@@ -1,27 +1,30 @@
-/** Official SuperNova Harness occupants: the profile-gated sidebar brand slots and the home whale frame layer. */
+/** Official SuperNova Harness occupants: the Supernova home effect and the symbol-only brand marks. */
 import type { Context as ClientContext } from '@supernova-ai/cordis'
 import type {} from '@supernova-ai/snh-client-ui-renderer/client'
 import type {} from '@supernova-ai/snh-client-ui-sidebar/client'
 import type {} from '@supernova-ai/snh-client-ui-conversation/client'
-import { PixelWhale } from './home-whale/PixelWhale.tsx'
-import { OfficialBrandMark, OfficialBrandName } from './Brand.tsx'
+import { PixelNova } from './home-supernova/PixelNova.tsx'
+import { SupernovaHeroMark, SupernovaMark, SupernovaName } from './SupernovaBrand.tsx'
 
 /** Required service: the UI slot registry. */
 export const inject = ['slots']
 
 /**
- * Fill official sidebar artwork and frame the blank home with the whale decoration.
+ * Fill the blank home with the Supernova effect and replace the default brand marks.
  * @param ctx - Client root context.
  */
 export function apply(ctx: ClientContext): void {
   ctx.slots.inject('conversation.hero.frame', () => ctx.slots.register({
     name: 'conversation.hero.frame',
-    id: 'pixel-whale',
-  }, PixelWhale))
+    id: 'supernova-home',
+  }, PixelNova))
+  ctx.slots.inject('conversation.hero.brand.mark', () => ctx.slots.register({
+    name: 'conversation.hero.brand.mark',
+  }, SupernovaHeroMark))
   if (process.env.SNH_CLIENT_BUILD_PROFILE !== 'official') return
   ctx.slots.inject('sidebar.brand.mark', () =>
     ctx.slots.inject('sidebar.brand.name', function* () {
-      yield ctx.slots.register({ name: 'sidebar.brand.mark' }, OfficialBrandMark)
-      yield ctx.slots.register({ name: 'sidebar.brand.name' }, OfficialBrandName)
+      yield ctx.slots.register({ name: 'sidebar.brand.mark' }, SupernovaMark)
+      yield ctx.slots.register({ name: 'sidebar.brand.name' }, SupernovaName)
     }))
 }

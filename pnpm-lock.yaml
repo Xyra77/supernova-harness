@@ -655,9 +655,6 @@ importers:
       '@supernova-ai/snh-llm-deepseek-account':
         specifier: workspace:*
         version: link:../../packages/llm/llm-deepseek-account
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../packages/llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-mock-server':
         specifier: workspace:*
         version: link:../../packages/test-support/llm-mock-server
@@ -670,6 +667,9 @@ importers:
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../../packages/llm/llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../packages/llm/llm-supernova-api-key
       '@supernova-ai/snh-loader-smoke':
         specifier: workspace:*
         version: link:../../packages/test-support/loader-smoke
@@ -2680,15 +2680,15 @@ importers:
       '@supernova-ai/snh-llm-deepseek-account':
         specifier: workspace:*
         version: link:../../llm/llm-deepseek-account
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-pi-ai':
         specifier: workspace:*
         version: link:../../llm/llm-pi-ai
       '@supernova-ai/snh-llm-retry':
         specifier: workspace:*
         version: link:../../llm/llm-retry
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-mcp-resources':
         specifier: workspace:*
         version: link:../../mcp/mcp-resources
@@ -3061,12 +3061,12 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../../llm/llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-retry':
         specifier: workspace:*
         version: link:../../llm/llm-retry
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-mcp-resources':
         specifier: workspace:*
         version: link:../../mcp/mcp-resources
@@ -8731,12 +8731,12 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../../llm/llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../../llm/llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-session':
         specifier: workspace:*
         version: link:../../core/session
@@ -9135,12 +9135,12 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../../llm/llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-pi-ai':
         specifier: workspace:*
         version: link:../../llm/llm-pi-ai
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-scope':
         specifier: workspace:*
         version: link:../scope
@@ -9763,12 +9763,12 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../../llm/llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../../llm/llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-permission-presets':
         specifier: workspace:*
         version: link:../../interaction/permission-presets
@@ -13071,12 +13071,12 @@ importers:
       '@supernova-ai/snh-llm-deepseek-account':
         specifier: workspace:*
         version: link:../../llm/llm-deepseek-account
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../../llm/llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-session':
         specifier: workspace:*
         version: link:../../core/session
@@ -13946,12 +13946,12 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../../llm/llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../../llm/llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-ptc-runtime':
         specifier: workspace:*
         version: link:../../ptc-runtime/ptc-runtime
@@ -15060,12 +15060,12 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../llm-supernova-api-key
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../llm-supernova-api-key
       '@supernova-ai/snh-supernova-auth':
         specifier: workspace:*
         version: link:../../account/supernova-auth
@@ -15118,12 +15118,12 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../llm-supernova-api-key
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../llm-supernova-api-key
       '@supernova-ai/snh-session':
         specifier: workspace:*
         version: link:../../core/session
@@ -15176,15 +15176,15 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../llm-supernova-api-key
       '@supernova-ai/snh-llm-mock-server':
         specifier: workspace:*
         version: link:../../test-support/llm-mock-server
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../llm-supernova-api-key
       '@supernova-ai/snh-session':
         specifier: workspace:*
         version: link:../../core/session
@@ -15291,7 +15291,7 @@ importers:
       '@supernova-ai/snh-llm-deepseek-account':
         specifier: workspace:*
         version: link:../llm-deepseek-account
-      '@supernova-ai/snh-llm-deepseek-api-key':
+      '@supernova-ai/snh-llm-supernova-api-key':
         specifier: workspace:*
         version: link:../llm-supernova-api-key
       '@supernova-ai/snh-plugin-package-inventory-supernova':
@@ -16438,7 +16438,7 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../../llm/llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
+      '@supernova-ai/snh-llm-supernova-api-key':
         specifier: workspace:*
         version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-permission-presets':
@@ -16928,15 +16928,15 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../../llm/llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-mock-server':
         specifier: workspace:*
         version: link:../../test-support/llm-mock-server
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../../llm/llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-message-feedback':
         specifier: workspace:*
         version: link:../../feedback/message-feedback
@@ -17288,15 +17288,15 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../../llm/llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-pi-ai':
         specifier: workspace:*
         version: link:../../llm/llm-pi-ai
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../../llm/llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-session':
         specifier: workspace:*
         version: link:../../core/session
@@ -18931,12 +18931,12 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../../llm/llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../../llm/llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-loader-smoke':
         specifier: workspace:*
         version: link:../../test-support/loader-smoke
@@ -19004,12 +19004,12 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../../llm/llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../../llm/llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-session':
         specifier: workspace:*
         version: link:../../core/session
@@ -20348,7 +20348,7 @@ importers:
       '@supernova-ai/snh-llm-deepseek-account':
         specifier: workspace:*
         version: link:../../llm/llm-deepseek-account
-      '@supernova-ai/snh-llm-deepseek-api-key':
+      '@supernova-ai/snh-llm-supernova-api-key':
         specifier: workspace:*
         version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-session':
@@ -20476,7 +20476,7 @@ importers:
       '@supernova-ai/snh-llm':
         specifier: workspace:*
         version: link:../../llm/llm
-      '@supernova-ai/snh-llm-deepseek-api-key':
+      '@supernova-ai/snh-llm-supernova-api-key':
         specifier: workspace:*
         version: link:../../llm/llm-supernova-api-key
       '@supernova-ai/snh-ptc-runtime':
@@ -20735,9 +20735,6 @@ importers:
       '@supernova-ai/snh-llm-deepseek-account':
         specifier: workspace:*
         version: link:../../packages/llm/llm-deepseek-account
-      '@supernova-ai/snh-llm-deepseek-api-key':
-        specifier: workspace:*
-        version: link:../../packages/llm/llm-supernova-api-key
       '@supernova-ai/snh-llm-pi-ai':
         specifier: workspace:*
         version: link:../../packages/llm/llm-pi-ai
@@ -20747,6 +20744,9 @@ importers:
       '@supernova-ai/snh-llm-supernova':
         specifier: workspace:*
         version: link:../../packages/llm/llm-supernova
+      '@supernova-ai/snh-llm-supernova-api-key':
+        specifier: workspace:*
+        version: link:../../packages/llm/llm-supernova-api-key
       '@supernova-ai/snh-mcp-client':
         specifier: workspace:*
         version: link:../../packages/mcp/mcp-client
