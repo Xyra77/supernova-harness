@@ -29,8 +29,8 @@ it('omits development artifacts while preserving executable modules, assets and 
     '@mixmark-io/domino/test/entities.html',
     '@mixmark-io/domino/.yarn/plugins/@yarnpkg/plugin-version.cjs',
     '@mixmark-io/domino/.yarn/versions/release.yml',
-    '@supernova-ai/libreoffice-kit-wasm/assets/soffice.data',
-    '@supernova-ai/libreoffice-kit-darwin-arm64/bin/dsoffice',
+    '@deepseek-ai/libreoffice-kit-wasm/assets/soffice.data',
+    '@deepseek-ai/libreoffice-kit-darwin-arm64/bin/dsoffice',
     '.modules.yaml', '.pnpm-workspace-state-v1.json', '.bin/tool', '.pnpm/cache',
   ]
   const retained = [
@@ -50,9 +50,9 @@ it('omits development artifacts while preserving executable modules, assets and 
     '@mixmark-io/domino/LICENSE', '@mixmark-io/domino/package.json',
     'example/.yarn/runtime.cjs', '@mixmark-io/domino/.yarn-data.json',
     '@img/sharp-win32-x64/lib/libvips-42.dll',
-    '@supernova-ai/libreoffice-kit-win32-x64/bin/dsoffice.exe',
-    '@supernova-ai/libreoffice-kit-win32-x64/sources/core-source.json',
-    '@supernova-ai/libreoffice-kit-win32-x64/licenses/MPL-2.0.txt',
+    '@deepseek-ai/libreoffice-kit-win32-x64/bin/dsoffice.exe',
+    '@deepseek-ai/libreoffice-kit-win32-x64/sources/core-source.json',
+    '@deepseek-ai/libreoffice-kit-win32-x64/licenses/MPL-2.0.txt',
     '@supernova-ai/snh/lib/index.js', '@supernova-ai/snh/lib/bin.js',
     '@supernova-ai/snh-session/lib/index.js',
     '@supernova-ai/snh/src/bin.ts', '@supernova-ai/snh/docs/architecture.md',
@@ -160,7 +160,7 @@ it.each([
 ] as const)('retains only the selected Office engine for %s/%s', (platform, arch, engine) => {
   for (const candidate of ['linux-x64', 'darwin-arm64', 'wasm']) {
     const omitted = desktopRuntimeFileExclusion(
-      `@supernova-ai/libreoffice-kit-${candidate}/prebuilds.json`, { platform, arch }, engine,
+      `@deepseek-ai/libreoffice-kit-${candidate}/prebuilds.json`, { platform, arch }, engine,
     )
     expect(omitted === undefined).toBe(candidate === engine)
   }

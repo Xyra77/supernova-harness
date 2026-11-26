@@ -16,12 +16,12 @@ import SandboxPolicyService from '@supernova-ai/snh-sandbox-policy'
 import LocalFileSystem from '@supernova-ai/snh-fs-local'
 import { FsError } from '@supernova-ai/snh-fs'
 import TypertRegistry from '@supernova-ai/snh-typert-registry'
-import type { Converter, ConverterOptions } from '@supernova-ai/libreoffice-kit'
+import type { Converter, ConverterOptions } from '@deepseek-ai/libreoffice-kit'
 import { expect, it, onTestFinished, vi } from 'vitest'
 import { brandString } from '@supernova-ai/snh-brand'
 
 const kit = vi.hoisted(() => ({ create: vi.fn<(options?: ConverterOptions) => Promise<Converter>>() }))
-vi.mock('@supernova-ai/libreoffice-kit', () => ({ createConverter: kit.create }))
+vi.mock('@deepseek-ai/libreoffice-kit', () => ({ createConverter: kit.create }))
 
 it('loads the shipped Office rows with separately patched settings and authorized PDF output', async () => {
   const directory = await realpath(await mkdtemp(join(tmpdir(), 'snh-web-office-')))

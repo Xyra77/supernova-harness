@@ -4,7 +4,7 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { extname, isAbsolute, join, relative, sep } from 'node:path'
 import { Context } from '@supernova-ai/cordis'
-import type { Converter, ConverterOptions } from '@supernova-ai/libreoffice-kit'
+import type { Converter, ConverterOptions } from '@deepseek-ai/libreoffice-kit'
 import z from '@supernova-ai/schemastery'
 import type { WorkspaceFileScope, WorkspaceFileStat } from '@supernova-ai/snh-api-workspace-files'
 import type {} from '@supernova-ai/snh-fs'
@@ -109,7 +109,7 @@ export const Config: z<Partial<Config>, Config> = z.object({
 })
 
 /** Kit operations loaded from the provider's Kit entry. */
-type KitModule = Pick<typeof import('@supernova-ai/libreoffice-kit'), 'createConverter'>
+type KitModule = Pick<typeof import('@deepseek-ai/libreoffice-kit'), 'createConverter'>
 
 /** Imported Kit operations with the engine resolver anchored at the same Kit entry. */
 interface LoadedKit extends KitModule {
@@ -344,7 +344,7 @@ export class OfficeKit extends TypertRemoteService {
   }
 
   private async importKit(): Promise<LoadedKit> {
-    const kit = resolveKitModule(() => import.meta.resolve('@supernova-ai/libreoffice-kit'))
+    const kit = resolveKitModule(() => import.meta.resolve('@deepseek-ai/libreoffice-kit'))
     if (kit.kind === 'missing') throw this.unavailableKit('LibreOffice Kit is not installed.', kit.error)
     let createConverter: KitModule['createConverter']
     try {

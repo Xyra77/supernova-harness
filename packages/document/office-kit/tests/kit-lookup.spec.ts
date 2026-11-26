@@ -15,10 +15,10 @@ function kitTree() {
   mkdirSync(dirname(engine), { recursive: true })
   mkdirSync(dirname(entry), { recursive: true })
   writeFileSync(join(kitDirectory, 'package.json'), JSON.stringify({
-    name: '@supernova-ai/libreoffice-kit', exports: { '.': './lib/index.js' },
+    name: '@deepseek-ai/libreoffice-kit', exports: { '.': './lib/index.js' },
   }))
   writeFileSync(entry, '')
-  writeFileSync(engine, JSON.stringify({ name: '@supernova-ai/libreoffice-kit-wasm' }))
+  writeFileSync(engine, JSON.stringify({ name: '@deepseek-ai/libreoffice-kit-wasm' }))
   return { entryUrl: pathToFileURL(entry), engine }
 }
 
@@ -30,7 +30,7 @@ it.each(['URL object', 'file URL string'])('locates the module entry and engines
   const resolution = resolveKitModule(() => input === 'URL object' ? fixture.entryUrl : fixture.entryUrl.href)
   if (resolution.kind !== 'available') throw new Error('Expected an available Kit')
   expect(resolution.entry).toBe(fixture.entryUrl.href)
-  expect(resolution.resolveEnginePackage('@supernova-ai/libreoffice-kit-wasm')).toBe(fixture.engine)
+  expect(resolution.resolveEnginePackage('@deepseek-ai/libreoffice-kit-wasm')).toBe(fixture.engine)
 })
 
 it('reports a missing Kit module with the lookup failure', () => {

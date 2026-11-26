@@ -3,13 +3,13 @@ import { access, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promise
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { Context } from '@supernova-ai/cordis'
-import type { Converter, RenderImagesRequest, RenderImagesResult, RenderedImage } from '@supernova-ai/libreoffice-kit'
+import type { Converter, RenderImagesRequest, RenderImagesResult, RenderedImage } from '@deepseek-ai/libreoffice-kit'
 import { afterEach, beforeEach, expect, it, onTestFinished, vi } from 'vitest'
 import { brandString } from '@supernova-ai/snh-brand'
 import OfficeKit, { Config, type OfficeSourceKey, type OfficeKitSource, type OfficeImagesRequest } from '../src/index.ts'
 
 const kit = vi.hoisted(() => ({ create: vi.fn<() => Promise<Converter>>() }))
-vi.mock('@supernova-ai/libreoffice-kit', () => ({ createConverter: kit.create }))
+vi.mock('@deepseek-ai/libreoffice-kit', () => ({ createConverter: kit.create }))
 
 /** Holds output-store deletions under `root` until `gate` settles. */
 const outputDeletion = vi.hoisted(() => ({ root: undefined as string | undefined, gate: undefined as Promise<void> | undefined }))

@@ -73,8 +73,8 @@ describe('desktop package-set selection', () => {
     const available = new Map<string, PackedDesktopPackage>([
       ['@supernova-ai/snh', packed('@supernova-ai/snh', {
         dependencies: {
-          '@supernova-ai/libreoffice-kit': '0.0.1',
-          '@supernova-ai/libreoffice-kit-wasm': '0.0.1',
+          '@deepseek-ai/libreoffice-kit': '0.0.1',
+          '@deepseek-ai/libreoffice-kit-wasm': '0.0.1',
         },
       })],
       ['@supernova-ai/snh-desktop-host', packed('@supernova-ai/snh-desktop-host')],

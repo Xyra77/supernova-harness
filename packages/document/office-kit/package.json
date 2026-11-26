@@ -61,7 +61,7 @@
     "@supernova-ai/snh-session": "workspace:*"
   },
   "dependencies": {
-    "@supernova-ai/libreoffice-kit": "0.2.3",
+    "@deepseek-ai/libreoffice-kit": "0.2.3",
     "@supernova-ai/schemastery": "workspace:~",
     "@supernova-ai/snh-brand": "workspace:*",
     "@supernova-ai/snh-typert-protocol": "workspace:*",

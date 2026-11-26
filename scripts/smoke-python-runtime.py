@@ -1127,10 +1127,10 @@ def smoke_sdk_office(executable: Path) -> None:
         cache_environment = {**os.environ, "SNH_RESOURCE_CACHE": str(root / "cache")}
         office = Path(json.loads(subprocess.check_output([str(relocated)], encoding="utf-8", env={**cache_environment, "SNH_RUNTIME_DOWNLOAD": "office"})))
         assert not (office.parent / "primary").exists(), "Office download unexpectedly prepared the authoring environment"
-        adapter = office / "node_modules/@supernova-ai/libreoffice-kit/package.json"
+        adapter = office / "node_modules/@deepseek-ai/libreoffice-kit/package.json"
         native = stem.removeprefix("supernova-harness-sdk-runtime-").replace("win-", "win32-").replace("macos-", "darwin-")
         declared = json.loads(adapter.read_text(encoding="utf-8")).get("optionalDependencies", {})
-        selected = native if f"@supernova-ai/libreoffice-kit-{native}" in declared else "wasm"
+        selected = native if f"@deepseek-ai/libreoffice-kit-{native}" in declared else "wasm"
         expected_backend = "wasm" if selected == "wasm" else "native"
         engines = [
             json.loads(manifest.read_text())["engine"]["kind"]

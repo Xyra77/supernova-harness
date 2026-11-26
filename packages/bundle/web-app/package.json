@@ -241,7 +241,7 @@
     "@supernova-ai/snh-tool-testkit": "workspace:*",
     "@supernova-ai/snh-tools": "workspace:*",
     "@supernova-ai/snh-typert-registry": "workspace:*",
-    "@supernova-ai/libreoffice-kit": "0.2.3",
+    "@deepseek-ai/libreoffice-kit": "0.2.3",
     "@supernova-ai/snh-otel": "workspace:*"
   }
 }
