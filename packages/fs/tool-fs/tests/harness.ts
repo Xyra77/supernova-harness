@@ -6,7 +6,7 @@ import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-tes
 import LocalFileSystem from '@supernova-ai/snh-fs-local'
 import * as FsPolicy from '@supernova-ai/snh-fs-observation-policy'
 import * as ToolFs from '@supernova-ai/snh-tool-fs'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 
 /**

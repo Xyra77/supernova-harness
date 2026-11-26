@@ -29,7 +29,7 @@ import { SuperNovaAdapter } from '../src/adapter.ts'
 import { object } from '../src/replay.ts'
 import { SuperNovaFileStore } from '../src/file-store.ts'
 import { resolveAdapterOptions } from '../src/config.ts'
-import * as Messages from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as Messages from '@supernova-ai/snh-llm-supernova-api-key'
 import * as AccountProvider from '@supernova-ai/snh-llm-deepseek-account'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import { adapter, assemble, chunks, MODEL, options, prepareExtensions, server, sse, textEvents, user, sourceModuleLoader } from './helpers.ts'
@@ -381,7 +381,7 @@ describe('Cordis provider composition', () => {
     await ctx.plugin(Loader)
     ctx.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
-      ['@supernova-ai/snh-llm', LlmRuntime], ['@supernova-ai/snh-llm-deepseek-api-key', Messages], ['@supernova-ai/snh-llm-deepseek-account', AccountProvider],
+      ['@supernova-ai/snh-llm', LlmRuntime], ['@supernova-ai/snh-llm-supernova-api-key', Messages], ['@supernova-ai/snh-llm-deepseek-account', AccountProvider],
       ['@supernova-ai/snh-credentials-local', LocalCredentials], ['@supernova-ai/snh-supernova-auth', SuperNovaAuth],
       ['@supernova-ai/snh-agent', AgentRegistry], ['@supernova-ai/snh-agent-loop', AgentLoop],
       ['@supernova-ai/snh-session', SessionStore], ['@supernova-ai/snh-session-projection', SessionProjectionRegistry],

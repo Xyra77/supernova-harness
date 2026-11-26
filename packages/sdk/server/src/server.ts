@@ -26,7 +26,7 @@ import type {} from '@supernova-ai/snh-permission-presets'
 import type {} from '@supernova-ai/snh-schedule'
 import type { SubagentRunEndInfo } from '@supernova-ai/snh-subagent'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import type {
   ApprovalRequestParams,
   CommandExecution,

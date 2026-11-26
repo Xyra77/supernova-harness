@@ -13,7 +13,7 @@
     path: {{credentials}}
     watch: false
 - name: '@supernova-ai/snh-supernova-auth'
-- name: '@supernova-ai/snh-llm-deepseek-api-key'
+- name: '@supernova-ai/snh-llm-supernova-api-key'
   config:
     apiKeyEnv: DEEPSEEK_API_KEY
     baseURL: {{endpoint}}

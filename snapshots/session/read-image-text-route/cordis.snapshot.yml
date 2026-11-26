@@ -3,7 +3,7 @@
 # text-only, so the strict read_image gate refuses and no image ever enters
 # the durable log.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-deepseek-api-key'
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - id: agent-default-model

@@ -3,7 +3,7 @@
 # 1 ms zero-jitter retry policy as the live sibling. The app patch still
 # restates its whole config for raw JSONL persistence and the recorded model.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-deepseek-api-key'
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - id: agent-default-model

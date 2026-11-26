@@ -8,8 +8,8 @@ import type {} from '@supernova-ai/snh-supernova-auth'
 import { launchEnvironmentOf } from '@supernova-ai/snh-launch-environment'
 import { Config as AccountConfig } from '@supernova-ai/snh-llm-deepseek-account'
 import { plainAccountOptions, resolveAccountOptions } from '@supernova-ai/snh-llm-deepseek-account/src/config.ts'
-import { Config as OfficialConfig } from '@supernova-ai/snh-llm-deepseek-api-key'
-import { plainOptions, resolveAdapterOptions } from '@supernova-ai/snh-llm-deepseek-api-key/src/config.ts'
+import { Config as OfficialConfig } from '@supernova-ai/snh-llm-supernova-api-key'
+import { plainOptions, resolveAdapterOptions } from '@supernova-ai/snh-llm-supernova-api-key/src/config.ts'
 
 /** One model route row. */
 export interface RouteRow {

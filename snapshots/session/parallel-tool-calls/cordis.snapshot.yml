@@ -2,7 +2,7 @@
 # sandboxed filesystem stack already lives in `snh-base`; the ACP row re-pins
 # `deepseek-v4-flash` for the recorded corpus.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-deepseek-api-key'
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - id: agent-default-model

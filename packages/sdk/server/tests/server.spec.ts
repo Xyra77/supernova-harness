@@ -19,7 +19,7 @@ import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-a
 
 import SessionStore, { Session, type SessionId, type SessionEvent } from '@supernova-ai/snh-session'
 import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import { brandString } from '@supernova-ai/snh-brand'
 import SubagentRuntime, { type SubagentRunId, type SubagentStartRequest, type SubagentRun, type SubagentResult, type SubagentRunEndInfo } from '@supernova-ai/snh-subagent'
 import type { JsonRpcTransportPeer } from '@supernova-ai/snh-sdk-protocol'

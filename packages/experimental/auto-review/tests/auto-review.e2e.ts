@@ -16,7 +16,7 @@ import {
   createUserMessage, isAgentLoopRequest, type ToolCallId,
   type StreamChunk,
 } from '@supernova-ai/snh-llm'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import PermissionPresetService, { AUTO_PRESET } from '@supernova-ai/snh-permission-presets'
 import SandboxProvider, { type ConfinedArgv, type SandboxPolicy } from '@supernova-ai/snh-sandbox'

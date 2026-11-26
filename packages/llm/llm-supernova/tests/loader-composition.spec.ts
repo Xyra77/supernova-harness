@@ -19,7 +19,7 @@ import { getOrCreateAnonymousUserId } from '@supernova-ai/snh-anonymous-user-id'
 import SuperNovaLlmApiExtensionRegistry from '@supernova-ai/snh-supernova-llm-api-extensions'
 import * as SessionLogSuperNova from '@supernova-ai/snh-session-log-supernova'
 import * as SuperNovaPluginPackageInventory from '@supernova-ai/snh-plugin-package-inventory-supernova'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import { assemble } from './assemble.ts'
 import { closeMockServers, mockServer, textEvents } from './mock-server.ts'
@@ -103,7 +103,7 @@ async function loadComposition(
       : [],
     "- name: '@supernova-ai/snh-supernova-auth'",
     '- id: llm-supernova',
-    "  name: '@supernova-ai/snh-llm-deepseek-api-key'",
+    "  name: '@supernova-ai/snh-llm-supernova-api-key'",
     '  config:',
     `    baseURL: ${JSON.stringify(options.baseURL)}`,
     '',
@@ -126,7 +126,7 @@ async function loadComposition(
     ['@supernova-ai/snh-plugin-package-inventory-supernova', SuperNovaPluginPackageInventory],
     ['@supernova-ai/snh-credentials-local', LocalCredentialProvider],
     ['@supernova-ai/snh-supernova-auth', SuperNovaAuth],
-    ['@supernova-ai/snh-llm-deepseek-api-key', LlmSuperNova],
+    ['@supernova-ai/snh-llm-supernova-api-key', LlmSuperNova],
   ])
   // The custom importer bypasses Node resolution; mirror the package manifests
   // a deployed cordis.yml has beside its declared dependencies.
@@ -218,7 +218,7 @@ describe('llm-supernova real dynamic composition', () => {
       ['deepseek-flash', { text: { en: 'New', zh: '新' }, tone: 'info' }],
       ['deepseek-v4-pro', undefined],
     ])
-    expect(warn).toHaveBeenCalledWith('[llm-deepseek-api-key]', expect.stringMatching(/^model "deepseek-v4-pro" shows no badge: /))
+    expect(warn).toHaveBeenCalledWith('[llm-supernova-api-key]', expect.stringMatching(/^model "deepseek-v4-pro" shows no badge: /))
     await ctx.settings.mutate(NS, [{ op: 'set', path: ['models'], value: [{ id: 'deepseek-flash' }] }])
     expect(await badges()).toEqual([['deepseek-flash', undefined]])
   })
@@ -235,7 +235,7 @@ describe('llm-supernova real dynamic composition', () => {
     expect(request).not.toHaveProperty('snh_session_log')
     expect(request.snh_plugin_packages.packages).toEqual(expect.arrayContaining([
       { name: '@supernova-ai/snh-supernova-llm-api-extensions', version: '0.1.0-rc.8' },
-      { name: '@supernova-ai/snh-llm-deepseek-api-key', version: '0.1.0-rc.8' },
+      { name: '@supernova-ai/snh-llm-supernova-api-key', version: '0.1.0-rc.8' },
       { name: '@supernova-ai/snh-session-log-supernova', version: '0.1.0-rc.8' },
     ]))
     expect(request.snh_plugin_packages.version).toBe(1)

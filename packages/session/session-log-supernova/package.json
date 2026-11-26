@@ -54,7 +54,7 @@
     "@supernova-ai/snh-supernova-llm-api-extensions": "workspace:*",
     "@supernova-ai/snh-llm": "workspace:*",
     "@supernova-ai/snh-llm-supernova": "workspace:*",
-    "@supernova-ai/snh-llm-deepseek-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
     "@supernova-ai/snh-llm-mock-server": "workspace:*",
     "@supernova-ai/snh-message-feedback": "workspace:*",
     "@supernova-ai/snh-session": "workspace:*",

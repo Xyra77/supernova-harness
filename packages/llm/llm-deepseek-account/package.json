@@ -53,7 +53,7 @@
     "@supernova-ai/snh-launch-environment": "workspace:*",
     "@supernova-ai/snh-deepseek-account": "workspace:*",
     "@supernova-ai/cordis-plugin-loader": "workspace:~",
-    "@supernova-ai/snh-llm-deepseek-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
     "@supernova-ai/snh-timeout": "workspace:*",
     "@supernova-ai/snh-agent": "workspace:*",
     "@supernova-ai/snh-supernova-auth": "workspace:*"

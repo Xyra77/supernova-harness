@@ -9,7 +9,7 @@ import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import SystemPrompt from '@supernova-ai/snh-system-prompt'
 import ToolRuntime from '@supernova-ai/snh-tools'
 import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
-import * as SuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as SuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import { brandString } from '@supernova-ai/snh-brand'
 

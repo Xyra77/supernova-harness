@@ -2,7 +2,7 @@
 # image-capable replay route. The scenario generates its tiny PNG inside the
 # run_code program, then exercises read_image as a nested dispatch.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-deepseek-api-key'
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - id: plugin-package-inventory-supernova

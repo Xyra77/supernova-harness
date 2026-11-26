@@ -5,7 +5,7 @@
       name: '../../../packages/test-support/session-snapshot/tests/fixtures/ptc-mode-change.ts'
 
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-deepseek-api-key'
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - id: plugin-package-inventory-supernova

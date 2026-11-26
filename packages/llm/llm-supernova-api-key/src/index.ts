@@ -14,12 +14,12 @@ import type { ResolvedSuperNovaOptions } from './config.ts'
 
 export { Config } from './config.ts'
 export type { Options, ResolvedSuperNovaOptions } from './config.ts'
-export const name = 'llm-deepseek-api-key'
+export const name = 'llm-supernova-api-key'
 export const inject = ['llm', 'supernovaAuth']
 
 const PROVIDER = 'deepseek-official'
 /** Console tag of listing diagnostics; product profiles mount no console exporter for `ctx.logger`. */
-const LOG_TAG = '[llm-deepseek-api-key]'
+const LOG_TAG = '[llm-supernova-api-key]'
 
 /** Connection facts of one operation: protocol settings plus the catalog resolved with them. */
 interface OfficialConnection extends ResolvedSuperNovaOptions {
@@ -40,7 +40,7 @@ export function apply(ctx: Context, config: Config): void {
   ctx.effect(() => ctx.supernovaAuth.connect('api-key', PROVIDER, () => {
     const connection = options()
     return { baseURL: connection.baseURL, reference: connection.apiKeyEnv, owner: settingsNs }
-  }), 'llm-deepseek-api-key: API-key deployment')
+  }), 'llm-supernova-api-key: API-key deployment')
   /**
    * The key `ctx.supernovaAuth` releases for `endpoint` from one configuration generation, in the header Messages
    * expects; `undefined` when none is configured or `endpoint` is outside the route's deployment. An unusable key fails

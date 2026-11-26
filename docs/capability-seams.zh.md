@@ -166,7 +166,7 @@ flowchart LR
   svc_supernovaAccount["ctx.supernovaAccount<br/>SuperNova account"]
   pkg_llm_deepseek_account["llm-deepseek-account"]
   svc_supernovaAuth["ctx.supernovaAuth<br/>SuperNova request authentication"]
-  pkg_llm_deepseek_api_key["llm-deepseek-api-key"]
+  pkg_llm_deepseek_api_key["llm-supernova-api-key"]
   pkg_web_supernova_api["web-supernova-api"]
   pkg_web_search_supernova["web-search-supernova"]
   pkg_authorization["authorization"]
@@ -765,7 +765,7 @@ flowchart LR
 | `ctx.subagentModelSelection` | `core` | [`tool-subagent`](../packages/subagent/tool-subagent) | - | [`tool-subagent`](../packages/subagent/tool-subagent) | - | 拥有默认关闭的设置命名空间；Agent 作用域的委派工具会在组合新顶层 Session 时读取它。 |
 | `ctx.credentials` | `seam` | [`credentials`](../packages/credentials/credentials) | [`credentials-local`](../packages/credentials/credentials-local) | [`api-settings-controller`](../packages/api/settings-controller), [`supernova-auth`](../packages/account/supernova-auth), [`llm-pi-ai`](../packages/llm/llm-pi-ai) | - | 配置携带对机密信息的引用；提供方拥有实际值。消费方按操作解析，因此轮换后的凭据会在紧接着的下一次请求中生效；settings controller 提供不含实际值的视图和只写存储。 |
 | `ctx.supernovaAccount` | `service` | [`deepseek-account`](../packages/account/deepseek-account) | - | [`supernova-auth`](../packages/account/supernova-auth), [`llm-deepseek-account`](../packages/llm/llm-deepseek-account) | - | Host 负责浏览器授权和本地凭证，并向 SuperNova 请求鉴权释放按请求的凭据；账号模型路由注册其运行中任务报告，UI 使用方只接收不含 token 的状态。 |
-| `ctx.supernovaAuth` | `service` | [`supernova-auth`](../packages/account/supernova-auth) | - | [`llm-deepseek-account`](../packages/llm/llm-deepseek-account), [`llm-deepseek-api-key`](../packages/llm/llm-deepseek-api-key), [`web-supernova-api`](../packages/web/web-supernova-api), [`web-search-supernova`](../packages/web/web-search-supernova) | - | 每个 SuperNova API 消费方给出其 API 接受的凭据种类；服务按计费方式排定 API 密钥与账号登录的顺序，把每一种绑定到其部署，并释放请求头。 |
+| `ctx.supernovaAuth` | `service` | [`supernova-auth`](../packages/account/supernova-auth) | - | [`llm-deepseek-account`](../packages/llm/llm-deepseek-account), [`llm-supernova-api-key`](../packages/llm/llm-supernova-api-key), [`web-supernova-api`](../packages/web/web-supernova-api), [`web-search-supernova`](../packages/web/web-search-supernova) | - | 每个 SuperNova API 消费方给出其 API 接受的凭据种类；服务按计费方式排定 API 密钥与账号登录的顺序，把每一种绑定到其部署，并释放请求头。 |
 | `ctx.authorization` | `seam` | [`authorization`](../packages/credentials/authorization) | - | [`llm-pi-ai`](../packages/llm/llm-pi-ai) | - | flow 由知道如何取得某份凭据的插件注册，并以其写入的记录为键；seam 拥有这段对话与"每个键同时只跑一次尝试"的生命周期，而非协议本身。 |
 | `ctx.productAnalytics` | `service` | [`client-product-analytics`](../packages/client/product-analytics) | - | - | - | 根据 Host 动态采集策略接收指定桌面事件、补充可用登录身份并监听实时压缩。 |
 | `ctx.otel` | `service` | [`otel`](../packages/telemetry/otel) | - | [`host-product-telemetry-otel`](../packages/host/product-telemetry-otel), [`session-telemetry-otel`](../packages/session/session-telemetry-otel) | - | 产品埋点和 Session 反馈适配器通过同一个注入服务创建独立上报通道。 |

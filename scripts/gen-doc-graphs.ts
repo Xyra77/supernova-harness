@@ -554,7 +554,7 @@ const SERVICE_ROLES: ServiceRole[] = [
     title: 'SuperNova request authentication',
     mode: 'service',
     implementations: [],
-    consumers: ['llm-deepseek-account', 'llm-deepseek-api-key', 'web-supernova-api', 'web-search-supernova'],
+    consumers: ['llm-deepseek-account', 'llm-supernova-api-key', 'web-supernova-api', 'web-search-supernova'],
     note: 'Every SuperNova API consumer names the credential kinds its API accepts; the service orders the API key and the account sign-in by billing, binds each to its deployment, and releases request headers.',
   },
   {

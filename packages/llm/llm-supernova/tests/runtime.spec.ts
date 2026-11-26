@@ -23,7 +23,7 @@ import { getOrCreateAnonymousUserId, type AnonymousUserId } from '@supernova-ai/
 import type { SessionId } from '@supernova-ai/snh-session'
 import SuperNovaLlmApiExtensionRegistry from '@supernova-ai/snh-supernova-llm-api-extensions'
 import type { PreparedSuperNovaLlmApiExtensions } from '@supernova-ai/snh-supernova-llm-api-extensions'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import { SuperNovaAdapter, resolveAdapterOptions } from '@supernova-ai/snh-llm-supernova'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import type { ContextFormed } from '@supernova-ai/snh-llm'
@@ -1787,7 +1787,7 @@ describe('plugin registration and config', () => {
     expect(ctx.llm.listConfigurableProviders()).toEqual([{
       provider: 'deepseek-official',
       displayName: 'SuperNova API',
-      settingsNs: 'llm-deepseek-api-key',
+      settingsNs: 'llm-supernova-api-key',
       settingsPath: [],
     }])
     await fiber.dispose()

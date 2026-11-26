@@ -1,5 +1,5 @@
 {
-  "name": "@supernova-ai/snh-llm-deepseek-api-key",
+  "name": "@supernova-ai/snh-llm-supernova-api-key",
   "description": "SuperNova api-key provider authentication and discovery",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -8,7 +8,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
-    "directory": "packages/llm/llm-deepseek-api-key"
+    "directory": "packages/llm/llm-supernova-api-key"
   },
   "type": "module",
   "main": "lib/index.js",

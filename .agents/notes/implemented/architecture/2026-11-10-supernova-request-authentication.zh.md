@@ -20,7 +20,7 @@ API 密钥通过 `@supernova-ai/snh-credentials` 的 `resolveCredentialRef` 和 
 
 `@supernova-ai/snh-llm-supernova` 不读取任何凭据。`SuperNovaAdapterOptions.resolveAuth(connection, endpoint)` 返回请求头、可选的 `revoked` 信号和可选的失败回调，或 `undefined`；`missingCredential(connection, provider)` 命名没有凭据时请求的失败，默认为 `MISSING_CREDENTIAL`。传输层让每次模型请求及其文件操作受 `revoked` 信号约束，并把由此产生的失败交给提供方的失败回调命名。列表缓存以端点和凭据请求头的哈希划分作用域。
 
-路由插件是同时登记自身部署的消费方，二者都要求该服务已挂载。`llm-deepseek-api-key` 在自己的路由 id 下登记其基础地址、`apiKeyEnv` 引用，以及作为密钥诊断所指属主的设置命名空间；它以 `accepts: ['api-key']` 索取放在 `x-api-key` 里的密钥，并把不可用的密钥报告为自己的 `INVALID_CREDENTIAL`。`llm-deepseek-account` 在自己的路由 id 下登记其基础地址，以 `accepts: ['account']` 索取凭据，把 HTTP 401 映射为 `ACCOUNT_TOKEN_INVALID`、配额失败映射为 `ACCOUNT_QUOTA`，没有凭据时以 `ACCOUNT_SIGN_IN_REQUIRED` 失败，并拥有退登策略：在 `deepseek-account/signed-out` 时取消其运行中的 Agent，并向账号服务注册运行中任务报告。退登时在途的请求随其授权的 `revoked` 信号结束，以 `ACCOUNT_SIGN_IN_REQUIRED` 失败；它的失败回调会取消同一批 Agent，因此比插件存活更久的请求仍会以退登原因结束其回合。
+路由插件是同时登记自身部署的消费方，二者都要求该服务已挂载。`llm-supernova-api-key` 在自己的路由 id 下登记其基础地址、`apiKeyEnv` 引用，以及作为密钥诊断所指属主的设置命名空间；它以 `accepts: ['api-key']` 索取放在 `x-api-key` 里的密钥，并把不可用的密钥报告为自己的 `INVALID_CREDENTIAL`。`llm-deepseek-account` 在自己的路由 id 下登记其基础地址，以 `accepts: ['account']` 索取凭据，把 HTTP 401 映射为 `ACCOUNT_TOKEN_INVALID`、配额失败映射为 `ACCOUNT_QUOTA`，没有凭据时以 `ACCOUNT_SIGN_IN_REQUIRED` 失败，并拥有退登策略：在 `deepseek-account/signed-out` 时取消其运行中的 Agent，并向账号服务注册运行中任务报告。退登时在途的请求随其授权的 `revoked` 信号结束，以 `ACCOUNT_SIGN_IN_REQUIRED` 失败；它的失败回调会取消同一批 Agent，因此比插件存活更久的请求仍会以退登原因结束其回合。
 
 `@supernova-ai/snh-deepseek-account` 向鉴权服务释放请求凭据。`resolveRequestCredential(url)` 返回 `x-snh-auth-token` 请求头、`reject()` 和 `revoked` 信号；`reject()` 仅在已存储的授权记录仍一致时删除它并隔离存储失败，`revoked` 由账号服务在每次退登时、`deepseek-account/signed-out` 的监听器返回之后中止。`registerRunningTaskReport(report)` 为 `hasRunningAccountTasks()` 提供答案。账号服务不检查任何 Agent，也不依赖 `snh-agent`、`snh-llm` 或鉴权服务。包以不变的名字位于 `packages/account/` 组。
 
@@ -38,7 +38,7 @@ Web 提供方声明各自的 API 接受什么。`web-supernova-api` 以 `accepts
 
 **让 `snh-llm` 从 `snh-credentials` 导入密钥检查。** 模型服务里没有任何代码读取密钥。该检查在其中唯一的调用方是 `llm-pi-ai`，而它已经依赖 `snh-credentials`，因此模型服务不导出密钥检查，也不新增依赖。
 
-**在 `deepseek-account` 旁边设一个 `deepseek-api-key` 包。** `deepseek-account` 是账号这项产品功能：浏览器登录、已存储的授权、资料、余额、通知和 Platform 会话，释放请求凭据只占其中一小部分。API 密钥没有这样的功能。它是通用凭据库里一个有名字的字符串，它的 SuperNova 专属逻辑就是服务内部的密钥来源。等到出现 SuperNova 专属的密钥行为，例如按密钥查余额、向服务端校验或多把密钥，才值得拆出一个包。
+**在 `deepseek-account` 旁边设一个 `supernova-api-key` 包。** `deepseek-account` 是账号这项产品功能：浏览器登录、已存储的授权、资料、余额、通知和 Platform 会话，释放请求凭据只占其中一小部分。API 密钥没有这样的功能。它是通用凭据库里一个有名字的字符串，它的 SuperNova 专属逻辑就是服务内部的密钥来源。等到出现 SuperNova 专属的密钥行为，例如按密钥查余额、向服务端校验或多把密钥，才值得拆出一个包。
 
 **合并两个模型路由插件，或合并它们的路由 id。** 它们是两个模型提供方，设置和目录来源不同，还各有 `ACCOUNT_*` 失败映射和针对运行中任务的退登策略。路由 id 是一段会话如何计费的持久记录：会话日志携带它，退登取消和 `auto` 计费读取它。
 

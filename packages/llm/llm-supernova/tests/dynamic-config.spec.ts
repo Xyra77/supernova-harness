@@ -18,7 +18,7 @@ import type {
 import { credentialRef } from '@supernova-ai/snh-credentials'
 import { LocalCredentialProvider } from '@supernova-ai/snh-credentials-local'
 import { liveConfig } from '../../../settings/settings/tests/live-config.ts'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import type { ContextFormed } from '@supernova-ai/snh-llm'
 import { assemble } from './assemble.ts'

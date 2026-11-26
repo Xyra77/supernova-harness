@@ -4,7 +4,7 @@ import { boot } from '@supernova-ai/snh-app-boot'
 import LlmRuntime from '@supernova-ai/snh-llm'
 import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
 import * as JsonlPersistence from '@supernova-ai/snh-session-persistence-jsonl'
-import * as Official from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as Official from '@supernova-ai/snh-llm-supernova-api-key'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
@@ -27,14 +27,14 @@ it.skipIf(!enabled)('translates a small independent billed query with exact Flas
       { id: 'sessions', name: '@supernova-ai/snh-session' },
       { id: 'storage', name: '@supernova-ai/snh-session-persistence-jsonl', config: { root: join(root, 'sessions'), compression: 'none' } },
       { id: 'supernova-auth', name: '@supernova-ai/snh-supernova-auth' },
-      { id: 'official-live-owner', name: '@supernova-ai/snh-llm-deepseek-api-key' },
+      { id: 'official-live-owner', name: '@supernova-ai/snh-llm-supernova-api-key' },
       { id: 'translator', name: '@supernova-ai/snh-experimental-translator', config: { supernovaMaxOutputTokens: 128 } },
     ]))
     const modules = new Map<string, unknown>([
       ['@supernova-ai/snh-llm', LlmRuntime], ['@supernova-ai/snh-session', SessionStore],
       ['@supernova-ai/snh-session-persistence-jsonl', JsonlPersistence],
       ['@supernova-ai/snh-supernova-auth', SuperNovaAuth],
-      ['@supernova-ai/snh-llm-deepseek-api-key', Official], ['@supernova-ai/snh-experimental-translator', Translator],
+      ['@supernova-ai/snh-llm-supernova-api-key', Official], ['@supernova-ai/snh-experimental-translator', Translator],
     ])
     const ctx = await boot('paid-translation-live', configPath, [], (host) => {
       const source: ModuleLoaderV2 = {

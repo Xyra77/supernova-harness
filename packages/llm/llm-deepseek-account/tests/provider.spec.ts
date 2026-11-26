@@ -6,7 +6,7 @@ import { Context } from '@supernova-ai/cordis'
 import { brandString } from '@supernova-ai/snh-brand'
 import LlmRuntime, { type ReasoningEffortId } from '@supernova-ai/snh-llm'
 import { accountStub } from '../../../account/deepseek-account/tests/account-stub.ts'
-import * as ApiKey from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as ApiKey from '@supernova-ai/snh-llm-supernova-api-key'
 import * as Account from '../src/index.ts'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 
@@ -71,7 +71,7 @@ it('keeps discovery and disposal independent across the two credential routes', 
   ])
   expect((await ctx.llm.listModels('deepseek-official')).map(row => row.id)).toEqual(['api-key-model'])
   expect(ctx.llm.listConfigurableProviders().map(row => [row.provider, row.settingsNs])).toEqual([
-    ['deepseek-account', 'llm-deepseek-account'], ['deepseek-official', 'llm-deepseek-api-key'],
+    ['deepseek-account', 'llm-deepseek-account'], ['deepseek-official', 'llm-supernova-api-key'],
   ])
   expect(Account.Config({})).not.toHaveProperty('apiKeyEnv')
   token = undefined

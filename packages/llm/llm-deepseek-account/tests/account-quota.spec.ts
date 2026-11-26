@@ -2,7 +2,7 @@
 import { Context } from '@supernova-ai/cordis'
 import { BlockAssembler, LlmRuntime } from '@supernova-ai/snh-llm'
 import { accountStub } from '../../../account/deepseek-account/tests/account-stub.ts'
-import * as ApiKey from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as ApiKey from '@supernova-ai/snh-llm-supernova-api-key'
 import { afterEach, expect, it, vi } from 'vitest'
 import * as Account from '../src/index.ts'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'

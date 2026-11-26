@@ -1,7 +1,7 @@
 # Keyless counterpart to subagent-send-message/cordis.yml: replace the live adapter
 # with replay and preserve its child and parent scheduling fence.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-deepseek-api-key'
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - id: agent-default-model

@@ -38,7 +38,7 @@ import { vi } from 'vitest'
 import { Context } from '@supernova-ai/cordis'
 import LlmRuntime from '@supernova-ai/snh-llm'
 import SuperNovaLlmApiExtensionRegistry from '@supernova-ai/snh-supernova-llm-api-extensions'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 
 let home: string

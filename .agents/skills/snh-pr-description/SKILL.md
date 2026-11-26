@@ -50,7 +50,7 @@ Filled in from the manifests, READMEs, and call sites of #8521:
 | 包 | 职责 | 本 PR 的变化 |
 |---|---|---|
 | `snh-supernova-auth` | `ctx.supernovaAuth`：在 API 密钥与账号登录之间选择，把凭据绑定到所属部署，给出请求头 | 新增 |
-| `snh-llm-deepseek-api-key`、`snh-llm-deepseek-account` | 注册各自的 SuperNova 模型路由 | 用 `connect()` 登记自己的部署，用 `authorize()` 取请求头 |
+| `snh-llm-supernova-api-key`、`snh-llm-deepseek-account` | 注册各自的 SuperNova 模型路由 | 用 `connect()` 登记自己的部署，用 `authorize()` 取请求头 |
 | `snh-web-supernova-api`、`snh-web-search-supernova` | Search / Fetch API 与 Messages 搜索 | 改为向 `ctx.supernovaAuth` 取凭据，不再自己读账号服务和模型路由配置 |
 | `snh-sdk-jsonrpc-server` | SDK JSON-RPC 服务 | 组合里没有 `supernovaAuth` 时自己挂载它 |
 | `snh-credentials`、`snh-deepseek-account` | 凭据存取、账号登录 | 不变，被 `snh-supernova-auth` 读取 |
@@ -58,7 +58,7 @@ Filled in from the manifests, READMEs, and call sites of #8521:
 依赖边：
 
 - 新增 `snh-supernova-auth → snh-credentials`、`snh-error`、`snh-launch-environment`、`snh-deepseek-account`（可选）
-- 新增 `snh-llm-deepseek-api-key → snh-supernova-auth`、`snh-llm-deepseek-account → snh-supernova-auth`
+- 新增 `snh-llm-supernova-api-key → snh-supernova-auth`、`snh-llm-deepseek-account → snh-supernova-auth`
 - 新增 `snh-web-supernova-api → snh-supernova-auth`、`snh-web-search-supernova → snh-supernova-auth`
 - 新增 `snh-sdk-jsonrpc-server → snh-supernova-auth`
 - 删除 `snh-web-supernova-api → snh-deepseek-account`（可选）、`snh-web-supernova-api → snh-launch-environment`

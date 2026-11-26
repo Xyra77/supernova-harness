@@ -530,7 +530,7 @@
       "@supernova-ai/snh-llm-replay": ["./packages/test-support/llm-replay/src"],
       "@supernova-ai/snh-llm-retry": ["./packages/llm/llm-retry/src"],
       "@supernova-ai/snh-llm-supernova": ["./packages/llm/llm-supernova/src"],
-      "@supernova-ai/snh-llm-deepseek-api-key": ["./packages/llm/llm-deepseek-api-key/src"],
+      "@supernova-ai/snh-llm-supernova-api-key": ["./packages/llm/llm-supernova-api-key/src"],
       "@supernova-ai/snh-loader-smoke": ["./packages/test-support/loader-smoke/src"],
       "@supernova-ai/snh-lsp": ["./packages/lsp/lsp/src"],
       "@supernova-ai/snh-lsp-stdio": ["./packages/lsp/lsp-stdio/src"],

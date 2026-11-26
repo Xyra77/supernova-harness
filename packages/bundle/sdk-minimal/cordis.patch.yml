@@ -27,7 +27,7 @@
       name: '@supernova-ai/snh-supernova-auth'
 
     - id: llm-supernova
-      name: '@supernova-ai/snh-llm-deepseek-api-key'
+      name: '@supernova-ai/snh-llm-supernova-api-key'
       config:
         apiKeyEnv: DEEPSEEK_API_KEY
         defaultContextWindow: !!js Number(process.env.SNH_CONTEXT_WINDOW ?? 1000000)

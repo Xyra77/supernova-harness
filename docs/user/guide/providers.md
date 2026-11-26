@@ -12,7 +12,7 @@ Open **Settings → Models**. The SuperNova API card exposes one API-key field; 
 
 Keys are write-only. The page receives a redacted descriptor after saving, never the literal secret. The key is stored in `$SNH_HOME/.credentials.yaml`, while settings retain only its credential reference.
 
-With a key saved and the default endpoint, SuperNova's models follow the list the SuperNova API publishes. The list loads when the models are first needed, refreshes in the background about every ten minutes while they are in use, and falls back to the built-in models when it cannot load. Editing **Models** under **Customized settings** keeps your own list instead and stops following the published one; **Restore defaults** follows it again and reloads it. While the published list is in use, the card shows the built-in models, so a newly published model appears only in the model picker. The [API-key provider reference](../../../packages/llm/llm-deepseek-api-key/README.md) owns the listing, fallback, and gating rules.
+With a key saved and the default endpoint, SuperNova's models follow the list the SuperNova API publishes. The list loads when the models are first needed, refreshes in the background about every ten minutes while they are in use, and falls back to the built-in models when it cannot load. Editing **Models** under **Customized settings** keeps your own list instead and stops following the published one; **Restore defaults** follows it again and reloads it. While the published list is in use, the card shows the built-in models, so a newly published model appears only in the model picker. The [API-key provider reference](../../../packages/llm/llm-supernova-api-key/README.md) owns the listing, fallback, and gating rules.
 
 ## Add a third-party provider
 

@@ -5,7 +5,7 @@ import LlmRuntime, { createToolResultMessage, createUserMessage, type ToolCallId
 import type { Message, ToolSchema } from '@supernova-ai/snh-llm'
 import * as LlmPiAi from '@supernova-ai/snh-llm-pi-ai'
 import type { PiAiProviderProfile } from '@supernova-ai/snh-llm-pi-ai'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import { assemble, type AssembledResult } from './assemble.ts'
 

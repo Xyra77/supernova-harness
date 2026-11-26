@@ -1,7 +1,7 @@
 # Keyless PTC mode combines the runtime/registry changes with the
 # SuperNova-to-replay swap in one profile patch.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-deepseek-api-key'
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - id: agent-default-model

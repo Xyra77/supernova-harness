@@ -349,7 +349,7 @@ Every package below exports a Cordis plugin that a bundle patch can name in a Lo
 | `@supernova-ai/snh-llm-deepseek-account` | yes | SuperNova account provider authentication and discovery |
 | `@supernova-ai/snh-llm-pi-ai` | yes | pi-ai-backed SuperNova adapter for the SuperNova Harness LLM seam (design-verification twin of snh-llm-supernova) |
 | `@supernova-ai/snh-llm-retry` | yes | Provider-routed LLM request retry policy for the SuperNova Harness |
-| `@supernova-ai/snh-llm-deepseek-api-key` | yes | SuperNova api-key provider authentication and discovery |
+| `@supernova-ai/snh-llm-supernova-api-key` | yes | SuperNova api-key provider authentication and discovery |
 | `@supernova-ai/snh-plugin-package-inventory-supernova` | yes | Active Loader-backed plugin package inventory for official SuperNova LLM API requests |
 | `@supernova-ai/snh-supernova-llm-api-extensions` | no | Additive request-field registry for the official SuperNova LLM API adapter |
 | `@supernova-ai/snh-token-meter` | yes | Replay-aware token measurement service (ctx.tokenMeter) for the SuperNova Harness |

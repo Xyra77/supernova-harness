@@ -126,7 +126,7 @@
 | `internal/plugin` | - | `computer-use-cua-driver-native`, `inspector`, `loader`, [`lsp-stdio`](../packages/lsp/lsp-stdio), [`mcp-client`](../packages/mcp/mcp-client), [`mcp-manager`](../packages/mcp/mcp-manager), `modules` |
 | `internal/service` | - | `client-ui-forge`, `gateway` |
 | `internal/status` | - | [`agent`](../packages/core/agent), `claude-code-mods`, `inspector`, `modules`, `server`, `translator`, [`web`](../packages/web/web) |
-| `loader/volatile-update` | - | [`action-cards`](../packages/interaction/action-cards), [`llm-pi-ai`](../packages/llm/llm-pi-ai), [`llm-supernova`](../packages/llm/llm-supernova), [`llm-deepseek-api-key`](../packages/llm/llm-deepseek-api-key), [`mcp-manager`](../packages/mcp/mcp-manager), `modules`, [`plugin-market`](../packages/boot/plugin-market), `product-analytics`, `speech-to-text`, [`timeline`](../packages/experimental/timeline) |
+| `loader/volatile-update` | - | [`action-cards`](../packages/interaction/action-cards), [`llm-pi-ai`](../packages/llm/llm-pi-ai), [`llm-supernova`](../packages/llm/llm-supernova), [`llm-supernova-api-key`](../packages/llm/llm-supernova-api-key), [`mcp-manager`](../packages/mcp/mcp-manager), `modules`, [`plugin-market`](../packages/boot/plugin-market), `product-analytics`, `speech-to-text`, [`timeline`](../packages/experimental/timeline) |
 | `locale/change` | `locale` (`emit`) | `locale` |
 | `slots/changed` | `ui-renderer` (`emit`) | - |
 | `theme/change` | `ui-theme` (`emit`) | `ui-layout`, `ui-theme` |

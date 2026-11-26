@@ -64,7 +64,7 @@
     "@supernova-ai/snh-fs-observation-policy": "workspace:*",
     "@supernova-ai/snh-llm": "workspace:*",
     "@supernova-ai/snh-llm-supernova": "workspace:*",
-    "@supernova-ai/snh-llm-deepseek-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
     "@supernova-ai/snh-sandbox": "workspace:*",
     "@supernova-ai/snh-sandbox-policy": "workspace:*",
     "@supernova-ai/snh-session": "workspace:*",

@@ -11,7 +11,7 @@ import AgentRegistry, { type Agent } from '@supernova-ai/snh-agent'
 
 import AgentLoop from '@supernova-ai/snh-agent-loop'
 import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import { brandString } from '@supernova-ai/snh-brand'
 

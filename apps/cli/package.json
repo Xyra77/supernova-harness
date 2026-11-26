@@ -147,7 +147,7 @@
     "@supernova-ai/snh-host-webserver": "workspace:*",
     "@supernova-ai/snh-llm": "workspace:*",
     "@supernova-ai/snh-llm-supernova": "workspace:*",
-    "@supernova-ai/snh-llm-deepseek-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
     "@supernova-ai/snh-llm-deepseek-account": "workspace:*",
     "@supernova-ai/snh-llm-mock-server": "workspace:*",
     "@supernova-ai/snh-llm-pi-ai": "workspace:*",

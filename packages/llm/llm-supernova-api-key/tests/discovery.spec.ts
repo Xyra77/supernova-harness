@@ -43,10 +43,10 @@ it('reports malformed credentials during discovery under the settings namespace 
     await ctx.plugin(SuperNovaAuth)
     await ctx.plugin(ApiKey, {})
     const [directory] = ctx.llm.listConfigurableProviders()
-    expect(directory?.settingsNs).toBe('llm-deepseek-api-key')
+    expect(directory?.settingsNs).toBe('llm-supernova-api-key')
     const failure = ctx.llm.listModels('deepseek-official')
     await expect(failure).rejects.toMatchObject({ code: 'INVALID_CREDENTIAL' })
-    await expect(failure).rejects.toThrow('llm-deepseek-api-key: the API key resolved from DEEPSEEK_API_KEY contains characters')
+    await expect(failure).rejects.toThrow('llm-supernova-api-key: the API key resolved from DEEPSEEK_API_KEY contains characters')
   } finally {
     await ctx.fiber.dispose()
     vi.unstubAllEnvs()
@@ -91,7 +91,7 @@ it('connects its route id, key reference and deployment, so other SuperNova cons
       kind: 'api-key', endpoint: 'https://route.deepseek.test/v1/tools/search', reference: 'ROUTE_KEY', headers: { authorization: 'Bearer fixture-api-key' },
     })
     vi.stubEnv('ROUTE_KEY', 'invalid\nheader')
-    await expect(ctx.supernovaAuth.authorize(search)).rejects.toThrow('llm-deepseek-api-key: the API key resolved from ROUTE_KEY contains characters')
+    await expect(ctx.supernovaAuth.authorize(search)).rejects.toThrow('llm-supernova-api-key: the API key resolved from ROUTE_KEY contains characters')
     await route.dispose()
     expect(ctx.supernovaAuth.routeKind('deepseek-official')).toBeUndefined()
     expect(await ctx.supernovaAuth.authorize(search)).toMatchObject({ endpoint: 'https://api.deepseek.com/v1/tools/search', reference: 'DEEPSEEK_API_KEY' })

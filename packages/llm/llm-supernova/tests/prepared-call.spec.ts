@@ -2,9 +2,9 @@
 import { afterEach, expect, it } from 'vitest'
 import type { AnonymousUserId } from '@supernova-ai/snh-anonymous-user-id'
 import { SuperNovaAdapter } from '../src/index.ts'
-import { Config } from '@supernova-ai/snh-llm-deepseek-api-key'
-import { plainOptions, resolveAdapterOptions } from '@supernova-ai/snh-llm-deepseek-api-key/src/config.ts'
-import type { ResolvedSuperNovaOptions as SuperNovaConnectionOptions } from '@supernova-ai/snh-llm-deepseek-api-key'
+import { Config } from '@supernova-ai/snh-llm-supernova-api-key'
+import { plainOptions, resolveAdapterOptions } from '@supernova-ai/snh-llm-supernova-api-key/src/config.ts'
+import type { ResolvedSuperNovaOptions as SuperNovaConnectionOptions } from '@supernova-ai/snh-llm-supernova-api-key'
 import { assemble, chunks, MODEL, options, server } from './helpers.ts'
 
 const close: (() => Promise<void>)[] = []

@@ -1,6 +1,6 @@
 # Minimal keyless composition: real app, pwsh executor, and pwsh tool; replayed model.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-deepseek-api-key'
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - insert:

@@ -1,7 +1,7 @@
 # Keyless twin of subagent-acp-diagnostic.cordis.yml: keep the real ACP child
 # permission-denial path and replace only the external parent model adapter.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-deepseek-api-key'
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - insert:

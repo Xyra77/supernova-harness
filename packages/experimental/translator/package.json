@@ -64,7 +64,7 @@
     "@supernova-ai/snh-credentials": "workspace:*",
     "@supernova-ai/snh-launch-environment": "workspace:*",
     "@supernova-ai/snh-llm-supernova": "workspace:*",
-    "@supernova-ai/snh-llm-deepseek-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
     "@supernova-ai/snh-llm-deepseek-account": "workspace:*",
     "@supernova-ai/snh-deepseek-account": "workspace:*",
     "@supernova-ai/snh-supernova-llm-api-extensions": "workspace:*",

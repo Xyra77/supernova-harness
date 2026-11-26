@@ -28,7 +28,7 @@ describe('snh-sdk-minimal bundle', () => {
       ['session-log-supernova', '@supernova-ai/snh-session-log-supernova'],
       ['plugin-package-inventory-supernova', '@supernova-ai/snh-plugin-package-inventory-supernova'],
       ['supernova-auth', '@supernova-ai/snh-supernova-auth'],
-      ['llm-supernova', '@supernova-ai/snh-llm-deepseek-api-key'],
+      ['llm-supernova', '@supernova-ai/snh-llm-supernova-api-key'],
       ['sandbox', '@supernova-ai/snh-sandbox-local'],
       ['filesystem', '@supernova-ai/snh-fs-local'],
       ['attachment-local', '@supernova-ai/snh-attachment-local'],

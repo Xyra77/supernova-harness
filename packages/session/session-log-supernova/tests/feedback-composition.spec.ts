@@ -11,7 +11,7 @@ import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-
 import MessageFeedback from '@supernova-ai/snh-message-feedback'
 import { recordFeedback } from '@supernova-ai/snh-command-feedback'
 import LlmRuntime, { createAssistantMessage, createUserMessage } from '@supernova-ai/snh-llm'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import SuperNovaLlmApiExtensions from '@supernova-ai/snh-supernova-llm-api-extensions'
 import { startMockLlmServer, type MockLlmServer, type MockLlmServerOptions } from '@supernova-ai/snh-llm-mock-server'
@@ -47,7 +47,7 @@ async function boot(
     ['@supernova-ai/snh-message-feedback', MessageFeedback],
     ['@supernova-ai/snh-llm', LlmRuntime],
     ['@supernova-ai/snh-supernova-auth', SuperNovaAuth],
-    ['@supernova-ai/snh-llm-deepseek-api-key', LlmSuperNova],
+    ['@supernova-ai/snh-llm-supernova-api-key', LlmSuperNova],
     ['@supernova-ai/snh-supernova-llm-api-extensions', SuperNovaLlmApiExtensions],
     ['@supernova-ai/snh-session-log-supernova', SessionLogSuperNova],
   ])
@@ -58,7 +58,7 @@ async function boot(
       ? { config: { root: join(root!, 'sessions'), compression: 'none' } }
       : name === '@supernova-ai/snh-message-feedback'
         ? { config: { maxNoteBytes: 1024 } }
-        : name === '@supernova-ai/snh-llm-deepseek-api-key'
+        : name === '@supernova-ai/snh-llm-supernova-api-key'
           ? { config: { baseURL: server!.baseURL } }
           : name === '@supernova-ai/snh-session-log-supernova'
             ? { config: sessionLog }

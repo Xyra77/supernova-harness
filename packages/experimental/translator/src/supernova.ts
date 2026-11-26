@@ -6,7 +6,7 @@ import { launchEnvironmentOf } from '@supernova-ai/snh-launch-environment'
 import { brandString } from '@supernova-ai/snh-brand'
 import { BlockAssembler, type ReasoningEffortId, type LlmRuntime, type GenerateOptions, type RequestUserInput, type FinishReason, type TextBlock } from '@supernova-ai/snh-llm'
 import type { Config as AccountNativeConfig } from '@supernova-ai/snh-llm-deepseek-account'
-import type { Config as OfficialNativeConfig } from '@supernova-ai/snh-llm-deepseek-api-key'
+import type { Config as OfficialNativeConfig } from '@supernova-ai/snh-llm-supernova-api-key'
 import { deadline, timeoutOf } from '@supernova-ai/snh-timeout'
 import { deepFreeze } from '@supernova-ai/snh-util-values'
 import type { Config } from './index.ts'
@@ -16,7 +16,7 @@ import type { TranslationLog } from './storage.ts'
 
 const MODEL = 'deepseek-flash'
 const OWNER_PACKAGES = { 'deepseek-account': '@supernova-ai/snh-llm-deepseek-account',
-  'deepseek-official': '@supernova-ai/snh-llm-deepseek-api-key' } as const
+  'deepseek-official': '@supernova-ai/snh-llm-supernova-api-key' } as const
 
 interface NativeOwnerFields { llm: LlmRuntime; fiber: Fiber }
 type NativeOwner = NativeOwnerFields & (

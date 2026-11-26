@@ -22,6 +22,6 @@ Status: implemented
 
 ## Consequences
 
-模型选择展示两条路由，即使存在 API Key，选择账号路由仍要求登录。两个路由分别由 `llm-deepseek-account` 和 `llm-deepseek-api-key` 注册，拥有独立的模型目录与连接设置，共用 `llm-supernova` 协议实现。取消保留排队输入，不自动唤醒。已记录的 hook 原因生成本地化对话提示，无须改变持久事件类型。
+模型选择展示两条路由，即使存在 API Key，选择账号路由仍要求登录。两个路由分别由 `llm-deepseek-account` 和 `llm-supernova-api-key` 注册，拥有独立的模型目录与连接设置，共用 `llm-supernova` 协议实现。取消保留排队输入，不自动唤醒。已记录的 hook 原因生成本地化对话提示，无须改变持久事件类型。
 
 行为测试覆盖凭证分离、首请求准备、工具阶段取消及路由替换。SDK account-provider-signout 场景启动随附 profile，记录被中断的输出和取消原因。

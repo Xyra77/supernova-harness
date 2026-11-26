@@ -2664,14 +2664,14 @@ export type Config = Readonly<Record<string, never>>
 ```
 <!-- END GENERATED config-catalog:@supernova-ai/snh-llm-retry -->
 
-<!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-llm-deepseek-api-key -->
-<a id="supernova-aisnh-llm-deepseek-api-key"></a>
+<!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-llm-supernova-api-key -->
+<a id="supernova-aisnh-llm-supernova-api-key"></a>
 
-## `@supernova-ai/snh-llm-deepseek-api-key`
+## `@supernova-ai/snh-llm-supernova-api-key`
 
 - `inject`: `llm` · `supernovaAuth`
 - `refs`: [`ModelListingConfig`](../packages/llm/llm-supernova/src/index.ts) · [`ProtocolConfig`](../packages/llm/llm-supernova/src/index.ts) · `Volatile` (`@supernova-ai/cordis`)
-- `source`: [`packages/llm/llm-deepseek-api-key/src/config.ts:18`](../packages/llm/llm-deepseek-api-key/src/config.ts)
+- `source`: [`packages/llm/llm-supernova-api-key/src/config.ts:18`](../packages/llm/llm-supernova-api-key/src/config.ts)
 
 ```ts config-catalog
 /** Messages configuration with a per-request API-key reference. */
@@ -2680,7 +2680,7 @@ export interface Config extends ProtocolConfig, ModelListingConfig {
   apiKeyEnv: Volatile<string>
 }
 ```
-<!-- END GENERATED config-catalog:@supernova-ai/snh-llm-deepseek-api-key -->
+<!-- END GENERATED config-catalog:@supernova-ai/snh-llm-supernova-api-key -->
 
 <!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-lsp-stdio -->
 <a id="supernova-aisnh-lsp-stdio"></a>

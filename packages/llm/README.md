@@ -26,7 +26,7 @@ The llm group provides the harness's model-call capability: one provider-neutral
 |---|---|---|
 | [`llm/`](llm/README.md) | Streams one model call through a registered provider adapter and shares the harness message, block, and chunk vocabulary | `ctx.llm` |
 | [`llm-supernova/`](llm-supernova/README.md) | Shared Messages protocol, request configuration, and model capabilities | — |
-| [`llm-deepseek-api-key/`](llm-deepseek-api-key/README.md) | API-key authentication and discovery for the official route | `ctx.llm` |
+| [`llm-supernova-api-key/`](llm-supernova-api-key/README.md) | API-key authentication and discovery for the official route | `ctx.llm` |
 | [`llm-deepseek-account/`](llm-deepseek-account/README.md) | Account-token authentication, invalidation, and discovery | `ctx.llm` |
 | [`llm-pi-ai/`](llm-pi-ai/README.md) | Serves configured provider routes through pi-ai catalogs and wire protocols, including hand-declared gateways | registers on `ctx.llm` |
 | [`supernova-llm-api-extensions/`](supernova-llm-api-extensions/README.md) | Registers lifecycle-owned top-level fields on official SuperNova requests | `ctx.supernovaLlmApiExtensions` |
