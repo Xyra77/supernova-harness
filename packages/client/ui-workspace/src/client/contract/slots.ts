@@ -37,27 +37,27 @@
  * the row's Session identity; a Session binding would activate and retain
  * every listed Session.
  */
-import type { ContextMenuTarget } from '@deepseek-ai/dsh-client-ui-context-menu/client'
+import type { ContextMenuTarget } from '@supernova-ai/snh-client-ui-context-menu/client'
 import type {
   FactoryComponentPropsOf, HostObservable, InjectFace, PropsHooks, PropsLocale, PropsRenderFactories, PropsRenderSlots,
   PropsRuntime, PropsStore, SlotHookFactory,
-} from '@deepseek-ai/dsh-client-ui-slots'
+} from '@supernova-ai/snh-client-ui-slots'
 // Type-only: pull the owner SlotMap merges into programs that resolve the
 // runtime shares below.
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
-import type { EmptyWorkspaceOwnerProps } from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
-import type { SessionSearchResultItem } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { RemoteHostFacts } from '@deepseek-ai/dsh-api-remotes/client'
-import type { SessionActivity, WorkspaceId, WorkspaceView } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { ShortcutCatalogEntry } from '@deepseek-ai/dsh-client-shortcuts/client'
+import type {} from '@supernova-ai/snh-client-ui-sidebar/client'
+import type { EmptyWorkspaceOwnerProps } from '@supernova-ai/snh-client-ui-conversation/client'
+import type {} from '@supernova-ai/snh-client-ui-layout/client'
+import type { SessionSearchResultItem } from '@supernova-ai/snh-api-session-controller/client'
+import type { RemoteHostFacts } from '@supernova-ai/snh-api-remotes/client'
+import type { SessionActivity, WorkspaceId, WorkspaceView } from '@supernova-ai/snh-api-workspace-controller/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type { ShortcutCatalogEntry } from '@supernova-ai/snh-client-shortcuts/client'
 import type { WorkspaceShortcutState } from '../shortcuts.ts'
 import type { StartSessionOptions } from '../navigation.ts'
 import type {} from './toast.ts'
 import type { createWorkspaceViewStore } from '../stores.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-context-menu/client' {
+declare module '@supernova-ai/snh-client-ui-context-menu/client' {
   interface ContextMenuTargetMap {
     /** Registered Workspace header; path and title belong to the clicked row. */
     workspace: { readonly workspaceId: WorkspaceId; readonly path: string; readonly displayTitle: string }
@@ -102,7 +102,7 @@ export interface SessionRowOwnerProps {
  * Drag data type a Session row sets to its Session id. The drag allows `copy`, and `move` while the row can be reordered;
  * a drop target outside the list that accepts the Session sets `dropEffect` to `copy`, which discards the pending reorder.
  */
-export type SessionDragType = 'application/x-dsh-session'
+export type SessionDragType = 'application/x-snh-session'
 
 /** The row menu's open state as its owner holds it: the `useState` pair. */
 export type MenuOpenState = readonly [open: boolean, setOpen: (open: boolean) => void]
@@ -141,7 +141,7 @@ export interface SessionRowTrailingOwnerProps {
   readonly sessionId: SessionId
 }
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@supernova-ai/snh-client-ui-slots' {
   interface SlotMap {
     /** Directory-flow hole under the conversation empty-state picker (declared by the WorkspacePicker entry). */
     'conversation.hero.workspace.directoryFlow': { kind: 'single'; scope: 'root'; owner: DirectoryFlowOwnerProps }

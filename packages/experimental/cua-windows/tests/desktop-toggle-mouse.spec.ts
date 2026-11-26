@@ -1,16 +1,16 @@
 /** Opt-in real Windows mouse-button toggles through the native helper. */
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process'
 import { createInterface } from 'node:readline'
-import { Context } from '@deepseek-ai/cordis'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import { NativeClient } from '@deepseek-ai/dsh-cua/native-client'
+import { Context } from '@supernova-ai/cordis'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import { NativeClient } from '@supernova-ai/snh-cua/native-client'
 import { expect, it } from 'vitest'
 import { z } from 'zod'
 import { Config } from '../src/index.ts'
 import { WindowsNativeRuntime } from '../src/native-runtime.ts'
 
-const helperPath = process.env.DSH_CUA_DESKTOP_TEST_HELPER
-const fixturePath = process.env.DSH_CUA_DESKTOP_TEST_FIXTURE
+const helperPath = process.env.SNH_CUA_DESKTOP_TEST_HELPER
+const fixturePath = process.env.SNH_CUA_DESKTOP_TEST_FIXTURE
 const Counts = z.object({ left: z.number().int(), right: z.number().int(), middle: z.number().int() })
 const FixtureState = z.object({
   window: z.string(), foreground: z.string(),

@@ -1,13 +1,13 @@
 /** Conditionally available task-board tools and guidance for Agent Teams. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { SubagentError } from '@deepseek-ai/dsh-subagent'
-import type { TeamTaskId, TeamTaskView } from '@deepseek-ai/dsh-agent-team'
-import { defineTool, ToolArgsError, ToolContextUnavailableError } from '@deepseek-ai/dsh-tools'
-import type { InferValue, ValueSchemaSpec } from '@deepseek-ai/dsh-tools'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { SubagentError } from '@supernova-ai/snh-subagent'
+import type { TeamTaskId, TeamTaskView } from '@supernova-ai/snh-agent-team'
+import { defineTool, ToolArgsError, ToolContextUnavailableError } from '@supernova-ai/snh-tools'
+import type { InferValue, ValueSchemaSpec } from '@supernova-ai/snh-tools'
+import { brandString } from '@supernova-ai/snh-brand'
 
 /** Cordis plugin name. */
 export const name = 'tool-agent-team'

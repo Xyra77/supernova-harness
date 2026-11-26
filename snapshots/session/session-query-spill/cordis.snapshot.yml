@@ -1,28 +1,28 @@
 # Keyless session-query snapshot patch: replay plus the filesystem spill
 # settings inherited by this scenario. The ACP row re-pins the recorded flash model.
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek-api-key'
+- id: llm-supernova
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - id: agent-default-model
-  name: '@deepseek-ai/dsh-agent-default-model'
+  name: '@supernova-ai/snh-agent-default-model'
   config:
     provider: deepseek-official
     model: deepseek-v4-flash
 
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@supernova-ai/snh-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
+    root: !!js snhHomePath('sessions')
     compression: none
 
 - id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
+  name: '@supernova-ai/snh-agent-instructions'
   config:
     maxBytes: 65536
 
 - id: system-prompt
-  name: '@deepseek-ai/dsh-system-prompt'
+  name: '@supernova-ai/snh-system-prompt'
   config:
     personaPrefix: |
       You are a coding assistant powered by the {{model}} model. Your bash tool runs under a file sandbox — a `[sandbox: file access denied …]` result is policy, not a command bug.
@@ -31,22 +31,22 @@
 
 - insert:
     - id: llm-replay
-      name: '@deepseek-ai/dsh-llm-replay'
+      name: '@supernova-ai/snh-llm-replay'
       config:
         providers:
           - id: deepseek-official
-            name: DeepSeek
+            name: SuperNova
             models:
               - id: deepseek-v4-flash
               - id: deepseek-v4-pro
 
 - id: spill-local
-  name: '@deepseek-ai/dsh-spill-local'
+  name: '@supernova-ai/snh-spill-local'
   config:
-    root: !!js process.env.DSH_SNAPSHOT_SPILL_ROOT ?? './.spill'
+    root: !!js process.env.SNH_SNAPSHOT_SPILL_ROOT ?? './.spill'
 
 - id: spill-policy
-  name: '@deepseek-ai/dsh-spill-policy'
+  name: '@supernova-ai/snh-spill-policy'
   config:
     maxInlineTokens: 200
 
@@ -54,17 +54,17 @@
 # supplies replay plus deterministic private spill storage and its byte limit.
 - insert:
     - id: tool-session-query
-      name: '@deepseek-ai/dsh-tool-session-query'
+      name: '@supernova-ai/snh-tool-session-query'
 
 - id: timeout-policy
-  name: '@deepseek-ai/dsh-tool-call-timeout-policy'
+  name: '@supernova-ai/snh-tool-call-timeout-policy'
 
 - insert:
     - id: snapshot-spill-locators
       name: ../../../scripts/snapshot-spill-locators.ts
       config:
-        root: !!js process.env.DSH_SNAPSHOT_SPILL_ROOT
-        locatorRoot: !!js process.env.DSH_SNAPSHOT_SPILL_LOCATOR_ROOT
+        root: !!js process.env.SNH_SNAPSHOT_SPILL_ROOT
+        locatorRoot: !!js process.env.SNH_SNAPSHOT_SPILL_LOCATOR_ROOT
 
 - insert:
     - id: query-spill-verification-path

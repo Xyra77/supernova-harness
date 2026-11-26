@@ -1,32 +1,32 @@
-/** Sidebar action that imports a DeepSeek chat export uploaded from the browser into a chosen Workspace. */
+/** Sidebar action that imports a SuperNova chat export uploaded from the browser into a chosen Workspace. */
 import { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import {
   Button, fileSizeText, IconChevronDownOutlineRegular, IconFolderCloseRegular, IconUploadOutlineMedium, IconUploadOutlineRegular,
   Modal, Tooltip,
-} from '@deepseek-ai/dsh-client-ui-primitives'
-import type { HocShare, InjectFace, PropsLocale, PropsRenderFactories, PropsRuntime, SlotMap } from '@deepseek-ai/dsh-client-ui-slots'
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
-import type {} from '@deepseek-ai/dsh-client-ui-workspace/client'
-import type {} from '@deepseek-ai/dsh-api-remote-access/client'
-import type { WorkspaceId } from '@deepseek-ai/dsh-workspace/types'
-import type { DeepseekChatImportFailureReason, DeepseekChatImportResult } from '../types.ts'
+} from '@supernova-ai/snh-client-ui-primitives'
+import type { HocShare, InjectFace, PropsLocale, PropsRenderFactories, PropsRuntime, SlotMap } from '@supernova-ai/snh-client-ui-slots'
+import type {} from '@supernova-ai/snh-client-ui-sidebar/client'
+import type {} from '@supernova-ai/snh-client-ui-workspace/client'
+import type {} from '@supernova-ai/snh-api-remote-access/client'
+import type { WorkspaceId } from '@supernova-ai/snh-workspace/types'
+import type { SupernovaChatImportFailureReason, SupernovaChatImportResult } from '../types.ts'
 import type { UploadProgress } from './upload.ts'
 import css from './ImportSessions.module.css'
 
 /** Outcome of one import request, already reduced for display. */
-export type DeepseekChatImportOutcome =
-  | { readonly ok: true; readonly result: DeepseekChatImportResult }
+export type SupernovaChatImportOutcome =
+  | { readonly ok: true; readonly result: SupernovaChatImportResult }
   | {
     readonly ok: false
-    readonly reason: DeepseekChatImportFailureReason | 'upload-failed' | 'unknown'
+    readonly reason: SupernovaChatImportFailureReason | 'upload-failed' | 'unknown'
     readonly message: string
     /** Byte limit, present when the browser's own size pre-check rejected the file. */
     readonly limit?: number
   }
 
 /** Callbacks injected by the plugin apply closure. */
-export interface DeepseekChatImportInjected {
+export interface SupernovaChatImportInjected {
   /**
    * Upload one archive into a Workspace, then refresh the Session list however the attempt ends.
    * @param file - archive chosen in the browser.
@@ -37,7 +37,7 @@ export interface DeepseekChatImportInjected {
    */
   readonly importArchive: (
     file: File, workspaceId: WorkspaceId, onProgress: (progress: UploadProgress) => void, signal: AbortSignal,
-  ) => Promise<DeepseekChatImportOutcome>
+  ) => Promise<SupernovaChatImportOutcome>
 }
 
 /** Props composed by the `sidebar.session.action` slot, including the New-session row content it wraps. */
@@ -45,8 +45,8 @@ export type ImportSessionsActionProps =
   PropsRuntime<'sidebar.session.action'>
   & HocShare<SlotMap['sidebar.session.action']>
   & PropsRenderFactories
-  & InjectFace<DeepseekChatImportInjected>
-  & PropsLocale<'deepseekChatImport'>
+  & InjectFace<SupernovaChatImportInjected>
+  & PropsLocale<'supernovaChatImport'>
 
 type Translate = ImportSessionsActionProps['t']
 
@@ -58,7 +58,7 @@ type Translate = ImportSessionsActionProps['t']
  */
 export function ImportSessionsAction(props: ImportSessionsActionProps) {
   const { wide, useRemoteAccess, t, children } = props
-  const allowed = useRemoteAccess('deepseekChatImport/limits')
+  const allowed = useRemoteAccess('supernovaChatImport/limits')
   const [open, setOpen] = useState(false)
   // A Peer that may not import still gets the New-session button: the layer adds nothing to it.
   if (!allowed) return children
@@ -83,7 +83,7 @@ export function ImportSessionsAction(props: ImportSessionsActionProps) {
 type DialogState =
   | { readonly phase: 'editing'; readonly error: string | null }
   | { readonly phase: 'running'; readonly progress: UploadProgress }
-  | { readonly phase: 'done'; readonly result: DeepseekChatImportResult; readonly workspace: string }
+  | { readonly phase: 'done'; readonly result: SupernovaChatImportResult; readonly workspace: string }
 
 function ImportDialog(
   { importArchive, renderFactorySlot, useSessions, useWorkspaces, onClose, t }: ImportSessionsActionProps & { onClose: () => void },
@@ -254,7 +254,7 @@ function ProgressBar({ progress, label }: { progress: UploadProgress; label: str
   return <progress className={css.progress} aria-label={label} {...value} />
 }
 
-function failureText(outcome: Extract<DeepseekChatImportOutcome, { ok: false }>, t: Translate): string {
+function failureText(outcome: Extract<SupernovaChatImportOutcome, { ok: false }>, t: Translate): string {
   switch (outcome.reason) {
     case 'too-large': return outcome.limit === undefined
       // The Host names the exact limit it rejected, which is not the pre-check one.

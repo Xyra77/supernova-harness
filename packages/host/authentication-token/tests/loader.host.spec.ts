@@ -7,23 +7,23 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { basename, dirname, isAbsolute, join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import * as Connection from '@deepseek-ai/dsh-client-connection'
-import LocalCredentials from '@deepseek-ai/dsh-credentials-local'
-import WebServer from '@deepseek-ai/dsh-host-webserver'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import Include from '@supernova-ai/cordis-plugin-include'
+import * as Connection from '@supernova-ai/snh-client-connection'
+import LocalCredentials from '@supernova-ai/snh-credentials-local'
+import WebServer from '@supernova-ai/snh-host-webserver'
 import { expect, it, onTestFinished } from 'vitest'
 import * as Token from '../src/index.ts'
 import { BrowserAuth } from '../src/browser-auth.ts'
 
 /** Loader-composed credentials, WebServer, Connection, and Token on an OS-assigned port. */
 async function composed(): Promise<{ ctx: Context; origin: string; auth: BrowserAuth }> {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-token-plugin-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-token-plugin-'))
   const ctx = new Context()
   onTestFinished(async () => {
     await ctx.fiber.dispose()
-    if (!isAbsolute(root) || dirname(root) !== resolve(tmpdir()) || !basename(root).startsWith('dsh-token-plugin-')) {
+    if (!isAbsolute(root) || dirname(root) !== resolve(tmpdir()) || !basename(root).startsWith('snh-token-plugin-')) {
       throw new Error(`refusing unexpected fixture cleanup path: ${root}`)
     }
     await rm(root, { recursive: true, force: true })
@@ -129,7 +129,7 @@ it('answers a sign-in that carries 17 other ports\' Cookies by expiring the earl
   // Counted down from the OS-assigned listener port, so none of them is the listener's own authority.
   const listenerPort = Number(new URL(origin).port)
   const others = Array.from({ length: 17 }, (_, index) => {
-    const name = `dsh-auth-${createHash('sha256').update(`127.0.0.1:${String(listenerPort - 1 - index)}`).digest('base64url')}`
+    const name = `snh-auth-${createHash('sha256').update(`127.0.0.1:${String(listenerPort - 1 - index)}`).digest('base64url')}`
     const claim = Buffer.from(JSON.stringify({ issuedAt: 1_795_000_000_000 + index }), 'utf8').toString('base64url')
     return { name, pair: `${name}=v1.${claim}.unverified` }
   })

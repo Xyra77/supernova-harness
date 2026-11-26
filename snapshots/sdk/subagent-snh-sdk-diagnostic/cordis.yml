@@ -1,0 +1,65 @@
+# TypeScript SDK snapshot patch for automatic SNH SDK failure notices.
+
+- id: skill-filesystem
+  name: '@supernova-ai/snh-skill-filesystem'
+  config:
+    includeDefaultRoots: false
+
+- id: llm-supernova
+  name: '@supernova-ai/snh-llm-supernova-api-key'
+  config:
+    thinking: enabled
+    reasoningEffort: max
+
+- id: session-persistence-jsonl
+  name: '@supernova-ai/snh-session-persistence-jsonl'
+  config:
+    root: !!js snhHomePath('sessions')
+    compression: !!js "process.env.SNH_SNAPSHOT === undefined ? 'zstd' : 'none'"
+
+- id: session-log-supernova
+  name: '@supernova-ai/snh-session-log-supernova'
+  config:
+    enabled: true
+
+- insert:
+    - id: subagent-snh-sdk-diagnostic
+      name: '@supernova-ai/snh-subagent-snh-sdk'
+      config:
+        providerName: snh-sdk-diagnostic
+        profile: sdk
+        patches:
+          - !!js process.env.SNH_TEST_CHILD_PATCH
+        snhHome: !!js snhHomePath('children/first')
+        provider: mock
+        model: mock-echo
+        env:
+          SNH_TELEMETRY_DISABLED: '1'
+          SNH_TEST_CHILD_FAILURE: '1'
+    - id: tool-subagent-snh-sdk-diagnostic
+      name: '@supernova-ai/snh-tool-subagent'
+      config:
+        provider: snh-sdk-diagnostic
+        toolName: subagent_snh_sdk
+        maxDepth: provider-managed
+    - id: subagent-snh-sdk-diagnostic-second
+      name: '@supernova-ai/snh-subagent-snh-sdk'
+      config:
+        providerName: snh-sdk-diagnostic-second
+        profile: sdk
+        patches:
+          - !!js process.env.SNH_TEST_CHILD_PATCH
+        snhHome: !!js snhHomePath('children/second')
+        provider: mock
+        model: mock-echo
+        env:
+          SNH_TELEMETRY_DISABLED: '1'
+          SNH_TEST_CHILD_FAILURE: '1'
+    - id: tool-subagent-snh-sdk-diagnostic-second
+      name: '@supernova-ai/snh-tool-subagent'
+      config:
+        provider: snh-sdk-diagnostic-second
+        toolName: subagent_snh_sdk_second
+        maxDepth: provider-managed
+    - id: await-external-subagents
+      name: '../../../packages/test-support/session-snapshot/tests/fixtures/subagent-settlement-barrier.ts'

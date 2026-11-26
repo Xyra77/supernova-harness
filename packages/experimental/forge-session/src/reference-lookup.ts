@@ -1,12 +1,12 @@
 /** Resolve unqualified CLI references in the shell execution world and persist only confirmed URLs. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import { extractTextContent } from '@deepseek-ai/dsh-llm/message'
-import type { Session } from '@deepseek-ai/dsh-session'
-import type { ToolExecution, ToolExecutionResult, ToolExecutionToken } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-shell'
-import type {} from '@deepseek-ai/dsh-shell-env'
-import type {} from '@deepseek-ai/dsh-sandbox-policy'
+import type { Context } from '@supernova-ai/cordis'
+import { extractTextContent } from '@supernova-ai/snh-llm/message'
+import type { Session } from '@supernova-ai/snh-session'
+import type { ToolExecution, ToolExecutionResult, ToolExecutionToken } from '@supernova-ai/snh-tools'
+import type {} from '@supernova-ai/snh-shell'
+import type {} from '@supernova-ai/snh-shell-env'
+import type {} from '@supernova-ai/snh-sandbox-policy'
 import { z } from 'zod'
 import type { CommandRules } from './commands.ts'
 
@@ -121,7 +121,7 @@ export function observeReferences(
         workdir: lookup.cwd,
         timeoutMs,
         signal,
-        dshEnv: scope.shellEnv.collect(lookup.exec),
+        snhEnv: scope.shellEnv.collect(lookup.exec),
         sandboxPolicy: scope.get('sandboxPolicy')?.resolve({ session: lookup.session }),
       })
       const process = await scope.shell.execute(spec)

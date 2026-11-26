@@ -65,7 +65,7 @@ describe.skipIf(process.platform === 'win32')('web e2e: Tencent Meeting plugin a
   let tripwire: ReturnType<typeof watchConsole>
 
   beforeAll(async () => {
-    binDir = await mkdtemp(join(tmpdir(), 'dsh-tencent-meeting-e2e-'))
+    binDir = await mkdtemp(join(tmpdir(), 'snh-tencent-meeting-e2e-'))
     await writeFile(join(binDir, 'tmeet'), TMEET)
     await chmod(join(binDir, 'tmeet'), 0o755)
     await mkdir(join(binDir, 'skills'))
@@ -98,7 +98,7 @@ describe.skipIf(process.platform === 'win32')('web e2e: Tencent Meeting plugin a
     await page.getByRole('navigation', { name: '全局面板' }).getByRole('button', { name: '插件', exact: true }).click()
     const panel = page.locator('[data-plugin-panel]')
     await panel.getByRole('button', { name: '查看 腾讯会议插件', exact: true }).click({ timeout: 20_000 })
-    const section = panel.locator('[data-connector-account-key="@deepseek-ai/dsh-tencent-meeting"]')
+    const section = panel.locator('[data-connector-account-key="@supernova-ai/snh-tencent-meeting"]')
     await expect.poll(() => section.getAttribute('data-connector-account'), { timeout: 20_000 }).toBe('disconnected')
     expect(await panel.locator('[data-plugin-detail]').getByText('未连接', { exact: true }).count()).toBe(2)
 

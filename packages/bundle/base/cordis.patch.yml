@@ -1,4 +1,4 @@
-# The dsh-base bundle patch: the shared core of each base-backed profile, applied as
+# The snh-base bundle patch: the shared core of each base-backed profile, applied as
 # ONE insert over the empty profile root. Later bundle patches and the user's
 # profile cordis.patch.yml address these rows by id, with the last write
 # winning per row.
@@ -14,58 +14,58 @@
 
 - insert:
     - id: tool-plugin-manager
-      name: '@deepseek-ai/dsh-plugin-manager/tools'
+      name: '@supernova-ai/snh-plugin-manager/tools'
       disabled: true
 
     - id: plugin-manager
-      name: '@deepseek-ai/dsh-plugin-manager'
+      name: '@supernova-ai/snh-plugin-manager'
       disabled: !!js "!ctx.get('profileContext')"
 
     - id: timer
-      name: '@deepseek-ai/cordis-plugin-timer'
+      name: '@supernova-ai/cordis-plugin-timer'
 
     # Profile configuration reloads by default; module roots are opt-in.
     - id: hmr
-      name: '@deepseek-ai/dsh-hmr'
+      name: '@supernova-ai/snh-hmr'
       disabled: !!js "!ctx.get('profileContext')"
       config:
         root: []
 
     - id: llm
-      name: '@deepseek-ai/dsh-llm'
+      name: '@supernova-ai/snh-llm'
 
-    - id: deepseek-llm-api-extensions
-      name: '@deepseek-ai/dsh-deepseek-llm-api-extensions'
+    - id: supernova-llm-api-extensions
+      name: '@supernova-ai/snh-supernova-llm-api-extensions'
 
     - id: session
-      name: '@deepseek-ai/dsh-session'
+      name: '@supernova-ai/snh-session'
 
-    - id: session-log-deepseek
-      name: '@deepseek-ai/dsh-session-log-deepseek'
+    - id: session-log-supernova
+      name: '@supernova-ai/snh-session-log-supernova'
 
     - id: typert
-      name: '@deepseek-ai/dsh-typert-registry'
+      name: '@supernova-ai/snh-typert-registry'
 
     - id: typert-loader
-      name: '@deepseek-ai/dsh-typert-loader'
+      name: '@supernova-ai/snh-typert-loader'
 
     - id: typert-gateway
-      name: '@deepseek-ai/dsh-api-gateway'
+      name: '@supernova-ai/snh-api-gateway'
 
     # Method-level access control for non-owner Peers; the Gateway requires it,
     # and its Client half publishes the standard access Hooks.
     - id: remote-access
-      name: '@deepseek-ai/dsh-api-remote-access'
+      name: '@supernova-ai/snh-api-remote-access'
 
     - id: session-title
-      name: '@deepseek-ai/dsh-session-title'
+      name: '@supernova-ai/snh-session-title'
       config:
         fallbackMaxWords: 5
         fallbackMaxBytes: 40
         maxTitleBytes: 80
 
     - id: session-title-llm
-      name: '@deepseek-ai/dsh-session-title-first-prompt-llm'
+      name: '@supernova-ai/snh-session-title-first-prompt-llm'
       config:
         targetWords: 5
         targetCjkCharacters: 10
@@ -77,57 +77,57 @@
         timeoutMs: 60000
 
     - id: user-questions
-      name: '@deepseek-ai/dsh-user-questions'
+      name: '@supernova-ai/snh-user-questions'
 
     - id: agent
-      name: '@deepseek-ai/dsh-agent'
+      name: '@supernova-ai/snh-agent'
 
-    - id: plugin-package-inventory-deepseek
-      name: '@deepseek-ai/dsh-plugin-package-inventory-deepseek'
+    - id: plugin-package-inventory-supernova
+      name: '@supernova-ai/snh-plugin-package-inventory-supernova'
 
     # The transport-independent default for Agents created by entry points.
     # Settings may supply a saved selection; consumers read it at creation time.
     - id: agent-default-model
-      name: '@deepseek-ai/dsh-agent-default-model'
+      name: '@supernova-ai/snh-agent-default-model'
       config:
         provider: deepseek-official
         model: deepseek-flash
 
     - id: jobs
-      name: '@deepseek-ai/dsh-jobs-local'
+      name: '@supernova-ai/snh-jobs-local'
 
     - id: llm-retry
-      name: '@deepseek-ai/dsh-llm-retry'
+      name: '@supernova-ai/snh-llm-retry'
 
     # Live Config forms persist through the active profile patch.
 
     # Live configuration forms persist through the launcher's profile.
     - id: config-editor
-      name: '@deepseek-ai/dsh-config-editor'
+      name: '@supernova-ai/snh-config-editor'
       disabled: !!js "!ctx.get('profileContext')"
 
     - id: settings
-      name: '@deepseek-ai/dsh-settings'
+      name: '@supernova-ai/snh-settings'
       disabled: !!js "!ctx.get('profileContext')"
 
-    # Credential sources: managed `$DSH_HOME/.credentials.yaml`, then inherited
+    # Credential sources: managed `$SNH_HOME/.credentials.yaml`, then inherited
     # environment, project `.env`, and user `.env` fallbacks.
     # Adapters resolve references per request; the Models page writes only the
     # managed document, which is never materialized into the process environment.
     - id: authorization
-      name: '@deepseek-ai/dsh-authorization'
+      name: '@supernova-ai/snh-authorization'
 
     - id: deepseek-account
-      name: '@deepseek-ai/dsh-deepseek-account'
+      name: '@supernova-ai/snh-deepseek-account'
       config:
         desktopPlatform: !!js "ctx.get('profileContext')?.name === 'desktop' && ['darwin', 'win32'].includes(process.platform) ? process.platform : null"
 
-    # DeepSeek model routes and web providers ask this service for the API key or the account sign-in of each request.
-    - id: deepseek-auth
-      name: '@deepseek-ai/dsh-deepseek-auth'
+    # SuperNova model routes and web providers ask this service for the API key or the account sign-in of each request.
+    - id: supernova-auth
+      name: '@supernova-ai/snh-supernova-auth'
 
     - id: credentials
-      name: '@deepseek-ai/dsh-credentials-local'
+      name: '@supernova-ai/snh-credentials-local'
 
     # The pi-ai multi-provider twin, mounted dormant: zero routes (and no extra
     # models in the picker) until a `llm-pi-ai:` settings section supplies provider
@@ -137,18 +137,18 @@
     # adapters exist is composition; which providers run is the user's settings
     # document.
     - id: llm-pi-ai
-      name: '@deepseek-ai/dsh-llm-pi-ai'
+      name: '@supernova-ai/snh-llm-pi-ai'
 
     - id: session-persistence-jsonl
-      name: '@deepseek-ai/dsh-session-persistence-jsonl'
+      name: '@supernova-ai/snh-session-persistence-jsonl'
       config:
-        root: !!js dshHomePath('sessions')
+        root: !!js snhHomePath('sessions')
 
     # Durable image bytes live outside the append-only session log. Messages
     # keep content-addressed references that this shared backend resolves for
     # provider requests and authorized history reads.
     - id: attachment-local
-      name: '@deepseek-ai/dsh-attachment-local'
+      name: '@supernova-ai/snh-attachment-local'
 
     # Full-text session search is opt-in. `openAt: never` keeps
     # ctx.sessionQuery mounted — exact reads, titles, and lineage traces
@@ -159,7 +159,7 @@
     # `first-search` or `startup` in a later patch layer (profile
     # cordis.patch.yml or a --patch overlay), typically with a durable `path`.
     - id: session-query-sqlite
-      name: '@deepseek-ai/dsh-session-query-sqlite'
+      name: '@supernova-ai/snh-session-query-sqlite'
       config:
         path: ':memory:'
         openAt: never
@@ -168,25 +168,25 @@
     # through its registered units, so the `list_agents` surface below fails
     # loud without it; web layers reuse this same mount for list rows.
     - id: working-directory
-      name: '@deepseek-ai/dsh-working-directory'
+      name: '@supernova-ai/snh-working-directory'
 
     - id: session-projection
-      name: '@deepseek-ai/dsh-session-projection'
+      name: '@supernova-ai/snh-session-projection'
 
     # Durable KV storage: the storage hub, the json backend, and the
     # schema-validated domain form over them. Session-layer persistence (the
     # projection cache below; workspace in web layers)
     # routes through this stack, so it belongs to the shared base.
     - id: storage
-      name: '@deepseek-ai/dsh-storage'
+      name: '@supernova-ai/snh-storage'
 
     - id: storage-json
-      name: '@deepseek-ai/dsh-storage-json'
+      name: '@supernova-ai/snh-storage-json'
       config:
-        root: !!js dshHomePath('storages')
+        root: !!js snhHomePath('storages')
 
     - id: storage-domain
-      name: '@deepseek-ai/dsh-storage-domain'
+      name: '@supernova-ai/snh-storage-domain'
       config:
         backend: json
 
@@ -195,20 +195,20 @@
     # checkpoint document per session), serving the session listing's
     # projection column.
     - id: session-projection-cache
-      name: '@deepseek-ai/dsh-session-projection-cache'
+      name: '@supernova-ai/snh-session-projection-cache'
       config:
         writeEveryEvents: 200
         writeIntervalMs: 5000
 
     - id: otel
-      name: '@deepseek-ai/dsh-otel'
+      name: '@supernova-ai/snh-otel'
 
     # OTel releases a Session-log prefix only after explicit user feedback,
     # regardless of model provider. Ordinary activity never triggers capture.
-    # DSH_TELEMETRY_OTLP_URL overrides the production endpoint. A non-empty
-    # DSH_TELEMETRY_DISABLED — any value, including '0'/'false' — opts the
+    # SNH_TELEMETRY_OTLP_URL overrides the production endpoint. A non-empty
+    # SNH_TELEMETRY_DISABLED — any value, including '0'/'false' — opts the
     # process out (the launchers patch the row disabled; config cannot disable
-    # a row). Exports carry the harness home's anonymous user id ($DSH_HOME/.anonymous-user-id,
+    # a row). Exports carry the harness home's anonymous user id ($SNH_HOME/.anonymous-user-id,
     # random UUID; delete the file to reset the identity) as the Resource's
     # user.id. Byte-bounded batching may turn an authorized prefix into
     # several HTTP requests. Requests run serially; each has its own 1s
@@ -217,13 +217,13 @@
     # large prefixes or an unsettled transport may leave records unsent.
     # Every CLI exit path drains by disposing the root on SIGINT/SIGTERM.
     - id: session-telemetry-otel
-      name: '@deepseek-ai/dsh-session-telemetry-otel'
+      name: '@supernova-ai/snh-session-telemetry-otel'
       config:
-        mode: !!js process.env.DSH_TELEMETRY_MODE || 'FEEDBACK_ONLY'
+        mode: !!js process.env.SNH_TELEMETRY_MODE || 'FEEDBACK_ONLY'
         shutdownTimeoutMillis: 3000
         maxRequestBytes: 4000000
         exporter:
-          url: !!js process.env.DSH_TELEMETRY_OTLP_URL ?? 'https://dsh-otel-collector.deepseeksvc.com/v1/logs'
+          url: !!js process.env.SNH_TELEMETRY_OTLP_URL ?? 'https://snh-otel-collector.supernovasvc.com/v1/logs'
           compression: gzip
           timeoutMillis: 1000
         processor:
@@ -233,42 +233,42 @@
           exportTimeoutMillis: 1500
 
     - id: subprocess
-      name: '@deepseek-ai/dsh-subprocess-local'
+      name: '@supernova-ai/snh-subprocess-local'
 
     # CLI app plugins register their vendor CLI and account with this Service,
     # which adds nothing to a composition until one registers.
     - id: cli-account
-      name: '@deepseek-ai/dsh-cli-account'
+      name: '@supernova-ai/snh-cli-account'
 
     # Every shipped CLI mode starts with the same file-effect boundary.
     # The environment remains an explicit deployment override; otherwise fresh
     # sessions pin workspace-write + ask through the permission service below.
     - id: sandbox
-      name: '@deepseek-ai/dsh-sandbox-local'
+      name: '@supernova-ai/snh-sandbox-local'
 
     - id: sandbox-policy
-      name: '@deepseek-ai/dsh-sandbox-policy'
+      name: '@supernova-ai/snh-sandbox-policy'
       config:
-        mode: !!js process.env.DSH_PERMISSION_MODE ?? 'workspace-write'
+        mode: !!js process.env.SNH_PERMISSION_MODE ?? 'workspace-write'
         workspaceRoot: !!js process.cwd()
 
     - id: bash-sandbox
-      name: '@deepseek-ai/dsh-bash-sandbox'
+      name: '@supernova-ai/snh-bash-sandbox'
       disabled: !!js process.platform === 'win32'
       config:
         timeoutMs: 60000
 
     - id: pwsh-sandbox
-      name: '@deepseek-ai/dsh-pwsh-sandbox'
+      name: '@supernova-ai/snh-pwsh-sandbox'
       disabled: !!js process.platform !== 'win32'
 
     - id: approval
-      name: '@deepseek-ai/dsh-user-approval'
+      name: '@supernova-ai/snh-user-approval'
       config:
-        policy: !!js "(process.env.DSH_PERMISSION_MODE ?? 'workspace-write') === 'danger-full-access' ? 'never' : 'ask'"
+        policy: !!js "(process.env.SNH_PERMISSION_MODE ?? 'workspace-write') === 'danger-full-access' ? 'never' : 'ask'"
 
     - id: permission
-      name: '@deepseek-ai/dsh-permission-presets'
+      name: '@supernova-ai/snh-permission-presets'
       config:
         presets:
           read-only:
@@ -282,70 +282,70 @@
             approval: never
 
     - id: shell-env
-      name: '@deepseek-ai/dsh-shell-env'
+      name: '@supernova-ai/snh-shell-env'
 
     - id: tool-bash
-      name: '@deepseek-ai/dsh-tool-bash'
+      name: '@supernova-ai/snh-tool-bash'
       disabled: !!js process.platform === 'win32'
 
     - id: tool-pwsh
-      name: '@deepseek-ai/dsh-tool-pwsh'
+      name: '@supernova-ai/snh-tool-pwsh'
       disabled: !!js process.platform !== 'win32'
 
     - id: tool-jobs
-      name: '@deepseek-ai/dsh-tool-jobs'
+      name: '@supernova-ai/snh-tool-jobs'
 
     - id: fs-observation-policy
-      name: '@deepseek-ai/dsh-fs-observation-policy'
+      name: '@supernova-ai/snh-fs-observation-policy'
       disabled: true
 
     - id: tool-fs
-      name: '@deepseek-ai/dsh-tool-fs'
+      name: '@supernova-ai/snh-tool-fs'
       config:
         # Set false to drop the apply_patch tool beside edit.
         applyPatch: false
 
     - id: tool-fs-search
-      name: '@deepseek-ai/dsh-tool-fs-search'
+      name: '@supernova-ai/snh-tool-fs-search'
       config:
         sampleOverCapGlobResults: false
 
     - id: agent-instructions
-      name: '@deepseek-ai/dsh-agent-instructions'
+      name: '@supernova-ai/snh-agent-instructions'
       config:
         maxBytes: 65536
 
     - id: skill
-      name: '@deepseek-ai/dsh-skill'
+      name: '@supernova-ai/snh-skill'
 
     - id: skill-filesystem
-      name: '@deepseek-ai/dsh-skill-filesystem'
+      name: '@supernova-ai/snh-skill-filesystem'
 
     - id: tool-skill
-      name: '@deepseek-ai/dsh-tool-skill'
+      name: '@supernova-ai/snh-tool-skill'
 
     # CLI app plugins register their entry skill and its pinned upstream files
     # with this Service, which downloads nothing until one registers.
     - id: upstream-skills
-      name: '@deepseek-ai/dsh-upstream-skills'
+      name: '@supernova-ai/snh-upstream-skills'
 
     - id: commands
-      name: '@deepseek-ai/dsh-commands'
+      name: '@supernova-ai/snh-commands'
 
     - id: command-feedback
-      name: '@deepseek-ai/dsh-command-feedback'
+      name: '@supernova-ai/snh-command-feedback'
 
     - id: goal
-      name: '@deepseek-ai/dsh-goal'
+      name: '@supernova-ai/snh-goal'
 
     - id: goal-round-driver
-      name: '@deepseek-ai/dsh-goal-round-driver'
+      name: '@supernova-ai/snh-goal-round-driver'
 
     - id: command-goal
-      name: '@deepseek-ai/dsh-command-goal'
+      name: '@supernova-ai/snh-command-goal'
 
     - id: plan-mode
-      name: '@deepseek-ai/dsh-plan-mode'
+      name: '@supernova-ai/snh-plan-mode'
       config:
         section: |
               You are in plan mode. Stay in plan mode until the user approves your plan through exit_plan_mode or switches the session mode. Imperative language to implement changes means plan the implementation, not execute it. A user's conversational agreement — including an answer confirming something you asked — approves nothing and does not end plan mode; fold the confirmed decision into the plan and submit it through exit_plan_mode.
@@ -361,46 +361,46 @@
               When ready, call exit_plan_mode with the complete plan markdown, starting with a # title. Make exit_plan_mode the only and final tool call in that assistant response: it presents the plan for approval, and implementation begins only in a later step after approval. Do not paste the final plan as a plain reply or ask "should I proceed?" through prose or ask_user_question. If review rejects it, incorporate the feedback and present again. If the review channel is unavailable or aborted, stay in plan mode and ask the user to switch modes manually; do not proceed with implementation.
 
     - id: token-meter
-      name: '@deepseek-ai/dsh-token-meter'
+      name: '@supernova-ai/snh-token-meter'
 
     - id: compaction-basic
-      name: '@deepseek-ai/dsh-compaction-basic'
+      name: '@supernova-ai/snh-compaction-basic'
 
     # Human `/compact`: one useful reduction below the automatic threshold. Backend
     # independent, so it follows whichever compaction service this leaf mounts.
     - id: command-compact
-      name: '@deepseek-ai/dsh-command-compact'
+      name: '@supernova-ai/snh-command-compact'
 
     - id: subagent
-      name: '@deepseek-ai/dsh-subagent'
+      name: '@supernova-ai/snh-subagent'
 
     - id: agent-team
-      name: '@deepseek-ai/dsh-agent-team'
+      name: '@supernova-ai/snh-agent-team'
       config:
         maxTasks: 256
 
     - id: tool-agent-team
-      name: '@deepseek-ai/dsh-tool-agent-team'
+      name: '@supernova-ai/snh-tool-agent-team'
 
     - id: subagent-spawn-in-process
-      name: '@deepseek-ai/dsh-subagent-spawn-in-process'
+      name: '@supernova-ai/snh-subagent-spawn-in-process'
       config:
         providerName: spawn
 
     - id: subagent-fork-in-process
-      name: '@deepseek-ai/dsh-subagent-fork-in-process'
+      name: '@supernova-ai/snh-subagent-fork-in-process'
       config:
         providerName: fork
 
     # Continuable background children are selected per delegation tool. The
     # separately loaded follow-up tool registers the one global `send_message`.
     - id: tool-subagent-control
-      name: '@deepseek-ai/dsh-tool-subagent-control'
+      name: '@supernova-ai/snh-tool-subagent-control'
       config:
         interrupt: false
 
     - id: tool-subagent
-      name: '@deepseek-ai/dsh-tool-subagent'
+      name: '@supernova-ai/snh-tool-subagent'
       config:
         provider: spawn
         toolName: subagent
@@ -410,41 +410,41 @@
     # See packages/subagent/tool-subagent/README.md
     # and .agents/notes/implemented/architecture/2026-08-10-fork-children-stay-one-shot.md.
     - id: tool-subagent-fork
-      name: '@deepseek-ai/dsh-tool-subagent'
+      name: '@supernova-ai/snh-tool-subagent'
       config:
         provider: fork
         toolName: subagent_fork
 
     - id: ptc-runtime
-      name: '@deepseek-ai/dsh-ptc-runtime-node'
+      name: '@supernova-ai/snh-ptc-runtime-node'
 
     - id: workflow-ptc
-      name: '@deepseek-ai/dsh-workflow-ptc'
+      name: '@supernova-ai/snh-workflow-ptc'
       config:
         provider: spawn
 
     - id: tool-workflow
-      name: '@deepseek-ai/dsh-tool-workflow'
+      name: '@supernova-ai/snh-tool-workflow'
 
     - id: timeout-policy
-      name: '@deepseek-ai/dsh-tool-call-timeout-policy'
+      name: '@supernova-ai/snh-tool-call-timeout-policy'
 
     - id: spill-local
-      name: '@deepseek-ai/dsh-spill-local'
+      name: '@supernova-ai/snh-spill-local'
 
     - id: spill-policy
-      name: '@deepseek-ai/dsh-spill-policy'
+      name: '@supernova-ai/snh-spill-policy'
       config:
         maxInlineTokens: 12500
 
     # Durability checkpoints before each model request and top-level dispatch.
     - id: session-checkpoint-policy
-      name: '@deepseek-ai/dsh-session-checkpoint-policy'
+      name: '@supernova-ai/snh-session-checkpoint-policy'
 
     # Compacts oversized tool results before the broader conversation compactor
     # runs, preserving the model-visible result within the configured budget.
     - id: tool-result-pruner
-      name: '@deepseek-ai/dsh-compaction-tool-result-pruner'
+      name: '@supernova-ai/snh-compaction-tool-result-pruner'
       config:
         thresholdChars: 8192
         headChars: 4096
@@ -453,21 +453,21 @@
     # When an image-capable route rejects a request as over its image budget,
     # replace the oldest images with placeholders on the surface and retry.
     - id: image-offload
-      name: '@deepseek-ai/dsh-compaction-image-offload'
+      name: '@supernova-ai/snh-compaction-image-offload'
 
     - id: tool-todo
-      name: '@deepseek-ai/dsh-tool-todo'
+      name: '@supernova-ai/snh-tool-todo'
       config:
         allowParallelInProgress: true
 
     # Persisted same-session goals reach the model and the slash menu here; the
     # domain, driver, and `/goal` command are above.
     - id: tool-goal
-      name: '@deepseek-ai/dsh-tool-goal'
+      name: '@supernova-ai/snh-tool-goal'
 
     # Consecutive-repeat reminders on the tool chain.
     - id: repeat-tool-reminder
-      name: '@deepseek-ai/dsh-repeat-tool-reminder'
+      name: '@supernova-ai/snh-repeat-tool-reminder'
       config:
         thresholds: [3, 5, 8]
         argumentsPreviewChars: 500
@@ -475,15 +475,15 @@
     # The shared base enables the stable model-facing web_search and web_fetch
     # tools. The Web app disables this host row and composes both tools per agent
     # preset; products with a stricter network policy override tool-web. Search
-    # composes no fixed provider, so dsh-web selects per model provider route:
-    # legacy Messages search (deepseek-official) for a conversation on a DeepSeek
-    # model route, because DeepSeek makes no per-search charge for it, and the
-    # DeepSeek Search API (deepseek-search-api) for every other route. Fetch
+    # composes no fixed provider, so snh-web selects per model provider route:
+    # legacy Messages search (deepseek-official) for a conversation on a SuperNova
+    # model route, because SuperNova makes no per-search charge for it, and the
+    # SuperNova Search API (supernova-search-api) for every other route. Fetch
     # defaults to the
-    # anonymous local fetcher (http). The DeepSeek Search and Fetch APIs
-    # (deepseek-search-api, deepseek-fetch-api) follow the conversation: on the
+    # anonymous local fetcher (http). The SuperNova Search and Fetch APIs
+    # (supernova-search-api, supernova-fetch-api) follow the conversation: on the
     # deepseek-account route they send the account token to that route's
-    # origin, and otherwise the API key of the DeepSeek API-key route to its
+    # origin, and otherwise the API key of the SuperNova API-key route to its
     # origin, so a DEEPSEEK_API_KEY alone serves both without a sign-in.
     # searchBaseURL / searchApiKeyEnv (fetch* for Fetch) pin one capability to
     # its own endpoint and key instead.
@@ -497,68 +497,68 @@
     # menus on the Web search and fetch settings page select a provider for each
     # capability in place of these defaults.
     - id: web
-      name: '@deepseek-ai/dsh-web'
+      name: '@supernova-ai/snh-web'
       config:
         fetchProvider: http
 
-    - id: web-search-deepseek
-      name: '@deepseek-ai/dsh-web-search-deepseek'
+    - id: web-search-supernova
+      name: '@supernova-ai/snh-web-search-supernova'
       config:
         apiKeyEnv: DEEPSEEK_API_KEY
 
-    - id: web-deepseek-api
-      name: '@deepseek-ai/dsh-web-deepseek-api'
+    - id: web-supernova-api
+      name: '@supernova-ai/snh-web-supernova-api'
 
     - id: web-fetch-http
-      name: '@deepseek-ai/dsh-web-fetch-http'
+      name: '@supernova-ai/snh-web-fetch-http'
 
     - id: tool-web
-      name: '@deepseek-ai/dsh-tool-web'
+      name: '@supernova-ai/snh-tool-web'
       config:
         fetch: true
         searchTimeoutMs: 60000
 
     - id: mcp-resources
-      name: '@deepseek-ai/dsh-mcp-resources'
+      name: '@supernova-ai/snh-mcp-resources'
 
     # ── rows every mode mounts, whose values each overlay may state ──────────────
 
     # Shared tool definitions and the deployment’s native executor.
     - id: tools
-      name: '@deepseek-ai/dsh-tools'
+      name: '@supernova-ai/snh-tools'
 
     - id: tool-executor-native
-      name: '@deepseek-ai/dsh-tool-executor-native'
+      name: '@supernova-ai/snh-tool-executor-native'
 
     - id: tool-executor-ptc
-      name: '@deepseek-ai/dsh-tool-executor-ptc'
+      name: '@supernova-ai/snh-tool-executor-ptc'
       disabled: true
 
     # The deployment persona is a deployment choice; plan-mode and tool plugins own
     # their own prompt sections.
     - id: system-prompt
-      name: '@deepseek-ai/dsh-system-prompt'
+      name: '@supernova-ai/snh-system-prompt'
       config:
         personaPrefix: ''
 
     # Agents created at startup. The base stays empty; raw overlays may create
     # agents, while Web creates sessions on client request.
     - id: agent-loop
-      name: '@deepseek-ai/dsh-agent-loop'
+      name: '@supernova-ai/snh-agent-loop'
       config:
         agents: []
 
     # The sandboxed filesystem provider. `cwd` defaults to `process.cwd()`; an
     # overlay can pin another workspace.
     - id: fs-sandbox
-      name: '@deepseek-ai/dsh-fs-sandbox'
+      name: '@supernova-ai/snh-fs-sandbox'
 
-    # The native DeepSeek adapter. No key or endpoint is inlined: both resolve per
-    # request from the `llm-deepseek:` settings section over this entry, with the
+    # The native SuperNova adapter. No key or endpoint is inlined: both resolve per
+    # request from the `llm-supernova:` settings section over this entry, with the
     # key coming from the credential store below. Thinking defaults are a deployment
     # choice.
-    - id: llm-deepseek
-      name: '@deepseek-ai/dsh-llm-deepseek-api-key'
+    - id: llm-supernova
+      name: '@supernova-ai/snh-llm-supernova-api-key'
 
     - id: llm-deepseek-account
-      name: '@deepseek-ai/dsh-llm-deepseek-account'
+      name: '@supernova-ai/snh-llm-deepseek-account'

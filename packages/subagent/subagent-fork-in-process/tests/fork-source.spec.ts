@@ -1,24 +1,24 @@
 /** Fork creation failures release unaccepted child Agents and their storage ownership. @module */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { AgentRegistry } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionId as SessionIdType } from '@deepseek-ai/dsh-session'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import * as persistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { AgentRegistry } from '@supernova-ai/snh-agent'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import { SessionId } from '@supernova-ai/snh-session'
+import type { SessionId as SessionIdType } from '@supernova-ai/snh-session'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import SubagentRuntime from '@supernova-ai/snh-subagent'
+import * as persistence from '@supernova-ai/snh-session-persistence-jsonl'
 import * as fork from '../src/index.ts'
 import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import { startTestActivation } from '../../subagent/tests/local-activation.ts'
 import { mountWorkingDirectoryFixture } from '../../subagent/tests/working-directory-fixture.ts'
 
 async function fixture(script: ConstructorParameters<typeof MockAdapter>[0] = [textResponse('parent reply'), textResponse('child reply')]) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-fork-source-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-fork-source-'))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
   const ctx = new Context()
   onTestFinished(() => ctx.fiber.dispose())

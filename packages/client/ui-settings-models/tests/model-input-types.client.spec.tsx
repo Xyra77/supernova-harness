@@ -43,7 +43,7 @@ describe.each(['inputModalities', 'input'] as const)('%s input types', (field) =
     expect(model).not.toHaveProperty(field)
   })
 
-  it('removes DeepSeek image limits when images are unchecked', () => {
+  it('removes SuperNova image limits when images are unchecked', () => {
     const onChange = vi.fn()
     const model = { id: 'vision', [field]: ['text', 'image'], description: 'kept', imagePixelBudget: 'low', imageTargetBytes: 12345 }
     render(<ModelInputTypes model={model} field={field} position={1} disabled={false} t={key => en[key]} onChange={onChange} />)

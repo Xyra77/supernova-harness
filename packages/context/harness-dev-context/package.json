@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-harness-dev-context",
-  "description": "Model context naming the DeepSeek Harness checkout and Web GUI URL without letting either change the system prompt",
+  "name": "@supernova-ai/snh-harness-dev-context",
+  "description": "Model context naming the SuperNova Harness checkout and Web GUI URL without letting either change the system prompt",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -35,21 +35,21 @@
     "zod": "4.6.6"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-session-projection": "workspace:*",
-    "@deepseek-ai/dsh-system-prompt": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-projection": "workspace:*",
+    "@supernova-ai/snh-system-prompt": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:*",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-session-projection": "workspace:*",
-    "@deepseek-ai/dsh-system-prompt": "workspace:*",
-    "@deepseek-ai/dsh-web-app": "workspace:*"
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-agent-loop-testkit": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-projection": "workspace:*",
+    "@supernova-ai/snh-system-prompt": "workspace:*",
+    "@supernova-ai/snh-web-app": "workspace:*"
   }
 }

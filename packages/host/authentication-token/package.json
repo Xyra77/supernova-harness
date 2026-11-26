@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-host-authentication-token",
+  "name": "@supernova-ai/snh-host-authentication-token",
   "description": "Default token authentication provider and HTTP cookie exchange",
   "version": "0.2.3-alpha.2",
   "publishConfig": { "access": "public" },
@@ -27,22 +27,22 @@
   "files": ["locale/de.json", "locale/en.json", "locale/es.json", "locale/fr.json", "locale/ja.json", "locale/pt.json", "locale/ru.json", "locale/zh.json", "lib/index.js", "lib/types/**/*.d.ts", "lib/types/**/*.d.ts.map", "lib/**/*.js.map", "src"],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-credentials": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~"
+    "@supernova-ai/snh-credentials": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-client-connection": "workspace:*",
-    "@deepseek-ai/dsh-host-webserver": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-client-connection": "workspace:*",
+    "@supernova-ai/snh-host-webserver": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/cordis-plugin-include": "workspace:~",
-    "@deepseek-ai/dsh-client-connection": "workspace:*",
-    "@deepseek-ai/dsh-host-webserver": "workspace:*",
-    "@deepseek-ai/dsh-credentials-local": "workspace:*",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*",
-    "@deepseek-ai/dsh-host-frontend-static": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/cordis-plugin-include": "workspace:~",
+    "@supernova-ai/snh-client-connection": "workspace:*",
+    "@supernova-ai/snh-host-webserver": "workspace:*",
+    "@supernova-ai/snh-credentials-local": "workspace:*",
+    "@supernova-ai/snh-typert-protocol": "workspace:*",
+    "@supernova-ai/snh-host-frontend-static": "workspace:*"
   }
 }

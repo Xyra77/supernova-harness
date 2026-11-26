@@ -1,14 +1,14 @@
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import SessionStore, { SESSION_FORMAT_VERSION, type SessionId, SessionLogOffset } from '@deepseek-ai/dsh-session'
-import { SessionQueryError, type SessionObservation } from '@deepseek-ai/dsh-session-query'
-import type {} from '@deepseek-ai/dsh-skill'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
+import type { Agent } from '@supernova-ai/snh-agent'
+import SessionStore, { SESSION_FORMAT_VERSION, type SessionId, SessionLogOffset } from '@supernova-ai/snh-session'
+import { SessionQueryError, type SessionObservation } from '@supernova-ai/snh-session-query'
+import type {} from '@supernova-ai/snh-skill'
 import { describe, expect, it, vi } from 'vitest'
 import { SessionSkillCatalog } from '../src/skill-catalog.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 function observation(
   sessionId: SessionId,

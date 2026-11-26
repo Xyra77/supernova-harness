@@ -1,7 +1,7 @@
-import type { Context } from '@deepseek-ai/cordis'
-import type { AgentOptions } from '@deepseek-ai/dsh-agent'
+import type { Context } from '@supernova-ai/cordis'
+import type { AgentOptions } from '@supernova-ai/snh-agent'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 import type {
   WebhookDeliveryId,
   WebhookRuleId,

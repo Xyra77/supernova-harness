@@ -3,16 +3,16 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { startMockLlmServer } from '@deepseek-ai/dsh-llm-mock-server'
-import { DeepSeekHarness } from '@deepseek-ai/dsh-sdk-client'
-import type {} from '@deepseek-ai/dsh-tool-skill'
+import { startMockLlmServer } from '@supernova-ai/snh-llm-mock-server'
+import { SuperNovaHarness } from '@supernova-ai/snh-sdk-client'
+import type {} from '@supernova-ai/snh-tool-skill'
 import { expect, it, onTestFinished } from 'vitest'
 import { profileEnvironment } from './fixtures/profile-environment.ts'
 
 const card = '```action-card\n{"action":"create_personalized_page","title":"Notes","brief":"Collect notes","details":{"slot":"page"}}\n```'
 
 it.each([true, false])('returns card text with recommendation skills enabled=%s', async (enabled) => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-sdk-recommendations-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-sdk-recommendations-'))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
   const server = await startMockLlmServer({
     sequence: ['tool_call_success', 'success'], toolName: 'skill',
@@ -25,9 +25,9 @@ it.each([true, false])('returns card text with recommendation skills enabled=%s'
     await writeFile(patch, '- id: action-cards\n  config:\n    enabled: false\n')
     patches.push(patch)
   }
-  await using harness = new DeepSeekHarness({
-    dshBin: fileURLToPath(new URL('../../../lib/bin.js', import.meta.url)),
-    cwd: root, processCwd: root, dshHome: join(root, 'home'), patches,
+  await using harness = new SuperNovaHarness({
+    snhBin: fileURLToPath(new URL('../../../lib/bin.js', import.meta.url)),
+    cwd: root, processCwd: root, snhHome: join(root, 'home'), patches,
     env: profileEnvironment(root, server.baseURL), initializeTimeoutMs: 30_000,
   })
   const run = await harness.run('I would like a notes page in this app.')

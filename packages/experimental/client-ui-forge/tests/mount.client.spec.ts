@@ -4,21 +4,21 @@
  * actions and their notices, the changes view, and unload.
  */
 import assert from 'node:assert/strict'
-import { Context, Service } from '@deepseek-ai/cordis'
-import type { RemoteHostFacts } from '@deepseek-ai/dsh-api-remotes/client'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { makeTranslate, stubConfigForm } from '@deepseek-ai/dsh-client-test-runtime'
-import type { QuoteSummary } from '@deepseek-ai/dsh-client-ui-primitives'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type { SidebarRightTabDefinition, TabId } from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
-import { resolveSlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
+import { Context, Service } from '@supernova-ai/cordis'
+import type { RemoteHostFacts } from '@supernova-ai/snh-api-remotes/client'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import { makeTranslate, stubConfigForm } from '@supernova-ai/snh-client-test-runtime'
+import type { QuoteSummary } from '@supernova-ai/snh-client-ui-primitives'
+import { SlotRegistry } from '@supernova-ai/snh-client-ui-renderer/client'
+import type { SidebarRightTabDefinition, TabId } from '@supernova-ai/snh-client-ui-sidebar-right/client'
+import { resolveSlotLabel } from '@supernova-ai/snh-client-ui-slots'
 import type {
   ChangeRequestDescription, ChangeRequestReviewer, ChangeRequestSnapshot, ForgeCommitList, ForgeRerunRequest, ForgeReviewData,
   ForgeReviewerCandidate, ForgeReviewRequest, ForgeReviewResult, ForgeReviewWrite, ForgeReviewWriteResult, ForgeThreadId, ForgeViewedFiles,
   ForgeViewedRequest,
-} from '@deepseek-ai/dsh-experimental-forge/types'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { RemoteError, type RemoteResult, type TypertRemoteContribution } from '@deepseek-ai/dsh-typert-protocol'
+} from '@supernova-ai/snh-experimental-forge/types'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { RemoteError, type RemoteResult, type TypertRemoteContribution } from '@supernova-ai/snh-typert-protocol'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { ActionToast } from '../src/client/ActionToast.tsx'
 import { AttentionIndicator, type AttentionIndicatorInjected } from '../src/client/AttentionIndicator.tsx'
@@ -47,7 +47,7 @@ import { WorktreeProgress, type WorktreeProgressInjected } from '../src/client/W
 import { WorktreeSettings } from '../src/client/WorktreeSettings.tsx'
 import type { WorktreeSettingsInjected, WorktreeSettings as WorktreeSettingsFields } from '../src/client/worktree-settings-form.ts'
 import { WorktreeToggle, type WorktreeToggleInjected } from '../src/client/WorktreeToggle.tsx'
-import type { WorktreeCleanup } from '@deepseek-ai/dsh-experimental-worktree/types'
+import type { WorktreeCleanup } from '@supernova-ai/snh-experimental-worktree/types'
 import type {
   ForgeBaseBranches, ForgeChangeRequestDiff, ForgeChangeRequestStatesFrame, ForgeExtensionState, ForgeLensFrame,
   ForgeLensRequest,
@@ -56,9 +56,9 @@ import type {
 } from '../src/types.ts'
 import { entry, listState, ready, snapshot, unserved } from './client-fixtures.client.ts'
 import { description, reviewed } from './review-fixtures.client.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
-const REMOTE: TypertRemoteContribution = { package: '@deepseek-ai/dsh-experimental-client-ui-forge', descriptors: [] }
+const REMOTE: TypertRemoteContribution = { package: '@supernova-ai/snh-experimental-client-ui-forge', descriptors: [] }
 const S1 = brandString<SessionId>('s1')
 const S2 = brandString<SessionId>('s2')
 const BASES: ForgeWorktreeBases = { current: { ref: 'refs/heads/main', name: 'main' }, defaults: [], local: [], remotes: [] }
@@ -104,7 +104,7 @@ const REFUSED = {
   started: { ok: false, error: new RemoteError('forgePanel/session-started', 'started', {}) },
   unavailable: { ok: false, error: new RemoteError('forgePanel/worktrees-unavailable', 'unavailable', {}) },
   busy: { ok: false, error: new RemoteError('forgePanel/session-busy', 'busy', {}) },
-  restore: { ok: false, error: new RemoteError('forgePanel/restore-failed', 'fatal: \'/work/repo-dsh\' already exists', {}) },
+  restore: { ok: false, error: new RemoteError('forgePanel/restore-failed', 'fatal: \'/work/repo-snh\' already exists', {}) },
   failed: { ok: false, error: new RemoteError('gateway/bad-request', 'failed', {}) },
   exists: { ok: false, error: new RemoteError('forgePanel/branch-exists', 'taken', {}) },
   invalidName: { ok: false, error: new RemoteError('forgePanel/invalid-name', 'invalid', {}) },
@@ -595,7 +595,7 @@ describe('mountForgePanel extension API', () => {
     expect(face.keyedHooks.annotations(address)).toBe(view)
     expect(face.keyedHooks.annotations(forgeChanges.address({ sessionId: S1, source: { kind: 'change', url: 'https://github.com/octo/demo/pull/7' } })))
       .not.toBe(view)
-    expect(() => face.keyedHooks.annotations('dsh-resource://forge-changes/s1/remote')).toThrow('forge-panel: not a changes address')
+    expect(() => face.keyedHooks.annotations('snh-resource://forge-changes/s1/remote')).toThrow('forge-panel: not a changes address')
 
     await f.dispose()
     expect(f.extensionStreams[0]?.disposed).toHaveBeenCalled()
@@ -912,7 +912,7 @@ describe('mountForgePanel Session panel actions', () => {
     f.checkout(S1).restore()
     await settle()
     expect(f.notice()).toMatchObject({
-      key: 'toast.restoreFailed', tone: 'failure', seq: 2, params: { message: 'fatal: \'/work/repo-dsh\' already exists' },
+      key: 'toast.restoreFailed', tone: 'failure', seq: 2, params: { message: 'fatal: \'/work/repo-snh\' already exists' },
     })
     f.toast().dismiss()
     expect(f.notice()).toBeNull()
@@ -1143,7 +1143,7 @@ describe('mountForgePanel worktree card actions', () => {
   it('returns why a restore failed for the card to show, without a notice', async () => {
     const f = await fixture()
     f.forgePanel.restoreWorktree.mockResolvedValueOnce(REFUSED.restore)
-    expect(await f.progress(S1).restore()).toBe('fatal: \'/work/repo-dsh\' already exists')
+    expect(await f.progress(S1).restore()).toBe('fatal: \'/work/repo-snh\' already exists')
     expect(f.notice()).toBeNull()
     await f.dispose()
   })

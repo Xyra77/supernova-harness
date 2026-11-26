@@ -8,21 +8,21 @@
  * image-reading tool is useful only when the exact calling route can inspect
  * its result, so unknown capability refuses instead of relying on an adapter
  * failure after filesystem and attachment work.
- * @module @deepseek-ai/dsh-tool-fs/src/read-image
+ * @module @supernova-ai/snh-tool-fs/src/read-image
  */
 
 import { basename, extname } from 'node:path'
-import type { Context } from '@deepseek-ai/cordis'
-import { AttachmentError, type AttachmentId } from '@deepseek-ai/dsh-attachment'
-import type { AttachmentStore, ImageAttachmentRef, ImageMediaType } from '@deepseek-ai/dsh-attachment'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import { defineTool, ToolArgsError, ToolContextUnavailableError } from '@deepseek-ai/dsh-tools'
-import type { GenericCallView, ToolExecution } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-fs'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
+import type { Context } from '@supernova-ai/cordis'
+import { AttachmentError, type AttachmentId } from '@supernova-ai/snh-attachment'
+import type { AttachmentStore, ImageAttachmentRef, ImageMediaType } from '@supernova-ai/snh-attachment'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import { defineTool, ToolArgsError, ToolContextUnavailableError } from '@supernova-ai/snh-tools'
+import type { GenericCallView, ToolExecution } from '@supernova-ai/snh-tools'
+import type {} from '@supernova-ai/snh-fs'
+import { assertNever } from '@supernova-ai/snh-util-values'
 import { ImageInputError } from './image-error.ts'
 import { resolveRegularReadTarget } from './read-target.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 /** Extensions `read_image` accepts; magic-byte validation at the attachment service stays authoritative. */
 const IMAGE_EXTENSIONS: Readonly<Record<string, ImageMediaType>> = {

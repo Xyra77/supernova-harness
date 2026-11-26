@@ -1,7 +1,7 @@
 /** Unsaved task forms survive navigation without persisting business records. */
-import { defineStore, type EngineStoreHandle } from '@deepseek-ai/dsh-client-store'
-import type { PropsStore } from '@deepseek-ai/dsh-client-ui-slots'
-import type { ScheduleCatalogEntry } from '@deepseek-ai/dsh-schedule/client'
+import { defineStore, type EngineStoreHandle } from '@supernova-ai/snh-client-store'
+import type { PropsStore } from '@supernova-ai/snh-client-ui-slots'
+import type { ScheduleCatalogEntry } from '@supernova-ai/snh-schedule/client'
 import type { TaskEditorDraft } from './TaskEditorFields.tsx'
 import type { HostEditFailure, TaskCreateOutcome } from './TaskDetail.tsx'
 

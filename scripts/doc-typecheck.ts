@@ -266,7 +266,7 @@ function main(): void {
     process.exit(0)
   }
 
-  const useBuiltTypes = process.env.DSH_DOC_TYPECHECK_USE_BUILD_OUTPUT === '1'
+  const useBuiltTypes = process.env.SNH_DOC_TYPECHECK_USE_BUILD_OUTPUT === '1'
   const compilationError = compileBlocks(all, useBuiltTypes)
   if (compilationError !== undefined) {
     console.error('doc-typecheck: documentation code blocks failed to compile.\n')

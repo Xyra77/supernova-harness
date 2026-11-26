@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-api-settings-controller",
+  "name": "@supernova-ai/snh-api-settings-controller",
   "description": "Remote owner for the configuration surfaces over the settings-domain seams",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -50,25 +50,25 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/schemastery": "workspace:~",
     "zod": "4.6.6"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-agent-preset-registry": "workspace:*",
-    "@deepseek-ai/dsh-credentials": "workspace:*",
-    "@deepseek-ai/dsh-native-command": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-settings": "workspace:*",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-agent-preset-registry": "workspace:*",
+    "@supernova-ai/snh-credentials": "workspace:*",
+    "@supernova-ai/snh-native-command": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-settings": "workspace:*",
+    "@supernova-ai/snh-typert-protocol": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-agent-preset-registry": "workspace:*",
-    "@deepseek-ai/dsh-credentials": "workspace:*",
-    "@deepseek-ai/dsh-native-command": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-settings": "workspace:*",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-agent-preset-registry": "workspace:*",
+    "@supernova-ai/snh-credentials": "workspace:*",
+    "@supernova-ai/snh-native-command": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-settings": "workspace:*",
+    "@supernova-ai/snh-typert-protocol": "workspace:*"
   }
 }

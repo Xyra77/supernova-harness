@@ -6,8 +6,8 @@ import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
-import * as atomicWrite from '@deepseek-ai/dsh-atomic-write'
-import { DetailFailure } from '@deepseek-ai/dsh-plugin-detail'
+import * as atomicWrite from '@supernova-ai/snh-atomic-write'
+import { DetailFailure } from '@supernova-ai/snh-plugin-detail'
 import { RepositoryCache, type RepositoryCacheOptions } from '../src/repository-cache.ts'
 
 /** Await a rejection that matches `fields` and whose message contains `message`. */
@@ -24,7 +24,7 @@ const signal = new AbortController().signal
 const text = (bytes: Uint8Array | undefined): string => new TextDecoder().decode(bytes)
 
 beforeEach(() => {
-  root = mkdtempSync(join(tmpdir(), 'dsh-plugin-market-repositories-'))
+  root = mkdtempSync(join(tmpdir(), 'snh-plugin-market-repositories-'))
   // Git reads no configuration of the developer running the tests.
   mkdirSync(join(root, 'home'))
   vi.stubEnv('HOME', join(root, 'home'))
@@ -198,8 +198,8 @@ it('reports an unreachable host as a network failure, a failed local command as 
   // A clone whose commit refs cannot be written fails a local command after a successful fetch; that says nothing about
   // the repository, and the clone is deleted.
   const [clone] = readdirSync(join(root, 'cache'))
-  rmSync(join(root, 'cache', clone as string, 'refs', 'dsh'), { recursive: true })
-  writeFileSync(join(root, 'cache', clone as string, 'refs', 'dsh'), 'not a directory')
+  rmSync(join(root, 'cache', clone as string, 'refs', 'snh'), { recursive: true })
+  writeFileSync(join(root, 'cache', clone as string, 'refs', 'snh'), 'not a directory')
   writeFileSync(join(source.dir, 'README.md'), 'y')
   git(source.dir, 'commit', '--quiet', '-am', 'next')
   const broken = repositories.read(source.url, git(source.dir, 'rev-parse', 'HEAD'), 'README.md', 100, signal)
@@ -384,7 +384,7 @@ it.each(['in-process queue', 'shared file lock'] as const)('cancels a Git index 
   const dir = join(root, 'cache', cloneName(`index\0${url}`))
   mkdirSync(dirname(dir), { recursive: true })
   git(root, 'clone', '--bare', '--quiet', source.url, dir)
-  git(dir, 'update-ref', `refs/dsh/${source.commit}`, source.commit)
+  git(dir, 'update-ref', `refs/snh/${source.commit}`, source.commit)
   // A rebuilt cache must fail locally instead of trying to connect to the example remote.
   writeFileSync(join(root, 'home', '.gitconfig'), `[url "${source.url}"]\n insteadOf = ${url}\n`)
   const marker = join(dir, 'holder-marker')

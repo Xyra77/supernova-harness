@@ -1,11 +1,11 @@
 /** The MCP client host: configuration validation, instances below the host, probes, and authorization owners. */
 
 import { expect, it, onTestFinished } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import Tools from '@deepseek-ai/dsh-tools'
-import { McpClientHost, type ConfigInput } from '@deepseek-ai/dsh-mcp-client'
+import { Context } from '@supernova-ai/cordis'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import Tools from '@supernova-ai/snh-tools'
+import { McpClientHost, type ConfigInput } from '@supernova-ai/snh-mcp-client'
 import { authorize, oauthWorld } from './oauth-fixture.ts'
 import { startHttpMcpFixture } from './http-fixture.ts'
 

@@ -1,12 +1,12 @@
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import { unsupportedModel, unsupportedInbox } from '@deepseek-ai/dsh-agent-loop-testkit'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { JobAppendOptions, JobHandle, JobOutcome } from '@deepseek-ai/dsh-jobs'
-import LocalJobRegistry from '@deepseek-ai/dsh-jobs-local'
-import { Session, type SessionId } from '@deepseek-ai/dsh-session'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import { unsupportedModel, unsupportedInbox } from '@supernova-ai/snh-agent-loop-testkit'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type { JobAppendOptions, JobHandle, JobOutcome } from '@supernova-ai/snh-jobs'
+import LocalJobRegistry from '@supernova-ai/snh-jobs-local'
+import { Session, type SessionId } from '@supernova-ai/snh-session'
+import { brandString } from '@supernova-ai/snh-brand'
 
 /** A registry with a tiny ring so eviction is cheap to reach. */
 export async function harness(): Promise<Context> {

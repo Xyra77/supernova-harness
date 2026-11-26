@@ -1,8 +1,8 @@
-import type { Context } from '@deepseek-ai/cordis'
-import type { GenerateOptions, StreamChunk } from '@deepseek-ai/dsh-llm'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm/types'
-import { LlmAdapter } from '@deepseek-ai/dsh-llm'
+import type { Context } from '@supernova-ai/cordis'
+import type { GenerateOptions, StreamChunk } from '@supernova-ai/snh-llm'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm/types'
+import { LlmAdapter } from '@supernova-ai/snh-llm'
 
 /** Script one delegation, then acknowledge the receipt and the completion notice. */
 class MockDelegatingAdapter extends LlmAdapter {

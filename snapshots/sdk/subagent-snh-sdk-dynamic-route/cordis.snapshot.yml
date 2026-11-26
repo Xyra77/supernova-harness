@@ -1,0 +1,26 @@
+# Keyless replay layer for the SNH SDK dynamic-route snapshot.
+
+- insert:
+    - id: llm-replay
+      name: '@supernova-ai/snh-llm-replay'
+      config:
+        providers:
+          - id: deepseek-official
+            name: SuperNova
+            models:
+              - id: mock-delegate
+          - id: mock
+            name: Mock
+            models:
+              - id: mock-routed
+                reasoningEfforts: [max]
+
+    - id: sdk-jsonrpc-server-dynamic-replay
+      name: '@supernova-ai/snh-sdk-jsonrpc-server'
+      inject: [sdkAppStartup, loader]
+      config:
+        maxTokensAsSuccess: true
+
+- id: session-log-supernova
+  config:
+    enabled: false

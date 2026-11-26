@@ -6,10 +6,10 @@ import { dirname, join } from 'node:path'
 import { describe, expect, it, type TestContext } from 'vitest'
 import { findRepositoryReferences, repositoryCommits, scanRepositoryReferences, uniquePrefixMatch } from './verify-repository-references.ts'
 
-const organizationUrl = `https://${['github.com', ['deepseek', 'harness'].join('-')].join('/')}`
+const organizationUrl = `https://${['github.com', ['supernova', 'harness'].join('-')].join('/')}`
 
 function repository(test: TestContext) {
-  const root = mkdtempSync(join(tmpdir(), 'dsh-repository-references-'))
+  const root = mkdtempSync(join(tmpdir(), 'snh-repository-references-'))
   test.onTestFinished(() => {
     rmSync(root, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 })
   })
@@ -206,7 +206,7 @@ describe('maintained repository reference policy', () => {
       fixture.commit.slice(0, 6),
       `prefix${fixture.commit}`,
       `${fixture.commit}suffix`,
-      'dsh-v0.0.1-rc.1',
+      'snh-v0.0.1-rc.1',
     ].join('\n'))
     expect(scanRepositoryReferences(fixture.root)).toEqual([])
   })

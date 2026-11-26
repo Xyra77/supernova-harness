@@ -4,30 +4,30 @@
  * matchers, snake_case payloads without a trailing newline, no hook environment
  * or command substitution, and no pre-tool approval or rewrite path; only
  * blocking decisions are honored. Shared execution and parsing live in
- * `dsh-hook-protocol`.
- * @module @deepseek-ai/dsh-hooks-codex
+ * `snh-hook-protocol`.
+ * @module @supernova-ai/snh-hooks-codex
  */
 
 // Each dialect bridge keeps its complete dependency list visible at the entry
 // point; a cross-package facade for imports alone would add indirection.
 /* jscpd:ignore-start */
-import type {} from '@deepseek-ai/dsh-working-directory'
+import type {} from '@supernova-ai/snh-working-directory'
 import { readFileSync } from 'node:fs'
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
-import { extractTextContent } from '@deepseek-ai/dsh-llm/message'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
-declare module '@deepseek-ai/dsh-llm' {
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type { Agent, PreStepDecision } from '@supernova-ai/snh-agent'
+import { extractTextContent } from '@supernova-ai/snh-llm/message'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'hooks-codex': { kind: 'hooks-codex' } & ContextFormed
   }
 }
 
-import type { ContentBlock, MessageSource } from '@deepseek-ai/dsh-llm'
-import type { UserMessage } from '@deepseek-ai/dsh-session'
-import type { PostToolDecision, PreToolDecision, ToolExecution, ToolExecutionResult } from '@deepseek-ai/dsh-tools'
+import type { ContentBlock, MessageSource } from '@supernova-ai/snh-llm'
+import type { UserMessage } from '@supernova-ai/snh-session'
+import type { PostToolDecision, PreToolDecision, ToolExecution, ToolExecutionResult } from '@supernova-ai/snh-tools'
 import {
   appendHookInvoked,
   appendHookResult,
@@ -42,7 +42,7 @@ import {
   selectHookGroups,
   type HookOutput,
   type MergedHookOutcome,
-} from '@deepseek-ai/dsh-hook-protocol'
+} from '@supernova-ai/snh-hook-protocol'
 import { parseCodexConfig, type CodexHookConfig } from './config.ts'
 /* jscpd:ignore-end */
 

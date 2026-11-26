@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-storage-domain",
-  "description": "Domain data form (ctx.storage.domain): schema-validated, event-emitting KV domains over storage backends for the DeepSeek Harness",
+  "name": "@supernova-ai/snh-storage-domain",
+  "description": "Domain data form (ctx.storage.domain): schema-validated, event-emitting KV domains over storage backends for the SuperNova Harness",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -32,15 +32,15 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-storage": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/snh-storage": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/schemastery": "workspace:~",
     "zod": "4.6.6"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-storage": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/snh-storage": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

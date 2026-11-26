@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-settings",
-  "description": "Abstract user-settings seam (ctx.settings) for the DeepSeek Harness",
+  "name": "@supernova-ai/snh-settings",
+  "description": "Abstract user-settings seam (ctx.settings) for the SuperNova Harness",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -37,27 +37,27 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~",
-    "@deepseek-ai/cordis-plugin-timer": "workspace:~",
-    "@deepseek-ai/dsh-app-boot": "workspace:*",
-    "@deepseek-ai/dsh-hmr": "workspace:*",
-    "@deepseek-ai/dsh-agent-default-model": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
+    "@supernova-ai/cordis-plugin-timer": "workspace:~",
+    "@supernova-ai/snh-app-boot": "workspace:*",
+    "@supernova-ai/snh-hmr": "workspace:*",
+    "@supernova-ai/snh-agent-default-model": "workspace:*",
     "yaml": "^2.8.1"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-util-values": "workspace:*",
-    "@deepseek-ai/dsh-config-editor": "workspace:*",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/cosmokit": "workspace:~",
+    "@supernova-ai/snh-util-values": "workspace:*",
+    "@supernova-ai/snh-config-editor": "workspace:*",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/cosmokit": "workspace:~",
     "yaml": "^2.8.1"
   }
 }

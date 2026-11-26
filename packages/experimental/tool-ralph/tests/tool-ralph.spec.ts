@@ -1,22 +1,22 @@
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import type { SubagentCapabilities, SubagentProvider, SubagentRun, SubagentStartRequest } from '@deepseek-ai/dsh-subagent'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH } from '@deepseek-ai/dsh-tools'
-import type { ToolExecutionResult } from '@deepseek-ai/dsh-tools'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { WorkflowRunId } from '@deepseek-ai/dsh-workflow/types'
-import { WorkflowEngine } from '@deepseek-ai/dsh-workflow'
-import type { WorkflowResult, WorkflowRun, WorkflowStartRequest } from '@deepseek-ai/dsh-workflow'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import type { SessionId } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SubagentRuntime from '@supernova-ai/snh-subagent'
+import type { SubagentCapabilities, SubagentProvider, SubagentRun, SubagentStartRequest } from '@supernova-ai/snh-subagent'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH } from '@supernova-ai/snh-tools'
+import type { ToolExecutionResult } from '@supernova-ai/snh-tools'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { WorkflowRunId } from '@supernova-ai/snh-workflow/types'
+import { WorkflowEngine } from '@supernova-ai/snh-workflow'
+import type { WorkflowResult, WorkflowRun, WorkflowStartRequest } from '@supernova-ai/snh-workflow'
 import * as toolRalph from '../src/index.ts'
 
 const testToolSignal = new AbortController().signal
@@ -150,7 +150,7 @@ async function settleCompleted(
   return pending
 }
 
-describe('dsh-tool-ralph', () => {
+describe('snh-tool-ralph', () => {
   it('starts the fixed workflow through the configured fresh provider and renders completion', async () => {
     const { ctx, engine, parent } = await setup({ config: { maxRounds: 9, maxHandoffChars: 9000 } })
     const pending = execute(ctx, { objective: '  Finish the migration.  ', maxRounds: 4 }, { agent: parent })

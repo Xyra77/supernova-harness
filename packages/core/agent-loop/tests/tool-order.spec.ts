@@ -5,23 +5,23 @@
  * happened to register in. Registration order is a concurrent loading artifact
  * and must not leak downstream.
  */
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import { createUserMessage } from '@supernova-ai/snh-llm'
 
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import SessionStore, { type SessionId, foldRequestHeader } from '@deepseek-ai/dsh-session'
-import SystemPrompt, { TOOL_ORDER_REST } from '@deepseek-ai/dsh-system-prompt'
-import type { Config as SystemPromptConfig } from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import AgentRegistry, { type Agent } from '@deepseek-ai/dsh-agent'
+import { Context } from '@supernova-ai/cordis'
+import LlmRuntime from '@supernova-ai/snh-llm'
+import SessionStore, { type SessionId, foldRequestHeader } from '@supernova-ai/snh-session'
+import SystemPrompt, { TOOL_ORDER_REST } from '@supernova-ai/snh-system-prompt'
+import type { Config as SystemPromptConfig } from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import { defineContentToolFixture } from '@supernova-ai/snh-tool-testkit'
+import AgentRegistry, { type Agent } from '@supernova-ai/snh-agent'
 
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import { MockAdapter, textResponse } from './mock-adapter.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 async function harness(adapter: MockAdapter, toolOrder?: SystemPromptConfig['toolOrder']) {
   const ctx = new Context()

@@ -1,6 +1,6 @@
-/** Browser-use provider identities. @module @deepseek-ai/dsh-browser-use/src/brand.ts */
+/** Browser-use provider identities. @module @supernova-ai/snh-browser-use/src/brand.ts */
 
-import type { Branded } from '@deepseek-ai/dsh-brand'
+import type { Branded } from '@supernova-ai/snh-brand'
 
 /** Provider-owned name identifying a browser-use registration. */
 export type BrowserUseProviderName = Branded<'BrowserUseProviderName'>

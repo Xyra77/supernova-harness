@@ -6,21 +6,21 @@
  * 404, missing descendant → errored stream).
  */
 
-import { SESSION_FORMAT_VERSION, SessionSeq } from '@deepseek-ai/dsh-session'
+import { SESSION_FORMAT_VERSION, SessionSeq } from '@supernova-ai/snh-session'
 import { randomBytes } from 'node:crypto'
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { unzipSync, strFromU8 } from 'fflate'
-import { AttachmentError } from '@deepseek-ai/dsh-attachment'
-import type { FileAttachmentRef, ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import type { SessionEvent, SessionHeader, SessionId, ToolResultMessage, UserMessage } from '@deepseek-ai/dsh-session'
-import type { SessionLineageNode } from '@deepseek-ai/dsh-session-query'
-import { SessionPersistenceNotFoundError } from '@deepseek-ai/dsh-session-persistence'
-import type { SessionAccess, SessionHandle } from '@deepseek-ai/dsh-session-persistence'
-import { ConnectionAuthentication, HostConnectionService } from '@deepseek-ai/dsh-client-connection'
+import { AttachmentError } from '@supernova-ai/snh-attachment'
+import type { FileAttachmentRef, ImageAttachmentRef } from '@supernova-ai/snh-attachment'
+import type { SessionEvent, SessionHeader, SessionId, ToolResultMessage, UserMessage } from '@supernova-ai/snh-session'
+import type { SessionLineageNode } from '@supernova-ai/snh-session-query'
+import { SessionPersistenceNotFoundError } from '@supernova-ai/snh-session-persistence'
+import type { SessionAccess, SessionHandle } from '@supernova-ai/snh-session-persistence'
+import { ConnectionAuthentication, HostConnectionService } from '@supernova-ai/snh-client-connection'
 import * as SessionLogExport from '../src/index.ts'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface ContentBlockMap {
     'plugin:vendor': { type: 'plugin:vendor'; data: { content: readonly unknown[] }; content: readonly unknown[] }
   }
@@ -314,7 +314,7 @@ describe('session.export download endpoint', () => {
     )
     expect(response.status).toBe(200)
     expect(response.headers.get('content-type')).toBe('application/zip')
-    expect(response.headers.get('content-disposition')).toContain('dsh-session-session-root.zip')
+    expect(response.headers.get('content-disposition')).toContain('snh-session-session-root.zip')
     const files = unzipSync(await responseBytes(response))
     expect(Object.keys(files)).toEqual([exportLogName])
     expect(strFromU8(files[exportLogName] as Uint8Array)).toBe(logText(stored))
@@ -329,7 +329,7 @@ describe('session.export download endpoint', () => {
 
     expect(response.status).toBe(200)
     expect(response.headers.get('content-type')).toBe('application/zip')
-    expect(response.headers.get('content-disposition')).toContain('dsh-session-session-root.zip')
+    expect(response.headers.get('content-disposition')).toContain('snh-session-session-root.zip')
     expect(response.body).toBeNull()
     expect(open).toHaveBeenCalledOnce()
   })

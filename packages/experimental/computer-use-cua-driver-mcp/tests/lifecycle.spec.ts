@@ -1,13 +1,13 @@
 /** The external MCP process is replaced by barriers to pin disposal ordering. */
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import ComputerUse from '@deepseek-ai/dsh-computer-use'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ComputerUseProviderName } from '@deepseek-ai/dsh-computer-use/types'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
+import { Context } from '@supernova-ai/cordis'
+import ComputerUse from '@supernova-ai/snh-computer-use'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ComputerUseProviderName } from '@supernova-ai/snh-computer-use/types'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
 
 const fake = vi.hoisted(() => ({
   start: vi.fn<() => Promise<void>>(),
@@ -15,8 +15,8 @@ const fake = vi.hoisted(() => ({
   configurations: [] as unknown[],
 }))
 
-vi.mock('@deepseek-ai/dsh-mcp-client', async (importOriginal) => {
-  const original = await importOriginal<typeof import('@deepseek-ai/dsh-mcp-client')>()
+vi.mock('@supernova-ai/snh-mcp-client', async (importOriginal) => {
+  const original = await importOriginal<typeof import('@supernova-ai/snh-mcp-client')>()
   return {
     ...original,
     async apply(ctx: Context, config: unknown) {

@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
-using DeepSeek.Cua.Protocol;
+using SuperNova.Cua.Protocol;
 
-namespace DeepSeek.Cua.Windows;
+namespace SuperNova.Cua.Windows;
 
 internal static class DesktopSession
 {
@@ -39,7 +39,7 @@ internal static class DesktopSession
             platform = "windows", sessionLocked = Locked(),
             captureAvailable,
             elevated = new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator),
-            helper = new { pid = 4, path = Environment.ProcessPath, name = "dsh-cua-windows" },
+            helper = new { pid = 4, path = Environment.ProcessPath, name = "snh-cua-windows" },
         };
     }
 }

@@ -3,7 +3,7 @@ description: "把飞书插件加入 profile：带内嵌技能的官方 lark-cli�
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-feishu
+# @supernova-ai/snh-feishu
 
 [English](README.md) | 中文
 
@@ -30,8 +30,8 @@ kind: "package-bundle"
 在 Web 侧栏的**插件**页面安装，或使用 CLI：
 
 ```sh
-dsh plugin --profile web add @deepseek-ai/dsh-feishu
-dsh plugin --profile web remove @deepseek-ai/dsh-feishu
+snh plugin --profile web add @supernova-ai/snh-feishu
+snh plugin --profile web remove @supernova-ai/snh-feishu
 ```
 
 pnpm 会拦截 `@larksuite/cli` 的安装脚本，该脚本负责下载并校验官方原生程序；请通过插件页的**允许这些脚本并重试**，或 [Plugin Manager](../../boot/plugin-manager/README.zh.md) 记录的其他方式批准。可执行文件存在之前，`feishu` 行会加载失败，并给出缺失的路径。
@@ -55,7 +55,7 @@ pnpm 会拦截 `@larksuite/cli` 的安装脚本，该脚本负责下载并校验
 | `sign-out` | 用户确认后运行 `auth logout --json`，同时退出用户自己终端里的登录，然后重新检查 |
 | 取消 | 在应用配置或登录期间取消操作并等待其命令退出；其他步骤会被忽略 |
 
-检查运行 `auth status --verify --json`。只有 CLI 报告用户可用且已被服务端核实时，账号才是 `connected`；用户缺失、未配置或需要刷新时为 `signed-out`；没有应用时为 `unconfigured`；其他情况为 `unverified`，例如核实时无法连到服务端。除 `unconfigured` 外，每种状态都带有已配置的 `appId`。`config init` 打印的链接和 `auth login` 报告的设备授权链接，只有是 `feishu.cn` 或 `larksuite.com` 上的 HTTPS 地址时才会提供。登录后仍有申请的权限未被授予时（`auth login` 以退出码 3 结束并把它们列为缺失），登录仍算成功；之后需要这些权限的命令会报告缺少哪些。结果分为成功、已取消和失败。失败时，页面和 Host 日志显示命令和观察到的退出码；原生消息、路径和授权数据均不保留。飞书网页显示成功不代表本地凭据已保存。运行 DSH 的进程需要能访问 CLI 配置和系统凭据存储；`DSH_HOME` 不会迁移这两者。
+检查运行 `auth status --verify --json`。只有 CLI 报告用户可用且已被服务端核实时，账号才是 `connected`；用户缺失、未配置或需要刷新时为 `signed-out`；没有应用时为 `unconfigured`；其他情况为 `unverified`，例如核实时无法连到服务端。除 `unconfigured` 外，每种状态都带有已配置的 `appId`。`config init` 打印的链接和 `auth login` 报告的设备授权链接，只有是 `feishu.cn` 或 `larksuite.com` 上的 HTTPS 地址时才会提供。登录后仍有申请的权限未被授予时（`auth login` 以退出码 3 结束并把它们列为缺失），登录仍算成功；之后需要这些权限的命令会报告缺少哪些。结果分为成功、已取消和失败。失败时，页面和 Host 日志显示命令和观察到的退出码；原生消息、路径和授权数据均不保留。飞书网页显示成功不代表本地凭据已保存。运行 SNH 的进程需要能访问 CLI 配置和系统凭据存储；`SNH_HOME` 不会迁移这两者。
 
 ### 配置
 
@@ -65,7 +65,7 @@ pnpm 会拦截 `@larksuite/cli` 的安装脚本，该脚本负责下载并校验
 
 账号检查和退出登录使用 [`cli-account` 行](../cli-account/README.zh.md#use-this-package)的 `commandTimeoutMs`，默认 30 秒。应用配置和登录最多等待用户在浏览器中操作 10 分钟，每条命令最多保留 1 MiB 的 stdout；这两个上限由 CLI 账号 Service 固定。
 
-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-feishu)是受支持字段的完整来源。
+生成的[配置目录](../../../docs/config-catalog.zh.md#supernova-aisnh-feishu)是受支持字段的完整来源。
 
 -----
 
@@ -77,7 +77,7 @@ pnpm 会拦截 `@larksuite/cli` 的安装脚本，该脚本负责下载并校验
 
 [`cordis.patch.yml`](cordis.patch.yml) 在 profile 其他层之后把本包作为 `feishu` 行插入，插件页以本包名作为账号区块的 key。[`src/index.ts`](src/index.ts) 是一个函数插件。它检查 `binDir/lark-cli`（Windows 上为 `lark-cli.exe`）是否可执行，把这个路径和账号注册到 `ctx.cliAccounts`，并注册 skill 提供方。[`src/cli.ts`](src/cli.ts) 定位 `lark-cli` 并解析账号命令的 JSON 输出。[CLI 账号 Service](../cli-account/README.zh.md) 在运行时上下文中把这个路径告诉模型，按同一路径运行每条命令，一次执行一个账号操作，并以退出码报告失败的命令。[`src/account.ts`](src/account.ts) 用飞书的命令完成每个操作，并从命令输出行中读取配置与登录链接。[`src/presentation.ts`](src/presentation.ts) 用 [`src/locales.ts`](src/locales.ts) 中的文案，把每个视图映射为注册表提供的区块。释放时取消进行中的操作，中止正在运行的命令，并在这些进程退出后完成。
 
-[`skills/feishu/SKILL.md`](skills/feishu/SKILL.md) 是本包携带的唯一 skill：DSH 指引、`lark-cli` 1.0.97 内嵌的 28 个子指南的索引，以及打开它们的方法。[`src/skills.ts`](src/skills.ts) 在插件加载时读取一次入口，并把它作为 `feishu` 提供方的唯一 skill 列出，资源基址为 opaque 类型，因此目录列出入口、加载返回该文件时都不运行 CLI。子指南留在二进制中，agent 用 `lark-cli skills read` 读取。
+[`skills/feishu/SKILL.md`](skills/feishu/SKILL.md) 是本包携带的唯一 skill：SNH 指引、`lark-cli` 1.0.97 内嵌的 28 个子指南的索引，以及打开它们的方法。[`src/skills.ts`](src/skills.ts) 在插件加载时读取一次入口，并把它作为 `feishu` 提供方的唯一 skill 列出，资源基址为 opaque 类型，因此目录列出入口、加载返回该文件时都不运行 CLI。子指南留在二进制中，agent 用 `lark-cli skills read` 读取。
 
 </details>
 
@@ -121,7 +121,7 @@ Feishu (飞书) and Lark through the bundled lark-cli: documents and wiki, Base,
 
 #### 模型看到什么
 
-`feishu` 的 `skill` 工具结果约 6,700 个字符：DSH 指引、为 `lark-cli` 1.0.97 内嵌的 28 个子指南各给一行并附路由规则的索引，以及打开子指南的方法。DSH 指引告诉 agent 按当前运行时上下文给出的绝对路径运行 `lark-cli`，在自己运行 CLI 的配置与登录流程之前先请用户到插件页连接飞书，并为保存登录状态的命令设置最窄的 `sandbox_permissions`。打开说明告诉 agent 子指南不是 skill，子指南及其引用的文件都用 `lark-cli skills read` 读取。其资源描述为 `Embedded lark-cli guides; open them with the skills read command given in the loaded skill.`
+`feishu` 的 `skill` 工具结果约 6,700 个字符：SNH 指引、为 `lark-cli` 1.0.97 内嵌的 28 个子指南各给一行并附路由规则的索引，以及打开子指南的方法。SNH 指引告诉 agent 按当前运行时上下文给出的绝对路径运行 `lark-cli`，在自己运行 CLI 的配置与登录流程之前先请用户到插件页连接飞书，并为保存登录状态的命令设置最窄的 `sandbox_permissions`。打开说明告诉 agent 子指南不是 skill，子指南及其引用的文件都用 `lark-cli skills read` 读取。其资源描述为 `Embedded lark-cli guides; open them with the skills read command given in the loaded skill.`
 
 #### Token 影响
 
@@ -163,7 +163,7 @@ Feishu CLI: run `lark-cli` by its absolute path with the call operator, & '<binD
 
 - 仅支持 macOS 和 Windows x64；其他平台未经验证。
 - 命令必须在本 Host 上运行。组合把命令放到别处运行（例如通过 SSH）时，插件仍会加载，但每条运行 `lark-cli` 的命令都会因为那里没有这个路径而失败。
-- 插件使用 CLI 的默认配置。在 DSH 中登录或退出会影响用户自己的终端，没有 DSH 私有账号或账号选择器。插件不提供解绑操作；关闭插件会保留配置与登录。
+- 插件使用 CLI 的默认配置。在 SNH 中登录或退出会影响用户自己的终端，没有 SNH 私有账号或账号选择器。插件不提供解绑操作；关闭插件会保留配置与登录。
 - 登录从 `lark-cli auth login --json` 的事件中读取设备授权链接和完成结果；CLI 版本改变这些事件时，连接以可重试的结果失败。
 - 入口的子指南索引对应 `lark-cli` 1.0.97；固定到另一个 `@larksuite/cli` 版本时，需要对照该版本的 `lark-cli skills list` 检查索引。
 - 在文件沙箱下，普通命令中的 token 刷新可能被拒绝，此时需要单条命令审批。

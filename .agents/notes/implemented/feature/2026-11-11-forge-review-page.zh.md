@@ -10,7 +10,7 @@ Status: implemented
 
 ## Decision
 
-[`dsh-experimental-client-ui-forge`](../../../../packages/experimental/client-ui-forge/README.zh.md) 在左侧导航中加入“代码评审”页，列出三个登录用户列表，并完整显示一个变更请求。
+[`snh-experimental-client-ui-forge`](../../../../packages/experimental/client-ui-forge/README.zh.md) 在左侧导航中加入“代码评审”页，列出三个登录用户列表，并完整显示一个变更请求。
 
 - **列表**——可选的 `ForgeProvider` 能力（`viewer`、`listForViewer`、`countForViewer`）返回未关闭变更请求的摘要；GitHub 每个列表用一次 GraphQL 搜索回答，因为在一个文档中放多个搜索会超时。Host 只在页面流或计数流存在时读取列表，不经过 forge 的状态轮询，因为几十个变更请求的批量快照会超过 GitHub 的查询时限；只有显示中的变更请求经 `ForgeService.watch` 轮询。
 - **按 URL 读取**——页面的 `forgePanel/review*` 方法以 URL 而不是会话指定变更请求；它们与会话绑定的方法共用实现，只有可以使用 Host 代码托管凭据的调用方能访问。

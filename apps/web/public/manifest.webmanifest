@@ -1,6 +1,6 @@
 {
-  "name": "DeepSeek Harness",
-  "short_name": "DSH",
+  "name": "SuperNova Harness",
+  "short_name": "SNH",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

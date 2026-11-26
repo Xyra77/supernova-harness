@@ -3,12 +3,12 @@ import { mkdir, mkdtemp, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { chromium, type Page } from 'playwright'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import type {} from '@deepseek-ai/dsh-api-session-controller'
-import { createLaunchEnvironmentSnapshot } from '@deepseek-ai/dsh-launch-environment'
+import type {} from '@supernova-ai/snh-api-session-controller'
+import { createLaunchEnvironmentSnapshot } from '@supernova-ai/snh-launch-environment'
 import { launchWebScaffold } from './scaffold.ts'
 import { connectFreshWorkspace } from './support.ts'
 
-const SHOTS = process.env.DSH_UI_REVIEW_OUTPUT
+const SHOTS = process.env.SNH_UI_REVIEW_OUTPUT
 const ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect x="1" y="1" width="14" height="14" rx="3" fill="#3b82f6"/></svg>'
 
 /** @param page - assembled file or preview page. @returns visible header axes and action-seat geometry. */

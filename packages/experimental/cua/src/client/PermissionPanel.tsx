@@ -1,10 +1,10 @@
 /** Native permission status and revocable application consent on the existing plugin page. */
 import { useEffect, useState } from 'react'
-import { Button, IconSettingsOutlineRegular, Modal, Toast } from '@deepseek-ai/dsh-client-ui-primitives'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type {} from '@deepseek-ai/dsh-client-ui-plugin-manager/client'
-import type { ConfigForm } from '@deepseek-ai/dsh-client-ui-settings/client'
+import { Button, IconSettingsOutlineRegular, Modal, Toast } from '@supernova-ai/snh-client-ui-primitives'
+import { assertNever } from '@supernova-ai/snh-util-values'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@supernova-ai/snh-client-ui-slots'
+import type {} from '@supernova-ai/snh-client-ui-plugin-manager/client'
+import type { ConfigForm } from '@supernova-ai/snh-client-ui-settings/client'
 import type { CuaApplicationGrant, CuaSystemPermissionState } from '../access-types.ts'
 import type { PermissionFace } from './controller.ts'
 import type { NS } from './locales.ts'
@@ -195,7 +195,7 @@ export function PermissionPanel(props: PermissionPanelProps) {
             x64: 'pnpm run build:native:x64', arm64: 'pnpm run build:native:arm64',
           })}</p>
           <p>{t('windowsHelperPath', {
-            patch: 'cordis.patch.yml', entry: 'cua-windows', config: 'config', path: 'helperPath', exe: 'dsh-cua-windows.exe',
+            patch: 'cordis.patch.yml', entry: 'cua-windows', config: 'config', path: 'helperPath', exe: 'snh-cua-windows.exe',
           })}</p>
         </>}
       </div>

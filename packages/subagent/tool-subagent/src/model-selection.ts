@@ -1,12 +1,12 @@
 /** Child LLM route selection for the subagent tool. */
 
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ReasoningEffortId } from '@deepseek-ai/dsh-llm/types'
-import type { LlmRuntime } from '@deepseek-ai/dsh-llm'
-import type { AgentOptions } from '@deepseek-ai/dsh-agent'
-import { SubagentError } from '@deepseek-ai/dsh-subagent'
-import { ToolArgsError, ToolContextUnavailableError } from '@deepseek-ai/dsh-tools'
-import z from '@deepseek-ai/schemastery'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ReasoningEffortId } from '@supernova-ai/snh-llm/types'
+import type { LlmRuntime } from '@supernova-ai/snh-llm'
+import type { AgentOptions } from '@supernova-ai/snh-agent'
+import { SubagentError } from '@supernova-ai/snh-subagent'
+import { ToolArgsError, ToolContextUnavailableError } from '@supernova-ai/snh-tools'
+import z from '@supernova-ai/schemastery'
 
 /** One exact child LLM route authorized by a user setting. */
 export interface AllowedModelRoute {

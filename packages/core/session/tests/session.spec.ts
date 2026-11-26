@@ -1,9 +1,9 @@
 import { describe, expect, expectTypeOf, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { createDeveloperMessage, createSystemMessage, createUserMessage, type ToolCallId, createMessage, createToolResultMessage, type MessageId, type ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
+import { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import { createDeveloperMessage, createSystemMessage, createUserMessage, type ToolCallId, createMessage, createToolResultMessage, type MessageId, type ReasoningEffortId } from '@supernova-ai/snh-llm'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
 import SessionStore, {
   adoptSessionEvent,
   SESSION_FORMAT_VERSION,
@@ -13,10 +13,10 @@ import SessionStore, {
   SessionLogOffset,
   SessionSeq,
   snapshotSessionEvent,
-} from '@deepseek-ai/dsh-session'
-import type { CreateSessionOptions, SessionEventType, SessionHeader, SessionSurface } from '@deepseek-ai/dsh-session'
+} from '@supernova-ai/snh-session'
+import type { CreateSessionOptions, SessionEventType, SessionHeader, SessionSurface } from '@supernova-ai/snh-session'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'test': { kind: 'test' } & ContextFormed
     'watcher': { kind: 'watcher' } & ContextFormed

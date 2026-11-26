@@ -8,7 +8,7 @@ import { once } from 'node:events'
 import { gunzipSync } from 'node:zlib'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
-import type { SessionEvent, SessionId } from '@deepseek-ai/dsh-session'
+import type { SessionEvent, SessionId } from '@supernova-ai/snh-session'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
 import {
   acknowledgeReloadConnectionLoss, assertFixtureInventory, captureExpandedTurnProcessAria, captureStableAria,
@@ -113,7 +113,7 @@ describe.each(MODE === 'record' ? ['deepseek-official'] : ['deepseek-official', 
       telemetryMode: 'FEEDBACK_ONLY',
       telemetryScheduledDelayMillis: 10,
       replayProviders: [
-        { id: 'deepseek-official', name: 'DeepSeek', models: [
+        { id: 'deepseek-official', name: 'SuperNova', models: [
           { id: 'deepseek-v4-flash', name: 'DeepSeek-V4-Flash', contextWindow: 128_000 },
         ] },
         { id: 'feedback-mock', name: 'Feedback mock', models: [

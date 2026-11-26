@@ -2,15 +2,15 @@
  * Tests for the mcp-client plugin's `apply` lifecycle entry point.
  * Isolated file so vi.mock of the MCP SDK doesn't pollute other test suites.
  */
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import assert from 'node:assert/strict'
 import { describe, expect, it, vi, beforeEach, onTestFinished } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import type { Transport } from '@modelcontextprotocol/client'
-import SystemPrompt, { renderPrompt } from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import { createScope } from '@deepseek-ai/dsh-scope'
+import SystemPrompt, { renderPrompt } from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import { createScope } from '@supernova-ai/snh-scope'
 
 // ---- Mock MCP SDK ----
 
@@ -72,7 +72,7 @@ vi.mock('@modelcontextprotocol/client/stdio', () => ({
 
 // vi.mock is hoisted above static imports, so the module under test sees the
 // mocked SDK even through a static import.
-import { apply, name, inject, Config as ConfigSchema } from '@deepseek-ai/dsh-mcp-client/src/index.ts'
+import { apply, name, inject, Config as ConfigSchema } from '@supernova-ai/snh-mcp-client/src/index.ts'
 
 // ---- Helpers ----
 

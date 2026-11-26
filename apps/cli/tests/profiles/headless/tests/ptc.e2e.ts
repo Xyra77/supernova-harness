@@ -1,37 +1,37 @@
-import { executeToolFixture, executeModelToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import { executeToolFixture, executeModelToolFixture } from '@supernova-ai/snh-tool-testkit'
 import { mkdtemp, mkdir, readFile, realpath, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { createUserMessage, type ToolCallId, HarnessError } from '@deepseek-ai/dsh-llm'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import { RUN_CODE_NAME, defineTool } from '@deepseek-ai/dsh-tools'
-import type { ToolExecutionResult } from '@deepseek-ai/dsh-tools'
-import type { Agent } from '@deepseek-ai/dsh-agent'
+import { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import { createUserMessage, type ToolCallId, HarnessError } from '@supernova-ai/snh-llm'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import type { SessionEvent } from '@supernova-ai/snh-session'
+import { RUN_CODE_NAME, defineTool } from '@supernova-ai/snh-tools'
+import type { ToolExecutionResult } from '@supernova-ai/snh-tools'
+import type { Agent } from '@supernova-ai/snh-agent'
 
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { LocalBashExecutor } from '@deepseek-ai/dsh-bash-local'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import * as ToolBash from '@deepseek-ai/dsh-tool-bash'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek-api-key'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
-import NodeRuntime, { type Config as NodeRuntimeConfig } from '@deepseek-ai/dsh-ptc-runtime-node'
-import Sandbox from '@deepseek-ai/dsh-sandbox-local'
-import SandboxPolicy from '@deepseek-ai/dsh-sandbox-policy'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
-import * as AgentInstructions from '@deepseek-ai/dsh-agent-instructions'
-import LocalJobRegistry from '@deepseek-ai/dsh-jobs-local'
-import * as ToolJobs from '@deepseek-ai/dsh-tool-jobs'
-import CordisHostRunner from '@deepseek-ai/dsh-cordis-host-runner'
-import * as ToolCordis from '@deepseek-ai/dsh-tool-cordis'
-import * as CordisInspectProviders from '@deepseek-ai/dsh-tool-cordis/host'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { LocalBashExecutor } from '@supernova-ai/snh-bash-local'
+import * as BashEnvPlugin from '@supernova-ai/snh-shell-env'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import * as ToolBash from '@supernova-ai/snh-tool-bash'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
+import NodeRuntime, { type Config as NodeRuntimeConfig } from '@supernova-ai/snh-ptc-runtime-node'
+import Sandbox from '@supernova-ai/snh-sandbox-local'
+import SandboxPolicy from '@supernova-ai/snh-sandbox-policy'
+import LocalFileSystem from '@supernova-ai/snh-fs-local'
+import * as ToolFs from '@supernova-ai/snh-tool-fs'
+import * as AgentInstructions from '@supernova-ai/snh-agent-instructions'
+import LocalJobRegistry from '@supernova-ai/snh-jobs-local'
+import * as ToolJobs from '@supernova-ai/snh-tool-jobs'
+import CordisHostRunner from '@supernova-ai/snh-cordis-host-runner'
+import * as ToolCordis from '@supernova-ai/snh-tool-cordis'
+import * as CordisInspectProviders from '@supernova-ai/snh-tool-cordis/host'
 
 /**
  * With-key PTC mode proof: a real model receives only `run_code`, composes two
@@ -73,8 +73,8 @@ async function ptcModeHarness(cwd: string): Promise<Context> {
     tools: { mode: 'ptc' },
   })
   await harness.plugin(AgentLoop, { agents: [] })
-  await harness.plugin(DeepSeekAuth)
-  await harness.plugin(LlmDeepSeek)
+  await harness.plugin(SuperNovaAuth)
+  await harness.plugin(LlmSuperNova)
   if (harness.get('subprocess') === undefined) await harness.plugin(LocalSubprocessRuntime)
   await harness.plugin(BashEnvPlugin)
   await harness.plugin(LocalBashExecutor, { cwd, timeoutMs: 30_000 })
@@ -94,8 +94,8 @@ async function workspacePtcModeHarness(): Promise<Context> {
   await harness.plugin(ToolFs)
   await harness.plugin(AgentInstructions, { maxBytes: 65536 })
   await harness.plugin(AgentLoop, { agents: [] })
-  await harness.plugin(DeepSeekAuth)
-  await harness.plugin(LlmDeepSeek, { models: [{ id: 'deepseek-v4-flash' }] })
+  await harness.plugin(SuperNovaAuth)
+  await harness.plugin(LlmSuperNova, { models: [{ id: 'deepseek-v4-flash' }] })
   await mountRuntime(harness, PER_CALL)
   return harness
 }
@@ -165,7 +165,7 @@ async function backgroundPtcModeHarness(mode: PtcMode, cwd: string): Promise<Con
 
 describe.each(PTC_MODES)('PTC mode typed values ($mode): keyless real-process contracts', (mode) => {
   it('returns formatted read content from inspect through the real outer run_code result', async () => {
-    workdir = await realpath(await mkdtemp(join(tmpdir(), 'dsh-ptc-inspect-read-')))
+    workdir = await realpath(await mkdtemp(join(tmpdir(), 'snh-ptc-inspect-read-')))
     const path = join(workdir, 'a.txt')
     await writeFile(path, 'alpha\nbeta\n')
     ctx = await typedPtcModeHarness(mode)
@@ -262,7 +262,7 @@ describe.each(PTC_MODES)('PTC mode typed values ($mode): keyless real-process co
   })
 
   it('returns a background job id, settles the outer run, and polls that id to completion', async () => {
-    workdir = await mkdtemp(join(tmpdir(), 'dsh-ptc-background-'))
+    workdir = await mkdtemp(join(tmpdir(), 'snh-ptc-background-'))
     ctx = await backgroundPtcModeHarness(mode, workdir)
 
     const jobId = completion(await runCode(ctx, `
@@ -285,7 +285,7 @@ describe.each(PTC_MODES)('PTC mode typed values ($mode): keyless real-process co
   }, 15_000)
 
   it('pre-abort spawns nothing; post-publication abort leaves job_kill as the cancellation owner', { timeout: 15_000, retry: 0 }, async () => {
-    workdir = await mkdtemp(join(tmpdir(), 'dsh-ptc-task-cancel-'))
+    workdir = await mkdtemp(join(tmpdir(), 'snh-ptc-task-cancel-'))
     ctx = await backgroundPtcModeHarness(mode, workdir)
 
     const pre = new AbortController()
@@ -335,7 +335,7 @@ describe.each(PTC_MODES)('PTC mode typed values ($mode): keyless real-process co
   })
 
   it('keeps foreground bash coupled to the outer signal', async () => {
-    workdir = await mkdtemp(join(tmpdir(), 'dsh-ptc-foreground-cancel-'))
+    workdir = await mkdtemp(join(tmpdir(), 'snh-ptc-foreground-cancel-'))
     ctx = await backgroundPtcModeHarness(mode, workdir)
     const controller = new AbortController()
     const startedAt = Date.now()
@@ -386,7 +386,7 @@ function waitForIdle(harness: Context, agent: Agent): Promise<void> {
 
 describe.skipIf(!process.env.DEEPSEEK_API_KEY)('PTC mode: real model writes a program over real tools', () => {
   it('collapses the wire tool list to [run_code], bridges sub-calls, and returns curated output', async () => {
-    workdir = await mkdtemp(join(tmpdir(), 'dsh-ptc-e2e-'))
+    workdir = await mkdtemp(join(tmpdir(), 'snh-ptc-e2e-'))
     ctx = await ptcModeHarness(workdir)
     const agent = await ctx.agentLoop.create(brandString<SessionId>('e2e-ptc'), { provider: 'deepseek-official', model: 'deepseek-v4-flash' }, { cwd: workdir })
 
@@ -431,7 +431,7 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('PTC mode: real model writes a pr
   }, 180_000)
 
   it('projects nested workspace instructions discovered by an fs sub-call', async () => {
-    workdir = await mkdtemp(join(tmpdir(), 'dsh-ptc-workspace-e2e-'))
+    workdir = await mkdtemp(join(tmpdir(), 'snh-ptc-workspace-e2e-'))
     await mkdir(join(workdir, '.git'), { recursive: true })
     await mkdir(join(workdir, 'pkg/deep'), { recursive: true })
     await writeFile(join(workdir, 'pkg/AGENTS.md'), `If asked for the PTC mode workspace handshake, reply with exactly ${WORKSPACE_PROBE} and nothing else.\n`)

@@ -3,13 +3,13 @@ description: "The pi-ai-backed multi-provider adapter for users and maintainers 
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-llm-pi-ai
+# @supernova-ai/snh-llm-pi-ai
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`@deepseek-ai/dsh-llm-pi-ai` routes model requests to multiple pi-ai providers, OpenAI-compatible gateways, or self-hosted servers from one configuration. Installed pi-ai providers supply endpoint, protocol, and model-catalog defaults; custom routes can declare those values without code changes. Profiles and credentials are resolved for each request, so settings changes take effect on the next request without a restart. Supported providers can use stored OAuth or interactive-key sign-in with cross-process refresh locking. The package may start with no routes and activate when user settings add them.
+`@supernova-ai/snh-llm-pi-ai` routes model requests to multiple pi-ai providers, OpenAI-compatible gateways, or self-hosted servers from one configuration. Installed pi-ai providers supply endpoint, protocol, and model-catalog defaults; custom routes can declare those values without code changes. Profiles and credentials are resolved for each request, so settings changes take effect on the next request without a restart. Supported providers can use stored OAuth or interactive-key sign-in with cross-process refresh locking. The package may start with no routes and activate when user settings add them.
 
 ## Table of Contents
 
@@ -31,14 +31,14 @@ The adapter accepts the LLM service's [request-only user inputs](../llm/README.m
 
 ### When to choose it
 
-Choose this adapter when the same composition serves several providers, when a route needs pi-ai's catalog defaults with a few fields corrected, or when a hand-declared gateway must be reached through its own endpoint and protocol. Choose `dsh-llm-deepseek` for the direct DeepSeek route when the deployment needs no other provider. Both adapters can be mounted together because their route names do not collide; registering a route another adapter already owns fails plugin loading.
+Choose this adapter when the same composition serves several providers, when a route needs pi-ai's catalog defaults with a few fields corrected, or when a hand-declared gateway must be reached through its own endpoint and protocol. Choose `snh-llm-supernova` for the direct SuperNova route when the deployment needs no other provider. Both adapters can be mounted together because their route names do not collide; registering a route another adapter already owns fails plugin loading.
 
 ### Configure provider routes
 
 Each profile may set a `retryPolicy`; omission uses normal mode with five retries. `apiKeyEnv` is a credential reference resolved per request through the harness credential seam, so no secret enters the configuration file; a reference that resolves to nothing fails the request with `MISSING_CREDENTIAL`. Omitting it leaves the route configured-but-keyless, which for an installed catalog route defers to pi-ai's provider-native ambient discovery.
 
 ```yaml
-- name: '@deepseek-ai/dsh-llm-pi-ai'
+- name: '@supernova-ai/snh-llm-pi-ai'
   config:
     providers:
       openai:
@@ -66,7 +66,7 @@ Each profile may set a `retryPolicy`; omission uses normal mode with five retrie
         api: openai-completions
         baseURL: https://gateway.acme.example/v1
         compat:
-          thinkingFormat: deepseek
+          thinkingFormat: supernova
         models:
           - id: acme-think
             name: Acme Think
@@ -94,13 +94,13 @@ Each profile may set a `retryPolicy`; omission uses normal mode with five retrie
 | `maxRequestImageBytes` | `20 MiB` | Aggregate base64 image-payload bound; a request whose retained images exceed it fails with `IMAGE_OFFLOAD_REQUIRED` |
 | `maxRequestImages` | `50` | Retained request-image count bound; a request whose retained images exceed it fails with `IMAGE_OFFLOAD_REQUIRED`. The default follows Azure OpenAI's 50-image limit; raise it on routes whose provider accepts more images |
 | `imageOffloadCountQuantum` | `10`, capped at `maxRequestImages` | Oldest images offloaded per count overflow |
-| `retryPolicy` | normal, 5 retries | Provider-owned retry policy executed by `dsh-llm-retry` |
+| `retryPolicy` | normal, 5 retries | Provider-owned retry policy executed by `snh-llm-retry` |
 
 Request images inherit the selected pi-ai model's `inputLimits.images.resize` width, height, and base64-byte cap. `requestImageMaxDimension` overrides both dimensions with one value; it cannot express unequal width and height overrides. `requestImageMaxBytes` overrides the per-image cap in raw encoded bytes. The effective hard limit is `min(3 × floor(maxRequestImageBytes / (4 × requestImageBudgetCount)), requestImageMaxBytes or catalog cap or 1 MiB)`, with the catalog cap converted using `3 × floor(catalogBytes / 4)`. Configuration must allow at least four aggregate base64 bytes per budget share. Defaults allocate 0.75 MiB per image, so 20 images at that limit use at most 20 MiB of base64 payload. Budget shares stay fixed as history grows; `maxRequestImages` separately controls retained occurrences. Missing catalog dimensions leave that axis uncapped, while total pixels remain governed by `requestImagePixelBudget`.
 
 pi exposes no separate soft-byte target: the shared encoder's `imageTargetBytes` equals its effective `maxImageBytes`. After the quality ladder, images that still exceed the limit are resized and re-encoded until they fit; an impossible limit fails explicitly. Stored attachments stay unchanged. Image descriptors and screenshot coordinates use the final encoded dimensions. Increase `requestImageBudgetCount` for smaller per-image allocations, or decrease it for larger ones; the aggregate cap still applies to actual payloads.
 
-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-llm-pi-ai) is the exhaustive source for every accepted field and its JSDoc.
+The generated [configuration catalog](../../../docs/config-catalog.md#supernova-aisnh-llm-pi-ai) is the exhaustive source for every accepted field and its JSDoc.
 
 ### Sign in to a provider
 
@@ -215,12 +215,12 @@ Anthropic can bind each signed thinking block to the request prefix it was gener
 
 Read these pages when the package-level contract is not enough. They move from the service contract to the twin adapter and the shared types.
 
-- [dsh-llm service](../llm/README.md) — the provider-neutral service this adapter registers on.
-- [llm-deepseek adapter](../llm-deepseek/README.md) — the direct DeepSeek twin for the `deepseek-official` route.
+- [snh-llm service](../llm/README.md) — the provider-neutral service this adapter registers on.
+- [llm-supernova adapter](../llm-supernova/README.md) — the direct SuperNova twin for the `deepseek-official` route.
 - [LLM streaming subsystem](../../../docs/subsystems/llm-streaming.md) — the `StreamChunk` protocol and adapter contract.
 - [llm-retry](../llm-retry/README.md) — the retry executor that applies each profile's `retryPolicy`.
-- [Twin LLM adapters](../../../.agents/notes/implemented/architecture/2026-06-13-twin-llm-adapters.md) — why the DeepSeek route ships two structurally different adapters.
-- [Generated configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-llm-pi-ai) — every accepted config field and its source declaration.
+- [Twin LLM adapters](../../../.agents/notes/implemented/architecture/2026-06-13-twin-llm-adapters.md) — why the SuperNova route ships two structurally different adapters.
+- [Generated configuration catalog](../../../docs/config-catalog.md#supernova-aisnh-llm-pi-ai) — every accepted config field and its source declaration.
 
 -----
 
@@ -231,7 +231,7 @@ Read these pages when the package-level contract is not enough. They move from t
 
 #### What the model sees
 
-The selected catalog model receives system-message text, conversation history, tools, and supported sampling fields. The adapter preserves later system messages in history order when the catalog model declares `supportsMidConvoSystemMessages`. Otherwise, it converts each non-empty later system message to a user message wrapped in `<system-reminder>` before passing it to pi-ai. The wrapper does not grant system-role priority. One-shot `GenerateOptions.system` precedes the initial history prompt. Repeated system messages remain repeated; empty system messages are skipped without discarding earlier text. Tool-update capabilities select the shared historical declaration projection; pi-ai receives initially active tools and grouped developer updates carrying additions and supported removals. When every projected declaration of an Anthropic request with tool updates is deferred, the initially active tools are one placeholder, `DeferredToolPlaceholder`, whose description tells the model never to call it; a call reaches the ordinary unknown-tool result. Anthropic receives later tool definitions inline in the update message. Replay preserves tool-call namespaces for dynamically loaded Responses tools. Each retained image is preceded by text naming its complete attachment id and actual request dimensions. When the current execution filesystem maps the attachment provider's host object, the text also carries a read-only normalized-object path and warns that normalization or request projection may have resized or re-encoded the upload. Each occurrence selected by a logged image-offload decision keeps its own identity and currently resolved access in replacement text, and its normalized attachment is not read or transformed. When the retained occurrences still exceed the route's `maxRequestImages`, or their exact base64 payload exceeds its `maxRequestImageBytes`, the call fails with `IMAGE_OFFLOAD_REQUIRED` so `dsh-compaction-image-offload` records the selected occurrences in an `image/offload` event and retries the step. The default allocation limits each encoded image to 0.75 MiB, allowing 20 such images within the 20 MiB aggregate base64 budget. Smaller images can retain more occurrences, subject to the count limit. Provider-native replay metadata is restored only when the adapter validates it for the historical content. On Anthropic Messages routes, a replayed response whose request prefix changed since generation, for example through compaction, loses its thinking blocks; its text and tool calls remain. `imageRequestTarget(provider, model, image)` exposes the maximum dimensions and byte limits to screenshot consumers; `readImageRequest` returns the actual encoded dimensions after enforcing the byte limit.
+The selected catalog model receives system-message text, conversation history, tools, and supported sampling fields. The adapter preserves later system messages in history order when the catalog model declares `supportsMidConvoSystemMessages`. Otherwise, it converts each non-empty later system message to a user message wrapped in `<system-reminder>` before passing it to pi-ai. The wrapper does not grant system-role priority. One-shot `GenerateOptions.system` precedes the initial history prompt. Repeated system messages remain repeated; empty system messages are skipped without discarding earlier text. Tool-update capabilities select the shared historical declaration projection; pi-ai receives initially active tools and grouped developer updates carrying additions and supported removals. When every projected declaration of an Anthropic request with tool updates is deferred, the initially active tools are one placeholder, `DeferredToolPlaceholder`, whose description tells the model never to call it; a call reaches the ordinary unknown-tool result. Anthropic receives later tool definitions inline in the update message. Replay preserves tool-call namespaces for dynamically loaded Responses tools. Each retained image is preceded by text naming its complete attachment id and actual request dimensions. When the current execution filesystem maps the attachment provider's host object, the text also carries a read-only normalized-object path and warns that normalization or request projection may have resized or re-encoded the upload. Each occurrence selected by a logged image-offload decision keeps its own identity and currently resolved access in replacement text, and its normalized attachment is not read or transformed. When the retained occurrences still exceed the route's `maxRequestImages`, or their exact base64 payload exceeds its `maxRequestImageBytes`, the call fails with `IMAGE_OFFLOAD_REQUIRED` so `snh-compaction-image-offload` records the selected occurrences in an `image/offload` event and retries the step. The default allocation limits each encoded image to 0.75 MiB, allowing 20 such images within the 20 MiB aggregate base64 budget. Smaller images can retain more occurrences, subject to the count limit. Provider-native replay metadata is restored only when the adapter validates it for the historical content. On Anthropic Messages routes, a replayed response whose request prefix changed since generation, for example through compaction, loses its thinking blocks; its text and tool calls remain. `imageRequestTarget(provider, model, image)` exposes the maximum dimensions and byte limits to screenshot consumers; `readImageRequest` returns the actual encoded dimensions after enforcing the byte limit.
 
 #### Token effect
 

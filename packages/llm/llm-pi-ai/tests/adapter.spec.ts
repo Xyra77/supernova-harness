@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from 'vitest'
-import { Context, Service } from '@deepseek-ai/cordis'
-import { type AttachmentId, AttachmentStore, type ImageVariantId } from '@deepseek-ai/dsh-attachment'
+import { Context, Service } from '@supernova-ai/cordis'
+import { type AttachmentId, AttachmentStore, type ImageVariantId } from '@supernova-ai/snh-attachment'
 import type {
   ImageAttachmentLimits,
   ImageAttachmentRef,
@@ -8,17 +8,17 @@ import type {
   RequestImageAttachment,
   SaveImageAttachment,
   StoredImageAttachment,
-} from '@deepseek-ai/dsh-attachment'
-import LlmRuntime, { createToolResultMessage, createUserMessage, CONTEXT_WINDOW_EXCEEDED_CODE, LlmError, type ReasoningEffortId, userAgent } from '@deepseek-ai/dsh-llm'
-import * as LlmPiAi from '@deepseek-ai/dsh-llm-pi-ai'
-import { PiAiAdapter } from '@deepseek-ai/dsh-llm-pi-ai'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
+} from '@supernova-ai/snh-attachment'
+import LlmRuntime, { createToolResultMessage, createUserMessage, CONTEXT_WINDOW_EXCEEDED_CODE, LlmError, type ReasoningEffortId, userAgent } from '@supernova-ai/snh-llm'
+import * as LlmPiAi from '@supernova-ai/snh-llm-pi-ai'
+import { PiAiAdapter } from '@supernova-ai/snh-llm-pi-ai'
+import { MAX_TIMER_DELAY_MS } from '@supernova-ai/snh-timeout'
 import { getBuiltinModels } from '@earendil-works/pi-ai/providers/all'
 import { DEFAULT_IMAGE_OFFLOAD_COUNT_QUANTUM, DEFAULT_MAX_REQUEST_IMAGE_BYTES, DEFAULT_MAX_REQUEST_IMAGES, resolveProfiles } from '../src/config.ts'
 import { memoryAuth } from './auth-double.ts'
 import { assemble } from './assemble.ts'
 import { anthropicTextEvents, closeMockServers, mockServer, textEvents } from './mock-server.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 afterEach(async () => {
   vi.useRealTimers()
@@ -33,8 +33,8 @@ const IMAGE_REF: ImageAttachmentRef = {
   width: 1,
   height: 1,
 }
-const HOST_IMAGE_PATH = '/host/.dsh/attachments/objects/aa/object'
-const MODEL_IMAGE_PATH = '/model/.dsh/attachments/objects/aa/object'
+const HOST_IMAGE_PATH = '/host/.snh/attachments/objects/aa/object'
+const MODEL_IMAGE_PATH = '/model/.snh/attachments/objects/aa/object'
 
 class MappedFileSystem extends Service {
   constructor(ctx: Context) {
@@ -90,7 +90,7 @@ async function harness(baseURL: string, overrides: Record<string, unknown> = {})
   const ctx = new Context()
   await ctx.plugin(LlmRuntime)
   await ctx.plugin(LlmPiAi, {
-    providers: { deepseek: { apiKeyEnv: 'PI_TEST_KEY', baseURL, ...overrides } },
+    providers: { supernova: { apiKeyEnv: 'PI_TEST_KEY', baseURL, ...overrides } },
   })
   return ctx
 }
@@ -134,18 +134,18 @@ describe('PiAiAdapter provider routing', () => {
     const first = await mockServer([{ events: textEvents }])
     const second = await mockServer([])
     let providers: Record<string, LlmPiAi.PiAiProviderProfile> = {
-      deepseek: { apiKeyEnv: 'PI_TEST_KEY', baseURL: first.url },
+      supernova: { apiKeyEnv: 'PI_TEST_KEY', baseURL: first.url },
     }
     const ctx = new Context()
     await ctx.plugin(LlmRuntime)
-    ctx.llm.registerAdapter(['deepseek'], new PiAiAdapter({
+    ctx.llm.registerAdapter(['supernova'], new PiAiAdapter({
       profiles: () => resolveProfiles(providers),
       resolveApiKey: () => Promise.resolve('test-key'),
       auth: memoryAuth(),
     }))
 
-    const prepared = await ctx.llm.prepareCall({ provider: 'deepseek', model: 'deepseek-flash' })
-    providers = { deepseek: { apiKeyEnv: 'PI_TEST_KEY', baseURL: second.url } }
+    const prepared = await ctx.llm.prepareCall({ provider: 'supernova', model: 'deepseek-flash' })
+    providers = { supernova: { apiKeyEnv: 'PI_TEST_KEY', baseURL: second.url } }
     const chunks: unknown[] = []
     for await (const chunk of prepared.stream({ ...prepared.config, messages: [] })) chunks.push(chunk)
 
@@ -189,8 +189,8 @@ describe('PiAiAdapter provider routing', () => {
       thinking: { type: 'enabled' },
       reasoning_effort: 'max',
     })
-    expect(server.requests[0]).not.toHaveProperty('dsh_session_log')
-    expect(server.requests[0]).not.toHaveProperty('dsh_plugin_packages')
+    expect(server.requests[0]).not.toHaveProperty('snh_session_log')
+    expect(server.requests[0]).not.toHaveProperty('snh_plugin_packages')
   })
 
   it('routes OpenCode Go requests by Session id through its required session header', async () => {
@@ -249,8 +249,8 @@ describe('PiAiAdapter provider routing', () => {
     const server = await mockServer([{ events: textEvents }])
     const ctx = new Context()
     await ctx.plugin(LlmRuntime)
-    ctx.llm.registerAdapter(['deepseek'], adapterOf({
-      deepseek: { apiKeyEnv: 'PI_TEST_KEY', baseURL: server.url },
+    ctx.llm.registerAdapter(['supernova'], adapterOf({
+      supernova: { apiKeyEnv: 'PI_TEST_KEY', baseURL: server.url },
     }))
 
     const result = await assemble(ctx, { model: 'deepseek-flash', messages: [] })
@@ -499,7 +499,7 @@ describe('PiAiAdapter provider routing', () => {
   })
 
   it('uses the resolved catalog context window for usage-based overflow detection', async () => {
-    const model = getBuiltinModels('deepseek').find(candidate => candidate.id === 'deepseek-flash')
+    const model = getBuiltinModels('supernova').find(candidate => candidate.id === 'deepseek-flash')
     if (model === undefined) throw new Error('deepseek-flash missing from pi-ai test catalog')
     const events = [
       '{"choices":[{"delta":{"role":"assistant","content":""},"index":0,"finish_reason":null}]}',
@@ -611,10 +611,10 @@ describe('provider profile lifecycle', () => {
     const ctx = new Context()
     await ctx.plugin(LlmRuntime)
     await ctx.plugin(LlmPiAi, {
-      providers: { deepseek: {}, openai: {} },
+      providers: { supernova: {}, openai: {} },
     })
 
-    await expect(ctx.llm.resolveModelInfo('deepseek', 'deepseek-flash'))
+    await expect(ctx.llm.resolveModelInfo('supernova', 'deepseek-flash'))
       .resolves.toMatchObject({
         reasoning: {
           efforts: [
@@ -645,9 +645,9 @@ describe('provider profile lifecycle', () => {
     const supported = new Context()
     await supported.plugin(LlmRuntime)
     await supported.plugin(LlmPiAi, {
-      providers: { deepseek: { reasoning: 'max' } },
+      providers: { supernova: { reasoning: 'max' } },
     })
-    await expect(supported.llm.resolveModelInfo('deepseek', 'deepseek-flash'))
+    await expect(supported.llm.resolveModelInfo('supernova', 'deepseek-flash'))
       .resolves.toMatchObject({ reasoning: { defaultEffort: brandString<ReasoningEffortId>('max') } })
 
     // A profile level this model cannot take DESCRIBES as no default rather
@@ -658,13 +658,13 @@ describe('provider profile lifecycle', () => {
     const unsupported = new Context()
     await unsupported.plugin(LlmRuntime)
     await unsupported.plugin(LlmPiAi, {
-      providers: { deepseek: { reasoning: 'medium' } },
+      providers: { supernova: { reasoning: 'medium' } },
     })
-    const described = await unsupported.llm.resolveModelInfo('deepseek', 'deepseek-flash')
+    const described = await unsupported.llm.resolveModelInfo('supernova', 'deepseek-flash')
     expect(described.reasoning?.defaultEffort).toBeUndefined()
     expect(described.reasoning?.efforts.length).toBeGreaterThan(0)
     await expect(assemble(unsupported, {
-      provider: 'deepseek', model: 'deepseek-flash', messages: [],
+      provider: 'supernova', model: 'deepseek-flash', messages: [],
     })).resolves.toMatchObject({
       finish: { kind: 'error', failure: { code: 'UNSUPPORTED_REASONING_EFFORT' } },
     })
@@ -672,9 +672,9 @@ describe('provider profile lifecycle', () => {
     const disabled = new Context()
     await disabled.plugin(LlmRuntime)
     await disabled.plugin(LlmPiAi, {
-      providers: { deepseek: { reasoning: 'off' } },
+      providers: { supernova: { reasoning: 'off' } },
     })
-    await expect(disabled.llm.resolveModelInfo('deepseek', 'deepseek-flash'))
+    await expect(disabled.llm.resolveModelInfo('supernova', 'deepseek-flash'))
       .resolves.toMatchObject({ reasoning: { defaultEffort: brandString<ReasoningEffortId>('off') } })
   })
 
@@ -768,7 +768,7 @@ describe('provider profile lifecycle', () => {
           baseURL: `${server.url}/v1`,
           // Without the switch pi-ai guesses the dialect from the endpoint
           // URL, and a private gateway's URL says nothing.
-          compat: { thinkingFormat: 'deepseek' },
+          compat: { thinkingFormat: 'supernova' },
           models: [{
             id: 'acme-think',
             contextWindow: 65_536,
@@ -980,7 +980,7 @@ describe('provider profile lifecycle', () => {
     const second = await assemble(ctx, { model: 'deepseek-flash', messages: [] })
     expect(second.finish.kind).toBe('error')
     if (second.finish.kind !== 'error') throw new Error('expected an error finish')
-    expect(second.finish.failure.message).toMatch(/provider route "deepseek".*PI_CUSTOM_REF_KEY/s)
+    expect(second.finish.failure.message).toMatch(/provider route "supernova".*PI_CUSTOM_REF_KEY/s)
     expect(server.requests).toHaveLength(0)
   })
 
@@ -1105,13 +1105,13 @@ describe('provider profile lifecycle', () => {
   })
 
   it('rejects unsupported or unresolved image input before provider I/O', async () => {
-    const adapter = adapterOf({ openai: {}, deepseek: {} })
+    const adapter = adapterOf({ openai: {}, supernova: {} })
     const drain = async (options: Parameters<PiAiAdapter['stream']>[0]): Promise<void> => {
       for await (const _chunk of adapter.stream(options)) { /* drain */ }
     }
 
     await expect(drain({
-      provider: 'deepseek',
+      provider: 'supernova',
       model: 'deepseek-v4-pro',
       messages: [createUserMessage({
         content: [{ type: 'image', attachment: IMAGE_REF }],
@@ -1156,10 +1156,10 @@ describe('abort wiring', () => {
     const message = Object.defineProperty({}, 'content', {
       get() { throw original },
     })
-    const adapter = adapterOf({ deepseek: {} })
+    const adapter = adapterOf({ supernova: {} })
     const drain = async (): Promise<void> => {
       for await (const _chunk of adapter.stream({
-        provider: 'deepseek',
+        provider: 'supernova',
         model: 'deepseek-flash',
         messages: [message as never],
       })) { /* drain */ }
@@ -1177,10 +1177,10 @@ describe('abort wiring', () => {
         throw original
       },
     })
-    const adapter = adapterOf({ deepseek: {} })
+    const adapter = adapterOf({ supernova: {} })
     const drain = async (): Promise<void> => {
       for await (const _chunk of adapter.stream({
-        provider: 'deepseek',
+        provider: 'supernova',
         model: 'deepseek-flash',
         messages: [message as never],
         signal: controller.signal,
@@ -1191,12 +1191,12 @@ describe('abort wiring', () => {
   })
 
   it('resolves catalog endpoints without an override before honoring pre-abort', async () => {
-    const adapter = adapterOf({ deepseek: {} })
+    const adapter = adapterOf({ supernova: {} })
     const controller = new AbortController()
     controller.abort('already stopped')
     const chunks = []
     for await (const chunk of adapter.stream({
-      provider: 'deepseek',
+      provider: 'supernova',
       model: 'deepseek-flash',
       messages: [],
       signal: controller.signal,
@@ -1231,7 +1231,7 @@ describe('abort wiring', () => {
   it('aborts upstream when a consumer stops early', async () => {
     const server = await mockServer([{ events: textEvents, delayMs: 30 }])
     const ctx = await harness(server.url)
-    for await (const chunk of ctx.llm.stream({ provider: 'deepseek', model: 'deepseek-flash', messages: [] })) {
+    for await (const chunk of ctx.llm.stream({ provider: 'supernova', model: 'deepseek-flash', messages: [] })) {
       if (chunk.type === 'block-start') break
     }
     await new Promise(resolve => setTimeout(resolve, 20))
@@ -1245,18 +1245,18 @@ it.each([
   new Error('credential storage failed'),
 ])('distinguishes missing credentials from catalog failures: $message', async (error) => {
   const adapter = new PiAiAdapter({
-    profiles: () => resolveProfiles({ deepseek: { apiKeyEnv: 'PI_TEST_KEY' } }),
+    profiles: () => resolveProfiles({ supernova: { apiKeyEnv: 'PI_TEST_KEY' } }),
     resolveApiKey: () => Promise.reject(error),
     auth: memoryAuth(),
   })
   if (error instanceof LlmError && error.code === 'MISSING_CREDENTIAL') {
-    expect(await adapter.listModels('deepseek')).toEqual([])
-  } else await expect(adapter.listModels('deepseek')).rejects.toBe(error)
+    expect(await adapter.listModels('supernova')).toEqual([])
+  } else await expect(adapter.listModels('supernova')).rejects.toBe(error)
 })
 
 it('resolves the exact pi-ai image budget for screenshot coordinates', () => {
-  const adapter = adapterOf({ deepseek: { apiKeyEnv: 'PI_TEST_KEY', requestImagePixelBudget: 10_000, requestImageMaxBytes: 50_000 } })
-  expect(adapter.imageRequestTarget('deepseek', 'deepseek-flash', { ...IMAGE_REF, width: 1000, height: 1000 }))
+  const adapter = adapterOf({ supernova: { apiKeyEnv: 'PI_TEST_KEY', requestImagePixelBudget: 10_000, requestImageMaxBytes: 50_000 } })
+  expect(adapter.imageRequestTarget('supernova', 'deepseek-flash', { ...IMAGE_REF, width: 1000, height: 1000 }))
     .toEqual({ width: 100, height: 100, maxImageBytes: 50_000, imageTargetBytes: 50_000 })
   expect(() => adapter.imageRequestTarget('missing', 'deepseek-flash', IMAGE_REF)).toThrow('does not own provider')
 })

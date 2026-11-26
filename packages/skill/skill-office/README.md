@@ -3,7 +3,7 @@ description: "One progressively loaded Office skill with concise inline authorin
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-skill-office
+# @supernova-ai/snh-skill-office
 
 English | [中文](README.zh.md)
 
@@ -26,10 +26,10 @@ The catalog lists one `office` skill. Its instructions load on demand, cover Wor
 <a id="use-this-package"></a>
 ## Use this package
 
-Mount the skill provider beside the skill registry and `dsh-tool-skill`. The provider supplies the `office` instructions and appends a Python environment section. The instructions direct operations to `office_render`, `office_convert`, and `office_recalculate`, so compose [`tool-office`](../../document/tool-office/README.md) beside this provider.
+Mount the skill provider beside the skill registry and `snh-tool-skill`. The provider supplies the `office` instructions and appends a Python environment section. The instructions direct operations to `office_render`, `office_convert`, and `office_recalculate`, so compose [`tool-office`](../../document/tool-office/README.md) beside this provider.
 
 ```yaml
-- name: '@deepseek-ai/dsh-skill-office'
+- name: '@supernova-ai/snh-skill-office'
 
 ```
 
@@ -38,7 +38,7 @@ Mount the skill provider beside the skill registry and `dsh-tool-skill`. The pro
 | `assetRoot` | Packaged `assets/` | Absolute directory containing the `office` skill folder with `SKILL.md`. |
 | `pythonEnvironment` | `'workspace-dependencies'` | Python that the `office` skill directs the model to; see below. |
 
-`pythonEnvironment` selects one fixed section appended to the `office` skill. Both values first defer to an explicit user or applicable AGENTS.md environment requirement. `'workspace-dependencies'` directs the model to call `load_workspace_dependencies` and use the bundled Python and libraries it returns; mount it only with `dsh-tool-workspace-dependencies`. A custom composition that mounts this package without `dsh-tool-workspace-dependencies` must configure `pythonEnvironment: user`. `'user'` directs the model to the project's or user's existing Python on PATH, to check that the required libraries import, and to name missing packages instead of installing them globally without the user's agreement.
+`pythonEnvironment` selects one fixed section appended to the `office` skill. Both values first defer to an explicit user or applicable AGENTS.md environment requirement. `'workspace-dependencies'` directs the model to call `load_workspace_dependencies` and use the bundled Python and libraries it returns; mount it only with `snh-tool-workspace-dependencies`. A custom composition that mounts this package without `snh-tool-workspace-dependencies` must configure `pythonEnvironment: user`. `'user'` directs the model to the project's or user's existing Python on PATH, to check that the required libraries import, and to name missing packages instead of installing them globally without the user's agreement.
 
 A relative `assetRoot` rejects registration. Catalog discovery and loading read `office/SKILL.md`. A missing or invalid skill file omits the skill from the catalog with a warning that names the path, and a file that disappears after discovery fails the load and removes the skill from the catalog. Other read errors, such as a locked file, leave discovery incomplete so the registry retries it. Loading instructions resolves no executable and prepares no engine; the Office tools report an unavailable LibreOffice Kit when called. Bash or PowerShell owns the approvals, sandboxing, and cancellation of copying converted files into the workspace.
 
@@ -107,7 +107,7 @@ The provider registers no tools or activation projection. Loaded skill results r
 <a id="model-experience"></a>
 ## Model Experience
 
-Indirectly, through `dsh-tool-skill`, which renders the one-line `office` summary in the catalog and returns the complete instructions from `skill(office)`. The instructions end with a Python environment section that names either `load_workspace_dependencies` or the user's existing Python, according to `pythonEnvironment`.
+Indirectly, through `snh-tool-skill`, which renders the one-line `office` summary in the catalog and returns the complete instructions from `skill(office)`. The instructions end with a Python environment section that names either `load_workspace_dependencies` or the user's existing Python, according to `pythonEnvironment`.
 
 #### KV Cache effect
 

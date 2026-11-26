@@ -7,7 +7,7 @@ import { compileBlocks, extractBlocks } from './doc-typecheck.ts'
 import { removeFixtureSafely } from './test-fixture-cleanup.ts'
 
 it('checks Client examples against their JSX project and rejects invalid props without mixing Host types', () => {
-  const root = mkdtempSync(join(tmpdir(), 'dsh-doc-faces-'))
+  const root = mkdtempSync(join(tmpdir(), 'snh-doc-faces-'))
   try {
     for (const face of ['host', 'client'] as const) {
       const extension = face === 'client' ? 'tsx' : 'ts'

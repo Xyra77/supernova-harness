@@ -1,12 +1,12 @@
 // @vitest-environment jsdom
 // A draft with attachments holds its Session without the event connection, so leaving every view keeps the same
 // composer and its attachments; a removed Session releases them, and a page unload reports what it discarded.
-import { AttachmentId } from '@deepseek-ai/dsh-attachment'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { FileUploadValue } from '@deepseek-ai/dsh-client-file-upload/client'
-import { makeTranslate, SlotTestRuntime } from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import { AttachmentId } from '@supernova-ai/snh-attachment'
+import { brandString } from '@supernova-ai/snh-brand'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import type { FileUploadValue } from '@supernova-ai/snh-client-file-upload/client'
+import { makeTranslate, SlotTestRuntime } from '@supernova-ai/snh-client-test-runtime'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ComposerBlockRegistry } from '../src/client/input/blocks.ts'
 import { InputHub } from '../src/client/input/hub.ts'
@@ -14,7 +14,7 @@ import { ConversationController } from '../src/client/service.ts'
 import { zh } from '../src/client/locales.ts'
 
 const SESSION = 's1'
-const UNLOAD_MARK = `dsh.composer-draft-attachments-unloaded.${SESSION}`
+const UNLOAD_MARK = `snh.composer-draft-attachments-unloaded.${SESSION}`
 
 function sessionId(): SessionId {
   return brandString<SessionId>(SESSION)

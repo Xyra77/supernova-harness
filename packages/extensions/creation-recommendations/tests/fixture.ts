@@ -2,19 +2,19 @@
 import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { expect, onTestFinished, TestRunner, vi } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { MessageId } from '@deepseek-ai/dsh-llm'
-import type { SessionId, SessionEvent } from '@deepseek-ai/dsh-session'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import Skills from '@deepseek-ai/dsh-skill'
-import * as SkillTool from '@deepseek-ai/dsh-tool-skill'
-import RemoteAccess from '@deepseek-ai/dsh-api-remote-access'
-import ActionCards, { type ActionCardId } from '@deepseek-ai/dsh-action-cards'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { BundleInfo, ChangeResult } from '@deepseek-ai/dsh-plugin-manager/types'
-import type { SubagentActivationSpec, SubagentResult } from '@deepseek-ai/dsh-subagent'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { MessageId } from '@supernova-ai/snh-llm'
+import type { SessionId, SessionEvent } from '@supernova-ai/snh-session'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import Skills from '@supernova-ai/snh-skill'
+import * as SkillTool from '@supernova-ai/snh-tool-skill'
+import RemoteAccess from '@supernova-ai/snh-api-remote-access'
+import ActionCards, { type ActionCardId } from '@supernova-ai/snh-action-cards'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type { BundleInfo, ChangeResult } from '@supernova-ai/snh-plugin-manager/types'
+import type { SubagentActivationSpec, SubagentResult } from '@supernova-ai/snh-subagent'
 import * as CreationRecommendations from '../src/index.ts'
 import type { PageData } from '../src/types.ts'
 
@@ -38,13 +38,13 @@ export function installedBundle(name: string): BundleInfo {
 
 export async function writeBundle(directory: string, name: string): Promise<void> {
   await writeFile(join(directory, 'package.json'), JSON.stringify({ name, version: '1.0.0', type: 'module',
-    main: './index.js', exports: { '.': './index.js', './client': './index.js' }, dsh: { bundle: { patch: './cordis.patch.yml' } } }))
+    main: './index.js', exports: { '.': './index.js', './client': './index.js' }, snh: { bundle: { patch: './cordis.patch.yml' } } }))
   await writeFile(join(directory, 'cordis.patch.yml'), JSON.stringify([{ insert: [{ id: name + ':counter', name }] }]))
   await writeFile(join(directory, 'index.js'), 'export function apply(ctx) { ctx.provide("createdCounter", true) }\n')
 }
 
 export async function fixture(initial?: PageCardState) {
-  const directory = await mkdtemp(join(tmpdir(), 'dsh-creation-'))
+  const directory = await mkdtemp(join(tmpdir(), 'snh-creation-'))
   const ctx = new Context()
   onTestFinished(async () => { await ctx.fiber.dispose(); await rm(directory, { recursive: true, force: true }) })
   await mountAgentLoopTestDependencies(ctx, { workingDirectory: true })

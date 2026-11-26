@@ -1,7 +1,7 @@
 /** Reference reads fall back to the launch environment only when no credentials service is mounted. */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { createLaunchEnvironmentSnapshot, DSH_LAUNCH_ENVIRONMENT_KEY } from '@deepseek-ai/dsh-launch-environment'
+import { createLaunchEnvironmentSnapshot, SNH_LAUNCH_ENVIRONMENT_KEY } from '@supernova-ai/snh-launch-environment'
 import { credentialRef, credentialRefConfigured, resolveCredentialRef } from '../src/index.ts'
 import { MemoryCredentials } from './memory.ts'
 
@@ -9,7 +9,7 @@ const ref = credentialRef('TEST_PROVIDER_KEY')
 
 function context(value?: string): Context {
   const ctx = new Context()
-  ctx.provide(DSH_LAUNCH_ENVIRONMENT_KEY, createLaunchEnvironmentSnapshot([
+  ctx.provide(SNH_LAUNCH_ENVIRONMENT_KEY, createLaunchEnvironmentSnapshot([
     { source: 'process', values: value === undefined ? {} : { [ref]: value } },
   ]))
   return ctx

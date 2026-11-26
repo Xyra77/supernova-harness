@@ -108,7 +108,7 @@ async function decideWithDelayedList(page: Page, requests: Locator, code: string
 
 it('lets a paired mobile browser approve another device and keeps denied or cancelled applicants signed out behind a public mount', async () => {
   const scaffold = await launchWebScaffold({
-    publicMount: { prefix: '/tools/dsh/' },
+    publicMount: { prefix: '/tools/snh/' },
     extraOverlayPath: fileURLToPath(new URL('./pin-browse-picker.overlay.yml', import.meta.url)),
   })
   onTestFinished(() => scaffold.close())
@@ -116,8 +116,8 @@ it('lets a paired mobile browser approve another device and keeps denied or canc
   try {
     const owner = await browser.newPage({ locale: ZH_BROWSER_LOCALE, viewport: { width: 1440, height: 1000 } })
     await owner.goto(scaffold.authenticatedUrl)
-    await owner.waitForFunction(() => '__DSH_BOOT__' in window)
-    expect((await owner.context().cookies()).some(cookie => cookie.name.startsWith('dsh-auth-') && cookie.httpOnly)).toBe(true)
+    await owner.waitForFunction(() => '__SNH_BOOT__' in window)
+    expect((await owner.context().cookies()).some(cookie => cookie.name.startsWith('snh-auth-') && cookie.httpOnly)).toBe(true)
     await openSettings(owner, 'zh')
     const navigation = owner.getByRole('dialog', { name: '设置', exact: true })
       .getByRole('button', { name: '远程连接', exact: true })
@@ -136,7 +136,7 @@ it('lets a paired mobile browser approve another device and keeps denied or canc
     const anonymousScript = applicant.waitForResponse(response => response.url() === new URL('pairing/client.js', scaffold.baseUrl).href)
     expect((await applicant.goto(scaffold.baseUrl))?.status()).toBe(401)
     expect((await anonymousScript).status()).toBe(200)
-    expect(await applicant.evaluate(() => customElements.get('dsh-device-pairing') !== undefined)).toBe(true)
+    expect(await applicant.evaluate(() => customElements.get('snh-device-pairing') !== undefined)).toBe(true)
     expect(await applicant.evaluate(() => '__ModuleLoader__' in window)).toBe(false)
     await applicant.locator('#auth-pair-request').click()
     await applicant.locator('#auth-pair-code').waitFor()
@@ -160,11 +160,11 @@ it('lets a paired mobile browser approve another device and keeps denied or canc
     const ticket: unknown = await replacementResponse.json()
     expect(ticket).toMatchObject({ code: code.replace(' ', ''), sourceIp: '127.0.0.1', authority: new URL(scaffold.baseUrl).origin })
     await expectObservedSource(approvals, new URL(scaffold.baseUrl).host)
-    expect(await applicant.evaluate(() => '__DSH_BOOT__' in window)).toBe(false)
-    expect((await applicant.context().cookies()).filter(cookie => /^dsh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
+    expect(await applicant.evaluate(() => '__SNH_BOOT__' in window)).toBe(false)
+    expect((await applicant.context().cookies()).filter(cookie => /^snh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
     expect(await applicant.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
 
-    const screenshotDirectory = process.env.DSH_PAIRING_SCREENSHOT_DIR
+    const screenshotDirectory = process.env.SNH_PAIRING_SCREENSHOT_DIR
     if (screenshotDirectory !== undefined) {
       await applicant.emulateMedia({ colorScheme: 'light' })
       await expect.poll(() => applicant.evaluate(() => getComputedStyle(document.documentElement).backgroundColor)).toBe('rgb(250, 250, 250)')
@@ -194,11 +194,11 @@ it('lets a paired mobile browser approve another device and keeps denied or canc
     )
 
     const approvedDecision = await decideWithDelayedList(owner, approvals, code, 'allow')
-    await applicant.waitForFunction(() => '__DSH_BOOT__' in window)
+    await applicant.waitForFunction(() => '__SNH_BOOT__' in window)
     expect(applicant.url()).toBe(scaffold.baseUrl)
-    expect((await applicant.context().cookies()).some(cookie => cookie.name.startsWith('dsh-remote-') && cookie.httpOnly)).toBe(true)
+    expect((await applicant.context().cookies()).some(cookie => cookie.name.startsWith('snh-remote-') && cookie.httpOnly)).toBe(true)
     expect((await applicant.reload())?.status()).toBe(200)
-    await applicant.waitForFunction(() => '__DSH_BOOT__' in window)
+    await applicant.waitForFunction(() => '__SNH_BOOT__' in window)
 
     await openSettings(applicant, 'zh')
     await applicant.getByRole('dialog', { name: '设置', exact: true })
@@ -216,8 +216,8 @@ it('lets a paired mobile browser approve another device and keeps denied or canc
     const thirdCode = await third.locator('#auth-pair-code').innerText()
     await mobileApprovals.getByText(thirdCode, { exact: true }).waitFor()
     await expectObservedSource(mobileApprovals, new URL(scaffold.baseUrl).host)
-    expect(await third.evaluate(() => '__DSH_BOOT__' in window)).toBe(false)
-    expect((await third.context().cookies()).filter(cookie => /^dsh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
+    expect(await third.evaluate(() => '__SNH_BOOT__' in window)).toBe(false)
+    expect((await third.context().cookies()).filter(cookie => /^snh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
     expect(await applicant.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
     expect(await third.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
     if (screenshotDirectory !== undefined) {
@@ -230,11 +230,11 @@ it('lets a paired mobile browser approve another device and keeps denied or canc
       await applicant.emulateMedia({ colorScheme: null })
     }
     await mobileApprovals.getByRole('button', { name: '批准', exact: true }).click()
-    await third.waitForFunction(() => '__DSH_BOOT__' in window)
+    await third.waitForFunction(() => '__SNH_BOOT__' in window)
     expect(third.url()).toBe(scaffold.baseUrl)
-    expect((await third.context().cookies()).some(cookie => cookie.name.startsWith('dsh-remote-') && cookie.httpOnly)).toBe(true)
+    expect((await third.context().cookies()).some(cookie => cookie.name.startsWith('snh-remote-') && cookie.httpOnly)).toBe(true)
     expect((await third.reload())?.status()).toBe(200)
-    await third.waitForFunction(() => '__DSH_BOOT__' in window)
+    await third.waitForFunction(() => '__SNH_BOOT__' in window)
     await mobileApprovals.getByText(thirdCode, { exact: true }).waitFor({ state: 'detached' })
     expect(await third.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
     expect(errors).toEqual([])
@@ -251,8 +251,8 @@ it('lets a paired mobile browser approve another device and keeps denied or canc
       [approvedDecision, deniedDecision].join('\n'), mode,
     )
     await denied.locator('#auth-pair-panel[data-state="denied"]').waitFor()
-    expect(await denied.evaluate(() => '__DSH_BOOT__' in window)).toBe(false)
-    expect((await denied.context().cookies()).filter(cookie => /^dsh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
+    expect(await denied.evaluate(() => '__SNH_BOOT__' in window)).toBe(false)
+    expect((await denied.context().cookies()).filter(cookie => /^snh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
 
     await denied.getByRole('button', { name: '重新申请', exact: true }).click()
     await denied.locator('#auth-pair-panel[data-state="waiting"]').waitFor()
@@ -262,7 +262,7 @@ it('lets a paired mobile browser approve another device and keeps denied or canc
     await denied.getByRole('button', { name: '申请配对', exact: true }).waitFor()
     expect(await denied.locator('#auth-pair-panel').isHidden()).toBe(true)
     await approvals.getByText(cancelledCode, { exact: true }).waitFor({ state: 'detached' })
-    expect((await denied.context().cookies()).filter(cookie => /^dsh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
+    expect((await denied.context().cookies()).filter(cookie => /^snh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
     expect((await denied.reload())?.status()).toBe(401)
 
     for (const decision of ['allow', 'deny'] as const) {
@@ -290,7 +290,7 @@ it('lets a paired mobile browser approve another device and keeps denied or canc
         console.info('pairing approval list before dropped decision', { decision, code: unconfirmedCode, ...current, content: await approvals.innerText(), errors })
         throw error
       }
-      expect((await unconfirmed.context().cookies()).filter(cookie => /^dsh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
+      expect((await unconfirmed.context().cookies()).filter(cookie => /^snh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
 
       const decisionDropped = Promise.withResolvers<undefined>()
       const routeErrors: unknown[] = []
@@ -316,15 +316,15 @@ it('lets a paired mobile browser approve another device and keeps denied or canc
         expect(await owner.getByRole('alert').filter({ hasText: '已批准申请' }).count()).toBe(0)
         expect(await owner.getByRole('alert').filter({ hasText: '已拒绝申请' }).count()).toBe(0)
         if (decision === 'allow') {
-          await unconfirmed.waitForFunction(() => '__DSH_BOOT__' in window)
+          await unconfirmed.waitForFunction(() => '__SNH_BOOT__' in window)
           expect(unconfirmed.url()).toBe(scaffold.baseUrl)
-          expect((await unconfirmed.context().cookies()).some(cookie => cookie.name.startsWith('dsh-remote-') && cookie.httpOnly)).toBe(true)
+          expect((await unconfirmed.context().cookies()).some(cookie => cookie.name.startsWith('snh-remote-') && cookie.httpOnly)).toBe(true)
           expect((await unconfirmed.reload())?.status()).toBe(200)
-          await unconfirmed.waitForFunction(() => '__DSH_BOOT__' in window)
+          await unconfirmed.waitForFunction(() => '__SNH_BOOT__' in window)
         } else {
           await unconfirmed.locator('#auth-pair-panel[data-state="denied"]').waitFor()
-          expect(await unconfirmed.evaluate(() => '__DSH_BOOT__' in window)).toBe(false)
-          expect((await unconfirmed.context().cookies()).filter(cookie => /^dsh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
+          expect(await unconfirmed.evaluate(() => '__SNH_BOOT__' in window)).toBe(false)
+          expect((await unconfirmed.context().cookies()).filter(cookie => /^snh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
           expect((await unconfirmed.reload())?.status()).toBe(401)
         }
         await approvals.getByText(unconfirmedCode, { exact: true }).waitFor({ state: 'detached' })
@@ -446,9 +446,9 @@ it('keeps one Remote connection panel, its QR invitation, and login link while a
     )
 
     await approvals.getByRole('button', { name: '批准', exact: true }).click()
-    await applicant.waitForFunction(() => '__DSH_BOOT__' in window)
+    await applicant.waitForFunction(() => '__SNH_BOOT__' in window)
     expect(applicant.url()).toBe(fixture.url)
-    expect((await applicant.context().cookies()).some(cookie => cookie.name.startsWith('dsh-remote-') && cookie.httpOnly)).toBe(true)
+    expect((await applicant.context().cookies()).some(cookie => cookie.name.startsWith('snh-remote-') && cookie.httpOnly)).toBe(true)
     expect(await qr.innerHTML()).toBe(qrMarkup)
     expect(await loginLink.innerText()).toBe(fixture.authenticatedUrl)
 
@@ -457,16 +457,16 @@ it('keeps one Remote connection panel, its QR invitation, and login link while a
       && response.request().method() === 'POST')
     await scanning.goto(invitation.result.value.url)
     expect((await exchanged).status()).toBe(204)
-    await scanning.waitForFunction(() => '__DSH_BOOT__' in window)
+    await scanning.waitForFunction(() => '__SNH_BOOT__' in window)
     expect(scanning.url()).toBe(fixture.url)
-    expect((await scanning.context().cookies()).some(cookie => cookie.name.startsWith('dsh-remote-') && cookie.httpOnly)).toBe(true)
+    expect((await scanning.context().cookies()).some(cookie => cookie.name.startsWith('snh-remote-') && cookie.httpOnly)).toBe(true)
     await section.getByText('二维码已使用，请在手机上确认是否已登录', { exact: true }).waitFor()
     expect(await navigation.count()).toBe(1)
   } finally { await browser.close() }
 })
 
 it('shows expiry and lets the applicant start a new request without signing in', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-pairing-expiry-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-pairing-expiry-'))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
   const overlay = join(root, 'pairing.yml')
   await writeFile(overlay, '- id: remote-connection\n  config:\n    pairing:\n      requestTtlMs: 3000\n      pollIntervalMs: 500\n')
@@ -482,8 +482,8 @@ it('shows expiry and lets the applicant start a new request without signing in',
     await applicant.locator('#auth-pair-code').waitFor()
     const expiredCode = await applicant.locator('#auth-pair-code').innerText()
     await applicant.locator('#auth-pair-panel[data-state="expired"]').waitFor()
-    expect(await applicant.evaluate(() => '__DSH_BOOT__' in window)).toBe(false)
-    expect((await applicant.context().cookies()).filter(cookie => /^dsh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
+    expect(await applicant.evaluate(() => '__SNH_BOOT__' in window)).toBe(false)
+    expect((await applicant.context().cookies()).filter(cookie => /^snh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
     await applicant.getByRole('button', { name: '重新申请', exact: true }).click()
     await applicant.locator('#auth-pair-code').waitFor()
     expect(await applicant.locator('#auth-pair-code').innerText()).not.toBe(expiredCode)
@@ -515,12 +515,12 @@ it('keeps Token and pairing usable on the same page after a QR exchange fails', 
     const failure = applicant.getByRole('alert').filter({ hasText: '二维码' })
     await failure.waitFor()
     expect(new URL(applicant.url()).hash).toBe('')
-    expect(await applicant.evaluate(() => '__DSH_BOOT__' in window)).toBe(false)
+    expect(await applicant.evaluate(() => '__SNH_BOOT__' in window)).toBe(false)
     const token = applicant.locator('#token')
     expect(await token.isEnabled()).toBe(true)
     expect(await applicant.locator('#token-submit').isEnabled()).toBe(true)
     expect(await applicant.getByRole('button', { name: '申请配对', exact: true }).isEnabled()).toBe(true)
-    const screenshotDirectory = process.env.DSH_PAIRING_SCREENSHOT_DIR
+    const screenshotDirectory = process.env.SNH_PAIRING_SCREENSHOT_DIR
     if (screenshotDirectory !== undefined) await mkdir(screenshotDirectory, { recursive: true })
     for (const scene of [
       { name: 'mobile-light', width: 390, height: 844, colorScheme: 'light' },
@@ -531,7 +531,7 @@ it('keeps Token and pairing usable on the same page after a QR exchange fails', 
       await applicant.emulateMedia({ colorScheme: scene.colorScheme })
       const layout = await applicant.evaluate(() => {
         const form = document.querySelector<HTMLElement>('#token-form')!
-        const pairing = document.querySelector<HTMLElement>('dsh-device-pairing')!
+        const pairing = document.querySelector<HTMLElement>('snh-device-pairing')!
         const notice = document.querySelector<HTMLElement>('#qr-notice')!
         const title = document.querySelector<HTMLElement>('#title')!
         const formBox = form.getBoundingClientRect()
@@ -580,9 +580,9 @@ it('keeps Token and pairing usable on the same page after a QR exchange fails', 
     if (launchToken === null) throw new Error('Token entry did not publish a startup credential')
     await token.fill(launchToken)
     await applicant.locator('#token-submit').click()
-    await applicant.waitForFunction(() => '__DSH_BOOT__' in window)
+    await applicant.waitForFunction(() => '__SNH_BOOT__' in window)
     expect(applicant.url()).toBe(fixture.url)
-    expect((await applicant.context().cookies()).some(cookie => cookie.name.startsWith('dsh-auth-') && cookie.httpOnly)).toBe(true)
+    expect((await applicant.context().cookies()).some(cookie => cookie.name.startsWith('snh-auth-') && cookie.httpOnly)).toBe(true)
     expect(errors).toEqual([])
   } finally {
     await browser.close()

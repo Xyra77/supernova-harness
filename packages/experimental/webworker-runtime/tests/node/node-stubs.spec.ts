@@ -33,7 +33,7 @@ import * as ws from '../../src/node/external_packages/ws.ts'
 import { REPLACED_EXTERNAL_PACKAGES } from '../../src/node/external_packages/replaced-externals.ts'
 import * as os from '../../src/node/builtin_modules/implemented/os.ts'
 import * as perfHooks from '../../src/node/builtin_modules/implemented/perf_hooks.ts'
-import { DSH_HOME, DSH_TMP } from '../../src/storage/paths.ts'
+import { SNH_HOME, SNH_TMP } from '../../src/storage/paths.ts'
 
 /** Node's standard code for a feature the running platform cannot provide. */
 const PLATFORM_UNAVAILABLE = 'ERR_FEATURE_UNAVAILABLE_ON_PLATFORM'
@@ -66,7 +66,7 @@ const CALLED: [string, Record<string, unknown>, readonly string[]][] = [
     create: piCodingAgent.SessionManager.create, open: piCodingAgent.SessionManager.open,
     inMemory: piCodingAgent.SessionManager.inMemory, list: piCodingAgent.SessionManager.list,
   }, ['create', 'open', 'inMemory', 'list']],
-  ['@deepseek-ai/pi-ai', piAi, [
+  ['@supernova-ai/pi-ai', piAi, [
     'createProvider', 'createModels', 'openAICompletionsApi', 'openAIResponsesApi', 'anthropicMessagesApi',
     'isContextOverflow', 'getSupportedThinkingLevels', 'builtinModels',
   ]],
@@ -163,14 +163,14 @@ describe('replaced external packages', () => {
     quiet()
     await expect(libreofficeKit.createConverter()).rejects.toMatchObject({
       code: 'unavailable',
-      message: 'web-preview: @deepseek-ai/libreoffice-kit.createConverter is not available in the worker host',
+      message: 'web-preview: @supernova-ai/libreoffice-kit.createConverter is not available in the worker host',
     })
   })
 
   it('lists the packages the loader serves from the bundle', () => {
     expect(REPLACED_EXTERNAL_PACKAGES).not.toContain('chokidar')
-    expect(REPLACED_EXTERNAL_PACKAGES).not.toContain('@deepseek-ai/node-addon-system')
-    expect(REPLACED_EXTERNAL_PACKAGES).not.toContain('@deepseek-ai/node-addon-system/landlock-run')
+    expect(REPLACED_EXTERNAL_PACKAGES).not.toContain('@supernova-ai/node-addon-system')
+    expect(REPLACED_EXTERNAL_PACKAGES).not.toContain('@supernova-ai/node-addon-system/landlock-run')
     expect(REPLACED_EXTERNAL_PACKAGES).toContain('ws')
   })
 
@@ -199,9 +199,9 @@ describe('node:net address predicates', () => {
 
 describe('node:os', () => {
   it('reports the virtual platform identity and the VFS directories', () => {
-    expect([os.EOL, os.tmpdir(), os.homedir()]).toEqual(['\n', DSH_TMP, DSH_HOME])
+    expect([os.EOL, os.tmpdir(), os.homedir()]).toEqual(['\n', SNH_TMP, SNH_HOME])
     expect([os.platform(), os.type(), os.arch()]).toEqual(['linux', 'Linux', 'x64'])
-    expect([os.release(), os.hostname()]).toEqual(['0.0.0-dsh-worker', 'dsh-worker'])
+    expect([os.release(), os.hostname()]).toEqual(['0.0.0-snh-worker', 'snh-worker'])
   })
 
   it('reports no per-core facts and no network interfaces', () => {

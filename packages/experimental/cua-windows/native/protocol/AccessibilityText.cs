@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.Json;
 
-namespace DeepSeek.Cua.Protocol;
+namespace SuperNova.Cua.Protocol;
 
 public sealed record AccessibilityNode
 {

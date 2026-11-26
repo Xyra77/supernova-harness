@@ -11,29 +11,29 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { z } from 'zod'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import { AttachmentStore } from '@deepseek-ai/dsh-attachment'
-import { agentPresetProjectionDefinition } from '@deepseek-ai/dsh-agent-preset-registry'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SESSION_FORMAT_VERSION, type SessionId, SessionLogOffset, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { Session, SessionEvent, SessionHeader, UserMessage } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import type { ProjectionDefinition } from '@deepseek-ai/dsh-session-projection'
-import type { SessionProjectionSummaryExcluded } from '@deepseek-ai/dsh-session-projection/types'
-import SessionProjectionCache, { projectionCacheDomainSpec } from '@deepseek-ai/dsh-session-projection-cache'
-import { titleProjectionDefinition } from '@deepseek-ai/dsh-session-title'
-import Storage from '@deepseek-ai/dsh-storage'
-import * as StorageDomain from '@deepseek-ai/dsh-storage-domain'
-import * as StorageJson from '@deepseek-ai/dsh-storage-json'
-import type { SessionControlFrame, SessionFollowFrame } from '@deepseek-ai/dsh-api-session-controller/types'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import { AttachmentStore } from '@supernova-ai/snh-attachment'
+import { agentPresetProjectionDefinition } from '@supernova-ai/snh-agent-preset-registry'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import SessionStore, { SESSION_FORMAT_VERSION, type SessionId, SessionLogOffset, SessionSeq } from '@supernova-ai/snh-session'
+import type { Session, SessionEvent, SessionHeader, UserMessage } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import type { ProjectionDefinition } from '@supernova-ai/snh-session-projection'
+import type { SessionProjectionSummaryExcluded } from '@supernova-ai/snh-session-projection/types'
+import SessionProjectionCache, { projectionCacheDomainSpec } from '@supernova-ai/snh-session-projection-cache'
+import { titleProjectionDefinition } from '@supernova-ai/snh-session-title'
+import Storage from '@supernova-ai/snh-storage'
+import * as StorageDomain from '@supernova-ai/snh-storage-domain'
+import * as StorageJson from '@supernova-ai/snh-storage-json'
+import type { SessionControlFrame, SessionFollowFrame } from '@supernova-ai/snh-api-session-controller/types'
 import {
   mountAgentLoopTestDependencies,
   mountAgentLoopTestHarness,
-} from '@deepseek-ai/dsh-agent-loop-testkit'
+} from '@supernova-ai/snh-agent-loop-testkit'
 import { createSessionTestRemote, testSessionPersistence, type TestSessionRemote } from './test-remote.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const ownedContexts = new Set<Context>()
 afterEach(async () => {
@@ -42,7 +42,7 @@ afterEach(async () => {
 })
 let nextHarnessSession = 1
 
-declare module '@deepseek-ai/dsh-session-projection/types' {
+declare module '@supernova-ai/snh-session-projection/types' {
   interface SessionProjectionMap {
     'test/last-user': { text: string } | null
     'test/summary-excluded': SessionProjectionSummaryExcluded<number>
@@ -589,7 +589,7 @@ describe('session.list projections column', () => {
   })
 
   it('keeps persisted host-only state out of a cold session.list response', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-api-projcache-'))
+    const root = await mkdtemp(join(tmpdir(), 'snh-api-projcache-'))
     const ctx = new Context()
     try {
       await ctx.plugin(Storage)
@@ -642,7 +642,7 @@ describe('session.list projections column', () => {
   })
 
   it('lists a forked Session\'s cached title after a Host restart without opening its body', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-api-projcache-'))
+    const root = await mkdtemp(join(tmpdir(), 'snh-api-projcache-'))
     const id = brandString<SessionId>('session-cold-fork')
     /** One Host process over `root`: storage stack, registry with the title unit, and the cache. */
     const boot = async (): Promise<Context> => {

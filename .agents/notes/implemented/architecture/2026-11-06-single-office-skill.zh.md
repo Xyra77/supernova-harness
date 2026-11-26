@@ -6,11 +6,11 @@ Status: implemented
 
 ## Problem
 
-[Office 提供者](../../../../packages/skill/skill-office/README.zh.md)曾列出四个技能：`office` 路由，以及 `office-docx`、`office-pptx` 和 `office-xlsx` 三个创作技能。每次请求都携带四条目录摘要，而格式技能只有在路由选中之后才有用。每个格式技能都重复"加载 `office` 以获得 Office 工具"的指示，提供者把同一段 Python 环境说明追加到三个正文中，而且格式正文大多是限制模型做法的分步流程要求与示例，而非模型无法自行获知的非显而易见 harness 事实。若把这些格式正文拆成按需读取的独立文件，仍会多出一步 `read` 调用，并依赖 Host 文件系统访问。目录应只标识一次 Office 能力，并在一步之内仅加载 DSH 特有事实与静默数据丢失易错点。
+[Office 提供者](../../../../packages/skill/skill-office/README.zh.md)曾列出四个技能：`office` 路由，以及 `office-docx`、`office-pptx` 和 `office-xlsx` 三个创作技能。每次请求都携带四条目录摘要，而格式技能只有在路由选中之后才有用。每个格式技能都重复"加载 `office` 以获得 Office 工具"的指示，提供者把同一段 Python 环境说明追加到三个正文中，而且格式正文大多是限制模型做法的分步流程要求与示例，而非模型无法自行获知的非显而易见 harness 事实。若把这些格式正文拆成按需读取的独立文件，仍会多出一步 `read` 调用，并依赖 Host 文件系统访问。目录应只标识一次 Office 能力，并在一步之内仅加载 SNH 特有事实与静默数据丢失易错点。
 
 ## Decision
 
-`@deepseek-ai/dsh-skill-office` 只注册 `office`。`office` 正文说明 `office_render`、`office_convert` 和 `office_recalculate` 会在下一步可用，指出内置 `pypdf` 用于读取现有 PDF、旧版 `.doc`／`.ppt`／`.xls` 需先用 `office_convert` 转换，内联列出 Word、PowerPoint 和 Excel 中会静默丢失格式、东亚字体、版面适配、公式计算值或工作表的精简易错点，并在末尾追加一次配置的 Python 环境说明。不再内置或读取单独的格式文件。本文取代[渐进式 Office 技能](2026-09-27-progressive-office-skills.zh.md)的目录与创作正文设计，同时保留[按需激活的 Office 工具](2026-10-31-native-office-tool.zh.md)的激活设计（`activationSkills` 默认为 `['office']`）。
+`@supernova-ai/snh-skill-office` 只注册 `office`。`office` 正文说明 `office_render`、`office_convert` 和 `office_recalculate` 会在下一步可用，指出内置 `pypdf` 用于读取现有 PDF、旧版 `.doc`／`.ppt`／`.xls` 需先用 `office_convert` 转换，内联列出 Word、PowerPoint 和 Excel 中会静默丢失格式、东亚字体、版面适配、公式计算值或工作表的精简易错点，并在末尾追加一次配置的 Python 环境说明。不再内置或读取单独的格式文件。本文取代[渐进式 Office 技能](2026-09-27-progressive-office-skills.zh.md)的目录与创作正文设计，同时保留[按需激活的 Office 工具](2026-10-31-native-office-tool.zh.md)的激活设计（`activationSkills` 默认为 `['office']`）。
 
 [Office 工具](../../../../packages/document/tool-office/README.zh.md)的 `activationSkills` 默认为 `['office']`。目录发现和加载时，提供者读取 `office/SKILL.md`；文件缺失或元数据无效时，`office` 从目录中省略并记录警告，其他读取错误使本次发现不完整，由注册表重试。
 

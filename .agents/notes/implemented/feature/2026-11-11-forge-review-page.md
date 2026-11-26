@@ -10,7 +10,7 @@ The [forge panel](2026-10-09-forge-panel.md) shows the change requests one Sessi
 
 ## Decision
 
-A left-navigation Code review page in [`dsh-experimental-client-ui-forge`](../../../../packages/experimental/client-ui-forge/README.md) lists three viewer lists and shows one change request in full.
+A left-navigation Code review page in [`snh-experimental-client-ui-forge`](../../../../packages/experimental/client-ui-forge/README.md) lists three viewer lists and shows one change request in full.
 
 - **Lists** — an optional `ForgeProvider` capability (`viewer`, `listForViewer`, `countForViewer`) returns summaries of open change requests; GitHub answers each list with one GraphQL search, because one document with several searches times out. The Host reads the lists only while a page or count stream lasts, outside the forge's status polling, since a batch snapshot of dozens of change requests exceeds GitHub's query timeout; only the shown change request is polled through `ForgeService.watch`.
 - **Reads by URL** — the page's `forgePanel/review*` methods name a change request by URL and no Session; they share the Session-bound methods' implementation and are reachable only by callers that may use the Host's code host credentials.

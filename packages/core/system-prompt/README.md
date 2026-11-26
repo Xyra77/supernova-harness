@@ -3,13 +3,13 @@ description: "System-prompt assembly for users and maintainers adding prompt sec
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-system-prompt
+# @supernova-ai/snh-system-prompt
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-system-prompt` assembles ordered sections, runtime facts, variables, and tool schemas. Each Session receives only new or changed system text; unchanged instructions remain in history. Cordis lifecycle determines whether a registered source is active. Same-named registrations support scoped overrides. Invalid complete-prompt combinations and unresolved variables fail assembly.
+`snh-system-prompt` assembles ordered sections, runtime facts, variables, and tool schemas. Each Session receives only new or changed system text; unchanged instructions remain in history. Cordis lifecycle determines whether a registered source is active. Same-named registrations support scoped overrides. Invalid complete-prompt combinations and unresolved variables fail assembly.
 
 ## Table of Contents
 
@@ -25,7 +25,7 @@ English | [中文](README.zh.md)
 <a id="use-this-package"></a>
 ## Use this package
 
-Mount `dsh-system-prompt` wherever agents run: it provides `ctx.systemPrompt`, the registry every prompt contribution lands in. Register through `agent.ctx` to contribute only to that agent. For the same section name, the nearest scope wins; within one scope, the latest live registration wins. Sibling scopes remain independent.
+Mount `snh-system-prompt` wherever agents run: it provides `ctx.systemPrompt`, the registry every prompt contribution lands in. Register through `agent.ctx` to contribute only to that agent. For the same section name, the nearest scope wins; within one scope, the latest live registration wins. Sibling scopes remain independent.
 
 <a id="configure-the-prompt"></a>
 ### Configure the prompt
@@ -35,7 +35,7 @@ Mount `dsh-system-prompt` wherever agents run: it provides `ctx.systemPrompt`, t
 The config owns the fixed opener, runtime context, deployment persona prefix and suffix, and tool order; everything else comes from registered contributions.
 
 ```yaml
-- name: '@deepseek-ai/dsh-system-prompt'
+- name: '@supernova-ai/snh-system-prompt'
   config:
     includeHarnessIdentity: true
     includeRuntimeContext: true
@@ -45,13 +45,13 @@ The config owns the fixed opener, runtime context, deployment persona prefix and
 
 | Field | Default | Meaning |
 |---|---|---|
-| `includeHarnessIdentity` | `true` | Include the fixed `You are an AI agent powered by DeepSeek Harness.` first-party opener at order −1000. Set false only when a compatibility deployment owns the complete system prompt. |
+| `includeHarnessIdentity` | `true` | Include the fixed `You are an AI agent powered by SuperNova Harness.` first-party opener at order −1000. Set false only when a compatibility deployment owns the complete system prompt. |
 | `includeRuntimeContext` | `true` | Include optional ordered dynamic runtime context in assembly |
 | `personaPrefix` | `''` | Global persona prefix template at order `0`, before first-party guidance |
 | `personaSuffix` | `''` | Global `deployment:persona-suffix` template at order `10200`, after first-party guidance |
 | `toolOrder` | — | Explicit model-facing tool order with one `'<unlisted-tools>'` rest entry |
 
-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-system-prompt) is the exhaustive source for every accepted field. A `toolOrder` list without exactly one rest entry or with duplicates fails at load; a listed name with no registered tool rejects every `assemble()`.
+The generated [configuration catalog](../../../docs/config-catalog.md#supernova-aisnh-system-prompt) is the exhaustive source for every accepted field. A `toolOrder` list without exactly one rest entry or with duplicates fails at load; a listed name with no registered tool rejects every `assemble()`.
 
 ### Contribute a prompt section
 
@@ -171,7 +171,7 @@ The first accepted assembly commits an initial `system/message` before user mess
 ##### Harness identity
 
 ```markdown
-You are an AI agent powered by DeepSeek Harness.
+You are an AI agent powered by SuperNova Harness.
 ```
 
 #### Token effect
@@ -186,7 +186,7 @@ Ordinary updates preserve earlier messages. Route changes, resume, explicit requ
 
 #### What the model sees
 
-For shipped tools, the model receives the per-agent-visible subset of the [generated tool schemas](../../../docs/tool-catalog.md#deepseek-aidsh-tool-executor-ptc), ordered by configuration or lexicographically after restrictions and step-time activation. Extensions can contribute additional definitions through the same registry. Sections and schema providers are separate assembly inputs. A restriction does not remove a section registration: tool-guidance plugins use `text({ scope, toolSet })` and `ctx.tools.get(name, scope, toolSet)` to return empty text or select applicable fragments. Arbitrary static sections are not automatically rewritten.
+For shipped tools, the model receives the per-agent-visible subset of the [generated tool schemas](../../../docs/tool-catalog.md#supernova-aisnh-tool-executor-ptc), ordered by configuration or lexicographically after restrictions and step-time activation. Extensions can contribute additional definitions through the same registry. Sections and schema providers are separate assembly inputs. A restriction does not remove a section registration: tool-guidance plugins use `text({ scope, toolSet })` and `ctx.tools.get(name, scope, toolSet)` to return empty text or select applicable fragments. Arbitrary static sections are not automatically rewritten.
 
 #### Token effect
 

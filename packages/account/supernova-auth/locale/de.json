@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "SuperNova-Anfrageauthentifizierung",
+    "description": "Wählt für jede Anfrage an SuperNova den API-Schlüssel oder die Kontoanmeldung aus und stellt die Anfrage-Header bereit."
+  }
+}

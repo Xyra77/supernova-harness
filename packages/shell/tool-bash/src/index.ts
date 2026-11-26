@@ -8,26 +8,26 @@
  *
  * TODO(permissions): deployment policy belongs in `tools/pre-execute` and
  * sandboxing executors; see docs/architecture.md § Where new behavior goes.
- * @module @deepseek-ai/dsh-tool-bash
+ * @module @supernova-ai/snh-tool-bash
  */
 
-import type {} from '@deepseek-ai/dsh-working-directory'
-import { FiberState } from '@deepseek-ai/cordis'
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import type {} from '@supernova-ai/snh-working-directory'
+import { FiberState } from '@supernova-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
 import { isAbsolute, sep } from 'node:path'
-import { defineTool, TOOL_ABORTED, ToolArgsError, ToolContextUnavailableError } from '@deepseek-ai/dsh-tools'
-import type { GenericCallView, TerminalCallView, ToolDefinition, ToolExecution, ToolResult, ToolResultView } from '@deepseek-ai/dsh-tools'
-import { HarnessError } from '@deepseek-ai/dsh-llm'
-import type { JobId, JobRegistry, JobView } from '@deepseek-ai/dsh-jobs'
-import type {} from '@deepseek-ai/dsh-user-approval'
-import type {} from '@deepseek-ai/dsh-shell-env'
-import type { SandboxExecutionPolicy, SandboxMode } from '@deepseek-ai/dsh-sandbox'
-import { ESCALATION_TARGETS, approveEscalation, sandboxPermissionsDescription, validateEscalationArgs } from '@deepseek-ai/dsh-sandbox'
-import { subprocessSpawnFailure } from '@deepseek-ai/dsh-subprocess'
-import type { SandboxPolicyService } from '@deepseek-ai/dsh-sandbox-policy'
-import { DSH_ENV_PREFIX } from '@deepseek-ai/dsh-shell'
-import type { ShellExecRequest, ShellExecSpec, ShellExecution, ShellRunResult } from '@deepseek-ai/dsh-shell'
+import { defineTool, TOOL_ABORTED, ToolArgsError, ToolContextUnavailableError } from '@supernova-ai/snh-tools'
+import type { GenericCallView, TerminalCallView, ToolDefinition, ToolExecution, ToolResult, ToolResultView } from '@supernova-ai/snh-tools'
+import { HarnessError } from '@supernova-ai/snh-llm'
+import type { JobId, JobRegistry, JobView } from '@supernova-ai/snh-jobs'
+import type {} from '@supernova-ai/snh-user-approval'
+import type {} from '@supernova-ai/snh-shell-env'
+import type { SandboxExecutionPolicy, SandboxMode } from '@supernova-ai/snh-sandbox'
+import { ESCALATION_TARGETS, approveEscalation, sandboxPermissionsDescription, validateEscalationArgs } from '@supernova-ai/snh-sandbox'
+import { subprocessSpawnFailure } from '@supernova-ai/snh-subprocess'
+import type { SandboxPolicyService } from '@supernova-ai/snh-sandbox-policy'
+import { SNH_ENV_PREFIX } from '@supernova-ai/snh-shell'
+import type { ShellExecRequest, ShellExecSpec, ShellExecution, ShellRunResult } from '@supernova-ai/snh-shell'
 import { processJob, processOutcome, processSources, ringDelta } from './background.ts'
 import type { ProcessJobHooks } from './background.ts'
 import { parseExitStatus, renderJobRead, renderPromoted, renderResult } from './render.ts'
@@ -121,7 +121,7 @@ function validateBashArgs(args: BashToolArgs, effectiveMode: SandboxMode | undef
 function bashDescription(): string {
   return 'Execute a bash command (`bash -c`) and return its stdout/stderr. '
     + 'Each call runs in a fresh shell; pass `workdir` instead of using `cd`. '
-    + `Managed \`$${DSH_ENV_PREFIX}*\` variables expose current harness environment facts. `
+    + `Managed \`$${SNH_ENV_PREFIX}*\` variables expose current harness environment facts. `
     + 'Long output is truncated to its tail; the full output is saved to a file whose path is reported when available. '
     + 'Provide `description` before `command` in the arguments. '
     + 'Before any delete or move, verify that the resolved absolute target path is the intended one; never run it against a computed path you have not checked. '
@@ -533,17 +533,17 @@ export function apply(ctx: Context, config: Config = {}): void {
           : { ...(standingPolicy as SandboxExecutionPolicy), mode: approvedMode }
         const cwd = exec.agent === undefined ? undefined : await ctx.workingDirectory.ensure(exec.agent, exec.signal)
         const workdir = resolveWorkdir(args.workdir, cwd)
-        const dshEnv = ctx.shellEnv.collect(exec)
+        const snhEnv = ctx.shellEnv.collect(exec)
         const request: ShellExecRequest = {
           command: args.command,
           ...workdir !== undefined ? { workdir } : {},
           ...args.timeoutMs !== undefined ? { timeoutMs: args.timeoutMs } : {},
-          dshEnv,
+          snhEnv,
           ...policy !== undefined ? { sandboxPolicy: policy } : {},
         }
         if (args.run_in_background === true) {
           if (jobs === undefined) {
-            throw new ToolContextUnavailableError('background jobs unavailable: load @deepseek-ai/dsh-jobs and @deepseek-ai/dsh-tool-jobs')
+            throw new ToolContextUnavailableError('background jobs unavailable: load @supernova-ai/snh-jobs and @supernova-ai/snh-tool-jobs')
           }
           // The caller owns cancellation until ctx.jobs commits detached ownership.
           if (exec.signal.aborted) throw toolAborted()

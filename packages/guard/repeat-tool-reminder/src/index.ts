@@ -3,23 +3,23 @@
  * with logged model context without vetoing or rewriting calls. Configuration
  * and chain semantics live in the package README; rationale lives in the
  * repeat-tool-reminder Agent Note.
- * @module @deepseek-ai/dsh-repeat-tool-reminder
+ * @module @supernova-ai/snh-repeat-tool-reminder
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
-declare module '@deepseek-ai/dsh-llm' {
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type { Agent, PreStepDecision } from '@supernova-ai/snh-agent'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'repeat-tool-reminder': { kind: 'repeat-tool-reminder' } & ContextFormed
   }
 }
 
-import type { MessageSource } from '@deepseek-ai/dsh-llm'
-import type { UserMessage } from '@deepseek-ai/dsh-session'
-import type { PostToolDecision, ToolExecution } from '@deepseek-ai/dsh-tools'
+import type { MessageSource } from '@supernova-ai/snh-llm'
+import type { UserMessage } from '@supernova-ai/snh-session'
+import type { PostToolDecision, ToolExecution } from '@supernova-ai/snh-tools'
 
 export const name = 'repeat-tool-reminder'
 

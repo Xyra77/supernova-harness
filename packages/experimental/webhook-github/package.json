@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-webhook-github",
-  "description": "Signed GitHub HTTP webhook adapter for the DeepSeek Harness webhook runtime",
+  "name": "@supernova-ai/snh-webhook-github",
+  "description": "Signed GitHub HTTP webhook adapter for the SuperNova Harness webhook runtime",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -40,25 +40,25 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-credentials": "workspace:*",
-    "@deepseek-ai/dsh-host-webserver": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-webhook": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-credentials": "workspace:*",
+    "@supernova-ai/snh-host-webserver": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-webhook": "workspace:*"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/dsh-util-values": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-util-values": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
     "@octokit/webhooks": "^14.2.0"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/cordis-plugin-include": "workspace:~",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/dsh-credentials": "workspace:*",
-    "@deepseek-ai/dsh-host-webserver": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-webhook": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis-plugin-include": "workspace:~",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-credentials": "workspace:*",
+    "@supernova-ai/snh-host-webserver": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-webhook": "workspace:*"
   }
 }

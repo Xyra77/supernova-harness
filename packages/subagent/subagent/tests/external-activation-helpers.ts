@@ -1,15 +1,15 @@
 /** Registered parent fixtures for external backend activation tests. */
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 
 import { randomUUID } from 'node:crypto'
 import { onTestFinished } from 'vitest'
-import type { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import { unsupportedModel, createInboxStub } from '@deepseek-ai/dsh-agent-loop-testkit'
+import type { Context } from '@supernova-ai/cordis'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import type { Agent } from '@supernova-ai/snh-agent'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import { unsupportedModel, createInboxStub } from '@supernova-ai/snh-agent-loop-testkit'
 import type { SubagentActivation, SubagentStartRequest } from '../src/types.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const parents = new WeakMap<Context, Promise<WeakMap<Agent, Agent>>>()
 

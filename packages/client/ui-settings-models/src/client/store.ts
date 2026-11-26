@@ -7,13 +7,13 @@
  * re-renders from the next describe, pushed or refetched.
  */
 
-import type { Context as ClientContext } from '@deepseek-ai/cordis'
+import type { Context as ClientContext } from '@supernova-ai/cordis'
 import type {
   CredentialInfo, LlmConfigurableProvider, LlmNativeAuth, LlmProviderInfo, SettingsNamespaceView,
-} from '@deepseek-ai/dsh-api-remotes/client'
-import type { SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { SettingsDescribeFace } from '@deepseek-ai/dsh-client-ui-settings/client'
+} from '@supernova-ai/snh-api-remotes/client'
+import type { SnapshotStore } from '@supernova-ai/snh-client-store'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import type { SettingsDescribeFace } from '@supernova-ai/snh-client-ui-settings/client'
 import type { SettingsSchemaOperations } from './schema-operations.ts'
 
 /**
@@ -365,7 +365,7 @@ export type OnboardingReadiness =
  * Project first-run readiness from the provider/settings/credential join used
  * by the Models page. The step exists to leave the user with a model to talk
  * to, so ANY usable provider ends it; only when none exists does the official
- * DeepSeek route — the one route the prompt can offer a key field for — decide
+ * SuperNova route — the one route the prompt can offer a key field for — decide
  * whether prompting can help. A missing official configurable-provider
  * declaration means the adapter is not repairable by navigating to Models.
  * @param state - current shared Models join snapshot.
@@ -384,7 +384,7 @@ export function onboardingReadiness(state: ModelsSettingsState): OnboardingReadi
   if (state.rows.some(providerUsable)) return { kind: 'provider-ready' }
   const row = state.rows.find(candidate =>
     candidate.entry.provider === 'deepseek-official'
-    && candidate.entry.settingsNs === 'llm-deepseek'
+    && candidate.entry.settingsNs === 'llm-supernova'
     && candidate.entry.settingsPath.length === 0)
   if (row === undefined) return { kind: 'adapter-absent' }
   if (!row.entry.active) {

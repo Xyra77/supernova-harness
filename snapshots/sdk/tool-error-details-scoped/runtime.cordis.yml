@@ -7,7 +7,7 @@
 
 - insert:
     - id: ptc-runtime
-      name: '@deepseek-ai/dsh-ptc-runtime-node'
+      name: '@supernova-ai/snh-ptc-runtime-node'
       config:
         executionMode: persistent-in-memory
     - id: structured-denial-fixture

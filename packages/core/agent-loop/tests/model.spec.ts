@@ -1,14 +1,14 @@
 /** Per-Agent model instances share the loop's projection registration and teardown. */
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry, { AgentModel, modelSelectionProjectionDefinition } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry, { AgentModel, modelSelectionProjectionDefinition } from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import LlmRuntime from '@supernova-ai/snh-llm'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 async function dependencies() {
   const ctx = new Context()

@@ -4,9 +4,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using DeepSeek.Cua.Protocol;
+using SuperNova.Cua.Protocol;
 
-namespace DeepSeek.Cua.Windows;
+namespace SuperNova.Cua.Windows;
 
 internal sealed record RunningApplication(int Pid, long Started, string Path, string Name);
 

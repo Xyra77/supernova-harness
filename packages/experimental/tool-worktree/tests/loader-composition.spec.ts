@@ -1,5 +1,5 @@
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { execFile } from 'node:child_process'
 import { mkdir, mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
@@ -7,23 +7,23 @@ import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { promisify } from 'node:util'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import LlmRuntime, { type ToolCallId } from '@deepseek-ai/dsh-llm'
-import LocalSandbox from '@deepseek-ai/dsh-sandbox-local'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import WorkingDirectoryService from '@deepseek-ai/dsh-working-directory'
-import WorktreeService from '@deepseek-ai/dsh-experimental-worktree'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import Include from '@supernova-ai/cordis-plugin-include'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import LocalFileSystem from '@supernova-ai/snh-fs-local'
+import { brandString } from '@supernova-ai/snh-brand'
+import LlmRuntime, { type ToolCallId } from '@supernova-ai/snh-llm'
+import LocalSandbox from '@supernova-ai/snh-sandbox-local'
+import SandboxPolicyService from '@supernova-ai/snh-sandbox-policy'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import WorkingDirectoryService from '@supernova-ai/snh-working-directory'
+import WorktreeService from '@supernova-ai/snh-experimental-worktree'
 import * as ToolWorktree from '../src/index.ts'
 
 const exec = promisify(execFile)
@@ -39,7 +39,7 @@ afterEach(async () => {
 
 describe('worktree tool through real Loader composition', () => {
   it('creates a checkout for a new name and enters an existing one, exits to the source checkout, reports canonical fields, and unregisters on disposal', async () => {
-    root = await realpath(await mkdtemp(join(tmpdir(), 'dsh-worktree-loader-')))
+    root = await realpath(await mkdtemp(join(tmpdir(), 'snh-worktree-loader-')))
     const repository = join(root, 'repo')
     await mkdir(repository)
     const git = (...args: string[]) => exec('git', ['-c', 'core.hooksPath=/dev/null', ...args], {
@@ -54,27 +54,27 @@ describe('worktree tool through real Loader composition', () => {
     const baseCommit = (await git('rev-parse', 'HEAD')).stdout.trim()
 
     const modules = new Map<string, unknown>([
-      ['@deepseek-ai/dsh-agent', AgentRegistry],
-      ['@deepseek-ai/dsh-session', SessionStore],
-      ['@deepseek-ai/dsh-session-projection', SessionProjectionRegistry],
+      ['@supernova-ai/snh-agent', AgentRegistry],
+      ['@supernova-ai/snh-session', SessionStore],
+      ['@supernova-ai/snh-session-projection', SessionProjectionRegistry],
 
-      ['@deepseek-ai/dsh-system-prompt', SystemPrompt],
-      ['@deepseek-ai/dsh-llm', LlmRuntime],
-      ['@deepseek-ai/dsh-tools', ToolRuntime],
-      ['@deepseek-ai/dsh-tool-executor-native', NativeToolExecutor],
-      ['@deepseek-ai/dsh-fs-local', LocalFileSystem],
-      ['@deepseek-ai/dsh-subprocess-local', LocalSubprocessRuntime],
-      ['@deepseek-ai/dsh-sandbox-local', LocalSandbox],
-      ['@deepseek-ai/dsh-sandbox-policy', SandboxPolicyService],
-      ['@deepseek-ai/dsh-working-directory', WorkingDirectoryService],
-      ['@deepseek-ai/dsh-experimental-worktree', WorktreeService],
-      ['@deepseek-ai/dsh-experimental-tool-worktree', ToolWorktree],
-      ['@deepseek-ai/dsh-agent-loop', AgentLoop],
+      ['@supernova-ai/snh-system-prompt', SystemPrompt],
+      ['@supernova-ai/snh-llm', LlmRuntime],
+      ['@supernova-ai/snh-tools', ToolRuntime],
+      ['@supernova-ai/snh-tool-executor-native', NativeToolExecutor],
+      ['@supernova-ai/snh-fs-local', LocalFileSystem],
+      ['@supernova-ai/snh-subprocess-local', LocalSubprocessRuntime],
+      ['@supernova-ai/snh-sandbox-local', LocalSandbox],
+      ['@supernova-ai/snh-sandbox-policy', SandboxPolicyService],
+      ['@supernova-ai/snh-working-directory', WorkingDirectoryService],
+      ['@supernova-ai/snh-experimental-worktree', WorktreeService],
+      ['@supernova-ai/snh-experimental-tool-worktree', ToolWorktree],
+      ['@supernova-ai/snh-agent-loop', AgentLoop],
     ])
     const config = [...modules.keys()].flatMap(name => [
       `- name: 'cordis:${name}'`,
-      ...name === '@deepseek-ai/dsh-sandbox-policy' ? ['  config:', '    mode: danger-full-access'] : [],
-      ...name === '@deepseek-ai/dsh-agent-loop' ? ['  config:', '    agents: []'] : [],
+      ...name === '@supernova-ai/snh-sandbox-policy' ? ['  config:', '    mode: danger-full-access'] : [],
+      ...name === '@supernova-ai/snh-agent-loop' ? ['  config:', '    agents: []'] : [],
     ]).join('\n') + '\n'
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, config)
@@ -169,7 +169,7 @@ describe('worktree tool through real Loader composition', () => {
     expect(generated.value).toMatchObject({ baseCommit, repositoryRoot: repository, created: true })
     expect(create).toHaveBeenCalledOnce()
 
-    const entry = [...context.loader.entries()].find(candidate => candidate.options.name === 'cordis:@deepseek-ai/dsh-experimental-tool-worktree')
+    const entry = [...context.loader.entries()].find(candidate => candidate.options.name === 'cordis:@supernova-ai/snh-experimental-tool-worktree')
     await entry!.fiber!.dispose()
     expect(context.tools.schemas().some(tool => tool.name.endsWith('_worktree'))).toBe(false)
   })

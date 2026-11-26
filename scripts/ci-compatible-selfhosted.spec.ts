@@ -45,13 +45,13 @@ function evaluate(expression: string, context: Record<string, unknown>): unknown
 
 function route(options: { mode?: string; author?: string; repository?: string; fork?: boolean; actor?: string } = {}): unknown {
   return evaluate(job['runs-on'], {
-    vars: { DSH_CI_FAILOVER_LINUX: options.mode ?? 'selfhosted' },
+    vars: { SNH_CI_FAILOVER_LINUX: options.mode ?? 'selfhosted' },
     github: {
-      repository: 'deepseek-harness/deepseek-harness',
+      repository: 'supernova-harness/supernova-harness',
       actor: options.actor ?? 'maintainer',
       event: { pull_request: {
         user: { login: options.author ?? 'maintainer' },
-        head: { repo: { full_name: options.repository ?? 'deepseek-harness/deepseek-harness', fork: options.fork ?? false } },
+        head: { repo: { full_name: options.repository ?? 'supernova-harness/supernova-harness', fork: options.fork ?? false } },
       } },
     },
     matrix: { runner: 'ubuntu-latest' },
@@ -62,7 +62,7 @@ describe('Node compatibility self-hosted routing', () => {
   it('runs the build-backed compatibility floor release and declares it for installed CLI users', () => {
     expect(job.strategy.matrix.include.filter(entry => String(entry.node) === BUILD_BACKED_NODE_COMPAT_VERSION)).toHaveLength(1)
     expect(job.strategy.matrix.include.filter(entry => entry.build === '1').map(entry => String(entry.node))).toEqual([BUILD_BACKED_NODE_COMPAT_VERSION])
-    expect(job.env.DSH_NODE_COMPAT_BUILD).toBe('${{ matrix.build }}')
+    expect(job.env.SNH_NODE_COMPAT_BUILD).toBe('${{ matrix.build }}')
     for (const manifest of ['package.json', 'apps/cli/package.json']) {
       const pkg = JSON.parse(readFileSync(resolve(import.meta.dirname, '..', manifest), 'utf8')) as { engines: { node: string } }
       expect(pkg.engines.node).toBe(`^${BUILD_BACKED_NODE_COMPAT_VERSION} || >=26.13.1`)
@@ -89,7 +89,7 @@ describe('Node compatibility self-hosted routing', () => {
       { node: '24.22.3', name: 'node 24.22.3', runner: 'ubuntu-latest', gate_concurrency: '1', build: '1' },
       { node: 26, name: 'node 26', runner: 'ubuntu-latest', gate_concurrency: '1', build: '' },
     ])
-    expect(job.env.DSH_GATE_CONCURRENCY).toBe('${{ matrix.gate_concurrency }}')
+    expect(job.env.SNH_GATE_CONCURRENCY).toBe('${{ matrix.gate_concurrency }}')
     expect(job.steps.map(step => step.run)).toContain('pnpm run check:node-compat')
     expect(job.steps.map(step => step.run)).toContain('pnpm exec vitest run packages/boot/app-boot/tests/loader-shape.compat.spec.ts')
     expect(pythonWorkflow.jobs['python-sdk']['runs-on']).toBe('ubuntu-latest')
@@ -114,7 +114,7 @@ describe('Node compatibility self-hosted routing', () => {
     // and saves; it must stay excluded from the persistent self-hosted pool.
     const remoteCaches = job.steps.filter(step => step.uses?.startsWith('actions/cache/'))
     expect(remoteCaches.length).toBeGreaterThan(0)
-    for (const step of remoteCaches) expect(step.if).toContain("vars.DSH_CI_FAILOVER_LINUX != 'selfhosted'")
+    for (const step of remoteCaches) expect(step.if).toContain("vars.SNH_CI_FAILOVER_LINUX != 'selfhosted'")
   })
 
   it('overrides runner exports inside setup-node without affecting later Node processes', () => {

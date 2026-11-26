@@ -3,11 +3,11 @@
  * forge-session runs, the `gh` commands that bind pull requests to a Session.
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type {} from '@deepseek-ai/dsh-experimental-forge'
-import type {} from '@deepseek-ai/dsh-experimental-forge-session'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type {} from '@supernova-ai/snh-experimental-forge'
+import type {} from '@supernova-ai/snh-experimental-forge-session'
+import { MAX_TIMER_DELAY_MS } from '@supernova-ai/snh-timeout'
 import { GH_COMMANDS } from './commands.ts'
 import { ghRunner } from './gh.ts'
 import { GitHubProvider } from './provider.ts'

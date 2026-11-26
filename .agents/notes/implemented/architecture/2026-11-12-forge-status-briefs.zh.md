@@ -6,7 +6,7 @@ Status: implemented
 
 ## Problem
 
-会话列表为每个已列出 Session 绑定的变更请求显示一个状态图标，此前为此读取每个变更请求的完整快照：最多 100 个检查 context、评审人、评审讨论、关联 issue 以及仓库的合并设置。注册表把同一个 forge 所有到期的变更请求合成一批，GitHub 提供方此前把一个主机的整批放进同一个 GraphQL 查询。GitHub 在处理一个请求超过 10 秒后终止它：包含 20 个 deepseek-harness pull request 的快照查询耗时 10.2 s，30 个的返回 HTTP 504，61 个的返回 HTTP 502。列表每次新的运行会让所有监听同时到期，所以绑定了约 30 个 pull request 的用户，列表会整批失败、整批重试。打开一个 Session 时，如果列表已经在监听它的变更请求，就不会触发任何读取，面板最长要等一个空闲间隔才有更新的状态。
+会话列表为每个已列出 Session 绑定的变更请求显示一个状态图标，此前为此读取每个变更请求的完整快照：最多 100 个检查 context、评审人、评审讨论、关联 issue 以及仓库的合并设置。注册表把同一个 forge 所有到期的变更请求合成一批，GitHub 提供方此前把一个主机的整批放进同一个 GraphQL 查询。GitHub 在处理一个请求超过 10 秒后终止它：包含 20 个 supernova-harness pull request 的快照查询耗时 10.2 s，30 个的返回 HTTP 504，61 个的返回 HTTP 502。列表每次新的运行会让所有监听同时到期，所以绑定了约 30 个 pull request 的用户，列表会整批失败、整批重试。打开一个 Session 时，如果列表已经在监听它的变更请求，就不会触发任何读取，面板最长要等一个空闲间隔才有更新的状态。
 
 还有一些读取是不必要的重复。变更请求只有在同一毫秒到期时才共用一次读取，所以 14 个列表监听在保持对齐时每小时 30 个查询，错开之后是 415 个。每次重新显示 Session 的面板，Host 都重新检查登录状态、重新按分支查找，客户端还会强制再读一次状态。每保存一个已审阅标记，所有打开的变更视图都会重读全部标记和全部评审讨论。Agent 的推送或 `gh pr merge` 不会触发状态读取。
 
@@ -14,7 +14,7 @@ Status: implemented
 
 **两个层级的状态。** 简报包含列表显示的内容：标题、状态、草稿标记、可合并性、评审结论与检查汇总结果。`ctx.forge.watchBrief` 监听简报；`ctx.forge.watch` 监听快照。被监听的变更请求在有快照监听方时轮询快照，否则轮询简报。快照包含简报，所以简报监听方能收到每一次结果。提供方通过可选的 `fetchBriefs` 读取简报；提供方没有该方法时，注册表从它读取快照。
 
-**GitHub 简报查询。** forge-github 从 pull request 自身的标量字段和 head 提交的 `statusCheckRollup.state` 读出简报，每个查询 25 个 pull request（`briefBatchSize`）。通过 `gh` 在 deepseek-harness 的 pull request 上实测，10 个的查询用 1.6 至 2.0 s，25 个的用 2.5 至 3.4 s，50 个的用 2.9 至 6.8 s，速率配额各消耗 1 点；25 个比 50 个离 GitHub 的 10 秒上限更远。快照查询里检查 context 占比最大：8 个 pull request 时占 186 KB 中的 174 KB、3.8 s 中的 1.4 s。
+**GitHub 简报查询。** forge-github 从 pull request 自身的标量字段和 head 提交的 `statusCheckRollup.state` 读出简报，每个查询 25 个 pull request（`briefBatchSize`）。通过 `gh` 在 supernova-harness 的 pull request 上实测，10 个的查询用 1.6 至 2.0 s，25 个的用 2.5 至 3.4 s，50 个的用 2.9 至 6.8 s，速率配额各消耗 1 点；25 个比 50 个离 GitHub 的 10 秒上限更远。快照查询里检查 context 占比最大：8 个 pull request 时占 186 KB 中的 174 KB、3.8 s 中的 1.4 s。
 
 **大小有上限的 GitHub 快照查询。** 一个 Session 可以绑定多个 pull request，它的面板监听其中每一个的快照。forge-github 在一个快照查询里最多放同一主机的 8 个 pull request（`snapshotBatchSize`）：用同样的方式实测，5 个的查询用 3.6 s，8 个的用 4.4 至 6.3 s，10 个的用 5.8 s。查询依次发送，因为 GitHub 要求同一账号串行发送请求。某个查询的 `gh` 运行失败或被 GitHub 拒绝时，只有该查询内的 pull request 失败。
 

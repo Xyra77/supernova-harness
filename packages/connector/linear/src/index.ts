@@ -5,14 +5,14 @@
  * runs. The manager owns connection, OAuth authorization, saved grants, and
  * sign-out; once a grant exists, the server's `mcp__linear__*` tools are
  * listed in the system prompt and each agent loads the ones it needs.
- * @module @deepseek-ai/dsh-linear
+ * @module @supernova-ai/snh-linear
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type {} from '@deepseek-ai/dsh-mcp-account'
-import type {} from '@deepseek-ai/dsh-mcp-manager'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type {} from '@supernova-ai/snh-mcp-account'
+import type {} from '@supernova-ai/snh-mcp-manager'
+import type {} from '@supernova-ai/snh-system-prompt'
 import { COPY } from './locales.ts'
 
 export const name = 'linear'
@@ -33,7 +33,7 @@ export interface Config {
   toolLoading: 'eager' | 'on-demand'
 }
 
-/* jscpd:ignore-start -- deliberate twin of dsh-notion and dsh-tencent-docs: the same MCP server and guidance registrations. */
+/* jscpd:ignore-start -- deliberate twin of snh-notion and snh-tencent-docs: the same MCP server and guidance registrations. */
 /** Runtime configuration schema for the Linear plugin. */
 export const Config: z<Partial<Config>, Config> = z.object({
   url: z.string().default('https://mcp.linear.app/mcp'),
@@ -61,7 +61,7 @@ export function apply(ctx: Context, config: Config): void {
     text: GUIDANCE,
   })
   ctx.inject(['mcpAccounts'], (scope) => {
-    scope.effect(() => scope.mcpAccounts.register({ server: SERVER_NAME, packageName: '@deepseek-ai/dsh-linear', copy: COPY }), 'linear: Plugins page account')
+    scope.effect(() => scope.mcpAccounts.register({ server: SERVER_NAME, packageName: '@supernova-ai/snh-linear', copy: COPY }), 'linear: Plugins page account')
   })
 }
 /* jscpd:ignore-end */

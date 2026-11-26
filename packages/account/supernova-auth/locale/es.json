@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Autenticación de solicitudes de SuperNova",
+    "description": "Elige la clave de API o el inicio de sesión de la cuenta para cada solicitud a SuperNova y proporciona los encabezados de la solicitud."
+  }
+}

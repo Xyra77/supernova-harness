@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-terminal-bash",
-  "description": "Persistent shell PTY backend over the DeepSeek Harness subprocess terminal primitive",
+  "name": "@supernova-ai/snh-terminal-bash",
+  "description": "Persistent shell PTY backend over the SuperNova Harness subprocess terminal primitive",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -32,33 +32,33 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-terminal": "workspace:*",
-    "@deepseek-ai/dsh-sandbox": "workspace:*",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-subprocess": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-working-directory": "workspace:*"
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-terminal": "workspace:*",
+    "@supernova-ai/snh-sandbox": "workspace:*",
+    "@supernova-ai/snh-sandbox-policy": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-subprocess": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-working-directory": "workspace:*"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-lazy-require": "workspace:*",
-    "@deepseek-ai/dsh-pwsh-local": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/snh-lazy-require": "workspace:*",
+    "@supernova-ai/snh-pwsh-local": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
     "@xterm/headless": "^6.0.0"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:*",
-    "@deepseek-ai/dsh-terminal": "workspace:*",
-    "@deepseek-ai/dsh-sandbox": "workspace:*",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-session-projection": "workspace:*",
-    "@deepseek-ai/dsh-subprocess": "workspace:*",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-working-directory": "workspace:*"
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-agent-loop-testkit": "workspace:*",
+    "@supernova-ai/snh-terminal": "workspace:*",
+    "@supernova-ai/snh-sandbox": "workspace:*",
+    "@supernova-ai/snh-sandbox-policy": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-projection": "workspace:*",
+    "@supernova-ai/snh-subprocess": "workspace:*",
+    "@supernova-ai/snh-subprocess-local": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-working-directory": "workspace:*"
   }
 }

@@ -3,13 +3,13 @@ import { es, fr, de, ru, pt } from '../src/client/locales.ts'
 /** Section, setup-card, and hand-written editor behavior over a scripted wire face. */
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import Schema from '@deepseek-ai/schemastery'
-import { Context } from '@deepseek-ai/cordis'
-import { bindSnapshotSelector, RemoteError } from '@deepseek-ai/dsh-client-test-runtime'
+import Schema from '@supernova-ai/schemastery'
+import { Context } from '@supernova-ai/cordis'
+import { bindSnapshotSelector, RemoteError } from '@supernova-ai/snh-client-test-runtime'
 import type {
   CredentialInfo, RemoteResult, SettingsNamespaceView,
-} from '@deepseek-ai/dsh-api-remotes/client'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+} from '@supernova-ai/snh-api-remotes/client'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
 import {
   ModelsSection, needsSetup, providerCopy, providerTargetLabel, removeProviderProfile,
 } from '../src/client/ModelsSection.tsx'
@@ -18,10 +18,10 @@ import { ApiKeyInput } from '../src/client/ApiKeyInput.tsx'
 import { ProviderEditor, pathOps } from '../src/client/ProviderEditor.tsx'
 import type { ProviderEditorProps } from '../src/client/ProviderEditor.tsx'
 import {
-  DeepSeekModelsEditor, formatCapacity, modelDrafts, parseCapacity, validateDeepSeekModels,
-} from '../src/client/DeepSeekModelsEditor.tsx'
+  SuperNovaModelsEditor, formatCapacity, modelDrafts, parseCapacity, validateSuperNovaModels,
+} from '../src/client/SuperNovaModelsEditor.tsx'
 import { apiKeyFailure } from '../src/client/apiKey.ts'
-import { SettingsDescribeMirror } from '@deepseek-ai/dsh-client-ui-settings/src/client/settings-mirror.ts'
+import { SettingsDescribeMirror } from '@supernova-ai/snh-client-ui-settings/src/client/settings-mirror.ts'
 import { deriveKeyRef, ModelsSettingsStore } from '../src/client/store.ts'
 import { createModelsOperations } from '../src/client/operations.ts'
 import type { ModelsOperations } from '../src/client/operations.ts'
@@ -34,7 +34,7 @@ afterEach(cleanup)
 const t: ModelsSectionInjected['t'] = key => en[key]
 const OPENAI_TARGET = { provider: 'openai', displayName: 'openai' }
 const openaiCopy = (template: string): string => providerCopy(template, OPENAI_TARGET)
-const DEEPSEEK_TARGET = { provider: 'deepseek-official', displayName: 'DeepSeek' }
+const DEEPSEEK_TARGET = { provider: 'deepseek-official', displayName: 'SuperNova' }
 const deepSeekCopy = (template: string): string => providerCopy(template, DEEPSEEK_TARGET)
 
 /** Open one row's capacity disclosure (1-based, as the labels read). */
@@ -57,7 +57,7 @@ const PiAiConfig = Schema.object({
   })),
 })
 
-const DeepSeekConfig = Schema.object({
+const SuperNovaConfig = Schema.object({
   apiKeyEnv: Schema.string().role('credential-ref'),
   baseURL: Schema.string().pattern(/^https:\/\//),
   reasoningEffort: Schema.union(['off', 'low', 'high', 'max']),
@@ -98,8 +98,8 @@ const DEFAULT_DEEPSEEK_MODELS = [
 function wireNamespaces(): SettingsNamespaceView[] {
   return [
     {
-      ns: 'llm-deepseek',
-      schema: JSON.parse(JSON.stringify(DeepSeekConfig.toJSON())) as JsonValue,
+      ns: 'llm-supernova',
+      schema: JSON.parse(JSON.stringify(SuperNovaConfig.toJSON())) as JsonValue,
       value: {
         apiKeyEnv: 'DEEPSEEK_API_KEY',
         baseURL: 'https://base',
@@ -142,7 +142,7 @@ function wireNamespaces(): SettingsNamespaceView[] {
     },
     {
       ns: 'llm-deepseek-account',
-      schema: JSON.parse(JSON.stringify(DeepSeekConfig.toJSON())) as JsonValue,
+      schema: JSON.parse(JSON.stringify(SuperNovaConfig.toJSON())) as JsonValue,
       value: {
         baseURL: 'https://base',
         defaultContextWindow: 1_000_000,
@@ -191,11 +191,11 @@ function scriptedFace(overrides: {
   const face = {
     llm: {
       listProviders: vi.fn((): ReturnType<PageContext['remote']['llm']['listProviders']> => Promise.resolve(remoteOk([
-        { id: 'deepseek-official', name: 'DeepSeek' },
+        { id: 'deepseek-official', name: 'SuperNova' },
         { id: 'openai', name: 'openai' },
       ]))),
       listConfigurableProviders: vi.fn(() => Promise.resolve(remoteOk([
-        { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
+        { provider: 'deepseek-official', displayName: 'SuperNova', settingsNs: 'llm-supernova', settingsPath: [], active: true },
         {
           provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'], active: true,
           defaultBaseURL: 'https://api.openai.com/v1', baseURLEnv: ['FIXTURE_ENDPOINT'], nativeAuth: { env: ['OPENAI_API_KEY'], oauth: false },
@@ -339,7 +339,7 @@ async function mountSection(overrides: Parameters<typeof scriptedFace>[0] = {}) 
 
 /**
  * Mount for a user who cannot reach any provider yet: no credential is stored
- * anywhere, so the whole-section DeepSeek route owns the first-run setup card.
+ * anywhere, so the whole-section SuperNova route owns the first-run setup card.
  */
 async function mountFirstRun(overrides: Parameters<typeof scriptedFace>[0] = {}) {
   const scripted = scriptedFace(overrides)
@@ -351,11 +351,11 @@ async function mountFirstRun(overrides: Parameters<typeof scriptedFace>[0] = {})
 }
 
 /**
- * Mount and open the DeepSeek editor. The shared fixture already has a usable
- * openai route, so DeepSeek is an ordinary row whose card opens through Edit
+ * Mount and open the SuperNova editor. The shared fixture already has a usable
+ * openai route, so SuperNova is an ordinary row whose card opens through Edit
  * rather than by itself.
  */
-async function mountDeepSeekCard(overrides: Parameters<typeof scriptedFace>[0] = {}) {
+async function mountSuperNovaCard(overrides: Parameters<typeof scriptedFace>[0] = {}) {
   const mounted = await mountSection(overrides)
   fireEvent.click(screen.getByRole('button', { name: deepSeekCopy(en.editProvider) }))
   return mounted
@@ -376,7 +376,7 @@ describe('ModelsSection', () => {
   it('waits for the current snapshot when a setup surface remounts during refresh', async () => {
     const { view, controller, face, mirror, mutate } = await mountFirstRun()
     view.unmount()
-    const before = controller.store.getSnapshot().namespaces.get('llm-deepseek')!
+    const before = controller.store.getSnapshot().namespaces.get('llm-supernova')!
     mirror.acceptView({
       ...before,
       value: { apiKeyEnv: 'DEEPSEEK_API_KEY', baseURL: 'https://current.example', models: DEFAULT_DEEPSEEK_MODELS },
@@ -389,7 +389,7 @@ describe('ModelsSection', () => {
     let refreshing: Promise<void> | undefined
     try {
       await act(async () => { refreshing = controller.load(); await started.promise })
-      expect(controller.store.getSnapshot().namespaces.get('llm-deepseek')?.revision).toBe(0)
+      expect(controller.store.getSnapshot().namespaces.get('llm-supernova')?.revision).toBe(0)
       render(<ModelsSection
         controller={controller}
         useSnapshot={bindSnapshotSelector(controller.store)}
@@ -411,7 +411,7 @@ describe('ModelsSection', () => {
     fireEvent.change(url, { target: { value: 'https://next.example' } })
     fireEvent.click(screen.getByRole('button', { name: en.apply }))
     await waitFor(() => { expect(mutate).toHaveBeenCalledWith(
-      'llm-deepseek', [{ op: 'set', path: ['baseURL'], value: 'https://next.example' }], 1,
+      'llm-supernova', [{ op: 'set', path: ['baseURL'], value: 'https://next.example' }], 1,
     ) })
     await screen.findByRole('status')
   })
@@ -424,7 +424,7 @@ describe('ModelsSection', () => {
     await act(async () => { await controller.load() })
     expect(screen.queryByLabelText(en.keyInput)).toBeNull()
     expect(screen.getByText(`${en.loadFailed}: directory unavailable`)).toBeTruthy()
-    const before = controller.store.getSnapshot().namespaces.get('llm-deepseek')!
+    const before = controller.store.getSnapshot().namespaces.get('llm-supernova')!
     mirror.acceptView({
       ...before,
       value: { apiKeyEnv: 'DEEPSEEK_API_KEY', baseURL: 'https://recovered.example', models: DEFAULT_DEEPSEEK_MODELS },
@@ -444,7 +444,7 @@ describe('ModelsSection', () => {
       await act(async () => { await started.promise })
       expect(load).toHaveBeenCalledOnce()
       expect(controller.store.getSnapshot()).toMatchObject({ status: 'loading' })
-      expect(controller.store.getSnapshot().namespaces.get('llm-deepseek')?.revision).toBe(0)
+      expect(controller.store.getSnapshot().namespaces.get('llm-supernova')?.revision).toBe(0)
       expect(screen.getByRole('heading', { name: en.title })).toBeTruthy()
       expect(screen.queryByLabelText(en.keyInput)).toBeNull()
     } finally {
@@ -460,7 +460,7 @@ describe('ModelsSection', () => {
     fireEvent.change(url, { target: { value: 'https://after-retry.example' } })
     fireEvent.click(screen.getByRole('button', { name: en.apply }))
     await waitFor(() => { expect(mutate).toHaveBeenCalledWith(
-      'llm-deepseek', [{ op: 'set', path: ['baseURL'], value: 'https://after-retry.example' }], 2,
+      'llm-supernova', [{ op: 'set', path: ['baseURL'], value: 'https://after-retry.example' }], 2,
     ) })
     await screen.findByRole('status')
   })
@@ -647,10 +647,10 @@ describe('ModelsSection', () => {
     const scripted = scriptedFace()
     const failure = 'The provider configuration needs repair'
     scripted.face.llm.listProviders.mockResolvedValue(remoteOk([
-      { id: 'deepseek-official', name: 'DeepSeek' },
+      { id: 'deepseek-official', name: 'SuperNova' },
     ]))
     scripted.face.llm.listConfigurableProviders.mockResolvedValue(remoteOk([
-      { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [], error: failure },
+      { provider: 'deepseek-official', displayName: 'SuperNova', settingsNs: 'llm-supernova', settingsPath: [], error: failure },
     ]))
     scripted.face.credentials.describe.mockResolvedValue(remoteOk({
       DEEPSEEK_API_KEY: { configured: false, writable: true },
@@ -667,7 +667,7 @@ describe('ModelsSection', () => {
     const { renderSlot } = await mountSection()
     const cards = cardSeatCalls(renderSlot)
     expect(cards).toContainEqual(['openai', true, true, 'llm-pi-ai'])
-    expect(cards).toContainEqual(['deepseek-official', true, false, 'llm-deepseek'])
+    expect(cards).toContainEqual(['deepseek-official', true, false, 'llm-supernova'])
     // The footer seat renders once below the rows and the add controls.
     expect(renderSlot.mock.calls.filter(call => call[0] === 'settings.models.footer')).toEqual([
       ['settings.models.footer', {}],
@@ -676,7 +676,7 @@ describe('ModelsSection', () => {
 
   it('dispatches the provider-card seat inside the first-run setup card', async () => {
     const { renderSlot } = await mountFirstRun()
-    expect(cardSeatCalls(renderSlot)).toContainEqual(['deepseek-official', true, false, 'llm-deepseek'])
+    expect(cardSeatCalls(renderSlot)).toContainEqual(['deepseek-official', true, false, 'llm-supernova'])
   })
 
   it('dispatches the provider-card seat on the add-provider draft with its dormant row', async () => {
@@ -706,7 +706,7 @@ describe('ModelsSection', () => {
     const { renderSlot, face, controller } = await mountSection()
     fireEvent.click(screen.getByRole('button', { name: en.add }))
     const directory = [
-      { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
+      { provider: 'deepseek-official', displayName: 'SuperNova', settingsNs: 'llm-supernova', settingsPath: [], active: true },
       { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'], active: true },
     ].map(({ active: _active, ...entry }) => entry)
     face.llm.listConfigurableProviders.mockImplementation(() => Promise.resolve(remoteOk(directory)))
@@ -718,9 +718,9 @@ describe('ModelsSection', () => {
   })
   it('renders the unkeyed whole-section provider as an open setup card in the first-run posture', async () => {
     await mountFirstRun()
-    // Nothing is reachable yet, and DeepSeek has no configured credential and
+    // Nothing is reachable yet, and SuperNova has no configured credential and
     // no stored apiKey → setup card.
-    expect(screen.getByText('DeepSeek')).toBeTruthy()
+    expect(screen.getByText('SuperNova')).toBeTruthy()
     expect(screen.getByLabelText(en.keyInput)).toBeTruthy()
     expect(screen.getByText('openai')).toBeTruthy()
     expect(screen.queryByText('Active')).toBeNull()
@@ -738,7 +738,7 @@ describe('ModelsSection', () => {
     expect(configured.className).toContain('credentialDotConfigured')
     expect(configured.closest('li')?.textContent).toContain('openai')
     const missing = screen.getByRole('img', { name: en.credentialMissing })
-    expect(missing.closest('li')?.textContent).toContain('DeepSeek')
+    expect(missing.closest('li')?.textContent).toContain('SuperNova')
     // The card is still one click away.
     fireEvent.click(screen.getByRole('button', { name: deepSeekCopy(en.editProvider) }))
     expect(screen.getByLabelText(en.keyInput)).toBeTruthy()
@@ -790,7 +790,7 @@ describe('ModelsSection', () => {
   })
 
   it('decides setup need from the joined credential state and the first-run posture', () => {
-    const entry = { provider: 'p', displayName: 'p', settingsNs: 'llm-deepseek', settingsPath: [], active: true }
+    const entry = { provider: 'p', displayName: 'p', settingsNs: 'llm-supernova', settingsPath: [], active: true }
     const row = (credential: ProviderRow['credential']): ProviderRow => ({
       entry,
       configured: true,
@@ -813,9 +813,9 @@ describe('ModelsSection', () => {
   })
 
   it('uses one stable provider identity in action copy', () => {
-    const target = { provider: 'deepseek-official', displayName: 'DeepSeek' }
-    expect(providerTargetLabel(target)).toBe('DeepSeek (deepseek-official)')
-    expect(providerCopy(en.deleteTitle, target)).toBe('Delete DeepSeek (deepseek-official)?')
+    const target = { provider: 'deepseek-official', displayName: 'SuperNova' }
+    expect(providerTargetLabel(target)).toBe('SuperNova (deepseek-official)')
+    expect(providerCopy(en.deleteTitle, target)).toBe('Delete SuperNova (deepseek-official)?')
     expect(providerTargetLabel(OPENAI_TARGET)).toBe('openai')
   })
 
@@ -843,10 +843,10 @@ describe('ModelsSection', () => {
     // mirror, so the reload shows as a directory read rather than a describe.
     await waitFor(() => { expect(face.llm.listProviders.mock.calls.length).toBeGreaterThan(1) })
     expect((await screen.findByRole('status')).textContent).toBe(
-      providerCopy(en.savedProvider, { provider: 'deepseek-official', displayName: 'DeepSeek' }),
+      providerCopy(en.savedProvider, { provider: 'deepseek-official', displayName: 'SuperNova' }),
     )
     fireEvent.click(screen.getByText(en.add))
-    expect(screen.queryByText(providerCopy(en.savedProvider, { provider: 'deepseek-official', displayName: 'DeepSeek' }))).toBeNull()
+    expect(screen.queryByText(providerCopy(en.savedProvider, { provider: 'deepseek-official', displayName: 'SuperNova' }))).toBeNull()
   })
 
   it('reuses the provider editor as a required credential-only onboarding form', async () => {
@@ -860,7 +860,7 @@ describe('ModelsSection', () => {
 
     render(<ProviderEditor
       provider="deepseek-official"
-      displayName="DeepSeek"
+      displayName="SuperNova"
       hideTitle
       namespace={wireNamespaces()[0]!}
       schema={settingsSchema}
@@ -909,13 +909,13 @@ describe('ModelsSection', () => {
     expect(onClose).toHaveBeenCalledWith(true)
   })
 
-  it('applies customized deepseek fields as path ops', async () => {
-    const { mutate } = await mountDeepSeekCard({
+  it('applies customized supernova fields as path ops', async () => {
+    const { mutate } = await mountSuperNovaCard({
       mutate: vi.fn(() => Promise.resolve(remoteOk(wireNamespaces()[0]))),
     })
     fireEvent.click(screen.getByText(en.customized))
     const baseURL = screen.getByLabelText<HTMLInputElement>(en.baseUrl)
-    // The deepseek placeholder is pinned to the public endpoint, not the
+    // The supernova placeholder is pinned to the public endpoint, not the
     // effective value (which may reflect a launch-environment override).
     expect(baseURL.placeholder).toBe('https://api.deepseek.com/anthropic (Default to use DEEPSEEK_BASE_URL)')
     fireEvent.change(baseURL, { target: { value: 'https://next2' } })
@@ -924,14 +924,14 @@ describe('ModelsSection', () => {
     // Only the field that actually changed: reasoningEffort was already
     // 'high' in the loaded profile, so it produces no op.
     expect(mutate.mock.calls[0]).toEqual([
-      'llm-deepseek',
+      'llm-supernova',
       [{ op: 'set', path: ['baseURL'], value: 'https://next2' }],
       0,
     ])
   })
 
-  it('materializes inherited models and adds an arbitrary DeepSeek id', async () => {
-    const { mutate } = await mountDeepSeekCard({
+  it('materializes inherited models and adds an arbitrary SuperNova id', async () => {
+    const { mutate } = await mountSuperNovaCard({
       mutate: vi.fn(() => Promise.resolve(remoteOk(wireNamespaces()[0]))),
     })
     fireEvent.click(screen.getByText(en.customized))
@@ -952,7 +952,7 @@ describe('ModelsSection', () => {
 
     await waitFor(() => { expect(mutate).toHaveBeenCalledTimes(1) })
     expect(mutate.mock.calls[0]).toEqual([
-      'llm-deepseek',
+      'llm-supernova',
       [{
         op: 'set',
         path: ['models'],
@@ -965,10 +965,10 @@ describe('ModelsSection', () => {
     ])
   })
 
-  it('edits the DeepSeek endpoint and credential without a protocol selection', async () => {
+  it('edits the SuperNova endpoint and credential without a protocol selection', async () => {
     const namespace: SettingsNamespaceView = {
       ...wireNamespaces()[0]!,
-      ns: 'llm-deepseek',
+      ns: 'llm-supernova',
       value: { apiKeyEnv: 'DEEPSEEK_API_KEY', models: DEFAULT_DEEPSEEK_MODELS },
       user: {},
     }
@@ -978,7 +978,7 @@ describe('ModelsSection', () => {
     const { ProviderEditor } = await import('../src/client/ProviderEditor.tsx')
     render(<ProviderEditor
       provider="deepseek-official"
-      displayName="DeepSeek"
+      displayName="SuperNova"
       namespace={namespace}
       schema={settingsSchema}
       settingsPath={[]}
@@ -998,7 +998,7 @@ describe('ModelsSection', () => {
     fireEvent.click(screen.getByText(en.apply))
     await waitFor(() => { expect(set).toHaveBeenCalledWith('DEEPSEEK_API_KEY', 'sk-messages-test') })
     expect(mutate.mock.calls).toEqual([[
-      'llm-deepseek',
+      'llm-supernova',
       [
         { op: 'set', path: ['baseURL'], value: 'https://messages.example/anthropic' },
         { op: 'set', path: ['models'], value: [
@@ -1010,8 +1010,8 @@ describe('ModelsSection', () => {
     ]])
   })
 
-  it('rejects duplicate DeepSeek model ids before writing', async () => {
-    const { mutate } = await mountDeepSeekCard()
+  it('rejects duplicate SuperNova model ids before writing', async () => {
+    const { mutate } = await mountSuperNovaCard()
     fireEvent.click(screen.getByText(en.customized))
     fireEvent.click(screen.getByText(en.addModel))
     const ids = screen.getAllByLabelText(new RegExp(en.modelId))
@@ -1025,25 +1025,25 @@ describe('ModelsSection', () => {
   it('validates every adapter-owned model catalog invariant', () => {
     expect(modelDrafts(undefined)).toEqual([])
     expect(modelDrafts([null, 'bad', { id: 'ok' }])).toEqual([{}, {}, { id: 'ok' }])
-    expect(validateDeepSeekModels([{}])).toEqual({ index: 0, key: 'modelIdRequired' })
-    expect(validateDeepSeekModels([{ id: 'same' }, { id: 'same' }]))
+    expect(validateSuperNovaModels([{}])).toEqual({ index: 0, key: 'modelIdRequired' })
+    expect(validateSuperNovaModels([{ id: 'same' }, { id: 'same' }]))
       .toEqual({ index: 1, key: 'modelIdDuplicate' })
-    expect(validateDeepSeekModels([{ id: 'model', name: '' }]))
+    expect(validateSuperNovaModels([{ id: 'model', name: '' }]))
       .toEqual({ index: 0, key: 'modelNameInvalid' })
-    expect(validateDeepSeekModels([{ id: 'model', contextWindow: null }]))
+    expect(validateSuperNovaModels([{ id: 'model', contextWindow: null }]))
       .toEqual({ index: 0, key: 'modelContextInvalid' })
-    expect(validateDeepSeekModels([{ id: 'model', contextWindow: 1.5 }]))
+    expect(validateSuperNovaModels([{ id: 'model', contextWindow: 1.5 }]))
       .toEqual({ index: 0, key: 'modelContextInvalid' })
-    expect(validateDeepSeekModels([{ id: 'model', contextWindow: 0 }]))
+    expect(validateSuperNovaModels([{ id: 'model', contextWindow: 0 }]))
       .toEqual({ index: 0, key: 'modelContextInvalid' })
-    expect(validateDeepSeekModels([{ id: 'model', contextWindow: 1 }])).toBeUndefined()
-    expect(validateDeepSeekModels([{ id: 'model', maxTokens: null }]))
+    expect(validateSuperNovaModels([{ id: 'model', contextWindow: 1 }])).toBeUndefined()
+    expect(validateSuperNovaModels([{ id: 'model', maxTokens: null }]))
       .toEqual({ index: 0, key: 'modelMaxTokensInvalid' })
-    expect(validateDeepSeekModels([{ id: 'model', maxTokens: 1.5 }]))
+    expect(validateSuperNovaModels([{ id: 'model', maxTokens: 1.5 }]))
       .toEqual({ index: 0, key: 'modelMaxTokensInvalid' })
-    expect(validateDeepSeekModels([{ id: 'model', maxTokens: 0 }]))
+    expect(validateSuperNovaModels([{ id: 'model', maxTokens: 0 }]))
       .toEqual({ index: 0, key: 'modelMaxTokensInvalid' })
-    expect(validateDeepSeekModels([{ id: 'model', maxTokens: 8192 }])).toBeUndefined()
+    expect(validateSuperNovaModels([{ id: 'model', maxTokens: 8192 }])).toBeUndefined()
   })
 
   it('reads context windows written as counts, thousands, or millions', () => {
@@ -1081,7 +1081,7 @@ describe('ModelsSection', () => {
   })
 
   it('accepts a suffixed context window and stores the plain count', async () => {
-    const { mutate } = await mountDeepSeekCard({
+    const { mutate } = await mountSuperNovaCard({
       mutate: vi.fn(() => Promise.resolve(remoteOk(wireNamespaces()[0]))),
     })
     fireEvent.click(screen.getByText(en.customized))
@@ -1107,7 +1107,7 @@ describe('ModelsSection', () => {
 
     await waitFor(() => { expect(mutate).toHaveBeenCalledTimes(1) })
     expect(mutate.mock.calls[0]).toEqual([
-      'llm-deepseek',
+      'llm-supernova',
       [{
         op: 'set',
         path: ['models'],
@@ -1121,7 +1121,7 @@ describe('ModelsSection', () => {
   })
 
   it('keeps unreadable context-window text on screen and refuses the write', async () => {
-    const { mutate } = await mountDeepSeekCard()
+    const { mutate } = await mountSuperNovaCard()
     fireEvent.click(screen.getByText(en.customized))
     expandRow(1)
     expandRow(2)
@@ -1148,8 +1148,8 @@ describe('ModelsSection', () => {
     const { face } = scriptedFace()
     const stored = { models: [{ id: 'user-only-model', name: 'User Only' }] }
     const overridden: SettingsNamespaceView = {
-      ns: 'llm-deepseek',
-      schema: JSON.parse(JSON.stringify(DeepSeekConfig.toJSON())) as JsonValue,
+      ns: 'llm-supernova',
+      schema: JSON.parse(JSON.stringify(SuperNovaConfig.toJSON())) as JsonValue,
       value: { ...stored, defaultContextWindow: 1_000_000 },
       ...base === undefined ? {} : { base },
       user: stored,
@@ -1160,7 +1160,7 @@ describe('ModelsSection', () => {
     const { ProviderEditor } = await import('../src/client/ProviderEditor.tsx')
     render(<ProviderEditor
       provider="deepseek-official"
-      displayName="DeepSeek"
+      displayName="SuperNova"
       namespace={overridden}
       schema={settingsSchema}
       settingsPath={[]}
@@ -1185,7 +1185,7 @@ describe('ModelsSection', () => {
     // The regression: one active buffer meant editing a second row displaced
     // the first, which then fell back to rendering its stored NaN as `NaN` —
     // losing the text the user was told they could still correct.
-    await mountDeepSeekCard()
+    await mountSuperNovaCard()
     fireEvent.click(screen.getByText(en.customized))
     expandRow(1)
     expandRow(2)
@@ -1199,7 +1199,7 @@ describe('ModelsSection', () => {
   })
 
   it('re-keys the typed text around a removed row', async () => {
-    await mountDeepSeekCard()
+    await mountSuperNovaCard()
     fireEvent.click(screen.getByText(en.customized))
     const windows = (): HTMLInputElement[] => capacityInputs(en.contextWindow)
     const removeRow = (at: number): void => {
@@ -1233,7 +1233,7 @@ describe('ModelsSection', () => {
     // The regression: reset removed the override but left the buffer, so an
     // inherited row displayed text no settings layer stores — and because an
     // unreadable buffer never settles, it stayed there indefinitely.
-    const { mutate } = await mountDeepSeekCard({
+    const { mutate } = await mountSuperNovaCard({
       mutate: vi.fn(() => Promise.resolve(remoteOk(wireNamespaces()[0]))),
     })
     fireEvent.click(screen.getByText(en.customized))
@@ -1256,7 +1256,7 @@ describe('ModelsSection', () => {
   })
 
   it('edits an output cap per model and carries its text across a removal', async () => {
-    const { mutate } = await mountDeepSeekCard({
+    const { mutate } = await mountSuperNovaCard({
       mutate: vi.fn(() => Promise.resolve(remoteOk(wireNamespaces()[0]))),
     })
     fireEvent.click(screen.getByText(en.customized))
@@ -1279,7 +1279,7 @@ describe('ModelsSection', () => {
     fireEvent.click(screen.getByText(en.apply))
     await waitFor(() => { expect(mutate).toHaveBeenCalledTimes(1) })
     expect(mutate.mock.calls[0]).toEqual([
-      'llm-deepseek',
+      'llm-supernova',
       [{
         op: 'set',
         path: ['models'],
@@ -1290,7 +1290,7 @@ describe('ModelsSection', () => {
   })
 
   it('settles a pasted id and refuses whitespace that would never match', async () => {
-    await mountDeepSeekCard()
+    await mountSuperNovaCard()
     fireEvent.click(screen.getByText(en.customized))
     const ids = screen.getAllByLabelText<HTMLInputElement>(new RegExp(en.modelId))
     fireEvent.change(ids[0] as HTMLInputElement, { target: { value: '  deepseek-v4-flash  ' } })
@@ -1302,13 +1302,13 @@ describe('ModelsSection', () => {
 
     // An id that is only whitespace is as absent as an empty one, and a padded
     // id is a duplicate of its trimmed twin.
-    expect(validateDeepSeekModels([{ id: '   ' }])).toEqual({ index: 0, key: 'modelIdRequired' })
-    expect(validateDeepSeekModels([{ id: 'model' }, { id: 'model ' }]))
+    expect(validateSuperNovaModels([{ id: '   ' }])).toEqual({ index: 0, key: 'modelIdRequired' })
+    expect(validateSuperNovaModels([{ id: 'model' }, { id: 'model ' }]))
       .toEqual({ index: 1, key: 'modelIdDuplicate' })
   })
 
   it('renders malformed draft fallbacks without inventing catalog values', () => {
-    render(<DeepSeekModelsEditor
+    render(<SuperNovaModelsEditor
       models={[{}]}
       overridden={false}
       defaultContextWindow={undefined}
@@ -1327,7 +1327,7 @@ describe('ModelsSection', () => {
   })
 
   it('can empty and reset the model override, then clear optional fields without dropping hidden data', async () => {
-    const { mutate } = await mountDeepSeekCard({
+    const { mutate } = await mountSuperNovaCard({
       mutate: vi.fn(() => Promise.resolve(remoteOk(wireNamespaces()[0]))),
     })
     fireEvent.click(screen.getByText(en.customized))
@@ -1346,7 +1346,7 @@ describe('ModelsSection', () => {
 
     await waitFor(() => { expect(mutate).toHaveBeenCalledTimes(1) })
     expect(mutate.mock.calls[0]).toEqual([
-      'llm-deepseek',
+      'llm-supernova',
       [{
         op: 'set',
         path: ['models'],
@@ -1361,7 +1361,7 @@ describe('ModelsSection', () => {
 
   it('clears an inherited override with an unset op, never a whole-section replace', async () => {
     // A whole-section replace would clobber sibling overrides to clear one field.
-    const { mutate } = await mountDeepSeekCard()
+    const { mutate } = await mountSuperNovaCard()
     fireEvent.click(screen.getByText(en.customized))
     const url = screen.getByLabelText<HTMLInputElement>(en.baseUrl)
     expect(url.value).toBe('https://base')
@@ -1371,17 +1371,17 @@ describe('ModelsSection', () => {
     // This editor clears one field through an unset op so it cannot clobber
     // sibling overrides with a whole-section replacement.
     expect(mutate.mock.calls[0]).toEqual([
-      'llm-deepseek',
+      'llm-supernova',
       [{ op: 'unset', path: ['baseURL'] }],
       0,
     ])
   })
 
-  it('pins the deepseek placeholder and clears typed input back to inherited', async () => {
+  it('pins the supernova placeholder and clears typed input back to inherited', async () => {
     const { face } = scriptedFace()
     const bare: SettingsNamespaceView = {
-      ns: 'llm-deepseek',
-      schema: JSON.parse(JSON.stringify(DeepSeekConfig.toJSON())) as JsonValue,
+      ns: 'llm-supernova',
+      schema: JSON.parse(JSON.stringify(SuperNovaConfig.toJSON())) as JsonValue,
       value: {},
       autoGenerate: true, applies: 'live',
       secrets: [],
@@ -1390,7 +1390,7 @@ describe('ModelsSection', () => {
     const { ProviderEditor } = await import('../src/client/ProviderEditor.tsx')
     render(<ProviderEditor
       provider="deepseek-official"
-      displayName="DeepSeek"
+      displayName="SuperNova"
       namespace={bare}
       schema={settingsSchema}
       settingsPath={[]}
@@ -1409,7 +1409,7 @@ describe('ModelsSection', () => {
   })
 
   it('saves credentials without changing the default model', async () => {
-    const { ctx, set } = await mountDeepSeekCard()
+    const { ctx, set } = await mountSuperNovaCard()
     const initialize = vi.spyOn(ctx.remote.session, 'initializeDefaultModel')
     fireEvent.change(await screen.findByLabelText(en.keyInput), { target: { value: 'test-key' } })
     fireEvent.click(screen.getByText(en.apply))
@@ -1419,7 +1419,7 @@ describe('ModelsSection', () => {
   })
 
   it('reveals only the current key draft and masks it again on change', async () => {
-    const { set } = await mountDeepSeekCard()
+    const { set } = await mountSuperNovaCard()
     const input = await screen.findByLabelText<HTMLInputElement>(en.keyInput)
     expect(input.type).toBe('password')
     expect(input.value).toBe('')
@@ -1443,7 +1443,7 @@ describe('ModelsSection', () => {
   })
 
   it('rejects an invalid draft before writing', async () => {
-    const { mutate } = await mountDeepSeekCard()
+    const { mutate } = await mountSuperNovaCard()
     fireEvent.click(screen.getByText(en.customized))
     fireEvent.change(screen.getByLabelText(en.baseUrl), { target: { value: 'not-a-url' } })
     fireEvent.click(screen.getByText(en.apply))
@@ -1602,7 +1602,7 @@ describe('ModelsSection', () => {
   it('tells the user to reopen when another writer moved the namespace first', async () => {
     // The stale-draft overwrite: two tabs open the same card, the other saves,
     // and this one must be refused rather than replay its opening snapshot.
-    const { set } = await mountDeepSeekCard({
+    const { set } = await mountSuperNovaCard({
       mutate: vi.fn(() => Promise.resolve(remoteFail('changed since it was read', 'settings/conflict'))),
     })
     fireEvent.click(screen.getByText(en.customized))
@@ -1613,7 +1613,7 @@ describe('ModelsSection', () => {
   })
 
   it('keeps the card usable after a refused write', async () => {
-    await mountDeepSeekCard({
+    await mountSuperNovaCard({
       mutate: vi.fn(() => Promise.resolve(remoteFail('the host refused', 'settings/rejected'))),
     })
     fireEvent.click(screen.getByText(en.customized))
@@ -1627,13 +1627,13 @@ describe('ModelsSection', () => {
   it('surfaces a refused credential write on the card', async () => {
     await mountFirstRun({
       set: vi.fn(() => Promise.resolve(remoteFail(
-        'credentials-local: invalid document at /home/user/.dsh/.credentials.yaml: BAD_INDENT at line 3, column 1',
+        'credentials-local: invalid document at /home/user/.snh/.credentials.yaml: BAD_INDENT at line 3, column 1',
       ))),
     })
     const key = screen.getByLabelText<HTMLInputElement>(en.keyInput)
     fireEvent.change(key, { target: { value: 'sk-live' } })
     fireEvent.click(screen.getByText(en.apply))
-    await screen.findByText(/invalid document at \/home\/user\/\.dsh\/\.credentials\.yaml/)
+    await screen.findByText(/invalid document at \/home\/user\/\.snh\/\.credentials\.yaml/)
     expect(screen.queryByRole('status')).toBeNull()
   })
 
@@ -1809,7 +1809,7 @@ describe('ModelsSection', () => {
   it('opens on the custom mode when every catalog provider is already configured', async () => {
     const scripted = scriptedFace()
     scripted.face.llm.listConfigurableProviders.mockResolvedValue(remoteOk([
-      { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] },
+      { provider: 'deepseek-official', displayName: 'SuperNova', settingsNs: 'llm-supernova', settingsPath: [] },
       { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'] },
     ]))
     await mountFace(scripted)
@@ -1862,7 +1862,7 @@ describe('ModelsSection', () => {
   it('picks a catalog target when the catalog becomes addable after the card opened', async () => {
     const scripted = scriptedFace()
     const exhausted = [
-      { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] },
+      { provider: 'deepseek-official', displayName: 'SuperNova', settingsNs: 'llm-supernova', settingsPath: [] },
       { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'] },
     ]
     scripted.face.llm.listConfigurableProviders.mockResolvedValue(remoteOk(exhausted))
@@ -2043,10 +2043,10 @@ describe('ModelsSection', () => {
     fireEvent.click(screen.getAllByText(en.cancel)[0] as HTMLElement)
     // The add card kept its draft…
     expect(screen.getByLabelText(en.provider)).toBeTruthy()
-    // …and DeepSeek collapsed to an ordinary row carrying the missing-key dot.
+    // …and SuperNova collapsed to an ordinary row carrying the missing-key dot.
     expect(screen.getAllByLabelText(en.keyInput)).toHaveLength(1)
     expect(screen.getAllByRole('img', { name: en.credentialMissing })
-      .some(dot => dot.closest('li')?.textContent?.includes('DeepSeek') === true)).toBe(true)
+      .some(dot => dot.closest('li')?.textContent?.includes('SuperNova') === true)).toBe(true)
     // Its card reopens through Edit, which closes the add card as any row does.
     fireEvent.click(screen.getByRole('button', { name: deepSeekCopy(en.editProvider) }))
     expect(screen.getAllByLabelText(en.keyInput)).toHaveLength(1)
@@ -2064,7 +2064,7 @@ describe('ModelsSection', () => {
       t={t}
       renderSlot={() => null}
     />)
-    await screen.findByText('DeepSeek')
+    await screen.findByText('SuperNova')
   })
 
   it('removes by unsetting the profile path, never by rebuilding the section', async () => {
@@ -2235,7 +2235,7 @@ it.each([
   ['openai', `sk-proj-${'•'.repeat(8)}wxyz`],
   ['anthropic', `sk-ant-a${'•'.repeat(8)}wxyz`],
   ['google', `AIzaS${'•'.repeat(8)}wxyz`],
-  ['deepseek', `sk-abcde${'•'.repeat(8)}wxyz`],
+  ['supernova', `sk-abcde${'•'.repeat(8)}wxyz`],
   ['acme-gateway', `vendor_abcde${'•'.repeat(8)}wxyz`],
 ] as const)('protects the saved %s key and reveals only its replacement', (provider, masked) => {
   renderPiAiEditor(provider, piAiNamespaceWith(provider, { apiKeyEnv: 'TEAM_API_KEY' }), {
@@ -2604,7 +2604,7 @@ it('shows endpoint configuration variables without presenting them as credential
 })
 
 it.each([true, false, undefined])('shows the confirmed fallback state without assuming a connection works: %s', (configured) => {
-  renderPiAiEditor('deepseek', wireNamespaces().find(view => view.ns === 'llm-pi-ai')!, {
+  renderPiAiEditor('supernova', wireNamespaces().find(view => view.ns === 'llm-pi-ai')!, {
     nativeAuth: { env: ['DEEPSEEK_API_KEY'], oauth: false },
     ...configured === undefined ? {} : { credentialChecks: { DEEPSEEK_API_KEY: { configured, writable: true } } },
   })

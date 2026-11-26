@@ -1,38 +1,38 @@
-/** Real attachments, filesystem recovery, Node PTC, and DeepSeek image request bytes without a desktop or API key. */
-import { executeModelToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import * as PtcToolExecutor from '@deepseek-ai/dsh-tool-executor-ptc'
+/** Real attachments, filesystem recovery, Node PTC, and SuperNova image request bytes without a desktop or API key. */
+import { executeModelToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import * as PtcToolExecutor from '@supernova-ai/snh-tool-executor-ptc'
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import LocalAttachments from '@deepseek-ai/dsh-attachment-local'
-import FileSystem from '@deepseek-ai/dsh-fs-local'
-import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { Context } from '@supernova-ai/cordis'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type { ImageAttachmentRef } from '@supernova-ai/snh-attachment'
+import LocalAttachments from '@supernova-ai/snh-attachment-local'
+import FileSystem from '@supernova-ai/snh-fs-local'
+import * as ToolFs from '@supernova-ai/snh-tool-fs'
+import { brandString } from '@supernova-ai/snh-brand'
 import {
   createAssistantMessage, createToolResultMessage, createUserMessage, LlmAdapter, LlmRuntime,
   resolveImageAttachmentAccess, type ToolCallId,
-} from '@deepseek-ai/dsh-llm'
-import type { ContentBlock, GenerateOptions, ImageBlock, StreamChunk, UserMessage } from '@deepseek-ai/dsh-llm'
-import { deepSeekImageRequestPricing, resolveAdapterOptions } from '@deepseek-ai/dsh-llm-deepseek'
-import { prepareImages } from '@deepseek-ai/dsh-llm-deepseek/src/images.ts'
-import { serialize } from '@deepseek-ai/dsh-llm-deepseek/src/serialize.ts'
-import { createMcpToolDefinition } from '@deepseek-ai/dsh-mcp-client'
-import NodeRuntime from '@deepseek-ai/dsh-ptc-runtime-node'
-import Sandbox from '@deepseek-ai/dsh-sandbox-local'
-import SandboxPolicy from '@deepseek-ai/dsh-sandbox-policy'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjections from '@deepseek-ai/dsh-session-projection'
-import LocalSpillStore from '@deepseek-ai/dsh-spill-local'
-import Subprocess from '@deepseek-ai/dsh-subprocess-local'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import { estimateContent } from '@deepseek-ai/dsh-token-meter/estimate'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+} from '@supernova-ai/snh-llm'
+import type { ContentBlock, GenerateOptions, ImageBlock, StreamChunk, UserMessage } from '@supernova-ai/snh-llm'
+import { deepSeekImageRequestPricing, resolveAdapterOptions } from '@supernova-ai/snh-llm-supernova'
+import { prepareImages } from '@supernova-ai/snh-llm-supernova/src/images.ts'
+import { serialize } from '@supernova-ai/snh-llm-supernova/src/serialize.ts'
+import { createMcpToolDefinition } from '@supernova-ai/snh-mcp-client'
+import NodeRuntime from '@supernova-ai/snh-ptc-runtime-node'
+import Sandbox from '@supernova-ai/snh-sandbox-local'
+import SandboxPolicy from '@supernova-ai/snh-sandbox-policy'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import SessionProjections from '@supernova-ai/snh-session-projection'
+import LocalSpillStore from '@supernova-ai/snh-spill-local'
+import Subprocess from '@supernova-ai/snh-subprocess-local'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import { estimateContent } from '@supernova-ai/snh-token-meter/estimate'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
 import sharp from 'sharp'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import * as SpillPolicy from '../src/index.ts'
@@ -47,7 +47,7 @@ const textOf = (content: readonly ContentBlock[]): string => content.filter(bloc
 const imagesOf = (content: readonly ContentBlock[]): ImageBlock[] => content.filter((block): block is ImageBlock => block.type === 'image')
 
 async function setup(mode: 'native' | 'ptc' = 'native', maxInlineTokens = CAP) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-image-recovery-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-image-recovery-'))
   const ctx = new Context()
   provideWorkingDirectoryFixture(ctx, root)
   onTestFinished(async () => {
@@ -58,7 +58,7 @@ async function setup(mode: 'native' | 'ptc' = 'native', maxInlineTokens = CAP) {
   await ctx.plugin(ToolRuntime)
   await ctx.plugin(mode === 'ptc' ? PtcToolExecutor : NativeToolExecutor)
   await ctx.plugin(FileSystem, { cwd: root })
-  await ctx.plugin(LocalAttachments, { dshHome: join(root, 'home') })
+  await ctx.plugin(LocalAttachments, { snhHome: join(root, 'home') })
   await ctx.plugin(ToolFs)
   await ctx.plugin(LocalSpillStore, { root: join(root, 'spill'), cleanupPeriodDays: 0 })
   await ctx.plugin(SessionStore)
@@ -167,7 +167,7 @@ describe('multimodal recovery through real providers', () => {
     expect(await requestImages(result.content)).toEqual(['green'])
   })
 
-  it('retains two distinct end images in both the tool result and DeepSeek request', async () => {
+  it('retains two distinct end images in both the tool result and SuperNova request', async () => {
     const { execute, originals, cost, requestImages } = await setup()
     const result = await execute('ends')
     expect(result.isError).toBe(false)

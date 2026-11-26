@@ -3,13 +3,13 @@ description: "Web @file and @session reference source for the composer: candidat
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-reference
+# @supernova-ai/snh-client-ui-reference
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-Use `dsh-client-ui-reference` when Web users need to mention files, folders, or sessions from one `@` completion menu. It lists files before sessions and keeps either group available when the other cannot load. Picking a file, folder, or session inserts an atomic reference with a stable clipboard form; folder rows also let users descend without closing completion. File rows omit redundant root locations, and session rows show a workspace only when it differs from the current one. Session mentions are validated before model context is captured, while browsing candidates has no model effect.
+Use `snh-client-ui-reference` when Web users need to mention files, folders, or sessions from one `@` completion menu. It lists files before sessions and keeps either group available when the other cannot load. Picking a file, folder, or session inserts an atomic reference with a stable clipboard form; folder rows also let users descend without closing completion. File rows omit redundant root locations, and session rows show a workspace only when it differs from the current one. Session mentions are validated before model context is captured, while browsing candidates has no model effect.
 
 ## Table of Contents
 
@@ -31,7 +31,7 @@ The source is active whenever the composition mounts this package and a Host `ct
 
 A file closes completion as an atomic inline reference displayed with a file glyph and business-color filename. A directory row carries two verbs: the settling pick (row click or Enter) resolves the folder itself as the same kind of atomic reference — folder glyph, trailing-slash label, canonical `@dir/` mention as its serialized form — while the drill action (Tab or the row's chevron) keeps plain editable path text with a folder glyph and the menu active at its trailing slash, so you can descend another level. A settled file or folder reference carries the absolute path, the listed path joined to the Session's current working directory, so the sent text names the same file after that directory changes; drill text stays relative to it. The reference keeps the listed spelling when the Session's directory is unknown or the absolute path cannot be written as a mention. Paths containing whitespace use `@"path with spaces"`, and a quote the user opened explicitly remains quoted.
 
-A session pick inserts an atomic inline reference whose hidden `ref` and clipboard representation is the canonical `@[label](dsh-session:…)` mention returned by the Host; its visible form is a chat-bubble glyph plus the session title. Sending carries the mention through `session.prompt`, and the session-reference service validates it and captures model context at `agent/pre-step`.
+A session pick inserts an atomic inline reference whose hidden `ref` and clipboard representation is the canonical `@[label](snh-session:…)` mention returned by the Host; its visible form is a chat-bubble glyph plus the session title. Sending carries the mention through `session.prompt`, and the session-reference service validates it and captures model context at `agent/pre-step`.
 
 The shared file context menu ends with **Add to chat**. It inserts the clicked file as the same kind of reference into that Session’s draft, preserves existing text and selection, and returns focus without sending. The reference captures the resolved absolute path; line numbers are not included. The action is disabled when the Session cannot be edited at the moment the menu opens or the path cannot use the mention grammar; a draft that becomes uneditable while the menu stays open makes the action report failure instead of inserting. An open menu updates its label and failure feedback when the interface language changes.
 
@@ -65,7 +65,7 @@ Candidate requests require an existing retained Client Session and share one tem
 
 ### Serialization
 
-File picks preserve the natural text defined by the shared `@path` grammar, with the absolute path, as the hidden serialized and clipboard form. Session picks use the canonical `@[label](dsh-session:…)` mention; serialization never reconstructs identity from the visible title.
+File picks preserve the natural text defined by the shared `@path` grammar, with the absolute path, as the hidden serialized and clipboard form. Session picks use the canonical `@[label](snh-session:…)` mention; serialization never reconstructs identity from the visible title.
 
 The plugin also registers file and folder matchers with [UserText](../ui-conversation/README.md#sent-user-text) and owns their `conversation.user.text.node` renderers. Each query returns the next complete candidate reference at an original-text offset without file discovery; the shared evaluator resolves overlaps by source position. Both node renderers subscribe to a Session-bound `pathPresence` keyed Hook backed by `workspaceFiles/stat`: a stat result or a `workspace-file/not-regular-file` failure (a directory, a symbolic link whatever it points to, or another non-regular entry) confirms the path, `workspace-file/not-found` rejects it, and any other failure leaves it unconfirmed for the next subscriber to retry. The plugin owns these answers, keeps one per Session and path, and aborts outstanding stats on disposal; a settling pick records its path as confirmed. Presence does not read the [`file` resource](../../api/workspace-files/README.md) through `useResource`: that provider keeps one Host change subscription open per Session and path while a reader is mounted, and a mention needs a single answer. Interactive file nodes also receive a Session-bound `openFile` injection; navigation failures keep the reference visible and offer a local retry/close dialog. Folder nodes remain labels.
 

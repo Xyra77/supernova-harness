@@ -5,29 +5,29 @@ import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { strToU8, zipSync } from 'fflate'
 import { afterEach, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import type { ImageAttachmentRef, SaveImageAttachment } from '@deepseek-ai/dsh-attachment'
-import { AttachmentId } from '@deepseek-ai/dsh-attachment'
-import type { ConnectionFetchRoute } from '@deepseek-ai/dsh-client-connection'
-import * as SessionStore from '@deepseek-ai/dsh-session'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import * as JsonlPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import * as SessionProjection from '@deepseek-ai/dsh-session-projection'
-import * as SessionProjectionCache from '@deepseek-ai/dsh-session-projection-cache'
-import * as Storage from '@deepseek-ai/dsh-storage'
-import * as StorageDomain from '@deepseek-ai/dsh-storage-domain'
-import * as StorageJson from '@deepseek-ai/dsh-storage-json'
-import * as TypertRegistry from '@deepseek-ai/dsh-typert-registry'
-import * as Workspace from '@deepseek-ai/dsh-workspace'
-import * as DeepseekChatImport from '../src/index.ts'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import Include from '@supernova-ai/cordis-plugin-include'
+import type { ImageAttachmentRef, SaveImageAttachment } from '@supernova-ai/snh-attachment'
+import { AttachmentId } from '@supernova-ai/snh-attachment'
+import type { ConnectionFetchRoute } from '@supernova-ai/snh-client-connection'
+import * as SessionStore from '@supernova-ai/snh-session'
+import { SessionId } from '@supernova-ai/snh-session'
+import * as JsonlPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import * as SessionProjection from '@supernova-ai/snh-session-projection'
+import * as SessionProjectionCache from '@supernova-ai/snh-session-projection-cache'
+import * as Storage from '@supernova-ai/snh-storage'
+import * as StorageDomain from '@supernova-ai/snh-storage-domain'
+import * as StorageJson from '@supernova-ai/snh-storage-json'
+import * as TypertRegistry from '@supernova-ai/snh-typert-registry'
+import * as Workspace from '@supernova-ai/snh-workspace'
+import * as SupernovaChatImport from '../src/index.ts'
 import { UPLOAD_PATH } from '../src/protocol.ts'
 import type { ExportSessionFile } from '../src/format.ts'
-import type { DeepseekChatImportLine } from '../src/types.ts'
-import type { PeerId, Principal, RemoteInvocation } from '@deepseek-ai/dsh-typert-protocol'
+import type { SupernovaChatImportLine } from '../src/types.ts'
+import type { PeerId, Principal, RemoteInvocation } from '@supernova-ai/snh-typert-protocol'
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@supernova-ai/snh-typert-protocol' {
   interface PrincipalMap {
     /** Test-only non-owner caller shared by the access specs. */
     'test-guest': { readonly kind: 'test-guest'; readonly guest: string }
@@ -59,31 +59,31 @@ function chat(id: string, leafAt: number): ExportSessionFile {
 
 /** Boot the plugin rows through the Loader with stand-ins for the Connection route registry and the attachment store. */
 async function boot(saveImage: (input: SaveImageAttachment) => Promise<ImageAttachmentRef> = () => Promise.reject(new Error('unused'))) {
-  root = await realpath(await mkdtemp(join(tmpdir(), 'dsh-deepseek-import-loader-')))
+  root = await realpath(await mkdtemp(join(tmpdir(), 'snh-supernova-import-loader-')))
   const workspacePath = join(root, 'project')
   await mkdir(workspacePath)
   const configPath = join(root, 'cordis.yml')
   await writeFile(configPath, [
-    "- name: '@deepseek-ai/dsh-session'",
-    "- name: '@deepseek-ai/dsh-session-persistence-jsonl'",
+    "- name: '@supernova-ai/snh-session'",
+    "- name: '@supernova-ai/snh-session-persistence-jsonl'",
     '  config:',
     `    root: ${JSON.stringify(join(root, 'sessions'))}`,
-    "- name: '@deepseek-ai/dsh-storage'",
-    "- name: '@deepseek-ai/dsh-storage-json'",
+    "- name: '@supernova-ai/snh-storage'",
+    "- name: '@supernova-ai/snh-storage-json'",
     '  config:',
     `    root: ${JSON.stringify(join(root, 'storage'))}`,
-    "- name: '@deepseek-ai/dsh-storage-domain'",
+    "- name: '@supernova-ai/snh-storage-domain'",
     '  config:',
     '    backend: json',
-    "- name: '@deepseek-ai/dsh-workspace'",
-    "- name: '@deepseek-ai/dsh-session-projection'",
-    "- name: '@deepseek-ai/dsh-session-projection-cache'",
+    "- name: '@supernova-ai/snh-workspace'",
+    "- name: '@supernova-ai/snh-session-projection'",
+    "- name: '@supernova-ai/snh-session-projection-cache'",
     '  config:',
     '    writeEveryEvents: 1',
     '    writeIntervalMs: 1000',
-    "- name: '@deepseek-ai/dsh-typert-registry'",
+    "- name: '@supernova-ai/snh-typert-registry'",
     '- id: deepseek-chat-import',
-    "  name: '@deepseek-ai/dsh-deepseek-chat-import'",
+    "  name: '@supernova-ai/snh-deepseek-chat-import'",
     '  config:',
     '    maxSessions: 1',
     '    maxUploadBytes: 4096',
@@ -105,16 +105,16 @@ async function boot(saveImage: (input: SaveImageAttachment) => Promise<ImageAtta
   await context.plugin(Loader)
   context.loader.builtins.include = Include
   const modules = new Map<string, unknown>([
-    ['@deepseek-ai/dsh-session', SessionStore],
-    ['@deepseek-ai/dsh-session-persistence-jsonl', JsonlPersistence],
-    ['@deepseek-ai/dsh-storage', Storage],
-    ['@deepseek-ai/dsh-storage-json', StorageJson],
-    ['@deepseek-ai/dsh-storage-domain', StorageDomain],
-    ['@deepseek-ai/dsh-workspace', Workspace],
-    ['@deepseek-ai/dsh-session-projection', SessionProjection],
-    ['@deepseek-ai/dsh-session-projection-cache', SessionProjectionCache],
-    ['@deepseek-ai/dsh-typert-registry', TypertRegistry],
-    ['@deepseek-ai/dsh-deepseek-chat-import', DeepseekChatImport],
+    ['@supernova-ai/snh-session', SessionStore],
+    ['@supernova-ai/snh-session-persistence-jsonl', JsonlPersistence],
+    ['@supernova-ai/snh-storage', Storage],
+    ['@supernova-ai/snh-storage-json', StorageJson],
+    ['@supernova-ai/snh-storage-domain', StorageDomain],
+    ['@supernova-ai/snh-workspace', Workspace],
+    ['@supernova-ai/snh-session-projection', SessionProjection],
+    ['@supernova-ai/snh-session-projection-cache', SessionProjectionCache],
+    ['@supernova-ai/snh-typert-registry', TypertRegistry],
+    ['@supernova-ai/snh-deepseek-chat-import', SupernovaChatImport],
   ])
   context.loader.internal = {
     version: 'v2',
@@ -139,25 +139,25 @@ async function boot(saveImage: (input: SaveImageAttachment) => Promise<ImageAtta
   return { ctx, routes, workspace, workspacePath, post, importer }
 }
 
-const lines = async (response: Response): Promise<DeepseekChatImportLine[]> =>
-  (await response.text()).split('\n').filter(line => line !== '').map(line => JSON.parse(line) as DeepseekChatImportLine)
+const lines = async (response: Response): Promise<SupernovaChatImportLine[]> =>
+  (await response.text()).split('\n').filter(line => line !== '').map(line => JSON.parse(line) as SupernovaChatImportLine)
 
 it('imports an uploaded archive through the registered route into a chosen Workspace', async () => {
   const { ctx, routes, workspace, workspacePath, post } = await boot()
   const signal = new AbortController().signal
   const as = (principal: Principal) => ctx.extend({
     invocation: {
-      request: { namespace: 'deepseekChatImport', method: 'limits', args: {} },
-      service: 'deepseekChatImport',
+      request: { namespace: 'supernovaChatImport', method: 'limits', args: {} },
+      service: 'supernovaChatImport',
       peer: { id: 'import-peer' as PeerId, ctx, principal, interactions: 'answer', signal, dispose: async () => {} },
       signal,
       uplink: <In>(): AsyncIterable<In> => ({ [Symbol.asyncIterator]: () => ({ next: async () => ({ done: true, value: undefined }) }) }),
     } satisfies RemoteInvocation,
-  }).deepseekChatImport
-  expect(ctx.get('deepseekChatImport')?.limits(signal)).toEqual({ maxUploadBytes: 4096 })
+  }).supernovaChatImport
+  expect(ctx.get('supernovaChatImport')?.limits(signal)).toEqual({ maxUploadBytes: 4096 })
   expect(as({ kind: 'owner' }).limits(signal)).toEqual({ maxUploadBytes: 4096 })
   expect(() => as({ kind: 'test-guest', guest: 'viewer' }).limits(signal))
-    .toThrow(expect.objectContaining({ code: 'deepseekChatImport/owner-only', message: 'only the owner may import DeepSeek chat exports' }))
+    .toThrow(expect.objectContaining({ code: 'supernovaChatImport/owner-only', message: 'only the owner may import SuperNova chat exports' }))
   expect(routes.get(UPLOAD_PATH)).toMatchObject({ methods: ['POST'], requestBody: 'streaming' })
 
   // An unsupported image type exercises the Host log: it stays a placeholder.

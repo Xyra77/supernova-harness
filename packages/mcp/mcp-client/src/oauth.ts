@@ -1,10 +1,10 @@
 /** Explicit browser authorization whose callback, flow, and in-flight work share one owner. */
 import { createHash, randomBytes, randomUUID, timingSafeEqual } from 'node:crypto'
-import type { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { AuthorizationSession } from '@deepseek-ai/dsh-authorization'
-import type { CredentialKey } from '@deepseek-ai/dsh-credentials'
-import type WebServer from '@deepseek-ai/dsh-host-webserver'
+import type { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { AuthorizationSession } from '@supernova-ai/snh-authorization'
+import type { CredentialKey } from '@supernova-ai/snh-credentials'
+import type WebServer from '@supernova-ai/snh-host-webserver'
 import { auth, exchangeAuthorization, extractWWWAuthenticateParams, OAuthError, OAuthErrorCode, validateAuthorizationResponseIssuer } from '@modelcontextprotocol/client'
 import type { OAuthClientProvider, OAuthDiscoveryState, StoredOAuthClientInformation } from '@modelcontextprotocol/client'
 import { McpTemplateBinding } from './credentials.ts'
@@ -20,17 +20,17 @@ const CLEANUP_FAILED = 'MCP OAuth cleanup failed'
 const CLEANUP_UNSETTLED = 'MCP OAuth cleanup did not settle'
 
 const CALLBACK_PAGE = (lines: readonly string[]): string => '<!doctype html><html><head><meta charset="utf-8">'
-  + '<meta name="viewport" content="width=device-width"><title>DSH</title>'
+  + '<meta name="viewport" content="width=device-width"><title>SNH</title>'
   + '<style>body{font:15px/1.6 system-ui,sans-serif;max-width:32em;margin:20vh auto;padding:0 1em}</style></head><body>'
   + lines.map(line => '<p>' + line + '</p>').join('') + '</body></html>'
 const CALLBACK_PAGES = {
   received: CALLBACK_PAGE([
-    '已收到授权。可以关闭此页，回到 DSH 查看连接结果。',
-    'Authorization received. You can close this page and check the connection in DSH.',
+    '已收到授权。可以关闭此页，回到 SNH 查看连接结果。',
+    'Authorization received. You can close this page and check the connection in SNH.',
   ]),
   incomplete: CALLBACK_PAGE([
-    '授权未完成。请回到 DSH 重试。',
-    'Authorization was not completed. Return to DSH to try again.',
+    '授权未完成。请回到 SNH 重试。',
+    'Authorization was not completed. Return to SNH to try again.',
   ]),
 }
 
@@ -248,7 +248,7 @@ export class McpOAuthAuthorization {
       const issuerKey = (issuer: string) => this.credentials.clientKey(serverUrl, issuer, redirectUri)
       const provider: OAuthClientProvider = {
         redirectUrl: redirectUri,
-        clientMetadata: { client_name: 'DeepSeek Harness', redirect_uris: [redirectUri],
+        clientMetadata: { client_name: 'SuperNova Harness', redirect_uris: [redirectUri],
           grant_types: ['authorization_code', 'refresh_token'], response_types: ['code'], token_endpoint_auth_method: 'none',
           ...this.config.oauth.scope === undefined ? {} : { scope: this.config.oauth.scope },
         },

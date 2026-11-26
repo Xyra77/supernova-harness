@@ -10,23 +10,23 @@ import {
   createAssistantMessage,
   createUserMessage,
   expandAssistantStream,
-} from '@deepseek-ai/dsh-llm'
-import type { AssistantStreamRecord } from '@deepseek-ai/dsh-llm'
-import { SessionSeq } from '@deepseek-ai/dsh-session/types'
-import type { SessionEvent, SessionEventMap } from '@deepseek-ai/dsh-session/types'
+} from '@supernova-ai/snh-llm'
+import type { AssistantStreamRecord } from '@supernova-ai/snh-llm'
+import { SessionSeq } from '@supernova-ai/snh-session/types'
+import type { SessionEvent, SessionEventMap } from '@supernova-ai/snh-session/types'
 import type {
   SessionEventEntry,
   SessionHistoryRecord,
   SessionWireEvent,
-} from '@deepseek-ai/dsh-api-session-controller/types'
-import { historyEntries } from '@deepseek-ai/dsh-api-session-controller/src/client/sessions/history-records.ts'
-import type { SessionEventLikeEntry } from '@deepseek-ai/dsh-api-session-controller/client'
-import { ConversationNodeAssembler } from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@supernova-ai/snh-api-session-controller/types'
+import { historyEntries } from '@supernova-ai/snh-api-session-controller/src/client/sessions/history-records.ts'
+import type { SessionEventLikeEntry } from '@supernova-ai/snh-api-session-controller/client'
+import { ConversationNodeAssembler } from '@supernova-ai/snh-client-ui-conversation/client'
 import type {
   ConversationNodeDefinition,
   ConversationViewDefinition,
   ConversationViewNode,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@supernova-ai/snh-client-ui-conversation/client'
 
 const LOGICAL_ITEMS = 416_756
 const STREAM_MEMBERS = 416_176

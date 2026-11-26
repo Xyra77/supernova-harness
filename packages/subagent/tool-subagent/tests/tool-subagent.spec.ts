@@ -1,30 +1,30 @@
-import { ToolExecutionPipeline } from '@deepseek-ai/dsh-tools/pipeline'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import { ToolExecutionPipeline } from '@supernova-ai/snh-tools/pipeline'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
 import { mountWorkingDirectoryFixture } from '../../subagent/tests/working-directory-fixture.ts'
 import { liveConfig } from '../../../settings/settings/tests/live-config.ts'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId, ReasoningEffortId } from '@deepseek-ai/dsh-llm/types'
-import { TOOL_ABORTED_BEFORE_DISPATCH } from '@deepseek-ai/dsh-tools'
-import { assembleContextFor } from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import type { SubagentStartRequest } from '@deepseek-ai/dsh-subagent'
-import * as SubagentSpawn from '@deepseek-ai/dsh-subagent-spawn-in-process'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId, ReasoningEffortId } from '@supernova-ai/snh-llm/types'
+import { TOOL_ABORTED_BEFORE_DISPATCH } from '@supernova-ai/snh-tools'
+import { assembleContextFor } from '@supernova-ai/snh-agent'
+import type { Agent } from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import SubagentRuntime from '@supernova-ai/snh-subagent'
+import type { SubagentStartRequest } from '@supernova-ai/snh-subagent'
+import * as SubagentSpawn from '@supernova-ai/snh-subagent-spawn-in-process'
 import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import { loadStoredSession } from '../../subagent/tests/persistence-helpers.ts'
 import * as mock from './scripted-provider.ts'
 import type { Config as toolConfig } from '../src/index.ts'
 import * as tool from '../src/index.ts'
-import { Session, type SessionId } from '@deepseek-ai/dsh-session'
+import { Session, type SessionId } from '@supernova-ai/snh-session'
 import {
   callSubagent,
   disposeSetupProvider,
@@ -50,14 +50,14 @@ async function delegationGuidance(ctx: Context, agent?: Agent): Promise<string[]
 }
 
 /**
- * Drives the REAL plugin body: mounts `dsh-tool-subagent` on a real
+ * Drives the REAL plugin body: mounts `snh-tool-subagent` on a real
  * `ToolRuntime` + `SubagentRuntime`, with a package-local scripted child
  * boundary, and invokes the registered `subagent` tool through
  * `ctx.tools.execute`. Everything downstream of the child boundary is the
  * shipping code path.
  */
 
-describe('dsh-tool-subagent', () => {
+describe('snh-tool-subagent', () => {
 
   it('rejects configured child agent options at mount when the provider cannot apply them', async () => {
     await expect(setup(
@@ -701,7 +701,7 @@ describe('dsh-tool-subagent', () => {
 
 })
 
-describe('dsh-tool-subagent local activation', () => {
+describe('snh-tool-subagent local activation', () => {
   const fixtures: { ctx: Context; root: string }[] = []
   afterEach(async () => {
     for (const { ctx, root } of fixtures.splice(0)) {
@@ -713,7 +713,7 @@ describe('dsh-tool-subagent local activation', () => {
   /** Boot the real continuable stack without any model-facing follow-up adapter. */
   async function continuableSetup(modelSelection = false) {
     const ctx = new Context()
-    const root = mkdtempSync(path.join(tmpdir(), 'dsh-tool-subagent-continuable-'))
+    const root = mkdtempSync(path.join(tmpdir(), 'snh-tool-subagent-continuable-'))
     fixtures.push({ ctx, root })
     await mountAgentLoopTestDependencies(ctx)
     await ctx.plugin(JsonlSessionPersistence, { root })
@@ -960,6 +960,6 @@ describe('depth budget configuration', () => {
   })
 })
 
-function admittedMessages(assembly: import('@deepseek-ai/dsh-system-prompt').PromptAssembly) {
+function admittedMessages(assembly: import('@supernova-ai/snh-system-prompt').PromptAssembly) {
   return assembly.systemUpdates(false).map(update => update.message)
 }

@@ -2,9 +2,9 @@
 
 import { cp, lstat, mkdir, mkdtemp, readFile, readlink, rename, rm, stat, symlink } from 'node:fs/promises'
 import { dirname, isAbsolute, join } from 'node:path'
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { defineTool } from '@deepseek-ai/dsh-tools'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { defineTool } from '@supernova-ai/snh-tools'
 import { WorkspaceDependencyError } from './error.ts'
 
 export { WorkspaceDependencyError, type WorkspaceDependencyErrorCode } from './error.ts'

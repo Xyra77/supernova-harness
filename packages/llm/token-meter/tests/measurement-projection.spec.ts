@@ -1,14 +1,14 @@
 /** Recovery facts survive JSON checkpoints while positional prices are rebuilt independently. */
-import { Context } from '@deepseek-ai/cordis'
-import { createAssistantMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore, { Session, type SessionId, SessionLogOffset } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import type { ProjectionCheckpoint } from '@deepseek-ai/dsh-session-projection'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
+import { Context } from '@supernova-ai/cordis'
+import { createAssistantMessage, createUserMessage } from '@supernova-ai/snh-llm'
+import SessionStore, { Session, type SessionId, SessionLogOffset } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import type { SessionEvent } from '@supernova-ai/snh-session'
+import type { ProjectionCheckpoint } from '@supernova-ai/snh-session-projection'
+import TokenMeter from '@supernova-ai/snh-token-meter'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { measurementProjectionDefinition } from '../src/measurement-projection.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 async function harness() {
   const ctx = new Context()

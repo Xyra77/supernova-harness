@@ -1,30 +1,30 @@
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import AgentRegistry from '@supernova-ai/snh-agent'
 import { mountWorkingDirectoryFixture } from '../../subagent/tests/working-directory-fixture.ts'
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { type ToolCallId,
   LlmAdapter, type ReasoningEffortId,
-} from '@deepseek-ai/dsh-llm'
+} from '@supernova-ai/snh-llm'
 import type {
   GenerateOptions,
   LlmModelInfo,
   LlmResolvedModelInfo,
   StreamChunk,
-} from '@deepseek-ai/dsh-llm'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+} from '@supernova-ai/snh-llm'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import SubagentRuntime from '@supernova-ai/snh-subagent'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import type { SessionId } from '@supernova-ai/snh-session'
 import * as tool from '../src/index.ts'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
 import SubagentModelSelectionConfig from '../src/model-selection-settings.ts'
 import { modelSelectionSetupAgent, ownContext, setup, testToolSignal, text } from './harness.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 class CatalogAdapter extends LlmAdapter {
   constructor(private readonly empty = false) {

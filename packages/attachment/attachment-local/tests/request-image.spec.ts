@@ -1,7 +1,7 @@
 import { mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import sharp from 'sharp'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import * as encoding from '../src/encoding.ts'
@@ -12,13 +12,13 @@ import LocalAttachmentStore from '../src/index.ts'
 const homes: string[] = []
 
 async function home(): Promise<string> {
-  const dshHome = await mkdtemp(join(tmpdir(), 'dsh-request-image-'))
-  homes.push(dshHome)
-  return dshHome
+  const snhHome = await mkdtemp(join(tmpdir(), 'snh-request-image-'))
+  homes.push(snhHome)
+  return snhHome
 }
 
 async function store(): Promise<LocalAttachmentStore> {
-  return new LocalAttachmentStore(new Context(), { dshHome: await home() })
+  return new LocalAttachmentStore(new Context(), { snhHome: await home() })
 }
 
 async function image(width: number, height: number): Promise<Uint8Array> {
@@ -52,10 +52,10 @@ afterEach(async () => {
 describe('local request-image cache', () => {
   it('rebuilds a cleared cache without moving or losing durable attachments', async () => {
     const fallbackHome = await home()
-    vi.stubEnv('DSH_HOME', fallbackHome)
+    vi.stubEnv('SNH_HOME', fallbackHome)
     try {
-      const dshHome = await home()
-      const attachments = new LocalAttachmentStore(new Context(), { dshHome })
+      const snhHome = await home()
+      const attachments = new LocalAttachmentStore(new Context(), { snhHome })
       const attachment = await attachments.saveImage({ data: await image(64, 32), mediaType: 'image/png' })
       const stored = await attachments.readImage(attachment)
       const fileData = Uint8Array.of(0, 1, 2, 255)
@@ -63,16 +63,16 @@ describe('local request-image cache', () => {
       const policy = { width: 22, height: 11, maxImageBytes: 4_096, imageTargetBytes: 4_096 }
       const initial = await attachments.readImageRequest(attachment, policy)
       const hash = String(initial.variantId).slice('sha256:'.length)
-      const cacheRoot = join(dshHome, 'cache')
+      const cacheRoot = join(snhHome, 'cache')
       const path = join(cacheRoot, 'attachments', 'request-images', hash.slice(0, 2), hash)
 
-      expect(attachments.root).toBe(join(dshHome, 'attachments', 'v1'))
+      expect(attachments.root).toBe(join(snhHome, 'attachments', 'v1'))
       await expect(readFile(path)).resolves.toEqual(Buffer.from(initial.data))
       await expect(readFile(join(attachments.root, 'request-images', hash.slice(0, 2), hash)))
         .rejects.toMatchObject({ code: 'ENOENT' })
       await rm(cacheRoot, { recursive: true })
 
-      const reopened = new LocalAttachmentStore(new Context(), { dshHome })
+      const reopened = new LocalAttachmentStore(new Context(), { snhHome })
       await expect(reopened.readImage(attachment)).resolves.toEqual(stored)
       await expect(readFile(reopened.fileHostPath(file))).resolves.toEqual(Buffer.from(fileData))
       await expect(reopened.readImageRequest(attachment, policy)).resolves.toEqual(initial)
@@ -261,13 +261,13 @@ describe('local request-image cache', () => {
   })
 
   it('rebuilds a cached image whose dimensions fit but whose actual bytes exceed the hard limit', async () => {
-    const dshHome = await home()
-    const attachments = new LocalAttachmentStore(new Context(), { dshHome })
+    const snhHome = await home()
+    const attachments = new LocalAttachmentStore(new Context(), { snhHome })
     const attachment = await attachments.saveImage({ data: await image(64, 32), mediaType: 'image/png' })
     const target = { width: 22, height: 11, maxImageBytes: 4096, imageTargetBytes: 4096 }
     const initial = await attachments.readImageRequest(attachment, target)
     const hash = String(initial.variantId).slice('sha256:'.length)
-    const path = join(dshHome, 'cache', 'attachments', 'request-images', hash.slice(0, 2), hash)
+    const path = join(snhHome, 'cache', 'attachments', 'request-images', hash.slice(0, 2), hash)
     const oversized = Buffer.concat([initial.data, Buffer.alloc(target.maxImageBytes)])
     await expect(sharp(oversized).metadata()).resolves.toMatchObject({ width: 22, height: 11 })
     await writeFile(path, oversized)
@@ -277,26 +277,26 @@ describe('local request-image cache', () => {
   })
 
   it('includes both byte limits and resize controls in the cache identity', async () => {
-    const dshHome = await home()
-    const attachments = new LocalAttachmentStore(new Context(), { dshHome })
+    const snhHome = await home()
+    const attachments = new LocalAttachmentStore(new Context(), { snhHome })
     const source = await attachments.saveImage({ data: await image(64, 32), mediaType: 'image/png' })
     const target = { width: 22, height: 11, maxImageBytes: 4096, imageTargetBytes: 1024 }
     const original = await attachments.readImageRequest(source, target)
     const softer = await attachments.readImageRequest(source, { ...target, imageTargetBytes: 2048 })
     const larger = await attachments.readImageRequest(source, { ...target, maxImageBytes: 8192 })
-    const configured = new LocalAttachmentStore(new Context(), { dshHome, requestImageMinShrinkFactor: 1.5, requestImageByteHeadroom: 0.9 })
+    const configured = new LocalAttachmentStore(new Context(), { snhHome, requestImageMinShrinkFactor: 1.5, requestImageByteHeadroom: 0.9 })
     const differentResize = await configured.readImageRequest(source, target)
     expect(new Set([original, softer, larger, differentResize].map(item => item.variantId)).size).toBe(4)
   })
 
   it('regenerates invalid, oversized, incompatible, or mismatched cached variants', async () => {
-    const dshHome = await home()
-    const attachments = new LocalAttachmentStore(new Context(), { dshHome })
+    const snhHome = await home()
+    const attachments = new LocalAttachmentStore(new Context(), { snhHome })
     const attachment = await attachments.saveImage({ data: await image(64, 32), mediaType: 'image/png' })
     const policy = { width: 22, height: 11, maxImageBytes: 4_096, imageTargetBytes: 4_096 }
     const initial = await attachments.readImageRequest(attachment, policy)
     const hash = String(initial.variantId).slice('sha256:'.length)
-    const path = join(dshHome, 'cache', 'attachments', 'request-images', hash.slice(0, 2), hash)
+    const path = join(snhHome, 'cache', 'attachments', 'request-images', hash.slice(0, 2), hash)
     const noisyPixels = new Uint8Array(64 * 64 * 3)
     let state = 0x2545f491
     for (let index = 0; index < noisyPixels.length; index += 1) {

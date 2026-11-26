@@ -1,15 +1,15 @@
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import * as spawn from '@deepseek-ai/dsh-subagent-spawn-in-process'
-import { STRUCTURED_OUTPUT_TOOL } from '@deepseek-ai/dsh-subagent'
+import { Context } from '@supernova-ai/cordis'
+import type { SessionId } from '@supernova-ai/snh-session'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import SubagentRuntime from '@supernova-ai/snh-subagent'
+import * as spawn from '@supernova-ai/snh-subagent-spawn-in-process'
+import { STRUCTURED_OUTPUT_TOOL } from '@supernova-ai/snh-subagent'
 import { MockAdapter, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import PtcWorkflowEngine from '../src/index.ts'
 import { mountPtcRuntime } from './setup.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 type Script = ConstructorParameters<typeof MockAdapter>[0]
 
@@ -27,7 +27,7 @@ async function setup(script: Script) {
   return { ctx, parent, adapter }
 }
 
-describe('dsh-workflow-ptc over the real in-process stack', () => {
+describe('snh-workflow-ptc over the real in-process stack', () => {
   it('runs a two-stage workflow: a plain child, then a schema child through the structured runtime', async () => {
     const { ctx, parent } = await setup([
       textResponse('the file list is a.ts'),

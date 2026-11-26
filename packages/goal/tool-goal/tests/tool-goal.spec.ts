@@ -1,33 +1,33 @@
-import { ToolExecutionPipeline } from '@deepseek-ai/dsh-tools/pipeline'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import { ToolExecutionPipeline } from '@supernova-ai/snh-tools/pipeline'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { afterAll, afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import AgentRegistry, { agentEvents } from '@deepseek-ai/dsh-agent'
-import type { Agent, AgentStatus, Inbox } from '@deepseek-ai/dsh-agent'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { GoalId } from '@deepseek-ai/dsh-goal/types'
-import GoalService from '@deepseek-ai/dsh-goal'
-import type { GoalRef } from '@deepseek-ai/dsh-goal'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm/types'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { MessageSource } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import AgentRegistry, { agentEvents } from '@supernova-ai/snh-agent'
+import type { Agent, AgentStatus, Inbox } from '@supernova-ai/snh-agent'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { GoalId } from '@supernova-ai/snh-goal/types'
+import GoalService from '@supernova-ai/snh-goal'
+import type { GoalRef } from '@supernova-ai/snh-goal'
+import type { ToolCallId } from '@supernova-ai/snh-llm/types'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import type { MessageSource } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
 import SessionStore, {
   SESSION_FORMAT_VERSION,
   Session,
   type SessionId,
   SessionLogOffset,
-} from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import type { ToolExecutionResult } from '@deepseek-ai/dsh-tools'
-import * as toolGoal from '@deepseek-ai/dsh-tool-goal'
-import { unsupportedModel, createInboxStub } from '@deepseek-ai/dsh-agent-loop-testkit'
+} from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import type { ToolExecutionResult } from '@supernova-ai/snh-tools'
+import * as toolGoal from '@supernova-ai/snh-tool-goal'
+import { unsupportedModel, createInboxStub } from '@supernova-ai/snh-agent-loop-testkit'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'test': { kind: 'test' } & ContextFormed
   }

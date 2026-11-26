@@ -1,24 +1,24 @@
 /** Models section registration: slot declaration injection, the locale-following label thunk, and HMR recovery. */
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
-import Schema from '@deepseek-ai/schemastery'
-import { Context } from '@deepseek-ai/cordis'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
+import Schema from '@supernova-ai/schemastery'
+import { Context } from '@supernova-ai/cordis'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
-import { resolveSlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { syncedConfig, TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import { remoteDefaultResponses } from '@deepseek-ai/dsh-client-test-runtime/src/assembly/remote-default-responses.ts'
-import { ok, RemoteMock } from '@deepseek-ai/dsh-remote-mock'
-import { apply as settingsApply, inject as settingsInject } from '@deepseek-ai/dsh-client-ui-settings/client'
-import { apply, inject, refreshIfLoaded } from '@deepseek-ai/dsh-client-ui-settings-models/client'
+import { resolveSlotLabel } from '@supernova-ai/snh-client-ui-slots'
+import { SlotRegistry } from '@supernova-ai/snh-client-ui-renderer/client'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import { syncedConfig, TestRemote } from '@supernova-ai/snh-client-test-runtime'
+import { remoteDefaultResponses } from '@supernova-ai/snh-client-test-runtime/src/assembly/remote-default-responses.ts'
+import { ok, RemoteMock } from '@supernova-ai/snh-remote-mock'
+import { apply as settingsApply, inject as settingsInject } from '@supernova-ai/snh-client-ui-settings/client'
+import { apply, inject, refreshIfLoaded } from '@supernova-ai/snh-client-ui-settings-models/client'
 import {
   WELCOME_NOTICE_ACK_FIELD, WELCOME_NOTICE_SETTINGS_NAMESPACE, WELCOME_NOTICE_VERSION,
 } from '../src/onboarding-copy.ts'
 import { ModelsSection } from '../src/client/ModelsSection.tsx'
-import { DeepSeekOnboardingDialog } from '../src/client/DeepSeekOnboardingDialog.tsx'
+import { SuperNovaOnboardingDialog } from '../src/client/SuperNovaOnboardingDialog.tsx'
 import { WelcomeNotice } from '../src/client/WelcomeNotice.tsx'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import type { ObservableSnapshot } from '@supernova-ai/snh-client-store'
 import * as hostPlugin from '../src/index.ts'
 
 afterEach(() => { vi.unstubAllGlobals() })
@@ -66,7 +66,7 @@ function declare(slots: SlotRegistry): () => void {
   )
 }
 
-/** The official-DeepSeek step's injected automatic-onboarding source. */
+/** The official-SuperNova step's injected automatic-onboarding source. */
 function automaticSource(slots: SlotRegistry): ObservableSnapshot<boolean> {
   const entry = slots.entries('settings.onboarding').find(candidate => candidate.options.id === 'deepseek-official')!
   return (entry.inject as () => { hooks: { automatic: ObservableSnapshot<boolean> } })().hooks.automatic
@@ -118,7 +118,7 @@ describe('ui-settings-models apply', () => {
   })
 
   it('leaves automatic onboarding and the welcome notice to the native shell', async () => {
-    vi.stubGlobal('dshDesktop', {})
+    vi.stubGlobal('snhDesktop', {})
     const { ctx, slots } = await bench()
     declare(slots)
     try {
@@ -162,8 +162,8 @@ describe('ui-settings-models apply', () => {
       options: { id: 'welcome-notice', order: -100 },
     })
     const deepSeek = onboarding.find(entry => entry.options.id === 'deepseek-official')!
-    expect(deepSeek.component).toBe(DeepSeekOnboardingDialog)
-    const analytics = (deepSeek.inject!() as object) as import('../src/client/DeepSeekOnboardingDialog.tsx').DeepSeekOnboardingInjected
+    expect(deepSeek.component).toBe(SuperNovaOnboardingDialog)
+    const analytics = (deepSeek.inject!() as object) as import('../src/client/SuperNovaOnboardingDialog.tsx').SuperNovaOnboardingInjected
     analytics.track?.('api_key_save_click', {})
     const track = vi.fn()
     before.ctx.provide('productAnalytics', { track } as never)
@@ -171,7 +171,7 @@ describe('ui-settings-models apply', () => {
     expect(track).toHaveBeenCalledWith('api_key_save_click', {})
     expect(deepSeek.options).toMatchObject({ id: 'deepseek-official', order: 0 })
     const deepSeekInjected = (
-      deepSeek.inject as unknown as () => import('../src/client/DeepSeekOnboardingDialog.tsx').DeepSeekOnboardingInjected
+      deepSeek.inject as unknown as () => import('../src/client/SuperNovaOnboardingDialog.tsx').SuperNovaOnboardingInjected
     )()
     expect(deepSeekInjected.hooks.models).toBe(injected.controller.store)
     expect(typeof deepSeekInjected.operations.storeCredential).toBe('function')
@@ -302,7 +302,7 @@ describe('pushed invalidations', () => {
       .find(candidate => candidate.options.id === 'deepseek-official')!
     const injected = (
       entry.inject as unknown as
-      () => import('../src/client/DeepSeekOnboardingDialog.tsx').DeepSeekOnboardingInjected
+      () => import('../src/client/SuperNovaOnboardingDialog.tsx').SuperNovaOnboardingInjected
     )()
     injected.controller.store.update((state) => { state.status = 'ready' })
     const load = vi.spyOn(injected.controller, 'load').mockResolvedValue()

@@ -3,25 +3,25 @@ import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import type { Context } from '@deepseek-ai/cordis'
-import Timer from '@deepseek-ai/cordis-plugin-timer'
-import { boot, initProfile, loadProfileDirectory, readProfilePatches, readProfileManifest, type ProfileContext } from '@deepseek-ai/dsh-app-boot'
-import Hmr from '@deepseek-ai/dsh-hmr'
-import PluginManager from '@deepseek-ai/dsh-plugin-manager'
-import Sessions, { type SessionId } from '@deepseek-ai/dsh-session'
-import Projections from '@deepseek-ai/dsh-session-projection'
-import Agents from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import Llm, { LlmAdapter, createUserMessage, type GenerateOptions, type StreamChunk } from '@deepseek-ai/dsh-llm'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import Tools from '@deepseek-ai/dsh-tools'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import Skills from '@deepseek-ai/dsh-skill'
-import Access from '@deepseek-ai/dsh-api-remote-access'
-import * as ActionCards from '@deepseek-ai/dsh-action-cards'
+import type { Context } from '@supernova-ai/cordis'
+import Timer from '@supernova-ai/cordis-plugin-timer'
+import { boot, initProfile, loadProfileDirectory, readProfilePatches, readProfileManifest, type ProfileContext } from '@supernova-ai/snh-app-boot'
+import Hmr from '@supernova-ai/snh-hmr'
+import PluginManager from '@supernova-ai/snh-plugin-manager'
+import Sessions, { type SessionId } from '@supernova-ai/snh-session'
+import Projections from '@supernova-ai/snh-session-projection'
+import Agents from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import Llm, { LlmAdapter, createUserMessage, type GenerateOptions, type StreamChunk } from '@supernova-ai/snh-llm'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import Tools from '@supernova-ai/snh-tools'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import Skills from '@supernova-ai/snh-skill'
+import Access from '@supernova-ai/snh-api-remote-access'
+import * as ActionCards from '@supernova-ai/snh-action-cards'
 import * as Recommendations from '../src/index.ts'
 import { ACTION, logProposal } from './fixture.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 class Model extends LlmAdapter {
   readonly requests: GenerateOptions[] = []
@@ -35,12 +35,12 @@ class Model extends LlmAdapter {
 }
 
 it.each(['normal', 'consumer-unload'] as const)('enables through the real Loader/HMR queue: %s', async (scenario) => {
-  const home = await mkdtemp(join(tmpdir(), 'dsh-recommendations-'))
+  const home = await mkdtemp(join(tmpdir(), 'snh-recommendations-'))
   let owner: Context | undefined
   onTestFinished(async () => { await owner?.fiber.dispose(); await rm(home, { recursive: true, force: true }) })
   const dir = join(home, 'profiles', 'test')
   const anchor = join(home, 'package.json')
-  const name = '@deepseek-ai/dsh-experimental-session-search'
+  const name = '@supernova-ai/snh-experimental-session-search'
   await writeFile(anchor, JSON.stringify({ name: 'installation', dependencies: { [name]: '1.0.0' } }))
   initProfile(dir, ['fixture-base'])
   async function bundle(root: string, name: string, patch: string) {
@@ -48,7 +48,7 @@ it.each(['normal', 'consumer-unload'] as const)('enables through the real Loader
     await mkdir(path, { recursive: true })
     await writeFile(join(path, 'package.json'), JSON.stringify({
       name, version: '1.0.0', description: 'Find previous conversations',
-      dsh: { bundle: { patch: './cordis.patch.yml' } },
+      snh: { bundle: { patch: './cordis.patch.yml' } },
     }))
     await writeFile(join(path, 'cordis.patch.yml'), patch)
     return path
@@ -81,7 +81,7 @@ it.each(['normal', 'consumer-unload'] as const)('enables through the real Loader
   const agent = await ctx.agentLoop.create(brandString<SessionId>('recommendation-live'), { provider: 'mock', model: 'test' })
   const cardId = logProposal(ctx, agent, 'card-live', { title: 'Session search', brief: 'Search saved conversations', details: { name } })
   expect((await ctx.skills.list()).map(skill => skill.name)).toContain('official-plugins')
-  expect(readProfileManifest('test', dir).dsh?.profile?.bundles).not.toContain(name)
+  expect(readProfileManifest('test', dir).snh?.profile?.bundles).not.toContain(name)
   if (scenario === 'consumer-unload') {
     const entered = Promise.withResolvers<undefined>()
     const release = Promise.withResolvers<undefined>()
@@ -104,14 +104,14 @@ it.each(['normal', 'consumer-unload'] as const)('enables through the real Loader
     expect(ctx.get('pluginRecommendations')).toBeUndefined()
     expect(await ctx.skills.list()).toEqual([])
     await ctx.hmr.runExclusive(async () => {})
-    expect(readProfileManifest('test', dir).dsh?.profile?.bundles).toContain(name)
+    expect(readProfileManifest('test', dir).snh?.profile?.bundles).toContain(name)
     expect((await ctx.pluginManager.listBundles()).find(bundle => bundle.name === name)?.enabled).toBe(true)
     expect(model.requests).toHaveLength(0)
     return
   }
   const enabled = { cardId, action: ACTION, phase: 'enabled' }
   expect(await ctx.actionCards.act(agent, cardId, 'enable')).toEqual({ status: 'settled', decision: enabled })
-  expect(readProfileManifest('test', dir).dsh?.profile?.bundles).toContain(name)
+  expect(readProfileManifest('test', dir).snh?.profile?.bundles).toContain(name)
   expect([...ctx.loader.entries()].find(entry => entry.options.id === 'recommendation-probe')?.fiber).toBeDefined()
   expect((await ctx.pluginManager.listBundles()).find(bundle => bundle.name === name)?.enabled).toBe(true)
   // The outcome reaches the model with the next request; enabling starts no turn by itself.

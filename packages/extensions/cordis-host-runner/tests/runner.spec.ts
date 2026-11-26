@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import TypertGateway from '@deepseek-ai/dsh-api-gateway'
-import RemoteAccessService from '@deepseek-ai/dsh-api-remote-access'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
-import { Peer } from '@deepseek-ai/dsh-client-connection'
+import { brandString } from '@supernova-ai/snh-brand'
+import TypertGateway from '@supernova-ai/snh-api-gateway'
+import RemoteAccessService from '@supernova-ai/snh-api-remote-access'
+import TypertRegistry from '@supernova-ai/snh-typert-registry'
+import { Peer } from '@supernova-ai/snh-client-connection'
 import type {
   ApprovalRequestId as ApprovalRequestIdType, CordisDynamicPluginId,
 } from '../src/types.ts'
@@ -38,8 +38,8 @@ it('routes source RPC inspect replies by agentId without resolving an Agent', as
     const resolve = vi.fn(() => { throw new Error('Client replies must not resolve an Agent') })
     ctx.typert.lookups.register('agent', {
       parameter: 'agent', wire: 'agentId', resource: 'session',
-      hostTypeSymbol: '@deepseek-ai/dsh-agent#Agent',
-      wireTypeSymbol: '@deepseek-ai/dsh-session/types#SessionId',
+      hostTypeSymbol: '@supernova-ai/snh-agent#Agent',
+      wireTypeSymbol: '@supernova-ai/snh-session/types#SessionId',
       resolve,
     })
     const peer = new Peer(ctx, { principal: { kind: 'owner' } })
@@ -525,7 +525,7 @@ describe('dynamic runner teardown', () => {
     const receipt = await runner.undefine(AGENT_A, brandString<CordisDynamicPluginId>('dyn-404'))
 
     expect(receipt).toMatchObject({ ok: false, reason: 'plugin-missing' })
-    expect((receipt as { message: string }).message).toContain('lost on DSH restart')
+    expect((receipt as { message: string }).message).toContain('lost on SNH restart')
   })
 
   it('unwinds every host half when the runner itself is disposed', async () => {

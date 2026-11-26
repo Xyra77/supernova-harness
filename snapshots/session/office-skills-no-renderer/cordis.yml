@@ -1,16 +1,16 @@
 - insert:
     - id: workspace-dependencies
-      name: '@deepseek-ai/dsh-tool-workspace-dependencies'
+      name: '@supernova-ai/snh-tool-workspace-dependencies'
       config:
         source: !!js process.cwd() + '/runtime-source'
         root: !!js process.cwd() + '/runtime-installed'
 
     - id: skill-office
-      name: '@deepseek-ai/dsh-skill-office'
+      name: '@supernova-ai/snh-skill-office'
       config:
         assetRoot: !!js process.cwd() + '/office-skills'
 
-- id: llm-deepseek
+- id: llm-supernova
   config:
     thinking: enabled
     reasoningEffort: high

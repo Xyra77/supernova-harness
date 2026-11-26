@@ -1,5 +1,5 @@
 /** Host configuration for the session-specific composer hint. */
-import z from '@deepseek-ai/schemastery'
+import z from '@supernova-ai/schemastery'
 
 /** Copy a Session ID into `sessionId` to give its composer the review checklist. */
 export const Config = z.object({

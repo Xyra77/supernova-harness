@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-file-actions",
+  "name": "@supernova-ai/snh-client-ui-file-actions",
   "description": "Original-file saving and image clipboard actions for Web and Desktop",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -29,13 +29,13 @@
       "types": "./lib/types/types.d.ts"
     }
   },
-  "dsh": {
+  "snh": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-context-menu",
-        "@deepseek-ai/dsh-api-workspace-files",
-        "@deepseek-ai/dsh-api-session-controller"
+        "@supernova-ai/snh-client-locale",
+        "@supernova-ai/snh-client-ui-context-menu",
+        "@supernova-ai/snh-api-workspace-files",
+        "@supernova-ai/snh-api-session-controller"
       ],
       "platform": "web"
     }
@@ -46,24 +46,24 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
+    "@supernova-ai/snh-brand": "workspace:*",
     "react": "^18.2.0",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:*",
-    "@deepseek-ai/dsh-api-session-controller": "workspace:*",
-    "@deepseek-ai/dsh-client-test-runtime": "workspace:*",
-    "@deepseek-ai/dsh-util-file-drag": "workspace:*",
-    "@deepseek-ai/dsh-client-locale": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-context-menu": "workspace:*",
-    "@deepseek-ai/dsh-api-workspace-files": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-util-workspace-path": "workspace:*",
+    "@supernova-ai/snh-client-ui-primitives": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-client-ui-slots": "workspace:*",
+    "@supernova-ai/snh-api-session-controller": "workspace:*",
+    "@supernova-ai/snh-client-test-runtime": "workspace:*",
+    "@supernova-ai/snh-util-file-drag": "workspace:*",
+    "@supernova-ai/snh-client-locale": "workspace:*",
+    "@supernova-ai/snh-client-ui-context-menu": "workspace:*",
+    "@supernova-ai/snh-api-workspace-files": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-util-workspace-path": "workspace:*",
     "mime": "^4.1.0",
-    "@deepseek-ai/dsh-client-ui-renderer": "workspace:*"
+    "@supernova-ai/snh-client-ui-renderer": "workspace:*"
   },
   "files": [
     "locale/*.json",

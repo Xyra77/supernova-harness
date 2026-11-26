@@ -8,20 +8,20 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { mkdtemp, readFile, realpath, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import SandboxedFileSystem from '@deepseek-ai/dsh-fs-sandbox'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import SandboxPolicyService, { setSandboxMode } from '@deepseek-ai/dsh-sandbox-policy'
-import { Session, type SessionId, type SessionEvent } from '@deepseek-ai/dsh-session'
-import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
-import ApprovalService from '@deepseek-ai/dsh-user-approval'
+import { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import SandboxedFileSystem from '@supernova-ai/snh-fs-sandbox'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import SandboxPolicyService, { setSandboxMode } from '@supernova-ai/snh-sandbox-policy'
+import { Session, type SessionId, type SessionEvent } from '@supernova-ai/snh-session'
+import * as ToolFs from '@supernova-ai/snh-tool-fs'
+import ApprovalService from '@supernova-ai/snh-user-approval'
 import { MockAdapter, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
+import SubagentRuntime from '@supernova-ai/snh-subagent'
 import { mountLocalActivations, startPreparedActivation } from './local-activation.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 type Script = ConstructorParameters<typeof MockAdapter>[0]
 
@@ -30,7 +30,7 @@ const contexts: Context[] = []
 let workspace: string
 
 beforeEach(async () => {
-  workspace = await realpath(await mkdtemp(join(tmpdir(), 'dsh-inherit-')))
+  workspace = await realpath(await mkdtemp(join(tmpdir(), 'snh-inherit-')))
 })
 
 afterEach(async () => {
@@ -79,7 +79,7 @@ function toolResultTexts(agent: Agent): string[] {
 
 describe('in-process policy inheritance', () => {
   it.each(['auto', 'danger-full-access'] as const)(
-    'records the parent %s identity before publishing a DSH in-process child',
+    'records the parent %s identity before publishing a SNH in-process child',
     async (preset) => {
       const { ctx, parent } = await setupWalled([textResponse('child done')])
       parent.session.append('permission/preset', { preset })
@@ -182,7 +182,7 @@ describe('in-process policy inheritance', () => {
         .filter((block): block is Extract<ContentBlock, { type: 'text' }> => block.type === 'text')
         .map(block => block.text)
         .join('\n')
-      expect(contextText).toContain('Current DSH file policy: read-only')
+      expect(contextText).toContain('Current SNH file policy: read-only')
       expect(contextText).toContain('Approval prompts are disabled')
       // The statement rides runtime context; the system node (surface node 0) stays uniform.
       expect(contextText).toContain('You are a delegated subagent')

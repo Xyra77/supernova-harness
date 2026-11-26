@@ -3,28 +3,28 @@
 import { useState } from 'react'
 import { act, cleanup, createEvent, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { DeepSeekModelsEditor } from '../src/client/DeepSeekModelsEditor.tsx'
-import type { DeepSeekModelDraft } from '../src/client/DeepSeekModelsEditor.tsx'
+import { SuperNovaModelsEditor } from '../src/client/SuperNovaModelsEditor.tsx'
+import type { SuperNovaModelDraft } from '../src/client/SuperNovaModelsEditor.tsx'
 import { ModelListEditor } from '../src/client/ModelListEditor.tsx'
 import { en } from '../src/client/locales.ts'
 
 afterEach(() => { cleanup(); vi.restoreAllMocks() })
 
 function Editor(props: {
-  family: 'deepseek' | 'pi-ai'
-  initial: DeepSeekModelDraft[]
-  changed: (models: DeepSeekModelDraft[]) => void
+  family: 'supernova' | 'pi-ai'
+  initial: SuperNovaModelDraft[]
+  changed: (models: SuperNovaModelDraft[]) => void
   disabled?: boolean
 }) {
   const [models, setModels] = useState(props.initial)
   const shared = {
     models, disabled: props.disabled === true, overridden: true,
     t: (key: keyof typeof en) => en[key],
-    onChange: (next: DeepSeekModelDraft[]): void => { props.changed(next); setModels(next) },
+    onChange: (next: SuperNovaModelDraft[]): void => { props.changed(next); setModels(next) },
     onReset: (): void => { setModels(props.initial) },
   }
-  return props.family === 'deepseek'
-    ? <DeepSeekModelsEditor {...shared} defaultContextWindow={undefined} defaultMaxTokens={undefined} />
+  return props.family === 'supernova'
+    ? <SuperNovaModelsEditor {...shared} defaultContextWindow={undefined} defaultMaxTokens={undefined} />
     : <ModelListEditor
       {...shared} probe={{ settingsNs: 'llm-pi-ai' }} onBusyChange={() => {}}
       operations={{ discoverModels: vi.fn(), storeCredential: vi.fn(), removeCredential: vi.fn(), writeSettings: vi.fn() }}
@@ -61,7 +61,7 @@ function leave(target: HTMLElement, relatedTarget: Node | null = null) {
   fireEvent(target, event)
 }
 
-describe.each(['deepseek', 'pi-ai'] as const)('%s model ordering', (family) => {
+describe.each(['supernova', 'pi-ai'] as const)('%s model ordering', (family) => {
   it('keeps name editing expanded after blur and restores disclosure focus on collapse', () => {
     render(<Editor family={family} initial={[{ id: 'first', name: 'First' }]} changed={vi.fn()} />)
     const name = screen.getByLabelText<HTMLInputElement>(`${en.modelName} 1`)
@@ -93,7 +93,7 @@ describe.each(['deepseek', 'pi-ai'] as const)('%s model ordering', (family) => {
 
     const dataTransfer = transfer()
     fireEvent.dragStart(source, { dataTransfer })
-    expect(dataTransfer.setData).toHaveBeenCalledExactlyOnceWith('application/x-dsh-model-order', '1')
+    expect(dataTransfer.setData).toHaveBeenCalledExactlyOnceWith('application/x-snh-model-order', '1')
     fireEvent.dragOver(destination, { dataTransfer })
     expect(changed).not.toHaveBeenCalled()
     fireEvent.drop(destination, { dataTransfer })
@@ -269,7 +269,7 @@ it('does not accept another provider editor\'s dragged model', () => {
   const firstChanged = vi.fn()
   const secondChanged = vi.fn()
   const first = render(<Editor family="pi-ai" initial={[{ id: 'a' }, { id: 'b' }]} changed={firstChanged} />)
-  const second = render(<Editor family="deepseek" initial={[{ id: 'c' }, { id: 'd' }]} changed={secondChanged} />)
+  const second = render(<Editor family="supernova" initial={[{ id: 'c' }, { id: 'd' }]} changed={secondChanged} />)
   const source = within(first.container).getByRole<HTMLButtonElement>('button', { name: `${en.reorderModel} 1` })
   const destination = within(second.container).getByRole<HTMLButtonElement>('button', { name: `${en.reorderModel} 2` })
   const dataTransfer = transfer()

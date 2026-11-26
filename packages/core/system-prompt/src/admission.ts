@@ -1,7 +1,7 @@
 /** System admissions built from captured contributions and committed state. */
 
-import { createMessage } from '@deepseek-ai/dsh-llm'
-import type { SystemMessage, SystemPromptSectionState, TextBlock } from '@deepseek-ai/dsh-llm'
+import { createMessage } from '@supernova-ai/snh-llm'
+import type { SystemMessage, SystemPromptSectionState, TextBlock } from '@supernova-ai/snh-llm'
 import type { CommittedSection, SectionAdmissions } from './projection.ts'
 
 /** Captured instruction text, distinct from a source's retirement notice. */

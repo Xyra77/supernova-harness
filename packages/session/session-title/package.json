@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-session-title",
-  "description": "Log-backed session title service and provider registry for the DeepSeek Harness",
+  "name": "@supernova-ai/snh-session-title",
+  "description": "Log-backed session title service and provider registry for the SuperNova Harness",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -41,25 +41,25 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-session-projection": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-projection": "workspace:*"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-util-values": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/snh-util-values": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
     "zod": "4.6.6"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-agent-loop": "workspace:*",
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-session-persistence-jsonl": "workspace:*",
-    "@deepseek-ai/dsh-session-projection": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-agent-loop": "workspace:*",
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-persistence-jsonl": "workspace:*",
+    "@supernova-ai/snh-session-projection": "workspace:*"
   }
 }

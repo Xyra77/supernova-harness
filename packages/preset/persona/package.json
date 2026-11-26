@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-persona",
-  "description": "Composition-authored deployment persona section for the DeepSeek Harness",
+  "name": "@supernova-ai/snh-persona",
+  "description": "Composition-authored deployment persona section for the SuperNova Harness",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -32,16 +32,16 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-system-prompt": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/snh-system-prompt": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:~"
+    "@supernova-ai/schemastery": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-scope": "workspace:*",
-    "@deepseek-ai/dsh-system-prompt": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-session-projection": "workspace:*"
+    "@supernova-ai/snh-scope": "workspace:*",
+    "@supernova-ai/snh-system-prompt": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-session-projection": "workspace:*"
   }
 }

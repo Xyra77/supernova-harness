@@ -1,31 +1,31 @@
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import { mkdtempSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { Session, type SessionId } from '@deepseek-ai/dsh-session'
-import { SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session/types'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED } from '@deepseek-ai/dsh-tools'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { unsupportedModel, provideWorkingDirectoryFixture, unsupportedInbox } from '@deepseek-ai/dsh-agent-loop-testkit'
-import LocalJobRegistry from '@deepseek-ai/dsh-jobs-local'
-import type { JobId } from '@deepseek-ai/dsh-jobs'
-import * as ToolTasks from '@deepseek-ai/dsh-tool-jobs'
-import type { ShellExecution, ShellProcess } from '@deepseek-ai/dsh-shell'
-import { LocalBashExecutor } from '@deepseek-ai/dsh-bash-local'
-import { SandboxUnavailableError } from '@deepseek-ai/dsh-sandbox'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import * as ToolBash from '@deepseek-ai/dsh-tool-bash'
+import { Context } from '@supernova-ai/cordis'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import { Session, type SessionId } from '@supernova-ai/snh-session'
+import { SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session/types'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime, { TOOL_ABORTED } from '@supernova-ai/snh-tools'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { unsupportedModel, provideWorkingDirectoryFixture, unsupportedInbox } from '@supernova-ai/snh-agent-loop-testkit'
+import LocalJobRegistry from '@supernova-ai/snh-jobs-local'
+import type { JobId } from '@supernova-ai/snh-jobs'
+import * as ToolTasks from '@supernova-ai/snh-tool-jobs'
+import type { ShellExecution, ShellProcess } from '@supernova-ai/snh-shell'
+import { LocalBashExecutor } from '@supernova-ai/snh-bash-local'
+import { SandboxUnavailableError } from '@supernova-ai/snh-sandbox'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import * as ToolBash from '@supernova-ai/snh-tool-bash'
 import { processSources, ringDelta } from '../src/background.ts'
 import { renderPromoted } from '../src/render.ts'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import * as BashEnvPlugin from '@supernova-ai/snh-shell-env'
+import { brandString } from '@supernova-ai/snh-brand'
 
 // Readiness polling stays on wall time while a test controls the execution deadline.
 const pollingTimeout = setTimeout
@@ -34,7 +34,7 @@ const pollingTimeout = setTimeout
 const silentReader = { readFrom: (fromByte: number) => ({ text: '', nextOffset: fromByte, lossy: false }) }
 
 const testToolSignal = new AbortController().signal
-const spillDir = mkdtempSync(join(tmpdir(), 'dsh-tool-bash-background-spec-'))
+const spillDir = mkdtempSync(join(tmpdir(), 'snh-tool-bash-background-spec-'))
 
 /** Job harness with a fast registry pump for tests. */
 async function setup() {
@@ -126,7 +126,7 @@ describe('background bash output', () => {
     const started = await call(ctx, {
       command: 'true',
       description: 'test command',
-      workdir: '/nonexistent-dsh',
+      workdir: '/nonexistent-snh',
       run_in_background: true,
     })
     expect(text(started)).toMatch(/^started background job bash-[0-9a-f]{16}$/)

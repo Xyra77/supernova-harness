@@ -2,7 +2,7 @@
 
 [English](worktrees.md) | 中文
 
-实验性的 [`dsh-experimental-worktree`](../../packages/experimental/worktree/README.zh.md) 服务提供 `ctx.worktrees`。其消费方 [`enter_worktree`](../../packages/experimental/tool-worktree/README.zh.md) 通过[工作目录服务](working-directory.zh.md)选中池中的检出目录，没有同名检出目录时创建新的 Git 分支与检出目录；`exit_worktree` 回到 Session 来自的检出目录。[变更请求与工作树组合包](../../packages/experimental/forge-bundle/README.zh.md#use-this-package)通过 GUI 插件管理器一起加载这两个包，随安装提供但默认关闭。其他 profile 可以选择[独立工作树组合包](../../packages/experimental/tool-worktree/README.zh.md#use-this-package)，或显式挂载这两个包。
+实验性的 [`snh-experimental-worktree`](../../packages/experimental/worktree/README.zh.md) 服务提供 `ctx.worktrees`。其消费方 [`enter_worktree`](../../packages/experimental/tool-worktree/README.zh.md) 通过[工作目录服务](working-directory.zh.md)选中池中的检出目录，没有同名检出目录时创建新的 Git 分支与检出目录；`exit_worktree` 回到 Session 来自的检出目录。[变更请求与工作树组合包](../../packages/experimental/forge-bundle/README.zh.md#use-this-package)通过 GUI 插件管理器一起加载这两个包，随安装提供但默认关闭。其他 profile 可以选择[独立工作树组合包](../../packages/experimental/tool-worktree/README.zh.md#use-this-package)，或显式挂载这两个包。
 
 ## 创建与保留
 

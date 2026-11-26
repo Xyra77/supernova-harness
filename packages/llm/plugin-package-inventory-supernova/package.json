@@ -1,0 +1,68 @@
+{
+  "name": "@supernova-ai/snh-plugin-package-inventory-supernova",
+  "description": "Active Loader-backed plugin package inventory for official SuperNova LLM API requests",
+  "version": "0.2.3-alpha.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/llm/plugin-package-inventory-supernova"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./lib/types/types.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "locale/*.json",
+    "lib/index.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts",
+    "lib/types/**/*.d.ts.map",
+    "lib/**/*.js.map",
+    "src"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~"
+  },
+  "peerDependencies": {
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-agent-preset-registry": "workspace:*",
+    "@supernova-ai/snh-supernova-llm-api-extensions": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "@supernova-ai/snh-agent-preset-registry": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@supernova-ai/snh-app-boot": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis-plugin-include": "workspace:~",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-agent-preset-registry": "workspace:*",
+    "@supernova-ai/snh-supernova-llm-api-extensions": "workspace:*",
+    "@supernova-ai/snh-scope": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-projection": "workspace:*"
+  }
+}

@@ -1,18 +1,18 @@
 /** Opt-in native SDK compatibility check without screenshots, input, or permission prompts. */
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
 
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import ComputerUseRegistry from '@deepseek-ai/dsh-computer-use'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
+import { Context } from '@supernova-ai/cordis'
+import ComputerUseRegistry from '@supernova-ai/snh-computer-use'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
 import * as NativeProvider from '../src/index.ts'
 
-it.skipIf(process.env.DSH_COMPUTER_USE_NATIVE_E2E !== '1')(
+it.skipIf(process.env.SNH_COMPUTER_USE_NATIVE_E2E !== '1')(
   'loads the installed native SDK, reads permission status without prompting, and shuts down',
   { retry: 0 },
   async ({ signal }) => {

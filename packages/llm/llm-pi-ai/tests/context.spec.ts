@@ -1,20 +1,20 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { AttachmentId, ImageVariantId } from '@deepseek-ai/dsh-attachment/types'
+import type { AttachmentId, ImageVariantId } from '@supernova-ai/snh-attachment/types'
 import type {
   AttachmentStore,
   ImageAttachmentRef,
   ImageRequestTarget,
   RequestImageAttachment,
-} from '@deepseek-ai/dsh-attachment'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { createDeveloperMessage, type ToolCallId, createAssistantMessage, createMessage, createToolResultMessage, createUserMessage, offloadedImageText } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock, GenerateOptions, Message, RequestUserInput } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
+} from '@supernova-ai/snh-attachment'
+import { brandString } from '@supernova-ai/snh-brand'
+import { createDeveloperMessage, type ToolCallId, createAssistantMessage, createMessage, createToolResultMessage, createUserMessage, offloadedImageText } from '@supernova-ai/snh-llm'
+import type { ContentBlock, GenerateOptions, Message, RequestUserInput } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
 import { toPiContext } from '../src/context.ts'
 import type { PiImageRequestContext } from '../src/context.ts'
 import { toPiAssistant } from '../src/replay.ts'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'test': { kind: 'test' } & ContextFormed
   }
@@ -217,7 +217,7 @@ describe('pi-ai request context conversion', () => {
       height: 565,
     }))
     const context = await toPiContext(request([user([{ type: 'image', attachment: named }])]), imageContext(store, {
-      resolveImageAccess: () => ({ readonlyPath: '/tmp/dsh/objects/aa/object' }),
+      resolveImageAccess: () => ({ readonlyPath: '/tmp/snh/objects/aa/object' }),
     }))
     expect(context.messages[0]).toMatchObject({
       role: 'user',
@@ -226,7 +226,7 @@ describe('pi-ai request context conversion', () => {
         { type: 'image' },
       ],
     })
-    expect(JSON.stringify(context.messages[0])).toContain('/tmp/dsh/objects/aa/object')
+    expect(JSON.stringify(context.messages[0])).toContain('/tmp/snh/objects/aa/object')
     expect(JSON.stringify(context.messages[0])).toContain('request preview 1130x565px')
   })
 
@@ -416,7 +416,7 @@ describe('pi-ai request context conversion', () => {
 
   it('renders an offloaded occurrence with independently resolved access', async () => {
     const sized: ImageAttachmentRef = { ...ref, bytes: 3 }
-    const access = { readonlyPath: '/tmp/dsh-normalized-image' }
+    const access = { readonlyPath: '/tmp/snh-normalized-image' }
     const readImageRequest = vi.fn()
 
     const context = await toPiContext(request([

@@ -2,10 +2,10 @@
  * Runtime registry for generated Typert reflection, Remote invocations, and
  * dependency-inverted lookup/Context providers. It performs no TypeScript
  * analysis or schema generation.
- * @module @deepseek-ai/dsh-typert-registry
+ * @module @supernova-ai/snh-typert-registry
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
+import { Context, Service } from '@supernova-ai/cordis'
 import { z } from 'zod'
 import type {
   InvocationDescriptor,
@@ -32,7 +32,7 @@ import type {
   TypertRegistryChange,
   TypertRegistryListener,
   TypertRegistryContract,
-} from '@deepseek-ai/dsh-typert-protocol'
+} from '@supernova-ai/snh-typert-protocol'
 import type {
   TypertContribution,
   TypertFace,

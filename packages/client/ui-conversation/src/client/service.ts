@@ -7,25 +7,25 @@
  * through one property read; assignment through the tracker proxy and `#`
  * private fields bypass that rebinding.
  */
-import { Service } from '@deepseek-ai/cordis'
-import type { Context } from '@deepseek-ai/cordis'
-import { randomUUID } from '@deepseek-ai/dsh-util-crypto'
+import { Service } from '@supernova-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
+import { randomUUID } from '@supernova-ai/snh-util-crypto'
 // Type-only imports: a plugin-to-plugin value import is a bundle purity
 // error, so scope resolution goes through the sessions service (scopeOf
 // method) instead of the standalone helper.
 import type {
   ISessions, PendingSubmissionRetirement, SessionFace,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type {} from '@deepseek-ai/dsh-client-file-upload/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { FileAttachmentRef, ImageMediaType } from '@deepseek-ai/dsh-attachment'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { ObservableSnapshot, SnapshotStore } from '@deepseek-ai/dsh-client-store'
+} from '@supernova-ai/snh-api-session-controller/client'
+import type {} from '@supernova-ai/snh-client-file-upload/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type { FileAttachmentRef, ImageMediaType } from '@supernova-ai/snh-attachment'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import type { ObservableSnapshot, SnapshotStore } from '@supernova-ai/snh-client-store'
 import type {
   ComposerAttachment, ComposerFileAttachment, ComposerImageAttachment, DraftFileUpload,
 } from './contract/slots.ts'
-import type { QueueAction } from '@deepseek-ai/dsh-api-session-controller/types'
-import type { MessageId } from '@deepseek-ai/dsh-llm/types'
+import type { QueueAction } from '@supernova-ai/snh-api-session-controller/types'
+import type { MessageId } from '@supernova-ai/snh-llm/types'
 import type { ComposerBlocks } from './contract/composer-blocks.ts'
 import type {
   DraftAttachmentId, DraftAttachmentSerializationResult, SessionInputResolver, SubmitAttachment, SubmitOutcome,

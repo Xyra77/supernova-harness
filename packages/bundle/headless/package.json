@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-headless",
-  "description": "The dsh one-shot bundle: a direct core Agent/Session runner over dsh-base with no Host, HTTP, or browser layer",
+  "name": "@supernova-ai/snh-headless",
+  "description": "The snh one-shot bundle: a direct core Agent/Session runner over snh-base with no Host, HTTP, or browser layer",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -39,56 +39,56 @@
     "src"
   ],
   "license": "MIT",
-  "dsh": {
+  "snh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "dependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/dsh-cmdline": "workspace:*",
-    "@deepseek-ai/dsh-util-values": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-cmdline": "workspace:*",
+    "@supernova-ai/snh-util-values": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
     "commander": "^15.0.0"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-agent-default-model": "workspace:*",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-session-query": "workspace:*",
-    "@deepseek-ai/dsh-fs": "workspace:*",
-    "@deepseek-ai/dsh-permission-presets": "workspace:*",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:*",
-    "@deepseek-ai/dsh-subagent": "workspace:*",
-    "@deepseek-ai/dsh-user-approval": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-agent-default-model": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-query": "workspace:*",
+    "@supernova-ai/snh-fs": "workspace:*",
+    "@supernova-ai/snh-permission-presets": "workspace:*",
+    "@supernova-ai/snh-sandbox-policy": "workspace:*",
+    "@supernova-ai/snh-subagent": "workspace:*",
+    "@supernova-ai/snh-user-approval": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-agent-default-model": "workspace:*",
-    "@deepseek-ai/dsh-agent-loop": "workspace:*",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:*",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-session-query": "workspace:*",
-    "@deepseek-ai/dsh-fs": "workspace:*",
-    "@deepseek-ai/dsh-permission-presets": "workspace:*",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:*",
-    "@deepseek-ai/dsh-subagent": "workspace:*",
-    "@deepseek-ai/dsh-user-approval": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-agent-default-model": "workspace:*",
+    "@supernova-ai/snh-agent-loop": "workspace:*",
+    "@supernova-ai/snh-agent-loop-testkit": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-query": "workspace:*",
+    "@supernova-ai/snh-fs": "workspace:*",
+    "@supernova-ai/snh-permission-presets": "workspace:*",
+    "@supernova-ai/snh-sandbox-policy": "workspace:*",
+    "@supernova-ai/snh-subagent": "workspace:*",
+    "@supernova-ai/snh-user-approval": "workspace:*"
   },
   "peerDependenciesMeta": {
-    "@deepseek-ai/dsh-permission-presets": {
+    "@supernova-ai/snh-permission-presets": {
       "optional": true
     },
-    "@deepseek-ai/dsh-sandbox-policy": {
+    "@supernova-ai/snh-sandbox-policy": {
       "optional": true
     },
-    "@deepseek-ai/dsh-subagent": {
+    "@supernova-ai/snh-subagent": {
       "optional": true
     }
   }

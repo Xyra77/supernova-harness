@@ -2,26 +2,26 @@
  * Surface retention selection and the shared log-recorded compaction
  * transaction for automatic open-turn and manual idle-session compaction.
  *
- * @module @deepseek-ai/dsh-compaction-basic/region
+ * @module @supernova-ai/snh-compaction-basic/region
  */
 
 import { randomUUID } from 'node:crypto'
 import { isDeepStrictEqual } from 'node:util'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { CompactionId } from '@deepseek-ai/dsh-compaction/types'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { CompactionId } from '@supernova-ai/snh-compaction/types'
 import {
   ManualCompactionError,
   compactCheckpointSource,
   toolPairingBalancedAfter,
   toolPairingBalancedBefore,
-} from '@deepseek-ai/dsh-compaction'
-import type { CompactionResult } from '@deepseek-ai/dsh-compaction'
-import type { CommandId } from '@deepseek-ai/dsh-commands/types'
-import { createUserMessage, errorChain } from '@deepseek-ai/dsh-llm'
-import type { Message, UserMessage } from '@deepseek-ai/dsh-llm'
-import type { TokenMeasurement, TokenMeter } from '@deepseek-ai/dsh-token-meter'
-import { SessionSeq, type Session, type SessionEvent } from '@deepseek-ai/dsh-session'
-import type { Agent } from '@deepseek-ai/dsh-agent'
+} from '@supernova-ai/snh-compaction'
+import type { CompactionResult } from '@supernova-ai/snh-compaction'
+import type { CommandId } from '@supernova-ai/snh-commands/types'
+import { createUserMessage, errorChain } from '@supernova-ai/snh-llm'
+import type { Message, UserMessage } from '@supernova-ai/snh-llm'
+import type { TokenMeasurement, TokenMeter } from '@supernova-ai/snh-token-meter'
+import { SessionSeq, type Session, type SessionEvent } from '@supernova-ai/snh-session'
+import type { Agent } from '@supernova-ai/snh-agent'
 import { frameSummary } from './summarizer.ts'
 import type { SummarizationInput, SummaryResult } from './summarizer.ts'
 interface RegionDependencies {

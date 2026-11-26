@@ -53,7 +53,7 @@ describe('desktop toolchain preflight', () => {
   })
 
   it('reports the archive reader when it cannot run', async () => {
-    const empty = await mkdtemp(join(tmpdir(), 'dsh-no-tools-'))
+    const empty = await mkdtemp(join(tmpdir(), 'snh-no-tools-'))
     directories.push(empty)
     const saved = { PATH: process.env.PATH, Path: process.env.Path }
     try {
@@ -74,7 +74,7 @@ describe('desktop toolchain preflight', () => {
   })
 
   it('reports missing PowerShell before Windows packaging', async () => {
-    const empty = await mkdtemp(join(tmpdir(), 'dsh-no-pwsh-'))
+    const empty = await mkdtemp(join(tmpdir(), 'snh-no-pwsh-'))
     directories.push(empty)
     const failures = await probeDesktopToolchain('win32', { PATH: empty })
     expect(failures.find(failure => failure.tool === 'pwsh')?.detail).toContain('PowerShell 7')
@@ -86,7 +86,7 @@ describe('desktop toolchain preflight', () => {
   })
 
   it('writes nothing into the working directory while probing', async () => {
-    const directory = await mkdtemp(join(tmpdir(), 'dsh-probe-cwd-'))
+    const directory = await mkdtemp(join(tmpdir(), 'snh-probe-cwd-'))
     directories.push(directory)
     await writeFile(join(directory, 'sentinel'), '')
     await probeDesktopToolchain('darwin', {})

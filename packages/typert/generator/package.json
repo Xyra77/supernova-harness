@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-typert-generator",
+  "name": "@supernova-ai/snh-typert-generator",
   "description": "TypeScript project analyzer and model-driven Typert artifact generator",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -39,13 +39,13 @@
     "typescript": "^6.0.3"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-tools": "workspace:*",
-    "@deepseek-ai/dsh-tool-cordis": "workspace:*",
-    "@deepseek-ai/dsh-typert-registry": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-tools": "workspace:*",
+    "@supernova-ai/snh-tool-cordis": "workspace:*",
+    "@supernova-ai/snh-typert-registry": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
     "zod": "4.6.6"
   }
 }

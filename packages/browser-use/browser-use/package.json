@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-browser-use",
+  "name": "@supernova-ai/snh-browser-use",
   "description": "Exclusive named browser-use provider registration",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -37,10 +37,10 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-brand": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-brand": "workspace:*"
   }
 }

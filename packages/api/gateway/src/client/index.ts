@@ -4,13 +4,13 @@
  * participates in method lookup, invocation, or type exposure.
  */
 
-import { Service } from '@deepseek-ai/cordis'
-import { RemoteError, isRemoteUplinkItem, remoteErrorOf } from '@deepseek-ai/dsh-typert-protocol'
+import { Service } from '@supernova-ai/cordis'
+import { RemoteError, isRemoteUplinkItem, remoteErrorOf } from '@supernova-ai/snh-typert-protocol'
 export type { TypertGatewayFaultDetails } from '../remote-error-codes.ts'
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
 import type {
   ConnectionHandle,
-} from '@deepseek-ai/dsh-client-connection/client'
+} from '@supernova-ai/snh-client-connection/client'
 import type {
   InvocationDescriptor,
   TypertClientEventListener,
@@ -22,7 +22,7 @@ import type {
   TypertDisposer,
   TypertRemoteContribution,
   TypertRemoteEvent,
-} from '@deepseek-ai/dsh-typert-protocol'
+} from '@supernova-ai/snh-typert-protocol'
 import {
   ClientUplinkQueue,
   RemoteStreamCarrierError,
@@ -125,7 +125,7 @@ export interface RemoteHostFacts {
   readonly isLoopback: boolean
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** Generated Remote namespaces selected by the Client assembly. */
     remote: ClientRemote
@@ -873,7 +873,7 @@ function rebuiltFailure(error: { code: string; message: string; details: object 
 }
 
 type MarkedConnectionStreamFailure = Error & {
-  readonly dshRemoteStreamFailure?:
+  readonly snhRemoteStreamFailure?:
     | { readonly kind: 'remote'; readonly code: string; readonly details: object }
     | { readonly kind: 'carrier' }
 }
@@ -884,7 +884,7 @@ async function *normalizeConnectionStream(source: AsyncIterable<unknown>): Async
     yield * source
   } catch (error) {
     if (!(error instanceof Error)) throw error
-    const marker = (error as MarkedConnectionStreamFailure).dshRemoteStreamFailure
+    const marker = (error as MarkedConnectionStreamFailure).snhRemoteStreamFailure
     if (marker?.kind === 'remote') {
       throw new RemoteError(marker.code as never, error.message, marker.details as never)
     }

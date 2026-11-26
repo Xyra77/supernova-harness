@@ -1,7 +1,7 @@
 /**
  * Run serial browser owners before one bounded snapshot pool of the other projects
  * (scripts/web-snapshot-projects.ts).
- * `DSH_WEB_SNAPSHOT_SHARD=<index>/<count>` runs one weighted shard of the pool
+ * `SNH_WEB_SNAPSHOT_SHARD=<index>/<count>` runs one weighted shard of the pool
  * (scripts/web-snapshot-sequencer.ts); the serial files, which rewrite the shared
  * build output, run only in the last shard so no other shard needs to wait for them.
  */
@@ -15,12 +15,12 @@ import {
   parseWebSnapshotShard,
 } from './web-snapshot-projects.ts'
 
-const workerRaw = process.env.DSH_WEB_SNAPSHOT_WORKERS
+const workerRaw = process.env.SNH_WEB_SNAPSHOT_WORKERS
 const workers = Number.parseInt(workerRaw ?? '', 10)
 if (!Number.isSafeInteger(workers) || workers < 1 || String(workers) !== workerRaw) {
-  throw new Error(`DSH_WEB_SNAPSHOT_WORKERS must be a positive integer, got ${JSON.stringify(workerRaw)}.`)
+  throw new Error(`SNH_WEB_SNAPSHOT_WORKERS must be a positive integer, got ${JSON.stringify(workerRaw)}.`)
 }
-const shard = parseWebSnapshotShard(process.env.DSH_WEB_SNAPSHOT_SHARD)
+const shard = parseWebSnapshotShard(process.env.SNH_WEB_SNAPSHOT_SHARD)
 const shardArgs = shard === undefined ? [] : [`--shard=${String(shard.index)}/${String(shard.count)}`]
 const ownsSerialFiles = ownsWebSnapshotSerialFiles(shard)
 const invocation = pnpmInvocation(['exec', 'vitest', 'run', '--config', 'vitest.web.config.ts'])

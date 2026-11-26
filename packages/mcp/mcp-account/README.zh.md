@@ -3,13 +3,13 @@ description: "在插件页显示每个 MCP 连接器插件的 OAuth 服务器账
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-mcp-account
+# @supernova-ai/snh-mcp-account
 
 [English](README.md) | 中文
 
 ## 概述
 
-Linear、Notion 等 MCP 连接器插件通过 `ctx.mcpAccounts` 注册其 OAuth 服务器，在插件页显示账号。本服务把账号注册到[连接器账号注册表](../../client/ui-connector-account/README.zh.md)，并把 [MCP 管理器](../mcp-manager/README.zh.md)对该服务器的视图映射为区块：状态、进行中的授权，以及适用的按钮。连接、取消、退出登录和重试都通过 Host 上的管理器执行。每个连接器只提供点出其服务名称的文案。Web 与桌面端组合通过 [`dsh-web-app`](../../bundle/web-app/README.zh.md) 加载本包。
+Linear、Notion 等 MCP 连接器插件通过 `ctx.mcpAccounts` 注册其 OAuth 服务器，在插件页显示账号。本服务把账号注册到[连接器账号注册表](../../client/ui-connector-account/README.zh.md)，并把 [MCP 管理器](../mcp-manager/README.zh.md)对该服务器的视图映射为区块：状态、进行中的授权，以及适用的按钮。连接、取消、退出登录和重试都通过 Host 上的管理器执行。每个连接器只提供点出其服务名称的文案。Web 与桌面端组合通过 [`snh-web-app`](../../bundle/web-app/README.zh.md) 加载本包。
 
 ## 目录
 
@@ -28,7 +28,7 @@ Linear、Notion 等 MCP 连接器插件通过 `ctx.mcpAccounts` 注册其 OAuth 
 连接器的 Host 行在 `ctx.inject` 内向 MCP 管理器注册服务器、向本服务注册账号，因此没有本服务的组合（如 headless profile）加载连接器时不带页面：
 
 ```ts ignore-check
-import type {} from '@deepseek-ai/dsh-mcp-account'
+import type {} from '@supernova-ai/snh-mcp-account'
 
 export function apply(ctx: Context): void {
   ctx.inject(['mcpAccounts'], (scope) => {
@@ -57,7 +57,7 @@ export function apply(ctx: Context): void {
 | 已关闭 | 不可用 | 重试，即重启服务器 |
 | 等待凭据、已停用或失败 | 不可用 | 只有重启能恢复失败时才提供“重试” |
 
-授权失败后，未连接或不可用的区块还会显示授权未完成。每个区块下方的一行说明授权需要在运行 DSH 的这台电脑上的浏览器中完成。连接成功和退出登录会在发起它们的浏览器中显示连接器的提示。
+授权失败后，未连接或不可用的区块还会显示授权未完成。每个区块下方的一行说明授权需要在运行 SNH 的这台电脑上的浏览器中完成。连接成功和退出登录会在发起它们的浏览器中显示连接器的提示。
 
 -----
 

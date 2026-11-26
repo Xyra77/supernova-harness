@@ -6,12 +6,12 @@
  * Draft text and reference chips live in the shell's Lexical editor; the machine
  * here owns submission state (phase, claim, attempt).
  */
-import type { Context } from '@deepseek-ai/cordis'
-import type { SessionBinding } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { InboxState } from '@deepseek-ai/dsh-agent/types'
-import type { ObservableSnapshot, SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { Branded } from '@deepseek-ai/dsh-brand'
-import type { QuoteSummary } from '@deepseek-ai/dsh-client-ui-primitives'
+import type { Context } from '@supernova-ai/cordis'
+import type { SessionBinding } from '@supernova-ai/snh-api-session-controller/client'
+import type { InboxState } from '@supernova-ai/snh-agent/types'
+import type { ObservableSnapshot, SnapshotStore } from '@supernova-ai/snh-client-store'
+import type { Branded } from '@supernova-ai/snh-brand'
+import type { QuoteSummary } from '@supernova-ai/snh-client-ui-primitives'
 import type { ArbitrateKey, ArbitrateOutcome, DraftQuote, Occurrence, ReferenceInsert, TokenSpan } from './draft-editor.ts'
 import type { InputSubmitMode, MessageSubmission } from './composer-submission.ts'
 
@@ -137,7 +137,7 @@ export interface InputTriggerController {
   toggleSource(source: string, hit: InputTriggerHit): void
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Events {
     /**
      * Claim a command token for the scoped input machine.

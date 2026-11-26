@@ -1,9 +1,9 @@
 // Paste publishes clipboard data immediately and leaves it available after dispatching Control+V.
 using System.Runtime.InteropServices;
 using System.Text;
-using DeepSeek.Cua.Protocol;
+using SuperNova.Cua.Protocol;
 
-namespace DeepSeek.Cua.Windows;
+namespace SuperNova.Cua.Windows;
 
 internal sealed class ClipboardPaste
 {

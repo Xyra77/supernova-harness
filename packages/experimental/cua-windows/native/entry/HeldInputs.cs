@@ -1,8 +1,8 @@
 // Held keys and buttons share one dispatch order across all connections to this desktop executor.
 using System.Globalization;
-using DeepSeek.Cua.Protocol;
+using SuperNova.Cua.Protocol;
 
-namespace DeepSeek.Cua.Windows;
+namespace SuperNova.Cua.Windows;
 
 internal sealed class HeldInputs(Action<Win32.Input> send)
 {

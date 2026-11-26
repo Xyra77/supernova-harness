@@ -197,7 +197,7 @@ async function measureFixedColumn(browser: Browser, url: string): Promise<void> 
   try {
     const consoleWatch = watchConsole(page)
     await page.setViewportSize(FIXED_VIEWPORT)
-    await page.addInitScript(width => { localStorage.setItem('dsh.conversation.contentWidth', String(width)) }, FIXED_COLUMN_PX)
+    await page.addInitScript(width => { localStorage.setItem('snh.conversation.contentWidth', String(width)) }, FIXED_COLUMN_PX)
     const elements = await openLoadedSidebar(page, url)
     const panelSelector = '[data-sidebar-right-panel="push"][data-sidebar-right-open]'
     const panel = page.locator(panelSelector)
@@ -223,7 +223,7 @@ async function measureFixedColumn(browser: Browser, url: string): Promise<void> 
     }, panelSelector)
     await page.waitForFunction(() => (window as FixedWidthProbe).benchmarkWidths.column.size > 0)
     const reserveRoom = (): Promise<string> => page.locator('[data-session-panel-probe]').first().evaluate(node =>
-      getComputedStyle(node).getPropertyValue('--dsh-session-panel-reserve-room').trim())
+      getComputedStyle(node).getPropertyValue('--snh-session-panel-reserve-room').trim())
     let panelStart = FIXED_PANEL_START_PX
     for (const direction of [1, -1] as const) {
       expect(await page.evaluate(() => (window as FixedWidthProbe).benchmarkWidths.panel)).toBe(panelStart)

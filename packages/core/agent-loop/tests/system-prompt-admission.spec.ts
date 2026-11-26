@@ -1,23 +1,23 @@
-import { CompactionId } from '@deepseek-ai/dsh-compaction'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import { CompactionId } from '@supernova-ai/snh-compaction'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry, { type Agent, type ModelSelection } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { installModelSelection } from '@deepseek-ai/dsh-agent'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import LlmRuntime, { createUserMessage, LlmError, type ReasoningEffortId, type GenerateOptions } from '@deepseek-ai/dsh-llm'
-import { toPiContext } from '@deepseek-ai/dsh-llm-pi-ai/src/context.ts'
-import SessionStore, { Session, type SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry, { type Agent, type ModelSelection } from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { installModelSelection } from '@supernova-ai/snh-agent'
+import { brandString } from '@supernova-ai/snh-brand'
+import LlmRuntime, { createUserMessage, LlmError, type ReasoningEffortId, type GenerateOptions } from '@supernova-ai/snh-llm'
+import { toPiContext } from '@supernova-ai/snh-llm-pi-ai/src/context.ts'
+import SessionStore, { Session, type SessionId } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import { defineContentToolFixture } from '@supernova-ai/snh-tool-testkit'
 import { MockAdapter, textResponse } from './mock-adapter.ts'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
-    'test-compaction': { kind: 'test-compaction' } & import('@deepseek-ai/dsh-llm').ContextFormed
+    'test-compaction': { kind: 'test-compaction' } & import('@supernova-ai/snh-llm').ContextFormed
   }
 }
 
@@ -68,8 +68,8 @@ async function send(agent: Agent, text: string) {
   await agent.whenIdle()
 }
 
-function compact(agent: Agent, start: import('@deepseek-ai/dsh-session').SessionSeq,
-  end: import('@deepseek-ai/dsh-session').SessionSeq, turn: number | null) {
+function compact(agent: Agent, start: import('@supernova-ai/snh-session').SessionSeq,
+  end: import('@supernova-ai/snh-session').SessionSeq, turn: number | null) {
   const session = agent.session
   const nodes = session.surface.nodes
   const shadowedSeqs = nodes.slice(nodes.indexOf(start), nodes.indexOf(end) + 1)

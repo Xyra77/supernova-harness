@@ -1,9 +1,9 @@
-import { setSandboxMode } from '@deepseek-ai/dsh-sandbox-policy'
+import { setSandboxMode } from '@supernova-ai/snh-sandbox-policy'
 /** Change the file policy from outside the active PTC call while a nested tool awaits cancellation. */
-import type { Context } from '@deepseek-ai/cordis'
-import type { Session } from '@deepseek-ai/dsh-session'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-sandbox-policy'
+import type { Context } from '@supernova-ai/cordis'
+import type { Session } from '@supernova-ai/snh-session'
+import { defineTool } from '@supernova-ai/snh-tools'
+import type {} from '@supernova-ai/snh-sandbox-policy'
 
 export const name = 'ptc-mode-change'
 export const inject = ['tools', 'sandboxPolicy']

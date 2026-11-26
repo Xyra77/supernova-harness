@@ -1,13 +1,13 @@
 /** Remote contribution mounting and the `sidebar.session.action` layer. */
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-api-session-controller/client'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
-import type {} from '@deepseek-ai/dsh-deepseek-chat-import/remote'
-import type { TypertRemoteContribution } from '@deepseek-ai/dsh-typert-protocol'
+import type { Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-api-session-controller/client'
+import type {} from '@supernova-ai/snh-client-locale/client'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
+import type {} from '@supernova-ai/snh-client-ui-sidebar/client'
+import type {} from '@supernova-ai/snh-deepseek-chat-import/remote'
+import type { TypertRemoteContribution } from '@supernova-ai/snh-typert-protocol'
 import { ImportSessionsAction } from './ImportSessions.tsx'
-import type { DeepseekChatImportInjected, DeepseekChatImportOutcome } from './ImportSessions.tsx'
+import type { SupernovaChatImportInjected, SupernovaChatImportOutcome } from './ImportSessions.tsx'
 import { de, en, es, fr, ja, NS, pt, ru, zh } from './locales.ts'
 import { uploadArchive } from './upload.ts'
 
@@ -16,14 +16,14 @@ export const inject = ['remote', 'slots', 'locale', 'sessions']
 
 /**
  * Register the dictionaries and the `sidebar.session.action` layer.
- * @param ctx - Context injecting the mounted `deepseekChatImport` Remote namespace.
+ * @param ctx - Context injecting the mounted `supernovaChatImport` Remote namespace.
  */
 function registerUi(ctx: Context): void {
   ctx.effect(() => ctx.locale.register(NS, { zh, en, ja, es, fr, de, ru, pt }), 'deepseek-chat-import: dictionaries')
-  const injected: DeepseekChatImportInjected = {
-    importArchive: async (file, workspaceId, onProgress, signal): Promise<DeepseekChatImportOutcome> => {
+  const injected: SupernovaChatImportInjected = {
+    importArchive: async (file, workspaceId, onProgress, signal): Promise<SupernovaChatImportOutcome> => {
       try {
-        const limits = await ctx.remote.deepseekChatImport.limits(signal)
+        const limits = await ctx.remote.supernovaChatImport.limits(signal)
         if (!limits.ok) return { ok: false, reason: 'unknown', message: limits.error.message }
         const limit = limits.value.maxUploadBytes
         if (file.size > limit) return { ok: false, reason: 'too-large', message: `the file exceeds ${limit} bytes`, limit }
@@ -51,12 +51,12 @@ function registerUi(ctx: Context): void {
 /**
  * Mount the generated Remote contribution, then the UI that calls it.
  * @param ctx - browser plugin context.
- * @param contribution - generated `deepseekChatImport` Remote definitions.
+ * @param contribution - generated `supernovaChatImport` Remote definitions.
  * @returns disposer withdrawing the UI before the Remote namespace.
  */
 export async function mountImport(ctx: Context, contribution: TypertRemoteContribution): Promise<() => Promise<void>> {
   const unmountRemote = await ctx.remote.$mount(contribution)
-  const ui = ctx.inject(['remote.deepseekChatImport', ...inject.slice(1)], registerUi)
+  const ui = ctx.inject(['remote.supernovaChatImport', ...inject.slice(1)], registerUi)
   return async () => {
     await ui.dispose()
     await unmountRemote()

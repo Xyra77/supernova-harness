@@ -5,10 +5,10 @@ import { watch as nativeWatch } from 'node:fs'
 import { mkdir, rename, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { performance } from 'node:perf_hooks'
-import type { Context } from '@deepseek-ai/cordis'
-import type { FileSystem, FsObservation, FsTarget } from '@deepseek-ai/dsh-fs'
-import type { FsVersion } from '@deepseek-ai/dsh-fs'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import type { Context } from '@supernova-ai/cordis'
+import type { FileSystem, FsObservation, FsTarget } from '@supernova-ai/snh-fs'
+import type { FsVersion } from '@supernova-ai/snh-fs'
+import { brandString } from '@supernova-ai/snh-brand'
 import { WorkspaceFiles } from '../src/index.ts'
 import { failureOf, openWorkspace, type Harness } from './harness.ts'
 
@@ -18,7 +18,7 @@ let unwatch: Mock<() => Promise<void>>
 const cleanups: Array<() => Promise<unknown>> = []
 
 beforeEach(async () => {
-  harness = await openWorkspace('dsh-workspace-files-changes-')
+  harness = await openWorkspace('snh-workspace-files-changes-')
   unwatch = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
   watch = vi.spyOn(harness.ctx.fs, 'watch').mockResolvedValue(unwatch)
 })

@@ -5,14 +5,14 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import { SessionId, SessionSeq, SessionLogOffset, SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SessionPersistenceCorruptionError } from '@deepseek-ai/dsh-session-persistence'
+import { SessionId, SessionSeq, SessionLogOffset, SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session'
+import type { SessionEvent, SessionHeader } from '@supernova-ai/snh-session'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import { SessionPersistenceCorruptionError } from '@supernova-ai/snh-session-persistence'
 import { sqliteLogs, forkTrace } from './fixtures/store.ts'
 
 async function fixture() {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-sqlite-recovery-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-sqlite-recovery-'))
   const path = join(root, 'sessions.sqlite')
   const logs = sqliteLogs(path, root)
   onTestFinished(async () => { try { await logs.close() } finally { await rm(root, { recursive: true, force: true }) } })

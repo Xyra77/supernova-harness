@@ -3,13 +3,13 @@ description: "MCP client bridge for deployments and maintainers choosing, config
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-mcp-client
+# @supernova-ai/snh-mcp-client
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-mcp-client` lets the model use tools and resources from external Model Context Protocol (MCP) servers. Configure one server per entry; its tools use names such as `mcp__github__create_issue`. No server is enabled by default. Shipped profiles already provide [shared resource discovery and reading](../mcp-resources/README.md). An empty caller scope adds no MCP tools or prompt text. Server instructions join the logged system prompt as literal text; MCP prompt templates are unsupported. With `toolLoading: on-demand`, the system prompt lists the tools and each agent loads the ones it needs. Slow or crashed servers can delay startup or fail calls until recovery.
+`snh-mcp-client` lets the model use tools and resources from external Model Context Protocol (MCP) servers. Configure one server per entry; its tools use names such as `mcp__github__create_issue`. No server is enabled by default. Shipped profiles already provide [shared resource discovery and reading](../mcp-resources/README.md). An empty caller scope adds no MCP tools or prompt text. Server instructions join the logged system prompt as literal text; MCP prompt templates are unsupported. With `toolLoading: on-demand`, the system prompt lists the tools and each agent loads the ones it needs. Slow or crashed servers can delay startup or fail calls until recovery.
 
 ## Table of Contents
 
@@ -25,7 +25,7 @@ English | [中文](README.zh.md)
 <a id="use-this-package"></a>
 ## Use this package
 
-Add `dsh-mcp-client` when the model should call tools from an external MCP server as if they were native. Give each server a unique name and transport. The official SDK selects the 2026-07-28 protocol when available and falls back to supported legacy revisions. Choose stdio for a local program and Streamable HTTP for a service; stdio negotiation starts a temporary probe process before the serving process.
+Add `snh-mcp-client` when the model should call tools from an external MCP server as if they were native. Give each server a unique name and transport. The official SDK selects the 2026-07-28 protocol when available and falls back to supported legacy revisions. Choose stdio for a local program and Streamable HTTP for a service; stdio negotiation starts a temporary probe process before the serving process.
 
 ### Minimal configuration
 
@@ -33,7 +33,7 @@ Add one entry per server; nothing else is required. After the harness starts, th
 
 ```yaml
 - id: mcp-github
-  name: '@deepseek-ai/dsh-mcp-client'
+  name: '@supernova-ai/snh-mcp-client'
   config:
     serverName: github
     transport: stdio
@@ -43,7 +43,7 @@ Add one entry per server; nothing else is required. After the harness starts, th
       GITHUB_TOKEN: !!js process.env.GITHUB_TOKEN
 
 - id: mcp-web
-  name: '@deepseek-ai/dsh-mcp-client'
+  name: '@supernova-ai/snh-mcp-client'
   config:
     serverName: web
     transport: streamable-http
@@ -71,7 +71,7 @@ Add one entry per server; nothing else is required. After the harness starts, th
 | `toolLoading` | `eager` | `on-demand` keeps the server's tools out of every tool list until an agent loads them with `mcp__<serverName>__load_tools` |
 | `catalogDescriptionMaxLength` | `160` | Maximum characters of each tool summary in an on-demand server's prompt catalog |
 
-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-mcp-client) is the exhaustive source for every accepted field.
+The generated [configuration catalog](../../../docs/config-catalog.md#supernova-aisnh-mcp-client) is the exhaustive source for every accepted field.
 
 After startup, the server's tools appear as `mcp__<serverName>__<tool>` — try a prompt that uses one. If the initial connection fails, the harness still starts but no tools from that server appear, and an error is logged. Setting `failOnStartupError: true` rejects plugin activation; [app-boot's startup policy](../../boot/app-boot/README.md) still permits an optional MCP entry to fail without aborting the harness.
 
@@ -122,7 +122,7 @@ With template expansion enabled, failure diagnostics, tool-call failures, and MC
 
 Set `oauth.credentialKey` to a stable `mcp-client/<id>` record address for a Streamable HTTP entry and load a credentials provider. Declare `inject: [credentials]` on the owning plugin entry so startup waits for that provider. OAuth cannot be combined with an `Authorization` header. Connections and probes only use committed grants and never open a browser or register a client. Missing credentials, rejected tokens, or an explicit insufficient-scope response put connections in `waiting-authorization`; probes return a failed result. Its reason is `missing` without a saved grant, `expired` when the access token expired and no refresh token remains, `binding` when the grant no longer matches the resolved `url` or OAuth options, `rejected` when a server rejects the token, and `scope` when the server requires more scope. A tool call in flight when authorization is lost fails with that reason, for example `MCP OAuth requires authorization: scope`. Probes may refresh and persist expired grants. Ordinary HTTP 403 errors do not change authorization state. Diagnostics, tool-call failures, and `isError` results replace every access token the connection sent with `[redacted]`.
 
-Explicit authorization uses the [manager](../mcp-manager/README.md#oauth-authorization) with Authorization and WebServer services. `oauth.clientId` selects a pre-registered public client; omission permits dynamic registration during explicit authorization. `oauth.scope` overrides the challenge scope; dynamic registration reuse requires the same configured scope. Changing the resolved `url`, `oauth.clientId`, or `oauth.scope` makes the saved grant unusable with reason `binding`, so the entry needs explicit authorization again. `oauth.requestTimeoutMs` defaults to 10,000 ms and `oauth.authorizationTimeoutMs` to 600,000 ms. Cancellation and retries wait up to `closeTimeoutMs` for unfinished authorization cleanup. Authorization-server requests and an OAuth entry's MCP requests require HTTPS, except for loopback HTTP, and reject redirects, so `url` must name the final endpoint. The browser callback is a `webserver/request` listener that exists only during an attempt and answers before route admission, because the authorization server's redirect arrives as a cross-site navigation, which [Connection](../../client/connection/README.md) refuses for every route. The listener handles only requests whose authority and path equal the redirect URI's and passes every other request on. The callback answers with a static Chinese and English page that says whether DSH received the authorization or asks the user to retry in DSH; it never echoes callback parameters. Resource headers are excluded from authorization-server requests. A failed attempt's `lastError` is a fixed or local message, such as `MCP OAuth request failed`; when that message omits the upstream cause, the Host logs the cause as a warning with resolved template values, the authorization code, the PKCE verifier, client secrets, and issued tokens replaced by `[redacted]`. Refreshes serialize through the credential provider, preserve the grant identity, and retain the registered token endpoint authentication method; successful reauthorization replaces the identity and connection without entering `waiting-authorization`.
+Explicit authorization uses the [manager](../mcp-manager/README.md#oauth-authorization) with Authorization and WebServer services. `oauth.clientId` selects a pre-registered public client; omission permits dynamic registration during explicit authorization. `oauth.scope` overrides the challenge scope; dynamic registration reuse requires the same configured scope. Changing the resolved `url`, `oauth.clientId`, or `oauth.scope` makes the saved grant unusable with reason `binding`, so the entry needs explicit authorization again. `oauth.requestTimeoutMs` defaults to 10,000 ms and `oauth.authorizationTimeoutMs` to 600,000 ms. Cancellation and retries wait up to `closeTimeoutMs` for unfinished authorization cleanup. Authorization-server requests and an OAuth entry's MCP requests require HTTPS, except for loopback HTTP, and reject redirects, so `url` must name the final endpoint. The browser callback is a `webserver/request` listener that exists only during an attempt and answers before route admission, because the authorization server's redirect arrives as a cross-site navigation, which [Connection](../../client/connection/README.md) refuses for every route. The listener handles only requests whose authority and path equal the redirect URI's and passes every other request on. The callback answers with a static Chinese and English page that says whether SNH received the authorization or asks the user to retry in SNH; it never echoes callback parameters. Resource headers are excluded from authorization-server requests. A failed attempt's `lastError` is a fixed or local message, such as `MCP OAuth request failed`; when that message omits the upstream cause, the Host logs the cause as a warning with resolved template values, the authorization code, the PKCE verifier, client secrets, and issued tokens replaced by `[redacted]`. Refreshes serialize through the credential provider, preserve the grant identity, and retain the registered token endpoint authentication method; successful reauthorization replaces the identity and connection without entering `waiting-authorization`.
 
 -----
 
@@ -137,7 +137,7 @@ This section explains the design decisions behind the bridge and points at the c
 ### Design philosophy
 
 - **Server-qualified identity.** Every MCP tool has the stable identity `(serverName, rawName)`. The namespace is local configuration, never the remote `serverInfo.name` — the remote name is untrusted, not unique across deployments, and can change on upgrade, none of which may silently rename model-facing tools.
-- **Naming is a pinned contract.** Public names are pure functions of `(serverName, rawName)` and satisfy the DeepSeek function-name contract; lossy normalization appends a 12-hex-char SHA-256 hash so distinct identities never collapse. Session history and permission rules therefore survive HMR swaps, re-syncs, and other servers' changes.
+- **Naming is a pinned contract.** Public names are pure functions of `(serverName, rawName)` and satisfy the SuperNova function-name contract; lossy normalization appends a 12-hex-char SHA-256 hash so distinct identities never collapse. Session history and permission rules therefore survive HMR swaps, re-syncs, and other servers' changes.
 - **The raw name is the only wire name.** `tools/call` always receives the raw name; the public name is never sent to the server and never parsed to recover the raw name.
 - **Full generation or none.** Syncs swap generations atomically: a fetch failure keeps the previous generation, and a registration conflict rolls back the entire attempted generation.
 - **One canonical value, one projection.** The executor preserves the complete canonical MCP value and prepares ordered text/image content. `projectContent` installs that content before `tools/post-execute`, so retention sees real images. Subsequent content replacement, value replacement, and blocking remain authoritative.
@@ -184,7 +184,7 @@ A tool call uses the SDK with the raw name, complete tool definition, JSON argum
 
 ### Environment scrubbing (stdio)
 
-The child environment starts from the subprocess seam's `scrubbedParentEnv()` — ambient names matching `/KEY|PASSWORD|SECRET|TOKEN/i` and ambient `DSH_*` names are dropped — and the configured `env` merges on top, so explicit overrides survive. The MCP SDK owns the actual spawn; this package shares the scrub definition, not the spawn path.
+The child environment starts from the subprocess seam's `scrubbedParentEnv()` — ambient names matching `/KEY|PASSWORD|SECRET|TOKEN/i` and ambient `SNH_*` names are dropped — and the configured `env` merges on top, so explicit overrides survive. The MCP SDK owns the actual spawn; this package shares the scrub definition, not the spawn path.
 
 </details>
 
@@ -199,7 +199,7 @@ Read these pages when the package-level contract is not enough. They move from t
 - [historical MCP client plugin Agent Note](../../../.agents/notes/archived/feature/2026-07-07-mcp-client-plugin.md) — the naming invariants, discovery and execution design, alternatives, and consequences.
 - [Canonical tool output contract reference](../../core/tools/README.md) — how MCP results map into the canonical tool-output contract.
 - [Third-party memory MCP guide](../../../docs/user/guide/mcp-memory.md) — three memory-server overlays using this package.
-- [Generated configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-mcp-client) — every accepted config field and its source declaration.
+- [Generated configuration catalog](../../../docs/config-catalog.md#supernova-aisnh-mcp-client) — every accepted config field and its source declaration.
 
 -----
 
@@ -274,7 +274,7 @@ These limits describe what you cannot do with this plugin and when it needs oper
 - **Reconnect handles failed negotiation and transport close** — a failed initial connection or a crashed stdio child uses the configured reconnect budget. Ordinary HTTP request failures use the SDK transport's recovery; credential changes replace the connection.
 - **Image is the only durable rich-result bridge** — PNG, JPEG, WebP, and GIF enter Native context after exact capability proof. Audio and embedded-resource payloads remain execution-local with explicit diagnostics, while resource links preserve only their name and URI as text.
 - **Invalid protocol results or output schemas fail through the SDK** — the bridge does not accept legacy `toolResult` substitutes or bypass advertised schema validation.
-- **OAuth authorization needs a browser that reaches the Host web server directly** — the callback is that server's own origin: its bind address and port, over HTTPS when it serves TLS. A browser that reaches DSH only through a proxy or the Web app's `publicUrl` cannot finish authorization. A dynamic client registration is keyed by that callback, so a changed bind address or port, or a random port, registers a new client at the next explicit authorization; sign-out keeps the previous registration record.
+- **OAuth authorization needs a browser that reaches the Host web server directly** — the callback is that server's own origin: its bind address and port, over HTTPS when it serves TLS. A browser that reaches SNH only through a proxy or the Web app's `publicUrl` cannot finish authorization. A dynamic client registration is keyed by that callback, so a changed bind address or port, or a random port, registers a new client at the next explicit authorization; sign-out keeps the previous registration record.
 - **On-demand loading is outside tool restrictions** — loaded tools live in the calling agent's own scope, which `tools.restrict()` allow and deny masks do not filter, and those masks reject names absent from the inherited tool list. Deny a loadable tool by name with an execution guard (`tools.guard`). In PTC mode a program binds its tools when it starts, so a tool loaded inside `run_code` becomes callable from the next program.
 - **Task-required MCP tools are rejected at call time** — a tool that requires the task-based execution extension throws instead of bridging; the extension is not implemented.
 
@@ -287,7 +287,7 @@ These limits describe what you cannot do with this plugin and when it needs oper
 This Dev Note is working context for maintainers: open design questions and directions that are not decided. It is explicitly non-authoritative — shipped behavior, limits, and accepted rationale live in the sections above, the package code, and the linked Agent Notes.
 
 - The public-name algorithm is a v1 contract pinned by tests; changing it after release would break session history and permission rules.
-- A DSH-owned budget for notification-driven re-syncs is an open direction; configured `startupTimeoutMs` bounds startup attempts, while the SDK's 60-second default bounds re-sync requests.
+- A SNH-owned budget for notification-driven re-syncs is an open direction; configured `startupTimeoutMs` bounds startup attempts, while the SDK's 60-second default bounds re-sync requests.
 - MCP prompt templates need a separate user-selection and invocation mechanism.
 - The pinned MCP SDK is still evolving; a breaking upstream change requires updating the bridge.
 

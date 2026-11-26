@@ -1,20 +1,20 @@
 import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { createUserMessage, type ToolCallId, LlmAdapter } from '@deepseek-ai/dsh-llm'
-import type { GenerateOptions, StreamChunk } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
-import { Session, type SessionId, SessionLogOffset, type SessionEvent } from '@deepseek-ai/dsh-session'
-import AgentRegistry, { agentEvents, type Agent } from '@deepseek-ai/dsh-agent'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { unsupportedModel, unsupportedInbox, mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import * as timeContext from '@deepseek-ai/dsh-time-context'
-import type { Config } from '@deepseek-ai/dsh-time-context'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import { brandString } from '@supernova-ai/snh-brand'
+import { createUserMessage, type ToolCallId, LlmAdapter } from '@supernova-ai/snh-llm'
+import type { GenerateOptions, StreamChunk } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
+import { Session, type SessionId, SessionLogOffset, type SessionEvent } from '@supernova-ai/snh-session'
+import AgentRegistry, { agentEvents, type Agent } from '@supernova-ai/snh-agent'
+import { defineContentToolFixture } from '@supernova-ai/snh-tool-testkit'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { unsupportedModel, unsupportedInbox, mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import * as timeContext from '@supernova-ai/snh-time-context'
+import type { Config } from '@supernova-ai/snh-time-context'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'compaction-basic': { kind: 'compaction-basic' } & ContextFormed
     'time-context-test': { kind: 'time-context-test' } & ContextFormed

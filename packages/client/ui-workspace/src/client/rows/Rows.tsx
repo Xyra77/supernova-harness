@@ -11,30 +11,30 @@
  */
 import { useEffect, useRef } from 'react'
 import clsx from 'clsx'
-import type { PropsRenderSlots } from '@deepseek-ai/dsh-client-ui-slots'
+import type { PropsRenderSlots } from '@supernova-ai/snh-client-ui-slots'
 import {
   HoverCard, IconArchiveOutlineRegular, MarqueeText,
   IconFolderCloseRegular, IconFolderOpenRegular,
   IconNewChatOutlineRegular, IconPinFillRegular,
   IconTriangleRightFillRegular, IconUnarchiveOutlineRegular, relativeTime, StateDot, Tooltip, useHoverMarquee, useRowDragPreview,
-} from '@deepseek-ai/dsh-client-ui-primitives'
-import type { ShortcutCatalogEntry } from '@deepseek-ai/dsh-client-shortcuts/client'
-import type { StateDotState } from '@deepseek-ai/dsh-client-ui-primitives'
-import { abbreviateHomePath } from '@deepseek-ai/dsh-util-workspace-path'
-import type { WorkspaceId } from '@deepseek-ai/dsh-api-workspace-controller/client'
+} from '@supernova-ai/snh-client-ui-primitives'
+import type { ShortcutCatalogEntry } from '@supernova-ai/snh-client-shortcuts/client'
+import type { StateDotState } from '@supernova-ai/snh-client-ui-primitives'
+import { abbreviateHomePath } from '@supernova-ai/snh-util-workspace-path'
+import type { WorkspaceId } from '@supernova-ai/snh-api-workspace-controller/client'
 import type { SessionDragType, WorkspaceBrowserProps } from '../contract/slots.ts'
 import type { GroupNode, SearchResultNode, SessionNode } from '../tree.ts'
 import css from './Rows.module.css'
 
 /** Sidebar-owned layout values needed by row copies mounted outside the sidebar. */
 const DRAG_PREVIEW_PROPERTIES = [
-  '--dsh-sidebar-row-padding',
-  '--dsh-sidebar-label-gap',
-  '--dsh-sidebar-paint-inset',
+  '--snh-sidebar-row-padding',
+  '--snh-sidebar-label-gap',
+  '--snh-sidebar-paint-inset',
 ] as const
 
 /** Drag data type carrying a dragged Session row's id. */
-const SESSION_DRAG_TYPE: SessionDragType = 'application/x-dsh-session'
+const SESSION_DRAG_TYPE: SessionDragType = 'application/x-snh-session'
 
 /** The standard locale seat, prop-passed from the browser root. */
 type RowTranslate = WorkspaceBrowserProps['t']

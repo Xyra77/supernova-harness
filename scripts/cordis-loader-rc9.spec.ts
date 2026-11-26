@@ -3,10 +3,10 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { Context, FiberState } from '@deepseek-ai/cordis'
-import Loader, { EntryValidationError, Group, ModuleNotFoundError, type EntryOptions } from '@deepseek-ai/cordis-plugin-loader'
-import Include, { ConfigFileError } from '@deepseek-ai/cordis-plugin-include'
-import Schema from '@deepseek-ai/schemastery'
+import { Context, FiberState } from '@supernova-ai/cordis'
+import Loader, { EntryValidationError, Group, ModuleNotFoundError, type EntryOptions } from '@supernova-ai/cordis-plugin-loader'
+import Include, { ConfigFileError } from '@supernova-ai/cordis-plugin-include'
+import Schema from '@supernova-ai/schemastery'
 import { describe, expect, it, onTestFinished } from 'vitest'
 
 const Typed = Object.assign((_ctx: Context, _config: { value: number }) => {}, {
@@ -15,7 +15,7 @@ const Typed = Object.assign((_ctx: Context, _config: { value: number }) => {}, {
 
 // `rows.yml` is the file the root Include reads; other files are reachable through nested includes.
 async function fixture(files: Record<string, string>) {
-  const dir = await mkdtemp(join(tmpdir(), 'dsh-loader-rc9-'))
+  const dir = await mkdtemp(join(tmpdir(), 'snh-loader-rc9-'))
   const pathOf = (name: string) => join(dir, name)
   for (const [name, content] of Object.entries(files)) await writeFile(pathOf(name), content)
   const ctx = new Context()

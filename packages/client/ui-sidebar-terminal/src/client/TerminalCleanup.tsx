@@ -1,9 +1,9 @@
 /** Failed background cleanup remains actionable after the originating tab disappears. */
 import type { ReactNode } from 'react'
-import type { TerminalCloseFailure } from '@deepseek-ai/dsh-api-terminal-controller/client'
-import type { WebTerminalId } from '@deepseek-ai/dsh-api-terminal-controller/types'
-import type { HostObservable, InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
+import type { TerminalCloseFailure } from '@supernova-ai/snh-api-terminal-controller/client'
+import type { WebTerminalId } from '@supernova-ai/snh-api-terminal-controller/types'
+import type { HostObservable, InjectFace, PropsLocale, PropsRuntime } from '@supernova-ai/snh-client-ui-slots'
+import type {} from '@supernova-ai/snh-client-ui-layout/client'
 import type {} from './locales.ts'
 import css from './TerminalCleanup.module.css'
 

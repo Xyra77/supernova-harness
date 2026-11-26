@@ -3,7 +3,7 @@ description: "Parse Codex-style patches and apply hunks to text without filesyst
 kind: "package-library"
 ---
 
-# dsh-fs-patch
+# snh-fs-patch
 
 English | [中文](README.zh.md)
 
@@ -26,7 +26,7 @@ Parse a complete Codex-style patch into ordered file operations with `parsePatch
 Operations and hunks contain only JSON-serializable values, and parsing retains repeated paths in input order as unresolved strings.
 
 ```ts
-import { applyHunks, parsePatch } from '@deepseek-ai/dsh-fs-patch'
+import { applyHunks, parsePatch } from '@supernova-ai/snh-fs-patch'
 
 const operations = parsePatch('*** Begin Patch\n*** Update File: hello.txt\n-hello\n+hi\n*** End Patch')
 const operation = operations[0]
@@ -42,7 +42,7 @@ Malformed input throws `PatchParseError` with a one-based `lineNumber` and a cor
 <a id="compatibility"></a>
 ## Compatibility
 
-The reference is [OpenAI Codex rust-v0.158.0](https://github.com/openai/codex/tree/rust-v0.158.0/codex-rs/apply-patch/src): `parser.rs` and `streaming_parser.rs` for syntax, and `seek_sequence.rs` and `file_update.rs` for matching and `NormalizeToLf` reconstruction. `text_file.rs` documents the separate line-preserving representation. The [parser tests](tests/parse.spec.ts) and [text tests](tests/apply.spec.ts) adapt selected upstream cases, including `file_update_tests.rs` and `lib.rs`. The [LICENSE](LICENSE) retains OpenAI attribution and Apache-2.0 terms alongside the MIT license for DeepSeek contributions.
+The reference is [OpenAI Codex rust-v0.158.0](https://github.com/openai/codex/tree/rust-v0.158.0/codex-rs/apply-patch/src): `parser.rs` and `streaming_parser.rs` for syntax, and `seek_sequence.rs` and `file_update.rs` for matching and `NormalizeToLf` reconstruction. `text_file.rs` documents the separate line-preserving representation. The [parser tests](tests/parse.spec.ts) and [text tests](tests/apply.spec.ts) adapt selected upstream cases, including `file_update_tests.rs` and `lib.rs`. The [LICENSE](LICENSE) retains OpenAI attribution and Apache-2.0 terms alongside the MIT license for SuperNova contributions.
 
 ### Parsing
 
@@ -76,7 +76,7 @@ EOF before any hunk has no effect, matching the reference; an update still requi
 | Context lines | Replace the complete matched region from patch text, including tolerated context differences. |
 | No hunks | Still perform the same reconstruction, so a missing terminal LF is added and one terminal empty line can be consumed. |
 
-The intentional differences from Codex are ownership and result reporting: the DSH provider preserves line-ending style, so the matcher sees only LF-normalized text and `PreserveLineEndings` is not implemented. CR is an ordinary character: callers must normalize CRLF first and restore the chosen style afterward. Match failures return structured data rather than Codex's path-bearing errors, so the caller owns file identification and user-facing diagnostics.
+The intentional differences from Codex are ownership and result reporting: the SNH provider preserves line-ending style, so the matcher sees only LF-normalized text and `PreserveLineEndings` is not implemented. CR is an ordinary character: callers must normalize CRLF first and restore the chosen style afterward. Match failures return structured data rather than Codex's path-bearing errors, so the caller owns file identification and user-facing diagnostics.
 
 <a id="understand-the-implementation"></a>
 ## Understand the implementation

@@ -2,7 +2,7 @@
 
 [English](responding-to-pr-review-on-a-stack.md) | 中文
 
-评审意见可能同时针对一条依赖堆叠（`A ← B ← C …`）中的多个 PR（Pull Request）。请通过 GitHub 官方的堆叠 PR 功能保持这条链的关联。本指南负责评审修复的归属与传播；[dsh-merging-stacked-prs](../../.agents/skills/dsh-merging-stacked-prs/SKILL.md) skill（技能）负责检查关联关系和落地。
+评审意见可能同时针对一条依赖堆叠（`A ← B ← C …`）中的多个 PR（Pull Request）。请通过 GitHub 官方的堆叠 PR 功能保持这条链的关联。本指南负责评审修复的归属与传播；[snh-merging-stacked-prs](../../.agents/skills/snh-merging-stacked-prs/SKILL.md) skill（技能）负责检查关联关系和落地。
 
 ## 基本规则
 
@@ -17,7 +17,7 @@
 1. 在行动之前先就事论事地审视每条评论：对照代码验证其论断——评审者指出了正确的症状，但仍可能误诊原因。
 2. 将每个被接受的发现映射到引入该问题的 PR，并在那里修复。
 3. 将修复后的层按顺序传播到每个受影响的子 PR：
-   - **原生级联 rebase：** 使用 `gh stack rebase`，验证所有已改写的层，然后通过 `gh stack push` 发布；也可以使用 `gh stack sync`，该命令可能先发布，因此必须按照 [dsh-pre-push-checks](../../.agents/skills/dsh-pre-push-checks/SKILL.md) 在同步后立即验证。
+   - **原生级联 rebase：** 使用 `gh stack rebase`，验证所有已改写的层，然后通过 `gh stack push` 发布；也可以使用 `gh stack sync`，该命令可能先发布，因此必须按照 [snh-pre-push-checks](../../.agents/skills/snh-pre-push-checks/SKILL.md) 在同步后立即验证。
    - **Merge-forward（仅在 PR 作者明确要求时）：** 将修复后的父分支合并到其子分支，验证子分支，然后继续沿堆叠向上传播。保留每个正在处理的检查点。
 4. 委派的修复需要信任但验证：subagent 的报告描述的是意图，不一定是实际落地的内容。请亲自在实际代码树上重新运行门禁；对于回归守卫，要证明它在未修复的代码上**失败**（引入回归、观察变红、再还原）——两种情况都通过的守卫什么也守不住。subagent 将问题重新定性为「已处理」时，这是一个需要亲自深入的信号。
 5. 在评审线程中回复（`gh api repos/{owner}/{repo}/pulls/{pr}/comments/{id}/replies`），而非发顶层评论；说明修复内容及当前承载修复的 commit 或 head。

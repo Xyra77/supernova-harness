@@ -5,17 +5,17 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { promisify } from 'node:util'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { unsupportedInbox, unsupportedModel } from '@deepseek-ai/dsh-agent-loop-testkit'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { Session } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import WorkingDirectoryService from '@deepseek-ai/dsh-working-directory'
+import { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { unsupportedInbox, unsupportedModel } from '@supernova-ai/snh-agent-loop-testkit'
+import LocalFileSystem from '@supernova-ai/snh-fs-local'
+import SandboxPolicyService from '@supernova-ai/snh-sandbox-policy'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { Session } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import WorkingDirectoryService from '@supernova-ai/snh-working-directory'
 
 const execute = promisify(execFile)
 
@@ -40,7 +40,7 @@ afterEach(async () => {
 
 /** A scratch directory holding a committed repository and room for checkouts beside it. */
 async function scratch(): Promise<{ base: string; repo: string }> {
-  const base = await realpath(await mkdtemp(join(tmpdir(), 'dsh-policy-root-')))
+  const base = await realpath(await mkdtemp(join(tmpdir(), 'snh-policy-root-')))
   cleanups.push(() => rm(base, { recursive: true, force: true }))
   const repo = join(base, 'repo')
   await mkdir(repo)

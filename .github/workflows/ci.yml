@@ -9,7 +9,7 @@ env:
   PRIMARY_NODE_VERSION: '^24.22.3'
   # CI runs must never report to the production telemetry endpoint baked
   # into apps/cli/cordis.yml (AppCLIEntry disables the row when set).
-  DSH_TELEMETRY_DISABLED: '1'
+  SNH_TELEMETRY_DISABLED: '1'
 
 # Cancel a superseded pull-request run on a new push so a fresh head does not
 # queue a second full run behind a stale one (paid enterprise runners
@@ -27,8 +27,8 @@ jobs:
         os: [linux, macos]
     runs-on: >-
       ${{ matrix.os == 'macos' && 'macos-latest'
-          || vars.DSH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-4vcpu-ubuntu-2404'
-          || vars.DSH_CI_FAILOVER_LINUX == 'selfhosted'
+          || vars.SNH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-4vcpu-ubuntu-2404'
+          || vars.SNH_CI_FAILOVER_LINUX == 'selfhosted'
           && github.event.pull_request.user.login != 'dependabot[bot]'
           && fromJSON('["self-hosted", "linux", "x64", "vm-backup"]')
           || 'ubuntu-latest' }}
@@ -50,7 +50,7 @@ jobs:
           dest: ${{ runner.temp }}/setup-pnpm-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Install only publisher production dependencies
         working-directory: publisher-isolated
-        run: pnpm --filter @deepseek-ai/dsh-desktop-publisher --fail-if-no-match install --prod --frozen-lockfile --ignore-scripts
+        run: pnpm --filter @supernova-ai/snh-desktop-publisher --fail-if-no-match install --prod --frozen-lockfile --ignore-scripts
       - name: Load publisher without Desktop or root development dependencies
         working-directory: publisher-isolated/apps/desktop-publisher
         run: node --import tsx tests/isolated-install.mjs
@@ -63,7 +63,7 @@ jobs:
   # snapshot shards restore its output instead of rebuilding.
   #
   # FAILOVER (Linux): each Linux enterprise job resolves its pool through the
-  # DSH_CI_FAILOVER_LINUX repository variable. Unset (normal), the expressions
+  # SNH_CI_FAILOVER_LINUX repository variable. Unset (normal), the expressions
   # pick the hosted enterprise pools below. Setting the variable to
   # 'selfhosted' (repo Settings → Actions → Variables; writer-manageable
   # repository state — not PR-editable, no merge required) retargets them
@@ -75,22 +75,22 @@ jobs:
   # .agents/notes/implemented/process/2026-09-09-blacksmith-failover-leg.md). The
   # in-house pool's readiness is re-proven on every master push by the
   # serial-linux-selfhosted standby lane in ci-master.yml. Native Windows jobs
-  # and their separate DSH_CI_FAILOVER_WINDOWS switch live in ci-windows.yml.
+  # and their separate SNH_CI_FAILOVER_WINDOWS switch live in ci-windows.yml.
   node-24:
     if: github.event_name == 'pull_request'
     runs-on: >-
-      ${{ vars.DSH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-8vcpu-ubuntu-2404'
-          || vars.DSH_CI_FAILOVER_LINUX == 'selfhosted'
+      ${{ vars.SNH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-8vcpu-ubuntu-2404'
+          || vars.SNH_CI_FAILOVER_LINUX == 'selfhosted'
           && github.event.pull_request.user.login != 'dependabot[bot]'
           && fromJSON('["self-hosted", "linux", "x64", "vm-backup"]')
-          || 'dsh-ubuntu-24-04-16core' }}
+          || 'snh-ubuntu-24-04-16core' }}
     name: node 24 / static
     env:
       # Shared hosts expose host CPUs, not an isolated allocation.
-      DSH_GATE_CONCURRENCY: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '8' || '' }}
+      SNH_GATE_CONCURRENCY: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '8' || '' }}
       # Stop the aggregate at the first blocking gate failure so a red run
       # does not keep burning enterprise runner time on the remaining gates.
-      DSH_GATE_FAIL_FAST: '1'
+      SNH_GATE_FAIL_FAST: '1'
     steps:
       # Runner cleanup owns tool caches and fixtures, including cancelled runs.
       - name: Use runner-owned temporary storage
@@ -128,7 +128,7 @@ jobs:
       # compression and upload on the paid latency-critical path. Skipped
       # under failover — see the coverage lane's identical rationale.
       - uses: actions/cache/restore@v6.1.0
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         with:
           path: ${{ steps.pnpm-store.outputs.path }}
           key: ${{ runner.os }}-node-${{ env.PRIMARY_NODE_VERSION }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
@@ -140,17 +140,17 @@ jobs:
 
       - name: Run static gates
         env:
-          DSH_ARCHIVE_BASE_REF: ${{ github.event.pull_request.base.sha }}
+          SNH_ARCHIVE_BASE_REF: ${{ github.event.pull_request.base.sha }}
         run: pnpm run check:ci:static
 
   node-24-coverage:
     if: github.event_name == 'pull_request'
     runs-on: >-
-      ${{ vars.DSH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-16vcpu-ubuntu-2404'
-          || vars.DSH_CI_FAILOVER_LINUX == 'selfhosted'
+      ${{ vars.SNH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-16vcpu-ubuntu-2404'
+          || vars.SNH_CI_FAILOVER_LINUX == 'selfhosted'
           && github.event.pull_request.user.login != 'dependabot[bot]'
           && fromJSON('["self-hosted", "linux", "x64", "vm-backup"]')
-          || 'dsh-ubuntu-24-04-16core' }}
+          || 'snh-ubuntu-24-04-16core' }}
     # Two instrumented file shards run on separate runners; the first also
     # runs the uninstrumented heavy suites. node-24-coverage-report merges the
     # shard blobs and owns the thresholds and the duration history.
@@ -160,11 +160,11 @@ jobs:
         shard: [1, 2]
     name: node 24 / coverage ${{ matrix.shard }}/2
     env:
-      DSH_COVERAGE_SHARD: ${{ matrix.shard }}/2
+      SNH_COVERAGE_SHARD: ${{ matrix.shard }}/2
       # Shared hosts expose host CPUs, not an isolated allocation.
-      DSH_COVERAGE_MAX_WORKERS: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '6' || '' }}
-      DSH_COVERAGE_PARTITIONS: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '4' || '' }}
-      DSH_GATE_CONCURRENCY: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '3' || '' }}
+      SNH_COVERAGE_MAX_WORKERS: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '6' || '' }}
+      SNH_COVERAGE_PARTITIONS: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '4' || '' }}
+      SNH_GATE_CONCURRENCY: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '3' || '' }}
       # Managed-scope teardown cases run past the default per-test budget when
       # this lane's partitions, workers, and sibling gates share one host: the
       # disposal cases in subprocess-local and bash-sandbox exceeded 5000ms on
@@ -172,10 +172,10 @@ jobs:
       # the budget on the in-house pool; the lane is green with this value
       # (run 34457655892). The Windows coverage lane grants the same budget for
       # the same reason.
-      DSH_COVERAGE_TEST_TIMEOUT_MS: '90000'
+      SNH_COVERAGE_TEST_TIMEOUT_MS: '90000'
       # A gate failure aborts the sibling gate instead of waiting out its
       # multi-minute instrumented run.
-      DSH_GATE_FAIL_FAST: '1'
+      SNH_GATE_FAIL_FAST: '1'
     steps:
       # Runner cleanup owns tool caches and fixtures, including cancelled runs.
       - name: Use runner-owned temporary storage
@@ -190,9 +190,9 @@ jobs:
         uses: actions/cache/restore@v6.1.0
         with:
           path: .coverage-times.json
-          key: coverage-times-Linux-${{ runner.environment }}-${{ vars.DSH_CI_FAILOVER_LINUX || 'enterprise' }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: coverage-times-Linux-${{ runner.environment }}-${{ vars.SNH_CI_FAILOVER_LINUX || 'enterprise' }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            coverage-times-Linux-${{ runner.environment }}-${{ vars.DSH_CI_FAILOVER_LINUX || 'enterprise' }}-
+            coverage-times-Linux-${{ runner.environment }}-${{ vars.SNH_CI_FAILOVER_LINUX || 'enterprise' }}-
 
       # Redirect the Node compile cache (enabled by pnpm and TypeScript) off
       # the root partition's /tmp before the first pnpm call in this lane.
@@ -218,7 +218,7 @@ jobs:
       # Self-hosted runners reuse the shared persistent pnpm store.
       # Hosted runners restore the remote cache into their ephemeral store.
       - uses: actions/cache/restore@v6.1.0
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         with:
           path: ${{ steps.pnpm-store.outputs.path }}
           key: ${{ runner.os }}-node-${{ env.PRIMARY_NODE_VERSION }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
@@ -229,10 +229,10 @@ jobs:
       # layout, so the archive cache follows the hosted-only pnpm store guard.
       - name: Restore verified bubblewrap archive
         id: bubblewrap-cache
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         uses: actions/cache/restore@v6.1.0
         with:
-          path: ~/.cache/dsh-ci/bubblewrap
+          path: ~/.cache/snh-ci/bubblewrap
           key: bubblewrap-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/prepare-ci-bubblewrap.sh') }}
 
       - name: Install dependencies and prepare bubblewrap
@@ -252,10 +252,10 @@ jobs:
       # is re-downloaded but not re-saved (the key already exists), so a tampered
       # entry survives until eviction; that needs deliberate cache poisoning.
       - name: Save verified bubblewrap archive
-        if: (vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]') && steps.bubblewrap-cache.outputs.cache-hit != 'true'
+        if: (vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]') && steps.bubblewrap-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6.1.0
         with:
-          path: ~/.cache/dsh-ci/bubblewrap
+          path: ~/.cache/snh-ci/bubblewrap
           key: bubblewrap-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/prepare-ci-bubblewrap.sh') }}
 
       - name: Run coverage shard
@@ -281,11 +281,11 @@ jobs:
     needs: node-24-coverage
     if: github.event_name == 'pull_request'
     runs-on: >-
-      ${{ vars.DSH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-8vcpu-ubuntu-2404'
-          || vars.DSH_CI_FAILOVER_LINUX == 'selfhosted'
+      ${{ vars.SNH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-8vcpu-ubuntu-2404'
+          || vars.SNH_CI_FAILOVER_LINUX == 'selfhosted'
           && github.event.pull_request.user.login != 'dependabot[bot]'
           && fromJSON('["self-hosted", "linux", "x64", "vm-backup"]')
-          || 'dsh-ubuntu-24-04-8core' }}
+          || 'snh-ubuntu-24-04-8core' }}
     name: node 24 / coverage report
     steps:
       # Runner cleanup owns tool caches and fixtures, including cancelled runs.
@@ -321,7 +321,7 @@ jobs:
       # Self-hosted runners reuse the shared persistent pnpm store.
       # Hosted runners restore the remote cache into their ephemeral store.
       - uses: actions/cache/restore@v6.1.0
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         with:
           path: ${{ steps.pnpm-store.outputs.path }}
           key: ${{ runner.os }}-node-${{ env.PRIMARY_NODE_VERSION }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
@@ -350,7 +350,7 @@ jobs:
         uses: actions/cache/save@v6.1.0
         with:
           path: .coverage-times.json
-          key: coverage-times-Linux-${{ runner.environment }}-${{ vars.DSH_CI_FAILOVER_LINUX || 'enterprise' }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: coverage-times-Linux-${{ runner.environment }}-${{ vars.SNH_CI_FAILOVER_LINUX || 'enterprise' }}-${{ github.run_id }}-${{ github.run_attempt }}
 
   # Lint and duplication get their own lane instead of riding the artifact
   # consumers: a red lint no longer costs the snapshot and artifact consumers a
@@ -359,16 +359,16 @@ jobs:
   node-24-lint:
     if: github.event_name == 'pull_request'
     runs-on: >-
-      ${{ vars.DSH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-8vcpu-ubuntu-2404'
-          || vars.DSH_CI_FAILOVER_LINUX == 'selfhosted'
+      ${{ vars.SNH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-8vcpu-ubuntu-2404'
+          || vars.SNH_CI_FAILOVER_LINUX == 'selfhosted'
           && github.event.pull_request.user.login != 'dependabot[bot]'
           && fromJSON('["self-hosted", "linux", "x64", "vm-backup"]')
-          || 'dsh-ubuntu-24-04-16core' }}
+          || 'snh-ubuntu-24-04-16core' }}
     name: node 24 / lint
     env:
       # Shared hosts expose host CPUs, not an isolated allocation.
-      DSH_GATE_CONCURRENCY: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '8' || '' }}
-      DSH_OXLINT_THREADS: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '8' || '' }}
+      SNH_GATE_CONCURRENCY: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '8' || '' }}
+      SNH_OXLINT_THREADS: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '8' || '' }}
     steps:
       # Runner cleanup owns tool caches and fixtures, including cancelled runs.
       - name: Use runner-owned temporary storage
@@ -399,7 +399,7 @@ jobs:
           echo "path=$store_path" >> "$GITHUB_OUTPUT"
 
       - uses: actions/cache/restore@v6.1.0
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         with:
           path: ${{ steps.pnpm-store.outputs.path }}
           key: ${{ runner.os }}-node-${{ env.PRIMARY_NODE_VERSION }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
@@ -425,7 +425,7 @@ jobs:
     needs: node-24-build
     if: github.event_name == 'pull_request'
     runs-on: >-
-      ${{ vars.DSH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-4vcpu-ubuntu-2404'
+      ${{ vars.SNH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-4vcpu-ubuntu-2404'
           || 'ubuntu-24.04' }}
     strategy:
       fail-fast: false
@@ -443,7 +443,7 @@ jobs:
     # Linux there.
     timeout-minutes: 20
     env:
-      DSH_BENCH_PHASE: ${{ matrix.phase }}
+      SNH_BENCH_PHASE: ${{ matrix.phase }}
     steps:
       - uses: actions/checkout@v7.0.1
         with:
@@ -488,7 +488,7 @@ jobs:
           # -m stamps restored files with the extraction time: newer than this
           # checkout and never in the future.
           zstd -dc -T0 "$archive" | tar -xmf -
-          test -f apps/cli/lib/bin.js && test -f apps/web/dist/index.html && test -f .dsh-build/client-build-environment.json
+          test -f apps/cli/lib/bin.js && test -f apps/web/dist/index.html && test -f .snh-build/client-build-environment.json
 
       # node-24-build can run on another pool (vm-backup under self-hosted
       # failover) while the benchmarks stay on hosted Linux, so the restored
@@ -505,11 +505,11 @@ jobs:
           fi
 
       - name: Install benchmark browser and hosted dependencies
-        run: pnpm --filter @deepseek-ai/dsh-benchmarks exec playwright install --with-deps chromium
+        run: pnpm --filter @supernova-ai/snh-benchmarks exec playwright install --with-deps chromium
 
       - name: Run performance benchmarks
         env:
-          DSH_GATE_VERBOSE: '1'
+          SNH_GATE_VERBOSE: '1'
         run: pnpm run check:ci:bench-prebuilt
 
       # The report global teardown writes results.jsonl and environment.json
@@ -521,7 +521,7 @@ jobs:
         uses: actions/upload-artifact@v7.0.1
         with:
           name: benchmark-results-${{ matrix.shard }}
-          path: benchmarks/.dsh-report/
+          path: benchmarks/.snh-report/
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 7
@@ -535,7 +535,7 @@ jobs:
     needs: node-24-bench
     if: ${{ !cancelled() && github.event_name == 'pull_request' }}
     runs-on: >-
-      ${{ vars.DSH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-2vcpu-ubuntu-2404'
+      ${{ vars.SNH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-2vcpu-ubuntu-2404'
           || 'ubuntu-latest' }}
     name: node 24 / benchmark report
     steps:
@@ -562,14 +562,14 @@ jobs:
             echo "::warning::No benchmark phase uploaded results."
             exit 0
           fi
-          node scripts/render-benchmark-report.ts benchmarks/.dsh-report "${phases[@]}"
+          node scripts/render-benchmark-report.ts benchmarks/.snh-report "${phases[@]}"
 
       - name: Upload scaled benchmark report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7.0.1
         with:
           name: benchmark-report
-          path: benchmarks/.dsh-report/
+          path: benchmarks/.snh-report/
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 7
@@ -580,18 +580,18 @@ jobs:
   node-24-build:
     if: github.event_name == 'pull_request'
     runs-on: >-
-      ${{ vars.DSH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-16vcpu-ubuntu-2404'
-          || vars.DSH_CI_FAILOVER_LINUX == 'selfhosted'
+      ${{ vars.SNH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-16vcpu-ubuntu-2404'
+          || vars.SNH_CI_FAILOVER_LINUX == 'selfhosted'
           && github.event.pull_request.user.login != 'dependabot[bot]'
           && fromJSON('["self-hosted", "linux", "x64", "vm-backup"]')
-          || 'dsh-ubuntu-24-04-16core' }}
+          || 'snh-ubuntu-24-04-16core' }}
     name: node 24 / build
     env:
       # Shared hosts expose host CPUs, not an isolated allocation.
-      DSH_GATE_CONCURRENCY: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '10' || '' }}
-      DSH_PUBLINT_CONCURRENCY: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '8' || '' }}
+      SNH_GATE_CONCURRENCY: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '10' || '' }}
+      SNH_PUBLINT_CONCURRENCY: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '8' || '' }}
       # A failing gate aborts its running siblings.
-      DSH_GATE_FAIL_FAST: '1'
+      SNH_GATE_FAIL_FAST: '1'
     steps:
       # Runner cleanup owns tool caches and fixtures, including cancelled runs.
       - name: Use runner-owned temporary storage
@@ -627,7 +627,7 @@ jobs:
       # upload on the required path. Self-hosted runners reuse the shared
       # persistent store instead of restoring the remote archive.
       - uses: actions/cache/restore@v6.1.0
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         with:
           path: ${{ steps.pnpm-store.outputs.path }}
           key: ${{ runner.os }}-node-${{ env.PRIMARY_NODE_VERSION }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
@@ -662,7 +662,7 @@ jobs:
           du -sch $(cat "$out/paths.txt") | tail -1
           tar -cf - -T "$out/paths.txt" | zstd -q -T0 -"$ZSTD_LEVEL" -o "$out/build-output.tar.zst"
           zstd -dc "$out/build-output.tar.zst" | tar -tf - > "$out/contents.txt"
-          for required in apps/cli/lib/bin.js apps/web/dist/index.html .dsh-build/client-build-environment.json; do
+          for required in apps/cli/lib/bin.js apps/web/dist/index.html .snh-build/client-build-environment.json; do
             grep -qx "$required" "$out/contents.txt" || { echo "::error::build output is missing $required"; exit 1; }
           done
           echo "archive entries: $(wc -l < "$out/contents.txt")"
@@ -687,19 +687,19 @@ jobs:
     needs: node-24-build
     if: github.event_name == 'pull_request'
     runs-on: >-
-      ${{ vars.DSH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-16vcpu-ubuntu-2404'
-          || vars.DSH_CI_FAILOVER_LINUX == 'selfhosted'
+      ${{ vars.SNH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-16vcpu-ubuntu-2404'
+          || vars.SNH_CI_FAILOVER_LINUX == 'selfhosted'
           && github.event.pull_request.user.login != 'dependabot[bot]'
           && fromJSON('["self-hosted", "linux", "x64", "vm-backup"]')
-          || 'dsh-ubuntu-24-04-16core' }}
+          || 'snh-ubuntu-24-04-16core' }}
     name: node 24 / snapshots and artifacts
     env:
       # Shared hosts expose host CPUs, not an isolated allocation.
-      DSH_GATE_CONCURRENCY: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '10' || '' }}
-      DSH_SNAPSHOT_MAX_CONCURRENCY: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '12' || '' }}
-      DSH_NODE_COMPAT_SKIP_TYPECHECK: '1'
+      SNH_GATE_CONCURRENCY: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '10' || '' }}
+      SNH_SNAPSHOT_MAX_CONCURRENCY: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '12' || '' }}
+      SNH_NODE_COMPAT_SKIP_TYPECHECK: '1'
       # A failing gate aborts its running siblings.
-      DSH_GATE_FAIL_FAST: '1'
+      SNH_GATE_FAIL_FAST: '1'
     steps:
       # Runner cleanup owns tool caches and fixtures, including cancelled runs.
       - name: Use runner-owned temporary storage
@@ -735,7 +735,7 @@ jobs:
       # upload on the required path. Self-hosted runners reuse the shared
       # persistent store instead of restoring the remote archive.
       - uses: actions/cache/restore@v6.1.0
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         with:
           path: ${{ steps.pnpm-store.outputs.path }}
           key: ${{ runner.os }}-node-${{ env.PRIMARY_NODE_VERSION }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
@@ -746,10 +746,10 @@ jobs:
       # layout, so the archive cache follows the hosted-only pnpm store guard.
       - name: Restore verified bubblewrap archive
         id: bubblewrap-cache
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         uses: actions/cache/restore@v6.1.0
         with:
-          path: ~/.cache/dsh-ci/bubblewrap
+          path: ~/.cache/snh-ci/bubblewrap
           key: bubblewrap-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/prepare-ci-bubblewrap.sh') }}
 
       - name: Install dependencies and prepare bubblewrap
@@ -766,10 +766,10 @@ jobs:
           exit "$sandbox_status"
 
       - name: Save verified bubblewrap archive
-        if: (vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]') && steps.bubblewrap-cache.outputs.cache-hit != 'true'
+        if: (vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]') && steps.bubblewrap-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6.1.0
         with:
-          path: ~/.cache/dsh-ci/bubblewrap
+          path: ~/.cache/snh-ci/bubblewrap
           key: bubblewrap-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/prepare-ci-bubblewrap.sh') }}
 
       # Restore the build job's output after the install, so no install or
@@ -789,7 +789,7 @@ jobs:
           # checkout and never in the future. Build-time mtimes ahead of the
           # clock make HMR treat freshly loaded lib/ modules as changed.
           zstd -dc -T0 "$archive" | tar -xmf -
-          test -f apps/cli/lib/bin.js && test -f apps/web/dist/index.html && test -f .dsh-build/client-build-environment.json
+          test -f apps/cli/lib/bin.js && test -f apps/web/dist/index.html && test -f .snh-build/client-build-environment.json
 
       # No gate reads the Office runtime output, so it builds beside the gates.
       # GitHub runners keep a background process started in one step alive for
@@ -823,11 +823,11 @@ jobs:
     needs: node-24-build
     if: github.event_name == 'pull_request'
     runs-on: >-
-      ${{ vars.DSH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-16vcpu-ubuntu-2404'
-          || vars.DSH_CI_FAILOVER_LINUX == 'selfhosted'
+      ${{ vars.SNH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-16vcpu-ubuntu-2404'
+          || vars.SNH_CI_FAILOVER_LINUX == 'selfhosted'
           && github.event.pull_request.user.login != 'dependabot[bot]'
           && fromJSON('["self-hosted", "linux", "x64", "vm-backup"]')
-          || 'dsh-ubuntu-24-04-16core' }}
+          || 'snh-ubuntu-24-04-16core' }}
     strategy:
       fail-fast: false
       matrix:
@@ -835,14 +835,14 @@ jobs:
     name: node 24 / web snapshots ${{ matrix.shard }}/2
     env:
       # Shared hosts expose host CPUs, not an isolated allocation.
-      DSH_GATE_CONCURRENCY: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '10' || '' }}
-      DSH_WEB_SNAPSHOT_WORKERS: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '6' || '' }}
-      DSH_WEB_SNAPSHOT_SHARD: ${{ matrix.shard }}/2
+      SNH_GATE_CONCURRENCY: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '10' || '' }}
+      SNH_WEB_SNAPSHOT_WORKERS: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && '6' || '' }}
+      SNH_WEB_SNAPSHOT_SHARD: ${{ matrix.shard }}/2
       # Every shard reads these shares. Each shard runs alone on its
       # machine; the last shard also runs the ~40s of serial files first.
-      DSH_WEB_SNAPSHOT_SHARD_SHARES: '0.54,0.46'
+      SNH_WEB_SNAPSHOT_SHARD_SHARES: '0.54,0.46'
       # A failing gate aborts its running siblings.
-      DSH_GATE_FAIL_FAST: '1'
+      SNH_GATE_FAIL_FAST: '1'
     steps:
       # Runner cleanup owns tool caches and fixtures, including cancelled runs.
       - name: Use runner-owned temporary storage
@@ -879,7 +879,7 @@ jobs:
       # upload on the required path. Self-hosted runners reuse the shared
       # persistent store instead of restoring the remote archive.
       - uses: actions/cache/restore@v6.1.0
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         with:
           path: ${{ steps.pnpm-store.outputs.path }}
           key: ${{ runner.os }}-node-${{ env.PRIMARY_NODE_VERSION }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
@@ -888,7 +888,7 @@ jobs:
 
       # Self-hosted runners retain their own browser cache between jobs.
       - uses: actions/cache/restore@v6.1.0
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
@@ -899,10 +899,10 @@ jobs:
       # layout, so the archive cache follows the hosted-only pnpm store guard.
       - name: Restore verified bubblewrap archive
         id: bubblewrap-cache
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         uses: actions/cache/restore@v6.1.0
         with:
-          path: ~/.cache/dsh-ci/bubblewrap
+          path: ~/.cache/snh-ci/bubblewrap
           key: bubblewrap-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/prepare-ci-bubblewrap.sh') }}
 
       - name: Install dependencies and prepare bubblewrap
@@ -919,17 +919,17 @@ jobs:
           exit "$sandbox_status"
 
       - name: Save verified bubblewrap archive
-        if: (vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]') && steps.bubblewrap-cache.outputs.cache-hit != 'true'
+        if: (vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]') && steps.bubblewrap-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6.1.0
         with:
-          path: ~/.cache/dsh-ci/bubblewrap
+          path: ~/.cache/snh-ci/bubblewrap
           key: bubblewrap-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/prepare-ci-bubblewrap.sh') }}
 
       # Ubuntu HTTP archive mirrors can stall for tens of seconds per package
       # (Blacksmith lists http://azure.archive.ubuntu.com first), so every
       # ephemeral runner fetches the archive over HTTPS before Playwright's apt.
       - name: Use HTTPS for Ubuntu archives
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         run: |
           sudo python3 - <<'PY'
           from pathlib import Path
@@ -953,13 +953,13 @@ jobs:
       # so the failover pool skips apt instead of mutating the shared host.
       - name: Start Playwright browser install
         env:
-          PLAYWRIGHT_INSTALL_MODE: ${{ vars.DSH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && 'browsers' || 'with-deps' }}
+          PLAYWRIGHT_INSTALL_MODE: ${{ vars.SNH_CI_FAILOVER_LINUX == 'selfhosted' && github.event.pull_request.user.login != 'dependabot[bot]' && 'browsers' || 'with-deps' }}
         run: |
           deps=()
           if [[ "$PLAYWRIGHT_INSTALL_MODE" == with-deps ]]; then deps=(--with-deps); fi
           (
             status=0
-            pnpm --filter @deepseek-ai/dsh-web-frontend exec playwright install "${deps[@]}" chromium webkit || status=$?
+            pnpm --filter @supernova-ai/snh-web-frontend exec playwright install "${deps[@]}" chromium webkit || status=$?
             echo "$status" > "$RUNNER_TEMP/playwright-install.status"
           ) > "$RUNNER_TEMP/playwright-install.log" 2>&1 &
           echo "$!" > "$RUNNER_TEMP/playwright-install.pid"
@@ -981,7 +981,7 @@ jobs:
           # checkout and never in the future. Build-time mtimes ahead of the
           # clock make HMR treat freshly loaded lib/ modules as changed.
           zstd -dc -T0 "$archive" | tar -xmf -
-          test -f apps/cli/lib/bin.js && test -f apps/web/dist/index.html && test -f .dsh-build/client-build-environment.json
+          test -f apps/cli/lib/bin.js && test -f apps/web/dist/index.html && test -f .snh-build/client-build-environment.json
 
       - name: Wait for Playwright browsers
         run: |
@@ -1004,8 +1004,8 @@ jobs:
     # to the persistent shared VM; the blacksmith branch targets ephemeral
     # runners and carries none of those predicates.
     runs-on: >-
-      ${{ vars.DSH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-4vcpu-ubuntu-2404'
-          || vars.DSH_CI_FAILOVER_LINUX == 'selfhosted'
+      ${{ vars.SNH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-4vcpu-ubuntu-2404'
+          || vars.SNH_CI_FAILOVER_LINUX == 'selfhosted'
           && github.event.pull_request.head.repo.full_name == github.repository
           && github.event.pull_request.head.repo.fork == false
           && github.event.pull_request.user.login != 'dependabot[bot]'
@@ -1013,12 +1013,12 @@ jobs:
           || matrix.runner }}
     name: ${{ matrix.name }}
     env:
-      DSH_GATE_CONCURRENCY: ${{ matrix.gate_concurrency }}
-      DSH_NODE_COMPAT_SKIP_TYPECHECK: '1'
-      DSH_NODE_COMPAT_BUILD: ${{ matrix.build }}
+      SNH_GATE_CONCURRENCY: ${{ matrix.gate_concurrency }}
+      SNH_NODE_COMPAT_SKIP_TYPECHECK: '1'
+      SNH_NODE_COMPAT_BUILD: ${{ matrix.build }}
       # A failed smoke aborts the remaining compatibility gates instead of
       # letting the build-backed legs run against an already-red aggregate.
-      DSH_GATE_FAIL_FAST: '1'
+      SNH_GATE_FAIL_FAST: '1'
     strategy:
       fail-fast: false
       max-parallel: 1
@@ -1079,25 +1079,25 @@ jobs:
       # layout, so the archive cache follows the hosted-only pnpm store guard.
       - name: Restore verified bubblewrap archive
         id: bubblewrap-cache
-        if: vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
+        if: vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]'
         uses: actions/cache/restore@v6.1.0
         with:
-          path: ~/.cache/dsh-ci/bubblewrap
+          path: ~/.cache/snh-ci/bubblewrap
           key: bubblewrap-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/prepare-ci-bubblewrap.sh') }}
 
       - name: Prepare bubblewrap (unrestrict userns)
         run: bash scripts/prepare-ci-bubblewrap.sh
 
       - name: Save verified bubblewrap archive
-        if: (vars.DSH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]') && steps.bubblewrap-cache.outputs.cache-hit != 'true'
+        if: (vars.SNH_CI_FAILOVER_LINUX != 'selfhosted' || github.event.pull_request.user.login == 'dependabot[bot]') && steps.bubblewrap-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6.1.0
         with:
-          path: ~/.cache/dsh-ci/bubblewrap
+          path: ~/.cache/snh-ci/bubblewrap
           key: bubblewrap-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/prepare-ci-bubblewrap.sh') }}
 
       - name: Run compatibility smokes
         env:
-          DSH_BUILD_CLIENT_PROFILE: official
+          SNH_BUILD_CLIENT_PROFILE: official
         run: pnpm run check:node-compat
 
       # Kept out of the gate aggregate: the shape a Node release carries only
@@ -1123,14 +1123,14 @@ jobs:
     # provisioning — and under Linux failover it follows the same selector as
     # the worker jobs it aggregates, so a standard-hosted outage cannot strand
     # the branch-protection verdict either. It retargets with the Linux switch
-    # (DSH_CI_FAILOVER_LINUX), not the Windows one, because it aggregates the
+    # (SNH_CI_FAILOVER_LINUX), not the Windows one, because it aggregates the
     # required Linux workers and runs on the vm-backup pool. Under the
     # 'blacksmith' value the verdict shares Blacksmith's pool with its workers
     # through the same selector, so a Blacksmith outage strands both together —
     # the accepted consequence of the explicit opt-in switch.
     runs-on: >-
-      ${{ vars.DSH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-4vcpu-ubuntu-2404'
-          || vars.DSH_CI_FAILOVER_LINUX == 'selfhosted'
+      ${{ vars.SNH_CI_FAILOVER_LINUX == 'blacksmith' && 'blacksmith-4vcpu-ubuntu-2404'
+          || vars.SNH_CI_FAILOVER_LINUX == 'selfhosted'
           && github.event.pull_request.user.login != 'dependabot[bot]'
           && fromJSON('["self-hosted", "linux", "x64", "vm-backup"]')
           || 'ubuntu-latest' }}

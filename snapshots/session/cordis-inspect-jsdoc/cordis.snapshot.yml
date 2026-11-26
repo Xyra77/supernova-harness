@@ -1,22 +1,22 @@
 # Replay counterpart to advanced.cordis.yml; only the live model is replaced.
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek-api-key'
+- id: llm-supernova
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - id: agent-default-model
-  name: '@deepseek-ai/dsh-agent-default-model'
+  name: '@supernova-ai/snh-agent-default-model'
   config:
     provider: deepseek-official
     model: deepseek-v4-flash
 
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@supernova-ai/snh-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
+    root: !!js snhHomePath('sessions')
     compression: none
 
 - id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
+  name: '@supernova-ai/snh-agent-instructions'
   config:
     maxBytes: 65536
 
@@ -27,7 +27,7 @@
   disabled: true
 
 - id: system-prompt
-  name: '@deepseek-ai/dsh-system-prompt'
+  name: '@supernova-ai/snh-system-prompt'
   config:
     personaPrefix: |
       You are a coding assistant powered by the {{model}} model.
@@ -36,17 +36,17 @@
 
 - insert:
     - id: cordis-host-runner
-      name: '@deepseek-ai/dsh-cordis-host-runner'
+      name: '@supernova-ai/snh-cordis-host-runner'
     - id: cordis-inspect-providers
-      name: '@deepseek-ai/dsh-tool-cordis/host'
+      name: '@supernova-ai/snh-tool-cordis/host'
     - id: tool-cordis
-      name: '@deepseek-ai/dsh-tool-cordis'
+      name: '@supernova-ai/snh-tool-cordis'
     - id: llm-replay
-      name: '@deepseek-ai/dsh-llm-replay'
+      name: '@supernova-ai/snh-llm-replay'
       config:
         providers:
           - id: deepseek-official
-            name: DeepSeek
+            name: SuperNova
             models:
               - id: deepseek-v4-flash
               - id: deepseek-v4-pro

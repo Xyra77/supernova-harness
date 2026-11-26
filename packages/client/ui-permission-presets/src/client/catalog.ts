@@ -1,9 +1,9 @@
 /** Identity-stable process permission catalog shared by both selection surfaces. */
 
-import type { Context as ClientContext } from '@deepseek-ai/cordis'
-import type { ConnectionHandle } from '@deepseek-ai/dsh-client-connection/client'
-import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { PermissionCatalog } from '@deepseek-ai/dsh-permission-presets/client'
+import type { Context as ClientContext } from '@supernova-ai/cordis'
+import type { ConnectionHandle } from '@supernova-ai/snh-client-connection/client'
+import { createSnapshotStore, type SnapshotStore } from '@supernova-ai/snh-client-store'
+import type { PermissionCatalog } from '@supernova-ai/snh-permission-presets/client'
 
 /** Observable complete catalog for the current Host generation. */
 export interface PermissionCatalogState {

@@ -1,15 +1,15 @@
 ---
-description: "The stdio JSON-RPC serving plugin for deployments that let out-of-process SDK clients open sessions and drive agents in a DeepSeek Harness runtime."
+description: "The stdio JSON-RPC serving plugin for deployments that let out-of-process SDK clients open sessions and drive agents in a SuperNova Harness runtime."
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-sdk-jsonrpc-server
+# @supernova-ai/snh-sdk-jsonrpc-server
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-sdk-jsonrpc-server` serves the SDK wire protocol over stdio so out-of-process clients can drive harness agents: it opens one session per `sessionId`, queues user prompts, and streams every session event and agent status transition back to the client. Mount it as the `jsonrpc` plugin in a Loader composition; the surrounding tree supplies everything else — agents, model adapters, persistence, and tools. Stdout carries only JSON-RPC frames, so a deployment must not compose a stdout logger. It answers `shutdown` by disposing the root runtime and exiting 0; the app bin owns EOF and signal exits.
+`snh-sdk-jsonrpc-server` serves the SDK wire protocol over stdio so out-of-process clients can drive harness agents: it opens one session per `sessionId`, queues user prompts, and streams every session event and agent status transition back to the client. Mount it as the `jsonrpc` plugin in a Loader composition; the surrounding tree supplies everything else — agents, model adapters, persistence, and tools. Stdout carries only JSON-RPC frames, so a deployment must not compose a stdout logger. It answers `shutdown` by disposing the root runtime and exiting 0; the app bin owns EOF and signal exits.
 
 ## Table of Contents
 
@@ -43,7 +43,7 @@ The supported commands below are existing Desktop native operations that can exe
 
 Each ordinary prompt records its user zone on its message source `{ kind: 'user', clientTimeZone }`. An explicit `timeZone` must canonicalize through the same check the Web Host applies; otherwise the request fails with a `TypeError`, which the transport answers as JSON-RPC `-32603`, before a Session is created or input is routed. An omitted `timeZone` samples `Intl.DateTimeFormat().resolvedOptions().timeZone` when that prompt is accepted, not once per process. A sampled value that does not canonicalize, such as `+00:00` under `TZ=GMT` or `Etc/Unknown`, records no zone and does not fail the prompt. The source carries no `rpcId` because the SDK has no Web submission identity. Native commands record no zone, like Web command execution.
 
-Host and Desktop adapters share `dsh-commands/builtin` for definition identity and English/Chinese aliases. The aliases `/压缩`, `/权限`, `/计划`, and `/目标` follow their official definitions after renaming; execution uses the current registered name. Exact names take precedence, but an unrelated same-name definition is not an SDK builtin and remains an ordinary prompt. Other builtin capabilities remain outside the SDK command set.
+Host and Desktop adapters share `snh-commands/builtin` for definition identity and English/Chinese aliases. The aliases `/压缩`, `/权限`, `/计划`, and `/目标` follow their official definitions after renaming; execution uses the current registered name. Exact names take precedence, but an unrelated same-name definition is not an SDK builtin and remains an ordinary prompt. Other builtin capabilities remain outside the SDK command set.
 
 The first text block supplies the complete command line; encoded images may precede or follow it. When that line matches a supported command, it must be the only text block and every other block must be an encoded image. Additional text blocks, durable image references, and other content types reject with a JSON-RPC error before execution or enqueue, without prompt fallback. Ordinary prompts preserve all block content and ordering. Empty arrays and arrays containing only blank text are rejected; image-only input is allowed.
 
@@ -61,7 +61,7 @@ Creation and edit accept images as reference material before the next round; sho
 
 ### Wiring
 
-The plugin creates one agent per `sessionId` on first use. A registered model adapter wins the route; an unowned `deepseek-official` route mounts the DeepSeek adapter, and any other unowned provider fails initialization. The selected adapter resolves the exact model and optional reasoning effort before initialization succeeds.
+The plugin creates one agent per `sessionId` on first use. A registered model adapter wins the route; an unowned `deepseek-official` route mounts the SuperNova adapter, and any other unowned provider fails initialization. The selected adapter resolves the exact model and optional reasoning effort before initialization succeeds.
 
 ### Configuration
 
@@ -69,7 +69,7 @@ The plugin creates one agent per `sessionId` on first use. A registered model ad
 |---|---|---|
 | `maxTokensAsSuccess` | `false` | Report max-token turn/subagent termination as a successful SDK result |
 
-The profile composition owns each root agent's tools. `input`, `output`, and `exit` are runtime-only transport hooks for tests; production uses process stdio and `process.exit`. The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-sdk-jsonrpc-server) is the exhaustive source for every accepted field.
+The profile composition owns each root agent's tools. `input`, `output`, and `exit` are runtime-only transport hooks for tests; production uses process stdio and `process.exit`. The generated [configuration catalog](../../../docs/config-catalog.md#supernova-aisnh-sdk-jsonrpc-server) is the exhaustive source for every accepted field.
 
 ### stdout is the protocol
 
@@ -77,7 +77,7 @@ Stdout carries only JSON-RPC frames, so clients can parse every byte; diagnostic
 
 ### What SDK clients can do
 
-`initialize` is the runtime-readiness boundary: when the server is mounted by a Loader composition, it waits for the current plugin tree to settle before replying, so async sibling capabilities such as initial MCP tool discovery are visible to the first prompt. The handshake returns the wire-stable identity `deepseek-harness-sdk-runtime`. The server validates the provider/model route and optional non-empty `reasoningEffort` through the selected adapter before it stores them; omission stores no effort, so the model retains its own default. An optional positive `maxTokens` becomes the request output cap of each SDK-created agent and its in-process descendants, while omission applies the selected adapter or provider route default. JSON-RPC requests may dispatch concurrently, so `session/prompt` rejects until one `initialize` has completed successfully; clients must await the handshake before sending prompts. An accepted prompt queues one identified user message and immediately returns `{ messageId }`; the server then streams every durable fact as `session.event` and every whole-agent lifecycle transition as `session.status`. It does not assign an assistant message or `turn/end` to a prompt, and independent requests may enqueue more work on the same session. Persistence roots and persona come from the surrounding composition.
+`initialize` is the runtime-readiness boundary: when the server is mounted by a Loader composition, it waits for the current plugin tree to settle before replying, so async sibling capabilities such as initial MCP tool discovery are visible to the first prompt. The handshake returns the wire-stable identity `supernova-harness-sdk-runtime`. The server validates the provider/model route and optional non-empty `reasoningEffort` through the selected adapter before it stores them; omission stores no effort, so the model retains its own default. An optional positive `maxTokens` becomes the request output cap of each SDK-created agent and its in-process descendants, while omission applies the selected adapter or provider route default. JSON-RPC requests may dispatch concurrently, so `session/prompt` rejects until one `initialize` has completed successfully; clients must await the handshake before sending prompts. An accepted prompt queues one identified user message and immediately returns `{ messageId }`; the server then streams every durable fact as `session.event` and every whole-agent lifecycle transition as `session.status`. It does not assign an assistant message or `turn/end` to a prompt, and independent requests may enqueue more work on the same session. Persistence roots and persona come from the surrounding composition.
 
 `session/wait` observes an existing SDK-owned session through managed descendant completion and any resulting root turns. It rejects unknown or retired roots, never creates a session, and responds after the root stays idle across the descendant check. Idle children with parked inbox messages remain resident but do not delay this response; later waking input can resume them. Session notifications emitted before completion precede the response on the stdio transport. A live Agent failure remains associated with that exact session until a later committed `turn/end` accounts for the outcome; otherwise the wait rejects, including when the failure preceded the wait request. Errors already represented by a terminal remain in Session events, and later successful activity clears an earlier live failure.
 
@@ -115,7 +115,7 @@ This section explains the design behind the serving plugin; the observable behav
 
 ### Design concept
 
-The plugin is a thin presentation adapter: [`HarnessSdkJsonRpcServer`](src/server.ts) owns the protocol methods and notifications, while the transport and the named wire types come from `dsh-sdk-protocol`, shared with the client SDKs. It subscribes to session, agent, and subagent lifecycle events and forwards them as wire notifications; subagent completions are forwarded only when the service-snapshotted lifecycle `local` flag is true — provider names, child ids, and durable lineage never establish locality. Both `subagent.started` and `subagent.finished` identify the durable direct creator in `parentSessionId`, including after that creator exits; the Team root only scopes runtime dispatch. Started notifications require `origin: subagent` and a direct creator id; ordinary forks, including historical ones with a parent id, produce none.
+The plugin is a thin presentation adapter: [`HarnessSdkJsonRpcServer`](src/server.ts) owns the protocol methods and notifications, while the transport and the named wire types come from `snh-sdk-protocol`, shared with the client SDKs. It subscribes to session, agent, and subagent lifecycle events and forwards them as wire notifications; subagent completions are forwarded only when the service-snapshotted lifecycle `local` flag is true — provider names, child ids, and durable lineage never establish locality. Both `subagent.started` and `subagent.finished` identify the durable direct creator in `parentSessionId`, including after that creator exits; the Team root only scopes runtime dispatch. Started notifications require `origin: subagent` and a direct creator id; ordinary forks, including historical ones with a parent id, produce none.
 
 ### Source map
 
@@ -145,7 +145,7 @@ Read these pages when the plugin contract is not enough. They move from the wire
 
 - [SDK wire protocol](../protocol/README.md) — the methods and payload shapes this plugin serves.
 - [TypeScript SDK client](../client/README.md) — the client that drives this plugin.
-- [SDK application bundle](../../bundle/sdk-app/README.md) — the `dsh --profile sdk` application that boots this plugin.
+- [SDK application bundle](../../bundle/sdk-app/README.md) — the `snh --profile sdk` application that boots this plugin.
 - [Python SDK](../../../python/README.md) — the Python client that drives the same server.
 - [SDK runtime distribution decision](../../../.agents/notes/implemented/architecture/2026-07-10-single-file-executable-sdk-runtime-distribution.md) — why the packaged runtime serves a closed plugin tree.
 
@@ -234,7 +234,7 @@ These limits define when the plugin needs special operational care. They are cur
 - **The wire has no per-session close or prompt-cancel method** — SDK-created agents remain live until process shutdown.
 - **There is no per-prompt result** — `MessageId` identifies inbox admission only; clients that own an automation interval must define and observe that interval themselves.
 - **stdout purity is deployment-enforced** — a surrounding config can still load a stdout logger and corrupt the JSON-RPC channel; this plugin does not inspect or veto sibling loggers.
-- **Automatic adapter mounting is DeepSeek-specific** — `initialize` can reuse any pre-registered model adapter, but its only fallback mounts the DeepSeek adapter.
+- **Automatic adapter mounting is SuperNova-specific** — `initialize` can reuse any pre-registered model adapter, but its only fallback mounts the SuperNova adapter.
 
 <a id="dev-note"></a>
 ### Dev Note

@@ -1,8 +1,8 @@
 /** Account sign-out policy over the latest logged request route of each running Agent. */
-import type { Context } from '@deepseek-ai/cordis'
-import { LlmError } from '@deepseek-ai/dsh-llm'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-deepseek-account'
+import type { Context } from '@supernova-ai/cordis'
+import { LlmError } from '@supernova-ai/snh-llm'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type {} from '@supernova-ai/snh-deepseek-account'
 
 /** Whether a running Agent's latest bound request used the account route `provider`. */
 function isRunningAccountTask(agent: Pick<Agent, 'status' | 'session'>, provider: string): boolean {
@@ -40,8 +40,8 @@ export function installAccountTaskCancellation(ctx: Context, provider: string): 
       }
     })
     scope.on('deepseek-account/signed-out', () => { cancelAccountTasks(scope, provider) })
-    scope.inject(['deepseekAccount'], (reporting) => {
-      reporting.effect(() => reporting.deepseekAccount.registerRunningTaskReport(
+    scope.inject(['supernovaAccount'], (reporting) => {
+      reporting.effect(() => reporting.supernovaAccount.registerRunningTaskReport(
         () => reporting.agents.list().some(agent => isRunningAccountTask(agent, provider)),
       ), 'llm-deepseek-account: running task report')
     })

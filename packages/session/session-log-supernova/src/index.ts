@@ -1,0 +1,291 @@
+/**
+ * Incremental session-log contribution for official SuperNova LLM API requests.
+ * Accepted sequence watermarks live in the canonical log, so restart recovery
+ * can conservatively resend uncertain tails without maintaining another store.
+ * @module @supernova-ai/snh-session-log-supernova
+ */
+
+import { Buffer } from 'node:buffer'
+import { Service, type Context, type Volatile } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { brandString } from '@supernova-ai/snh-brand'
+import type {} from '@supernova-ai/snh-supernova-llm-api-extensions'
+import { KNOWN_SESSION_EVENT_TYPES, SessionLogOffset, SessionSeq } from '@supernova-ai/snh-session'
+import type {
+  Session,
+  SessionEvent,
+  SessionId,
+  SessionLogOffset as SessionLogOffsetType,
+  SessionSeq as SessionSeqType,
+  SessionSeqCursor,
+  SurfaceOp,
+} from '@supernova-ai/snh-session'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
+import type {
+  SuperNovaSessionLogExtension,
+  SuperNovaSessionLogWireEvent,
+  SuperNovaSessionLogWireHeader,
+  SuperNovaSessionLogWireSurfaceOp,
+  SessionLogUploadExclusion,
+  SessionLogUploadRequest,
+} from './types.ts'
+
+export type * from './types.ts'
+
+declare module '@supernova-ai/cordis' {
+  interface Context {
+    sessionLogSuperNova: SessionLogSuperNovaService
+  }
+}
+
+/** Cordis plugin name. */
+export const name = 'session-log-supernova'
+/** Services required to resolve sessions and contribute the provider request field. */
+export const inject = ['supernovaLlmApiExtensions', 'sessions']
+
+/** Session-log request contribution configuration. */
+export interface Config {
+  /** Contribute `snh_session_log` to official SuperNova requests. Defaults to `true`. */
+  enabled: Volatile<boolean>
+  /**
+   * Largest serialized `snh_session_log` field, in UTF-8 bytes, that one request carries.
+   * A request uploads the longest pending event prefix that fits; later requests continue
+   * after its acceptance. Defaults to 8 MiB.
+   */
+  maxBytes: number
+}
+
+/** Validated Session-log request contribution configuration. */
+export const Config = z.object({
+  enabled: z.boolean().default(true).volatile(),
+  maxBytes: z.number().step(1).min(1).default(8 * 1024 * 1024),
+})
+
+interface AcceptanceFold {
+  readonly scannedEvents: SessionLogOffsetType
+  readonly throughSeq: SessionSeqCursor
+}
+
+const acceptanceFolds = new WeakMap<Session, AcceptanceFold>()
+/** Event each Session's upload was last reported blocked at; a block is logged once. */
+const blockedWarnings = new WeakMap<Session, SessionSeqType>()
+
+/** Translate logical Session metadata to raw external request fields. */
+function wireHeader(session: Session): SuperNovaSessionLogWireHeader {
+  const header = session.header
+  return {
+    version: header.version,
+    id: String(header.id),
+    createdAt: header.createdAt,
+    ...header.cwd === undefined ? {} : { cwd: header.cwd },
+    ...header.parentSession === undefined ? {} : { parentSession: String(header.parentSession) },
+    ...header.isSeeded ? { seedLength: Number(session.inheritedEventCount) } : {},
+    ...header.origin === undefined ? {} : { origin: header.origin },
+    ...header.delegationDepth === undefined ? {} : { delegationDepth: header.delegationDepth },
+    ...header.agentPreset === undefined ? {} : { agentPreset: header.agentPreset },
+  }
+}
+
+/** Translate compile-time sequence brands to raw numeric request fields. */
+function wireEvent(event: SessionEvent): SuperNovaSessionLogWireEvent {
+  const common = {
+    seq: Number(event.seq),
+    time: event.time,
+    data: event.data as JsonValue,
+    ...event.ignorable === undefined ? {} : { ignorable: event.ignorable },
+  }
+  switch (event.type) {
+    case 'developer/message':
+    case 'system/message':
+    case 'user/message':
+    case 'tool/result':
+      return {
+        ...common,
+        type: event.type,
+        surfaceOp: wireSurfaceOp(event.surfaceOp),
+        ...event.sourceEventSeqs === undefined ? {} : { sourceEventSeqs: event.sourceEventSeqs.map(Number) },
+      }
+    case 'assistant/message':
+      return { ...common, type: event.type, surfaceOp: wireSurfaceOp(event.surfaceOp) }
+    default: {
+      // Restored unknown ignorable records are opaque, not current surface events.
+      if (!KNOWN_SESSION_EVENT_TYPES.has(event.type) && event.ignorable === true) {
+        const opaque = event as { surfaceOp?: JsonValue; sourceEventSeqs?: JsonValue }
+        return {
+          ...common, type: event.type, ignorable: true,
+          ...opaque.surfaceOp === undefined ? {} : { surfaceOp: opaque.surfaceOp },
+          ...opaque.sourceEventSeqs === undefined ? {} : { sourceEventSeqs: opaque.sourceEventSeqs },
+        }
+      }
+      return { ...common, type: event.type }
+    }
+  }
+}
+
+function wireSurfaceOp(op: SurfaceOp): SuperNovaSessionLogWireSurfaceOp {
+  return op === 'append'
+    ? op
+    : { op: 'replace', startSeq: Number(op.startSeq), endSeq: Number(op.endSeq) }
+}
+
+/**
+ * UTF-8 length of one value's JSON text as the request body encodes it.
+ * @returns `Infinity` when the value fails to serialize, which counts as exceeding every limit.
+ */
+function jsonBytes(value: SuperNovaSessionLogExtension | SuperNovaSessionLogWireEvent): number {
+  let text: string
+  try {
+    text = JSON.stringify(value)
+  } catch (_unserializable) {
+    // No request can carry a value that fails to serialize.
+    return Number.POSITIVE_INFINITY
+  }
+  return Buffer.byteLength(text)
+}
+
+/**
+ * Highest confirmed sequence for this exact Session format generation.
+ * @param session - canonical log whose matching acceptance events are folded.
+ * @returns greatest accepted sequence, or `-1` before any accepted request.
+ */
+export function acceptedThrough(session: Session): SessionSeqCursor {
+  const previous = acceptanceFolds.get(session)
+  let throughSeq = previous?.throughSeq ?? -1
+  const length = session.seq
+  const start = previous?.scannedEvents ?? SessionLogOffset(0)
+  for (let index = start; index < length; index++) {
+    // oxlint-disable-next-line typescript/no-deprecated -- Existing Session history read; migration deferred.
+    const event = session.eventAt(SessionSeq(index))
+    if (event === undefined) {
+      throw new Error(`session-log-supernova: missing event ${String(index)} below captured length ${String(length)}`)
+    }
+    if (event.type !== 'session-log-supernova/delivery-accepted') continue
+    const acceptedFormatVersion = event.data.sessionFormatVersion ?? 0
+    if (!Number.isSafeInteger(acceptedFormatVersion)
+      || acceptedFormatVersion < 0
+      || Object.is(acceptedFormatVersion, -0)) {
+      throw new Error(`session-log-supernova: malformed acceptance format version at seq ${event.seq}`)
+    }
+    if (acceptedFormatVersion !== session.header.version) continue
+    let acceptedSeq: SessionSeqType
+    try {
+      acceptedSeq = SessionSeq(event.data.throughSeq)
+    } catch {
+      throw new Error(`session-log-supernova: malformed acceptance watermark at seq ${event.seq}`)
+    }
+    if (typeof event.data.sessionId !== 'string' || event.data.sessionId.length === 0
+      || acceptedSeq >= event.seq) {
+      throw new Error(`session-log-supernova: malformed acceptance watermark at seq ${event.seq}`)
+    }
+    if (event.data.sessionId !== session.id) continue
+    if (acceptedSeq > throughSeq) throughSeq = acceptedSeq
+  }
+  acceptanceFolds.set(session, { scannedEvents: length, throughSeq })
+  return throughSeq
+}
+
+/** Incremental Session-log contributor with caller-owned upload exclusions. */
+export class SessionLogSuperNovaService extends Service {
+  static inject = inject
+
+  private readonly exclusions = new Set<{ readonly exclude: SessionLogUploadExclusion }>()
+
+  constructor(ctx: Context, config: Config) {
+    super(ctx, 'sessionLogSuperNova')
+    const { maxBytes } = config
+    ctx.supernovaLlmApiExtensions.register('snh_session_log', {
+      prepare: (request) => {
+        if (!config.enabled.get()) return undefined
+        // TODO: Define an explicit wire result for direct or stale-session calls if they become a supported product path.
+        if (request.sessionId === undefined) return undefined
+        const session = ctx.sessions.get(brandString<SessionId>(request.sessionId))
+        if (session === undefined) return undefined
+        const upload: SessionLogUploadRequest = {
+          sessionId: session.id,
+          ...request.purpose === undefined ? {} : { purpose: request.purpose },
+        }
+        for (const { exclude } of this.exclusions) {
+          if (exclude(upload)) return undefined
+        }
+
+        const afterSeq = acceptedThrough(session)
+        // oxlint-disable-next-line typescript/no-deprecated -- Existing Session history read; migration deferred.
+        const pending = session.snapshotEvents(SessionLogOffset(afterSeq + 1))
+        const envelope = {
+          version: 1,
+          sessionFormatVersion: session.header.version,
+          session: wireHeader(session),
+          afterSeq: Number(afterSeq),
+        } as const
+        // Field bytes without events or throughSeq digits; each candidate prefix adds its own.
+        let bytes = jsonBytes({ ...envelope, throughSeq: 0, events: [] }) - 1
+        const events: SuperNovaSessionLogWireEvent[] = []
+        // Field bytes with the last examined event; when none fits, the first event's own field size.
+        let candidateBytes = 0
+        for (const event of pending) {
+          const wire = wireEvent(event)
+          const next = bytes + (events.length === 0 ? 0 : 1) + jsonBytes(wire)
+          candidateBytes = next + String(event.seq).length
+          if (candidateBytes > maxBytes) break
+          bytes = next
+          events.push(wire)
+        }
+        const last = events.length === 0 ? undefined : pending[events.length - 1]
+        if (last === undefined) {
+          const first = pending[0]
+          if (first !== undefined && blockedWarnings.get(session) !== first.seq) {
+            blockedWarnings.set(session, first.seq)
+            const seq = String(first.seq)
+            ctx.logger.warn(Number.isFinite(candidateBytes)
+              ? `session-log-supernova: event ${seq} of session "${session.id}" needs a ${String(candidateBytes)}-byte`
+                + ` snh_session_log field, above maxBytes ${String(maxBytes)}; this session's upload stays at event ${seq}`
+                + ' until maxBytes admits it'
+              : `session-log-supernova: event ${seq} of session "${session.id}" is too large to serialize into a snh_session_log field;`
+                + ` this session's upload stays at event ${seq}`)
+          }
+          return undefined
+        }
+        const throughSeq = last.seq
+        const value: SuperNovaSessionLogExtension = { ...envelope, throughSeq: Number(throughSeq), events }
+        return {
+          value,
+          accept: () => {
+            session.append('session-log-supernova/delivery-accepted', {
+              sessionId: session.id,
+              sessionFormatVersion: session.header.version,
+              throughSeq,
+            })
+            // TODO: Add an immediate lightweight checkpoint if duplicate replay after a 2xx crash window becomes unacceptable.
+          },
+        }
+      },
+    })
+  }
+
+  /**
+   * Exclude matching requests before reading or preparing their log contribution.
+   * Any matching rule suppresses both the field and its acceptance callback. With
+   * no matching rules, normal upload eligibility applies. A throwing rule fails
+   * this contribution; the request-extension registry omits it and reports the error.
+   * @param exclude - synchronous, side-effect-free predicate; `true` skips this upload.
+   * @returns effect disposer that removes this registration when called or when the caller unloads.
+   */
+  registerExclusion(exclude: SessionLogUploadExclusion): () => Promise<void> {
+    const entry = { exclude }
+    const exclusions = this.exclusions
+    return this.ctx.effect(() => {
+      exclusions.add(entry)
+      return () => { exclusions.delete(entry) }
+    }, 'sessionLogSuperNova.registerExclusion()')
+  }
+}
+
+/**
+ * Register the incremental request contribution; enablement is read for each request.
+ * @param ctx - plugin context carrying Sessions and the SuperNova request-extension registry.
+ * @param config - validated configuration.
+ * @returns fulfillment after the upload service is mounted.
+ */
+export async function apply(ctx: Context, config: Config): Promise<void> {
+  await ctx.plugin(SessionLogSuperNovaService, config)
+}

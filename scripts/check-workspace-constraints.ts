@@ -19,7 +19,7 @@ import {
   PRIVATE_EXPERIMENTAL_PACKAGE_DIRECTORIES,
 } from './experimental-package-policy.ts'
 import { hasTypertRemoteNavigation } from './publication-payload.ts'
-import type { DshBundleManifest } from '../packages/util/package-manifest/src/types.ts'
+import type { SnhBundleManifest } from '../packages/util/package-manifest/src/types.ts'
 import { detailPath } from '../packages/util/plugin-detail/src/document.ts'
 import { bundlePatchFiles } from '../packages/boot/app-boot/src/profile.ts'
 import { OPTIONAL_BUNDLES } from '../packages/util/official-bundles/src/bundles.ts'
@@ -40,22 +40,22 @@ const workspaceGlobs = [
   { dir: 'apps', depth: 1 },
 ] as const
 const vendoredPackages = new Set([
-  '@deepseek-ai/cordis',
-  '@deepseek-ai/cosmokit',
-  '@deepseek-ai/schemastery',
-  '@deepseek-ai/cordis-plugin-loader',
-  '@deepseek-ai/cordis-plugin-include',
-  '@deepseek-ai/cordis-plugin-group',
-  '@deepseek-ai/cordis-plugin-timer',
-  '@deepseek-ai/cordis-plugin-hmr',
-  '@deepseek-ai/cordis-plugin-logger-console',
+  '@supernova-ai/cordis',
+  '@supernova-ai/cosmokit',
+  '@supernova-ai/schemastery',
+  '@supernova-ai/cordis-plugin-loader',
+  '@supernova-ai/cordis-plugin-include',
+  '@supernova-ai/cordis-plugin-group',
+  '@supernova-ai/cordis-plugin-timer',
+  '@supernova-ai/cordis-plugin-hmr',
+  '@supernova-ai/cordis-plugin-logger-console',
 ])
 const publicNativePackages = new Set([
-  '@deepseek-ai/node-addon-system',
-  '@deepseek-ai/node-addon-system-darwin-arm64',
-  '@deepseek-ai/node-addon-system-darwin-x64',
-  '@deepseek-ai/node-addon-system-linux-arm64',
-  '@deepseek-ai/node-addon-system-linux-x64',
+  '@supernova-ai/node-addon-system',
+  '@supernova-ai/node-addon-system-darwin-arm64',
+  '@supernova-ai/node-addon-system-darwin-x64',
+  '@supernova-ai/node-addon-system-linux-arm64',
+  '@supernova-ai/node-addon-system-linux-x64',
 ])
 /** Public source home recorded in maintained package manifests. */
 const publishedRepositoryUrl = 'git+https://github.com/deepseek-ai/deepseek-harness.git'
@@ -79,13 +79,13 @@ const localArtifactDirs = new Set(['node_modules'])
 const appPackageFiles: Readonly<Record<string, readonly string[]>> = {
   // Only `prepack` stages `docs`; every other reader of this directory sees
   // whatever the checkout holds.
-  '@deepseek-ai/dsh': ['lib/*.js', 'lib/*.js.map', 'lib/types/*.d.ts', 'lib/types/*.d.ts.map', 'docs', 'src'],
-  '@deepseek-ai/dsh-desktop-host': [
+  '@supernova-ai/snh': ['lib/*.js', 'lib/*.js.map', 'lib/types/*.d.ts', 'lib/types/*.d.ts.map', 'docs', 'src'],
+  '@supernova-ai/snh-desktop-host': [
     'lib/index.js', 'lib/cli.js',
   ],
   // The worker-preview surface (dist/preview.html and dist/preview/) backs
   // opt-in experimental packages and is not published.
-  '@deepseek-ai/dsh-web-frontend': ['dist', '!dist/preview.html', '!dist/preview', 'src'],
+  '@supernova-ai/snh-web-frontend': ['dist', '!dist/preview.html', '!dist/preview', 'src'],
 }
 
 /** The subset of package.json fields this constraint check cares about. */
@@ -106,8 +106,8 @@ export interface PackageManifest {
   devDependencies?: Record<string, string>
   dependencies?: Record<string, string>
   optionalDependencies?: Record<string, string>
-  dsh?: {
-    bundle?: DshBundleManifest
+  snh?: {
+    bundle?: SnhBundleManifest
   }
 }
 
@@ -186,82 +186,82 @@ export function readWorkspaceManifests(repositoryRoot: string): WorkspaceManifes
 
 const packageFileExtras: Readonly<Record<string, readonly string[]>> = {
   // Tools entry points share error classes and invocation stages through runtime chunks.
-  '@deepseek-ai/dsh-tools': ['lib/pipeline.js', 'lib/shared-*.js'],
-  '@deepseek-ai/dsh-tool-executor-ptc': ['lib/run-code.js', 'lib/_chunks/*.js'],
+  '@supernova-ai/snh-tools': ['lib/pipeline.js', 'lib/shared-*.js'],
+  '@supernova-ai/snh-tool-executor-ptc': ['lib/run-code.js', 'lib/_chunks/*.js'],
   // The embedded OAR implementation retains its upstream license.
-  '@deepseek-ai/dsh-experimental-subagent-oar': ['LICENSE-OAR'],
+  '@supernova-ai/snh-experimental-subagent-oar': ['LICENSE-OAR'],
   // CUA publishes its client API and attributed native source for local macOS builds.
-  '@deepseek-ai/dsh-cua': ['lib/remote-types.js', 'lib/api.js', 'lib/bridge.js', 'lib/native-client.js', 'lib/protocol.js', 'lib/config.js', 'lib/native-schema.js', 'lib/native-build.js', 'lib/guidance.js'],
-  '@deepseek-ai/dsh-cua-macos': ['native/bin', 'cua-helper.json', 'native/Package.swift', 'native/Info.plist', 'native/DSHComputerUse.icns', 'native/build_app.py', 'native/Sources', 'native/tests/swift', 'native/tests/test_swift.py', 'native/LICENSE.cua-driver', 'native/LICENSE.computer-use-icon', 'native/upstream.json', 'native/README.md', 'native/README.zh.md', 'native/protocol.schema.json'],
-  '@deepseek-ai/dsh-cua-windows': ['native/bin'],
-  '@deepseek-ai/dsh-webhook-github': ['examples/github-review/cordis.yml', 'examples/github-review/github-ready-review-rule.mjs'],
+  '@supernova-ai/snh-cua': ['lib/remote-types.js', 'lib/api.js', 'lib/bridge.js', 'lib/native-client.js', 'lib/protocol.js', 'lib/config.js', 'lib/native-schema.js', 'lib/native-build.js', 'lib/guidance.js'],
+  '@supernova-ai/snh-cua-macos': ['native/bin', 'cua-helper.json', 'native/Package.swift', 'native/Info.plist', 'native/SNHComputerUse.icns', 'native/build_app.py', 'native/Sources', 'native/tests/swift', 'native/tests/test_swift.py', 'native/LICENSE.cua-driver', 'native/LICENSE.computer-use-icon', 'native/upstream.json', 'native/README.md', 'native/README.zh.md', 'native/protocol.schema.json'],
+  '@supernova-ai/snh-cua-windows': ['native/bin'],
+  '@supernova-ai/snh-webhook-github': ['examples/github-review/cordis.yml', 'examples/github-review/github-ready-review-rule.mjs'],
   // Liveshare publishes its built Relay gateway entry and the shared runtime
   // chunk that entry imports. Its `./types` export is a type-only module, so
   // the emitted tree contributes that one runtime file; the declarations still
   // ship as the whole tree.
-  '@deepseek-ai/dsh-experimental-liveshare': [
+  '@supernova-ai/snh-experimental-liveshare': [
     'lib/owner-gateway/cli.js',
     'lib/retry-backoff-*.js',
   ],
   // Owned Worker bundles import this public bootstrap before their business entry.
-  '@deepseek-ai/dsh-app-boot': ['lib/worker/profile-resolution-bootstrap.js'],
+  '@supernova-ai/snh-app-boot': ['lib/worker/profile-resolution-bootstrap.js'],
   // Statically linked client libraries keep their stylesheets next to the emitted
   // JavaScript, which imports them by relative path: the compile shell runs
   // them through its own CSS pipeline, so the sheets are published artifacts.
   // The glob covers whichever sheets a package emits; sourcemaps stay
   // unpublished, as everywhere else in the repository.
-  '@deepseek-ai/dsh-client-ui-primitives': ['lib/**/*.css'],
-  '@deepseek-ai/dsh-client-ui-dockkit': ['lib/**/*.css'],
-  '@deepseek-ai/dsh-client-ui-sidebar-documentpreview': ['lib/client.*.js'],
-  '@deepseek-ai/dsh-client-ui-sidebar-terminal': ['lib/client.*.js'],
-  '@deepseek-ai/dsh-client-web': ['lib/**/*.css', 'lib/apply-injections.js'],
-  '@deepseek-ai/dsh-client-ui-theme': ['lib/styles'],
+  '@supernova-ai/snh-client-ui-primitives': ['lib/**/*.css'],
+  '@supernova-ai/snh-client-ui-dockkit': ['lib/**/*.css'],
+  '@supernova-ai/snh-client-ui-sidebar-documentpreview': ['lib/client.*.js'],
+  '@supernova-ai/snh-client-ui-sidebar-terminal': ['lib/client.*.js'],
+  '@supernova-ai/snh-client-web': ['lib/**/*.css', 'lib/apply-injections.js'],
+  '@supernova-ai/snh-client-ui-theme': ['lib/styles'],
   // The physical-key protocol is a public entry usable without the browser service.
-  '@deepseek-ai/dsh-client-shortcuts': ['lib/protocol.js'],
+  '@supernova-ai/snh-client-shortcuts': ['lib/protocol.js'],
   // The Feishu entry skill travels with the package; the guides it indexes stay in lark-cli.
-  '@deepseek-ai/dsh-feishu': ['skills'],
+  '@supernova-ai/snh-feishu': ['skills'],
   // The WeCom plugin ships its entry skill; the upstream guides it indexes are downloaded at load.
-  '@deepseek-ai/dsh-wecom': ['skills'],
+  '@supernova-ai/snh-wecom': ['skills'],
   // The Tencent Meeting plugin ships its entry skill; the upstream guide it indexes is downloaded at load.
-  '@deepseek-ai/dsh-tencent-meeting': ['skills'],
+  '@supernova-ai/snh-tencent-meeting': ['skills'],
   // The DingTalk entry skill travels with the package; the plugin copies it beside the downloaded guides.
-  '@deepseek-ai/dsh-dingtalk': ['skills'],
-  '@deepseek-ai/dsh-experimental-speech-to-text-sensevoice': ['runtime/assets.json'],
+  '@supernova-ai/snh-dingtalk': ['skills'],
+  '@supernova-ai/snh-experimental-speech-to-text-sensevoice': ['runtime/assets.json'],
   // Node profile configuration and process bootstraps have separate bundles.
-  '@deepseek-ai/dsh-ptc-runtime-node': ['lib/configuration.js', 'lib/process.js', 'lib/persistent-process.js'],
+  '@supernova-ai/snh-ptc-runtime-node': ['lib/configuration.js', 'lib/process.js', 'lib/persistent-process.js'],
   // The Inspector owns a Worker and a mirrored frontend outside package export paths.
-  '@deepseek-ai/dsh-experimental-inspector': ['lib/client.*.js', 'lib/worker.js', 'lib/devtools/**'],
+  '@supernova-ai/snh-experimental-inspector': ['lib/client.*.js', 'lib/worker.js', 'lib/devtools/**'],
   // Creator's composition guidance travels with the declaration package.
-  '@deepseek-ai/dsh-agent-preset': ['skills'],
+  '@supernova-ai/snh-agent-preset': ['skills'],
   // Personalized pages ship the location guidance used by their Creator.
-  '@deepseek-ai/dsh-creation-recommendations': ['references/*.md', 'skills/*.md'],
+  '@supernova-ai/snh-creation-recommendations': ['references/*.md', 'skills/*.md'],
   // Official-plugin recommendations ship the skill text their provider loads.
-  '@deepseek-ai/dsh-plugin-recommendations': ['skills/*.md'],
+  '@supernova-ai/snh-plugin-recommendations': ['skills/*.md'],
   // The Web Host mounts the default-off settings owner independently of the
   // delegation-tool instances.
-  '@deepseek-ai/dsh-tool-subagent': ['lib/model-selection-settings.js'],
+  '@supernova-ai/snh-tool-subagent': ['lib/model-selection-settings.js'],
   // The JSONL backend resolves its private verification Worker relative to
   // import.meta.url; it is shipped without a public package subpath.
-  '@deepseek-ai/dsh-session-persistence-jsonl': ['lib/worker.cjs'],
+  '@supernova-ai/snh-session-persistence-jsonl': ['lib/worker.cjs'],
   // The plugin market parses fetched indexes in a private Worker resolved
   // relative to import.meta.url; it is shipped without a public package subpath.
-  '@deepseek-ai/dsh-plugin-market': ['lib/worker.cjs'],
+  '@supernova-ai/snh-plugin-market': ['lib/worker.cjs'],
   // The argv-prefix runner entry ships beside the lib as its own bundle;
   // sandbox-local resolves it through the package's ./runner export. tsdown
   // also shares its generated FFI code through a hashed runtime chunk.
-  '@deepseek-ai/dsh-sandbox-windows-acl': ['lib/runner.js', 'lib/types-*.js', 'assets'],
-  '@deepseek-ai/dsh-skill-badge': ['assets'],
-  '@deepseek-ai/dsh-skill-office': ['assets'],
-  '@deepseek-ai/dsh-subprocess': ['lib/control.js'],
+  '@supernova-ai/snh-sandbox-windows-acl': ['lib/runner.js', 'lib/types-*.js', 'assets'],
+  '@supernova-ai/snh-skill-badge': ['assets'],
+  '@supernova-ai/snh-skill-office': ['assets'],
+  '@supernova-ai/snh-subprocess': ['lib/control.js'],
   // SSH launches a private helper and shares wire definitions and TLS setup
   // between that helper and the connection owner.
-  '@deepseek-ai/dsh-ssh': [
+  '@supernova-ai/snh-ssh': [
     'lib/helper.js', 'lib/protocol.js', 'lib/schemas.js',
     'lib/protocol-*.js', 'lib/schemas-*.js', 'lib/stream-security-*.js',
   ],
   // Ordinary native containment ships a path-loaded runner and its shared
   // runner chunk beside the existing node-pty permission repair.
-  '@deepseek-ai/dsh-subprocess-local': [
+  '@supernova-ai/snh-subprocess-local': [
     'lib/runner.js',
     'lib/runner-*.js',
     'lib/output.js',
@@ -270,12 +270,12 @@ const packageFileExtras: Readonly<Record<string, readonly string[]>> = {
   // tsdown shares the repository/pack code between the lib entry and the bin
   // through a hashed chunk. The committed bin.js is the link target pnpm can
   // resolve at install time, before the build produces lib/bin.js.
-  '@deepseek-ai/dsh-experimental-webworker-packer': ['bin.js', 'lib/repository-*.js'],
+  '@supernova-ai/snh-experimental-webworker-packer': ['bin.js', 'lib/repository-*.js'],
   // Startup and runtime share the advertised URL parser.
-  '@deepseek-ai/dsh-web-app': ['lib/public-url-*.js'],
+  '@supernova-ai/snh-web-app': ['lib/public-url-*.js'],
   // The headless entry and its startup row share the JSON projection code
   // through a hashed tsdown chunk; both import it by relative path.
-  '@deepseek-ai/dsh-headless': ['lib/json-stream-*.js'],
+  '@supernova-ai/snh-headless': ['lib/json-stream-*.js'],
 }
 
 function sameStringList(actual: readonly string[] | undefined, expected: readonly string[]): boolean {
@@ -319,7 +319,7 @@ export function detailDocumentFiles(packageDir: string): readonly string[] {
  * @param detailFiles - entries from {@link detailDocumentFiles}.
  * @returns the icon, deduplicated locale targets, and detail documents followed by runtime, package-asset, and declaration payloads.
  */
-export function expectedDshPackageFiles(manifest: PackageManifest, detailFiles: readonly string[] = []): readonly string[] {
+export function expectedSnhPackageFiles(manifest: PackageManifest, detailFiles: readonly string[] = []): readonly string[] {
   const localeFiles = new Set<string>()
   for (const resource of Object.keys(manifest.exports ?? {})) {
     if (!/^\.\/(?:.+\/)?locale\/[^/]+\.json$/u.test(resource)) continue
@@ -327,7 +327,7 @@ export function expectedDshPackageFiles(manifest: PackageManifest, detailFiles: 
     if (target?.startsWith('./') && target.endsWith('.json')) localeFiles.add(target.slice(2))
   }
   const browserClient = exportDefault(manifest, './client')
-  const bundle = manifest.dsh?.bundle
+  const bundle = manifest.snh?.bundle
   const bundleFiles = bundle === undefined ? [] : bundlePatchFiles(bundle).map(file => file.replace(/^\.\//, ''))
   const extras = [
     ...bundleFiles,
@@ -445,7 +445,7 @@ export function checkExperimentalManifest(
     errors.push(`${label}: experimental package must declare a name`)
   } else if (manifest.name.startsWith(EXPERIMENTAL_PACKAGE_NAME_PREFIX)) {
     if (!LEGACY_PREFIXED_EXPERIMENTAL_PACKAGE_DIRECTORIES.includes(dir)) {
-      errors.push(`${label}: new experimental packages must not use the ${JSON.stringify(EXPERIMENTAL_PACKAGE_NAME_PREFIX)} prefix; name it @deepseek-ai/dsh-<name> and declare it in EXPERIMENTAL_PACKAGE_NAME_EXCEPTIONS (scripts/experimental-package-policy.ts)`)
+      errors.push(`${label}: new experimental packages must not use the ${JSON.stringify(EXPERIMENTAL_PACKAGE_NAME_PREFIX)} prefix; name it @supernova-ai/snh-<name> and declare it in EXPERIMENTAL_PACKAGE_NAME_EXCEPTIONS (scripts/experimental-package-policy.ts)`)
     }
   } else if (manifest.name !== EXPERIMENTAL_PACKAGE_NAME_EXCEPTIONS[dir]) {
     errors.push(`${label}: experimental package name must be declared for this directory in EXPERIMENTAL_PACKAGE_NAME_EXCEPTIONS (scripts/experimental-package-policy.ts)`)
@@ -490,21 +490,21 @@ function isReleaseMemberDirectory(dir: string): boolean {
 }
 
 /**
- * Require a dsh-family manifest to carry the workspace version.
+ * Require a snh-family manifest to carry the workspace version.
  *
- * The dsh release sequence publishes packages/ and apps/ members and every
- * private dsh package on one shared version, written by `release:dsh` and
+ * The snh release sequence publishes packages/ and apps/ members and every
+ * private snh package on one shared version, written by `release:snh` and
  * shared with the workspace root. This name test is that boundary: it covers
  * the family wherever the manifest lives, so apps/ members cannot drift with
  * only the release lane noticing.
  * @param manifest - the workspace package manifest.
- * @param expected - the version every dsh-family manifest must carry (the root's).
+ * @param expected - the version every snh-family manifest must carry (the root's).
  * @returns one violation naming the manifest and the expected version, or
  * undefined when the manifest is compliant or not in the family.
  */
-export function checkDshFamilyVersion(manifest: PackageManifest, expected: string | undefined): string | undefined {
+export function checkSnhFamilyVersion(manifest: PackageManifest, expected: string | undefined): string | undefined {
   const name = manifest.name
-  if (name !== '@deepseek-ai/dsh' && name?.startsWith('@deepseek-ai/dsh-') !== true) return undefined
+  if (name !== '@supernova-ai/snh' && name?.startsWith('@supernova-ai/snh-') !== true) return undefined
   if (manifest.version !== expected) {
     return `${name}: package.json version must match root version ${expected ?? '(missing)'}`
   }
@@ -512,14 +512,14 @@ export function checkDshFamilyVersion(manifest: PackageManifest, expected: strin
 }
 
 /**
- * Check one workspace manifest against publication and dsh-package policy.
+ * Check one workspace manifest against publication and snh-package policy.
  * @param workspace - package directory and parsed manifest.
  * @returns path-qualified policy violations.
  */
 export function checkWorkspaceManifest({ dir, manifest }: WorkspaceManifest): string[] {
   const errors = checkExperimentalManifest({ dir, manifest })
   const label = manifest.name ?? dir
-  const familyVersionError = checkDshFamilyVersion(manifest, repositoryVersion)
+  const familyVersionError = checkSnhFamilyVersion(manifest, repositoryVersion)
   if (familyVersionError !== undefined) errors.push(familyVersionError)
   const isNativePackageDir = dir.startsWith('native/system/packages/')
   const isPublicNativePackage = isNativePackageDir
@@ -546,7 +546,7 @@ export function checkWorkspaceManifest({ dir, manifest }: WorkspaceManifest): st
     //
     // Access is per release sequence, not per scope: the vendored framework and
     // the Landlock packages publish publicly because outside consumers install
-    // them, and the dsh family published publicly with its own sequence on
+    // them, and the snh family published publicly with its own sequence on
     // 2026-08-13. No publish path passes `--access`; each packed manifest declares
     // it, and this gate requires every release member to be public.
     if (manifest.private === true) {
@@ -568,7 +568,7 @@ export function checkWorkspaceManifest({ dir, manifest }: WorkspaceManifest): st
     return errors
   }
 
-  if (dir.startsWith('apps/') && dir !== desktopApplicationDirectory && dir !== pluginMarketGeneratorDirectory && dir !== desktopPublisherDirectory && manifest.name?.startsWith('@deepseek-ai/')) {
+  if (dir.startsWith('apps/') && dir !== desktopApplicationDirectory && dir !== pluginMarketGeneratorDirectory && dir !== desktopPublisherDirectory && manifest.name?.startsWith('@supernova-ai/')) {
     const expectedFiles = appPackageFiles[manifest.name]
     if (expectedFiles === undefined) {
       errors.push(`${label}: app package has no publication files policy`)
@@ -586,14 +586,14 @@ export function checkWorkspaceManifest({ dir, manifest }: WorkspaceManifest): st
     }
   }
 
-  if (dir.startsWith('packages/') && manifest.name?.startsWith('@deepseek-ai/dsh-')) {
-    const peer = manifest.peerDependencies?.['@deepseek-ai/cordis']
-    const dev = manifest.devDependencies?.['@deepseek-ai/cordis']
+  if (dir.startsWith('packages/') && manifest.name?.startsWith('@supernova-ai/snh-')) {
+    const peer = manifest.peerDependencies?.['@supernova-ai/cordis']
+    const dev = manifest.devDependencies?.['@supernova-ai/cordis']
 
-    if (!peer) errors.push(`${label}: @deepseek-ai/cordis must be a peerDependency`)
-    if (!dev) errors.push(`${label}: @deepseek-ai/cordis must also be a devDependency`)
+    if (!peer) errors.push(`${label}: @supernova-ai/cordis must be a peerDependency`)
+    if (!dev) errors.push(`${label}: @supernova-ai/cordis must also be a devDependency`)
     if (peer && dev && peer !== dev) {
-      errors.push(`${label}: @deepseek-ai/cordis peer (${peer}) and dev (${dev}) ranges must match`)
+      errors.push(`${label}: @supernova-ai/cordis peer (${peer}) and dev (${dev}) ranges must match`)
     }
     if (manifest.type !== 'module') {
       errors.push(`${label}: package.json must set "type": "module"`)
@@ -611,15 +611,15 @@ export function checkWorkspaceManifest({ dir, manifest }: WorkspaceManifest): st
     if (rootEntry?.default !== './lib/index.js') {
       errors.push(`${label}: package.json exports["."].default must be "./lib/index.js"`)
     }
-    if (manifest.name === '@deepseek-ai/dsh-tools'
+    if (manifest.name === '@supernova-ai/snh-tools'
       && !hasExportPair(manifest, './pipeline', './lib/types/pipeline.d.ts', './lib/pipeline.js')) {
       errors.push(`${label}: exports["./pipeline"] must expose lib/types/pipeline.d.ts and lib/pipeline.js`)
     }
-    if (manifest.name === '@deepseek-ai/dsh-tool-executor-ptc'
+    if (manifest.name === '@supernova-ai/snh-tool-executor-ptc'
       && !hasExportPair(manifest, './run-code', './lib/types/run-code.d.ts', './lib/run-code.js')) {
       errors.push(`${label}: exports["./run-code"] must expose lib/types/run-code.d.ts and lib/run-code.js`)
     }
-    const expectedFiles = expectedDshPackageFiles(manifest, detailDocumentFiles(join(root, dir)))
+    const expectedFiles = expectedSnhPackageFiles(manifest, detailDocumentFiles(join(root, dir)))
     if (!sameStringList(manifest.files, expectedFiles)) {
       errors.push(`${label}: package.json files must be ${JSON.stringify(expectedFiles)}`)
     }
@@ -655,8 +655,8 @@ function checkHierarchyShape(): string[] {
 }
 
 function checkRepositoryVersion(): string[] {
-  // The root carries the dsh release family's version, so a prerelease such as
-  // 0.0.1-rc.1 is a valid state between `release:dsh` and its publication.
+  // The root carries the snh release family's version, so a prerelease such as
+  // 0.0.1-rc.1 is a valid state between `release:snh` and its publication.
   if (repositoryVersion && /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(repositoryVersion)) return []
   return ['package.json: version must be X.Y.Z with an optional prerelease segment']
 }
@@ -667,7 +667,7 @@ const dependencySections = ['dependencies', 'devDependencies', 'peerDependencies
 const runtimeDependencySections = ['dependencies', 'optionalDependencies', 'peerDependencies'] as const
 
 /**
- * Prevent an official runtime from requiring an experimental package. The dsh installation's `dependencies`
+ * Prevent an official runtime from requiring an experimental package. The snh installation's `dependencies`
  * may hold the bundles the launcher's `OPTIONAL_BUNDLES` names: shipped switched off, they are not a requirement
  * ([rationale](../.agents/notes/implemented/process/2026-09-15-shipped-optional-bundles.md)).
  * @param manifests - release, private experimental, and deployment-root manifests.
@@ -684,7 +684,7 @@ export function checkExperimentalDependencyIsolation(
   const errors: string[] = []
   for (const { dir, manifest } of manifests) {
     if (!standardReleaseMemberDirectory.test(dir) && dir !== 'python/sdk-runtime') continue
-    const offered = manifest.name === '@deepseek-ai/dsh' ? new Set(optionalBundles) : new Set<string>()
+    const offered = manifest.name === '@supernova-ai/snh' ? new Set(optionalBundles) : new Set<string>()
     for (const section of runtimeDependencySections) {
       for (const [name, range] of Object.entries(manifest[section] ?? {})) {
         const experimental = experimentalNames.has(name) || isExperimentalPackageName(name)
@@ -699,7 +699,7 @@ export function checkExperimentalDependencyIsolation(
 }
 
 /**
- * Require exact DSH ranges, tilde vendor/native ranges, and the workspace protocol elsewhere.
+ * Require exact SNH ranges, tilde vendor/native ranges, and the workspace protocol elsewhere.
  *
  * A hand-written range says nothing about the version the workspace actually
  * carries, and `pnpm pack` leaves it alone: `^0.0.1` published from version
@@ -718,7 +718,7 @@ export function checkWorkspaceProtocol(manifests: readonly WorkspaceManifest[]):
     for (const section of dependencySections) {
       for (const [name, range] of Object.entries(manifest[section] ?? {})) {
         if (!members.has(name)) continue
-        const expected = name === '@deepseek-ai/dsh' || name.startsWith('@deepseek-ai/dsh-')
+        const expected = name === '@supernova-ai/snh' || name.startsWith('@supernova-ai/snh-')
           ? 'workspace:*'
           : vendors.has(name) ? 'workspace:~' : undefined
         if (expected !== undefined ? range === expected : range.startsWith('workspace:')) continue

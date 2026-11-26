@@ -3,13 +3,13 @@ description: "Recommend built-in official plugins for explicit user needs and en
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-plugin-recommendations
+# @supernova-ai/snh-plugin-recommendations
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-Users can discover a relevant built-in plugin while discussing a concrete need or asking how to do something in DSH. The Agent answers first, then offers one card at the completed Turn’s end; the user can open its plugin details, choose Enable, or choose Not now. Enabling changes the whole profile and persists across restarts. The Agent learns the result with the next request; clicking starts no model turn. Users can later disable or remove the plugin from its details page.
+Users can discover a relevant built-in plugin while discussing a concrete need or asking how to do something in SNH. The Agent answers first, then offers one card at the completed Turn’s end; the user can open its plugin details, choose Enable, or choose Not now. Enabling changes the whole profile and persists across restarts. The Agent learns the result with the next request; clicking starts no model turn. Users can later disable or remove the plugin from its details page.
 
 ## Table of Contents
 
@@ -25,7 +25,7 @@ Users can discover a relevant built-in plugin while discussing a concrete need o
 <a id="use-this-package"></a>
 ## Use this package
 
-The Web and Desktop composition ([`dsh-web-app`](../../bundle/web-app/README.md)) mounts this package with the shared [action card service](../../interaction/action-cards/README.md) and its browser half. Settings → General → Personalized recommendations turns new cards off. This plugin has no configuration of its own.
+The Web and Desktop composition ([`snh-web-app`](../../bundle/web-app/README.md)) mounts this package with the shared [action card service](../../interaction/action-cards/README.md) and its browser half. Settings → General → Personalized recommendations turns new cards off. This plugin has no configuration of its own.
 
 Plugin recommendations keep working when the Personalized pages row (`creation-recommendations`) is disabled, and neither package depends on the other. A Turn shows at most one card across both kinds: the first valid `action-card` block of the Turn becomes the card. For several independent needs, guidance follows an explicit user priority and otherwise prefers an existing plugin over a new page; other needs stay in the answer.
 
@@ -41,7 +41,7 @@ The card appears below the answer after the Turn that holds its block ends. Enab
 <details>
 <summary>Implementation internals — click to expand</summary>
 
-The Host entry is a function plugin. Its `apply` assembles the internal `pluginRecommendations` Remote service with `ctx.plugin`; the service reads catalog text for cards and enables plugins for its card kind. It is not a separately configurable or replaceable YAML entry and adds no service to `dsh-base`. Disabling the feature removes its skill, card kind and Remote and drains its owned enabling work.
+The Host entry is a function plugin. Its `apply` assembles the internal `pluginRecommendations` Remote service with `ctx.plugin`; the service reads catalog text for cards and enables plugins for its card kind. It is not a separately configurable or replaceable YAML entry and adds no service to `snh-base`. Disabling the feature removes its skill, card kind and Remote and drains its owned enabling work.
 
 The plugin adds no model tool and no system-prompt section. It registers the `official-plugins` skill; loading it appends the current eligible catalog from `pluginManager`. It registers the `enable_official_plugin` kind with the shared [action card service](../../interaction/action-cards/README.md): `details` holding the plugin `name`, and the Enable verb, which requires global Remote access. The service owns the card projection, Not now, the Remote action and the status notice. This plugin enables the named plugin through Plugin Manager and records `enabled`, `already-enabled`, `failed` or `unconfirmed`. The decision data carries `application: restart-required` when the saved selection waits for a restart, and the management `errorCode` of a failed change, or `operation-error` when Plugin Manager rejected the change without one. `unconfirmed` records an enable whose result a plugin reload cut off. Before every action, including Not now, such a card checks the profile, and a plugin found on records `enabled` instead of a retry or a dismissal. Not now is recorded for an unstarted, failed or unconfirmed card. Only shipped, optional, official plugins that are available, writable and error-free are eligible; the name is checked when the user acts, not when the model proposes. The Remote `describe(sessionId, cardId)` returns the current title, description and selection of a card's plugin, or a refusal.
 
@@ -69,7 +69,7 @@ Concurrent actions on one card share one operation, and disposal stops local fol
 
 #### What the model sees
 
-The existing `skill` tool loads `official-plugins` when the user asks how to do or use something in DSH, asks whether DSH can do something, or says a capability is missing or should change, such as tools, input, displayed thinking or titles, session search, terminals, worktrees, agent teams, desktop control, automation, access, approval prompts, output badges or signatures, and plugins or plugin sources. The catalog entry tells the Agent that such a question is not a request to develop DSH and to load the skill before reading files or source. Loading returns matching policy, the submission rule and the current catalog with names, English titles and descriptions, and enabled state. An enabled match gets usage guidance without a card; a partial match states its limit. Ordinary tasks, quoted wishes, discussion-only and declined requests get no card. The proposal is one [`action-card` block](../../interaction/action-cards/README.md#model-experience) that ends the final answer, holding `action: "enable_official_plugin"`, the plugin's catalog `title`, a one-sentence `brief` in the user's language and `details` holding the catalog `name`; the block itself is the submission, the user does not see it, and nothing changes until the user clicks Enable. Because the card shows only the plugin’s catalog title and description, the answer before the block says in one sentence, in the user’s language, how the plugin meets the need; `brief` is that same sentence. At most one short invitation to click Enable below comes right before the block and never says the plugin is already on. The next request after a click carries the shared status notice with this kind's guidance: a fact, not a request for more work, and enabling authorizes nothing beyond that plugin.
+The existing `skill` tool loads `official-plugins` when the user asks how to do or use something in SNH, asks whether SNH can do something, or says a capability is missing or should change, such as tools, input, displayed thinking or titles, session search, terminals, worktrees, agent teams, desktop control, automation, access, approval prompts, output badges or signatures, and plugins or plugin sources. The catalog entry tells the Agent that such a question is not a request to develop SNH and to load the skill before reading files or source. Loading returns matching policy, the submission rule and the current catalog with names, English titles and descriptions, and enabled state. An enabled match gets usage guidance without a card; a partial match states its limit. Ordinary tasks, quoted wishes, discussion-only and declined requests get no card. The proposal is one [`action-card` block](../../interaction/action-cards/README.md#model-experience) that ends the final answer, holding `action: "enable_official_plugin"`, the plugin's catalog `title`, a one-sentence `brief` in the user's language and `details` holding the catalog `name`; the block itself is the submission, the user does not see it, and nothing changes until the user clicks Enable. Because the card shows only the plugin’s catalog title and description, the answer before the block says in one sentence, in the user’s language, how the plugin meets the need; `brief` is that same sentence. At most one short invitation to click Enable below comes right before the block and never says the plugin is already on. The next request after a click carries the shared status notice with this kind's guidance: a fact, not a request for more work, and enabling authorizes nothing beyond that plugin.
 
 #### Token effect
 

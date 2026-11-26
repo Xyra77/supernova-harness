@@ -1,4 +1,4 @@
-/** Unit suites cannot reach the official DeepSeek model listing unless they answer `fetch` themselves. */
+/** Unit suites cannot reach the official SuperNova model listing unless they answer `fetch` themselves. */
 import { createServer } from 'node:http'
 import { afterEach, expect, it } from 'vitest'
 import type { Server } from 'node:http'

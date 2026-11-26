@@ -4,16 +4,16 @@
  * instance owns one `(provider id, canonical workspace)` process. Queries serialize through a single
  * queue so a cancellation that fails to stop the server can terminate it without killing unrelated
  * work; distinct instances run in parallel.
- * @module @deepseek-ai/dsh-lsp-stdio/instance
+ * @module @supernova-ai/snh-lsp-stdio/instance
  */
 
-import { LspError } from '@deepseek-ai/dsh-lsp'
+import { LspError } from '@supernova-ai/snh-lsp'
 import type {
   LspOperation,
   LspProviderQuery,
   LspQueryResult,
-} from '@deepseek-ai/dsh-lsp'
-import { deadline } from '@deepseek-ai/dsh-timeout'
+} from '@supernova-ai/snh-lsp'
+import { deadline } from '@supernova-ai/snh-timeout'
 import { abortable, abortError } from './abort.ts'
 import { LspConnection } from './connection.ts'
 import type { ConnectionSpawner, ConnectionSpec, ConnectionWriter } from './connection.ts'

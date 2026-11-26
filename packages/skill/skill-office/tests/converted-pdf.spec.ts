@@ -1,11 +1,11 @@
 /** The temporary file and byte count a PDF conversion reports, which the real Office export lane asserts. */
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { createToolResultMessage, type ToolCallId } from '@deepseek-ai/dsh-llm'
-import { Session, type SessionId, type SessionEvent } from '@deepseek-ai/dsh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import { createToolResultMessage, type ToolCallId } from '@supernova-ai/snh-llm'
+import { Session, type SessionId, type SessionEvent } from '@supernova-ai/snh-session'
 import { expect, it } from 'vitest'
 import { convertedPdfFiles } from './fixtures/real-office.ts'
 
-const temporary = '/h/.dsh/office-kit/outputs/session-0123456789abcdef01234567/2f0f8c3e-7d1b-4c1e-9b0a-0d5e6f7a8b9c/input.pdf'
+const temporary = '/h/.snh/office-kit/outputs/session-0123456789abcdef01234567/2f0f8c3e-7d1b-4c1e-9b0a-0d5e6f7a8b9c/input.pdf'
 
 /** Record native tool results carrying one text block each. */
 function results(texts: readonly string[], isError = false): readonly SessionEvent[] {

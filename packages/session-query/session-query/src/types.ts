@@ -2,7 +2,7 @@
  * Public records for exact reads and relationship traces over the
  * live-preferred logical session corpus.
  *
- * @module @deepseek-ai/dsh-session-query/types
+ * @module @supernova-ai/snh-session-query/types
  */
 
 import type {
@@ -14,13 +14,13 @@ import type {
   SessionSeq,
   OptionalSessionSeq,
   SurfaceEvent,
-} from '@deepseek-ai/dsh-session/types'
-import type { SessionTitleSnapshot } from '@deepseek-ai/dsh-session-title/types'
+} from '@supernova-ai/snh-session/types'
+import type { SessionTitleSnapshot } from '@supernova-ai/snh-session-title/types'
 import type { SessionSearchCursor } from './cursor.ts'
 
 export type { SessionSearchCursor } from './cursor.ts'
 
-declare module '@deepseek-ai/dsh-session-projection/types' {
+declare module '@supernova-ai/snh-session-projection/types' {
   interface SessionProjectionMap {
     /** Persisted facts used to summarize a Session without activating it. */
     sessionListMetadata: SessionListMetadata

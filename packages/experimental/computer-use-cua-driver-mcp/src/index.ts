@@ -4,12 +4,12 @@
  * @module
  */
 
-import type { Context, Fiber } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ComputerUseProviderName } from '@deepseek-ai/dsh-computer-use/types'
-import * as McpClient from '@deepseek-ai/dsh-mcp-client'
-import type {} from '@deepseek-ai/dsh-computer-use'
+import type { Context, Fiber } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ComputerUseProviderName } from '@supernova-ai/snh-computer-use/types'
+import * as McpClient from '@supernova-ai/snh-mcp-client'
+import type {} from '@supernova-ai/snh-computer-use'
 
 /** Cordis plugin identity for the installed Cua Driver provider. */
 export const name = 'experimental-computer-use-cua-driver-mcp'

@@ -1,14 +1,14 @@
-import { ToolExecutionPipeline } from '@deepseek-ai/dsh-tools/pipeline'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import { ToolExecutionPipeline } from '@supernova-ai/snh-tools/pipeline'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context, type Fiber } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import AgentRegistry, { type Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage, type ToolCallId, HarnessError , createMessage } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
-import { MAX_TIMER_DELAY_MS, TimeoutReason } from '@deepseek-ai/dsh-timeout'
-import * as TimeoutPolicy from '@deepseek-ai/dsh-tool-call-timeout-policy'
+import { Context, type Fiber } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import AgentRegistry, { type Agent } from '@supernova-ai/snh-agent'
+import { createUserMessage, type ToolCallId, HarnessError , createMessage } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
+import { MAX_TIMER_DELAY_MS, TimeoutReason } from '@supernova-ai/snh-timeout'
+import * as TimeoutPolicy from '@supernova-ai/snh-tool-call-timeout-policy'
 import SessionStore, {
   SESSION_FORMAT_VERSION,
   type SessionId,
@@ -17,8 +17,8 @@ import SessionStore, {
   type SessionEvent,
   type SessionHeader,
   type SessionId as SessionIdValue,
-} from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+} from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import SessionQueryEngine, {
   SessionQueryError,
   type SessionSearchCursor,
@@ -31,13 +31,13 @@ import SessionQueryEngine, {
   type SessionSearchPage,
   type SessionSearchRequest,
   type SessionTitleObservationResult,
-} from '@deepseek-ai/dsh-session-query'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { type ToolExecutionResult } from '@deepseek-ai/dsh-tools'
-import type { Config as ToolSessionQueryConfig } from '@deepseek-ai/dsh-tool-session-query'
-import * as ToolSessionQuery from '@deepseek-ai/dsh-tool-session-query'
+} from '@supernova-ai/snh-session-query'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime, { type ToolExecutionResult } from '@supernova-ai/snh-tools'
+import type { Config as ToolSessionQueryConfig } from '@supernova-ai/snh-tool-session-query'
+import * as ToolSessionQuery from '@supernova-ai/snh-tool-session-query'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'test': { kind: 'test' } & ContextFormed
   }

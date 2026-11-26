@@ -7,7 +7,7 @@
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
   "license": "MIT",
-  "name": "@deepseek-ai/dsh-client-ui-plugin-recommendations",
+  "name": "@supernova-ai/snh-client-ui-plugin-recommendations",
   "description": "Official plugin card body with catalog text and enabling",
   "repository": {
     "type": "git",
@@ -27,37 +27,37 @@
     },
     "./locale/*.json": "./locale/*.json"
   },
-  "dsh": {
+  "snh": {
     "client": {
       "platform": "web",
       "inject": [
-        "@deepseek-ai/dsh-api-remotes",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-plugin-manager",
-        "@deepseek-ai/dsh-client-ui-action-cards"
+        "@supernova-ai/snh-api-remotes",
+        "@supernova-ai/snh-client-locale",
+        "@supernova-ai/snh-client-ui-plugin-manager",
+        "@supernova-ai/snh-client-ui-action-cards"
       ]
     }
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-api-remotes": "workspace:*",
-    "@deepseek-ai/dsh-client-locale": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:*",
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-api-remotes": "workspace:*",
+    "@supernova-ai/snh-client-locale": "workspace:*",
+    "@supernova-ai/snh-client-ui-slots": "workspace:*",
+    "@supernova-ai/snh-client-ui-primitives": "workspace:*",
     "react": "^18.2.0",
-    "@deepseek-ai/dsh-plugin-recommendations": "workspace:*",
-    "@deepseek-ai/dsh-client-store": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-plugin-manager": "workspace:*",
-    "@deepseek-ai/dsh-package-manifest": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-action-cards": "workspace:*",
-    "@deepseek-ai/dsh-action-cards": "workspace:*",
+    "@supernova-ai/snh-plugin-recommendations": "workspace:*",
+    "@supernova-ai/snh-client-store": "workspace:*",
+    "@supernova-ai/snh-client-ui-plugin-manager": "workspace:*",
+    "@supernova-ai/snh-package-manifest": "workspace:*",
+    "@supernova-ai/snh-client-ui-action-cards": "workspace:*",
+    "@supernova-ai/snh-action-cards": "workspace:*",
     "zod": "4.6.6",
-    "@deepseek-ai/dsh-client-test-runtime": "workspace:*"
+    "@supernova-ai/snh-client-test-runtime": "workspace:*"
   },
   "files": [
     "locale/*.json",

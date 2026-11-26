@@ -4,9 +4,9 @@ using System.IO.Pipes;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Windows.Automation;
-using DeepSeek.Cua.Protocol;
+using SuperNova.Cua.Protocol;
 
-namespace DeepSeek.Cua.Windows;
+namespace SuperNova.Cua.Windows;
 
 internal static class NativeServer
 {

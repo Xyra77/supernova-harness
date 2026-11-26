@@ -4,12 +4,12 @@ import { useSyncExternalStore } from 'react'
 import { act, cleanup, fireEvent, render, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import './fonts-dom.client.ts'
-import type { PaneId, SidebarRightTabActions, SidebarRightTabInfo, TabId } from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { bindSnapshotSelector, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { RemoteError, type RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
-import { fileAddressFor } from '@deepseek-ai/dsh-util-workspace-path'
+import type { PaneId, SidebarRightTabActions, SidebarRightTabInfo, TabId } from '@supernova-ai/snh-client-ui-sidebar-right/client'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import { bindSnapshotSelector, makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { RemoteError, type RemoteResult } from '@supernova-ai/snh-typert-protocol'
+import { fileAddressFor } from '@supernova-ai/snh-util-workspace-path'
 import { CHANGES_KIND, changesAddress, type ChangesParams, type ChangesSource } from '../src/client/changes-address.ts'
 import * as DiffFileModule from '../src/client/DiffFile.tsx'
 import type { ReviewActions } from '../src/client/ReviewComposer.tsx'
@@ -33,10 +33,10 @@ import type {
 } from '../src/types.ts'
 import type {
   ChangeRequestKey, ForgeCommitList, ForgeReviewData, ForgeReviewId, ForgeReviewThread, ForgeReviewWriteResult, ForgeThreadId,
-} from '@deepseek-ai/dsh-experimental-forge/types'
+} from '@supernova-ai/snh-experimental-forge/types'
 import { entry, hostCopy, ready, snapshot } from './client-fixtures.client.ts'
 import { reviewComment, reviewThread } from './thread-fixtures.client.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const english = makeTranslate(en)
 /** Copy of a view of a GitHub pull request, which names the code host and the noun. */
@@ -566,9 +566,9 @@ describe('ChangesTab tooltips', () => {
     Object.defineProperty(name, 'scrollWidth', { value: 240, configurable: true })
     Object.defineProperty(name, 'clientWidth', { value: 120, configurable: true })
     fireEvent.pointerEnter(row)
-    expect([name.hasAttribute('data-marquee'), name.style.getPropertyValue('--dsh-marquee-range')]).toEqual([true, '120px'])
+    expect([name.hasAttribute('data-marquee'), name.style.getPropertyValue('--snh-marquee-range')]).toEqual([true, '120px'])
     fireEvent.pointerLeave(row)
-    expect([name.hasAttribute('data-marquee'), name.style.getPropertyValue('--dsh-marquee-range')]).toEqual([false, ''])
+    expect([name.hasAttribute('data-marquee'), name.style.getPropertyValue('--snh-marquee-range')]).toEqual([false, ''])
   })
 
   it('shows toolbar and viewed hints after 500ms of hover and at once on keyboard focus, with no native titles', async () => {
@@ -861,7 +861,7 @@ describe('ChangesTab local reads', () => {
     m.view.unmount()
 
     vi.spyOn(console, 'error').mockImplementation(() => {})
-    expect(() => mount({ contentId: 'dsh-resource://forge-changes/s1/remote' })).toThrow('not a changes address')
+    expect(() => mount({ contentId: 'snh-resource://forge-changes/s1/remote' })).toThrow('not a changes address')
   })
 })
 

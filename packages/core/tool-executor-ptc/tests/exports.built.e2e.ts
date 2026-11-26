@@ -10,12 +10,12 @@ const factoryBundle = fileURLToPath(new URL('../lib/run-code.js', import.meta.ur
 const execFileAsync = promisify(execFile)
 const probe = String.raw`
 import assert from 'node:assert/strict'
-import { Context } from '@deepseek-ai/cordis'
-import * as ptc from '@deepseek-ai/dsh-tool-executor-ptc'
-import { createRunCodeTool, RunCodeConfig } from '@deepseek-ai/dsh-tool-executor-ptc/run-code'
-import Tools, { defineTool } from '@deepseek-ai/dsh-tools'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { Context } from '@supernova-ai/cordis'
+import * as ptc from '@supernova-ai/snh-tool-executor-ptc'
+import { createRunCodeTool, RunCodeConfig } from '@supernova-ai/snh-tool-executor-ptc/run-code'
+import Tools, { defineTool } from '@supernova-ai/snh-tools'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 
 assert.equal(Object.hasOwn(ptc, 'createRunCodeTool'), false)
 assert.equal(Object.hasOwn(ptc, 'jsonSchemaToPy'), false)

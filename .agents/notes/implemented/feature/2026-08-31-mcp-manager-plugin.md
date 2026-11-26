@@ -6,13 +6,13 @@ English | [中文](2026-08-31-mcp-manager-plugin.zh.md)
 
 ## Problem
 
-One MCP server was one `dsh-mcp-client` row in `cordis.yml`. That is right for composition-pinned servers and wrong for the product goal of managing servers from a Web surface: adding, editing, testing, enabling, disabling, deleting, and recovering servers at runtime, with connection status visible per server. The client plugin exposed no status beyond log lines, activation inherited an unbounded SDK startup wait, and there was no way to test a configuration without mounting it. A survey of six peer agent products (Claude Code, Codex, OpenCode, Kimi Code, DeepSeek-Reasonix, Pi) converged on the same shape: a config registry, a management facade, and a connection-state machine with a status-to-action mapping, secrets never round-tripping to the surface.
+One MCP server was one `snh-mcp-client` row in `cordis.yml`. That is right for composition-pinned servers and wrong for the product goal of managing servers from a Web surface: adding, editing, testing, enabling, disabling, deleting, and recovering servers at runtime, with connection status visible per server. The client plugin exposed no status beyond log lines, activation inherited an unbounded SDK startup wait, and there was no way to test a configuration without mounting it. A survey of six peer agent products (Claude Code, Codex, OpenCode, Kimi Code, SuperNova-Reasonix, Pi) converged on the same shape: a config registry, a management facade, and a connection-state machine with a status-to-action mapping, secrets never round-tripping to the surface.
 
 Installed application plugins also bring their own servers. Each must add its server without editing the user's configuration or depending on another application, and disabling or uninstalling the plugin must withdraw the server's tools.
 
 ## Decision
 
-`packages/mcp/mcp-manager` is a service plugin (`ctx.mcpManager`) that owns the volatile `servers` configuration and reconciles a fleet of ordinary `dsh-mcp-client` child instances; `packages/mcp/mcp-client` owns connection supervision, status, probing, and per-attempt startup budgets.
+`packages/mcp/mcp-manager` is a service plugin (`ctx.mcpManager`) that owns the volatile `servers` configuration and reconciles a fleet of ordinary `snh-mcp-client` child instances; `packages/mcp/mcp-client` owns connection supervision, status, probing, and per-attempt startup budgets.
 
 **Configuration is volatile Config, and CRUD needs no new API.** Settings projects the manager entry’s Config under its Loader id; ConfigEditor owns profile persistence, inheritance, and revision checks. Settings edits retain inherited servers, and resetting an inherited entry restores its base value. Direct profile patches replace the complete `servers` map. Loader commits the reference before notifying the manager’s existing reconcile queue.
 
@@ -20,7 +20,7 @@ Installed application plugins also bring their own servers. Each must add its se
 
 **A flat entry schema, validated cross-field.** The entry is flat with a `transport` discriminant, and write-time validation enforces the per-transport requirements and rejections (missing `command`/`url`, cross-transport fields, malformed templates) at the write — a schema-valid-but-unserviceable entry is never stored, and refusals name the offending field where a union's shape error would not.
 
-**Children are plugin instances, not library calls.** Each enabled entry is a `dsh-mcp-client` instance that the MCP client host mounts under the manager's fiber via `ctx.plugin()`. That reuses the tested activation/disposal semantics, makes `serverName` reservations collide correctly with statically composed instances (surfaced as a `failed`/`load` status with the actionable message), and lets manager disposal unwind every instance and its tools through ordinary fiber teardown.
+**Children are plugin instances, not library calls.** Each enabled entry is a `snh-mcp-client` instance that the MCP client host mounts under the manager's fiber via `ctx.plugin()`. That reuses the tested activation/disposal semantics, makes `serverName` reservations collide correctly with statically composed instances (surfaced as a `failed`/`load` status with the actionable message), and lets manager disposal unwind every instance and its tools through ordinary fiber teardown.
 
 **The MCP client host is the manager's only reach into mcp-client.** The manager creates an `McpClientHost` at construction and imports only that class and mcp-client types. The host validates an entry's client fields through each transport's own schema, so refusals still name the field; mounts instances under the manager's fiber; probes; and creates authorization owners from the manager's context. A plugin entry exports what the Loader loads and its Service and error classes, so the host is a Service class rather than a set of functions.
 

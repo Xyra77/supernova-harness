@@ -1,0 +1,64 @@
+{
+  "name": "@supernova-ai/snh-session-log-supernova",
+  "description": "Incremental lossless session-log request extension for the official SuperNova LLM API",
+  "version": "0.2.3-alpha.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/session/session-log-supernova"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./lib/types/types.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "locale/*.json",
+    "lib/index.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts",
+    "lib/types/**/*.d.ts.map",
+    "lib/**/*.js.map",
+    "src"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-util-values": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~"
+  },
+  "peerDependencies": {
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-supernova-llm-api-extensions": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*"
+  },
+  "devDependencies": {
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis-plugin-include": "workspace:~",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-command-feedback": "workspace:*",
+    "@supernova-ai/snh-supernova-llm-api-extensions": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-llm-supernova": "workspace:*",
+    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-mock-server": "workspace:*",
+    "@supernova-ai/snh-message-feedback": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-persistence-jsonl": "workspace:*",
+    "@supernova-ai/snh-supernova-auth": "workspace:*"
+  }
+}

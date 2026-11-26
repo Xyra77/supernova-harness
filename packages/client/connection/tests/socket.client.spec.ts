@@ -30,8 +30,8 @@ describe('Connection WebSocket carrier', () => {
   })
 
   it.each([
-    ['http://host.example/tools/dsh/', 'ws://host.example/tools/dsh/api/remote.mux'],
-    ['https://host.example/tools/dsh/', 'wss://host.example/tools/dsh/api/remote.mux'],
+    ['http://host.example/tools/snh/', 'ws://host.example/tools/snh/api/remote.mux'],
+    ['https://host.example/tools/snh/', 'wss://host.example/tools/snh/api/remote.mux'],
   ])('resolves the channel beneath the explicit Host base %s', (base, expected) => {
     const socket = socketProbe()
     const factory = vi.fn<ConnectionWebSocketFactory>().mockReturnValue(socket)

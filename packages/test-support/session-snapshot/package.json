@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-session-snapshot",
+  "name": "@supernova-ai/snh-session-snapshot",
   "description": "Session-log snapshot core with an ACP protocol adapter, expected-output normalization, and fixture invariants",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -31,36 +31,36 @@
   "license": "MIT",
   "dependencies": {
     "@agentclientprotocol/sdk": "1.4.0",
-    "@deepseek-ai/cordis-plugin-include": "workspace:~",
-    "@deepseek-ai/dsh-llm-replay": "workspace:*",
-    "@deepseek-ai/dsh-loader-smoke": "workspace:*",
-    "@deepseek-ai/dsh-session-format": "workspace:*",
+    "@supernova-ai/cordis-plugin-include": "workspace:~",
+    "@supernova-ai/snh-llm-replay": "workspace:*",
+    "@supernova-ai/snh-loader-smoke": "workspace:*",
+    "@supernova-ai/snh-session-format": "workspace:*",
     "js-yaml": "^4.3.2",
     "vitest": "^4.1.11"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-http-proxy": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-http-proxy": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-agent-loop": "workspace:*",
-    "@deepseek-ai/dsh-agent-preset-registry": "workspace:*",
-    "@deepseek-ai/dsh-compaction": "workspace:*",
-    "@deepseek-ai/dsh-fs": "workspace:*",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/dsh-persona": "workspace:*",
-    "@deepseek-ai/dsh-sandbox": "workspace:*",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-subagent": "workspace:*",
-    "@deepseek-ai/dsh-tool-testkit": "workspace:*",
-    "@deepseek-ai/dsh-tools": "workspace:*",
-    "@deepseek-ai/dsh-user-questions": "workspace:*",
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-agent-loop": "workspace:*",
+    "@supernova-ai/snh-agent-preset-registry": "workspace:*",
+    "@supernova-ai/snh-compaction": "workspace:*",
+    "@supernova-ai/snh-fs": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-persona": "workspace:*",
+    "@supernova-ai/snh-sandbox": "workspace:*",
+    "@supernova-ai/snh-sandbox-policy": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-subagent": "workspace:*",
+    "@supernova-ai/snh-tool-testkit": "workspace:*",
+    "@supernova-ai/snh-tools": "workspace:*",
+    "@supernova-ai/snh-user-questions": "workspace:*",
     "@types/js-yaml": "^4.0.9",
-    "@deepseek-ai/dsh-http-proxy": "workspace:*"
+    "@supernova-ai/snh-http-proxy": "workspace:*"
   }
 }

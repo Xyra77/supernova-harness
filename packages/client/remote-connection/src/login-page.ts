@@ -68,7 +68,7 @@ export function enterAuthenticationPage(
   title.textContent = t.authenticationTitle
   const form = document.getElementById('token-form') as HTMLFormElement | null
   const description = document.getElementById('description') as HTMLElement
-  description.textContent = form === null && document.querySelector('dsh-device-pairing') === null
+  description.textContent = form === null && document.querySelector('snh-device-pairing') === null
     ? t.authenticationUnavailable : t.authenticationDescription
   const clean = new URL(location.href)
   clean.searchParams.delete('token')
@@ -150,7 +150,7 @@ export function renderAuthenticationPage(options: AuthenticationPageOptions): st
   const placeholder = t.tokenPlaceholder.replace('{url}', t.tokenPlaceholderFallbackUrl)
   const tokenForm = options.tokenLoginEnabled ? `<form id="token-form" action="./" method="get" aria-labelledby="token-title"><h2 id="token-title"><label id="token-label" for="token">${t.tokenLabel}</label></h2><p id="token-hint" class="hint">${t.tokenHint}</p><input id="token" type="password" name="token" placeholder="${placeholder}" required autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-describedby="token-hint token-error"><p id="token-error" class="error" role="alert"></p><button id="token-submit" type="submit">${t.tokenSubmit}</button></form>` : ''
   const pairing = options.pairingEnabled
-    ? `<dsh-device-pairing><noscript><p>${t.pairingScriptRequired}</p></noscript></dsh-device-pairing>` : ''
+    ? `<snh-device-pairing><noscript><p>${t.pairingScriptRequired}</p></noscript></snh-device-pairing>` : ''
   const methods = tokenForm || pairing ? `<div class="methods">${tokenForm}${pairing}</div>` : ''
   const content = `<h1 id="title">${t.authenticationTitle}</h1><p id="description" class="description">${options.tokenLoginEnabled || options.pairingEnabled ? t.authenticationDescription : t.authenticationUnavailable}</p><div id="qr-notice" class="notice" hidden><p id="status" role="status"></p><a id="open" href="./" hidden>${t.open}</a></div>${methods}`
   return documentHtml(t.authenticationTitle, content, `(${enterAuthenticationPage.toString()})(${scriptJson(loginLocales)},(${enterBrowser.toString()}))`, options.pairingEnabled)

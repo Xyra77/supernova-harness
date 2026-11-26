@@ -27,7 +27,7 @@ import {
   type WorkspacePackageManifest,
 } from './verify-package-dependencies.ts'
 
-const CORDIS = '@deepseek-ai/cordis'
+const CORDIS = '@supernova-ai/cordis'
 const roots: string[] = []
 
 afterEach(() => {
@@ -66,26 +66,26 @@ function facts(manifest: PackageDependencyManifest): PackageDependencyFacts {
     manifest,
     workspaceNames: new Set([
       CORDIS,
-      '@deepseek-ai/dsh-runtime',
-      '@deepseek-ai/dsh-types',
-      '@deepseek-ai/dsh-stale',
-      '@deepseek-ai/schemastery',
+      '@supernova-ai/snh-runtime',
+      '@supernova-ai/snh-types',
+      '@supernova-ai/snh-stale',
+      '@supernova-ai/schemastery',
     ]),
     allSourceUses: new Map([
-      ['@deepseek-ai/dsh-runtime', ['packages/core/probe/src/index.ts']],
-      ['@deepseek-ai/dsh-types', ['packages/core/probe/src/types.ts']],
+      ['@supernova-ai/snh-runtime', ['packages/core/probe/src/index.ts']],
+      ['@supernova-ai/snh-types', ['packages/core/probe/src/types.ts']],
     ]),
     hostRuntimeSourceUses: new Map([
-      ['@deepseek-ai/dsh-runtime', ['packages/core/probe/src/index.ts']],
+      ['@supernova-ai/snh-runtime', ['packages/core/probe/src/index.ts']],
     ]),
     hostRuntimeExportUses: [{
-      packageName: '@deepseek-ai/dsh-runtime',
-      specifier: '@deepseek-ai/dsh-runtime',
+      packageName: '@supernova-ai/snh-runtime',
+      specifier: '@supernova-ai/snh-runtime',
       exportName: 'runtimeValue',
       sourcePath: 'packages/core/probe/src/index.ts',
       line: 1,
       column: 10,
-      sourceLine: "import { runtimeValue } from '@deepseek-ai/dsh-runtime'",
+      sourceLine: "import { runtimeValue } from '@supernova-ai/snh-runtime'",
     }],
     peerRequiredHostDependencies: new Set(),
     configurationOnlyDevDependencies: new Set(),
@@ -98,7 +98,7 @@ async function sourceFacts(
   manifest: Partial<PackageDependencyManifest> = {},
   role: PackageDependencyRole = 'client-host',
 ): Promise<PackageDependencyFacts> {
-  const root = mkdtempSync(join(tmpdir(), 'dsh-dependency-source-'))
+  const root = mkdtempSync(join(tmpdir(), 'snh-dependency-source-'))
   roots.push(root)
   const subject = pkg('@f/probe', 'packages/g/probe/package.json', manifest)
   for (const [path, source] of Object.entries(files)) {
@@ -110,14 +110,14 @@ async function sourceFacts(
 }
 
 function generatedHostFixture(mode: 'schema' | 'object'): { root: string; manifestPath: string; source: string } {
-  const root = mkdtempSync(join(tmpdir(), 'dsh-generated-host-dependencies-'))
+  const root = mkdtempSync(join(tmpdir(), 'snh-generated-host-dependencies-'))
   roots.push(root)
   const manifestPath = 'packages/client/probe/package.json'
   const source = `/** @typert ${mode} */\nexport interface Payload { value: string }\n`
   const manifest = {
     name: '@fixture/generated',
     type: 'module',
-    dsh: { client: {} },
+    snh: { client: {} },
     exports: {
       '.': { types: './lib/types/index.d.ts', default: './lib/index.js' },
       './typert': { types: './lib/typert.host.d.ts', default: './lib/typert.host.js' },
@@ -187,7 +187,7 @@ function workspaceFixture(manifests: Readonly<Record<string, PackageDependencyMa
   rootManifest: PackageDependencyManifest
   packages: WorkspacePackageManifest[]
 } {
-  const root = mkdtempSync(join(tmpdir(), 'dsh-root-type-packages-'))
+  const root = mkdtempSync(join(tmpdir(), 'snh-root-type-packages-'))
   roots.push(root)
   for (const [path, manifest] of Object.entries(manifests)) {
     mkdirSync(dirname(join(root, path)), { recursive: true })
@@ -207,66 +207,66 @@ function rootTypeRemoval(path: string, entry: string): string {
 describe('package dependency scope', () => {
   it('keeps the measured Host relay roster explicit', () => {
     expect(PACKAGE_DEPENDENCY_POLICY.clientFaceExclude).toEqual([
-      '@deepseek-ai/dsh-api-session-controller',
-      '@deepseek-ai/dsh-api-workspace-controller',
+      '@supernova-ai/snh-api-session-controller',
+      '@supernova-ai/snh-api-workspace-controller',
     ])
     expect(PACKAGE_DEPENDENCY_POLICY.hostPackages).toEqual([
-      '@deepseek-ai/dsh-llm',
-      '@deepseek-ai/dsh-session',
+      '@supernova-ai/snh-llm',
+      '@supernova-ai/snh-session',
     ])
     expect(PACKAGE_DEPENDENCY_POLICY.requiredServicePeers).toEqual({
-      '@deepseek-ai/dsh-api-terminal-controller': ['@deepseek-ai/dsh-subprocess'],
+      '@supernova-ai/snh-api-terminal-controller': ['@supernova-ai/snh-subprocess'],
     })
     expect(PACKAGE_DEPENDENCY_POLICY.configurationOnlyDevDependencies).toEqual({
-      '@deepseek-ai/dsh-client-locale': ['@deepseek-ai/dsh-api-remotes'],
-      '@deepseek-ai/dsh-client-ui-conversation': [
-        '@deepseek-ai/dsh-api-remotes',
-        '@deepseek-ai/dsh-client-ui-workspace',
+      '@supernova-ai/snh-client-locale': ['@supernova-ai/snh-api-remotes'],
+      '@supernova-ai/snh-client-ui-conversation': [
+        '@supernova-ai/snh-api-remotes',
+        '@supernova-ai/snh-client-ui-workspace',
       ],
-      '@deepseek-ai/dsh-client-ui-model-selection': ['@deepseek-ai/dsh-client-ui-input-trigger'],
-      '@deepseek-ai/dsh-client-ui-sidebar': ['@deepseek-ai/dsh-client-ui-workspace'],
-      '@deepseek-ai/dsh-client-ui-subagent': ['@deepseek-ai/dsh-client-ui-input-trigger'],
-      '@deepseek-ai/dsh-client-ui-theme': ['@deepseek-ai/dsh-api-remotes'],
-      '@deepseek-ai/dsh-client-ui-tool': ['@deepseek-ai/dsh-api-remotes'],
+      '@supernova-ai/snh-client-ui-model-selection': ['@supernova-ai/snh-client-ui-input-trigger'],
+      '@supernova-ai/snh-client-ui-sidebar': ['@supernova-ai/snh-client-ui-workspace'],
+      '@supernova-ai/snh-client-ui-subagent': ['@supernova-ai/snh-client-ui-input-trigger'],
+      '@supernova-ai/snh-client-ui-theme': ['@supernova-ai/snh-api-remotes'],
+      '@supernova-ai/snh-client-ui-tool': ['@supernova-ai/snh-api-remotes'],
     })
     expect(PACKAGE_DEPENDENCY_POLICY.duplicateSafePackages).toEqual([
-      '@deepseek-ai/dsh-brand',
-      '@deepseek-ai/dsh-lazy-require',
-      '@deepseek-ai/dsh-typert-protocol',
-      '@deepseek-ai/dsh-util-code-language',
-      '@deepseek-ai/dsh-util-crypto',
-      '@deepseek-ai/dsh-util-text-search',
-      '@deepseek-ai/dsh-util-values',
+      '@supernova-ai/snh-brand',
+      '@supernova-ai/snh-lazy-require',
+      '@supernova-ai/snh-typert-protocol',
+      '@supernova-ai/snh-util-code-language',
+      '@supernova-ai/snh-util-crypto',
+      '@supernova-ai/snh-util-text-search',
+      '@supernova-ai/snh-util-values',
     ])
-    expect(PACKAGE_DEPENDENCY_POLICY.safeHostDependencyExports['@deepseek-ai/dsh-deque']).toEqual(['Deque'])
-    expect(PACKAGE_DEPENDENCY_POLICY.safeHostDependencyExports['@deepseek-ai/schemastery']).toEqual(['default'])
-    expect(PACKAGE_DEPENDENCY_POLICY.safeHostDependencyExports['@deepseek-ai/dsh-session/types']).toBeUndefined()
-    expect(PACKAGE_DEPENDENCY_POLICY.safeHostDependencyExports['@deepseek-ai/dsh-typert-protocol']).toBeUndefined()
-    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@deepseek-ai/dsh-scope']).toEqual([
+    expect(PACKAGE_DEPENDENCY_POLICY.safeHostDependencyExports['@supernova-ai/snh-deque']).toEqual(['Deque'])
+    expect(PACKAGE_DEPENDENCY_POLICY.safeHostDependencyExports['@supernova-ai/schemastery']).toEqual(['default'])
+    expect(PACKAGE_DEPENDENCY_POLICY.safeHostDependencyExports['@supernova-ai/snh-session/types']).toBeUndefined()
+    expect(PACKAGE_DEPENDENCY_POLICY.safeHostDependencyExports['@supernova-ai/snh-typert-protocol']).toBeUndefined()
+    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@supernova-ai/snh-scope']).toEqual([
       'carrierKeyOf', 'createScope', 'scopeOf', 'scopeParentOf', 'scopeTarget',
     ])
-    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@deepseek-ai/dsh-typert-protocol']).toBeUndefined()
-    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@deepseek-ai/dsh-experimental-translator'])
+    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@supernova-ai/snh-typert-protocol']).toBeUndefined()
+    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@supernova-ai/snh-experimental-translator'])
       .toEqual(['TranslationError'])
-    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@deepseek-ai/dsh-experimental-forge'])
+    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@supernova-ai/snh-experimental-forge'])
       .toEqual(['changeRequestKey'])
-    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@deepseek-ai/dsh-experimental-worktree'])
+    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@supernova-ai/snh-experimental-worktree'])
       .toEqual(['generatedWorktreeName', 'CREATED_RECORD', 'createdWorktreeSchema'])
-    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@deepseek-ai/dsh-fs']).toEqual(['FsError'])
-    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@deepseek-ai/dsh-session'])
+    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@supernova-ai/snh-fs']).toEqual(['FsError'])
+    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@supernova-ai/snh-session'])
       .toEqual(['SESSION_FORMAT_VERSION', 'appendPluginRecord', 'pluginRecordOf', 'validateSessionLog'])
-    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@deepseek-ai/dsh-session-title']).toEqual(['normalizeSessionTitle'])
-    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@deepseek-ai/dsh-timeout']).toEqual(['deadline', 'timeoutOf'])
+    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@supernova-ai/snh-session-title']).toEqual(['normalizeSessionTitle'])
+    expect(PACKAGE_DEPENDENCY_POLICY.peerRequiredHostExports['@supernova-ai/snh-timeout']).toEqual(['deadline', 'timeoutOf'])
   })
 
-  it('discovers the Client directory, dsh.client declarations, and configured Host packages', () => {
+  it('discovers the Client directory, snh.client declarations, and configured Host packages', () => {
     const packages = [
       pkg('@f/static', 'packages/client/static/package.json'),
-      pkg('@f/dynamic-client', 'packages/client/dynamic/package.json', { dsh: { client: {} } }),
-      pkg('@f/dual', 'packages/api/dual/package.json', { dsh: { client: {} } }),
+      pkg('@f/dynamic-client', 'packages/client/dynamic/package.json', { snh: { client: {} } }),
+      pkg('@f/dual', 'packages/api/dual/package.json', { snh: { client: {} } }),
       pkg('@f/export-only', 'packages/api/export-only/package.json', { exports: { './client': './lib/client.js' } }),
       pkg('@f/forced-client', 'packages/api/forced/package.json'),
-      pkg('@f/excluded', 'packages/api/excluded/package.json', { dsh: { client: {} } }),
+      pkg('@f/excluded', 'packages/api/excluded/package.json', { snh: { client: {} } }),
       pkg('@f/host', 'packages/core/host/package.json'),
     ]
 
@@ -289,7 +289,7 @@ describe('package dependency scope', () => {
   it('rejects stale, redundant, overlapping, and unknown configuration', () => {
     const packages = [
       pkg('@f/client', 'packages/client/client/package.json'),
-      pkg('@f/dual', 'packages/api/dual/package.json', { dsh: { client: {} } }),
+      pkg('@f/dual', 'packages/api/dual/package.json', { snh: { client: {} } }),
       pkg('@f/host', 'packages/core/host/package.json'),
     ]
     const found = discoverPackageDependencyScope(packages, policy({
@@ -302,7 +302,7 @@ describe('package dependency scope', () => {
       expect.stringContaining('clientFaceInclude redundantly names automatically discovered package @f/dual'),
       expect.stringContaining('@f/host appears in both clientFaceInclude and clientFaceExclude'),
       expect.stringContaining('clientFaceExclude cannot exempt packages/client package @f/client'),
-      expect.stringContaining('clientFaceExclude names @f/host, which declares no dsh.client entry'),
+      expect.stringContaining('clientFaceExclude names @f/host, which declares no snh.client entry'),
       expect.stringContaining('hostPackages redundantly names Client-faced package @f/dual'),
       expect.stringContaining('clientFaceInclude names unknown package @f/missing'),
     ]))
@@ -356,7 +356,7 @@ describe('package dependency scope', () => {
 
 /** Write a temporary repository whose files are JSON-encoded unless given as strings. */
 function writeWorkspace(files: Readonly<Record<string, string | object>>): string {
-  const root = mkdtempSync(join(tmpdir(), 'dsh-dependency-workspace-'))
+  const root = mkdtempSync(join(tmpdir(), 'snh-dependency-workspace-'))
   roots.push(root)
   for (const [path, content] of Object.entries(files)) {
     mkdirSync(dirname(join(root, path)), { recursive: true })
@@ -370,16 +370,16 @@ const CORDIS_PEER = { peerDependencies: { [CORDIS]: 'workspace:~' }, devDependen
 describe('experimental packages and Host build entries', () => {
   it('applies the published policy to an experimental Client package that declares browser packages as peers', async () => {
     const root = writeWorkspace({
-      'packages/client/ui-probe/package.json': { name: '@deepseek-ai/dsh-client-ui-probe', ...CORDIS_PEER },
+      'packages/client/ui-probe/package.json': { name: '@supernova-ai/snh-client-ui-probe', ...CORDIS_PEER },
       'packages/experimental/client-ui-probe/package.json': {
-        name: '@deepseek-ai/dsh-experimental-client-ui-probe',
-        dsh: { client: {} },
-        peerDependencies: { [CORDIS]: 'workspace:~', '@deepseek-ai/dsh-client-ui-probe': 'workspace:*' },
-        devDependencies: { [CORDIS]: 'workspace:~', '@deepseek-ai/dsh-client-ui-probe': 'workspace:*' },
+        name: '@supernova-ai/snh-experimental-client-ui-probe',
+        snh: { client: {} },
+        peerDependencies: { [CORDIS]: 'workspace:~', '@supernova-ai/snh-client-ui-probe': 'workspace:*' },
+        devDependencies: { [CORDIS]: 'workspace:~', '@supernova-ai/snh-client-ui-probe': 'workspace:*' },
       },
       'packages/experimental/client-ui-probe/src/index.ts': 'export function apply() {}\n',
       'packages/experimental/client-ui-probe/src/client/index.ts':
-        "import { Button } from '@deepseek-ai/dsh-client-ui-probe'\nexport const control = Button\n",
+        "import { Button } from '@supernova-ai/snh-client-ui-probe'\nexport const control = Button\n",
     })
 
     const state = await readPackageDependencyState(root, policy())
@@ -388,7 +388,7 @@ describe('experimental packages and Host build entries', () => {
       ['packages/experimental/client-ui-probe/package.json', 'client-host'],
     )
     expect(collectPackageDependencyViolations(state)).toEqual([
-      'packages/experimental/client-ui-probe/package.json: @deepseek-ai/dsh-client-ui-probe (existing non-Cordis peer, '
+      'packages/experimental/client-ui-probe/package.json: @supernova-ai/snh-client-ui-probe (existing non-Cordis peer, '
       + 'packages/experimental/client-ui-probe/src/client/index.ts) must be devDependencies-only at workspace:*; '
       + 'found devDependencies + peerDependencies',
     ])
@@ -396,11 +396,11 @@ describe('experimental packages and Host build entries', () => {
 
   it('accepts an experimental package in the configured Host roster', async () => {
     const root = writeWorkspace({
-      'packages/experimental/host-probe/package.json': { name: '@deepseek-ai/dsh-experimental-host-probe', ...CORDIS_PEER },
+      'packages/experimental/host-probe/package.json': { name: '@supernova-ai/snh-experimental-host-probe', ...CORDIS_PEER },
       'packages/experimental/host-probe/src/index.ts': 'export function apply() {}\n',
     })
 
-    const state = await readPackageDependencyState(root, policy({ hostPackages: ['@deepseek-ai/dsh-experimental-host-probe'] }))
+    const state = await readPackageDependencyState(root, policy({ hostPackages: ['@supernova-ai/snh-experimental-host-probe'] }))
 
     expect(state.policyViolations).toEqual([])
     expect(state.facts.map(fact => [fact.manifestPath, fact.role])).toEqual(
@@ -411,8 +411,8 @@ describe('experimental packages and Host build entries', () => {
   it('reads Host Worker entries from the package build configuration', async () => {
     const root = writeWorkspace({
       'packages/g/inspect/package.json': {
-        name: '@deepseek-ai/dsh-inspect-probe',
-        dsh: { client: {} },
+        name: '@supernova-ai/snh-inspect-probe',
+        snh: { client: {} },
         dependencies: { ws: '^8.0.0' },
         ...CORDIS_PEER,
       },
@@ -440,9 +440,9 @@ describe('experimental packages and Host build entries', () => {
 
   it('evaluates every build face and keeps only Host entries outside the Client source tree', async () => {
     const root = writeWorkspace({
-      'packages/g/faces/package.json': { name: '@deepseek-ai/dsh-faces-probe' },
+      'packages/g/faces/package.json': { name: '@supernova-ai/snh-faces-probe' },
       'packages/g/faces/tsdown.config.ts': [
-        'export default ({ env }: { env: { DSH_BUILD_FACE?: string } }) => env.DSH_BUILD_FACE === \'host\'',
+        'export default ({ env }: { env: { SNH_BUILD_FACE?: string } }) => env.SNH_BUILD_FACE === \'host\'',
         "  ? [{ entry: '' }, { entry: { runner: './lib/types/runner.js' }, platform: 'neutral' }]",
         "  : [{ entry: ['lib/types/index.js', 'src/helper.ts', 'lib/types/optional/*.js'] },",
         "    { entry: { 'client.node': 'lib/types/client/index.js' }, platform: 'node' },",
@@ -454,7 +454,7 @@ describe('experimental packages and Host build entries', () => {
       'packages/g/faces/src/helper.ts': 'export {}\n',
       'packages/g/faces/src/client/index.ts': 'export {}\n',
     })
-    const subject = pkg('@deepseek-ai/dsh-faces-probe', 'packages/g/faces/package.json')
+    const subject = pkg('@supernova-ai/snh-faces-probe', 'packages/g/faces/package.json')
 
     expect((await readHostBuildEntries(root, subject)).map(path => relative(root, path).split(sep).join('/'))).toEqual([
       'packages/g/faces/src/helper.ts',
@@ -471,12 +471,12 @@ describe('experimental packages and Host build entries', () => {
     ["export default { entry: 'lib/types/missing.js' }", 'tsdown entry lib/types/missing.js has no source module'],
   ])('rejects a build configuration Host entry discovery cannot follow: %s', async (config, message) => {
     const root = writeWorkspace({
-      'packages/g/broken/package.json': { name: '@deepseek-ai/dsh-broken-probe' },
+      'packages/g/broken/package.json': { name: '@supernova-ai/snh-broken-probe' },
       'packages/g/broken/tsdown.config.ts': `${config}\n`,
       'packages/g/broken/src/index.ts': 'export {}\n',
     })
 
-    await expect(readHostBuildEntries(root, pkg('@deepseek-ai/dsh-broken-probe', 'packages/g/broken/package.json')))
+    await expect(readHostBuildEntries(root, pkg('@supernova-ai/snh-broken-probe', 'packages/g/broken/package.json')))
       .rejects.toThrow(`packages/g/broken/tsdown.config.ts: ${message}`)
   })
 })
@@ -721,8 +721,8 @@ describe('face-aware source classification', () => {
     'does not classify the package-asset export %j as Host code', async (target) => {
       const root = writeWorkspace({
         'packages/client/ui-probe/package.json': {
-          name: '@deepseek-ai/dsh-client-ui-probe',
-          dsh: { client: { platform: 'web' } },
+          name: '@supernova-ai/snh-client-ui-probe',
+          snh: { client: { platform: 'web' } },
           exports: {
             '.': { types: './lib/types/index.d.ts', default: './lib/index.js' },
             './client': { types: './lib/types/client/index.d.ts', default: './lib/client.js' },
@@ -748,7 +748,7 @@ describe('face-aware source classification', () => {
   })
 
   it('fails when a managed Host package has no Host entry', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'dsh-package-missing-host-'))
+    const root = mkdtempSync(join(tmpdir(), 'snh-package-missing-host-'))
     roots.push(root)
     const subject = pkg('@f/host', 'packages/g/host/package.json')
 
@@ -757,10 +757,10 @@ describe('face-aware source classification', () => {
   })
 
   it('classifies Host values, required services, and Client build inputs separately', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'dsh-package-faces-'))
+    const root = mkdtempSync(join(tmpdir(), 'snh-package-faces-'))
     roots.push(root)
     const subject = pkg('@f/dual', 'packages/g/dual/package.json', {
-      dsh: { client: { inject: ['@f/injected'] } },
+      snh: { client: { inject: ['@f/injected'] } },
     })
     const files = {
       'packages/g/dual/src/index.ts': [
@@ -832,16 +832,16 @@ describe('face-aware source classification', () => {
       "export * from '@f/star'",
       "void import('@f/dynamic')",
       "void require('@f/required')",
-      "import { createLazyRequire as lazy } from '@deepseek-ai/dsh-lazy-require'",
-      "import * as lazyModule from '@deepseek-ai/dsh-lazy-require'",
+      "import { createLazyRequire as lazy } from '@supernova-ai/snh-lazy-require'",
+      "import * as lazyModule from '@supernova-ai/snh-lazy-require'",
       "void lazy('@f/lazy', import.meta.url)",
       "void lazyModule.createLazyRequire('@f/lazy-namespace', import.meta.url)",
       'void defaultValue; void local; void namespace',
     ].join('\n')
     const uses = collectRuntimeSourceExportUses('probe.ts', source)
     expect(uses.map(({ specifier, exportName }) => ({ specifier, exportName }))).toEqual([
-      { specifier: '@deepseek-ai/dsh-lazy-require', exportName: '*' },
-      { specifier: '@deepseek-ai/dsh-lazy-require', exportName: 'createLazyRequire' },
+      { specifier: '@supernova-ai/snh-lazy-require', exportName: '*' },
+      { specifier: '@supernova-ai/snh-lazy-require', exportName: 'createLazyRequire' },
       { specifier: '@f/dynamic', exportName: '*' },
       { specifier: '@f/effect', exportName: '(side effect)' },
       { specifier: '@f/lazy', exportName: '*' },
@@ -936,10 +936,10 @@ describe('dependency sections', () => {
   })
 
   it('validates every third-party range before writing any manifest in a repair batch', () => {
-    const root = mkdtempSync(join(tmpdir(), 'dsh-dependency-batch-'))
+    const root = mkdtempSync(join(tmpdir(), 'snh-dependency-batch-'))
     roots.push(root)
-    const valid = { ...facts({ name: '@deepseek-ai/dsh-first' }), manifestPath: 'first.json' }
-    const base = facts({ name: '@deepseek-ai/dsh-second' })
+    const valid = { ...facts({ name: '@supernova-ai/snh-first' }), manifestPath: 'first.json' }
+    const base = facts({ name: '@supernova-ai/snh-second' })
     const invalid: PackageDependencyFacts = {
       ...base,
       manifestPath: 'second.json',
@@ -962,9 +962,9 @@ describe('dependency sections', () => {
 
   it('moves browser-only third-party imports to development dependencies without changing their ranges', () => {
     const manifest: PackageDependencyManifest = {
-      name: '@deepseek-ai/dsh-probe',
-      dependencies: { '@deepseek-ai/dsh-runtime': 'workspace:*', external: '^1.2.3' },
-      devDependencies: { [CORDIS]: 'workspace:~', '@deepseek-ai/dsh-types': 'workspace:*' },
+      name: '@supernova-ai/snh-probe',
+      dependencies: { '@supernova-ai/snh-runtime': 'workspace:*', external: '^1.2.3' },
+      devDependencies: { [CORDIS]: 'workspace:~', '@supernova-ai/snh-types': 'workspace:*' },
       peerDependencies: { [CORDIS]: 'workspace:~' },
     }
     const base = facts(manifest)
@@ -989,15 +989,15 @@ describe('dependency sections', () => {
 
   it('does not leak repository configuration into captured dependency facts', () => {
     const manifest: PackageDependencyManifest = {
-      name: '@deepseek-ai/dsh-client-locale',
-      dependencies: { '@deepseek-ai/dsh-runtime': 'workspace:*' },
-      devDependencies: { [CORDIS]: 'workspace:~', '@deepseek-ai/dsh-types': 'workspace:*' },
+      name: '@supernova-ai/snh-client-locale',
+      dependencies: { '@supernova-ai/snh-runtime': 'workspace:*' },
+      devDependencies: { [CORDIS]: 'workspace:~', '@supernova-ai/snh-types': 'workspace:*' },
       peerDependencies: { [CORDIS]: 'workspace:~' },
     }
     const base = facts(manifest)
     const subject: PackageDependencyFacts = {
       ...base,
-      workspaceNames: new Set([...base.workspaceNames, '@deepseek-ai/dsh-api-remotes']),
+      workspaceNames: new Set([...base.workspaceNames, '@supernova-ai/snh-api-remotes']),
     }
 
     expect(collectPackageDependencyViolations({
@@ -1007,15 +1007,15 @@ describe('dependency sections', () => {
 
   it('requires non-workspace Host runtime imports in dependencies', () => {
     const manifest: PackageDependencyManifest = {
-      name: '@deepseek-ai/dsh-probe',
-      dependencies: { '@deepseek-ai/dsh-runtime': 'workspace:*' },
-      devDependencies: { [CORDIS]: 'workspace:~', '@deepseek-ai/dsh-types': 'workspace:*', external: '^1.0.0' },
+      name: '@supernova-ai/snh-probe',
+      dependencies: { '@supernova-ai/snh-runtime': 'workspace:*' },
+      devDependencies: { [CORDIS]: 'workspace:~', '@supernova-ai/snh-types': 'workspace:*', external: '^1.0.0' },
       peerDependencies: { [CORDIS]: 'workspace:~' },
     }
     const subject: PackageDependencyFacts = {
       ...facts(manifest),
       hostRuntimeSourceUses: new Map([
-        ['@deepseek-ai/dsh-runtime', ['packages/core/probe/src/index.ts']],
+        ['@supernova-ai/snh-runtime', ['packages/core/probe/src/index.ts']],
         ['external', ['packages/core/probe/src/index.ts']],
       ]),
       allSourceUses: new Map([
@@ -1047,14 +1047,14 @@ describe('dependency sections', () => {
 
   it('accepts Host dependencies, development-only inputs, and shared Cordis', () => {
     const manifest: PackageDependencyManifest = {
-      name: '@deepseek-ai/dsh-probe',
+      name: '@supernova-ai/snh-probe',
       dependencies: {
-        '@deepseek-ai/dsh-runtime': 'workspace:*',
-        '@deepseek-ai/schemastery': 'workspace:~',
+        '@supernova-ai/snh-runtime': 'workspace:*',
+        '@supernova-ai/schemastery': 'workspace:~',
         external: '^1.0.0',
       },
       devDependencies: {
-        '@deepseek-ai/dsh-types': 'workspace:*',
+        '@supernova-ai/snh-types': 'workspace:*',
         [CORDIS]: 'workspace:~',
       },
       peerDependencies: { [CORDIS]: 'workspace:~' },
@@ -1065,20 +1065,20 @@ describe('dependency sections', () => {
   })
 
   it('lists managed Host runtime dependencies for fix review', () => {
-    const subject = facts({ name: '@deepseek-ai/dsh-probe' })
+    const subject = facts({ name: '@supernova-ai/snh-probe' })
     expect(formatManagedRuntimeDependencies({
       facts: [subject], packages: [], policyViolations: [], workspaceNames: subject.workspaceNames,
     })).toEqual([
       'verify-package-dependencies: 1 managed Host runtime edge(s) remain in dependencies across 1 package(s):',
-      '  @deepseek-ai/dsh-probe -> @deepseek-ai/dsh-runtime: @deepseek-ai/dsh-runtime#runtimeValue',
+      '  @supernova-ai/snh-probe -> @supernova-ai/snh-runtime: @supernova-ai/snh-runtime#runtimeValue',
     ])
   })
 
   it('reports an unapproved Host runtime export without rewriting its dependency section', () => {
     const manifest: PackageDependencyManifest = {
-      name: '@deepseek-ai/dsh-probe',
-      dependencies: { '@deepseek-ai/dsh-runtime': 'workspace:*' },
-      devDependencies: { [CORDIS]: 'workspace:~', '@deepseek-ai/dsh-types': 'workspace:*' },
+      name: '@supernova-ai/snh-probe',
+      dependencies: { '@supernova-ai/snh-runtime': 'workspace:*' },
+      devDependencies: { [CORDIS]: 'workspace:~', '@supernova-ai/snh-types': 'workspace:*' },
       peerDependencies: { [CORDIS]: 'workspace:~' },
     }
     const subject = facts(manifest)
@@ -1092,23 +1092,23 @@ describe('dependency sections', () => {
     }
 
     expect(safetyViolations).toEqual([
-      'packages/core/probe/src/index.ts:1:10: @deepseek-ai/dsh-runtime#runtimeValue is not classified as '
-      + 'safe or peer-required — import { runtimeValue } from \'@deepseek-ai/dsh-runtime\'',
+      'packages/core/probe/src/index.ts:1:10: @supernova-ai/snh-runtime#runtimeValue is not classified as '
+      + 'safe or peer-required — import { runtimeValue } from \'@supernova-ai/snh-runtime\'',
     ])
     expect(fixPackageDependencies('/unused', state)).toEqual([])
-    expect(manifest.dependencies).toEqual({ '@deepseek-ai/dsh-runtime': 'workspace:*' })
+    expect(manifest.dependencies).toEqual({ '@supernova-ai/snh-runtime': 'workspace:*' })
   })
 
   it('keeps an edge as a peer when one imported export requires shared identity', () => {
     const manifest: PackageDependencyManifest = {
-      name: '@deepseek-ai/dsh-probe',
-      dependencies: { '@deepseek-ai/dsh-runtime': 'workspace:*' },
-      devDependencies: { [CORDIS]: 'workspace:~', '@deepseek-ai/dsh-types': 'workspace:*' },
+      name: '@supernova-ai/snh-probe',
+      dependencies: { '@supernova-ai/snh-runtime': 'workspace:*' },
+      devDependencies: { [CORDIS]: 'workspace:~', '@supernova-ai/snh-types': 'workspace:*' },
       peerDependencies: { [CORDIS]: 'workspace:~' },
     }
     const subject: PackageDependencyFacts = {
       ...facts(manifest),
-      peerRequiredHostDependencies: new Set(['@deepseek-ai/dsh-runtime']),
+      peerRequiredHostDependencies: new Set(['@supernova-ai/snh-runtime']),
     }
     expect(collectHostDependencyExportPolicyViolations(
       [subject],
@@ -1116,7 +1116,7 @@ describe('dependency sections', () => {
       {
         safeHostDependencyExports: {},
         peerRequiredHostExports: {
-          '@deepseek-ai/dsh-runtime': ['runtimeValue'],
+          '@supernova-ai/snh-runtime': ['runtimeValue'],
         },
       },
     )).toEqual([])
@@ -1125,28 +1125,28 @@ describe('dependency sections', () => {
     expect(manifest.dependencies).toBeUndefined()
     expect(manifest.peerDependencies).toMatchObject({
       [CORDIS]: 'workspace:~',
-      '@deepseek-ai/dsh-runtime': 'workspace:*',
+      '@supernova-ai/snh-runtime': 'workspace:*',
     })
     expect(manifest.devDependencies).toMatchObject({
       [CORDIS]: 'workspace:~',
-      '@deepseek-ai/dsh-runtime': 'workspace:*',
+      '@supernova-ai/snh-runtime': 'workspace:*',
     })
     expect(formatPeerRequiredRuntimeDependencies({
       facts: [subject], packages: [], policyViolations: [], workspaceNames: subject.workspaceNames,
     })).toEqual([
       'verify-package-dependencies: 1 Host runtime edge(s) remain in peerDependencies for shared exports or required services across 1 package(s):',
-      '  @deepseek-ai/dsh-probe -> @deepseek-ai/dsh-runtime: @deepseek-ai/dsh-runtime#runtimeValue',
+      '  @supernova-ai/snh-probe -> @supernova-ai/snh-runtime: @supernova-ai/snh-runtime#runtimeValue',
     ])
   })
 
   it('requires both peer and development declarations for a service without a value import', () => {
-    const dependency = '@deepseek-ai/dsh-runtime'
+    const dependency = '@supernova-ai/snh-runtime'
     const manifest: PackageDependencyManifest = {
-      name: '@deepseek-ai/dsh-probe',
+      name: '@supernova-ai/snh-probe',
       devDependencies: {
         [CORDIS]: 'workspace:~',
         [dependency]: 'workspace:*',
-        '@deepseek-ai/dsh-types': 'workspace:*',
+        '@supernova-ai/snh-types': 'workspace:*',
       },
       peerDependencies: { [CORDIS]: 'workspace:~' },
     }
@@ -1182,39 +1182,39 @@ describe('dependency sections', () => {
 
   it('reports wrong sections, workspace ranges, and stale peer metadata', () => {
     const manifest: PackageDependencyManifest = {
-      name: '@deepseek-ai/dsh-probe',
-      dependencies: { '@deepseek-ai/dsh-types': 'workspace:^' },
-      devDependencies: { [CORDIS]: 'workspace:~', '@deepseek-ai/dsh-runtime': 'workspace:*' },
-      peerDependencies: { [CORDIS]: 'workspace:*', '@deepseek-ai/dsh-runtime': 'workspace:*' },
-      peerDependenciesMeta: { '@deepseek-ai/dsh-missing': { optional: true } },
+      name: '@supernova-ai/snh-probe',
+      dependencies: { '@supernova-ai/snh-types': 'workspace:^' },
+      devDependencies: { [CORDIS]: 'workspace:~', '@supernova-ai/snh-runtime': 'workspace:*' },
+      peerDependencies: { [CORDIS]: 'workspace:*', '@supernova-ai/snh-runtime': 'workspace:*' },
+      peerDependenciesMeta: { '@supernova-ai/snh-missing': { optional: true } },
     }
     const state = {
       facts: [facts(manifest)], packages: [], policyViolations: [], workspaceNames: facts(manifest).workspaceNames,
     }
     const violations = collectPackageDependencyViolations(state)
     expect(violations).toEqual(expect.arrayContaining([
-      expect.stringContaining('@deepseek-ai/dsh-runtime'),
-      expect.stringContaining('@deepseek-ai/dsh-types'),
+      expect.stringContaining('@supernova-ai/snh-runtime'),
+      expect.stringContaining('@supernova-ai/snh-types'),
       expect.stringContaining(`${CORDIS} must be matching peerDependencies + devDependencies`),
-      expect.stringContaining('dependencies.@deepseek-ai/dsh-types must use workspace:*'),
-      expect.stringContaining('peerDependenciesMeta.@deepseek-ai/dsh-missing has no matching'),
+      expect.stringContaining('dependencies.@supernova-ai/snh-types must use workspace:*'),
+      expect.stringContaining('peerDependenciesMeta.@supernova-ai/snh-missing has no matching'),
     ]))
   })
 
   it('repairs owned relationships without changing unrelated dependencies', () => {
-    const root = mkdtempSync(join(tmpdir(), 'dsh-package-dependencies-'))
+    const root = mkdtempSync(join(tmpdir(), 'snh-package-dependencies-'))
     roots.push(root)
     const manifestPath = 'package.json'
     const manifest: PackageDependencyManifest = {
-      name: '@deepseek-ai/dsh-probe',
-      dependencies: { '@deepseek-ai/schemastery': 'workspace:*', external: '^1.0.0' },
-      devDependencies: { [CORDIS]: 'workspace:~', '@deepseek-ai/dsh-runtime': 'workspace:*' },
+      name: '@supernova-ai/snh-probe',
+      dependencies: { '@supernova-ai/schemastery': 'workspace:*', external: '^1.0.0' },
+      devDependencies: { [CORDIS]: 'workspace:~', '@supernova-ai/snh-runtime': 'workspace:*' },
       peerDependencies: {
         [CORDIS]: 'workspace:~',
-        '@deepseek-ai/dsh-runtime': 'workspace:*',
-        '@deepseek-ai/dsh-stale': 'workspace:*',
+        '@supernova-ai/snh-runtime': 'workspace:*',
+        '@supernova-ai/snh-stale': 'workspace:*',
       },
-      peerDependenciesMeta: { '@deepseek-ai/dsh-stale': { optional: true } },
+      peerDependenciesMeta: { '@supernova-ai/snh-stale': { optional: true } },
     }
     writeFileSync(join(root, manifestPath), `${JSON.stringify(manifest, null, 2)}\n`)
     const subject = { ...facts(manifest), manifestPath }
@@ -1223,14 +1223,14 @@ describe('dependency sections', () => {
     expect(fixPackageDependencies(root, state)).toEqual([manifestPath])
     const fixed = JSON.parse(readFileSync(join(root, manifestPath), 'utf8')) as PackageDependencyManifest
     expect(fixed.dependencies).toEqual({
-      '@deepseek-ai/schemastery': 'workspace:~',
+      '@supernova-ai/schemastery': 'workspace:~',
       external: '^1.0.0',
-      '@deepseek-ai/dsh-runtime': 'workspace:*',
+      '@supernova-ai/snh-runtime': 'workspace:*',
     })
     expect(fixed.devDependencies).toEqual({
       [CORDIS]: 'workspace:~',
-      '@deepseek-ai/dsh-types': 'workspace:*',
-      '@deepseek-ai/dsh-stale': 'workspace:*',
+      '@supernova-ai/snh-types': 'workspace:*',
+      '@supernova-ai/snh-stale': 'workspace:*',
     })
     expect(fixed.peerDependencies).toEqual({ [CORDIS]: 'workspace:~' })
     expect(fixed.peerDependenciesMeta).toBeUndefined()
@@ -1238,12 +1238,12 @@ describe('dependency sections', () => {
 
   it('repairs an in-memory manifest for benchmark simulation', () => {
     const manifest: PackageDependencyManifest = {
-      name: '@deepseek-ai/dsh-probe',
-      peerDependencies: { [CORDIS]: 'workspace:~', '@deepseek-ai/dsh-runtime': 'workspace:*' },
-      devDependencies: { [CORDIS]: 'workspace:~', '@deepseek-ai/dsh-runtime': 'workspace:*' },
+      name: '@supernova-ai/snh-probe',
+      peerDependencies: { [CORDIS]: 'workspace:~', '@supernova-ai/snh-runtime': 'workspace:*' },
+      devDependencies: { [CORDIS]: 'workspace:~', '@supernova-ai/snh-runtime': 'workspace:*' },
     }
     repairPackageDependencyManifest(facts(manifest))
-    expect(manifest.dependencies).toEqual({ '@deepseek-ai/dsh-runtime': 'workspace:*' })
+    expect(manifest.dependencies).toEqual({ '@supernova-ai/snh-runtime': 'workspace:*' })
     expect(manifest.peerDependencies).toEqual({ [CORDIS]: 'workspace:~' })
   })
 })

@@ -6,15 +6,15 @@
  * type-only.
  */
 
-import type {} from '@deepseek-ai/dsh-api-session-controller/remote-events'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type {} from '@deepseek-ai/dsh-deepseek-account/types'
-import type {} from '@deepseek-ai/dsh-permission-presets/types'
-import type {} from '@deepseek-ai/dsh-plugin-manager/types'
-import type {} from '@deepseek-ai/dsh-plugin-market/types'
-import type {} from '@deepseek-ai/dsh-schedule/client'
-import type { TypertForwardableEventEntry } from '@deepseek-ai/dsh-typert-protocol'
-import type {} from '@deepseek-ai/dsh-web/types'
+import type {} from '@supernova-ai/snh-api-session-controller/remote-events'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type {} from '@supernova-ai/snh-deepseek-account/types'
+import type {} from '@supernova-ai/snh-permission-presets/types'
+import type {} from '@supernova-ai/snh-plugin-manager/types'
+import type {} from '@supernova-ai/snh-plugin-market/types'
+import type {} from '@supernova-ai/snh-schedule/client'
+import type { TypertForwardableEventEntry } from '@supernova-ai/snh-typert-protocol'
+import type {} from '@supernova-ai/snh-web/types'
 
 /**
  * Host events this application forwards without renaming. The explicit mode is

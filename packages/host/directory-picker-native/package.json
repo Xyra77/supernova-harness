@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-host-directory-picker-native",
-  "description": "Native-OS-chooser backend of the directory-picker seam for the DeepSeek Harness web GUI host",
+  "name": "@supernova-ai/snh-host-directory-picker-native",
+  "description": "Native-OS-chooser backend of the directory-picker seam for the SuperNova Harness web GUI host",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -37,15 +37,15 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-host-directory-picker": "workspace:*",
-    "@deepseek-ai/dsh-native-command": "workspace:*",
+    "@supernova-ai/snh-host-directory-picker": "workspace:*",
+    "@supernova-ai/snh-native-command": "workspace:*",
     "koffi": "3.1.1"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis": "workspace:~",
     "tsx": "^4.23.13"
   }
 }

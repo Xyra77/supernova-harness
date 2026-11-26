@@ -1,19 +1,19 @@
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
 import { mkdir, readFile, unlink, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { Browser, Locator, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import type { AgentHandle } from '@deepseek-ai/dsh-agent'
-import type { SessionAttachmentValue } from '@deepseek-ai/dsh-api-session-controller'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { type ToolCallId, createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { GenerateOptions } from '@deepseek-ai/dsh-llm'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-agent-preset-registry'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import type { AgentHandle } from '@supernova-ai/snh-agent'
+import type { SessionAttachmentValue } from '@supernova-ai/snh-api-session-controller'
+import { brandString } from '@supernova-ai/snh-brand'
+import { type ToolCallId, createUserMessage } from '@supernova-ai/snh-llm'
+import type { GenerateOptions } from '@supernova-ai/snh-llm'
+import type { SessionId } from '@supernova-ai/snh-session'
+import type { Session } from '@supernova-ai/snh-session'
+import type {} from '@supernova-ai/snh-agent-preset-registry'
+import type {} from '@supernova-ai/snh-system-prompt'
 import {
   acknowledgeReloadConnectionLoss,
   assertFixtureInventory,
@@ -109,14 +109,14 @@ describe('minimal agent preset', () => {
       signal,
       callId: brandString<ToolCallId>('minimal-bash-state-setup'),
       name: 'bash',
-      arguments: { command: `cd ${JSON.stringify(stateDir)} && export DSH_MINIMAL_STATE=PERSISTED` },
+      arguments: { command: `cd ${JSON.stringify(stateDir)} && export SNH_MINIMAL_STATE=PERSISTED` },
       agent: agentHandle.agent,
     })
     const bash = await executeToolFixture(scaffold.ctx, {
       signal,
       callId: brandString<ToolCallId>('minimal-bash-state-read'),
       name: 'bash',
-      arguments: { command: 'printf \'%s:%s\n\' "$DSH_MINIMAL_STATE" "$PWD"' },
+      arguments: { command: 'printf \'%s:%s\n\' "$SNH_MINIMAL_STATE" "$PWD"' },
       agent: agentHandle.agent,
     })
     const text = (result: typeof bash): string => result.content

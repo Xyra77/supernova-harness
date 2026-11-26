@@ -3,7 +3,7 @@ description: "Connect Linear's hosted MCP server through the shared MCP manager,
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-linear
+# @supernova-ai/snh-linear
 
 English | [中文](README.zh.md)
 
@@ -30,10 +30,10 @@ The Linear plugin registers Linear's hosted MCP server, `https://mcp.linear.app/
 Install the package as a bundle, for example from the Web sidebar's **Plugins** page or with the CLI:
 
 ```sh
-dsh plugin --profile web add @deepseek-ai/dsh-linear
+snh plugin --profile web add @supernova-ai/snh-linear
 ```
 
-The bundle patch inserts the `linear` row after the profile's other layers. The plugin requires the `mcpManager` and `systemPrompt` services: the [base bundle](../../bundle/base/README.md) provides `systemPrompt`, and the Web and Desktop compositions add the MCP manager through [`dsh-web-app`](../../bundle/web-app/README.md). In a profile without the MCP manager, such as `headless`, the plugin does not activate, and startup prints a warning that names the missing `mcpManager` service.
+The bundle patch inserts the `linear` row after the profile's other layers. The plugin requires the `mcpManager` and `systemPrompt` services: the [base bundle](../../bundle/base/README.md) provides `systemPrompt`, and the Web and Desktop compositions add the MCP manager through [`snh-web-app`](../../bundle/web-app/README.md). In a profile without the MCP manager, such as `headless`, the plugin does not activate, and startup prints a warning that names the missing `mcpManager` service.
 
 ### Authorize and sign out
 
@@ -48,13 +48,13 @@ While the plugin is on, its page on the **Plugins** page shows a **Linear accoun
 | Connected | **Sign out** asks for confirmation, then deletes the local grant |
 | Cannot connect right now | **Retry** restarts the server and keeps the existing grant |
 
-Authorization must be completed in a browser on the Host machine. After the user approves access in Linear, the callback page says DSH received the authorization; the section then shows the result. Leaving the page does not cancel an attempt, which the Host owns. A failed attempt shows **Authorization was not completed. Try again.**; a failed page action shows a toast. Sign-out keeps the client registration and does not revoke the connection on Linear's side.
+Authorization must be completed in a browser on the Host machine. After the user approves access in Linear, the callback page says SNH received the authorization; the section then shows the result. Leaving the page does not cancel an attempt, which the Host owns. A failed attempt shows **Authorization was not completed. Try again.**; a failed page action shows a toast. Sign-out keeps the client registration and does not revoke the connection on Linear's side.
 
-The page follows the account through the [`connectorAccounts` Remote](../../client/ui-connector-account/README.md) under the key `mcp:linear`, and its buttons start `connect`, `sign-out`, or `retry` or cancel the attempt there. On the Host, [`dsh-mcp-account`](../../mcp/mcp-account/README.md) runs them through the manager's [OAuth operations](../../mcp/mcp-manager/README.md#oauth-authorization): `startAuthorization('linear')` returns an attempt whose `authorizationUrl` the stream reports, `cancelAuthorization('linear', id)` cancels it, `signOut('linear')` deletes the grant, and `restart('linear')` retries. Other Remote clients can use the same operations.
+The page follows the account through the [`connectorAccounts` Remote](../../client/ui-connector-account/README.md) under the key `mcp:linear`, and its buttons start `connect`, `sign-out`, or `retry` or cancel the attempt there. On the Host, [`snh-mcp-account`](../../mcp/mcp-account/README.md) runs them through the manager's [OAuth operations](../../mcp/mcp-manager/README.md#oauth-authorization): `startAuthorization('linear')` returns an attempt whose `authorizationUrl` the stream reports, `cancelAuthorization('linear', id)` cancels it, `signOut('linear')` deletes the grant, and `restart('linear')` retries. Other Remote clients can use the same operations.
 
 ### Turn off and uninstall
 
-Turning the row off in Plugin Manager, or uninstalling the package, ends the registration: the Linear tools leave the model's tool set, and the saved grant stays in the credentials store, so reinstalling reuses it. To remove the grant, sign out while the plugin is loaded, or delete the `mcp-client/linear` record from `$DSH_HOME/.credentials.yaml` as the [local credentials provider](../../credentials/credentials-local/README.md) documents.
+Turning the row off in Plugin Manager, or uninstalling the package, ends the registration: the Linear tools leave the model's tool set, and the saved grant stays in the credentials store, so reinstalling reuses it. To remove the grant, sign out while the plugin is loaded, or delete the `mcp-client/linear` record from `$SNH_HOME/.credentials.yaml` as the [local credentials provider](../../credentials/credentials-local/README.md) documents.
 
 ### Configure
 
@@ -63,7 +63,7 @@ Turning the row off in Plugin Manager, or uninstalling the package, ends the reg
 | `url` | `https://mcp.linear.app/mcp` | Streamable HTTP MCP endpoint of the Linear server |
 | `toolLoading` | `on-demand` | `on-demand` keeps Linear's tools hidden from each agent until it loads them; `eager` sends every tool definition with every request |
 
-The generated [config catalog](../../../docs/config-catalog.md#deepseek-aidsh-linear) is the exhaustive source of supported fields. Connection and authorization budgets use the manager and mcp-client defaults. The saved grant is bound to `url`; changing it requires connecting the account again.
+The generated [config catalog](../../../docs/config-catalog.md#supernova-aisnh-linear) is the exhaustive source of supported fields. Connection and authorization budgets use the manager and mcp-client defaults. The saved grant is bound to `url`; changing it requires connecting the account again.
 
 -----
 
@@ -75,7 +75,7 @@ The generated [config catalog](../../../docs/config-catalog.md#deepseek-aidsh-li
 
 [`cordis.patch.yml`](cordis.patch.yml) inserts one row with id `linear` naming this package, so the package is both the bundle and its only row; `config` overrides target that id. The Host half, [`src/index.ts`](src/index.ts), makes two registrations, both effects of the plugin's fiber: `ctx.mcpManager.register('linear', …)` adds a Streamable HTTP entry with the configured `url` and OAuth credential key, and `ctx.systemPrompt.section()` adds the naming guidance at the `MCP_SERVERS` order. The server name fixes the `mcp__linear__` tool namespace, and the credential key fixes the grant address, so a reloaded or reinstalled plugin reaches the same tools and grant. The manager validates the entry when it is registered; a configured or registered server that already uses the name or key makes the plugin fail to load before the guidance is added.
 
-While the account registry runs, the plugin also calls `ctx.mcpAccounts.register({ server: 'linear', packageName: '@deepseek-ai/dsh-linear', copy })`, where [`src/locales.ts`](src/locales.ts) holds the text that names Linear in every shipped language; [`dsh-mcp-account`](../../mcp/mcp-account/README.md) then registers the account with the connector account registry, which renders the section, guidance, tag, and toast described above. A composition without the registry, such as a headless profile, loads the plugin without the account section.
+While the account registry runs, the plugin also calls `ctx.mcpAccounts.register({ server: 'linear', packageName: '@supernova-ai/snh-linear', copy })`, where [`src/locales.ts`](src/locales.ts) holds the text that names Linear in every shipped language; [`snh-mcp-account`](../../mcp/mcp-account/README.md) then registers the account with the connector account registry, which renders the section, guidance, tag, and toast described above. A composition without the registry, such as a headless profile, loads the plugin without the account section.
 
 </details>
 
@@ -126,7 +126,7 @@ After authorization, the model sees Linear's server instructions under `### MCP 
 
 #### Token effect
 
-Linear's server defines the tool set and instructions, and their size can change without a DSH update. With `on-demand`, a connected Linear costs its instructions, the loader, and a catalog of about 9,600 characters for its 70 tools, plus the definitions an agent has loaded; with `eager`, all definitions, about 97,900 characters, repeat on every request.
+Linear's server defines the tool set and instructions, and their size can change without a SNH update. With `on-demand`, a connected Linear costs its instructions, the loader, and a catalog of about 9,600 characters for its 70 tools, plus the definitions an agent has loaded; with `eager`, all definitions, about 97,900 characters, repeat on every request.
 
 #### KV Cache effect
 

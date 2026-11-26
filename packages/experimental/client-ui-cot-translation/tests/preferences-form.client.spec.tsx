@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 /** Preferences remain staged until one explicit Settings save. */
-import type { TranslationProvider } from '@deepseek-ai/dsh-experimental-translator/types'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+import type { TranslationProvider } from '@supernova-ai/snh-experimental-translator/types'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
 import { afterEach, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
-import { bindSnapshotSelector, makeTranslate, stubConfigForm } from '@deepseek-ai/dsh-client-test-runtime'
+import { bindSnapshotSelector, makeTranslate, stubConfigForm } from '@supernova-ai/snh-client-test-runtime'
 import { TranslationPreferencesForm } from '../src/client/preferences-form.ts'
 import { TranslationSettings, type TranslationSettingsProps } from '../src/client/TranslationSettings.tsx'
 import type { CotTranslationPreferences } from '../src/preferences.ts'
@@ -106,9 +106,9 @@ it('offers both version-free paid routes only when eligible and keeps selection 
   try {
     expect(refreshProviders).toHaveBeenCalledOnce()
     expect(view.getByLabelText(en.provider)).toHaveProperty('value', 'bing')
-    expect(view.getByRole('option', { name: en.deepseekAccount })).toBeTruthy()
-    expect(view.getByRole('option', { name: en.deepseekOfficial })).toBeTruthy()
-    expect(en.deepseekAccount).not.toMatch(/v?4\.1/)
+    expect(view.getByRole('option', { name: en.supernovaAccount })).toBeTruthy()
+    expect(view.getByRole('option', { name: en.supernovaOfficial })).toBeTruthy()
+    expect(en.supernovaAccount).not.toMatch(/v?4\.1/)
     expect(view.getByText(en.anonymousNotice)).toBeTruthy()
     expect(view.queryByText(en.paidNotice)).toBeNull()
     fireEvent.change(view.getByLabelText(en.provider), { target: { value: 'deepseek-account' } })
@@ -139,15 +139,15 @@ it('keeps an unavailable paid choice disabled and offers repair or an explicit r
   const view = render(<TranslationSettings {...props} />)
   try {
     expect(view.getByLabelText(en.provider)).toHaveProperty('value', 'deepseek-official')
-    const selected = view.getByRole('option', { name: `${en.deepseekOfficial} — unavailable` })
+    const selected = view.getByRole('option', { name: `${en.supernovaOfficial} — unavailable` })
     expect(selected).toHaveProperty('disabled', true)
-    expect(view.queryByRole('option', { name: en.deepseekAccount })).toBeNull()
+    expect(view.queryByRole('option', { name: en.supernovaAccount })).toBeNull()
     expect(view.getByText(en.providerUnavailable)).toBeTruthy()
     expect(view.getByText(en.paidNotice)).toBeTruthy()
     expect(scope.mutate).not.toHaveBeenCalled()
     act(() => { availability.set(['bing', 'google', 'deepseek-official']) })
     expect(view.getByLabelText(en.provider)).toHaveProperty('value', 'deepseek-official')
-    expect(view.getByRole('option', { name: en.deepseekOfficial })).toHaveProperty('disabled', false)
+    expect(view.getByRole('option', { name: en.supernovaOfficial })).toHaveProperty('disabled', false)
     expect(view.queryByText(en.providerUnavailable)).toBeNull()
     expect(scope.mutate).not.toHaveBeenCalled()
     fireEvent.click(view.getByRole('button', { name: en.reset }))

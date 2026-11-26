@@ -5,14 +5,14 @@
  * runs. The manager owns connection, OAuth authorization, saved grants, and
  * sign-out; once a grant exists, the server's `mcp__notion__*` tools are
  * listed in the system prompt and each agent loads the ones it needs.
- * @module @deepseek-ai/dsh-notion
+ * @module @supernova-ai/snh-notion
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type {} from '@deepseek-ai/dsh-mcp-account'
-import type {} from '@deepseek-ai/dsh-mcp-manager'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type {} from '@supernova-ai/snh-mcp-account'
+import type {} from '@supernova-ai/snh-mcp-manager'
+import type {} from '@supernova-ai/snh-system-prompt'
 import { COPY } from './locales.ts'
 
 export const name = 'notion'
@@ -60,6 +60,6 @@ export function apply(ctx: Context, config: Config): void {
     text: GUIDANCE,
   })
   ctx.inject(['mcpAccounts'], (scope) => {
-    scope.effect(() => scope.mcpAccounts.register({ server: SERVER_NAME, packageName: '@deepseek-ai/dsh-notion', copy: COPY }), 'notion: Plugins page account')
+    scope.effect(() => scope.mcpAccounts.register({ server: SERVER_NAME, packageName: '@supernova-ai/snh-notion', copy: COPY }), 'notion: Plugins page account')
   })
 }

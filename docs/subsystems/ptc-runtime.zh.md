@@ -2,7 +2,7 @@
 
 [English](ptc-runtime.md) | 中文
 
-PTC 执行[能力 seam](../../.agents/notes/implemented/architecture/2026-06-13-capability-seams.zh.md)通过 [dsh-ptc-runtime](../../packages/ptc-runtime/ptc-runtime) 提供 `ctx.ptcRuntime`。它针对 Host 绑定运行一个程序，报告输出、失败与适用的沙箱事实。PTC 执行是可选能力，不属于[智能体循环主干](core.zh.md)。[PTC 基础](../../.agents/notes/implemented/feature/2026-06-15-ptc.zh.md)负责注册表呈现，[类型化返回约定](../../.agents/notes/implemented/feature/2026-07-20-ptc-typed-tool-returns.zh.md)负责绑定值，[沙箱 Node 决策](../../.agents/notes/implemented/architecture/2026-09-11-sandboxed-node-ptc-runtime.zh.md)负责已发布的执行提供方。
+PTC 执行[能力 seam](../../.agents/notes/implemented/architecture/2026-06-13-capability-seams.zh.md)通过 [snh-ptc-runtime](../../packages/ptc-runtime/ptc-runtime) 提供 `ctx.ptcRuntime`。它针对 Host 绑定运行一个程序，报告输出、失败与适用的沙箱事实。PTC 执行是可选能力，不属于[智能体循环主干](core.zh.md)。[PTC 基础](../../.agents/notes/implemented/feature/2026-06-15-ptc.zh.md)负责注册表呈现，[类型化返回约定](../../.agents/notes/implemented/feature/2026-07-20-ptc-typed-tool-returns.zh.md)负责绑定值，[沙箱 Node 决策](../../.agents/notes/implemented/architecture/2026-09-11-sandboxed-node-ptc-runtime.zh.md)负责已发布的执行提供方。
 
 源码：[`packages/ptc-runtime/ptc-runtime/src/types.ts`](../../packages/ptc-runtime/ptc-runtime/src/types.ts)
 
@@ -181,7 +181,7 @@ type PtcJsonValue = null | boolean | number | string | PtcJsonValue[] | { [key: 
 type PtcBindingFunction = (args: unknown) => Promise<PtcJsonValue>
 ```
 
-`@deepseek-ai/dsh-ptc-runtime` 导出的 `PtcInspectableValue` 通过 `new PtcInspectableValue(value, text)`，为无损 JSON 对象或数组关联宿主提供的文本。提供方向程序交付数据本身，不暴露描述符，也不添加程序可见属性。只有直接 `inspect` 原结果，且其数据仍与初始快照一致时，才使用附带文本；空文本不产生输出。拷贝、字段选择、修改后的结果和嵌套值使用普通格式。该关联由 Node 进程拥有，不序列化到 Session 日志，复制程序值也不会传递该关联。参见 [`src/inspectable-value.ts`](../../packages/ptc-runtime/ptc-runtime/src/inspectable-value.ts)。
+`@supernova-ai/snh-ptc-runtime` 导出的 `PtcInspectableValue` 通过 `new PtcInspectableValue(value, text)`，为无损 JSON 对象或数组关联宿主提供的文本。提供方向程序交付数据本身，不暴露描述符，也不添加程序可见属性。只有直接 `inspect` 原结果，且其数据仍与初始快照一致时，才使用附带文本；空文本不产生输出。拷贝、字段选择、修改后的结果和嵌套值使用普通格式。该关联由 Node 进程拥有，不序列化到 Session 日志，复制程序值也不会传递该关联。参见 [`src/inspectable-value.ts`](../../packages/ptc-runtime/ptc-runtime/src/inspectable-value.ts)。
 
 数据中可以包含宿主提供的 `PtcImage` 描述符。提供方在展示快照中保留对应程序 `Image` 的身份。直接展示未修改的容器时输出附带文本；展示 Image 字段时输出该图片。
 

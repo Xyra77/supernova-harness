@@ -1,1 +1,1 @@
-dsh: SERVER: CLI mock provider failed
+snh: SERVER: CLI mock provider failed

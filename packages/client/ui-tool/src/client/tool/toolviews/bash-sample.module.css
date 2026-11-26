@@ -94,7 +94,7 @@
 .root {
   display: flex;
   align-items: center;
-  height: calc(24px + var(--dsh-content-font-delta, 0px));
+  height: calc(24px + var(--snh-content-font-delta, 0px));
   min-width: 0;
   color: var(--dsw-alias-label-tertiary);
   transition: color 100ms ease;
@@ -115,8 +115,8 @@
 .leading {
   position: relative; /* .chevronHover overlay anchor */
   flex: none;
-  width: calc(16px + var(--dsh-content-font-delta, 0px));
-  height: calc(16px + var(--dsh-content-font-delta, 0px));
+  width: calc(16px + var(--snh-content-font-delta, 0px));
+  height: calc(16px + var(--snh-content-font-delta, 0px));
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -132,8 +132,8 @@
    15px); migrating the bash row onto the shared DisclosureRow removes this
    copy. */
 .leading svg:not([data-state]) {
-  width: calc(14px + var(--dsh-content-font-delta, 0px));
-  height: calc(14px + var(--dsh-content-font-delta, 0px));
+  width: calc(14px + var(--snh-content-font-delta, 0px));
+  height: calc(14px + var(--snh-content-font-delta, 0px));
 }
 
 .chevron {
@@ -168,8 +168,8 @@
 
 .title {
   flex: none;
-  font-size: var(--dsh-content-font-size-secondary, 13px);
-  line-height: calc(24px + var(--dsh-content-font-delta, 0px));
+  font-size: var(--snh-content-font-size-secondary, 13px);
+  line-height: calc(24px + var(--snh-content-font-delta, 0px));
 }
 
 .sep {
@@ -187,8 +187,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--dsh-content-font-size-secondary, 13px);
-  line-height: calc(24px + var(--dsh-content-font-delta, 0px));
+  font-size: var(--snh-content-font-size-secondary, 13px);
+  line-height: calc(24px + var(--snh-content-font-delta, 0px));
 }
 
 /* Error row's collapsed summary: the failure's first line in the error color. */

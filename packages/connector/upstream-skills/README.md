@@ -1,15 +1,15 @@
 ---
-description: "Register a CLI app plugin's entry skill with the Host Service `ctx.upstreamSkills`: it downloads the upstream files the entry indexes from one directory of the vendor's GitHub repository at a pinned commit, verifies them, publishes them in the DSH cache, and lists the entry skill over them."
+description: "Register a CLI app plugin's entry skill with the Host Service `ctx.upstreamSkills`: it downloads the upstream files the entry indexes from one directory of the vendor's GitHub repository at a pinned commit, verifies them, publishes them in the SNH cache, and lists the entry skill over them."
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-upstream-skills
+# @supernova-ai/snh-upstream-skills
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-CLI app plugins such as WeCom and Tencent Meeting register with `ctx.upstreamSkills` for guides their vendor publishes only in its GitHub repository. The plugin keeps its own entry `SKILL.md` and pins one directory of that repository by commit, total size, and digest. The Service downloads the commit's archive when the plugin loads, verifies the kept files, publishes them in the DSH cache, and lists the entry skill with the published directory as its base directory. The repository and the plugins' npm packages carry no copy of those files. The base bundle loads the Service, which downloads nothing until one registers.
+CLI app plugins such as WeCom and Tencent Meeting register with `ctx.upstreamSkills` for guides their vendor publishes only in its GitHub repository. The plugin keeps its own entry `SKILL.md` and pins one directory of that repository by commit, total size, and digest. The Service downloads the commit's archive when the plugin loads, verifies the kept files, publishes them in the SNH cache, and lists the entry skill with the published directory as its base directory. The repository and the plugins' npm packages carry no copy of those files. The base bundle loads the Service, which downloads nothing until one registers.
 
 ## Table of Contents
 
@@ -37,7 +37,7 @@ The [base bundle](../../bundle/base/cordis.patch.yml) loads the Service in every
 
 ```yaml
 - id: upstream-skills
-  name: '@deepseek-ai/dsh-upstream-skills'
+  name: '@supernova-ai/snh-upstream-skills'
 ```
 
 | Field | Default | Meaning |
@@ -45,7 +45,7 @@ The [base bundle](../../bundle/base/cordis.patch.yml) loads the Service in every
 | `skillsUrls` | `['https://codeload.github.com']` | HTTPS archive download prefixes, without a query, fragment, or credentials, tried in order; they apply to every registered plugin |
 | `skillsTimeoutMs` | `120000` | Whole milliseconds one prefix may take to deliver the whole archive before the next is tried; it applies to every registered plugin |
 
-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-upstream-skills) is the exhaustive source for every accepted field. An empty `skillsUrls`, a prefix that does not parse as such a URL, or a `skillsTimeoutMs` below 1 or above 2147483647 fails at load.
+The generated [configuration catalog](../../../docs/config-catalog.md#supernova-aisnh-upstream-skills) is the exhaustive source for every accepted field. An empty `skillsUrls`, a prefix that does not parse as such a URL, or a `skillsTimeoutMs` below 1 or above 2147483647 fails at load.
 
 ### Register an entry skill
 
@@ -53,8 +53,8 @@ The plugin's Host row lists `upstreamSkills` in `inject`, pins the upstream file
 
 ```ts
 import { fileURLToPath } from 'node:url'
-import type { Context } from '@deepseek-ai/cordis'
-import type { UpstreamSkillSet } from '@deepseek-ai/dsh-upstream-skills'
+import type { Context } from '@supernova-ai/cordis'
+import type { UpstreamSkillSet } from '@supernova-ai/snh-upstream-skills'
 
 const VENDOR_SKILLS: UpstreamSkillSet = {
   repository: 'vendor/vendor-cli',
@@ -83,12 +83,12 @@ export function apply(ctx: Context, config: Config): void {
 
 `register` reads the entry's name and description from its YAML frontmatter, registers a skill provider under `name`, and starts the download unless the files are already in place. The registration belongs to the plugin whose `ctx` made the call: unloading that plugin aborts the download, removes the provider, and ends the notifications. A second registration under one `name` throws and leaves the first in place.
 
-- `name` is the skill provider's name, the prefix of the plugin's errors and log records, and the directory under `$DSH_HOME/cache` that receives the download.
+- `name` is the skill provider's name, the prefix of the plugin's errors and log records, and the directory under `$SNH_HOME/cache` that receives the download.
 - `entry` is the absolute path of the packaged entry `SKILL.md`, whose body refers to the upstream files by their repository paths, such as `skills/<guide>/SKILL.md`.
 - `set` is the pin that `scripts/upstream-skills-digest.ts` prints.
 - `skillsDir` is the plugin's own optional config field: a directory that already holds the kept files at their repository paths. When it is set, nothing is downloaded, and a path that is not a directory makes `register` throw.
 
-The returned handle serves the plugin's account view and check. `directory` is `skillsDir`; otherwise it is `$DSH_HOME/cache/<name>/<profile>/skills-<first 16 digest digits>` in a profile and `$DSH_HOME/cache/<name>/skills-<first 16 digest digits>` without one. `state` is `downloading` while a download runs, otherwise `installed` when that directory exists and `failed` when it does not. `watch(listener)` reports each start and end of a download, and `retry()` starts another download after a failure and returns at once. A plugin shows the state beside its account and calls `retry()` from its check without waiting, so a slow download never holds its account operations. A failed download is logged as a warning. `dispose()` withdraws the registration before the plugin unloads. The contracts in [`src/index.ts`](src/index.ts) and [`src/types.ts`](src/types.ts) are authoritative.
+The returned handle serves the plugin's account view and check. `directory` is `skillsDir`; otherwise it is `$SNH_HOME/cache/<name>/<profile>/skills-<first 16 digest digits>` in a profile and `$SNH_HOME/cache/<name>/skills-<first 16 digest digits>` without one. `state` is `downloading` while a download runs, otherwise `installed` when that directory exists and `failed` when it does not. `watch(listener)` reports each start and end of a download, and `retry()` starts another download after a failure and returns at once. A plugin shows the state beside its account and calls `retry()` from its check without waiting, so a slow download never holds its account operations. A failed download is logged as a warning. `dispose()` withdraws the registration before the plugin unloads. The contracts in [`src/index.ts`](src/index.ts) and [`src/types.ts`](src/types.ts) are authoritative.
 
 ### Kept files and verification
 
@@ -96,7 +96,7 @@ The Service downloads `<prefix>/<owner>/<repository>/tar.gz/<commit>` from each 
 
 ### Replaced pins
 
-Each profile that `dsh` launches has a directory of its own for a plugin's files, `$DSH_HOME/cache/<name>/<profile>`, which the processes of that profile share. A registration deletes the other pins of that directory once, the first time its own pin is in place there: already at load, or after its download. A plugin update that changes the pin therefore leaves one copy, and the earlier pin stays until the new one is published. The deletion runs in the background, and neither `register` nor the end of a download waits for it; a pin that cannot be deleted is logged as a warning and deleted at a later load. Because a registration deletes the other pins only once, a process whose pin another process of the profile deleted downloads it again at its next check and leaves that process's pin in place; [Known Limitations](#known-limitations-and-deferred-work) describes that case. A composition that `dsh` did not launch has no profile: its pins stay in `$DSH_HOME/cache/<name>`, which several installations may share, and none is deleted. A configured `skillsDir` and its sibling directories are never deleted.
+Each profile that `snh` launches has a directory of its own for a plugin's files, `$SNH_HOME/cache/<name>/<profile>`, which the processes of that profile share. A registration deletes the other pins of that directory once, the first time its own pin is in place there: already at load, or after its download. A plugin update that changes the pin therefore leaves one copy, and the earlier pin stays until the new one is published. The deletion runs in the background, and neither `register` nor the end of a download waits for it; a pin that cannot be deleted is logged as a warning and deleted at a later load. Because a registration deletes the other pins only once, a process whose pin another process of the profile deleted downloads it again at its next check and leaves that process's pin in place; [Known Limitations](#known-limitations-and-deferred-work) describes that case. A composition that `snh` did not launch has no profile: its pins stay in `$SNH_HOME/cache/<name>`, which several installations may share, and none is deleted. A configured `skillsDir` and its sibling directories are never deleted.
 
 ### Pinning a commit
 
@@ -136,11 +136,11 @@ Each profile that `dsh` launches has a directory of its own for a plugin's files
 <a id="model-experience"></a>
 ## Model Experience
 
-Indirectly, through `dsh-tool-skill`, which lists the entry skill in its catalog once the upstream files are published and returns the entry body with the handle's `directory` as the skill's base directory. While no plugin is registered, the Service adds nothing to a model request.
+Indirectly, through `snh-tool-skill`, which lists the entry skill in its catalog once the upstream files are published and returns the entry body with the handle's `directory` as the skill's base directory. While no plugin is registered, the Service adds nothing to a model request.
 
 #### KV Cache effect
 
-A load that finds the files in place lists the entry in the session's first catalog. A download that finishes after the first catalog makes `dsh-tool-skill` append one replacement catalog that includes the entry; earlier request tokens are unchanged.
+A load that finds the files in place lists the entry in the session's first catalog. A download that finishes after the first catalog makes `snh-tool-skill` append one replacement catalog that includes the entry; earlier request tokens are unchanged.
 
 ## Known Limitations and Deferred Work
 
@@ -150,7 +150,7 @@ A load that finds the files in place lists the entry in the session's first cata
 - Each profile that loads a plugin downloads its own copy of the pin.
 - Processes of one profile can run different versions of a plugin at the same time, such as one started before a plugin update and one started after it. The later one deletes the pin the earlier one reads: the earlier process lists no entry skill, and its agents cannot open the guides, until its next check has downloaded the pin again. Both pins then stay until a process of the profile loads the plugin again.
 - Removing a plugin leaves its pin in the cache. A process that exits while it writes a download leaves its `.skills-<digest>-<uuid>` staging directory there too. Nothing deletes either.
-- Without a profile, every pin stays in `$DSH_HOME/cache/<name>` after the plugin pins another commit.
+- Without a profile, every pin stays in `$SNH_HOME/cache/<name>` after the plugin pins another commit.
 - Only the published directory's existence is checked. When files inside it are deleted or changed, the entry skill stays listed over them; deleting the directory makes the next check or load download the pin again.
 - File modes are not kept, so an upstream script is not executable; the current upstream guides run their scripts through `python3`.
 - In the experimental Web preview, which runs Host plugins in a browser worker, the Service loads but node-tar does not, so every download fails there.

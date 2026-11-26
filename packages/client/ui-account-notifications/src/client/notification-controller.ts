@@ -15,11 +15,11 @@
  * card and active poll. Credential and connection changes end
  * that lifecycle before another begins. Signing out and unloading also clear
  * the cards; a later sign-in shows whatever the server offers.
- * @module @deepseek-ai/dsh-client-ui-account-notifications/src/client/notification-controller
+ * @module @supernova-ai/snh-client-ui-account-notifications/src/client/notification-controller
  */
 import type {
   AccountNotification, AccountNotificationBatch, AccountNotificationEvent, AccountNotificationId,
-} from '@deepseek-ai/dsh-deepseek-account/types'
+} from '@supernova-ai/snh-deepseek-account/types'
 
 /** Notification content currently available to the sidebar presentation. */
 export type AccountNotice = AccountNotification

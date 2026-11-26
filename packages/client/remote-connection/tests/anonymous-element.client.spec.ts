@@ -24,7 +24,7 @@ beforeEach(() => {
     const held = JSON.parse(init.body) as { id: string; secret: string }
     return new Response(JSON.stringify({ ...ticket, ...held }))
   })
-  document.head.innerHTML = '<base href="https://host.example/tools/dsh/">'
+  document.head.innerHTML = '<base href="https://host.example/tools/snh/">'
 })
 
 afterEach(() => {
@@ -36,7 +36,7 @@ afterEach(() => {
 })
 
 function mount(): PairingElement {
-  const element = document.createElement('dsh-device-pairing')
+  const element = document.createElement('snh-device-pairing')
   if (!(element instanceof DevicePairingElement)) throw new Error('Pairing element is not defined')
   document.body.append(element)
   return element
@@ -51,8 +51,8 @@ it('defines and mounts independently of authenticated Client modules, with insta
   const element = mount()
   expect(element.querySelector('h2')?.textContent).toBe('Pair this device')
   expect(element.querySelectorAll('style')).toHaveLength(1)
-  expect(element.querySelector('button')?.classList.contains('dsh-device-pairing-button')).toBe(true)
-  expect(element.querySelector('button')?.classList.contains('dsh-device-pairing-primary')).toBe(true)
+  expect(element.querySelector('button')?.classList.contains('snh-device-pairing-button')).toBe(true)
+  expect(element.querySelector('button')?.classList.contains('snh-device-pairing-primary')).toBe(true)
   expect(element.querySelector('button')?.textContent).toBe('Request to pair')
   expect(element.querySelector('p')?.textContent).toContain('Settings → Remote connection')
   expect(element.querySelector('p')?.closest('[hidden]')).toBeNull()
@@ -109,14 +109,14 @@ it('retains the private ticket across BFCache suspension and resumes its status 
   window.dispatchEvent(new Event('pageshow'))
   await vi.advanceTimersByTimeAsync(0)
   expect(request).toHaveBeenCalledTimes(2)
-  expect(request.mock.calls[1]?.[0]).toEqual(new URL('https://host.example/tools/dsh/pairing/status'))
+  expect(request.mock.calls[1]?.[0]).toEqual(new URL('https://host.example/tools/snh/pairing/status'))
   expect(request.mock.calls[1]?.[1]?.body).toBe(request.mock.calls[0]?.[1]?.body)
   expect(element.querySelector('#auth-pair-panel')?.getAttribute('data-state')).toBe('waiting')
 })
 
 it('waits for a browsing context before mounting an adopted element', () => {
   const doc = document.implementation.createHTMLDocument('Detached document')
-  const element = document.createElement('dsh-device-pairing')
+  const element = document.createElement('snh-device-pairing')
   doc.adoptNode(element)
   doc.body.append(element)
   expect(element.childNodes).toHaveLength(0)

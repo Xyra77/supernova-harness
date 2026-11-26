@@ -2,9 +2,9 @@
 import { mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ForgeReadiness } from '@deepseek-ai/dsh-experimental-forge'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ForgeReadiness } from '@supernova-ai/snh-experimental-forge'
+import type { SessionId } from '@supernova-ai/snh-session'
 import type { Config, ForgePanelState } from '../src/index.ts'
 import { bench, demo, follow, git, pullUrl, repository, scratch, shellTurn, snapshot } from './harness.ts'
 import type { Bench, Follower } from './harness.ts'
@@ -22,7 +22,7 @@ const SIGNED_OUT: ForgeReadiness = { state: 'unauthenticated', message: 'sign in
 const UNSERVED = 'https://unserved.test/a/b/pull/3'
 
 async function project(remote = 'https://fake.test/octo/demo.git'): Promise<{ root: string; repo: string }> {
-  const { path, remove } = await scratch('dsh-forge-revisit-')
+  const { path, remove } = await scratch('snh-forge-revisit-')
   cleanups.push(remove)
   const repo = await repository(path)
   await git(repo, 'remote', 'add', 'origin', remote)

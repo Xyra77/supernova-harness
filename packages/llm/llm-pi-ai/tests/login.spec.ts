@@ -2,11 +2,11 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AuthorizationService from '@deepseek-ai/dsh-authorization'
-import type { AuthorizationInteraction, AuthorizationNotice, AuthorizationPrompt } from '@deepseek-ai/dsh-authorization'
-import LocalCredentialProvider from '@deepseek-ai/dsh-credentials-local'
-import type { CredentialKey } from '@deepseek-ai/dsh-credentials'
+import { Context } from '@supernova-ai/cordis'
+import AuthorizationService from '@supernova-ai/snh-authorization'
+import type { AuthorizationInteraction, AuthorizationNotice, AuthorizationPrompt } from '@supernova-ai/snh-authorization'
+import LocalCredentialProvider from '@supernova-ai/snh-credentials-local'
+import type { CredentialKey } from '@supernova-ai/snh-credentials'
 import type { AuthEvent, AuthInteraction, AuthPrompt, AuthType, Credential } from '@earendil-works/pi-ai'
 
 const login = vi.hoisted(() => vi.fn())
@@ -28,7 +28,7 @@ const dirs: string[] = []
 
 /** A context with the record store, the seam, and every pi-ai login flow. */
 async function harness(): Promise<Context> {
-  const dir = await mkdtemp(join(tmpdir(), 'dsh-pi-login-'))
+  const dir = await mkdtemp(join(tmpdir(), 'snh-pi-login-'))
   dirs.push(dir)
   const ctx = new Context()
   await ctx.plugin(LocalCredentialProvider, { path: join(dir, '.credentials.yaml'), watch: false })
@@ -95,7 +95,7 @@ describe('pi-ai login flows', () => {
       .toEqual(['oauth', 'api-key'])
     // A key-only provider still gets a flow, because pi-ai collects the key
     // through its own prompt rather than leaving it to the settings form.
-    expect(offered.find(entry => entry.key === recordKeyFor('deepseek'))?.methods.map(one => one.id))
+    expect(offered.find(entry => entry.key === recordKeyFor('supernova'))?.methods.map(one => one.id))
       .toEqual(['api-key'])
     // pi-ai ships Sign in with ChatGPT for `openai`, which needs an
     // installation ID the harness does not supply; only the key login is offered.

@@ -1,13 +1,13 @@
 /** Common paid requests and results survive Host restart without altering main conversation input. */
-import { createAssistantMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import { pluginRecordOf, type SessionId, SessionSeq, type SessionEvent } from '@deepseek-ai/dsh-session'
-import type { SessionPersistence } from '@deepseek-ai/dsh-session-persistence'
+import { createAssistantMessage, createUserMessage } from '@supernova-ai/snh-llm'
+import { pluginRecordOf, type SessionId, SessionSeq, type SessionEvent } from '@supernova-ai/snh-session'
+import type { SessionPersistence } from '@supernova-ai/snh-session-persistence'
 import type { JsonlHandleStorage } from '../../../session/session-persistence-jsonl/src/storage.ts'
 import { readFile } from 'node:fs/promises'
 import { setImmediate } from 'node:timers/promises'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { paidFixture } from './paid-fixture.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const cleanups: Array<() => Promise<void>> = []
 afterEach(async () => {
@@ -41,7 +41,7 @@ function historicalEvents(): SessionEvent[] {
 describe('common paid translation persistence', () => {
   it.each(['caller cancellation', 'provider deadline'] as const)(
     'keeps a pending result ahead of an immediate retry after %s without billing again', async (interruption) => {
-      const b = await paidFixture(cleanups, { translator: { deepseekTimeoutMs: 60_000 } }), backend = b.ctx.sessionPersistence as SessionPersistence & Pick<JsonlHandleStorage, 'persistBatch'>
+      const b = await paidFixture(cleanups, { translator: { supernovaTimeoutMs: 60_000 } }), backend = b.ctx.sessionPersistence as SessionPersistence & Pick<JsonlHandleStorage, 'persistBatch'>
       expect(typeof backend.persistBatch).toBe('function')
       const entered = Promise.withResolvers<undefined>(), release = Promise.withResolvers<undefined>()
       cleanups.push(async () => { release.resolve(undefined) })
@@ -195,7 +195,7 @@ describe('common paid translation persistence', () => {
     const b = await paidFixture(cleanups), id = b.session!.id
     const spec = () => b.ctx.translator.resolve({ provider: 'deepseek-official', text: 'Original paragraph', targetLanguage: 'zh', sessionId: id })
     expect(await b.ctx.translator.translate(spec())).toBe('翻译结果')
-    await b.restart({ translator: { deepseekMaxOutputTokens: 16 } })
+    await b.restart({ translator: { supernovaMaxOutputTokens: 16 } })
     await expect(b.ctx.translator.translate(spec())).rejects.toMatchObject({ code: 'TRANSLATION_SESSION_INACTIVE' })
     expect(b.requests).toHaveLength(1)
     await b.activate(id)

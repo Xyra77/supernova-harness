@@ -1,10 +1,10 @@
 /**
  * Carrier-independent Typert Gateway request, service, and error contracts.
- * @module @deepseek-ai/dsh-api-gateway/types
+ * @module @supernova-ai/snh-api-gateway/types
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { PeerScope, RemoteUplinkWindow, TypertResourceReader } from '@deepseek-ai/dsh-typert-protocol'
+import type { Context } from '@supernova-ai/cordis'
+import type { PeerScope, RemoteUplinkWindow, TypertResourceReader } from '@supernova-ai/snh-typert-protocol'
 import type { RemoteEventAgentId, RemoteEventHostInfo } from './stream-protocol.ts'
 
 /** One Remote method request after a carrier has decoded its envelope. */
@@ -191,7 +191,7 @@ export interface TypertGateway {
   stream(request: InvokeRemoteRequest): Promise<AsyncIterable<unknown>>
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** Host dispatcher for Typert Remote calls. */
     typertGateway: TypertGateway

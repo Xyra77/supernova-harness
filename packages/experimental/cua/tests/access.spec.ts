@@ -1,21 +1,21 @@
 /** Application decisions are checked at dispatch and revocation cancels owned work. */
 import { setImmediate } from 'node:timers/promises'
-import { Context } from '@deepseek-ai/cordis'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import FsLocal from '@deepseek-ai/dsh-fs-local'
-import NodeRuntime from '@deepseek-ai/dsh-ptc-runtime-node'
-import Sandbox from '@deepseek-ai/dsh-sandbox-local'
-import SandboxPolicy from '@deepseek-ai/dsh-sandbox-policy'
-import Subprocess from '@deepseek-ai/dsh-subprocess-local'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import UserQuestions, { type AskUserQuestionAnswer } from '@deepseek-ai/dsh-user-questions'
+import { Context } from '@supernova-ai/cordis'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import FsLocal from '@supernova-ai/snh-fs-local'
+import NodeRuntime from '@supernova-ai/snh-ptc-runtime-node'
+import Sandbox from '@supernova-ai/snh-sandbox-local'
+import SandboxPolicy from '@supernova-ai/snh-sandbox-policy'
+import Subprocess from '@supernova-ai/snh-subprocess-local'
+import type { SessionId } from '@supernova-ai/snh-session'
+import UserQuestions, { type AskUserQuestionAnswer } from '@supernova-ai/snh-user-questions'
 import { expect, it, onTestFinished, vi } from 'vitest'
 import { ApplicationAuthorizationResult, installCuaAccess } from '../src/access.ts'
 import type { CuaApplicationGrant } from '../src/access-types.ts'
 import type { CuaAppHandle } from '../src/types.ts'
 import { NativeClient, NativeError } from '../src/native-client.ts'
 import { permissionFixture } from './permission-fixture.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const native = vi.hoisted(() => ({ instances: [] as Array<{
   disposed: boolean
@@ -424,7 +424,7 @@ it('omits the Windows helper PID while retaining its diagnostic name and path', 
   const f = await setup()
   await f.ctx.cuaAccess.systemStatus()
   const status = { platform: 'windows', sessionLocked: null, captureAvailable: true, elevated: false }
-  const helper = { name: 'dsh-cua-windows', path: 'C:/fixture/dsh-cua-windows.exe' }
+  const helper = { name: 'snh-cua-windows', path: 'C:/fixture/snh-cua-windows.exe' }
   native.instances.at(-1)!.request.mockResolvedValueOnce({ ...status, helper: { ...helper, pid: 4 } })
   expect(await f.ctx.cuaAccess.systemStatus()).toEqual({ ...status, helper })
 })

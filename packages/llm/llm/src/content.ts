@@ -1,4 +1,4 @@
-/** Content-block structure helpers. @module @deepseek-ai/dsh-llm/content */
+/** Content-block structure helpers. @module @supernova-ai/snh-llm/content */
 
 import type { ContentBlock, ToolSchema, ToolUpdate, ToolHistory } from './types.ts'
 import type { RequestMessage } from './types.ts'
@@ -6,8 +6,8 @@ import type { Message } from './message.ts'
 import type { MessageId } from './types.ts'
 import type {
   AttachmentStore, FileAttachmentRef, ImageAttachmentRef, ImageMediaType, RequestImageAttachment,
-} from '@deepseek-ai/dsh-attachment'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
+} from '@supernova-ai/snh-attachment'
+import { assertNever } from '@supernova-ai/snh-util-values'
 
 export { requiredImageOffload } from './request-images.ts'
 

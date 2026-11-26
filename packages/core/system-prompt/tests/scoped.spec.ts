@@ -1,10 +1,10 @@
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { bindScopeParent, createScope, scopeOf } from '@deepseek-ai/dsh-scope'
-import type { Scope, ScopeKey } from '@deepseek-ai/dsh-scope'
-import SystemPrompt, { TOOL_ORDER_REST, renderContextSnapshot, renderPrompt } from '@deepseek-ai/dsh-system-prompt'
-import type { Config, PromptPresentation } from '@deepseek-ai/dsh-system-prompt'
+import { Context } from '@supernova-ai/cordis'
+import { bindScopeParent, createScope, scopeOf } from '@supernova-ai/snh-scope'
+import type { Scope, ScopeKey } from '@supernova-ai/snh-scope'
+import SystemPrompt, { TOOL_ORDER_REST, renderContextSnapshot, renderPrompt } from '@supernova-ai/snh-system-prompt'
+import type { Config, PromptPresentation } from '@supernova-ai/snh-system-prompt'
 
 const contexts: Context[] = []
 afterEach(async () => {

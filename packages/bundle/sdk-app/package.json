@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-sdk-app",
-  "description": "The dsh SDK profile bundle: stdio JSON-RPC serving and process lifecycle over dsh-base",
+  "name": "@supernova-ai/snh-sdk-app",
+  "description": "The snh SDK profile bundle: stdio JSON-RPC serving and process lifecycle over snh-base",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -33,40 +33,40 @@
     "src"
   ],
   "license": "MIT",
-  "dsh": {
+  "snh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "dependencies": {
-    "@deepseek-ai/dsh-action-cards": "workspace:*",
-    "@deepseek-ai/dsh-agent-preset": "workspace:*",
-    "@deepseek-ai/dsh-cmdline": "workspace:*",
-    "@deepseek-ai/dsh-creation-recommendations": "workspace:*",
-    "@deepseek-ai/dsh-office-kit": "workspace:*",
-    "@deepseek-ai/dsh-plugin-recommendations": "workspace:*",
-    "@deepseek-ai/dsh-sdk-jsonrpc-server": "workspace:*",
-    "@deepseek-ai/dsh-tool-office": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/snh-action-cards": "workspace:*",
+    "@supernova-ai/snh-agent-preset": "workspace:*",
+    "@supernova-ai/snh-cmdline": "workspace:*",
+    "@supernova-ai/snh-creation-recommendations": "workspace:*",
+    "@supernova-ai/snh-office-kit": "workspace:*",
+    "@supernova-ai/snh-plugin-recommendations": "workspace:*",
+    "@supernova-ai/snh-sdk-jsonrpc-server": "workspace:*",
+    "@supernova-ai/snh-tool-office": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
     "commander": "^15.0.0",
-    "@deepseek-ai/dsh-skill-office": "workspace:*",
-    "@deepseek-ai/dsh-tool-workspace-dependencies": "workspace:*",
-    "@deepseek-ai/dsh-client-connection": "workspace:*",
-    "@deepseek-ai/dsh-client-file-upload": "workspace:*",
-    "@deepseek-ai/dsh-workspace": "workspace:*",
-    "@deepseek-ai/dsh-schedule": "workspace:*",
-    "@deepseek-ai/dsh-time-context": "workspace:*",
-    "@deepseek-ai/dsh-tool-schedule": "workspace:*",
-    "@deepseek-ai/dsh-tool-ask-user": "workspace:*",
-    "@deepseek-ai/dsh-tool-present": "workspace:*",
-    "@deepseek-ai/dsh-file-reference-local": "workspace:*",
-    "@deepseek-ai/dsh-deliverable-file-references": "workspace:*"
+    "@supernova-ai/snh-skill-office": "workspace:*",
+    "@supernova-ai/snh-tool-workspace-dependencies": "workspace:*",
+    "@supernova-ai/snh-client-connection": "workspace:*",
+    "@supernova-ai/snh-client-file-upload": "workspace:*",
+    "@supernova-ai/snh-workspace": "workspace:*",
+    "@supernova-ai/snh-schedule": "workspace:*",
+    "@supernova-ai/snh-time-context": "workspace:*",
+    "@supernova-ai/snh-tool-schedule": "workspace:*",
+    "@supernova-ai/snh-tool-ask-user": "workspace:*",
+    "@supernova-ai/snh-tool-present": "workspace:*",
+    "@supernova-ai/snh-file-reference-local": "workspace:*",
+    "@supernova-ai/snh-deliverable-file-references": "workspace:*"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:~",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis-plugin-include": "workspace:~",
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

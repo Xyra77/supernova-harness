@@ -4,28 +4,28 @@
  * catalog injection, unavailable-model refusals, and the prompt-assembly
  * boundary for a running selection change.
  */
-import { AgentModel, modelSelectionProjectionDefinition } from '@deepseek-ai/dsh-agent'
-import { createInboxStub } from '@deepseek-ai/dsh-agent-loop-testkit'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { AgentModel, modelSelectionProjectionDefinition } from '@supernova-ai/snh-agent'
+import { createInboxStub } from '@supernova-ai/snh-agent-loop-testkit'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 
 import { describe, expect, it, vi, onTestFinished } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AttachmentStore from '@deepseek-ai/dsh-attachment'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import LlmRuntime, { LlmAdapter, type ReasoningEffortId } from '@deepseek-ai/dsh-llm'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import type { Agent } from '@supernova-ai/snh-agent'
+import AttachmentStore from '@supernova-ai/snh-attachment'
+import { brandString } from '@supernova-ai/snh-brand'
+import LlmRuntime, { LlmAdapter, type ReasoningEffortId } from '@supernova-ai/snh-llm'
 import type {
   GenerateOptions, LlmCallConfigAdapterDefaults, LlmModelInfo,
   LlmModelReasoningInfo, LlmProviderInfo, LlmResolvedModelInfo, StreamChunk,
   UserMessage,
-} from '@deepseek-ai/dsh-llm'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+} from '@supernova-ai/snh-llm'
+import SessionStore from '@supernova-ai/snh-session'
+import type { SessionId } from '@supernova-ai/snh-session'
 import type { SessionPromptRequest, SessionRequestId } from '../src/types.ts'
 import { buildModelCatalog, hasProviderApiKey } from '../src/catalog.ts'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import { RemoteError } from '@supernova-ai/snh-typert-protocol'
 import { createSessionTestController, createSessionTestRemote } from './test-remote.ts'
 
 function request<P>(payload: P): P {
@@ -101,9 +101,9 @@ async function harness(logged?: {
   await ctx.plugin(SystemPrompt, { personaPrefix: '' })
   await ctx.plugin(LlmRuntime)
   await ctx.plugin(AgentRegistry)
-  ctx.llm.registerAdapter(['deepseek-official'], new CatalogAdapter('DeepSeek', [
-    { provider: 'deepseek-official', id: 'deepseek-chat', name: 'DeepSeek Chat' },
-    { provider: 'deepseek-official', id: 'deepseek-reasoner', name: 'DeepSeek Reasoner', description: 'Reasoning model' },
+  ctx.llm.registerAdapter(['deepseek-official'], new CatalogAdapter('SuperNova', [
+    { provider: 'deepseek-official', id: 'deepseek-chat', name: 'SuperNova Chat' },
+    { provider: 'deepseek-official', id: 'deepseek-reasoner', name: 'SuperNova Reasoner', description: 'Reasoning model' },
   ], REASONING))
   ctx.llm.registerAdapter(['broken'], new CatalogAdapter('Broken Provider', new Error('catalog offline')))
   ctx.llm.registerAdapter(['metadata-broken'], new CatalogAdapter('Metadata Broken', [
@@ -406,12 +406,12 @@ describe('Web session model selection', () => {
     })
     expect(catalog.groups).toEqual([{
       id: 'deepseek-official',
-      name: 'DeepSeek',
+      name: 'SuperNova',
       models: [
-        { id: 'deepseek-chat', name: 'DeepSeek Chat', reasoning: REASONING },
+        { id: 'deepseek-chat', name: 'SuperNova Chat', reasoning: REASONING },
         {
           id: 'deepseek-reasoner',
-          name: 'DeepSeek Reasoner',
+          name: 'SuperNova Reasoner',
           description: 'Reasoning model',
           reasoning: REASONING,
         },

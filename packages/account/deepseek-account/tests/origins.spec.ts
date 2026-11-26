@@ -3,12 +3,12 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { afterEach, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AuthorizationService from '@deepseek-ai/dsh-authorization'
-import { LocalCredentialProvider } from '@deepseek-ai/dsh-credentials-local'
-import { credentialKey } from '@deepseek-ai/dsh-credentials'
-import type { AccountNotificationId } from '@deepseek-ai/dsh-deepseek-account'
-import { DeepSeekAccount, type Config } from '../src/index.ts'
+import { Context } from '@supernova-ai/cordis'
+import AuthorizationService from '@supernova-ai/snh-authorization'
+import { LocalCredentialProvider } from '@supernova-ai/snh-credentials-local'
+import { credentialKey } from '@supernova-ai/snh-credentials'
+import type { AccountNotificationId } from '@supernova-ai/snh-deepseek-account'
+import { SuperNovaAccount, type Config } from '../src/index.ts'
 
 const cleanups: Array<() => Promise<unknown>> = []
 afterEach(async () => {
@@ -17,7 +17,7 @@ afterEach(async () => {
 })
 
 async function fixture(issuer: string, config: Config = {}) {
-  const home = await mkdtemp(join(tmpdir(), 'dsh-account-origin-'))
+  const home = await mkdtemp(join(tmpdir(), 'snh-account-origin-'))
   cleanups.push(() => rm(home, { recursive: true, force: true }))
   const ctx = new Context()
   cleanups.push(() => ctx.fiber.dispose())
@@ -26,8 +26,8 @@ async function fixture(issuer: string, config: Config = {}) {
   await ctx.credentials.modifyRecord(credentialKey('deepseek-account-platform', 'default'), () => Promise.resolve({
     kind: 'grant', payload: { version: 1, token: 'fixture-token', issuer },
   }))
-  await ctx.plugin(DeepSeekAccount, config)
-  return ctx.deepseekAccount
+  await ctx.plugin(SuperNovaAccount, config)
+  return ctx.supernovaAccount
 }
 
 it('routes only notification APIs to Harness while account APIs and pages stay on Platform', async () => {
@@ -78,7 +78,7 @@ it('keeps private grants and embedded pages on Platform while allowing a notific
   })
   const fetcher = vi.spyOn(globalThis, 'fetch').mockImplementation(async (input, init) => {
     expect(input).toBe('https://notifications.example/api/v0/users/notifications/list')
-    expect(init?.headers).toMatchObject({ 'x-deployment': 'base', 'x-account': 'account', 'x-dsh-auth-token': 'fixture-token' })
+    expect(init?.headers).toMatchObject({ 'x-deployment': 'base', 'x-account': 'account', 'x-snh-auth-token': 'fixture-token' })
     return new Response(JSON.stringify({ code: 0, data: { biz_code: 0, biz_data: { notifications: [], next_poll_after: 600 } } }))
   })
   await account.getNotifications({ version: 'test', locale: 'en', timezoneOffsetSeconds: 0 })

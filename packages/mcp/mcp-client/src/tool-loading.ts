@@ -6,11 +6,11 @@
  * @module
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { truncateWithoutSplittingSurrogatePair } from '@deepseek-ai/dsh-output-retention'
-import { createScope, type Scope, type ScopeKey } from '@deepseek-ai/dsh-scope'
-import { defineTool, type ToolDefinition } from '@deepseek-ai/dsh-tools'
+import type { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { truncateWithoutSplittingSurrogatePair } from '@supernova-ai/snh-output-retention'
+import { createScope, type Scope, type ScopeKey } from '@supernova-ai/snh-scope'
+import { defineTool, type ToolDefinition } from '@supernova-ai/snh-tools'
 import { publicToolName } from './tools.ts'
 
 /** Raw name of the loader tool inside the server's `mcp__<serverName>__` namespace. */

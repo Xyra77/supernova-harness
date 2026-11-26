@@ -3,7 +3,7 @@ description: "Model tools that enter a local Git worktree, creating it when it i
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-experimental-tool-worktree
+# @supernova-ai/snh-experimental-tool-worktree
 
 English | [中文](README.zh.md)
 
@@ -25,16 +25,16 @@ Let a model enter a Git worktree with one call, which creates the worktree when 
 <a id="use-this-package"></a>
 ## Use this package
 
-In the GUI, enable [Change requests & worktrees](../forge-bundle/README.md). The standalone bundle has no Plugins page card. Profiles without the Web application may select it in `dsh.profile.bundles`; it loads the [worktree runtime](../worktree/README.md) and this tool together. Turning it off removes `enter_worktree` and `exit_worktree` without deleting existing checkouts or branches; a Session inside a worktree stays there until a Host operation moves it.
+In the GUI, enable [Change requests & worktrees](../forge-bundle/README.md). The standalone bundle has no Plugins page card. Profiles without the Web application may select it in `snh.profile.bundles`; it loads the [worktree runtime](../worktree/README.md) and this tool together. Turning it off removes `enter_worktree` and `exit_worktree` without deleting existing checkouts or branches; a Session inside a worktree stays there until a Host operation moves it.
 
 For an explicit composition, mount this function plugin after the worktree runtime and tool registry.
 
 ```yaml
-- name: '@deepseek-ai/dsh-experimental-worktree'
-- name: '@deepseek-ai/dsh-experimental-tool-worktree'
+- name: '@supernova-ai/snh-experimental-worktree'
+- name: '@supernova-ai/snh-experimental-tool-worktree'
 ```
 
-Call `enter_worktree({ name?: string, from?: string })`. The tool forwards only these two fields to the runtime, so it never fetches. When the worktree pool of the checkout the Session is in holds a registered worktree of that name, the call moves the Session into it, leaves branches and files as they are, and returns its `path`, its `branch` when one is checked out, the `repositoryRoot` the Session came from, and `created: false`. Otherwise it creates a new branch and checkout from `from`, HEAD by default, enters it, and returns `path`, `branch`, the pinned `baseCommit`, `repositoryRoot`, and `created: true`. Omitting `name` always creates one with a generated name. `from` asks for a new worktree, so it fails with `WORKTREE_ALREADY_EXISTS` when the name is taken. To leave, call `exit_worktree()`: it returns the Session to the checkout it created or entered the worktree from and reports that worktree's record; the checkout and branch remain. The [generated tool catalog](../../../docs/tool-catalog.md#deepseek-aidsh-experimental-tool-worktree) owns the exact schema and model-facing description.
+Call `enter_worktree({ name?: string, from?: string })`. The tool forwards only these two fields to the runtime, so it never fetches. When the worktree pool of the checkout the Session is in holds a registered worktree of that name, the call moves the Session into it, leaves branches and files as they are, and returns its `path`, its `branch` when one is checked out, the `repositoryRoot` the Session came from, and `created: false`. Otherwise it creates a new branch and checkout from `from`, HEAD by default, enters it, and returns `path`, `branch`, the pinned `baseCommit`, `repositoryRoot`, and `created: true`. Omitting `name` always creates one with a generated name. `from` asks for a new worktree, so it fails with `WORKTREE_ALREADY_EXISTS` when the name is taken. To leave, call `exit_worktree()`: it returns the Session to the checkout it created or entered the worktree from and reports that worktree's record; the checkout and branch remain. The [generated tool catalog](../../../docs/tool-catalog.md#supernova-aisnh-experimental-tool-worktree) owns the exact schema and model-facing description.
 
 -----
 
@@ -68,7 +68,7 @@ No runtime invariant companion is published because the tool retains no state in
 
 #### What the model sees
 
-The [tool catalog](../../../docs/tool-catalog.md#deepseek-aidsh-experimental-tool-worktree) defines `enter_worktree` and `exit_worktree`. Each successful result contains the canonical path and branch of the worktree entered or left, and the top-level directory of the checkout the Session came from; a creation, and the exit of a created worktree, add the base commit. `created` tells the model whether `enter_worktree` made a new worktree. Failed calls report the operation error.
+The [tool catalog](../../../docs/tool-catalog.md#supernova-aisnh-experimental-tool-worktree) defines `enter_worktree` and `exit_worktree`. Each successful result contains the canonical path and branch of the worktree entered or left, and the top-level directory of the checkout the Session came from; a creation, and the exit of a created worktree, add the base commit. `created` tells the model whether `enter_worktree` made a new worktree. Failed calls report the operation error.
 
 #### Token effect
 

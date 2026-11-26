@@ -1,18 +1,18 @@
 /** Pending creation and durable Session listing share one identity and header policy. @module */
 import { DatabaseSync } from 'node:sqlite'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import { SESSION_FORMAT_VERSION, SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { SessionHeader } from '@deepseek-ai/dsh-session'
-import { SessionFormatUnsupportedError, SessionPersistenceCorruptionError } from '@deepseek-ai/dsh-session-persistence'
+import { SESSION_FORMAT_VERSION, SessionId, SessionSeq } from '@supernova-ai/snh-session'
+import type { SessionHeader } from '@supernova-ai/snh-session'
+import { SessionFormatUnsupportedError, SessionPersistenceCorruptionError } from '@supernova-ai/snh-session-persistence'
 import * as persistence from '../src/index.ts'
 import { SqliteStore } from '../src/sqlite.ts'
 
 it('public list emits an identity once when first materialization completes after pending capture', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-session-list-once-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-session-list-once-'))
   const ctx = new Context()
   onTestFinished(async () => { try { await ctx.fiber.dispose() } finally { await rm(root, { recursive: true, force: true }) } })
   await ctx.plugin(persistence, { root, compression: 'none' })
@@ -37,7 +37,7 @@ it('public list emits an identity once when first materialization completes afte
 })
 
 it.each(['corrupt', 'unsupported'] as const)('omits %s headers whose first commit landed after the pending listing snapshot', async (kind) => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-session-list-omitted-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-session-list-omitted-'))
   const ctx = new Context()
   onTestFinished(async () => { try { await ctx.fiber.dispose() } finally { await rm(root, { recursive: true, force: true }) } })
   await ctx.plugin(persistence, { root, compression: 'none' })
@@ -73,7 +73,7 @@ it.each(['corrupt', 'unsupported'] as const)('omits %s headers whose first commi
 })
 
 it('lists 201 durable SQLite sessions with one metadata query and no event payload reads', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-session-list-query-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-session-list-query-'))
   const ctx = new Context()
   onTestFinished(async () => { try { await ctx.fiber.dispose() } finally { await rm(root, { recursive: true, force: true }) } })
   await ctx.plugin(persistence, { root, compression: 'none' })

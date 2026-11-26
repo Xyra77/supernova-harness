@@ -8,7 +8,7 @@ description: "在 Web profile 中启用跨 Session 消息，并理解独立对�
 
 ## 概述
 
-当 Agent 需要向另一个普通 Session 发送指令或发现时，在 Web profile 中启用 `session_send_message`。接收方可以属于其他 Workspace 或目录。你需要一个包含 `@deepseek-ai/dsh-web-app` bundle 的 profile（例如 `web`），以及目标 Session 的 id。`headless`、`sdk`、`sdk-minimal` 和 `acp` profile 中没有该工具。
+当 Agent 需要向另一个普通 Session 发送指令或发现时，在 Web profile 中启用 `session_send_message`。接收方可以属于其他 Workspace 或目录。你需要一个包含 `@supernova-ai/snh-web-app` bundle 的 profile（例如 `web`），以及目标 Session 的 id。`headless`、`sdk`、`sdk-minimal` 和 `acp` profile 中没有该工具。
 
 ## 目录
 
@@ -25,7 +25,7 @@ description: "在 Web profile 中启用跨 Session 消息，并理解独立对�
 
 该工具默认关闭。启用后，任何能看到它的 Agent（包括 subagent）都可以向 Web Session 控制器能打开的任意普通 Session 发消息，包括当前 Workspace 或 cwd 之外的 Session。
 
-将以下 patch 追加到某个 Web profile 的 `$DSH_HOME/profiles/<profile>/cordis.patch.yml`，保留已有条目。未设置 `DSH_HOME` 时使用 `~/.dsh`：
+将以下 patch 追加到某个 Web profile 的 `$SNH_HOME/profiles/<profile>/cordis.patch.yml`，保留已有条目。未设置 `SNH_HOME` 时使用 `~/.snh`：
 
 ```yaml
 - id: tool-session-control
@@ -37,7 +37,7 @@ description: "在 Web profile 中启用跨 Session 消息，并理解独立对�
 在源码 checkout 中，同一 patch 位于 [session-control.overlay.yml](../../apps/cli/config/examples/session-control.overlay.yml)。无需启动 Web 服务器即可检查其效果：
 
 ```sh
-pnpm dsh --profile web --patch apps/cli/config/examples/session-control.overlay.yml --dump-config
+pnpm snh --profile web --patch apps/cli/config/examples/session-control.overlay.yml --dump-config
 ```
 
 合成后的 `tool-session-control` 行具有 `disabled: false`。启动该 profile 时保留此 overlay，或将 patch 保留在上面的 profile 文件中。[Profile 参考](../../apps/cli/README.zh.md#profiles)说明 patch 优先级和配置检查方式。

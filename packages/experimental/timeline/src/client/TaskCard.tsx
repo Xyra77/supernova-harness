@@ -8,11 +8,11 @@ import {
   IconClockOutlineRegular,
   IconRightUpOutlineRegular,
   Tooltip,
-} from '@deepseek-ai/dsh-client-ui-primitives'
-import type { ToolCallViewProps } from '@deepseek-ai/dsh-client-ui-tool/client'
-import type { InjectFace, PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
-import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
-import type { ConfigFormSnapshot } from '@deepseek-ai/dsh-client-ui-settings/client'
+} from '@supernova-ai/snh-client-ui-primitives'
+import type { ToolCallViewProps } from '@supernova-ai/snh-client-ui-tool/client'
+import type { InjectFace, PropsLocale } from '@supernova-ai/snh-client-ui-slots'
+import type { ObservableSnapshot } from '@supernova-ai/snh-client-store'
+import type { ConfigFormSnapshot } from '@supernova-ai/snh-client-ui-settings/client'
 import { z } from 'zod'
 import type { Config } from '../config.ts'
 import { taskReceiptSchema } from '../records.ts'

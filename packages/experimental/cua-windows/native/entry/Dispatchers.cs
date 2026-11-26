@@ -2,11 +2,11 @@
 using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using System.Text.Json;
-using DeepSeek.Cua.Protocol;
+using SuperNova.Cua.Protocol;
 using Forms = System.Windows.Forms;
 using Timer = System.Threading.Timer;
 
-namespace DeepSeek.Cua.Windows;
+namespace SuperNova.Cua.Windows;
 
 internal sealed record NativeConfig(int MaxRequestBytes, int MaxResponseBytes, int AxTimeoutMs,
     double TextEventIntervalMs, int ScreenshotTimeoutMs, int TimeoutMs, int GraceMs, int PollIntervalMs, int LaunchWaitMs, int MaxClickHoldMs)
@@ -50,7 +50,7 @@ internal sealed class MtaDispatcher : IAsyncDisposable
             }
             catch (Exception error) { ready.TrySetException(error); }
             finally { if (initialized) Win32.RoUninitialize(); stopped.TrySetResult(null); }
-        }) { IsBackground = true, Name = "dsh-cua-uia" };
+        }) { IsBackground = true, Name = "snh-cua-uia" };
         thread.SetApartmentState(ApartmentState.MTA);
         thread.Start();
     }
@@ -106,7 +106,7 @@ internal sealed class StaDispatcher : IAsyncDisposable
             }
             catch (Exception error) { ready.TrySetException(error); }
             finally { stopped.TrySetResult(null); }
-        }) { IsBackground = true, Name = "dsh-cua-clipboard" };
+        }) { IsBackground = true, Name = "snh-cua-clipboard" };
         thread.SetApartmentState(ApartmentState.STA);
         thread.Start();
     }

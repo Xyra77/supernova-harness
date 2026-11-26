@@ -1,15 +1,15 @@
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import { createUserMessage } from '@supernova-ai/snh-llm'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek-api-key'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import SessionTitleService from '@deepseek-ai/dsh-session-title'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import * as FirstMessageTitleProvider from '@deepseek-ai/dsh-session-title-first-prompt-llm'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { Context } from '@supernova-ai/cordis'
+import LlmRuntime from '@supernova-ai/snh-llm'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import SessionTitleService from '@supernova-ai/snh-session-title'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import * as FirstMessageTitleProvider from '@supernova-ai/snh-session-title-first-prompt-llm'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const contexts: Context[] = []
 
@@ -17,13 +17,13 @@ afterEach(async () => {
   await Promise.all(contexts.splice(0).map(ctx => ctx.fiber.dispose()))
 })
 
-describe.skipIf(!process.env.DEEPSEEK_API_KEY)('first-prompt title provider with real DeepSeek API', () => {
+describe.skipIf(!process.env.DEEPSEEK_API_KEY)('first-prompt title provider with real SuperNova API', () => {
   it('replaces the fallback with a short model title', async () => {
     const ctx = new Context()
     contexts.push(ctx)
     await ctx.plugin(LlmRuntime)
-    await ctx.plugin(DeepSeekAuth)
-    await ctx.plugin(LlmDeepSeek, { thinking: 'disabled' })
+    await ctx.plugin(SuperNovaAuth)
+    await ctx.plugin(LlmSuperNova, { thinking: 'disabled' })
     await ctx.plugin(SessionStore)
     await ctx.plugin(SessionProjectionRegistry)
     await ctx.plugin(AgentRegistry)

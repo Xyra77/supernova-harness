@@ -35,23 +35,23 @@ const signingEnvironment = process.argv.includes('--signed') ? loadDesktopPackag
 const signingRun = process.argv.includes('--signed')
   ? createPackagingRun(join(output, 'packaging-runs'), { target: 'installer-test' }) : undefined
 const sign = process.argv.includes('--signed') ? createWindowsTokenSigner({
-  certificateFile: signingEnvironment.DSH_DESKTOP_WINDOWS_CER_FILE,
-  signTool: signingEnvironment.DSH_DESKTOP_WINDOWS_SIGNTOOL,
-  tokenPin: signingEnvironment.DSH_DESKTOP_WINDOWS_TOKEN_PIN,
-  keyContainer: signingEnvironment.DSH_DESKTOP_WINDOWS_KEY_CONTAINER,
+  certificateFile: signingEnvironment.SNH_DESKTOP_WINDOWS_CER_FILE,
+  signTool: signingEnvironment.SNH_DESKTOP_WINDOWS_SIGNTOOL,
+  tokenPin: signingEnvironment.SNH_DESKTOP_WINDOWS_TOKEN_PIN,
+  keyContainer: signingEnvironment.SNH_DESKTOP_WINDOWS_KEY_CONTAINER,
   runDirectory: signingRun.directory,
 }) : undefined
 let succeeded = false
 try {
   Object.assign(process.env, {
-    DSH_DESKTOP_APP_ID: `com.deepseek.harness.installertest.n${id}`,
-    DSH_DESKTOP_TARGET_PLATFORM: 'win32', DSH_DESKTOP_TARGET_ARCH: 'x64',
-    DSH_DESKTOP_UNSIGNED: '1', CSC_IDENTITY_AUTO_DISCOVERY: 'false', ELECTRON_BUILDER_7Z_FILTER: 'BCJ',
-    DSH_DESKTOP_MANDATORY_UPDATE_TEST_ORIGIN: signingEnvironment.DSH_DESKTOP_MANDATORY_UPDATE_TEST_ORIGIN
+    SNH_DESKTOP_APP_ID: `com.supernova.harness.installertest.n${id}`,
+    SNH_DESKTOP_TARGET_PLATFORM: 'win32', SNH_DESKTOP_TARGET_ARCH: 'x64',
+    SNH_DESKTOP_UNSIGNED: '1', CSC_IDENTITY_AUTO_DISCOVERY: 'false', ELECTRON_BUILDER_7Z_FILTER: 'BCJ',
+    SNH_DESKTOP_MANDATORY_UPDATE_TEST_ORIGIN: signingEnvironment.SNH_DESKTOP_MANDATORY_UPDATE_TEST_ORIGIN
       ?? 'https://test.example.com',
-    DSH_DESKTOP_MANDATORY_UPDATE_CONFIG: signingEnvironment.DSH_DESKTOP_MANDATORY_UPDATE_CONFIG
+    SNH_DESKTOP_MANDATORY_UPDATE_CONFIG: signingEnvironment.SNH_DESKTOP_MANDATORY_UPDATE_CONFIG
       ?? JSON.stringify({ allowedAuthOrigins: ['https://login.example.com'] }),
-    ...signingRun ? { DSH_DESKTOP_PACKAGING_RUN_DIR: signingRun.directory } : {},
+    ...signingRun ? { SNH_DESKTOP_PACKAGING_RUN_DIR: signingRun.directory } : {},
   })
   const { createElectronBuilderConfig } = await import('../electron-builder.config.mjs')
   const childOptions = { env: scrubWindowsSigningEnvironment(process.env), windowsHide: true, maxBuffer: 8 * 1024 * 1024 }
@@ -133,7 +133,7 @@ SectionEnd
     const strings = join(languageOutput, 'strings.nsh')
     await writeFile(strings, renderInstallerStrings([locale]), 'utf8')
     const include = join(languageOutput, 'include.nsh')
-    await writeFile(include, `!define DSH_COMMAND_MUTEX "Local\\DSHUninstallTests-${guid}"\n!define DSH_COMMAND_ENVIRONMENT_KEY "Software\\DSHUninstallTests\\${guid}\\CommandEnvironment"\n!define DSH_COMMAND_OWNER_KEY "Software\\DSHUninstallTests\\${guid}\\CommandOwner"\n!define DSH_PROTOCOL_KEY "Software\\Classes\\dsh-test-${guid}"\n!define INSTALLER_BUILD_DIR "${join(output, 'ui')}"\n!define INSTALLER_STRINGS_FILE "${strings}"\n!include "${join(appRoot, 'scripts', 'installer.nsh')}"\n`)
+    await writeFile(include, `!define SNH_COMMAND_MUTEX "Local\\SNHUninstallTests-${guid}"\n!define SNH_COMMAND_ENVIRONMENT_KEY "Software\\SNHUninstallTests\\${guid}\\CommandEnvironment"\n!define SNH_COMMAND_OWNER_KEY "Software\\SNHUninstallTests\\${guid}\\CommandOwner"\n!define SNH_PROTOCOL_KEY "Software\\Classes\\snh-test-${guid}"\n!define INSTALLER_BUILD_DIR "${join(output, 'ui')}"\n!define INSTALLER_STRINGS_FILE "${strings}"\n!include "${join(appRoot, 'scripts', 'installer.nsh')}"\n`)
     await build({ projectDir: appRoot, prepackaged: payload, targets: Platform.WINDOWS.createTarget(['nsis'], Arch.x64), publish: 'never',
       config: { ...config, productName, extraMetadata: { ...config.extraMetadata, name: packageName },
         artifactName: 'installer-test.exe', directories: { output: languageOutput },

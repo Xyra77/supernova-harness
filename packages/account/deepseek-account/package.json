@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-deepseek-account",
-  "description": "Sign in to DeepSeek and manage account credentials and notifications",
+  "name": "@supernova-ai/snh-deepseek-account",
+  "description": "Sign in to SuperNova and manage account credentials and notifications",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -54,26 +54,26 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/dsh-util-values": "workspace:*",
-    "@deepseek-ai/dsh-authorization": "workspace:*",
-    "@deepseek-ai/dsh-credentials": "workspace:*",
-    "@deepseek-ai/dsh-host-webserver": "workspace:*",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-util-values": "workspace:*",
+    "@supernova-ai/snh-authorization": "workspace:*",
+    "@supernova-ai/snh-credentials": "workspace:*",
+    "@supernova-ai/snh-host-webserver": "workspace:*",
+    "@supernova-ai/snh-typert-protocol": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-client-connection": "workspace:*",
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/dsh-util-values": "workspace:*",
-    "@deepseek-ai/dsh-authorization": "workspace:*",
-    "@deepseek-ai/dsh-credentials": "workspace:*",
-    "@deepseek-ai/dsh-host-webserver": "workspace:*",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-client-connection": "workspace:*",
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-util-values": "workspace:*",
+    "@supernova-ai/snh-authorization": "workspace:*",
+    "@supernova-ai/snh-credentials": "workspace:*",
+    "@supernova-ai/snh-host-webserver": "workspace:*",
+    "@supernova-ai/snh-typert-protocol": "workspace:*"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/schemastery": "workspace:~",
     "zod": "4.6.6"
   }
 }

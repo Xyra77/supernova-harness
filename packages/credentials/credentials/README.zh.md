@@ -3,13 +3,13 @@ description: "面向用户与维护者的凭据 seam：在不把机密值写进�
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-credentials
+# @supernova-ai/snh-credentials
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-credentials` 通过让 settings 与 `cordis.yml` 引用 `DEEPSEEK_API_KEY` 等密钥名称，使机密值留在配置之外。它还存储持久化的按插件组织的凭据记录，包括授权 grant 与提供方环境值。轮换后的已存储密钥会作用于下一次请求，无需重启或修改配置。配置界面可以报告密钥或记录是否已设置、来自哪里及能否写入，而不会暴露值。空密钥值视为不存在，而空记录仍表示一项有意存储的凭据。
+`snh-credentials` 通过让 settings 与 `cordis.yml` 引用 `DEEPSEEK_API_KEY` 等密钥名称，使机密值留在配置之外。它还存储持久化的按插件组织的凭据记录，包括授权 grant 与提供方环境值。轮换后的已存储密钥会作用于下一次请求，无需重启或修改配置。配置界面可以报告密钥或记录是否已设置、来自哪里及能否写入，而不会暴露值。空密钥值视为不存在，而空记录仍表示一项有意存储的凭据。
 
 ## 目录
 
@@ -36,18 +36,18 @@ kind: "package-reference"
 加载本地存储包并给出文档路径：
 
 ```yaml
-- name: '@deepseek-ai/dsh-credentials-local'
+- name: '@supernova-ai/snh-credentials-local'
   config:
     path: /absolute/path/to/.credentials.yaml
 ```
 
-本地存储 README 拥有完整配置面；生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-credentials-local)是穷尽式字段清单。
+本地存储 README 拥有完整配置面；生成的[配置目录](../../../docs/config-catalog.zh.md#supernova-aisnh-credentials-local)是穷尽式字段清单。
 
 ### 存储、检查与移除密钥
 
 ```ts
-import type { Context } from '@deepseek-ai/cordis'
-import { credentialRef } from '@deepseek-ai/dsh-credentials'
+import type { Context } from '@supernova-ai/cordis'
+import { credentialRef } from '@supernova-ai/snh-credentials'
 
 declare const ctx: Context
 
@@ -60,15 +60,15 @@ await ctx.credentials.unset(ref)                       // no-op when absent; an 
 
 用 `set` 存储密钥、用 `unset` 移除、用 `describe` 检查状态、在操作需要时用 `resolve` 读取当前值。`describe` 报告密钥是否已设置、来自哪里、能否写入——它绝不返回值。提供方可通过可选的 `masked` 字段报告已保存值的脱敏预览；完整值留在 Host。
 
-必须在没有凭据服务的组合中也能工作的消费方（如 DeepSeek 请求鉴权）通过 `resolveCredentialRef(ctx, ref)` 和 `credentialRefConfigured(ctx, ref)` 读取引用：已挂载的服务具有权威性，包括它不持有值的情况；只有服务缺席时才读取启动环境，其中空值视为不存在。存储失败向上传播。值的格式由调用方用 `normalizeApiKey(raw)` 校验：它去掉首尾空白，并拒绝空值和含有 HTTP 请求头无法携带的字符的值；调用方再依据它返回的 `reason` 写出自己的错误；本包不生成诊断文案。
+必须在没有凭据服务的组合中也能工作的消费方（如 SuperNova 请求鉴权）通过 `resolveCredentialRef(ctx, ref)` 和 `credentialRefConfigured(ctx, ref)` 读取引用：已挂载的服务具有权威性，包括它不持有值的情况；只有服务缺席时才读取启动环境，其中空值视为不存在。存储失败向上传播。值的格式由调用方用 `normalizeApiKey(raw)` 校验：它去掉首尾空白，并拒绝空值和含有 HTTP 请求头无法携带的字符的值；调用方再依据它返回的 `reason` 写出自己的错误；本包不生成诊断文案。
 
 ### 存储、更新与移除记录
 
 插件按 `<scope>/<id>` 寻址每条记录——自身注册名加一个自选 id，例如提供方路由键——并读取、修改或移除它所持有的内容：
 
 ```ts
-import type { Context } from '@deepseek-ai/cordis'
-import { credentialKey } from '@deepseek-ai/dsh-credentials'
+import type { Context } from '@supernova-ai/cordis'
+import { credentialKey } from '@supernova-ai/snh-credentials'
 
 declare const ctx: Context
 
@@ -94,7 +94,7 @@ apiKeyEnv: DEEPSEEK_API_KEY
 
 ### 可能出错的地方
 
-- **存储的密钥优先于启动环境**——存在存储值时，`DEEPSEEK_API_KEY=… dsh`（或 CI 机密、容器 `-e`）不会生效；要使用导出的密钥，请 `unset` 存储的密钥。
+- **存储的密钥优先于启动环境**——存在存储值时，`DEEPSEEK_API_KEY=… snh`（或 CI 机密、容器 `-e`）不会生效；要使用导出的密钥，请 `unset` 存储的密钥。
 - **空值无法存储**——存储空字符串会被拒绝；请改为移除密钥。
 - **密钥值绝不会出现在配置界面或诊断信息中**——界面只显示密钥是否已设置、来自哪里、能否修改；值本身留在存储中。
 

@@ -5,7 +5,7 @@ if (-not $IsWindows) { throw 'Requires PowerShell 7 on Windows.' }
 $scheduler = New-Object -ComObject 'Schedule.Service'
 $scheduler.Connect()
 $sid = [Security.Principal.WindowsIdentity]::GetCurrent().User.Value
-$root = Join-Path ([IO.Path]::GetTempPath()) ('dsh-boot-definition-' + [guid]::NewGuid().ToString('N'))
+$root = Join-Path ([IO.Path]::GetTempPath()) ('snh-boot-definition-' + [guid]::NewGuid().ToString('N'))
 $null = New-Item -ItemType Directory -Path $root
 try {
 $runner = Join-Path $root 'runner with spaces'
@@ -30,7 +30,7 @@ foreach ($minutes in @(1, 7, 1440)) {
         (Read-Value 't:Settings/t:ExecutionTimeLimit') -ne 'PT0S' -or
         (Read-Value 't:Settings/t:DisallowStartIfOnBatteries') -ne 'false' -or
         (Read-Value 't:Settings/t:StopIfGoingOnBatteries') -ne 'false') { throw 'Boot task lifetime settings differ.' }
-    if ((Read-Value 't:Actions/t:Exec/t:Command') -ne (Join-Path $runner 'dsh-task/launcher.exe') -or
+    if ((Read-Value 't:Actions/t:Exec/t:Command') -ne (Join-Path $runner 'snh-task/launcher.exe') -or
         (Read-Value 't:Actions/t:Exec/t:Arguments') -ne ('"' + $pwsh + '"') -or
         (Read-Value 't:Actions/t:Exec/t:WorkingDirectory') -ne $runner) { throw 'Boot task bypasses the existing launcher.' }
     # Round-trip through the scheduler's parser, without storing or enabling a task.
@@ -44,7 +44,7 @@ $interactive = New-WindowsRunnerTaskDefinition $scheduler $sid $runner $pwsh 1
 $interactiveNs = [Xml.XmlNamespaceManager]::new($interactiveXml.NameTable)
 $interactiveNs.AddNamespace('t', 'http://schemas.microsoft.com/windows/2004/02/mit/task')
 if ($interactive.Principal.LogonType -ne 3 -or $interactive.Principal.RunLevel -ne 0 -or $interactive.Settings.Priority -ne 4 -or $interactive.Settings.Enabled -or $interactiveXml.SelectNodes('/t:Task/t:Triggers/t:LogonTrigger/t:UserId', $interactiveNs).Count -ne 1 -or $interactiveXml.SelectSingleNode('/t:Task/t:Triggers/t:LogonTrigger/t:UserId', $interactiveNs).InnerText -ne $sid -or $interactiveXml.SelectNodes('/t:Task/t:Triggers/t:BootTrigger', $interactiveNs).Count -ne 0) { throw 'Interactive task defaults changed.' }
-if (Get-WindowsRunnerTask $scheduler ('DSH-absent-' + [guid]::NewGuid().ToString('N'))) { throw 'Missing task lookup returned a task.' }
+if (Get-WindowsRunnerTask $scheduler ('SNH-absent-' + [guid]::NewGuid().ToString('N'))) { throw 'Missing task lookup returned a task.' }
 $deniedFolder = [pscustomobject]@{}
 $deniedFolder | Add-Member ScriptMethod GetTask { param($Name); throw [Runtime.InteropServices.COMException]::new('Injected scheduler access denied', -2147024891) }
 $deniedScheduler = [pscustomobject]@{ Folder=$deniedFolder }
@@ -56,7 +56,7 @@ $manager = Join-Path $PSScriptRoot '../scripts/windows-runner-task.ps1'
 function Reject-Options([string[]]$Options, [string]$Message) {
     $output = & $pwsh -NoProfile -NonInteractive -File $manager -RunnerRoot $runner @Options 2>&1 | Out-String
     if ($LASTEXITCODE -eq 0 -or -not $output.Contains($Message)) { throw "Expected rejection: $Message`n$output" }
-    if (Test-Path -LiteralPath (Join-Path $runner 'dsh-task')) { throw 'Rejected options wrote a startup snapshot.' }
+    if (Test-Path -LiteralPath (Join-Path $runner 'snh-task')) { throw 'Rejected options wrote a startup snapshot.' }
 }
 Reject-Options @('-Action','register-boot') 'requires -RunAs'
 Reject-Options @('-Action','install','-StartupMode','Boot','-RunAs','NT AUTHORITY\SYSTEM') 'RunAs applies only to register-boot'
@@ -81,7 +81,7 @@ foreach ($mode in @('readable','missing','throwing')) {
     $probeOptions = switch ($mode) { 'missing' { @('-Unreadable') }; 'throwing' { @('-ThrowPath') }; default { @() } }
     $output = & $pwsh -NoProfile -NonInteractive -File $processProbe -Manager $manager -Runner $runner @probeOptions 2>&1 | Out-String
     if ($LASTEXITCODE -eq 0 -or -not $output.Contains('A runner process is active or its location is unreadable')) { throw "Live-process installation guard failed: $output" }
-    if (Test-Path -LiteralPath (Join-Path $runner 'dsh-task')) { throw 'Live-process rejection wrote a startup snapshot.' }
+    if (Test-Path -LiteralPath (Join-Path $runner 'snh-task')) { throw 'Live-process rejection wrote a startup snapshot.' }
 }
 Set-Content -LiteralPath (Join-Path $runner '.service') -Value 'fixture'
 Reject-Options @('-Action','install','-ConfigRoot',$root) 'native runner service is configured'
@@ -104,7 +104,7 @@ function Get-Process { param($Name,$ErrorAction); return @() }
 '@ | Set-Content -LiteralPath $prepareProbe
 & $pwsh -NoProfile -NonInteractive -File $prepareProbe -Manager (Join-Path $fixture 'windows-runner-task.ps1') -Runner $runner -ConfigRoot $root
 if ($LASTEXITCODE -ne 0) { throw 'Boot preparation failed.' }
-$configFile = Join-Path $runner 'dsh-task/config.json'
+$configFile = Join-Path $runner 'snh-task/config.json'
 $config = Get-Content -LiteralPath $configFile -Raw | ConvertFrom-Json
 if ($config.StartupMode -ne 'Boot' -or $config.AccountSid -ne $sid -or $config.RestartMinutes -ne 7 -or $config.RestartCount -ne 3) { throw 'Preparation lost account or recovery settings.' }
 if (Get-WindowsRunnerTask $scheduler $config.TaskName) { throw 'Preparation registered a task.' }
@@ -207,7 +207,7 @@ foreach ($operation in @('status','start','stop','uninstall')) {
         if ($result.Replace("`r`n","`n").Trim() -ne $expected) { throw "Unexpected management effects: $operation" }
     }
 }
-Remove-Item -LiteralPath (Join-Path $runner 'dsh-task/launcher.exe')
+Remove-Item -LiteralPath (Join-Path $runner 'snh-task/launcher.exe')
 $failure = $null
 try { Assert-WindowsRunnerBootConfiguration $config $sid $runner $config.TaskName } catch { $failure = $_ }
 if (-not $failure) { throw 'Missing launcher was accepted.' }

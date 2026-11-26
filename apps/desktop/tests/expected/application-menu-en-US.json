@@ -1,13 +1,13 @@
 [
   {
-    "label": "About DeepSeek Harness",
+    "label": "About SuperNova Harness",
     "role": "about"
   },
   {
     "type": "separator"
   },
   {
-    "id": "dsh-settings-open",
+    "id": "snh-settings-open",
     "label": "Settings…",
     "enabled": false
   },
@@ -18,7 +18,7 @@
     "label": "Check for Updates…"
   },
   {
-    "label": "Manage dsh Command…"
+    "label": "Manage snh Command…"
   },
   {
     "type": "separator"
@@ -32,7 +32,7 @@
   },
   {
     "role": "hide",
-    "label": "Hide DeepSeek Harness"
+    "label": "Hide SuperNova Harness"
   },
   {
     "role": "hideOthers",
@@ -47,6 +47,6 @@
   },
   {
     "role": "quit",
-    "label": "Quit DeepSeek Harness"
+    "label": "Quit SuperNova Harness"
   }
 ]

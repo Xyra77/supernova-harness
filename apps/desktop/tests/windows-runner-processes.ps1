@@ -8,7 +8,7 @@ $info.CreateNoWindow = $true
 foreach ($argument in @('-NoProfile','-NonInteractive','-Command','Start-Sleep -Seconds 120')) { $info.ArgumentList.Add($argument) }
 $child = [Diagnostics.Process]::Start($info)
 try {
-    $parents = [DshRunnerProcesses]::ReadParents()
+    $parents = [SnhRunnerProcesses]::ReadParents()
     if (-not $parents.ContainsKey($PID) -or -not $parents.ContainsKey($child.Id) -or $parents[$child.Id] -ne $PID) {
         throw 'Native process snapshot did not identify the owned child and parent.'
     }

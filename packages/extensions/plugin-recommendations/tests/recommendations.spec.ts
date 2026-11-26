@@ -1,10 +1,10 @@
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { createUserMessage, type ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import type { BundleInfo, ChangeResult } from '@deepseek-ai/dsh-plugin-manager/types'
-import type { ActionCardId } from '@deepseek-ai/dsh-action-cards'
+import { brandString } from '@supernova-ai/snh-brand'
+import { createUserMessage, type ToolCallId } from '@supernova-ai/snh-llm'
+import type { SessionId } from '@supernova-ai/snh-session'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import type { BundleInfo, ChangeResult } from '@supernova-ai/snh-plugin-manager/types'
+import type { ActionCardId } from '@supernova-ai/snh-action-cards'
 import { MockAdapter, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import * as PluginRecommendations from '../src/index.ts'
 import { ACTION, bundle, cardAnswer, cardId, fixture, logProposal, proposal } from './fixture.ts'
@@ -56,7 +56,7 @@ describe('official recommendations', () => {
     ])
     f.ctx.llm.registerAdapter(['mock'], adapter)
     const agent = await f.ctx.agentLoop.create(brandString<SessionId>('answer-card'), { provider: 'mock', model: 'mock' })
-    agent.followup(createUserMessage({ content: [{ type: 'text', text: 'Can DSH search my old conversations?' }], source: { kind: 'user' } }))
+    agent.followup(createUserMessage({ content: [{ type: 'text', text: 'Can SNH search my old conversations?' }], source: { kind: 'user' } }))
     await agent.whenIdle()
     const answer = agent.session.snapshotEvents().findLast(event => event.type === 'assistant/message')
     if (answer?.type !== 'assistant/message') throw new Error('the model gave no answer')

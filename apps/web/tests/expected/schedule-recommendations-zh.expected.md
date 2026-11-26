@@ -8,7 +8,7 @@
     - listitem:
       - button "Issue 扫描": Issue 扫描 把新开的 issue 分成 bug、需求、提问，标出重复的和需要回复的。 工作日 {{clock}}
     - listitem:
-      - button "插件兼容检查": 插件兼容检查 DSH 出新版本时，检查已装的插件和自己做的插件要不要改。 每天 {{clock}}
+      - button "插件兼容检查": 插件兼容检查 SNH 出新版本时，检查已装的插件和自己做的插件要不要改。 每天 {{clock}}
     - listitem:
       - button "主题和论文追踪": 主题和论文追踪 搜索关注主题的新消息和 arXiv 新论文，各列几条要点。 每天 9:00
     - listitem:

@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-mcp-manager",
+  "name": "@supernova-ai/snh-mcp-manager",
   "description": "MCP server manager: a settings-driven fleet of mcp-client instances with runtime status, restart, and probe",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -50,35 +50,35 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-mcp-client": "workspace:*",
-    "@deepseek-ai/dsh-tools": "workspace:*",
-    "@deepseek-ai/dsh-util-values": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*",
-    "@deepseek-ai/dsh-credentials": "workspace:*"
+    "@supernova-ai/snh-mcp-client": "workspace:*",
+    "@supernova-ai/snh-tools": "workspace:*",
+    "@supernova-ai/snh-util-values": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-typert-protocol": "workspace:*",
+    "@supernova-ai/snh-credentials": "workspace:*"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-timeout": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/snh-timeout": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
     "zod": "4.6.6"
   },
   "devDependencies": {
     "@modelcontextprotocol/client": "2.2.0",
-    "@deepseek-ai/dsh-credentials": "workspace:*",
-    "@deepseek-ai/dsh-mcp-client": "workspace:*",
-    "@deepseek-ai/dsh-settings": "workspace:*",
-    "@deepseek-ai/dsh-system-prompt": "workspace:*",
-    "@deepseek-ai/dsh-tool-testkit": "workspace:*",
-    "@deepseek-ai/dsh-tools": "workspace:*",
-    "@deepseek-ai/dsh-util-values": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-app-boot": "workspace:*",
-    "@deepseek-ai/dsh-config-editor": "workspace:*",
-    "@deepseek-ai/dsh-hmr": "workspace:*",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/cordis-plugin-timer": "workspace:~",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*",
-    "@deepseek-ai/dsh-session-projection": "workspace:*"
+    "@supernova-ai/snh-credentials": "workspace:*",
+    "@supernova-ai/snh-mcp-client": "workspace:*",
+    "@supernova-ai/snh-settings": "workspace:*",
+    "@supernova-ai/snh-system-prompt": "workspace:*",
+    "@supernova-ai/snh-tool-testkit": "workspace:*",
+    "@supernova-ai/snh-tools": "workspace:*",
+    "@supernova-ai/snh-util-values": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-app-boot": "workspace:*",
+    "@supernova-ai/snh-config-editor": "workspace:*",
+    "@supernova-ai/snh-hmr": "workspace:*",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/cordis-plugin-timer": "workspace:~",
+    "@supernova-ai/snh-typert-protocol": "workspace:*",
+    "@supernova-ai/snh-session-projection": "workspace:*"
   }
 }

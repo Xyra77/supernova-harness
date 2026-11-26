@@ -3,7 +3,7 @@ import { cp, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/pr
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { FiberState } from '@deepseek-ai/cordis'
+import { FiberState } from '@supernova-ai/cordis'
 import { chromium } from 'playwright'
 import { expect, it, onTestFailed, onTestFinished } from 'vitest'
 import { launchWebScaffold, watchConsole } from './scaffold.ts'
@@ -36,11 +36,11 @@ function parseObservation(text: string): Observation {
 
 it('renders volatile Config without secrets or ordinary fields and updates it in place from a profile edit', async () => {
   // An installed package carries its own dependencies: the copy links the Schemastery its Host face imports.
-  const installed = await mkdtemp(join(tmpdir(), 'dsh-client-config-sync-'))
+  const installed = await mkdtemp(join(tmpdir(), 'snh-client-config-sync-'))
   onTestFinished(() => rm(installed, { recursive: true, force: true }))
   await cp(FIXTURE, installed, { recursive: true })
-  await mkdir(join(installed, 'node_modules', '@deepseek-ai'), { recursive: true })
-  await symlink(SCHEMASTERY, join(installed, 'node_modules', '@deepseek-ai', 'schemastery'), 'junction')
+  await mkdir(join(installed, 'node_modules', '@supernova-ai'), { recursive: true })
+  await symlink(SCHEMASTERY, join(installed, 'node_modules', '@supernova-ai', 'schemastery'), 'junction')
   const scaffold = await launchWebScaffold({ profile: { packages: [{ dir: installed, enabled: true }] } })
   onTestFinished(() => scaffold.close())
   const browser = await chromium.launch()
@@ -70,7 +70,7 @@ it('renders volatile Config without secrets or ordinary fields and updates it in
   page.on('framenavigated', () => { navigations++ })
   await expect.poll(async () => (await dataset()).applies, { timeout: 20_000 }).toBe('1')
   const bootRow = await page.evaluate((id) => {
-    const boot = Reflect.get(window, '__DSH_BOOT__') as { entries: { id: string; config?: unknown }[] }
+    const boot = Reflect.get(window, '__SNH_BOOT__') as { entries: { id: string; config?: unknown }[] }
     return boot.entries.find(row => row.id === id)
   }, PACKAGE)
   expect(bootRow?.config).toEqual({ greeting: 'hello-r0', account: { label: 'primary' } })

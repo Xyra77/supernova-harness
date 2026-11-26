@@ -1,18 +1,18 @@
 /**
  * Replay-safe, model-free tool-result pruning service.
  *
- * @module @deepseek-ai/dsh-compaction-tool-result-pruner
+ * @module @supernova-ai/snh-compaction-tool-result-pruner
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { freezeMessage } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { Session, SessionEvent, SessionSeq, ToolResultMessage } from '@deepseek-ai/dsh-session'
+import { Context, Service } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { freezeMessage } from '@supernova-ai/snh-llm'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import type { Session, SessionEvent, SessionSeq, ToolResultMessage } from '@supernova-ai/snh-session'
 // Type-only: the `compaction/*` SessionEventMap merges (the shadow-price event).
-import type {} from '@deepseek-ai/dsh-compaction'
+import type {} from '@supernova-ai/snh-compaction'
 // Type-only: the `ctx.tokenMeter` Context merge for the declared injection.
-import type {} from '@deepseek-ai/dsh-token-meter'
+import type {} from '@supernova-ai/snh-token-meter'
 import { codePointLength, DEFAULTS, PRUNE_MARKER, resolveConfig } from './config.ts'
 import type {
   PrunedEntry,
@@ -29,7 +29,7 @@ export type {
   ToolResultPruneConfig,
 } from './types.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     toolResultPruner: ToolResultPruner
   }

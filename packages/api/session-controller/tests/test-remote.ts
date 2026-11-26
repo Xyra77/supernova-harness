@@ -1,16 +1,16 @@
 /** Test-only direct Remote face over the Session Controller's internal controllers. */
 import type { SessionControllerInternals } from '../src/index.ts'
 
-import { SessionLogOffset } from '@deepseek-ai/dsh-session'
-import { Service, type Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ModelSelection as AgentModelSelection } from '@deepseek-ai/dsh-agent'
+import { SessionLogOffset } from '@supernova-ai/snh-session'
+import { Service, type Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ModelSelection as AgentModelSelection } from '@supernova-ai/snh-agent'
 import type {
   AdmittedPromptContentPart,
   AttachmentAdmissionPart,
   ImageAttachmentLimits,
-} from '@deepseek-ai/dsh-attachment'
-import type { SessionEvent, SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
+} from '@supernova-ai/snh-attachment'
+import type { SessionEvent, SessionHeader, SessionId } from '@supernova-ai/snh-session'
 import type { SessionProjectionsValue } from '../src/types.ts'
 import {
   SessionPersistenceNotFoundError,
@@ -23,16 +23,16 @@ import {
   type SessionPersistenceOpenOptions,
   type SessionPersistenceSnapshot,
   type SessionPersistenceStatOptions,
-} from '@deepseek-ai/dsh-session-persistence'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SessionQueryEngine from '@deepseek-ai/dsh-session-query'
+} from '@supernova-ai/snh-session-persistence'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SessionQueryEngine from '@supernova-ai/snh-session-query'
 import { vi } from 'vitest'
 import {
   RemoteError,
   remoteErrorOf,
   type RemoteResult,
-} from '@deepseek-ai/dsh-typert-protocol'
-import RemoteAccessService from '@deepseek-ai/dsh-api-remote-access'
+} from '@supernova-ai/snh-typert-protocol'
+import RemoteAccessService from '@supernova-ai/snh-api-remote-access'
 import SessionController from '../src/index.ts'
 import type {
   ModelCatalog,

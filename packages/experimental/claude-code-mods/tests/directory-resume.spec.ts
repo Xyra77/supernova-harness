@@ -3,18 +3,18 @@ import { mkdir, mkdtemp, realpath, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import WorkingDirectory from '@deepseek-ai/dsh-working-directory'
+import { Context } from '@supernova-ai/cordis'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import LocalFileSystem from '@supernova-ai/snh-fs-local'
+import type { SessionId } from '@supernova-ai/snh-session'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import WorkingDirectory from '@supernova-ai/snh-working-directory'
 import ClaudeCodeMods, { defineMod } from '../src/index.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 it('reports the final committed cwd when a persisted Session resumes, retaining its original project', async () => {
-  const root = await realpath(await mkdtemp(join(tmpdir(), 'dsh-mods-resume-directory-')))
+  const root = await realpath(await mkdtemp(join(tmpdir(), 'snh-mods-resume-directory-')))
   const origin = join(root, 'project')
   const current = join(origin, 'current')
   await mkdir(current, { recursive: true })

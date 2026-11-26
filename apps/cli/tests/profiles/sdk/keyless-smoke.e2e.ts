@@ -4,11 +4,11 @@ import { tmpdir } from 'node:os'
 import { dirname, join, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { zstdDecompressSync } from 'node:zlib'
-import { resolveExampleLaunch } from '@deepseek-ai/dsh-loader-smoke'
-import { scanZstdFrames } from '@deepseek-ai/dsh-session-persistence-jsonl/src/zstd.js'
+import { resolveExampleLaunch } from '@supernova-ai/snh-loader-smoke'
+import { scanZstdFrames } from '@supernova-ai/snh-session-persistence-jsonl/src/zstd.js'
 import { execa } from 'execa'
 import { describe, expect, it, onTestFinished } from 'vitest'
-import { workspaceDependencyPaths, type PrimaryRuntimeManifest } from '@deepseek-ai/dsh-tool-workspace-dependencies'
+import { workspaceDependencyPaths, type PrimaryRuntimeManifest } from '@supernova-ai/snh-tool-workspace-dependencies'
 
 import { messagesResponse } from './fixtures/messages-response.ts'
 
@@ -51,7 +51,7 @@ function waitForLine(
   })
 }
 
-describe('Python SDK dsh profile keyless smoke', () => {
+describe('Python SDK snh profile keyless smoke', () => {
   it.each([
     { label: 'reports max-token turns with the default mapping config', envValue: undefined, editorEnabled: false },
     { label: 'reports max-token turns with mapping enabled through env', envValue: 'true', editorEnabled: false },
@@ -67,7 +67,7 @@ describe('Python SDK dsh profile keyless smoke', () => {
     const unreadEdit = 'unreadEdit' in scenario && scenario.unreadEdit
     const patchEnabled = 'patchEnabled' in scenario && scenario.patchEnabled
 
-    const root = await mkdtemp(join(tmpdir(), 'dsh-python-sdk-runtime-smoke-'))
+    const root = await mkdtemp(join(tmpdir(), 'snh-python-sdk-runtime-smoke-'))
     const unreadFile = join(root, 'notes.txt')
     if (unreadEdit) await writeFile(unreadFile, 'alpha\n')
     const editorPatch = join(root, 'editor.patch.yml')
@@ -76,7 +76,7 @@ describe('Python SDK dsh profile keyless smoke', () => {
     if (editorEnabled) await writeFile(editorPatch, [
       '- insert:',
       '    - id: tool-str-replace-editor',
-      "      name: '@deepseek-ai/dsh-tool-str-replace-editor'",
+      "      name: '@supernova-ai/snh-tool-str-replace-editor'",
       '',
     ].join('\n'))
     const modelRequests: Record<string, unknown>[] = []
@@ -113,13 +113,13 @@ describe('Python SDK dsh profile keyless smoke', () => {
       cwd: repoRoot,
       env: {
         ...launch.env,
-        DSH_HOME: join(root, '.dsh'),
-        DSH_PERMISSION_MODE: 'danger-full-access',
-        DSH_TELEMETRY_DISABLED: '1',
-        DSH_TOOLS_MODE: ptc ? 'native' : 'ptc',
+        SNH_HOME: join(root, '.snh'),
+        SNH_PERMISSION_MODE: 'danger-full-access',
+        SNH_TELEMETRY_DISABLED: '1',
+        SNH_TOOLS_MODE: ptc ? 'native' : 'ptc',
         DEEPSEEK_API_KEY: 'keyless-smoke-no-call',
         DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
-        ...(envValue === undefined ? {} : { DSH_MAX_TOKENS_AS_SUCCESS: envValue }),
+        ...(envValue === undefined ? {} : { SNH_MAX_TOKENS_AS_SUCCESS: envValue }),
       },
       timeout: 35_000,
       killSignal: 'SIGKILL',
@@ -153,7 +153,7 @@ describe('Python SDK dsh profile keyless smoke', () => {
       expect(initialized).toMatchObject({
         jsonrpc: '2.0',
         id: 1,
-        result: { serverInfo: { name: 'deepseek-harness-sdk-runtime' } },
+        result: { serverInfo: { name: 'supernova-harness-sdk-runtime' } },
       })
 
       child.stdin.write(`${JSON.stringify({
@@ -211,15 +211,15 @@ describe('Python SDK dsh profile keyless smoke', () => {
         'Time sampled while preparing']) {
         expect(requestText.includes(text), text).toBe(true)
       }
-      expect(requestText).not.toContain('Current DeepSeek Harness implementation checkout:')
-      expect(requestText).not.toContain('Current DeepSeek Harness Web GUI URL:')
+      expect(requestText).not.toContain('Current SuperNova Harness implementation checkout:')
+      expect(requestText).not.toContain('Current SuperNova Harness Web GUI URL:')
 
       child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', id: 3, method: 'shutdown' })}\n`)
       const shutdown = await waitForLine(lines, value => value.id === 3, () => stderr)
       expect(shutdown).toMatchObject({ jsonrpc: '2.0', id: 3, result: {} })
       const exit = await child
       expect(exit.exitCode, `signal=${String(exit.signal)}; stderr=${stderr}`).toBe(0)
-      const sessionsRoot = join(root, '.dsh', 'sessions')
+      const sessionsRoot = join(root, '.snh', 'sessions')
       const files = await readdir(sessionsRoot, { recursive: true })
       // Session logs are JSONL across one zstd frame per batch, header frame
       // first. Decompress frames explicitly: a single call over concatenated
@@ -261,7 +261,7 @@ describe('Python SDK dsh profile keyless smoke', () => {
     { label: 'offloads an over-budget image and continues with sdk-minimal', editorEnabled: false, imageEnabled: true, optOut: false, offloadEnabled: true },
     { label: 'retains the previous tools through the documented opt-out patch', editorEnabled: false, imageEnabled: false, optOut: true, offloadEnabled: false },
   ])('$label', async ({ editorEnabled, imageEnabled, optOut, offloadEnabled }) => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-python-sdk-minimal-'))
+    const root = await mkdtemp(join(tmpdir(), 'snh-python-sdk-minimal-'))
     onTestFinished(() => rm(root, { recursive: true, force: true }))
     const editorPatch = join(root, 'editor.patch.yml')
     if (editorEnabled) {
@@ -278,7 +278,7 @@ describe('Python SDK dsh profile keyless smoke', () => {
       await writeFile(editorPatch, yaml!)
     }
     if (offloadEnabled) await writeFile(editorPatch, [
-      '- id: llm-deepseek',
+      '- id: llm-supernova',
       '  config:',
       '    apiKeyEnv: DEEPSEEK_API_KEY',
       '    maxRequestFilesBytes: 1',
@@ -335,8 +335,8 @@ describe('Python SDK dsh profile keyless smoke', () => {
       cwd: repoRoot,
       env: {
         ...launch.env,
-        DSH_HOME: join(root, '.dsh'),
-        DSH_SYSTEM_PROMPT: 'Minimal allowlist prompt.',
+        SNH_HOME: join(root, '.snh'),
+        SNH_SYSTEM_PROMPT: 'Minimal allowlist prompt.',
         DEEPSEEK_API_KEY: 'keyless-smoke-no-call',
         DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
       },
@@ -381,10 +381,10 @@ describe('Python SDK dsh profile keyless smoke', () => {
       })
 
       const profile = JSON.parse(
-        await readFile(join(root, '.dsh', 'profiles', 'sdk-minimal', 'package.json'), 'utf8'),
-      ) as { dsh?: { profile?: { bundles?: string[] } } }
-      expect(profile.dsh?.profile).toEqual({
-        bundles: ['@deepseek-ai/dsh-sdk-minimal'],
+        await readFile(join(root, '.snh', 'profiles', 'sdk-minimal', 'package.json'), 'utf8'),
+      ) as { snh?: { profile?: { bundles?: string[] } } }
+      expect(profile.snh?.profile).toEqual({
+        bundles: ['@supernova-ai/snh-sdk-minimal'],
       })
       expect(modelRequests[0]?.tools).toEqual(expect.any(Array))
       const tools = modelRequests[0]?.tools as { name?: string }[]
@@ -411,7 +411,7 @@ describe('Python SDK dsh profile keyless smoke', () => {
             { type: 'image', source: { type: 'file', file_id: 'file-minimal-image' } },
           ]))
         }
-        const stored = await readdir(join(root, '.dsh', 'attachments', 'v1', 'objects'), { recursive: true })
+        const stored = await readdir(join(root, '.snh', 'attachments', 'v1', 'objects'), { recursive: true })
         expect(stored.some(file => /[a-f0-9]{64}$/u.test(file))).toBe(true)
       }
       if (editorEnabled) {
@@ -446,8 +446,8 @@ describe('Python SDK dsh profile keyless smoke', () => {
   }, 40_000)
 
   it.each([false, true])('exits after startup failure with stdin open (logs blocked: %s)', async (blocked) => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-sdk-startup-exit-'))
-    const home = join(root, '.dsh')
+    const root = await mkdtemp(join(tmpdir(), 'snh-sdk-startup-exit-'))
+    const home = join(root, '.snh')
     const patch = join(root, 'failure.yml')
     await mkdir(home)
     if (blocked) await writeFile(join(home, 'logs'), 'blocked')
@@ -456,7 +456,7 @@ describe('Python SDK dsh profile keyless smoke', () => {
       ...launch.args, '--profile', 'sdk', '--patch', patch,
     ], {
       cwd: repoRoot,
-      env: { ...launch.env, DSH_HOME: home, DSH_TELEMETRY_DISABLED: '1', DEEPSEEK_API_KEY: 'keyless-no-call' },
+      env: { ...launch.env, SNH_HOME: home, SNH_TELEMETRY_DISABLED: '1', DEEPSEEK_API_KEY: 'keyless-no-call' },
       stdin: 'pipe',
       stripFinalNewline: false,
       timeout: 25_000,
@@ -491,7 +491,7 @@ describe('Python SDK dsh profile keyless smoke', () => {
     { tz: 'America/New_York', sampled: 'Browser time zone for this request: America/New_York. Interpret otherwise-unqualified dates and times in this zone.' },
     { tz: 'GMT', sampled: 'Browser time zone for this request: unavailable. Ask the user to clarify otherwise-unqualified dates and times.' },
   ])('shows the model the reported or sampled prompt time zone (TZ=$tz)', async ({ tz, sampled }) => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-sdk-time-zone-'))
+    const root = await mkdtemp(join(tmpdir(), 'snh-sdk-time-zone-'))
     onTestFinished(() => rm(root, { recursive: true, force: true }))
     const modelRequests: string[] = []
     const modelServer = createServer((request, response) => {
@@ -512,8 +512,8 @@ describe('Python SDK dsh profile keyless smoke', () => {
       cwd: repoRoot,
       env: {
         ...launch.env,
-        DSH_HOME: join(root, '.dsh'),
-        DSH_TELEMETRY_DISABLED: '1',
+        SNH_HOME: join(root, '.snh'),
+        SNH_TELEMETRY_DISABLED: '1',
         DEEPSEEK_API_KEY: 'keyless-smoke-no-call',
         DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}`,
         TZ: tz,
@@ -568,7 +568,7 @@ describe('Python SDK dsh profile keyless smoke', () => {
   }, 40_000)
 
   it('rejects an invalid max-token success env value', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-python-sdk-runtime-invalid-'))
+    const root = await mkdtemp(join(tmpdir(), 'snh-python-sdk-runtime-invalid-'))
     try {
       const { exitCode, stdout, stderr } = await execa(launch.command, [
         ...launch.args,
@@ -578,9 +578,9 @@ describe('Python SDK dsh profile keyless smoke', () => {
         cwd: repoRoot,
         env: {
           ...launch.env,
-          DSH_HOME: join(root, '.dsh'),
+          SNH_HOME: join(root, '.snh'),
           DEEPSEEK_API_KEY: 'keyless-smoke-no-call',
-          DSH_MAX_TOKENS_AS_SUCCESS: 'sometimes',
+          SNH_MAX_TOKENS_AS_SUCCESS: 'sometimes',
         },
         stdin: 'ignore',
         timeout: 25_000,
@@ -591,7 +591,7 @@ describe('Python SDK dsh profile keyless smoke', () => {
       expect(exitCode, stderr).toBe(1)
       expect(stdout).toBe('')
       expect(stderr).toContain('startup failed:')
-      expect(stderr).toContain('sdk-jsonrpc-server (required)\n    Package: @deepseek-ai/dsh-sdk-jsonrpc-server\n    SyntaxError')
+      expect(stderr).toContain('sdk-jsonrpc-server (required)\n    Package: @supernova-ai/snh-sdk-jsonrpc-server\n    SyntaxError')
       expect(stderr).toContain('sometimes')
     } finally {
       await rm(root, { recursive: true, force: true })
@@ -659,8 +659,8 @@ it.each(['unset', 'empty', 'full', 'python-only', 'python-only-patched', 'wrong-
   const officeLaunch = resolveExampleLaunch({
     srcBin: fileURLToPath(new URL('../../../src/bin.ts', import.meta.url)), mode: 'lib',
     configArgs: ['--profile', 'sdk', '--patch', cliPatch],
-    env: { DSH_HOME: home, DSH_PRIMARY_RUNTIME: mode === 'unset' ? undefined : mode === 'empty' ? '' : source + '/',
-      DSH_PERMISSION_MODE: 'danger-full-access', DSH_TELEMETRY_DISABLED: '1',
+    env: { SNH_HOME: home, SNH_PRIMARY_RUNTIME: mode === 'unset' ? undefined : mode === 'empty' ? '' : source + '/',
+      SNH_PERMISSION_MODE: 'danger-full-access', SNH_TELEMETRY_DISABLED: '1',
       DEEPSEEK_API_KEY: 'local-fixture', DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}` },
   })
   const child = execa(officeLaunch.command, officeLaunch.args, { cwd: repoRoot, env: officeLaunch.env, timeout: 60_000, reject: false })
@@ -734,14 +734,14 @@ it.each(['unset', 'empty', 'full', 'python-only', 'python-only-patched', 'wrong-
   expect(exit.timedOut).toBe(false)
   expect(exit.signal).toBeUndefined()
   expect(exit.exitCode, stderr).toBe(0)
-  await expect(readFile(join(home, 'dsh-runtimes', 'dsh-primary-runtime', 'runtime.json'))).rejects.toMatchObject({ code: 'ENOENT' })
+  await expect(readFile(join(home, 'snh-runtimes', 'snh-primary-runtime', 'runtime.json'))).rejects.toMatchObject({ code: 'ENOENT' })
 })
 
-it.each(['standard', 'ptc'] as const)('lists and loads the packaged dsh-doc skill through the SDK profile (%s)', async (mode) => {
-  const root = await mkdtemp(join(tmpdir(), 'sdk-dsh-doc-'))
+it.each(['standard', 'ptc'] as const)('lists and loads the packaged snh-doc skill through the SDK profile (%s)', async (mode) => {
+  const root = await mkdtemp(join(tmpdir(), 'sdk-snh-doc-'))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
   const requests: { tools: { name: string }[]; messages: unknown }[] = []
-  const toolUses = mode === 'standard' ? [{ type: 'tool_use', id: 'dsh-doc', name: 'skill', input: { name: 'dsh-doc' } } as const] : []
+  const toolUses = mode === 'standard' ? [{ type: 'tool_use', id: 'snh-doc', name: 'skill', input: { name: 'snh-doc' } } as const] : []
   const server = createServer((request, response) => {
     let body = ''
     request.setEncoding('utf8').on('data', (chunk: string) => { body += chunk })
@@ -759,7 +759,7 @@ it.each(['standard', 'ptc'] as const)('lists and loads the packaged dsh-doc skil
   const launch = resolveExampleLaunch({
     srcBin: fileURLToPath(new URL('../../../src/bin.ts', import.meta.url)), mode: 'lib',
     configArgs: ['--profile', 'sdk', ...mode === 'ptc' ? ['--patch', join(repoRoot, 'apps/cli/config/examples/ptc.yml')] : []],
-    env: { DSH_HOME: join(root, 'home'), DSH_PRIMARY_RUNTIME: '', DSH_PERMISSION_MODE: 'danger-full-access', DSH_TELEMETRY_DISABLED: '1',
+    env: { SNH_HOME: join(root, 'home'), SNH_PRIMARY_RUNTIME: '', SNH_PERMISSION_MODE: 'danger-full-access', SNH_TELEMETRY_DISABLED: '1',
       DEEPSEEK_API_KEY: 'local-fixture', DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}` },
   })
   const child = execa(launch.command, launch.args, { cwd: repoRoot, env: launch.env, timeout: 60_000, reject: false })
@@ -778,20 +778,20 @@ it.each(['standard', 'ptc'] as const)('lists and loads the packaged dsh-doc skil
     return waitForLine(lines, value => value.id === id, () => stderr)
   }
   expect(await send(1, 'initialize', { cwd: root, provider: 'deepseek-official', model: 'deepseek-v4-pro' })).toHaveProperty('result')
-  await send(2, 'session/prompt', { sessionId: 'dsh-doc', contentBlocks: [{ type: 'text', text: 'How do DSH presets work?' }] })
+  await send(2, 'session/prompt', { sessionId: 'snh-doc', contentBlocks: [{ type: 'text', text: 'How do SNH presets work?' }] })
   await waitForLine(lines, (value) => {
     const params = value.params as { sessionId?: string; event?: { type?: string } } | undefined
-    return value.method === 'session.event' && params?.sessionId === 'dsh-doc' && params.event?.type === 'turn/end'
+    return value.method === 'session.event' && params?.sessionId === 'snh-doc' && params.event?.type === 'turn/end'
   }, () => stderr)
   expect(requests).toHaveLength(toolUses.length + 1)
-  expect(JSON.stringify(requests[0]!.messages)).toMatch(/- `dsh-doc`: Use when a task needs facts about DeepSeek Harness/)
+  expect(JSON.stringify(requests[0]!.messages)).toMatch(/- `snh-doc`: Use when a task needs facts about SuperNova Harness/)
   if (mode === 'ptc') expect(requests[0]!.tools.map(tool => tool.name)).toEqual(['run_code'])
   else {
     const messages = requests[1]!.messages as { content: { tool_use_id?: string }[] }[]
-    const loaded = JSON.stringify(messages.flatMap(message => message.content).find(block => block.tool_use_id === 'dsh-doc'))
-    const directory = join(repoRoot, 'packages/preset/agent-preset/skills/dsh-doc').split(sep).join('/')
+    const loaded = JSON.stringify(messages.flatMap(message => message.content).find(block => block.tool_use_id === 'snh-doc'))
+    const directory = join(repoRoot, 'packages/preset/agent-preset/skills/snh-doc').split(sep).join('/')
     expect(loaded).toContain(JSON.stringify(`Base directory for this skill: ${directory}`).slice(1, -1))
-    expect(loaded).toContain('# DeepSeek Harness documentation')
+    expect(loaded).toContain('# SuperNova Harness documentation')
   }
   await send(3, 'shutdown')
   const exit = await child

@@ -1,12 +1,12 @@
 /** Shared tool invocation policy, cancellation, and result settlement. @module */
-import type { Context } from '@deepseek-ai/cordis'
-import type { ScopeKey } from '@deepseek-ai/dsh-scope'
-import { scopeTarget } from '@deepseek-ai/dsh-scope'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import { HarnessError } from '@deepseek-ai/dsh-llm'
-import type { UserMessage } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-user-approval'
-import { assertNever, deepFreeze, snapshotJsonValue, type JsonValue } from '@deepseek-ai/dsh-util-values'
+import type { Context } from '@supernova-ai/cordis'
+import type { ScopeKey } from '@supernova-ai/snh-scope'
+import { scopeTarget } from '@supernova-ai/snh-scope'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import { HarnessError } from '@supernova-ai/snh-llm'
+import type { UserMessage } from '@supernova-ai/snh-session'
+import type {} from '@supernova-ai/snh-user-approval'
+import { assertNever, deepFreeze, snapshotJsonValue, type JsonValue } from '@supernova-ai/snh-util-values'
 import { TOOL_ABORTED, TOOL_ABORTED_BEFORE_DISPATCH, ToolNotFoundError, ToolOutputError } from './contracts.ts'
 import { APPROVAL_CANCELLED, APPROVAL_ERROR_NAME, APPROVAL_REJECTED, APPROVAL_UNAVAILABLE, type ApprovalErrorCode } from './error-codes.ts'
 import { validateJsonSchemaValue } from './json-schema.ts'
@@ -726,7 +726,7 @@ function isUnclassifiedCancellation(error: unknown, signal: AbortSignal): boolea
 
 /** Mint a same-process correlation token whose identity is its value. */
 function createExecutionToken(): ToolExecutionToken {
-  return Symbol('dsh.tool.execution') as ToolExecutionToken
+  return Symbol('snh.tool.execution') as ToolExecutionToken
 }
 
 function toolErrorResult(error: unknown, info = errorInfo(error)): ToolExecutionResult {

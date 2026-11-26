@@ -1,13 +1,13 @@
 /** Fold of `ask_user_question` tool events into the answerable question set, and its Session projection. */
 import { z } from 'zod'
-import { SessionLogOffset, TOOL_OUTCOME_UNKNOWN } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionLogOffset as SessionLogOffsetType } from '@deepseek-ai/dsh-session'
-import type { ProjectionDefinition } from '@deepseek-ai/dsh-session-projection'
-import type {} from '@deepseek-ai/dsh-agent/types'
-import type {} from '@deepseek-ai/dsh-tool-executor-ptc/types'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock, ToolSchema } from '@deepseek-ai/dsh-llm'
+import { SessionLogOffset, TOOL_OUTCOME_UNKNOWN } from '@supernova-ai/snh-session'
+import type { SessionEvent, SessionLogOffset as SessionLogOffsetType } from '@supernova-ai/snh-session'
+import type { ProjectionDefinition } from '@supernova-ai/snh-session-projection'
+import type {} from '@supernova-ai/snh-agent/types'
+import type {} from '@supernova-ai/snh-tool-executor-ptc/types'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import type { ContentBlock, ToolSchema } from '@supernova-ai/snh-llm'
 import type { AskUserQuestionAnswerItem, AskUserQuestionItem, AskUserQuestionOption, PendingUserQuestion, SettledUserQuestion, UserQuestionProjectionView } from './types.ts'
 
 /**

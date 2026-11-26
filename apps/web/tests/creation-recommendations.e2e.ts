@@ -124,7 +124,7 @@ describe('creation recommendation after an explicit wish', () => {
     acknowledgeReloadConnectionLoss(tripwire, warnings)
     expect(await card.getByRole('button', { name: 'Create', exact: true }).count()).toBe(0)
     expect(await card.getByRole('button', { name: 'Show more', exact: true }).isVisible()).toBe(true)
-    expect((await scaffold.ctx.pluginManager.listBundles()).some(bundle => bundle.name.startsWith('@dsh-local/view-'))).toBe(false)
+    expect((await scaffold.ctx.pluginManager.listBundles()).some(bundle => bundle.name.startsWith('@snh-local/view-'))).toBe(false)
     await compareOrRefreshGolden(join(directory, 'dismissed.expected.md'), await captureStableAria(page, creationSelector, scaffold.workspaceCwd), scaffold.mode)
     await sendTurn(prompts[2]!)
     await page.getByText('The counter proposal was dismissed. Creation never started.', { exact: true }).waitFor()

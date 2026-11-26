@@ -5,14 +5,14 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { expect, onTestFinished, vi } from 'vitest'
-import { Context, Logger, LoggerLevel, type Exporter } from '@deepseek-ai/cordis'
-import Authorization from '@deepseek-ai/dsh-authorization'
-import { LocalCredentialProvider } from '@deepseek-ai/dsh-credentials-local'
-import WebServer from '@deepseek-ai/dsh-host-webserver'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import Tools from '@deepseek-ai/dsh-tools'
+import { Context, Logger, LoggerLevel, type Exporter } from '@supernova-ai/cordis'
+import Authorization from '@supernova-ai/snh-authorization'
+import { LocalCredentialProvider } from '@supernova-ai/snh-credentials-local'
+import WebServer from '@supernova-ai/snh-host-webserver'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import Tools from '@supernova-ai/snh-tools'
 import { createMcpHandler, McpServer } from '@modelcontextprotocol/server'
 import { toNodeHandler, type NodeIncomingMessageLike } from '@modelcontextprotocol/node'
 import { z } from 'zod'
@@ -56,7 +56,7 @@ export async function oauthWorld(interactive = true, webHost = '127.0.0.1') {
   const server = createServer((request, response) => {
     void handle(request, response).catch(() => { response.writeHead(500).end() })
   })
-  const dir = await mkdtemp(join(tmpdir(), 'dsh-mcp-oauth-'))
+  const dir = await mkdtemp(join(tmpdir(), 'snh-mcp-oauth-'))
   onTestFinished(async () => {
     for (const release of releases) release()
     try {

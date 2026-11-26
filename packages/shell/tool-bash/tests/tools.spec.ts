@@ -1,33 +1,33 @@
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { mkdtempSync, rmSync } from 'node:fs'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterAll, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { ShellExecutor } from '@deepseek-ai/dsh-shell'
-import type { ShellExecRequest, ShellExecSpec, ShellExecution, ShellProcess, ShellRunResult } from '@deepseek-ai/dsh-shell'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED, TOOL_ABORTED_BEFORE_DISPATCH } from '@deepseek-ai/dsh-tools'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import LocalJobRegistry from '@deepseek-ai/dsh-jobs-local'
-import * as ToolJobs from '@deepseek-ai/dsh-tool-jobs'
-import ApprovalService from '@deepseek-ai/dsh-user-approval'
-import type { ApprovalOutcome } from '@deepseek-ai/dsh-user-approval'
-import { LocalBashExecutor } from '@deepseek-ai/dsh-bash-local'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import { escalationHintMarker, sandboxDenialMarker } from '@deepseek-ai/dsh-sandbox'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import * as ToolBash from '@deepseek-ai/dsh-tool-bash'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
+import { Context } from '@supernova-ai/cordis'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import { ShellExecutor } from '@supernova-ai/snh-shell'
+import type { ShellExecRequest, ShellExecSpec, ShellExecution, ShellProcess, ShellRunResult } from '@supernova-ai/snh-shell'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime, { TOOL_ABORTED, TOOL_ABORTED_BEFORE_DISPATCH } from '@supernova-ai/snh-tools'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type { SessionId } from '@supernova-ai/snh-session'
+import LocalJobRegistry from '@supernova-ai/snh-jobs-local'
+import * as ToolJobs from '@supernova-ai/snh-tool-jobs'
+import ApprovalService from '@supernova-ai/snh-user-approval'
+import type { ApprovalOutcome } from '@supernova-ai/snh-user-approval'
+import { LocalBashExecutor } from '@supernova-ai/snh-bash-local'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import SandboxPolicyService from '@supernova-ai/snh-sandbox-policy'
+import { escalationHintMarker, sandboxDenialMarker } from '@supernova-ai/snh-sandbox'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import * as ToolBash from '@supernova-ai/snh-tool-bash'
+import * as BashEnvPlugin from '@supernova-ai/snh-shell-env'
 import { processOutcome } from '../src/background.ts'
 import { renderJobRead, renderResult } from '../src/render.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 /** Use the newest id returned by the real registry, including settled jobs. */
 function currentId(ctx: Context, owner?: Agent): string {
@@ -41,7 +41,7 @@ const silentReader = { readFrom: (fromByte: number) => ({ text: '', nextOffset: 
 
 const testToolSignal = new AbortController().signal
 
-const spillDir = mkdtempSync(join(tmpdir(), 'dsh-tool-bash-spec-'))
+const spillDir = mkdtempSync(join(tmpdir(), 'snh-tool-bash-spec-'))
 
 afterAll(() => {
   rmSync(spillDir, { recursive: true, force: true })
@@ -342,7 +342,7 @@ describe('bash tool', () => {
 
   it('surfaces spawn failures as isError', async () => {
     const ctx = await setup()
-    const result = await call(ctx, 'bash', { command: 'true', description: 'test command', workdir: '/nonexistent-dsh' })
+    const result = await call(ctx, 'bash', { command: 'true', description: 'test command', workdir: '/nonexistent-snh' })
     expect(result.isError).toBe(true)
     expect(text(result)).toMatch(/ENOENT/)
   })
@@ -648,7 +648,7 @@ describe('background execution through the job runtime', () => {
       isError: true,
       error: { info: { name: 'ToolContextUnavailableError', code: 'TOOL_CONTEXT_UNAVAILABLE' } },
     })
-    expect(text(result)).toContain('background jobs unavailable: load @deepseek-ai/dsh-jobs and @deepseek-ai/dsh-tool-jobs')
+    expect(text(result)).toContain('background jobs unavailable: load @supernova-ai/snh-jobs and @supernova-ai/snh-tool-jobs')
   })
 
   it('a pre-aborted call is skipped before the process starts', async () => {
@@ -1330,7 +1330,7 @@ describe('tool-owned UI presentation (presentCall / presentResult)', () => {
 })
 
 describe('the model-facing bash tool builds its request from named args only (no {...args} forward)', () => {
-  const recordingDshHome = join(spillDir, 'dsh-home')
+  const recordingSnhHome = join(spillDir, 'snh-home')
 
   /**
    * Records every {@link ShellExecRequest} the consumer hands to `resolve()`, so a
@@ -1341,7 +1341,7 @@ describe('the model-facing bash tool builds its request from named args only (no
    * future refactor that blindly forwards `...args` — which would silently thread
    * model input into the post-scrub `env` merge or per-run capture budget — NOT
    * to defend a trust boundary
-   * (the credential scrub in dsh-bash-local is the security control; see the
+   * (the credential scrub in snh-bash-local is the security control; see the
    * bash-stdin-env Agent Note). Foreground `run()` returns a canned result; `start()`
    * hands back an already-settled fake handle so the task registration completes.
    */
@@ -1358,7 +1358,7 @@ describe('the model-facing bash tool builds its request from named args only (no
         ...request.signal ? { signal: request.signal } : {},
         ...request.stdin !== undefined ? { stdin: request.stdin } : {},
         ...request.env !== undefined ? { env: request.env } : {},
-        ...request.dshEnv !== undefined ? { dshEnv: request.dshEnv } : {},
+        ...request.snhEnv !== undefined ? { snhEnv: request.snhEnv } : {},
         sandboxPolicy: request.sandboxPolicy,
       }
     }
@@ -1388,7 +1388,7 @@ describe('the model-facing bash tool builds its request from named args only (no
     await ctx.plugin(AgentRegistry)
     await ctx.plugin(LocalJobRegistry)
     await ctx.plugin(ToolJobs)
-    await ctx.plugin(BashEnvPlugin, { dshHome: recordingDshHome })
+    await ctx.plugin(BashEnvPlugin, { snhHome: recordingSnhHome })
     await ctx.plugin(RecordingBashExecutor)
     await ctx.plugin(ToolBash)
     return { ctx, bash: ctx.shell as RecordingBashExecutor }
@@ -1397,13 +1397,13 @@ describe('the model-facing bash tool builds its request from named args only (no
   it('describes the managed harness environment namespace to the model', async () => {
     const { ctx } = await setupRecording()
     const description = ctx.tools.get('bash')?.description ?? ''
-    expect(description).toContain('$DSH_*')
+    expect(description).toContain('$SNH_*')
   })
 
   it('injects built-ins and the stable session id into a foreground request', async () => {
     const { ctx, bash } = await setupRecording()
     const agent = await registerFakeAgent(ctx, 'request-fg', () => undefined)
-    const ambient = process.env.DSH_SESSION_ID
+    const ambient = process.env.SNH_SESSION_ID
 
     await executeToolFixture(ctx, {
       signal: testToolSignal,
@@ -1413,13 +1413,13 @@ describe('the model-facing bash tool builds its request from named args only (no
       agent,
     })
 
-    expect(bash.requests[0]?.dshEnv).toEqual({
-      DSH_HOME: recordingDshHome,
-      DSH_NODE_EXECUTABLE: process.execPath,
-      DSH_SESSION_ID: 'request-fg',
-      DSH_SHELL: '1',
+    expect(bash.requests[0]?.snhEnv).toEqual({
+      SNH_HOME: recordingSnhHome,
+      SNH_NODE_EXECUTABLE: process.execPath,
+      SNH_SESSION_ID: 'request-fg',
+      SNH_SHELL: '1',
     })
-    expect(process.env.DSH_SESSION_ID).toBe(ambient)
+    expect(process.env.SNH_SESSION_ID).toBe(ambient)
   })
 
   it('injects the same trusted variables into a background request without forwarding model env', async () => {
@@ -1434,17 +1434,17 @@ describe('the model-facing bash tool builds its request from named args only (no
         command: 'sleep 1',
         description: 'run command',
         run_in_background: true,
-        env: { DSH_SESSION_ID: 'spoofed' },
+        env: { SNH_SESSION_ID: 'spoofed' },
       },
       agent,
     })
 
     expect(bash.requests[0]?.env).toBeUndefined()
-    expect(bash.requests[0]?.dshEnv).toEqual({
-      DSH_HOME: recordingDshHome,
-      DSH_NODE_EXECUTABLE: process.execPath,
-      DSH_SESSION_ID: 'request-bg',
-      DSH_SHELL: '1',
+    expect(bash.requests[0]?.snhEnv).toEqual({
+      SNH_HOME: recordingSnhHome,
+      SNH_NODE_EXECUTABLE: process.execPath,
+      SNH_SESSION_ID: 'request-bg',
+      SNH_SHELL: '1',
     })
   })
 
@@ -1463,18 +1463,18 @@ describe('the model-facing bash tool builds its request from named args only (no
       })
     }
 
-    expect(bash.requests.map(request => request.dshEnv)).toEqual([
+    expect(bash.requests.map(request => request.snhEnv)).toEqual([
       {
-        DSH_HOME: recordingDshHome,
-        DSH_NODE_EXECUTABLE: process.execPath,
-        DSH_SESSION_ID: 'request-parent',
-        DSH_SHELL: '1',
+        SNH_HOME: recordingSnhHome,
+        SNH_NODE_EXECUTABLE: process.execPath,
+        SNH_SESSION_ID: 'request-parent',
+        SNH_SHELL: '1',
       },
       {
-        DSH_HOME: recordingDshHome,
-        DSH_NODE_EXECUTABLE: process.execPath,
-        DSH_SESSION_ID: 'request-child',
-        DSH_SHELL: '1',
+        SNH_HOME: recordingSnhHome,
+        SNH_NODE_EXECUTABLE: process.execPath,
+        SNH_SESSION_ID: 'request-child',
+        SNH_SHELL: '1',
       },
     ])
   })
@@ -1541,7 +1541,7 @@ describe('resolved launch directory metadata', () => {
     { background: true, workdir: 'relative' },
   ])('records the executor directory for background=$background and workdir=$workdir', async ({ background, workdir }) => {
     const ctx = await setupWithJobs()
-    const directory = mkdtempSync(join(tmpdir(), 'dsh-bash-cwd-meta-'))
+    const directory = mkdtempSync(join(tmpdir(), 'snh-bash-cwd-meta-'))
     const current = join(directory, 'current')
     const ensure = vi.spyOn(ctx.workingDirectory, 'ensure').mockResolvedValue(current)
     const resolve = ctx.shell.resolve.bind(ctx.shell)

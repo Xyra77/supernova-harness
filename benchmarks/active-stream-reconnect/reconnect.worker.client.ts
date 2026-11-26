@@ -1,9 +1,9 @@
 /** Compiled production Client fold for a reconnect during a long Assistant attempt. */
 import { performance } from 'node:perf_hooks'
-import { AssistantStreamAccumulator } from '@deepseek-ai/dsh-llm/assistant-stream'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { LlmAttemptId } from '@deepseek-ai/dsh-llm/types'
-import type { SessionAssistantStreamBaseline } from '@deepseek-ai/dsh-api-session-controller/types'
+import { AssistantStreamAccumulator } from '@supernova-ai/snh-llm/assistant-stream'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { LlmAttemptId } from '@supernova-ai/snh-llm/types'
+import type { SessionAssistantStreamBaseline } from '@supernova-ai/snh-api-session-controller/types'
 // The Client implementation has no plain-Node export; only this adapter is bundled.
 import { ClientAssistantStream } from '../../packages/api/session-controller/src/client/sessions/assistant-stream.ts'
 import { assertBuiltBenchmarkRuntime } from '../support/built-worker.ts'
@@ -19,7 +19,7 @@ export interface ReconnectReport {
 }
 
 assertBuiltBenchmarkRuntime(import.meta.url, {
-  '@deepseek-ai/dsh-llm/assistant-stream': import.meta.resolve('@deepseek-ai/dsh-llm/assistant-stream'),
+  '@supernova-ai/snh-llm/assistant-stream': import.meta.resolve('@supernova-ai/snh-llm/assistant-stream'),
 })
 const deltas = 100000
 const accumulator = new AssistantStreamAccumulator()

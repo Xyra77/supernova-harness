@@ -13,15 +13,15 @@
  * its inputs: the Remote listing and watch bindings, and `canOpenOf`; the
  * search's binding lives in `search-workspace.ts`.
  */
-import type { ClientRemote, RemoteResult } from '@deepseek-ai/dsh-api-remotes/client'
-import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { PaneId, TabId } from '@deepseek-ai/dsh-client-ui-dockkit'
-import type { SidebarRightTabDefinition, SidebarRightTabNavigation } from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
-import type { HostObservable } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { ClientRemote, RemoteResult } from '@supernova-ai/snh-api-remotes/client'
+import { createSnapshotStore, type SnapshotStore } from '@supernova-ai/snh-client-store'
+import type { PaneId, TabId } from '@supernova-ai/snh-client-ui-dockkit'
+import type { SidebarRightTabDefinition, SidebarRightTabNavigation } from '@supernova-ai/snh-client-ui-sidebar-right/client'
+import type { HostObservable } from '@supernova-ai/snh-client-ui-slots'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import { childPath, locateFile, relativeFileOf, type DirLevel, type FilesSearchResult, type FilesStoreInstance } from './store.ts'
-import type { WorkspaceFileWatchFrame } from '@deepseek-ai/dsh-api-workspace-files/types'
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
+import type { WorkspaceFileWatchFrame } from '@supernova-ai/snh-api-workspace-files/types'
+import { RemoteError } from '@supernova-ai/snh-typert-protocol'
 import { DirectoryNode } from './directory-node.ts'
 import { FILL_BELOW, FULLSCREEN_QUERY } from './navigator-layout.ts'
 import type { WorkspaceSearchPreferenceBook } from './search-preferences.ts'

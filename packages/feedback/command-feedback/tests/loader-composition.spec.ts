@@ -3,18 +3,18 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent, AgentStatus } from '@deepseek-ai/dsh-agent'
-import CommandRuntime from '@deepseek-ai/dsh-commands'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import * as CommandFeedback from '@deepseek-ai/dsh-command-feedback'
-import { getOrCreateAnonymousUserId } from '@deepseek-ai/dsh-anonymous-user-id'
-import { unsupportedModel, unsupportedInbox } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import Include from '@supernova-ai/cordis-plugin-include'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import type { Agent, AgentStatus } from '@supernova-ai/snh-agent'
+import CommandRuntime from '@supernova-ai/snh-commands'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import * as CommandFeedback from '@supernova-ai/snh-command-feedback'
+import { getOrCreateAnonymousUserId } from '@supernova-ai/snh-anonymous-user-id'
+import { unsupportedModel, unsupportedInbox } from '@supernova-ai/snh-agent-loop-testkit'
+import { brandString } from '@supernova-ai/snh-brand'
 
 let root: string | undefined
 let context: Context | undefined
@@ -55,16 +55,16 @@ async function agent(ctx: Context): Promise<Agent> {
 
 describe('/feedback real Loader composition through cordis.yml', () => {
   it('boots cordis.yml and records feedback without model-visible output', async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-command-feedback-loader-'))
-    vi.stubEnv('DSH_HOME', root)
+    root = await mkdtemp(join(tmpdir(), 'snh-command-feedback-loader-'))
+    vi.stubEnv('SNH_HOME', root)
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@deepseek-ai/dsh-session-projection'",
-      "- name: '@deepseek-ai/dsh-agent'",
-      "- name: '@deepseek-ai/dsh-session-projection'",
-      "- name: '@deepseek-ai/dsh-session'",
-      "- name: '@deepseek-ai/dsh-commands'",
-      "- name: '@deepseek-ai/dsh-command-feedback'",
+      "- name: '@supernova-ai/snh-session-projection'",
+      "- name: '@supernova-ai/snh-agent'",
+      "- name: '@supernova-ai/snh-session-projection'",
+      "- name: '@supernova-ai/snh-session'",
+      "- name: '@supernova-ai/snh-commands'",
+      "- name: '@supernova-ai/snh-command-feedback'",
       '',
     ].join('\n'))
 
@@ -73,12 +73,12 @@ describe('/feedback real Loader composition through cordis.yml', () => {
     await context.plugin(Loader)
     context.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
-      ['@deepseek-ai/dsh-session-projection', SessionProjectionRegistry],
-      ['@deepseek-ai/dsh-agent', AgentRegistry],
-      ['@deepseek-ai/dsh-session-projection', SessionProjectionRegistry],
-      ['@deepseek-ai/dsh-session', SessionStore],
-      ['@deepseek-ai/dsh-commands', CommandRuntime],
-      ['@deepseek-ai/dsh-command-feedback', CommandFeedback],
+      ['@supernova-ai/snh-session-projection', SessionProjectionRegistry],
+      ['@supernova-ai/snh-agent', AgentRegistry],
+      ['@supernova-ai/snh-session-projection', SessionProjectionRegistry],
+      ['@supernova-ai/snh-session', SessionStore],
+      ['@supernova-ai/snh-commands', CommandRuntime],
+      ['@supernova-ai/snh-command-feedback', CommandFeedback],
     ])
     context.loader.internal = {
       version: 'v2',
@@ -97,7 +97,7 @@ describe('/feedback real Loader composition through cordis.yml', () => {
     expect(context.commands.list(owner).map(command => command.name)).toContain('feedback')
 
     const accepted = await context.commands.execute(owner, '/feedback the diff view is unreadable', [], signal)
-    const userId = getOrCreateAnonymousUserId({ env: { DSH_HOME: root } })
+    const userId = getOrCreateAnonymousUserId({ env: { SNH_HOME: root } })
     expect(accepted?.result).toEqual({
       kind: 'success',
       text: `Feedback recorded for session feedback-loader-agent\nAnonymous user: ${userId}.`,

@@ -4,8 +4,8 @@ import { join } from 'node:path'
 import { mkdir } from 'node:fs/promises'
 import { chromium, type Locator } from 'playwright'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import type { AccountView } from '@deepseek-ai/dsh-deepseek-account/types'
-import type {} from '@deepseek-ai/dsh-deepseek-account'
+import type { AccountView } from '@supernova-ai/snh-deepseek-account/types'
+import type {} from '@supernova-ai/snh-deepseek-account'
 import {
   captureStableAria, compareOrRefreshGolden, launchWebScaffold, webSnapshotMode,
 } from './scaffold.ts'
@@ -56,7 +56,7 @@ it('shows complete English settings navigation across sidebar and narrow layouts
   const navigation = dialog.getByRole('navigation')
   const entries = navigation.getByRole('button')
   const pluginsEntry = 'Plugins'
-  const screenshots = process.env.DSH_SETTINGS_NAV_SCREENSHOTS
+  const screenshots = process.env.SNH_SETTINGS_NAV_SCREENSHOTS
   if (screenshots) await mkdir(screenshots, { recursive: true })
 
   for (const palette of ['light', 'dark'] as const) {
@@ -213,7 +213,7 @@ it('shares settings card materials and control sizes in both palettes', async ()
     { op: 'set', path: ['step'], value: 'done' },
     { op: 'set', path: ['completion'], value: 'completed' },
   ])
-  const account = scaffold.ctx.deepseekAccount
+  const account = scaffold.ctx.supernovaAccount
   const state: AccountView = {
     status: 'credential-stored', attempt: null,
     links: { usageUrl: 'https://platform.deepseek.com/usage', topUpUrl: 'https://platform.deepseek.com/top_up' },
@@ -238,7 +238,7 @@ it('shares settings card materials and control sizes in both palettes', async ()
   const browser = await chromium.launch()
   onTestFinished(() => browser.close())
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, locale: ZH_BROWSER_LOCALE })
-  await page.addInitScript(() => { Object.defineProperty(globalThis, 'dshDesktop', { value: { protocolVersion: 1 } }) })
+  await page.addInitScript(() => { Object.defineProperty(globalThis, 'snhDesktop', { value: { protocolVersion: 1 } }) })
   await page.goto(scaffold.authenticatedUrl, { waitUntil: 'load' })
   await openSettings(page, 'zh')
   const dialog = page.getByRole('dialog', { name: '设置', exact: true })

@@ -38,14 +38,14 @@ export async function extractHelper(archive: string, directory: string): Promise
   for (const entry of entries) {
     const path = entry.path.replace(/\/$/, '')
     if (!['File', 'Directory'].includes(entry.type) || path.split('/').some(part => part === '..' || part === '.' || part === '')
-      || path.includes('\\') || !path.startsWith('dsh-ssh-helper') || (path !== 'dsh-ssh-helper' && !path.startsWith('dsh-ssh-helper/')) || seen.has(path)) {
+      || path.includes('\\') || !path.startsWith('snh-ssh-helper') || (path !== 'snh-ssh-helper' && !path.startsWith('snh-ssh-helper/')) || seen.has(path)) {
       throw new Error(`Invalid SSH helper archive entry: ${entry.path} (${entry.type})`)
     }
     seen.add(path)
   }
-  if (!seen.has('dsh-ssh-helper/manifest.json')) throw new Error('SSH helper archive has no manifest.json')
+  if (!seen.has('snh-ssh-helper/manifest.json')) throw new Error('SSH helper archive has no manifest.json')
   await extract({ file: archive, cwd: directory, strict: true })
-  return join(directory, 'dsh-ssh-helper')
+  return join(directory, 'snh-ssh-helper')
 }
 
 /**
@@ -92,15 +92,15 @@ export function artifactComposition(
   connection: { id: string; name: string; config: object }, workspace: string, ptc: keyof typeof PTC_EXECUTION = 'per-call',
 ): string {
   const rows = [
-    { id: 'projections', name: '@deepseek-ai/dsh-session-projection' },
-    { id: 'policy', name: '@deepseek-ai/dsh-sandbox-policy', config: { mode: 'workspace-write', workspaceRoot: workspace } },
+    { id: 'projections', name: '@supernova-ai/snh-session-projection' },
+    { id: 'policy', name: '@supernova-ai/snh-sandbox-policy', config: { mode: 'workspace-write', workspaceRoot: workspace } },
     connection,
-    { id: 'fs', name: '@deepseek-ai/dsh-fs-ssh' },
-    { id: 'subprocess', name: '@deepseek-ai/dsh-subprocess-ssh' },
-    { id: 'sandbox', name: '@deepseek-ai/dsh-sandbox-ssh' },
+    { id: 'fs', name: '@supernova-ai/snh-fs-ssh' },
+    { id: 'subprocess', name: '@supernova-ai/snh-subprocess-ssh' },
+    { id: 'sandbox', name: '@supernova-ai/snh-sandbox-ssh' },
   ]
   return rows.map(row => `- ${JSON.stringify(row)}`).join('\n')
-    + '\n- id: ptc\n  name: "@deepseek-ai/dsh-ptc-runtime-node"\n  inject: [ssh]\n  config:\n' + PTC_EXECUTION[ptc] + '    launch: !!js ctx.ssh.ptcLaunch\n'
+    + '\n- id: ptc\n  name: "@supernova-ai/snh-ptc-runtime-node"\n  inject: [ssh]\n  config:\n' + PTC_EXECUTION[ptc] + '    launch: !!js ctx.ssh.ptcLaunch\n'
 }
 
 /**
@@ -119,7 +119,7 @@ export async function verifySshHelper(argv: string[]): Promise<void> {
   const archive = resolve(values.archive)
   const checksum = (await readFile(`${archive}.sha256`, 'utf8')).split(/\s/)[0]
   if (await fileDigest(archive) !== checksum) throw new Error('SSH helper archive checksum mismatch')
-  const temporary = await realpath(await mkdtemp(join(homedir(), '.dsh-helper-check-')))
+  const temporary = await realpath(await mkdtemp(join(homedir(), '.snh-helper-check-')))
   try {
     const installed = await extractHelper(archive, temporary)
     const manifest = await verifyPayload(installed)
@@ -138,12 +138,12 @@ export async function verifySshHelper(argv: string[]): Promise<void> {
       await chmod(join(bin, 'bwrap'), 0o755)
       path = `${bin}:${path}`
     }
-    const executable = join(installed, 'dsh-ssh-helper')
+    const executable = join(installed, 'snh-ssh-helper')
     const helperHash = await fileDigest(executable)
     const environment = {
-      HOME: home, PATH: process.env.PATH, DSH_HOME: join(home, 'dsh'),
-      TSX_TSCONFIG_PATH: join(root, 'tsconfig.base.json'), DSH_TELEMETRY_DISABLED: '1',
-      ...(values.backend === undefined ? {} : { DSH_EXPECT_SANDBOX_RUNNER: values.backend }),
+      HOME: home, PATH: process.env.PATH, SNH_HOME: join(home, 'snh'),
+      TSX_TSCONFIG_PATH: join(root, 'tsconfig.base.json'), SNH_TELEMETRY_DISABLED: '1',
+      ...(values.backend === undefined ? {} : { SNH_EXPECT_SANDBOX_RUNNER: values.backend }),
     }
     // The concurrent consumers cover both PTC program formats; report-0 stays the per-call evidence.
     const runs = await Promise.allSettled((['per-call', 'scoped-repl'] as const).map(async (ptc, index) => {

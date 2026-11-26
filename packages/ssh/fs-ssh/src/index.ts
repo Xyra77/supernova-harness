@@ -1,13 +1,13 @@
 /** Filesystem provider preserving remote identities and helper-owned atomic mutations. */
 import { posix } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { FS_ERROR_CODES, FileSystem, FsError } from '@deepseek-ai/dsh-fs'
-import type { FsDeleteOutcome, FsMoveOutcome, FsDirEntry, FsEditOutcome, FsEditRequest, FsErrorCode, FsInfo, FsPathInfo, FsTarget, FsVersion, FsWriteIntent, FsWriteOutcome } from '@deepseek-ai/dsh-fs'
-import type { SandboxExecutionPolicy, SandboxMode } from '@deepseek-ai/dsh-sandbox'
-import type {} from '@deepseek-ai/dsh-sandbox-policy'
-import type {} from '@deepseek-ai/dsh-ssh'
-import { RemoteOperationError } from '@deepseek-ai/dsh-ssh/protocol'
-import { deleteResultSchema, moveResultSchema, editResultSchema, entriesSchema, infoSchema, pathInfoSchema, targetSchema, textStreamIdSchema, writeResultSchema } from '@deepseek-ai/dsh-ssh/schemas'
+import { FS_ERROR_CODES, FileSystem, FsError } from '@supernova-ai/snh-fs'
+import type { FsDeleteOutcome, FsMoveOutcome, FsDirEntry, FsEditOutcome, FsEditRequest, FsErrorCode, FsInfo, FsPathInfo, FsTarget, FsVersion, FsWriteIntent, FsWriteOutcome } from '@supernova-ai/snh-fs'
+import type { SandboxExecutionPolicy, SandboxMode } from '@supernova-ai/snh-sandbox'
+import type {} from '@supernova-ai/snh-sandbox-policy'
+import type {} from '@supernova-ai/snh-ssh'
+import { RemoteOperationError } from '@supernova-ai/snh-ssh/protocol'
+import { deleteResultSchema, moveResultSchema, editResultSchema, entriesSchema, infoSchema, pathInfoSchema, targetSchema, textStreamIdSchema, writeResultSchema } from '@supernova-ai/snh-ssh/schemas'
 import { z } from 'zod'
 
 const errorCodes = new Set<string>(FS_ERROR_CODES)

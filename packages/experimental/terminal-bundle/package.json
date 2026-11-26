@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-experimental-terminal-bundle",
+  "name": "@supernova-ai/snh-experimental-terminal-bundle",
   "description": "Let the agent run long-lived commands in terminals you can watch in the sidebar.",
   "version": "0.2.3-alpha.2",
   "icon": "./icon.svg",
@@ -36,20 +36,20 @@
     "src"
   ],
   "license": "MIT",
-  "dsh": {
+  "snh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "dependencies": {
-    "@deepseek-ai/dsh-tool-terminal": "workspace:*",
-    "@deepseek-ai/dsh-terminal": "workspace:*",
-    "@deepseek-ai/dsh-terminal-panel": "workspace:*"
+    "@supernova-ai/snh-tool-terminal": "workspace:*",
+    "@supernova-ai/snh-terminal": "workspace:*",
+    "@supernova-ai/snh-terminal-panel": "workspace:*"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

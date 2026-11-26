@@ -5,13 +5,13 @@
  * `./types` for host consumers and `./client/types` for client aggregates —
  * with zero content duplication.
  *
- * @module @deepseek-ai/dsh-session-title/types
+ * @module @supernova-ai/snh-session-title/types
  */
 
 export {}
 
-import type { Branded } from '@deepseek-ai/dsh-brand'
-import type { OptionalSessionSeq, SessionSeq } from '@deepseek-ai/dsh-session/types'
+import type { Branded } from '@supernova-ai/snh-brand'
+import type { OptionalSessionSeq, SessionSeq } from '@supernova-ai/snh-session/types'
 
 /** Identifies one session-title provider registration. */
 export type SessionTitleProviderId = Branded<'SessionTitleProviderId'>
@@ -76,7 +76,7 @@ export interface TitleInputState {
   readonly lastSeq: OptionalSessionSeq
 }
 
-declare module '@deepseek-ai/dsh-session-projection/types' {
+declare module '@supernova-ai/snh-session-projection/types' {
   interface SessionProjectionMap {
     /**
      * The session's current normalized title — the latest `session/title`

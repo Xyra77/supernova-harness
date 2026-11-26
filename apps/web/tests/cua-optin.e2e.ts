@@ -4,15 +4,15 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { chromium, type Browser } from 'playwright'
-import { readProfileManifest } from '@deepseek-ai/dsh-app-boot'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-ptc-runtime'
-import type {} from '@deepseek-ai/dsh-agent-preset-registry'
-import { parseEntryYaml } from '@deepseek-ai/cordis-plugin-include'
+import { readProfileManifest } from '@supernova-ai/snh-app-boot'
+import type { SessionId } from '@supernova-ai/snh-session'
+import type {} from '@supernova-ai/snh-ptc-runtime'
+import type {} from '@supernova-ai/snh-agent-preset-registry'
+import { parseEntryYaml } from '@supernova-ai/cordis-plugin-include'
 import { expect, it, vi } from 'vitest'
 import { captureStableAria, compareOrRefreshGolden, launchWebScaffold, webSnapshotMode, type WebScaffold } from './scaffold.ts'
 import { connectFreshWorkspaceZh, ZH_BROWSER_LOCALE } from './support.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 // This fixture exercises the macOS provider’s permission setup.
 it.skipIf(process.platform !== 'darwin').each([
@@ -31,7 +31,7 @@ it.skipIf(process.platform !== 'darwin').each([
     // Both variants start without retained state so that the persistent-mode action has an effect.
     const defaults = join(directory, 'ptc-defaults')
     await mkdir(defaults)
-    await writeFile(join(defaults, 'package.json'), JSON.stringify({ name: 'cua-ptc-defaults', version: '1.0.0', dsh: { bundle: { patch: 'cordis.patch.yml' } } }))
+    await writeFile(join(defaults, 'package.json'), JSON.stringify({ name: 'cua-ptc-defaults', version: '1.0.0', snh: { bundle: { patch: 'cordis.patch.yml' } } }))
     await writeFile(join(defaults, 'cordis.patch.yml'), script
       ? '- id: ptc-runtime\n  config:\n    executionMode: vm-script\n    scriptPersistence: false\n'
       : '- id: ptc-runtime\n  config:\n    executionMode: per-call\n')
@@ -53,12 +53,12 @@ it.skipIf(process.platform !== 'darwin').each([
     await page.getByRole('navigation', { name: '全局面板' }).getByRole('button', { name: '插件', exact: true }).click()
     const plugins = page.locator('[data-plugin-panel]')
     await plugins.getByRole('button', { name: '更多', exact: true }).waitFor()
-    expect(await page.locator('[data-plugin-package="@deepseek-ai/dsh-cua-bundle"]').count()).toBe(0)
+    expect(await page.locator('[data-plugin-package="@supernova-ai/snh-cua-bundle"]').count()).toBe(0)
     await plugins.getByRole('button', { name: '更多', exact: true }).click()
     // The installation ships the bundle off; the Experimental plugins list offers it without an installation step.
-    const card = page.locator('[data-plugin-package="@deepseek-ai/dsh-cua-bundle"]')
-    await plugins.locator('[data-plugin-group="more"] [data-plugin-package="@deepseek-ai/dsh-cua-bundle"]').waitFor()
-    const listed = (await scaffold.ctx.pluginManager.listBundles()).find(bundle => bundle.name === '@deepseek-ai/dsh-cua-bundle')
+    const card = page.locator('[data-plugin-package="@supernova-ai/snh-cua-bundle"]')
+    await plugins.locator('[data-plugin-group="more"] [data-plugin-package="@supernova-ai/snh-cua-bundle"]').waitFor()
+    const listed = (await scaffold.ctx.pluginManager.listBundles()).find(bundle => bundle.name === '@supernova-ai/snh-cua-bundle')
     expect(listed).toMatchObject({ availability: 'installation', optional: true, enabled: false, installed: false })
     expect(listed).not.toHaveProperty('listedByDefault')
     let toggle = card.getByRole('switch', { name: '启用 Computer Use', exact: true })
@@ -76,9 +76,9 @@ it.skipIf(process.platform !== 'darwin').each([
     expect(originalRuntime.programFormat).toBe(script ? 'script' : 'function-body')
     expect(scaffold.ctx.get('computerUse')).toBeUndefined()
     const profileManifest = () => readProfileManifest('scaffold', join(scaffold.harnessHome, 'profiles/scaffold'))
-    const selected = () => profileManifest().dsh?.profile?.bundles
+    const selected = () => profileManifest().snh?.profile?.bundles
     const dependencies = profileManifest().dependencies
-    expect(selected()).not.toContain('@deepseek-ai/dsh-cua-bundle')
+    expect(selected()).not.toContain('@supernova-ai/snh-cua-bundle')
 
     const enabling = Promise.withResolvers<undefined>()
     const setEnabled = scaffold.ctx.pluginManager.setBundleEnabled.bind(scaffold.ctx.pluginManager)
@@ -92,7 +92,7 @@ it.skipIf(process.platform !== 'darwin').each([
       await toggle.click()
       await card.getByRole('status').getByText('正在应用 Computer Use 的更改', { exact: true }).waitFor()
       await compareOrRefreshGolden(fileURLToPath(new URL('./expected/cua-permissions/enabling.expected.md', import.meta.url)),
-        await captureStableAria(page, '[data-plugin-package="@deepseek-ai/dsh-cua-bundle"] [role="status"]', scaffold.workspaceCwd), webSnapshotMode())
+        await captureStableAria(page, '[data-plugin-package="@supernova-ai/snh-cua-bundle"] [role="status"]', scaffold.workspaceCwd), webSnapshotMode())
     } finally {
       enabling.resolve(undefined)
       enableCall.mockRestore()
@@ -108,7 +108,7 @@ it.skipIf(process.platform !== 'darwin').each([
       await captureStableAria(page, '[role="dialog"]', scaffold.workspaceCwd), webSnapshotMode())
     expect(await setup.getByRole('button', { name: '设为 PTC', exact: true }).count()).toBe(0)
     expect(scaffold.ctx.agentPresets.defaultId).toBe(initialDefault)
-    expect(selected()).toContain('@deepseek-ai/dsh-cua-bundle')
+    expect(selected()).toContain('@supernova-ai/snh-cua-bundle')
     expect(profileManifest().dependencies).toEqual(dependencies)
     expect(await card.getByText('实验性', { exact: true }).count()).toBe(1)
     expect(await card.textContent()).not.toContain('将 PTC 模式改为可持久化')

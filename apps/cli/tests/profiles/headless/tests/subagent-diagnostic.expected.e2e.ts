@@ -6,20 +6,20 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import {
   fixtureContext,
   normalizeSessionSnapshot,
   normalizeSessionSnapshots,
   REPLAY_CREDENTIAL_ENV,
   type NormalizeContext,
-} from '@deepseek-ai/dsh-session-snapshot'
-import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@deepseek-ai/dsh-loader-smoke'
-import { createMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SessionSeq, SESSION_FORMAT_VERSION, type SessionId, type SessionEvent, type SessionHeader } from '@deepseek-ai/dsh-session'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+} from '@supernova-ai/snh-session-snapshot'
+import { LOADER_SMOKE_TEST_TIMEOUT_MS, runLoaderSmoke } from '@supernova-ai/snh-loader-smoke'
+import { createMessage, createUserMessage } from '@supernova-ai/snh-llm'
+import { SessionSeq, SESSION_FORMAT_VERSION, type SessionId, type SessionEvent, type SessionHeader } from '@supernova-ai/snh-session'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
 import { describe, expect, it } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const fixtureDir = fileURLToPath(new URL('./expected/subagent-diagnostic', import.meta.url))
 const replayOverride = join(fixtureDir, 'replay.override.json')
@@ -29,7 +29,7 @@ const binScript = fileURLToPath(new URL('../../../../../../packages/test-support
 const tsconfigPath = fileURLToPath(new URL('../../../../../../tsconfig.json', import.meta.url))
 const parentId = brandString<SessionId>('subagent-diagnostic-parent')
 const childId = brandString<SessionId>('subagent-diagnostic-child')
-const refreshing = process.env.DSH_SNAPSHOT === 'refresh'
+const refreshing = process.env.SNH_SNAPSHOT === 'refresh'
 const task = 'Call list_agents once and report what it shows.'
 
 /** Compare current normalized Session records without historical migration. */
@@ -112,7 +112,7 @@ describe('parent-owned cold child catalog snapshot', () => {
     let cwd = ''
     const result = await runLoaderSmoke({
       label: 'subagent diagnostic headless stream-json snapshot',
-      tempDirPrefix: 'dsh-subagent-diag-',
+      tempDirPrefix: 'snh-subagent-diag-',
       binScript,
       libBinScript: binScript,
       configPath,
@@ -120,8 +120,8 @@ describe('parent-owned cold child catalog snapshot', () => {
       tsconfigPath,
       env: {
         ...REPLAY_CREDENTIAL_ENV,
-        DSH_SNAPSHOT_FILE: replayOverride,
-        DSH_SNAPSHOT_OVERRIDE: replayOverride,
+        SNH_SNAPSHOT_FILE: replayOverride,
+        SNH_SNAPSHOT_OVERRIDE: replayOverride,
       },
       prepare: async (runCwd) => {
         cwd = runCwd

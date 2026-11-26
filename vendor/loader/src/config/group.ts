@@ -1,5 +1,5 @@
-import { Context, Service } from '@deepseek-ai/cordis'
-import { isNullable } from '@deepseek-ai/cosmokit'
+import { Context, Service } from '@supernova-ai/cordis'
+import { isNullable } from '@supernova-ai/cosmokit'
 import { Entry, type EntryOptions } from './entry.ts'
 import { EntryTree } from './tree.ts'
 import { EntryValidationError, formatIssues, formatLocation, relocate, validateOptions, type Issue } from './utils.ts'

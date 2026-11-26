@@ -1,6 +1,6 @@
 /** Routing scans share JSONL's filesystem budget and settle before returning. @module */
-import { Context } from '@deepseek-ai/cordis'
-import { SessionId, SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session'
+import { Context } from '@supernova-ai/cordis'
+import { SessionId, SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
@@ -20,7 +20,7 @@ vi.mock('node:fs/promises', async (importOriginal) => {
 })
 
 async function fixture() {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-route-list-concurrency-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-route-list-concurrency-'))
   const ctx = new Context()
   onTestFinished(async () => {
     interception.read = undefined

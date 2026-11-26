@@ -1,16 +1,16 @@
 // @vitest-environment jsdom
 /** The Remote namespace and the sidebar action leave with the plugin; imports check limits, upload, then always refresh. */
 import assert from 'node:assert/strict'
-import { Context, Service } from '@deepseek-ai/cordis'
+import { Context, Service } from '@supernova-ai/cordis'
 import { afterEach, expect, it, vi } from 'vitest'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { RemoteError, type RemoteResult, type TypertRemoteContribution } from '@deepseek-ai/dsh-typert-protocol'
-import type { WorkspaceId } from '@deepseek-ai/dsh-workspace/types'
-import type { DeepseekChatImportInjected } from '../src/client/ImportSessions.tsx'
+import { SlotRegistry } from '@supernova-ai/snh-client-ui-renderer/client'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import { RemoteError, type RemoteResult, type TypertRemoteContribution } from '@supernova-ai/snh-typert-protocol'
+import type { WorkspaceId } from '@supernova-ai/snh-workspace/types'
+import type { SupernovaChatImportInjected } from '../src/client/ImportSessions.tsx'
 import { inject, mountImport } from '../src/client/mount.ts'
 import type { UploadAnswer } from '../src/client/upload.ts'
-import type { DeepseekChatImportLimits, DeepseekChatImportResult } from '../src/types.ts'
+import type { SupernovaChatImportLimits, SupernovaChatImportResult } from '../src/types.ts'
 
 const upload = vi.hoisted(() => ({ answer: { ok: false, transport: 'unset' } as UploadAnswer }))
 vi.mock('../src/client/upload.ts', () => ({
@@ -18,9 +18,9 @@ vi.mock('../src/client/upload.ts', () => ({
 }))
 const { uploadArchive } = await import('../src/client/upload.ts')
 
-const contribution: TypertRemoteContribution = { package: '@deepseek-ai/dsh-deepseek-chat-import', descriptors: [] }
+const contribution: TypertRemoteContribution = { package: '@supernova-ai/snh-deepseek-chat-import', descriptors: [] }
 const W1 = 'w1' as WorkspaceId
-const RESULT: DeepseekChatImportResult = {
+const RESULT: SupernovaChatImportResult = {
   workspaceId: 'w1', workspacePath: '/home/a/project', sessionIds: ['s1'], conversationCount: 1, omittedByLimit: 0, skipped: [],
 }
 
@@ -29,11 +29,11 @@ const contexts: Context[] = []
 afterEach(async () => {
   for (const ctx of contexts.splice(0)) await ctx.fiber.dispose()
   vi.mocked(uploadArchive).mockClear()
-  vi.doUnmock('@deepseek-ai/dsh-deepseek-chat-import/remote')
+  vi.doUnmock('@supernova-ai/snh-deepseek-chat-import/remote')
 })
 
 async function fixture(
-  limits: RemoteResult<DeepseekChatImportLimits> = { ok: true, value: { maxUploadBytes: 8 } },
+  limits: RemoteResult<SupernovaChatImportLimits> = { ok: true, value: { maxUploadBytes: 8 } },
   refreshed: () => Promise<void> = () => Promise.resolve(),
 ) {
   const ctx = new Context()
@@ -45,7 +45,7 @@ async function fixture(
   }
   new TestRemote()
   const refresh = vi.fn(refreshed)
-  ctx.provide('remote.deepseekChatImport', { limits: vi.fn((_signal?: AbortSignal) => Promise.resolve(limits)) } as never)
+  ctx.provide('remote.supernovaChatImport', { limits: vi.fn((_signal?: AbortSignal) => Promise.resolve(limits)) } as never)
   ctx.provide('sessions', { refresh } as never)
   ctx.provide('locale', new LocaleRuntime(ctx))
   await ctx.plugin(SlotRegistry)
@@ -53,11 +53,11 @@ async function fixture(
   return { ctx, unmount, refresh }
 }
 
-function importFace(value: Record<string, unknown>): asserts value is Record<string, unknown> & DeepseekChatImportInjected {
+function importFace(value: Record<string, unknown>): asserts value is Record<string, unknown> & SupernovaChatImportInjected {
   assert(typeof value.importArchive === 'function')
 }
 
-function injected(ctx: Context): DeepseekChatImportInjected {
+function injected(ctx: Context): SupernovaChatImportInjected {
   const entry = ctx.slots.entries('sidebar.session.action')[0]
   assert(entry !== undefined && typeof entry.inject === 'function')
   const face = entry.inject()
@@ -65,7 +65,7 @@ function injected(ctx: Context): DeepseekChatImportInjected {
   return face
 }
 
-const file = (bytes: number) => new File([new Uint8Array(bytes)], 'deepseek_data.zip')
+const file = (bytes: number) => new File([new Uint8Array(bytes)], 'supernova_data.zip')
 const run = (ctx: Context, bytes = 4) => injected(ctx).importArchive(file(bytes), W1, () => {}, new AbortController().signal)
 const answer = (value: UploadAnswer) => { upload.answer = value }
 
@@ -74,12 +74,12 @@ it('uploads within the limit, refreshes the Session list, and withdraws both con
   const dispose = await mountImport(b.ctx, contribution)
   expect(b.ctx.slots.spec('sidebar.session.action')).toEqual({ kind: 'hoc', scope: 'root' })
   expect(b.ctx.slots.entries('sidebar.session.action').map(entry => [entry.options.id, entry.locale]))
-    .toEqual([['deepseek-chat-import', 'deepseekChatImport']])
+    .toEqual([['deepseek-chat-import', 'supernovaChatImport']])
   answer({ ok: true, value: RESULT })
   expect(await run(b.ctx)).toEqual({ ok: true, result: RESULT })
   expect(uploadArchive).toHaveBeenCalledWith(expect.any(File), W1, expect.any(Function), expect.any(AbortSignal))
   expect(b.refresh).toHaveBeenCalledOnce()
-  expect(b.ctx.locale.bind('deepseekChatImport')('action.label')).toBe('Import DeepSeek chats')
+  expect(b.ctx.locale.bind('supernovaChatImport')('action.label')).toBe('Import SuperNova chats')
   await dispose()
   expect(b.ctx.slots.entries('sidebar.session.action')).toEqual([])
   expect(b.unmount).toHaveBeenCalledOnce()
@@ -119,7 +119,7 @@ it('keeps the outcome when the list refresh fails and refreshes after a thrown u
 
 it('loads the browser entry through its generated Remote contribution', async () => {
   const b = await fixture()
-  vi.doMock('@deepseek-ai/dsh-deepseek-chat-import/remote', () => ({ default: contribution }))
+  vi.doMock('@supernova-ai/snh-deepseek-chat-import/remote', () => ({ default: contribution }))
   const browser = await import('../src/client/index.ts')
   expect(browser.inject).toEqual(inject)
   const fiber = b.ctx.plugin({ inject: [...browser.inject], apply: browser.apply })

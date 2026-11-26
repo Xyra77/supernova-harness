@@ -3,13 +3,13 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, it } from 'vitest'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import WorkingDirectoryService from '@deepseek-ai/dsh-working-directory'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import LocalFileSystem from '@supernova-ai/snh-fs-local'
+import SandboxPolicyService from '@supernova-ai/snh-sandbox-policy'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import WorkingDirectoryService from '@supernova-ai/snh-working-directory'
 import { omitsGeneratedPage } from '../../../settings/settings/tests/live-config.ts'
 import WorktreeService from '../src/index.ts'
 import { UnusedSandbox } from './harness.ts'
@@ -20,7 +20,7 @@ afterEach(async () => {
 })
 
 it('keeps its own instance off the generated Settings pages', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-worktree-settings-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-worktree-settings-'))
   cleanups.push(() => rm(root, { recursive: true, force: true }))
   await omitsGeneratedPage(async (ctx) => {
     await ctx.plugin(SessionProjectionRegistry)

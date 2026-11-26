@@ -7,18 +7,18 @@ import type { Duplex } from 'node:stream'
 import { tmpdir } from 'node:os'
 import { basename, dirname, isAbsolute, join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import * as Connection from '@deepseek-ai/dsh-client-connection'
-import * as Token from '@deepseek-ai/dsh-host-authentication-token'
-import { BrowserAuth } from '@deepseek-ai/dsh-host-authentication-token/src/browser-auth.ts'
-import LocalCredentials from '@deepseek-ai/dsh-credentials-local'
-import WebServer from '@deepseek-ai/dsh-host-webserver'
-import * as FrontendStatic from '@deepseek-ai/dsh-host-frontend-static'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
-import TypertGateway from '@deepseek-ai/dsh-api-gateway'
-import RemoteAccess from '@deepseek-ai/dsh-api-remote-access'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import Include from '@supernova-ai/cordis-plugin-include'
+import * as Connection from '@supernova-ai/snh-client-connection'
+import * as Token from '@supernova-ai/snh-host-authentication-token'
+import { BrowserAuth } from '@supernova-ai/snh-host-authentication-token/src/browser-auth.ts'
+import LocalCredentials from '@supernova-ai/snh-credentials-local'
+import WebServer from '@supernova-ai/snh-host-webserver'
+import * as FrontendStatic from '@supernova-ai/snh-host-frontend-static'
+import TypertRegistry from '@supernova-ai/snh-typert-registry'
+import TypertGateway from '@supernova-ai/snh-api-gateway'
+import RemoteAccess from '@supernova-ai/snh-api-remote-access'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import WebSocket, { WebSocketServer } from 'ws'
 import { z } from 'zod'
@@ -56,7 +56,7 @@ afterEach(async () => {
   }))
   await Promise.all(hosts.splice(0).map(host => host.ctx.fiber.dispose()))
   for (const root of roots.splice(0)) {
-    if (!isAbsolute(root) || dirname(root) !== resolve(tmpdir()) || !basename(root).startsWith('dsh-operator-connect-')) {
+    if (!isAbsolute(root) || dirname(root) !== resolve(tmpdir()) || !basename(root).startsWith('snh-operator-connect-')) {
       throw new Error(`refusing unexpected fixture cleanup path: ${root}`)
     }
     await rm(root, { recursive: true, force: true })
@@ -352,7 +352,7 @@ describe('operator connect through Loader composition', () => {
       await finish.promise
       await dispose()
     })
-    const token = [...host.ctx.loader.entries()].find(entry => entry.options.name === 'cordis:@deepseek-ai/dsh-host-authentication-token')
+    const token = [...host.ctx.loader.entries()].find(entry => entry.options.name === 'cordis:@supernova-ai/snh-host-authentication-token')
     if (token?.fiber === undefined) throw new Error('Token provider did not activate')
     const entered = Promise.withResolvers<undefined>()
     const resume = Promise.withResolvers<undefined>()
@@ -433,20 +433,20 @@ describe('operator connect through Loader composition', () => {
 })
 
 async function boot(): Promise<Host> {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-operator-connect-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-operator-connect-'))
   roots.push(root)
   const distIndex = join(root, 'index.html')
   await writeFile(distIndex, '<head></head><body>operator fixture</body>')
   const configPath = join(root, 'cordis.yml')
   const rows = [
-    { name: '@deepseek-ai/dsh-credentials-local', config: { path: join(root, '.credentials.yaml'), watch: false } },
-    { name: '@deepseek-ai/dsh-host-webserver', config: { host: '127.0.0.1', port: 0 } },
-    { name: '@deepseek-ai/dsh-client-connection' },
-    { name: '@deepseek-ai/dsh-host-authentication-token' },
-    { name: '@deepseek-ai/dsh-host-frontend-static', config: { distIndex } },
-    { name: '@deepseek-ai/dsh-typert-registry' },
-    { name: '@deepseek-ai/dsh-api-remote-access' },
-    { name: '@deepseek-ai/dsh-api-gateway' },
+    { name: '@supernova-ai/snh-credentials-local', config: { path: join(root, '.credentials.yaml'), watch: false } },
+    { name: '@supernova-ai/snh-host-webserver', config: { host: '127.0.0.1', port: 0 } },
+    { name: '@supernova-ai/snh-client-connection' },
+    { name: '@supernova-ai/snh-host-authentication-token' },
+    { name: '@supernova-ai/snh-host-frontend-static', config: { distIndex } },
+    { name: '@supernova-ai/snh-typert-registry' },
+    { name: '@supernova-ai/snh-api-remote-access' },
+    { name: '@supernova-ai/snh-api-gateway' },
     { name: '@fixture/operator-connect' },
   ]
   await writeFile(configPath, rows.map(row => `- ${JSON.stringify({ ...row, name: `cordis:${row.name}` })}`).join('\n') + '\n')
@@ -456,14 +456,14 @@ async function boot(): Promise<Host> {
     await ctx.plugin(Loader)
     Object.assign(ctx.loader.builtins, {
       include: Include,
-      '@deepseek-ai/dsh-credentials-local': LocalCredentials,
-      '@deepseek-ai/dsh-host-webserver': WebServer,
-      '@deepseek-ai/dsh-client-connection': Connection,
-      '@deepseek-ai/dsh-host-authentication-token': Token,
-      '@deepseek-ai/dsh-host-frontend-static': FrontendStatic,
-      '@deepseek-ai/dsh-typert-registry': TypertRegistry,
-      '@deepseek-ai/dsh-api-remote-access': RemoteAccess,
-      '@deepseek-ai/dsh-api-gateway': TypertGateway,
+      '@supernova-ai/snh-credentials-local': LocalCredentials,
+      '@supernova-ai/snh-host-webserver': WebServer,
+      '@supernova-ai/snh-client-connection': Connection,
+      '@supernova-ai/snh-host-authentication-token': Token,
+      '@supernova-ai/snh-host-frontend-static': FrontendStatic,
+      '@supernova-ai/snh-typert-registry': TypertRegistry,
+      '@supernova-ai/snh-api-remote-access': RemoteAccess,
+      '@supernova-ai/snh-api-gateway': TypertGateway,
       '@fixture/operator-connect': OperatorConnectFixture,
     })
     await ctx.loader.create({ name: 'cordis:include', config: { path: pathToFileURL(configPath).href } })

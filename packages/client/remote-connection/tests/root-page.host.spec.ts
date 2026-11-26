@@ -1,11 +1,11 @@
 /** Remote's public root page and independent credentials over real HTTP admission. */
-import { Context } from '@deepseek-ai/cordis'
-import * as Connection from '@deepseek-ai/dsh-client-connection'
-import * as FrontendStatic from '@deepseek-ai/dsh-host-frontend-static'
-import * as Token from '@deepseek-ai/dsh-host-authentication-token'
-import WebServer, { type WebEntryUrl } from '@deepseek-ai/dsh-host-webserver'
-import type { CredentialKey, CredentialRecord } from '@deepseek-ai/dsh-credentials'
-import type { PeerScope, RemoteInvocation } from '@deepseek-ai/dsh-typert-protocol'
+import { Context } from '@supernova-ai/cordis'
+import * as Connection from '@supernova-ai/snh-client-connection'
+import * as FrontendStatic from '@supernova-ai/snh-host-frontend-static'
+import * as Token from '@supernova-ai/snh-host-authentication-token'
+import WebServer, { type WebEntryUrl } from '@supernova-ai/snh-host-webserver'
+import type { CredentialKey, CredentialRecord } from '@supernova-ai/snh-credentials'
+import type { PeerScope, RemoteInvocation } from '@supernova-ai/snh-typert-protocol'
 import { request as httpRequest } from 'node:http'
 import type { IncomingHttpHeaders, ServerResponse } from 'node:http'
 import { mkdtemp, rm, writeFile } from 'node:fs/promises'
@@ -40,7 +40,7 @@ function cookie(reply: Reply): string {
 }
 
 async function mounted(withToken = false, releaseHeldRead?: () => void) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-remote-root-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-remote-root-'))
   const ctx = new Context()
   onTestFinished(async () => {
     releaseHeldRead?.()
@@ -147,7 +147,7 @@ it('serves QR mode from the root even to a browser already authenticated through
     expect(page.headers['cache-control']).toBe('no-store')
     expect(page.headers['referrer-policy']).toBe('no-referrer')
     expect(page.headers['content-security-policy']).toContain("frame-ancestors 'none'")
-    expect(page.body).toContain('<dsh-device-pairing>')
+    expect(page.body).toContain('<snh-device-pairing>')
     expect(page.body).toContain('./pairing/client.js')
     expect(page.body).toContain('<h1 id="title">Connect to this Host</h1>')
     expect(page.body).toContain('id="token-form"')
@@ -166,7 +166,7 @@ it('serves QR mode from the root even to a browser already authenticated through
     'content-type': 'text/plain', cookie: authenticated,
   }, entry.hash.slice(1))
   expect(exchanged.status).toBe(204)
-  expect(cookie(exchanged)).toMatch(/^dsh-remote-/u)
+  expect(cookie(exchanged)).toMatch(/^snh-remote-/u)
   expect(service.status(ticket.id).ticket).toBe('used')
 })
 
@@ -178,7 +178,7 @@ it('keeps Token sign-in and pairing available after a QR invitation is rejected'
   const page = await send('/?login=qr')
   expect(page.status).toBe(200)
   expect(page.body).toContain('id="token-form"')
-  expect(page.body).toContain('<dsh-device-pairing>')
+  expect(page.body).toContain('<snh-device-pairing>')
   expect(page.body).toContain('./pairing/client.js')
   expect(page.body).not.toContain('PRIVATE_APPLICATION')
   expect(renderedPeers).toHaveLength(0)

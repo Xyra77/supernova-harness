@@ -3,13 +3,13 @@ description: "The web access service (ctx.web): how deployments and plugin autho
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-web
+# @supernova-ai/snh-web
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-Use `dsh-web` to search the web or fetch a URL without tying callers to a specific vendor. It selects a usable backend for each operation and gives callers consistent cancellation, errors, and result limits. Choose it for plugins or tools that call `ctx.web.search()` or `ctx.web.fetch()`; the shipped `dsh-tool-web` tools load it for you. A search or fetch requires a configured, usable provider because this package does not make network requests on its own.
+Use `snh-web` to search the web or fetch a URL without tying callers to a specific vendor. It selects a usable backend for each operation and gives callers consistent cancellation, errors, and result limits. Choose it for plugins or tools that call `ctx.web.search()` or `ctx.web.fetch()`; the shipped `snh-tool-web` tools load it for you. A search or fetch requires a configured, usable provider because this package does not make network requests on its own.
 
 ## Table of Contents
 
@@ -25,31 +25,31 @@ Use `dsh-web` to search the web or fetch a URL without tying callers to a specif
 <a id="use-this-package"></a>
 ## Use this package
 
-A composition that needs web access loads the `dsh-web` service and mounts at least one backend — a search provider and/or a fetch provider — and plugin or tool authors then call `ctx.web.search()` and `ctx.web.fetch()` directly. The service resolves the backend for each call, so callers never see provider ids unless they configured one.
+A composition that needs web access loads the `snh-web` service and mounts at least one backend — a search provider and/or a fetch provider — and plugin or tool authors then call `ctx.web.search()` and `ctx.web.fetch()` directly. The service resolves the backend for each call, so callers never see provider ids unless they configured one.
 
 ### When to choose it
 
-Choose the service when a plugin or tool must search or fetch without hard-coding a vendor; a deployment that only uses the shipped `web_search`/`web_fetch` tools gets it for free through `dsh-tool-web`. You do not need it when the composition never reaches the web. The service adds no network access of its own: without at least one usable provider, every call fails with a structured `WebError`.
+Choose the service when a plugin or tool must search or fetch without hard-coding a vendor; a deployment that only uses the shipped `web_search`/`web_fetch` tools gets it for free through `snh-tool-web`. You do not need it when the composition never reaches the web. The service adds no network access of its own: without at least one usable provider, every call fails with a structured `WebError`.
 
 ### Minimal configuration
 
-Load the service and let a single mounted backend auto-select, or pin a provider id with `searchProvider`/`fetchProvider`. The environment variables `$DSH_WEB_SEARCH_PROVIDER` and `$DSH_WEB_FETCH_PROVIDER` feed the same fields and are not a separate priority chain. Both backends below register a fetch provider, so the example pins `fetchProvider: http`. The DeepSeek backend requires [`dsh-deepseek-auth`](../../account/deepseek-auth/README.md) for its credentials.
+Load the service and let a single mounted backend auto-select, or pin a provider id with `searchProvider`/`fetchProvider`. The environment variables `$SNH_WEB_SEARCH_PROVIDER` and `$SNH_WEB_FETCH_PROVIDER` feed the same fields and are not a separate priority chain. Both backends below register a fetch provider, so the example pins `fetchProvider: http`. The SuperNova backend requires [`snh-supernova-auth`](../../account/supernova-auth/README.md) for its credentials.
 
 ```yaml
-- name: '@deepseek-ai/dsh-web'
+- name: '@supernova-ai/snh-web'
   config:
     fetchProvider: http
-- name: '@deepseek-ai/dsh-deepseek-auth'
-- name: '@deepseek-ai/dsh-web-deepseek-api'
-- name: '@deepseek-ai/dsh-web-fetch-http'
+- name: '@supernova-ai/snh-supernova-auth'
+- name: '@supernova-ai/snh-web-supernova-api'
+- name: '@supernova-ai/snh-web-fetch-http'
 ```
 
 | Field | Default | Meaning |
 |---|---|---|
-| `searchProvider` | (unset) | Pinned search provider id; unset prefers the usable DeepSeek provider of the [request's model route](#provider-selection), and otherwise auto-selects when exactly one is usable |
+| `searchProvider` | (unset) | Pinned search provider id; unset prefers the usable SuperNova provider of the [request's model route](#provider-selection), and otherwise auto-selects when exactly one is usable |
 | `fetchProvider` | (unset) | Pinned fetch provider id; unset auto-selects when exactly one is usable |
 
-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-web) is the exhaustive source for every accepted field and its JSDoc.
+The generated [configuration catalog](../../../docs/config-catalog.md#supernova-aisnh-web) is the exhaustive source for every accepted field and its JSDoc.
 
 ### Searching and fetching
 
@@ -57,7 +57,7 @@ The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-a
 
 ```text
 // Search the web; sources[] is capped to maxResults:
-const result = await ctx.web.search({ query: 'deepseek harness', maxResults: 8 })
+const result = await ctx.web.search({ query: 'supernova harness', maxResults: 8 })
 
 // Fetch one URL; a non-2xx response is a result, not an error:
 const page = await ctx.web.fetch({ url: 'https://example.com' })
@@ -80,14 +80,14 @@ Each call resolves its provider at execution time, and registration or load orde
 | no id, no usable provider | `WEB_PROVIDER_UNAVAILABLE` |
 | no id, multiple usable providers | `WEB_PROVIDER_AMBIGUOUS` |
 
-The shipped `deepseek-official` and `deepseek-search-api` search ids select legacy Messages search and the direct Search API respectively. While no search provider is configured, a search prefers `deepseek-official` for a model request on the `deepseek-official` or `deepseek-account` model route, because DeepSeek makes no per-search charge for Messages search, and `deepseek-search-api` for a request on any other route and for a search that serves no model request. The preference is fixed in this package and applies only while the preferred provider is registered and usable, so a composition without these providers selects as the table states. The [base composition](../../bundle/base/cordis.patch.yml) mounts both and configures no search provider. A configured `searchProvider`, or `$DSH_WEB_SEARCH_PROVIDER`, applies to every route.
+The shipped `deepseek-official` and `supernova-search-api` search ids select legacy Messages search and the direct Search API respectively. While no search provider is configured, a search prefers `deepseek-official` for a model request on the `deepseek-official` or `deepseek-account` model route, because SuperNova makes no per-search charge for Messages search, and `supernova-search-api` for a request on any other route and for a search that serves no model request. The preference is fixed in this package and applies only while the preferred provider is registered and usable, so a composition without these providers selects as the table states. The [base composition](../../bundle/base/cordis.patch.yml) mounts both and configures no search provider. A configured `searchProvider`, or `$SNH_WEB_SEARCH_PROVIDER`, applies to every route.
 
 A provider's availability is a cheap local check — for example whether its API key is present — and never makes network calls, so selection stays fast and deterministic.
 
 <a id="listing-providers"></a>
 ### Listing providers
 
-`listProviders()` returns every registered search and fetch provider as `{ id, title?, description? }` entries, each list in registration order; it lists unavailable providers too, because a picker shows what can be pinned. `title` is the provider's optional display name, and a picker shows `id` when it is absent. `description` is optional `LocalizedText` from `dsh-package-manifest`, a plain string or translations keyed by lowercase language id with a required `en` entry, stating what the provider suits and what it costs or cannot do; a picker shows it under the selected provider and shows nothing when it is absent. Each registration and each disposal emits the payload-free `web/providers-changed` event after the registry changes, and observer failures cannot veto the change. Clients call the same method as the `web` Remote namespace, `ctx.remote.web.listProviders()`, whose Remote result carries the lists in `value` only when `ok` is true, and refresh on the forwarded `web/providers-changed` event; the [Web search and fetch settings page](../../client/ui-settings-web-search/README.md) fills its Search and Fetch menus this way. A plugin (including one written in creator mode) that registers a provider with a `title` appears in the matching menu under that title, shows its `description` while selected, and choosing it pins `searchProvider` or `fetchProvider` to its `id`.
+`listProviders()` returns every registered search and fetch provider as `{ id, title?, description? }` entries, each list in registration order; it lists unavailable providers too, because a picker shows what can be pinned. `title` is the provider's optional display name, and a picker shows `id` when it is absent. `description` is optional `LocalizedText` from `snh-package-manifest`, a plain string or translations keyed by lowercase language id with a required `en` entry, stating what the provider suits and what it costs or cannot do; a picker shows it under the selected provider and shows nothing when it is absent. Each registration and each disposal emits the payload-free `web/providers-changed` event after the registry changes, and observer failures cannot veto the change. Clients call the same method as the `web` Remote namespace, `ctx.remote.web.listProviders()`, whose Remote result carries the lists in `value` only when `ok` is true, and refresh on the forwarded `web/providers-changed` event; the [Web search and fetch settings page](../../client/ui-settings-web-search/README.md) fills its Search and Fetch menus this way. A plugin (including one written in creator mode) that registers a provider with a `title` appears in the matching menu under that title, shows its `description` while selected, and choosing it pins `searchProvider` or `fetchProvider` to its `id`.
 
 ```text
 // Remote: web/listProviders; Host event: web/providers-changed
@@ -101,20 +101,20 @@ ctx.remote.$on('web/providers-changed', () => { /* re-read the lists */ })
 <a id="adding-a-provider"></a>
 #### Add another provider
 
-A search or fetch backend outside the shipped composition is a plugin package that calls `ctx.web.registerSearchProvider()` or `ctx.web.registerFetchProvider()` with a unique `id`, and an optional `title`. To enable one in a profile, install the package with `dsh plugin --profile <name> add <package>` ([install rules](../../../docs/user/develop/basic/publish.md)), add its row to the profile's user patch layer `$DSH_HOME/profiles/<name>/cordis.patch.yml`, and restart DSH. That file is a top-level YAML array of patch entries; append the `insert` entry below, or replace a lone `[]` with it. The example mounts a hypothetical `@example/dsh-web-search-acme`; use the provider's real package name and add the `config` its README documents.
+A search or fetch backend outside the shipped composition is a plugin package that calls `ctx.web.registerSearchProvider()` or `ctx.web.registerFetchProvider()` with a unique `id`, and an optional `title`. To enable one in a profile, install the package with `snh plugin --profile <name> add <package>` ([install rules](../../../docs/user/develop/basic/publish.md)), add its row to the profile's user patch layer `$SNH_HOME/profiles/<name>/cordis.patch.yml`, and restart SNH. That file is a top-level YAML array of patch entries; append the `insert` entry below, or replace a lone `[]` with it. The example mounts a hypothetical `@example/snh-web-search-acme`; use the provider's real package name and add the `config` its README documents.
 
 ```yaml
 - insert:
     - id: web-search-acme
-      name: '@example/dsh-web-search-acme'
+      name: '@example/snh-web-search-acme'
 ```
 
-`dsh --profile <name> --dump-config` prints the row under the patch file's layer. After the restart, the provider appears in the **Web search provider** or **Web fetch provider** menu of the [settings page](../../client/ui-settings-web-search/README.md) under its `title`, or its `id` when it has none; the page needs no change. Choosing it pins `searchProvider` or `fetchProvider` to its `id`. If the row is later removed while the provider is selected, the menu shows the stored id as **(not loaded)** and each call fails with `WEB_PROVIDER_CONFIGURED_MISSING` until another provider is chosen.
+`snh --profile <name> --dump-config` prints the row under the patch file's layer. After the restart, the provider appears in the **Web search provider** or **Web fetch provider** menu of the [settings page](../../client/ui-settings-web-search/README.md) under its `title`, or its `id` when it has none; the page needs no change. Choosing it pins `searchProvider` or `fetchProvider` to its `id`. If the row is later removed while the provider is selected, the menu shows the stored id as **(not loaded)** and each call fails with `WEB_PROVIDER_CONFIGURED_MISSING` until another provider is chosen.
 
 <a id="search-readiness"></a>
 ### Search and fetch readiness
 
-`searchReady(llmProvider?)` and `fetchReady(llmProvider?)` ask the provider that `search()` or `fetch()` would select, for a search the one selected for a request with that `llmProvider`, whether an operation made for a model request on that chat route has a credential to send; [`dsh-tool-web`](../tool-web/README.md#search-readiness) uses the answers to decide whether each model step admits `web_search` and `web_fetch`. A provider answers through its optional `ready(llmProvider)`, a configuration-only check that must not make network calls; a provider without it counts as ready. When selection fails, the readiness method answers true, because the operation reports that failure as a structured `WebError`. Readiness never changes which provider is selected.
+`searchReady(llmProvider?)` and `fetchReady(llmProvider?)` ask the provider that `search()` or `fetch()` would select, for a search the one selected for a request with that `llmProvider`, whether an operation made for a model request on that chat route has a credential to send; [`snh-tool-web`](../tool-web/README.md#search-readiness) uses the answers to decide whether each model step admits `web_search` and `web_fetch`. A provider answers through its optional `ready(llmProvider)`, a configuration-only check that must not make network calls; a provider without it counts as ready. When selection fails, the readiness method answers true, because the operation reports that failure as a structured `WebError`. Readiness never changes which provider is selected.
 
 ```text
 // false only when the selected provider cannot authenticate this route's operations:
@@ -141,7 +141,7 @@ This section explains the design decisions behind the service; the observable be
 The package is built on one deliberate separation:
 
 - **One seam, two independent operations.** Search and fetch share no request schema and no business logic, but they share one service so provider selection, cancellation, errors, and product configuration have a single owner. The parallel `Search`/`Fetch` method pairs are intentional.
-- **Selection is never order-dependent.** A capability either pins a provider id or auto-selects when exactly one usable provider is registered, and an unpinned search prefers the DeepSeek provider of the request's model route; `search()`/`fetch()` resolve the provider at execution time.
+- **Selection is never order-dependent.** A capability either pins a provider id or auto-selects when exactly one usable provider is registered, and an unpinned search prefers the SuperNova provider of the request's model route; `search()`/`fetch()` resolve the provider at execution time.
 - **The service owns the result bound.** `maxResults` is enforced by the seam after the provider returns, so an over-returning provider can never leak more sources than the caller asked for.
 
 ### Source map
@@ -170,18 +170,18 @@ Read these pages when the package-level contract is not enough. They move from t
 
 - [Web subsystem](../../../docs/subsystems/web.md) — the exhaustive search/fetch requests and results, provider availability, and error codes.
 - [Web package map](../README.md) — the five-package family and each role.
-- [dsh-tool-web](../tool-web/README.md) — the model-facing `web_search` and `web_fetch` tools over this service.
-- [dsh-web-fetch-http](../web-fetch-http/README.md) — the shipped anonymous HTTP(S) fetch backend.
-- [Generated configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-web) — every accepted config field and its source declaration.
+- [snh-tool-web](../tool-web/README.md) — the model-facing `web_search` and `web_fetch` tools over this service.
+- [snh-web-fetch-http](../web-fetch-http/README.md) — the shipped anonymous HTTP(S) fetch backend.
+- [Generated configuration catalog](../../../docs/config-catalog.md#supernova-aisnh-web) — every accepted config field and its source declaration.
 - [Web capability seam decision](../../../.agents/notes/implemented/architecture/2026-06-24-web-capability-seam.md) — why search and fetch share one provider-selection service.
-- [Search readiness decision](../../../.agents/notes/implemented/architecture/2026-09-27-web-search-offered-by-provider-readiness.md) — why the seam answers per-route search and fetch readiness for `dsh-tool-web`.
+- [Search readiness decision](../../../.agents/notes/implemented/architecture/2026-09-27-web-search-offered-by-provider-readiness.md) — why the seam answers per-route search and fetch readiness for `snh-tool-web`.
 
 -----
 
 <a id="model-experience"></a>
 ## Model Experience
 
-Indirectly, through `dsh-tool-web`, which renders the seam's normalized search results and fetch bodies to the model and does not admit `web_search` or `web_fetch` to model steps for which `searchReady()` or `fetchReady()` answers false, while this service contributes no prompt or schema.
+Indirectly, through `snh-tool-web`, which renders the seam's normalized search results and fetch bodies to the model and does not admit `web_search` or `web_fetch` to model steps for which `searchReady()` or `fetchReady()` answers false, while this service contributes no prompt or schema.
 
 #### KV Cache effect
 
@@ -197,7 +197,7 @@ These limits define when the service is incomplete on its own. They are current 
 - **No availability observation** — `listProviders()` and `web/providers-changed` report which providers are registered, not whether they are usable; there is no capability-status query, and `searchReady()` and `fetchReady()` report only the selected provider's credential readiness and answer true when selection fails. Availability is observable only by running a search or fetch and routing the thrown code, and the no-provider failure is the generic `WEB_PROVIDER_UNAVAILABLE` with no per-provider reason enumeration ([Agent Note](../../../.agents/notes/archived/simplification/2026-07-04-drop-unconsumed-web-observation-surface.md)).
 - **Search requests carry only `query`, `maxResults`, and `llmProvider`** — provider-neutral controls (recency, domain filters, regional hints, search depth) are deferred until the backends can honor them ([seam Agent Note](../../../.agents/notes/implemented/architecture/2026-06-24-web-capability-seam.md)).
 - **`WebFetchBody` has no `pdf` arm** — text-extractable PDF support is named deferred work; the closed union makes adding it a compile-enforced change across the web packages.
-- **The per-route search preference is fixed** — the two DeepSeek model routes and the two DeepSeek search provider ids are constants of this package, so a deployment changes the outcome only by configuring `searchProvider`, and a provider-neutral rule is deferred until a second pair of routes and providers needs one.
+- **The per-route search preference is fixed** — the two SuperNova model routes and the two SuperNova search provider ids are constants of this package, so a deployment changes the outcome only by configuring `searchProvider`, and a provider-neutral rule is deferred until a second pair of routes and providers needs one.
 - **Provider-backed page extraction is out of scope of `fetch()`** — a Firecrawl/Tavily-style `web_extract` capability is deferred rather than widening the fetch operation.
 
 <a id="dev-note"></a>

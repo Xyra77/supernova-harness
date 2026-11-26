@@ -1,35 +1,35 @@
 /** Host BFF entry and Loader shell for the Remote contribution assembly. */
 
 import { homedir } from 'node:os'
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
+import type { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
 import type {
   TypertRemoteEventDispatch,
   TypertRemoteEventInvocation,
   TypertRemoteEventOutcome,
   TypertRemoteEventSource,
-} from '@deepseek-ai/dsh-api-gateway'
-import { Deque } from '@deepseek-ai/dsh-deque'
-import { carrierKeyOf } from '@deepseek-ai/dsh-scope'
-import { isJsonValue, type JsonValue } from '@deepseek-ai/dsh-util-values'
+} from '@supernova-ai/snh-api-gateway'
+import { Deque } from '@supernova-ai/snh-deque'
+import { carrierKeyOf } from '@supernova-ai/snh-scope'
+import { isJsonValue, type JsonValue } from '@supernova-ai/snh-util-values'
 import { API_REMOTE_FORWARDED_EVENTS } from './remote-events.ts'
 
 // The owner packages' client-safe `./types` exports carry the cordis `Events`
 // declarations for every allowlisted event. Pulling them into this face is what
 // makes the shape assertion below judge real signatures rather than an empty
 // event vocabulary.
-import type {} from '@deepseek-ai/dsh-commands/types'
-import type {} from '@deepseek-ai/dsh-cordis-host-runner/types'
-import type {} from '@deepseek-ai/dsh-credentials/types'
-import type {} from '@deepseek-ai/dsh-goal/types'
-import type {} from '@deepseek-ai/dsh-llm/types'
-import type {} from '@deepseek-ai/dsh-agent-preset-registry/types'
-import type {} from '@deepseek-ai/dsh-permission-presets/types'
-import type {} from '@deepseek-ai/dsh-settings/types'
-import type {} from '@deepseek-ai/dsh-user-approval'
-import type {} from '@deepseek-ai/dsh-user-questions'
-import type {} from '@deepseek-ai/dsh-web/types'
-export type {} from '@deepseek-ai/dsh-api-session-controller/types'
+import type {} from '@supernova-ai/snh-commands/types'
+import type {} from '@supernova-ai/snh-cordis-host-runner/types'
+import type {} from '@supernova-ai/snh-credentials/types'
+import type {} from '@supernova-ai/snh-goal/types'
+import type {} from '@supernova-ai/snh-llm/types'
+import type {} from '@supernova-ai/snh-agent-preset-registry/types'
+import type {} from '@supernova-ai/snh-permission-presets/types'
+import type {} from '@supernova-ai/snh-settings/types'
+import type {} from '@supernova-ai/snh-user-approval'
+import type {} from '@supernova-ai/snh-user-questions'
+import type {} from '@supernova-ai/snh-web/types'
+export type {} from '@supernova-ai/snh-api-session-controller/types'
 
 export { API_REMOTE_FORWARDED_EVENTS } from './remote-events.ts'
 export type { ApiRemoteForwardedEvent } from './types.ts'

@@ -1,8 +1,8 @@
 /** SQLite Session persistence and event storage. @module */
-import { Context, type Fiber } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { JsonlCompressionSchema, JsonlSessionPersistence } from '@deepseek-ai/dsh-session-persistence-jsonl'
-import type { Config as JsonlConfigOptions } from '@deepseek-ai/dsh-session-persistence-jsonl'
+import { Context, type Fiber } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { JsonlCompressionSchema, JsonlSessionPersistence } from '@supernova-ai/snh-session-persistence-jsonl'
+import type { Config as JsonlConfigOptions } from '@supernova-ai/snh-session-persistence-jsonl'
 import { SqliteSessionPersistence } from './persistence.ts'
 
 /** Loader label for the SQLite Session persistence provider. */

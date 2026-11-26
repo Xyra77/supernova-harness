@@ -2,7 +2,7 @@
 const hoverSignature = 'mouseMove(target: string | [number, number], options?: { relative?: boolean })'
 
 /** System-prompt section that carries the CUA operation guidance for one Agent. */
-export const CUA_PROMPT_SECTION_NAME = 'computer-use:dsh-cua'
+export const CUA_PROMPT_SECTION_NAME = 'computer-use:snh-cua'
 
 /** Async method catalog with consent and observation rules, grouped by observation, mouse, and keyboard. */
 export const COMMON_GUIDANCE = `Use cua to observe and operate native applications. Always use cua.getCapabilities() to confirm whether a specific API is available on the current platform; its reported capabilities take precedence over availability statements in these instructions. All methods are async. Actions report dispatch evidence, not verified completion. If sessionLocked is true or an operation reports SESSION_LOCKED, stop UI actions and ask the user to unlock the desktop session; null or unknown means verify a usable unlocked desktop session first. cua.getApp requests user consent; if access is denied or revoked, stop using that application until the user explicitly permits another request, and never bypass a refusal or switch tools to avoid it. Never replay uncertain input without a fresh observation.
@@ -65,7 +65,7 @@ click, drag, and pressKey are convenience operations; sendKeyEvent, mouseMove, a
  * @returns Instructions for a provider with held-input state support.
  */
 export function withHeldInputGuidance(guidance: string): string {
-  return guidance.replace('click, drag, and pressKey are convenience operations;', `Explicit downs from sendKeyEvent and toggleMouse remain held across programs and turns until an explicit up releases them through the same target. After a successful run_code or cua_run_code, a system reminder lists any remaining keys and mouse buttons, their targets and input modes. No reminder is added when none remain. Program failure, a received cancellation, connection closure, and disposal release owned inputs together in reverse dispatch order. After a DSH stop, the next CUA operation waits for any pending cleanup. A client pause between completed MCP calls is not observable by the server, so held input can remain pressed. pressKey, typeText, click, and complete drag release their own inputs within the operation.
+  return guidance.replace('click, drag, and pressKey are convenience operations;', `Explicit downs from sendKeyEvent and toggleMouse remain held across programs and turns until an explicit up releases them through the same target. After a successful run_code or cua_run_code, a system reminder lists any remaining keys and mouse buttons, their targets and input modes. No reminder is added when none remain. Program failure, a received cancellation, connection closure, and disposal release owned inputs together in reverse dispatch order. After a SNH stop, the next CUA operation waits for any pending cleanup. A client pause between completed MCP calls is not observable by the server, so held input can remain pressed. pressKey, typeText, click, and complete drag release their own inputs within the operation.
 
 click, drag, and pressKey are convenience operations;`)
 }
@@ -89,5 +89,5 @@ export function withSystemInputGuidance(guidance: string): string {
   })
   return `${catalog}
 
-Pass useSystemInput: true only when the task requires system keyboard or mouse input. Omitting the option or passing false uses the provider default. When approval is enabled, the first explicit system input requests permission; otherwise it executes immediately. Prefer a supported non-system action when it meets the task. The approval question interrupts the user; approval or refusal lasts until this session closes or DSH restarts. Approval does not change later calls: pass true on each system operation. If the user dismisses the request, ask again only if they request it. Wait for an outstanding request to finish. Subagents cannot request system input.`
+Pass useSystemInput: true only when the task requires system keyboard or mouse input. Omitting the option or passing false uses the provider default. When approval is enabled, the first explicit system input requests permission; otherwise it executes immediately. Prefer a supported non-system action when it meets the task. The approval question interrupts the user; approval or refusal lasts until this session closes or SNH restarts. Approval does not change later calls: pass true on each system operation. If the user dismisses the request, ask again only if they request it. Wait for an outstanding request to finish. Subagents cannot request system input.`
 }

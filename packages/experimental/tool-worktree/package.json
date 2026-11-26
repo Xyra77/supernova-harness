@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-experimental-tool-worktree",
+  "name": "@supernova-ai/snh-experimental-tool-worktree",
   "description": "Model tool that creates and enters a new Git worktree",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -36,40 +36,40 @@
     "directory": "packages/experimental/tool-worktree"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-tools": "workspace:*",
-    "@deepseek-ai/dsh-experimental-worktree": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-tools": "workspace:*",
+    "@supernova-ai/snh-experimental-worktree": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/cordis-plugin-include": "workspace:~",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-agent-loop-testkit": "workspace:*",
-    "@deepseek-ai/dsh-fs-local": "workspace:*",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/dsh-sandbox": "workspace:*",
-    "@deepseek-ai/dsh-sandbox-local": "workspace:*",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-session-projection": "workspace:*",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:*",
-    "@deepseek-ai/dsh-system-prompt": "workspace:*",
-    "@deepseek-ai/dsh-tool-executor-native": "workspace:*",
-    "@deepseek-ai/dsh-tool-testkit": "workspace:*",
-    "@deepseek-ai/dsh-tools": "workspace:*",
-    "@deepseek-ai/dsh-working-directory": "workspace:*",
-    "@deepseek-ai/dsh-experimental-worktree": "workspace:*",
-    "@deepseek-ai/dsh-agent-loop": "workspace:*"
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis-plugin-include": "workspace:~",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-agent-loop-testkit": "workspace:*",
+    "@supernova-ai/snh-fs-local": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-sandbox": "workspace:*",
+    "@supernova-ai/snh-sandbox-local": "workspace:*",
+    "@supernova-ai/snh-sandbox-policy": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-projection": "workspace:*",
+    "@supernova-ai/snh-subprocess-local": "workspace:*",
+    "@supernova-ai/snh-system-prompt": "workspace:*",
+    "@supernova-ai/snh-tool-executor-native": "workspace:*",
+    "@supernova-ai/snh-tool-testkit": "workspace:*",
+    "@supernova-ai/snh-tools": "workspace:*",
+    "@supernova-ai/snh-working-directory": "workspace:*",
+    "@supernova-ai/snh-experimental-worktree": "workspace:*",
+    "@supernova-ai/snh-agent-loop": "workspace:*"
   },
   "icon": "./icon.svg",
-  "dsh": {
+  "snh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
   },
   "dependencies": {
-    "@deepseek-ai/dsh-experimental-worktree": "workspace:*"
+    "@supernova-ai/snh-experimental-worktree": "workspace:*"
   }
 }

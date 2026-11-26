@@ -1,5 +1,5 @@
 /**
- * Keep unit suites from requesting the official DeepSeek model listing.
+ * Keep unit suites from requesting the official SuperNova model listing.
  *
  * The API-key and account routes request `GET https://api.deepseek.com/models` whenever they hold a
  * credential for the official endpoint, and suites routinely boot those routes with a dummy key or
@@ -9,7 +9,7 @@
  * @module
  */
 
-/** The listing endpoint of the official DeepSeek API. */
+/** The listing endpoint of the official SuperNova API. */
 const OFFICIAL_LISTING = 'https://api.deepseek.com/models'
 
 const ambientFetch = globalThis.fetch

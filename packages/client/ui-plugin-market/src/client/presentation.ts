@@ -1,8 +1,8 @@
 /** Pure Discover query and display helpers over market search results. */
-import type { LocalizedText } from '@deepseek-ai/dsh-package-manifest'
-import type { MarketIndexSummary, MarketListingEntry, MarketListingVersion, MarketSort } from '@deepseek-ai/dsh-api-remotes/client'
-import type { MarketIndexMetadata } from '@deepseek-ai/dsh-plugin-market-index'
-import { parseGitMarketIndexSource } from '@deepseek-ai/dsh-plugin-market-index/source'
+import type { LocalizedText } from '@supernova-ai/snh-package-manifest'
+import type { MarketIndexSummary, MarketListingEntry, MarketListingVersion, MarketSort } from '@supernova-ai/snh-api-remotes/client'
+import type { MarketIndexMetadata } from '@supernova-ai/snh-plugin-market-index'
+import { parseGitMarketIndexSource } from '@supernova-ai/snh-plugin-market-index/source'
 
 /** The Discover query: text, filters, and order, without paging. */
 export interface DiscoverQuery {

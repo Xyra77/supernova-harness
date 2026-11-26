@@ -2,23 +2,23 @@
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import TypertGatewayService from '@deepseek-ai/dsh-api-gateway'
-import type { RemoteAccessBinding } from '@deepseek-ai/dsh-api-remote-access'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
-import type { PeerId, PeerScope, Principal } from '@deepseek-ai/dsh-typert-protocol'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
+import { Context } from '@supernova-ai/cordis'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import TypertGatewayService from '@supernova-ai/snh-api-gateway'
+import type { RemoteAccessBinding } from '@supernova-ai/snh-api-remote-access'
+import type { SessionId } from '@supernova-ai/snh-session'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import SubagentRuntime from '@supernova-ai/snh-subagent'
+import type { PeerId, PeerScope, Principal } from '@supernova-ai/snh-typert-protocol'
+import TypertRegistry from '@supernova-ai/snh-typert-registry'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { MockAdapter } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import { mountWorkingDirectoryFixture } from '../../../subagent/subagent/tests/working-directory-fixture.ts'
 import { createSessionTestController } from './test-remote.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@supernova-ai/snh-typert-protocol' {
   interface PrincipalMap {
     /** Test-only non-owner caller shared by the access specs. */
     'test-guest': { readonly kind: 'test-guest'; readonly guest: string }
@@ -33,7 +33,7 @@ afterEach(async () => {
 })
 
 async function harness() {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-subagent-access-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-subagent-access-'))
   const ctx = new Context()
   cleanups.push(async () => {
     try { await ctx.fiber.dispose() } finally { await rm(root, { recursive: true, force: true }) }

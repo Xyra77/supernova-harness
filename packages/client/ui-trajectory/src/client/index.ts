@@ -2,18 +2,18 @@
  * Browser trajectory plugin contributing one entry to the conversation view
  * slot without defining a service.
  */
-import type { Context } from '@deepseek-ai/cordis'
-import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import type { SessionBinding } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { Context } from '@supernova-ai/cordis'
+import type { ImageAttachmentRef } from '@supernova-ai/snh-attachment'
+import type { SessionBinding } from '@supernova-ai/snh-api-session-controller/client'
+import type { ObservableSnapshot } from '@supernova-ai/snh-client-store'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 // Type-only: pulls the locale plugin's Context merge (ctx.locale).
-import type {} from '@deepseek-ai/dsh-client-locale/client'
+import type {} from '@supernova-ai/snh-client-locale/client'
 // Type-only: the 'conversation.view' SlotMap row (declared by the slot's
 // owning package) must be in the program for the register calls to type.
-import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type {} from '@deepseek-ai/dsh-client-ui-session/client'
+import type {} from '@supernova-ai/snh-client-ui-conversation/client'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
+import type {} from '@supernova-ai/snh-client-ui-session/client'
 import { createToolResultWatcher } from './watch-tool-result.ts'
 import { createTrajectoryDurationStore } from './duration-store.ts'
 import { createTrajectoryStringWrappingStore } from './string-wrapping-store.ts'

@@ -1,4 +1,4 @@
-import { defineMod } from '@deepseek-ai/dsh-experimental-claude-code-mods'
+import { defineMod } from '@supernova-ai/snh-experimental-claude-code-mods'
 
 /**
  * Scenario mod: adds prompt context and refuses forced Git pushes.

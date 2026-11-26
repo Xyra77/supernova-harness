@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "SuperNova Upload do registro da sessão",
+    "description": "Quando ativado, os logs de sessão são enviados para SuperNova com solicitações de modelo oficial API."
+  }
+}

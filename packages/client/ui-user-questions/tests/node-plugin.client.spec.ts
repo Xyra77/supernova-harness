@@ -1,10 +1,10 @@
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import { Context } from '@deepseek-ai/cordis'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import { Context } from '@supernova-ai/cordis'
 import { afterEach, describe, expect, it } from 'vitest'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import UserQuestionService from '@deepseek-ai/dsh-user-questions'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import UserQuestionService from '@supernova-ai/snh-user-questions'
 import { apply } from '../src/index.ts'
 
 let ctx: Context | undefined

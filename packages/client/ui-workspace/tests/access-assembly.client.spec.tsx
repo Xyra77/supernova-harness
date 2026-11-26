@@ -7,20 +7,20 @@
  * remote-access snapshot owner itself and renders the real slot tree, so the Workspace access Hooks
  * are the renderer's bindings over one non-owner snapshot.
  */
-import { syncedConfig } from '@deepseek-ai/dsh-client-test-runtime'
+import { syncedConfig } from '@supernova-ai/snh-client-test-runtime'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, screen } from '@testing-library/react'
-import type { AccessEffect, RemoteEndpoint, TypertResourceKind } from '@deepseek-ai/dsh-api-remote-access/client'
-import { ClientAccessState } from '@deepseek-ai/dsh-api-remote-access/src/client/state.ts'
-import { whenAllowed } from '@deepseek-ai/dsh-api-remote-access/src/client/when-allowed.ts'
-import type { WorkspaceId } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import type { PropsRenderSlots } from '@deepseek-ai/dsh-client-ui-slots'
-import { allowAllAccessPlugin, SlotTestRuntime, usePinnedBrowserLanguages } from '@deepseek-ai/dsh-client-test-runtime'
-import { apply as applyMenus, inject as injectMenus } from '@deepseek-ai/dsh-client-ui-context-menu/client'
-import { apply, inject } from '@deepseek-ai/dsh-client-ui-workspace/client'
+import type { AccessEffect, RemoteEndpoint, TypertResourceKind } from '@supernova-ai/snh-api-remote-access/client'
+import { ClientAccessState } from '@supernova-ai/snh-api-remote-access/src/client/state.ts'
+import { whenAllowed } from '@supernova-ai/snh-api-remote-access/src/client/when-allowed.ts'
+import type { WorkspaceId } from '@supernova-ai/snh-api-workspace-controller/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import type { PropsRenderSlots } from '@supernova-ai/snh-client-ui-slots'
+import { allowAllAccessPlugin, SlotTestRuntime, usePinnedBrowserLanguages } from '@supernova-ai/snh-client-test-runtime'
+import { apply as applyMenus, inject as injectMenus } from '@supernova-ai/snh-client-ui-context-menu/client'
+import { apply, inject } from '@supernova-ai/snh-client-ui-workspace/client'
 import { SECTION_HOOK_CONTEXT, SECTION_INJECT } from './section-scroller.client.ts'
 
 usePinnedBrowserLanguages('zh-CN')

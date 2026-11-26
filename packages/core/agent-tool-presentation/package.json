@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-agent-tool-presentation",
-  "description": "Deprecated tool presentation selector; use dsh-tool-executor-native or dsh-tool-executor-ptc directly",
+  "name": "@supernova-ai/snh-agent-tool-presentation",
+  "description": "Deprecated tool presentation selector; use snh-tool-executor-native or snh-tool-executor-ptc directly",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -32,23 +32,23 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-tool-executor-native": "workspace:*",
-    "@deepseek-ai/dsh-tool-executor-ptc": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~"
+    "@supernova-ai/snh-tool-executor-native": "workspace:*",
+    "@supernova-ai/snh-tool-executor-ptc": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~"
   },
   "peerDependencies": {
-    "@deepseek-ai/dsh-tools": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/snh-tools": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-ptc-runtime": "workspace:*",
-    "@deepseek-ai/dsh-scope": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-system-prompt": "workspace:*",
-    "@deepseek-ai/dsh-tools": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-session-projection": "workspace:*"
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-ptc-runtime": "workspace:*",
+    "@supernova-ai/snh-scope": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-system-prompt": "workspace:*",
+    "@supernova-ai/snh-tools": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-session-projection": "workspace:*"
   }
 }

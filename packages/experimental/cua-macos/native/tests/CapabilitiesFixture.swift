@@ -34,7 +34,7 @@ final class CapabilityPad: NSView {
 final class CapabilityTextView: NSTextView {
     var attemptedPaste: ((Bool) -> Void)?
     override func paste(_ sender: Any?) {
-        let owned = NSPasteboard.general.data(forType: NSPasteboard.PasteboardType("org.deepseek-harness.cua.clipboard-owner")) != nil
+        let owned = NSPasteboard.general.data(forType: NSPasteboard.PasteboardType("org.supernova-harness.cua.clipboard-owner")) != nil
         attemptedPaste?(owned)
         if owned { super.paste(sender) }
     }
@@ -65,7 +65,7 @@ final class CapabilitiesFixture: NSObject, NSApplicationDelegate, NSWindowDelega
         window = NSWindow(contentRect: NSRect(x: 140, y: 160, width: 640, height: 500),
                           styleMask: [.titled, .closable], backing: .buffered, defer: false)
         window.delegate = self
-        window.title = "DSH CUA capability checks"
+        window.title = "SNH CUA capability checks"
         window.isReleasedWhenClosed = false
         window.animationBehavior = .none
         signal(SIGUSR1, SIG_IGN)
@@ -84,7 +84,7 @@ final class CapabilitiesFixture: NSObject, NSApplicationDelegate, NSWindowDelega
         text.isEditable = true
         text.font = .systemFont(ofSize: 18)
         text.string = "第一😀 target，第二😀 target."
-        text.setAccessibilityIdentifier("dsh-cua-rich-text")
+        text.setAccessibilityIdentifier("snh-cua-rich-text")
         text.setAccessibilityLabel("Rich text fixture")
         text.delegate = self
         text.attemptedPaste = { [weak self] owned in self?.pasteAttempts.append(owned); self?.persist() }
@@ -116,8 +116,8 @@ final class CapabilitiesFixture: NSObject, NSApplicationDelegate, NSWindowDelega
             self.persist()
         }
         window.contentView!.addSubview(pad)
-        if Bundle.main.object(forInfoDictionaryKey: "DSHFixtureBackground") as? Bool == true || CommandLine.arguments.contains("--background") {
-            if Bundle.main.object(forInfoDictionaryKey: "DSHFixtureKeyboard") as? Bool == true {
+        if Bundle.main.object(forInfoDictionaryKey: "SNHFixtureBackground") as? Bool == true || CommandLine.arguments.contains("--background") {
+            if Bundle.main.object(forInfoDictionaryKey: "SNHFixtureKeyboard") as? Bool == true {
                 window.makeFirstResponder(pad)
                 window.orderBack(nil)
             } else { window.orderFront(nil) }
@@ -177,7 +177,7 @@ if CommandLine.arguments.dropFirst().first == "--buttons" {
     print(String(data: try! JSONSerialization.data(withJSONObject: values), encoding: .utf8)!)
     exit(0)
 }
-let statePath = CommandLine.arguments.dropFirst().first ?? Bundle.main.object(forInfoDictionaryKey: "DSHFixtureStatePath") as? String
+let statePath = CommandLine.arguments.dropFirst().first ?? Bundle.main.object(forInfoDictionaryKey: "SNHFixtureStatePath") as? String
 if let statePath {
     let application = NSApplication.shared
     application.setActivationPolicy(.regular)

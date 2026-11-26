@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "SuperNova Hochladen des Sitzungsprotokolls",
+    "description": "Wenn diese Option aktiviert ist, werden Sitzungsprotokolle mit offiziellen Modell-API-Anfragen auf SuperNova hochgeladen."
+  }
+}

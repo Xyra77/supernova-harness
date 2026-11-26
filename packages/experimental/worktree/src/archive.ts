@@ -4,17 +4,17 @@
  * archive-admission families, so it holds for every Session the Workspace archives.
  */
 import { sep } from 'node:path'
-import type { Context } from '@deepseek-ai/cordis'
-import type { SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
-import type { ProjectionHandle, SessionProjectionMap } from '@deepseek-ai/dsh-session-projection'
-import type {} from '@deepseek-ai/dsh-session-projection-cache'
-import type {} from '@deepseek-ai/dsh-session-query'
-import type {} from '@deepseek-ai/dsh-working-directory'
-import type {} from '@deepseek-ai/dsh-workspace'
+import type { Context } from '@supernova-ai/cordis'
+import type { SessionHeader, SessionId } from '@supernova-ai/snh-session'
+import type { ProjectionHandle, SessionProjectionMap } from '@supernova-ai/snh-session-projection'
+import type {} from '@supernova-ai/snh-session-projection-cache'
+import type {} from '@supernova-ai/snh-session-query'
+import type {} from '@supernova-ai/snh-working-directory'
+import type {} from '@supernova-ai/snh-workspace'
 import type { WorktreeProjectionState } from './projection.ts'
 import type { CreatedWorktree, WorktreeCleanup, WorktreeCreation } from './types.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Events {
     /**
      * A cleanup attempt changed state. Fires once at admission with

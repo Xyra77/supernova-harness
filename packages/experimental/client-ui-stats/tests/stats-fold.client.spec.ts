@@ -1,14 +1,14 @@
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'agent-message': { readonly kind: 'agent-message' }
   }
 }
 
 import { beforeEach, describe, expect, it } from 'vitest'
-import type { SessionEventLike } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { TeamId, TeamMessageId } from '@deepseek-ai/dsh-agent-team/types'
-import type { AttachmentId } from '@deepseek-ai/dsh-attachment/types'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import type { SessionEventLike } from '@supernova-ai/snh-api-session-controller/client'
+import type { TeamId, TeamMessageId } from '@supernova-ai/snh-agent-team/types'
+import type { AttachmentId } from '@supernova-ai/snh-attachment/types'
+import { brandString } from '@supernova-ai/snh-brand'
 import type {
   LlmAttemptId,
   MessageId,
@@ -21,10 +21,10 @@ import type {
   TokenUsage,
   ToolResultMessage,
   UserMessage,
-} from '@deepseek-ai/dsh-llm'
-import type { RetryId } from '@deepseek-ai/dsh-llm-retry/types'
-import { type SessionId, SessionSeq, type SessionEventMap, type SessionEventType } from '@deepseek-ai/dsh-session/types'
-import type {} from '@deepseek-ai/dsh-tool-executor-ptc/types'
+} from '@supernova-ai/snh-llm'
+import type { RetryId } from '@supernova-ai/snh-llm-retry/types'
+import { type SessionId, SessionSeq, type SessionEventMap, type SessionEventType } from '@supernova-ai/snh-session/types'
+import type {} from '@supernova-ai/snh-tool-executor-ptc/types'
 import {
   CALL_LIMIT, fallbackState, foldEvent, isCodeMode, newState, promptOf, stepMetrics, toolSpanUnion, triggerSenderOf,
 } from '../src/client/stats-fold.ts'
@@ -104,7 +104,7 @@ function assistantMessage(content: readonly ContentBlock[] = []): AssistantMessa
     role: 'assistant',
     id: brandString<MessageId>('assistant-1'),
     content,
-    source: { kind: 'model', provider: 'deepseek', model: 'deepseek-chat' },
+    source: { kind: 'model', provider: 'supernova', model: 'deepseek-chat' },
   }
 }
 
@@ -162,7 +162,7 @@ function retry(turn: number, step: number, time: number): SessionEventLike {
     turn,
     step,
     retryId: brandString<RetryId>('retry-1'),
-    provider: 'deepseek',
+    provider: 'supernova',
     mode: 'normal',
     policyKey: 'default',
     retry: 1,

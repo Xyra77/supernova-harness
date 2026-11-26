@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { RemoteResult } from '@deepseek-ai/dsh-api-remotes/client'
-import type { GoalActivationChanged, GoalId, GoalProjection, GoalView } from '@deepseek-ai/dsh-goal/client'
-import { RemoteError } from '@deepseek-ai/dsh-client-test-runtime'
+import { brandString } from '@supernova-ai/snh-brand'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import type { RemoteResult } from '@supernova-ai/snh-api-remotes/client'
+import type { GoalActivationChanged, GoalId, GoalProjection, GoalView } from '@supernova-ai/snh-goal/client'
+import { RemoteError } from '@supernova-ai/snh-client-test-runtime'
 import { createGoalActivationSource } from '../src/client/activation-source.ts'
 
 const GOAL_ID = brandString<GoalId>('g-1')

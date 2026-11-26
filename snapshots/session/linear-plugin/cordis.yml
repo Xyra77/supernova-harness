@@ -4,9 +4,9 @@
 
 - insert:
     - id: mcp-manager
-      name: '@deepseek-ai/dsh-mcp-manager'
+      name: '@supernova-ai/snh-mcp-manager'
       inject: [credentials, mcpResources]
     - id: linear
-      name: '@deepseek-ai/dsh-linear'
+      name: '@supernova-ai/snh-linear'
       config:
-        url: !!js process.env.DSH_MCP_DEMO_URL
+        url: !!js process.env.SNH_MCP_DEMO_URL

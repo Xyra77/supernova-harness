@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-util-crypto",
+  "name": "@supernova-ai/snh-util-crypto",
   "description": "Zero-dependency browser-safe UUID and byte-encoding helpers",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -30,9 +30,9 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

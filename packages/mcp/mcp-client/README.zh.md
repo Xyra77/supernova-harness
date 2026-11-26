@@ -3,13 +3,13 @@ description: "面向部署方与维护者的 MCP 客户端桥接说明，用于�
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-mcp-client
+# @supernova-ai/snh-mcp-client
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-mcp-client` 让模型使用外部 MCP（Model Context Protocol）服务器的工具与资源。每台服务器配置一条记录；其工具使用 `mcp__github__create_issue` 这样的名称。默认不启用任何服务器。随附 profile 已提供[共享资源发现与读取](../mcp-resources/README.zh.md)。调用方作用域为空时，不添加 MCP 工具或提示词文本。服务器指令作为字面文本加入已记录的系统提示词；MCP 提示词模板不受支持。配置 `toolLoading: on-demand` 时，系统提示词列出这些工具，由各 agent 加载所需的工具。缓慢或崩溃的服务器可能延迟启动，或让调用失败直至恢复。
+`snh-mcp-client` 让模型使用外部 MCP（Model Context Protocol）服务器的工具与资源。每台服务器配置一条记录；其工具使用 `mcp__github__create_issue` 这样的名称。默认不启用任何服务器。随附 profile 已提供[共享资源发现与读取](../mcp-resources/README.zh.md)。调用方作用域为空时，不添加 MCP 工具或提示词文本。服务器指令作为字面文本加入已记录的系统提示词；MCP 提示词模板不受支持。配置 `toolLoading: on-demand` 时，系统提示词列出这些工具，由各 agent 加载所需的工具。缓慢或崩溃的服务器可能延迟启动，或让调用失败直至恢复。
 
 ## 目录
 
@@ -25,7 +25,7 @@ kind: "package-reference"
 <a id="use-this-package"></a>
 ## 使用本包
 
-当模型需要像调用原生工具一样调用外部 MCP 服务器时，添加 `dsh-mcp-client`。为每台服务器指定唯一名称和传输方式。官方 SDK 优先选择可用的 2026-07-28 协议，并回退到支持的旧版协议。本地程序使用 stdio，远端服务使用 Streamable HTTP；stdio 协商会先启动临时探测进程，再启动实际服务进程。
+当模型需要像调用原生工具一样调用外部 MCP 服务器时，添加 `snh-mcp-client`。为每台服务器指定唯一名称和传输方式。官方 SDK 优先选择可用的 2026-07-28 协议，并回退到支持的旧版协议。本地程序使用 stdio，远端服务使用 Streamable HTTP；stdio 协商会先启动临时探测进程，再启动实际服务进程。
 
 ### 最小配置
 
@@ -33,7 +33,7 @@ kind: "package-reference"
 
 ```yaml
 - id: mcp-github
-  name: '@deepseek-ai/dsh-mcp-client'
+  name: '@supernova-ai/snh-mcp-client'
   config:
     serverName: github
     transport: stdio
@@ -43,7 +43,7 @@ kind: "package-reference"
       GITHUB_TOKEN: !!js process.env.GITHUB_TOKEN
 
 - id: mcp-web
-  name: '@deepseek-ai/dsh-mcp-client'
+  name: '@supernova-ai/snh-mcp-client'
   config:
     serverName: web
     transport: streamable-http
@@ -71,7 +71,7 @@ kind: "package-reference"
 | `toolLoading` | `eager` | `on-demand` 让服务器的工具不进入任何工具列表，直到 agent 用 `mcp__<serverName>__load_tools` 加载 |
 | `catalogDescriptionMaxLength` | `160` | 按需服务器提示词目录中每个工具摘要的最大字符数 |
 
-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-mcp-client)是每个受支持字段的穷尽式真源。
+生成的[配置目录](../../../docs/config-catalog.zh.md#supernova-aisnh-mcp-client)是每个受支持字段的穷尽式真源。
 
 启动后，服务器的工具会以 `mcp__<serverName>__<tool>` 形式出现——试着用一条提示词调用其中一个。如果初始连接失败，harness 仍会启动，但该服务器的工具不会出现，并会记录一条错误。设置 `failOnStartupError: true` 会拒绝插件激活；[app-boot 的启动策略](../../boot/app-boot/README.zh.md)仍允许可选 MCP 配置项失败，而不中止 harness。
 
@@ -122,7 +122,7 @@ kind: "package-reference"
 
 为 Streamable HTTP 条目设置稳定的 `mcp-client/<id>` 凭据记录地址 `oauth.credentialKey`，并加载凭据提供方。在所属插件条目上声明 `inject: [credentials]`，使启动等待该提供方就绪。OAuth 不能与 `Authorization` 请求头同时配置。连接和探测只使用已提交的授权，不会打开浏览器或注册客户端。缺失凭据、令牌被拒绝或明确的权限不足响应会使连接进入 `waiting-authorization`；探测返回失败结果。其原因为：没有已保存授权时为 `missing`，access token 过期且没有 refresh token 时为 `expired`，授权与解析后的 `url` 或 OAuth 选项不再匹配时为 `binding`，服务器拒绝令牌时为 `rejected`，服务器要求更多权限范围时为 `scope`。授权失效时正在进行的工具调用会以该原因失败，例如 `MCP OAuth requires authorization: scope`。探测可能刷新并持久化过期授权。普通 HTTP 403 错误不改变授权状态。诊断、工具调用失败与 `isError` 结果会把连接发送过的每个 access token 替换为 `[redacted]`。
 
-显式授权通过[管理器](../mcp-manager/README.zh.md#oauth-authorization)使用 Authorization 与 WebServer 服务。`oauth.clientId` 指定预注册的公开客户端；省略时允许在显式授权中动态注册。`oauth.scope` 覆盖挑战中的权限范围；仅在配置的权限范围一致时复用动态注册。修改解析后的 `url`、`oauth.clientId` 或 `oauth.scope` 会使已保存授权以 `binding` 原因失效，条目需要重新显式授权。`oauth.requestTimeoutMs` 默认为 10,000 毫秒，`oauth.authorizationTimeoutMs` 默认为 600,000 毫秒。取消和重试等待未完成授权清理的时间由 `closeTimeoutMs` 限制。授权服务器请求和 OAuth 条目的 MCP 请求都要求 HTTPS（回环 HTTP 除外）并拒绝重定向，因此 `url` 必须是最终端点。浏览器回调是一个只在授权尝试期间存在的 `webserver/request` 监听器，在路由准入之前应答：授权服务器的跳转是跨站导航，[Connection](../../client/connection/README.zh.md) 对所有路由都拒绝这类请求。监听器只处理 authority 和路径都与重定向 URI 相同的请求，其余请求交给后续处理。回调返回一个中英双语的静态页面，说明 DSH 是否已收到授权，或提示回到 DSH 重试；页面不回显任何回调参数。授权服务器请求不携带资源请求头。失败尝试的 `lastError` 是固定或本地消息，例如 `MCP OAuth request failed`；该消息未包含上游原因时，宿主会以警告日志记录该原因，并把解析后的模板值、授权码、PKCE verifier、客户端密钥和签发的令牌替换为 `[redacted]`。刷新通过凭据提供方串行执行，保留授权身份及注册时的令牌端点认证方式；重新授权成功后会替换授权身份和连接，替换期间不会进入 `waiting-authorization`。
+显式授权通过[管理器](../mcp-manager/README.zh.md#oauth-authorization)使用 Authorization 与 WebServer 服务。`oauth.clientId` 指定预注册的公开客户端；省略时允许在显式授权中动态注册。`oauth.scope` 覆盖挑战中的权限范围；仅在配置的权限范围一致时复用动态注册。修改解析后的 `url`、`oauth.clientId` 或 `oauth.scope` 会使已保存授权以 `binding` 原因失效，条目需要重新显式授权。`oauth.requestTimeoutMs` 默认为 10,000 毫秒，`oauth.authorizationTimeoutMs` 默认为 600,000 毫秒。取消和重试等待未完成授权清理的时间由 `closeTimeoutMs` 限制。授权服务器请求和 OAuth 条目的 MCP 请求都要求 HTTPS（回环 HTTP 除外）并拒绝重定向，因此 `url` 必须是最终端点。浏览器回调是一个只在授权尝试期间存在的 `webserver/request` 监听器，在路由准入之前应答：授权服务器的跳转是跨站导航，[Connection](../../client/connection/README.zh.md) 对所有路由都拒绝这类请求。监听器只处理 authority 和路径都与重定向 URI 相同的请求，其余请求交给后续处理。回调返回一个中英双语的静态页面，说明 SNH 是否已收到授权，或提示回到 SNH 重试；页面不回显任何回调参数。授权服务器请求不携带资源请求头。失败尝试的 `lastError` 是固定或本地消息，例如 `MCP OAuth request failed`；该消息未包含上游原因时，宿主会以警告日志记录该原因，并把解析后的模板值、授权码、PKCE verifier、客户端密钥和签发的令牌替换为 `[redacted]`。刷新通过凭据提供方串行执行，保留授权身份及注册时的令牌端点认证方式；重新授权成功后会替换授权身份和连接，替换期间不会进入 `waiting-authorization`。
 
 -----
 
@@ -137,7 +137,7 @@ kind: "package-reference"
 ### 设计理念
 
 - **服务器限定身份。** 每个 MCP 工具都有稳定的身份 `(serverName, rawName)`。namespace 是本地配置，绝不采用远程 `serverInfo.name`——远程名称不可信、在部署间不唯一、且升级时可能变化，这些都不允许静默重命名面向模型的工具。
-- **命名是固定约定。** 公开名称是 `(serverName, rawName)` 的纯函数，并满足 DeepSeek 函数名称约定；有损规范化会追加 12 位十六进制 SHA-256 hash，使不同身份绝不会折叠。会话历史与权限规则因此能在 HMR（热模块替换）、重新同步和其他服务器变化后保持有效。
+- **命名是固定约定。** 公开名称是 `(serverName, rawName)` 的纯函数，并满足 SuperNova 函数名称约定；有损规范化会追加 12 位十六进制 SHA-256 hash，使不同身份绝不会折叠。会话历史与权限规则因此能在 HMR（热模块替换）、重新同步和其他服务器变化后保持有效。
 - **原始名称是唯一的协议名称。** `tools/call` 始终收到原始名称；公开名称绝不会发给服务器，也绝不会被解析来还原原始名称。
 - **要么完整世代，要么没有。** 同步会原子地交换世代：获取失败保留上一世代，注册冲突则回滚整个尝试中的世代。
 - **一个规范值，一个投影。** 执行器保留完整的规范 MCP 返回值，并准备有序图文内容。`projectContent` 在 `tools/post-execute` 之前安装已准备的内容，让省略策略看到真实图片块。后续策略的内容替换、值替换和阻止均保持生效。
@@ -184,7 +184,7 @@ SDK 通过旧版通知或现代协议订阅接收工具列表变化。监督器�
 
 ### 环境清洗（stdio）
 
-子进程环境以子进程 seam 的 `scrubbedParentEnv()` 为基座——删除匹配 `/KEY|PASSWORD|SECRET|TOKEN/i` 的环境名称与所有 `DSH_*` 名称——再在其上合并配置的 `env`，因此显式覆盖得以保留。实际 spawn 由 MCP SDK 负责；本包共享清洗定义，而非 spawn 路径。
+子进程环境以子进程 seam 的 `scrubbedParentEnv()` 为基座——删除匹配 `/KEY|PASSWORD|SECRET|TOKEN/i` 的环境名称与所有 `SNH_*` 名称——再在其上合并配置的 `env`，因此显式覆盖得以保留。实际 spawn 由 MCP SDK 负责；本包共享清洗定义，而非 spawn 路径。
 
 </details>
 
@@ -199,7 +199,7 @@ SDK 通过旧版通知或现代协议订阅接收工具列表变化。监督器�
 - [历史MCP 客户端插件 Agent Note](../../../.agents/notes/archived/feature/2026-07-07-mcp-client-plugin.md)——命名不变式、发现与执行设计、备选方案与后果。
 - [规范工具输出约定 reference](../../core/tools/README.zh.md)——MCP 结果如何映射进规范工具输出约定。
 - [第三方记忆 MCP 指南](../../../docs/user/guide/mcp-memory.zh.md)——使用本包的三份记忆服务器 overlay。
-- [生成配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-mcp-client)——每个受支持配置字段及其源声明。
+- [生成配置目录](../../../docs/config-catalog.zh.md#supernova-aisnh-mcp-client)——每个受支持配置字段及其源声明。
 
 -----
 
@@ -274,7 +274,7 @@ SDK 通过旧版通知或现代协议订阅接收工具列表变化。监督器�
 - **重连处理协商失败与传输关闭**——初始连接失败或 stdio 子进程崩溃都会使用配置的重连预算。普通 HTTP 请求失败使用 SDK 传输的恢复机制；凭据变化则替换连接。
 - **图片是唯一的持久丰富结果桥接**——PNG、JPEG、WebP 与 GIF 在确切能力得到证明后进入 Native 上下文。音频与嵌入资源载荷仍只存在于执行局部并带明确诊断，资源链接只以文本保留名称与 URI。
 - **无效的协议结果或输出 schema 由 SDK 拒绝**——桥接器不接受旧式 `toolResult` 替代结果，也不绕过已声明的 schema 校验。
-- **OAuth 授权需要浏览器能直接访问 Host Web 服务器**——回调地址是该服务器自身的源地址：监听地址加端口，启用 TLS 时使用 HTTPS。只能通过代理或 Web 应用的 `publicUrl` 访问 DSH 的浏览器无法完成授权。动态客户端注册以该回调地址区分，监听地址或端口改变、或端口随机分配时，下一次显式授权会注册新的客户端；退出登录会保留之前的注册记录。
+- **OAuth 授权需要浏览器能直接访问 Host Web 服务器**——回调地址是该服务器自身的源地址：监听地址加端口，启用 TLS 时使用 HTTPS。只能通过代理或 Web 应用的 `publicUrl` 访问 SNH 的浏览器无法完成授权。动态客户端注册以该回调地址区分，监听地址或端口改变、或端口随机分配时，下一次显式授权会注册新的客户端；退出登录会保留之前的注册记录。
 - **按需加载不受工具限制约束**——已加载的工具位于调用方 agent 自己的作用域，`tools.restrict()` 的 allow 与 deny 掩码不过滤它们，而且这些掩码会拒绝继承工具列表中不存在的名称。要按名称禁止可加载的工具，使用执行 guard（`tools.guard`）。PTC 模式下程序在开始时绑定工具，`run_code` 内加载的工具要到下一个程序才能调用。
 - **要求基于任务的 MCP 工具在调用时被拒绝**——要求使用基于任务的执行（task-based execution）扩展的工具会抛出异常而非被桥接；该扩展未实现。
 
@@ -287,7 +287,7 @@ SDK 通过旧版通知或现代协议订阅接收工具列表变化。监督器�
 本开发备注是维护者的工作上下文：开放设计问题与尚未决定的探索方向。它明确不具权威性——已交付行为、限制与既定理由以上文、包代码与所链接的 Agent Note 为准。
 
 - 公开名称算法是由测试固定的 v1 约定；发布后更改会破坏会话历史与权限规则。
-- 由 DSH 拥有的通知驱动重同步预算是开放的探索方向；配置后的 `startupTimeoutMs` 约束启动尝试，SDK 的 60 秒默认值约束重同步请求。
+- 由 SNH 拥有的通知驱动重同步预算是开放的探索方向；配置后的 `startupTimeoutMs` 约束启动尝试，SDK 的 60 秒默认值约束重同步请求。
 - MCP 提示词模板需要独立的用户选择和模板调用机制。
 - 固定的 MCP SDK 仍在演化；上游破坏性变更需要更新桥接。
 

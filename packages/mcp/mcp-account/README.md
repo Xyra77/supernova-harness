@@ -3,13 +3,13 @@ description: "Show the OAuth server account of each MCP connector plugin on the 
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-mcp-account
+# @supernova-ai/snh-mcp-account
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-MCP connector plugins such as Linear and Notion register their OAuth server with `ctx.mcpAccounts` to show its account on the Plugins page. The service registers the account with the [connector account registry](../../client/ui-connector-account/README.md) and maps the [MCP manager](../mcp-manager/README.md)'s view of the server to the section: its status, the authorization in progress, and the buttons that apply. Connecting, cancelling, signing out, and retrying run through the manager on the Host. Each connector supplies only the text that names its service. The Web and Desktop compositions load it through [`dsh-web-app`](../../bundle/web-app/README.md).
+MCP connector plugins such as Linear and Notion register their OAuth server with `ctx.mcpAccounts` to show its account on the Plugins page. The service registers the account with the [connector account registry](../../client/ui-connector-account/README.md) and maps the [MCP manager](../mcp-manager/README.md)'s view of the server to the section: its status, the authorization in progress, and the buttons that apply. Connecting, cancelling, signing out, and retrying run through the manager on the Host. Each connector supplies only the text that names its service. The Web and Desktop compositions load it through [`snh-web-app`](../../bundle/web-app/README.md).
 
 ## Table of Contents
 
@@ -28,7 +28,7 @@ MCP connector plugins such as Linear and Notion register their OAuth server with
 A connector's Host row registers its server with the MCP manager and its account with this service, inside `ctx.inject`, so a composition without the service, such as a headless profile, loads the connector without the page:
 
 ```ts ignore-check
-import type {} from '@deepseek-ai/dsh-mcp-account'
+import type {} from '@supernova-ai/snh-mcp-account'
 
 export function apply(ctx: Context): void {
   ctx.inject(['mcpAccounts'], (scope) => {
@@ -57,7 +57,7 @@ The returned disposer withdraws the account from every page.
 | Closed | Unavailable | Retry, which restarts the server |
 | Waiting for credentials, disabled, or failed | Unavailable | Retry only when a restart recovers the failure |
 
-After a failed authorization, a disconnected or unavailable section also shows that authorization did not complete. The line under every section says that authorization completes in a browser on the computer running DSH. A connection and a sign-out report the connector's notice in the browser that started them.
+After a failed authorization, a disconnected or unavailable section also shows that authorization did not complete. The line under every section says that authorization completes in a browser on the computer running SNH. A connection and a sign-out report the connector's notice in the browser that started them.
 
 -----
 

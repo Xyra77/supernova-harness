@@ -1,14 +1,14 @@
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { unsupportedModel, unsupportedInbox } from '@deepseek-ai/dsh-agent-loop-testkit'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-workspace'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { unsupportedModel, unsupportedInbox } from '@supernova-ai/snh-agent-loop-testkit'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import type { Session } from '@supernova-ai/snh-session'
+import type {} from '@supernova-ai/snh-workspace'
 import { describe, expect, it } from 'vitest'
 import { ArchivedSessionGate } from '../src/archived-session-gate.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 interface Harness {
   ctx: Context

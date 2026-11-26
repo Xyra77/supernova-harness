@@ -1,11 +1,11 @@
 /**
  * LLM failure codes and helpers over the shared Harness error base. The base
- * class lives in `@deepseek-ai/dsh-error` and is re-exported here, so both
+ * class lives in `@supernova-ai/snh-error` and is re-exported here, so both
  * import paths name the same class.
- * @module @deepseek-ai/dsh-llm/error
+ * @module @supernova-ai/snh-llm/error
  */
 
-import { HarnessError } from '@deepseek-ai/dsh-error'
+import { HarnessError } from '@supernova-ai/snh-error'
 
 export { HarnessError }
 
@@ -227,7 +227,7 @@ export function isHarnessError(value: unknown): value is HarnessError {
  * Canonical code for a request an image-capable route cannot send until more
  * of its images are offloaded. The failure's `offloadImages` names how many
  * more of the oldest retained occurrences must be offloaded;
- * `dsh-compaction-image-offload` records an `image/offload` selection before
+ * `snh-compaction-image-offload` records an `image/offload` selection before
  * the agent or summarizer retries with freshly derived input.
  */
 export const IMAGE_OFFLOAD_REQUIRED_CODE = 'IMAGE_OFFLOAD_REQUIRED' satisfies BuiltinLlmFailureCode

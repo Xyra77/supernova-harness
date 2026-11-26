@@ -3,7 +3,7 @@ description: "复用 Computer Use 应用和窗口对象，通过已授权并记�
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-cua
+# @supernova-ai/snh-cua
 
 [English](README.md) | 中文
 
@@ -29,7 +29,7 @@ kind: "package-reference"
 <a id="use-this-package"></a>
 ## 使用本包
 
-挂载 [macOS 提供方](../cua-macos/README.zh.md)或 [Windows 提供方](../cua-windows/README.zh.md)以启用对应平台的原生操作。外部 PTC 宿主从 `@deepseek-ai/dsh-cua/bridge` 导入 `connectCua`，并提供当前 `tools.cua` 绑定。源码组合与原生组件准备由提供方负责。
+挂载 [macOS 提供方](../cua-macos/README.zh.md)或 [Windows 提供方](../cua-windows/README.zh.md)以启用对应平台的原生操作。外部 PTC 宿主从 `@supernova-ai/snh-cua/bridge` 导入 `connectCua`，并提供当前 `tools.cua` 绑定。源码组合与原生组件准备由提供方负责。
 
 `cua_run_code` 为每个 agent（智能体）在独立的持久 Node 环境中按 scoped REPL 语句运行 TypeScript。程序开始前即可使用全局 `cua` 对象；`tools` 中只有 `cua`。其他普通工具在程序外直接调用。使用顶层 `await`，通过 `inspect(...values)` 展示选中的文字和截图；顶层 `return` 无效。工具接受与 `run_code` 相同的超时和沙箱控制参数。运行时重启会自动重建 `cua`，但其他变量和已选择的应用对象需要重新创建。
 
@@ -49,7 +49,7 @@ kind: "package-reference"
 
 `tools.cua` 的截图操作在 TypeScript 程序中返回 `Image`。宿主侧的规范化截图结果包含编码图像数据与持久的 `attachment` 引用；原生渲染器将坐标元数据和图片投影为模型内容。截图前要求附件服务可用，且已配置 `screenshotTarget` 或当前模型路由声明图片输入。图片接入或保存失败会拒绝调用。 失败调用带有结构化标识：原生与 Host 拒绝使用 `NativeError` 及原生或 Host code，例如 `APP_ACCESS_DENIED`、`NATIVE_TIMEOUT`，模型不支持图片输入时为 `MODEL_DOES_NOT_SUPPORT_IMAGES`，它仍属于 `NativeError`，因为这是本包唯一的错误类，其 message 也与所有 `NativeError` 一样带 `CODE: ` 前缀；缺少 Agent、附件服务或模型路由时使用 `ToolContextUnavailableError`；参数 schema 无法检查的参数错误使用 `ToolArgsError`；调用方取消后的原生取消记录为 `AbortError` 与 `ABORTED`。对象桥接保留截图字节和已校验的元数据，不重复上传或输出同一张图片。 `screenshotTarget.maxBytes` 是编码字节硬上限；继续缩图后，截图坐标使用最终编码尺寸。
 
-应用授权发生在启动、观察、截图和输入之前。会话许可按对话和应用身份持久化，重启 DSH 或关闭 Computer Use 后仍可复用，其他对话需要单独授权。长期许可要求平台提供可复用的应用身份。拒绝或撤销会关闭受影响的 Agent 连接，因此旧对象必须重新选择目标。取消、超时或重新连接后均不重放输入。
+应用授权发生在启动、观察、截图和输入之前。会话许可按对话和应用身份持久化，重启 SNH 或关闭 Computer Use 后仍可复用，其他对话需要单独授权。长期许可要求平台提供可复用的应用身份。拒绝或撤销会关闭受影响的 Agent 连接，因此旧对象必须重新选择目标。取消、超时或重新连接后均不重放输入。
 
 动作返回 `dispatched` 布尔值；`mouseMove` 还会返回 `hoverRoute` 和 `systemPointerMoved`，`show()` 还会返回 `windowId` 和 `foregroundChanged`。请读取新状态以验证结果。截图和指针操作只能通过显式窗口对象使用。坐标操作默认使用最近返回截图中的像素；成功读取覆盖该窗口的 AX 或取得截图后，传入 `relative: true` 可使用 0～999 的整数坐标。仅选择窗口不会建立该观察。数值除以 1000 后按窗口尺寸缩放，并限制在窗口内。Host 在返回截图前解析附件归一化和当前模型的图片缩放规则，再将输入换算为提供方的原生窗口坐标。窗口尺寸变化会使截图映射失效，绝对坐标遇到 `SCREENSHOT_REQUIRED` 时需要重新截图。窗口缩放后以 `WINDOW_CHANGED` 拒绝旧坐标；单纯移动窗口不改变窗口内坐标。
 
@@ -61,7 +61,7 @@ kind: "package-reference"
 
 ### 权限控件
 
-应用授权卡片包含**风险提示**标签。悬停、通过键盘聚焦或轻触该标签，可阅读保留格式的卡片，了解对已授权应用的后台访问、各应用的自动化规则和可能的账号限制，以及通过 DeepSeek Harness 停止操作的方法。指针移入卡片后，可以继续阅读和选择文字。
+应用授权卡片包含**风险提示**标签。悬停、通过键盘聚焦或轻触该标签，可阅读保留格式的卡片，了解对已授权应用的后台访问、各应用的自动化规则和可能的账号限制，以及通过 SuperNova Harness 停止操作的方法。指针移入卡片后，可以继续阅读和选择文字。
 
 Computer Use 详情页的权限卡片、组件列表和来源信息使用 l3 边框，区块间距为 32px。应用名称徽标保留 l1 边框。
 
@@ -71,7 +71,7 @@ Computer Use 详情页的权限卡片、组件列表和来源信息使用 l3 边
 
 进入页面、返回窗口和操作结束后会刷新状态。查询失败保留上次观测但标为未确认，并提供“重试”。打开设置或申请权限不代表授权完成。原生引导、配置和本地化恢复提示由 provider 负责。
 
-系统权限操作作用于运行 DSH 的电脑。远程访问时，请在该电脑上完成授权。
+系统权限操作作用于运行 SNH 的电脑。远程访问时，请在该电脑上完成授权。
 
 从插件列表或详情页启用后，系统权限尚未就绪时会显示设置引导，提供“稍后”和“前往设置”。标准、创造和 PTC 模式均可使用 Computer Use。详情页的“新会话默认模式”提供“设为 PTC”按钮，仅点击此按钮才保存默认值。已有会话保留原 preset。“PTC 执行方式”一行的“设为持久化”在选用 Script 模式时单独启用 `ptc-runtime.scriptPersistence`；其他模式下保存 `ptc-runtime.executionMode: persistent-in-memory` 和 `replScoped: true`，使用 scoped REPL。切换会重载共享 PTC 执行器，可能打断当前调用；后续调用在内存中保留变量和应用对象。已经使用持久化模式时，按钮显示“已设为持久化”并禁用。其他 preset 单独保留自己的 CUA 程序状态，不依赖此设置。
 
@@ -91,11 +91,11 @@ Computer Use 详情页的权限卡片、组件列表和来源信息使用 l3 边
 <details>
 <summary>共享执行与平台职责</summary>
 
-实现 `CuaBackend.heldInputState` 的提供方通过 `getHeldInputs({})` 返回当前连接的持有记录，通过 `releaseHeldInputs({})` 释放这些输入并返回结果。原生记录负责保存实际按键或按钮、目标、进程身份和输入方式。成功结束的 `run_code` 和 `cua_run_code` 查询这些记录，仍有输入按住时添加 system reminder；DSH 和 MCP 的正常程序结束和回合结束均保持输入。DSH 通过已记录的额外上下文传递提醒，MCP 通过工具响应传递。macOS 和 Windows 都实现了这套协议。能力方法列表保持静态。
+实现 `CuaBackend.heldInputState` 的提供方通过 `getHeldInputs({})` 返回当前连接的持有记录，通过 `releaseHeldInputs({})` 释放这些输入并返回结果。原生记录负责保存实际按键或按钮、目标、进程身份和输入方式。成功结束的 `run_code` 和 `cua_run_code` 查询这些记录，仍有输入按住时添加 system reminder；SNH 和 MCP 的正常程序结束和回合结束均保持输入。SNH 通过已记录的额外上下文传递提醒，MCP 通过工具响应传递。macOS 和 Windows 都实现了这套协议。能力方法列表保持静态。
 
-每个 Agent 使用独立的原生输入连接，多个程序和回合可以复用这条连接。DSH 收到停止请求或模型报错时启动清理。原生释放尚未确认时，Agent 可以结束回合，`whenIdle()` 也可以返回。后续 CUA 调用等待清理结果。程序执行成功后，如果最终工具结果失败，CUA 立即清理这次调用所属的输入。原工具错误可以先返回，清理失败会另行报告。确认释放后，DSH 为模型记录释放提醒，并撤销仍在队列中的旧持有提醒。清理失败会通过 `agent/error` 单独报告，并禁用该任务后续的 CUA 操作。程序失败或取消、执行中的 MCP 请求收到取消、环境重置、连接关闭和提供方卸载，各自等待清理完成。
+每个 Agent 使用独立的原生输入连接，多个程序和回合可以复用这条连接。SNH 收到停止请求或模型报错时启动清理。原生释放尚未确认时，Agent 可以结束回合，`whenIdle()` 也可以返回。后续 CUA 调用等待清理结果。程序执行成功后，如果最终工具结果失败，CUA 立即清理这次调用所属的输入。原工具错误可以先返回，清理失败会另行报告。确认释放后，SNH 为模型记录释放提醒，并撤销仍在队列中的旧持有提醒。清理失败会通过 `agent/error` 单独报告，并禁用该任务后续的 CUA 操作。程序失败或取消、执行中的 MCP 请求收到取消、环境重置、连接关闭和提供方卸载，各自等待清理完成。
 
-[授权存储](src/permission-store.ts)复用 `storageDomain` 和配置的后端。默认 JSON 后端写入 `$DSH_HOME/storages/cua_permissions_<sha256>.json`，摘要对应 profile 的真实目录。每次授权检查在 profile 文件锁内打开并读取最新状态，随后关闭存储域；原生操作使用单独的应用锁。撤销会等待其他进程已获准执行的操作结束；撤销完成后，各进程都拒绝旧句柄。不同电脑或 PID 命名空间不能共享这把锁。
+[授权存储](src/permission-store.ts)复用 `storageDomain` 和配置的后端。默认 JSON 后端写入 `$SNH_HOME/storages/cua_permissions_<sha256>.json`，摘要对应 profile 的真实目录。每次授权检查在 profile 文件锁内打开并读取最新状态，随后关闭存储域；原生操作使用单独的应用锁。撤销会等待其他进程已获准执行的操作结束；撤销完成后，各进程都拒绝旧句柄。不同电脑或 PID 命名空间不能共享这把锁。
 
 旧 `allowedApps` 只在首次访问存储时导入，迁移后不再应用。确认权限页显示正确后，可以删除旧配置。授权、拒绝和允许再次询问均持久化，页面仍不显示仅对某个会话生效的许可。没有 profile 的独立组合只保留进程内决定；有 profile 但缺少域存储的组合会拒绝授权操作。
 
@@ -124,7 +124,7 @@ Computer Use 详情页的权限卡片、组件列表和来源信息使用 l3 边
 通过 `await cua.getCapabilities()` 返回的 `methods` 和 `keyboard` 确认支持的操作和输入范围。`pressKey(key, modifiers?)` 在按住所列修饰键时按下并释放一个键；`sendKeyEvent(key, direction)` 只发送一次按下或抬起。`typeText` 和 `paste` 在 provider 声明的键盘作用域内传送字面文本。键盘修饰键名称是 provider 解释的普通字符串。
 
 
-平台提供方从 `@deepseek-ai/dsh-cua/config` 导入 `CuaConfigFields` 来扩展共享配置。根 Host 入口导出 `installCua`、`CuaConfig` 和供 Typert 发现的 `CuaAccess` 服务，`apply()` 只标记可选 Client 贡献。`/client` 通过现有模块加载器加载权限界面。Host 和 Client 使用独立编译项目，headless 导入不会加载 React、CSS 或浏览器注册。`/api` 提供应用、窗口 API 及其类型；`/bridge`、`/native-client` 和 `/protocol` 保留运行时和平台消费者。`/types` 仅导出生成 Remote 声明所需的命名类型，Client 使用包内类型。`/typert` 提供 Host 反射，`/remote` 提供浏览器描述和编解码，权限判断仍由 Host 执行。
+平台提供方从 `@supernova-ai/snh-cua/config` 导入 `CuaConfigFields` 来扩展共享配置。根 Host 入口导出 `installCua`、`CuaConfig` 和供 Typert 发现的 `CuaAccess` 服务，`apply()` 只标记可选 Client 贡献。`/client` 通过现有模块加载器加载权限界面。Host 和 Client 使用独立编译项目，headless 导入不会加载 React、CSS 或浏览器注册。`/api` 提供应用、窗口 API 及其类型；`/bridge`、`/native-client` 和 `/protocol` 保留运行时和平台消费者。`/types` 仅导出生成 Remote 声明所需的命名类型，Client 使用包内类型。`/typert` 提供 Host 反射，`/remote` 提供浏览器描述和编解码，权限判断仍由 Host 执行。
 
 可选浏览器插件挂载原生 provider 的权限 Remote，复用插件页的启用引导和配置插槽。四排使用条件始终可见，未加载的字段保留占位；平台确认后，查询期间和权限已允许时均保留权限管理说明。默认模式、执行方式、系统权限、应用列表和应用图标分别查询，结果返回后各自显示。应用名称和操作按钮不等待图标，图标位置保留空位。用户操作按顺序执行，不等待尚未完成的查询；卸载时等待操作和查询全部结束，再释放独立持有的 Remote 挂载。已知查询错误和只读设置提示在管理操作或重试期间保持可见，操作按钮禁用。查询错误只显示在对应部分，启用引导只等待系统权限结果。注入层独立于页面观察插件管理操作。组合包和组件行变更会暂停四项查询，并使进行中的结果失效；操作结束后即使页面已关闭，也会重新查询。已知错误保留至读取成功；卸载后的迟到结果会被丢弃。首次读取系统权限失败时，控制器会查询主机插件清单。已启用的 Windows 提供方即使因准备辅助程序而加载失败，页面仍会显示配置步骤。两项查询都失败时，页面显示两个错误并提供重试。重新连接后会刷新状态。进入页面、窗口聚焦或操作完成后读取当前授权存储。操作提示挂载到 shell overlay，关闭页面后仍可显示。provider 负责权限检查、持久授权和取消；浏览器不保存授权决定。
 

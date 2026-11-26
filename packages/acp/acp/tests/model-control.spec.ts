@@ -1,11 +1,11 @@
-import { Context } from '@deepseek-ai/cordis'
-import { AgentModel, modelSelectionProjectionDefinition } from '@deepseek-ai/dsh-agent'
-import AgentRegistry, { type ModelSelection } from '@deepseek-ai/dsh-agent'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { Context } from '@supernova-ai/cordis'
+import { AgentModel, modelSelectionProjectionDefinition } from '@supernova-ai/snh-agent'
+import AgentRegistry, { type ModelSelection } from '@supernova-ai/snh-agent'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ReasoningEffortId, LlmRuntime } from '@deepseek-ai/dsh-llm'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ReasoningEffortId, LlmRuntime } from '@supernova-ai/snh-llm'
 import { AcpModelControl } from '../src/model-control.ts'
 
 /** Minimal LLM catalog/runtime double for pure standard-option tests. */

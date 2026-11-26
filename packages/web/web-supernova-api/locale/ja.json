@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "SuperNova Web 検索・取得 API",
+    "description": "SuperNova Search API で Web ページを検索し、Fetch API で本文を取得します。"
+  }
+}

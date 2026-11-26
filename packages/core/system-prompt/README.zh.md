@@ -3,13 +3,13 @@ description: "面向用户与维护者的系统提示词组装说明，用于添
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-system-prompt
+# @supernova-ai/snh-system-prompt
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-system-prompt` 组装有序提示词段、运行时事实、变量和工具 schema。每个 Session 只接收新增或变化的系统文本；未变指令保留在历史中。Cordis 生命周期决定已注册来源是否活跃。同名注册支持作用域覆盖。无效的完整提示词组合和未解析变量会使组装失败。
+`snh-system-prompt` 组装有序提示词段、运行时事实、变量和工具 schema。每个 Session 只接收新增或变化的系统文本；未变指令保留在历史中。Cordis 生命周期决定已注册来源是否活跃。同名注册支持作用域覆盖。无效的完整提示词组合和未解析变量会使组装失败。
 
 ## 目录
 
@@ -25,7 +25,7 @@ kind: "package-reference"
 <a id="use-this-package"></a>
 ## 使用本包
 
-在任何运行 agent 的地方挂载 `dsh-system-prompt`：它提供 `ctx.systemPrompt`，即每个提示词贡献所落入的注册表。通过 `agent.ctx` 注册只向该 agent 贡献内容。同名段以最近的作用域为准；同一作用域中，最后一个活跃注册优先。兄弟作用域互不影响。
+在任何运行 agent 的地方挂载 `snh-system-prompt`：它提供 `ctx.systemPrompt`，即每个提示词贡献所落入的注册表。通过 `agent.ctx` 注册只向该 agent 贡献内容。同名段以最近的作用域为准；同一作用域中，最后一个活跃注册优先。兄弟作用域互不影响。
 
 <a id="configure-the-prompt"></a>
 ### 配置提示词
@@ -35,7 +35,7 @@ kind: "package-reference"
 配置拥有固定开场白、runtime 上下文、部署 persona 前缀与后缀与工具顺序；其余一切来自已注册的贡献。
 
 ```yaml
-- name: '@deepseek-ai/dsh-system-prompt'
+- name: '@supernova-ai/snh-system-prompt'
   config:
     includeHarnessIdentity: true
     includeRuntimeContext: true
@@ -45,13 +45,13 @@ kind: "package-reference"
 
 | 字段 | 默认值 | 含义 |
 |---|---|---|
-| `includeHarnessIdentity` | `true` | 是否包含顺序为 −1000 的第一方固定开场白 `You are an AI agent powered by DeepSeek Harness.`。仅当兼容性部署拥有完整系统提示词时设为 false。 |
+| `includeHarnessIdentity` | `true` | 是否包含顺序为 −1000 的第一方固定开场白 `You are an AI agent powered by SuperNova Harness.`。仅当兼容性部署拥有完整系统提示词时设为 false。 |
 | `includeRuntimeContext` | `true` | 是否在组装中包含可选的有序动态 runtime 上下文 |
 | `personaPrefix` | `''` | 全局 persona 前缀模板，顺序为 `0`，位于第一方指导之前 |
 | `personaSuffix` | `''` | 全局 `deployment:persona-suffix` 模板，顺序为 `10200`，位于第一方指导之后 |
 | `toolOrder` | — | 显式面向模型工具顺序，含一个 `'<unlisted-tools>'` 其余项标记 |
 
-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-system-prompt)是每个受支持字段的穷尽式真源。没有恰好一个其余项或存在重复项的 `toolOrder` 列表会在加载时失败；已列名称没有对应已注册工具会使每次 `assemble()` 被拒绝。
+生成的[配置目录](../../../docs/config-catalog.zh.md#supernova-aisnh-system-prompt)是每个受支持字段的穷尽式真源。没有恰好一个其余项或存在重复项的 `toolOrder` 列表会在加载时失败；已列名称没有对应已注册工具会使每次 `assemble()` 被拒绝。
 
 ### 贡献提示词段
 
@@ -171,7 +171,7 @@ ctx.systemPrompt.variable('response_language', () => 'English')
 ##### harness 身份
 
 ```markdown
-You are an AI agent powered by DeepSeek Harness.
+You are an AI agent powered by SuperNova Harness.
 ```
 
 #### Token 影响
@@ -186,7 +186,7 @@ You are an AI agent powered by DeepSeek Harness.
 
 #### 模型看到什么
 
-对于已交付工具，模型会收到[生成工具 schema](../../../docs/tool-catalog.zh.md#deepseek-aidsh-tool-executor-ptc)中对每个 agent 可见的子集；限制与步骤时激活完成后，按配置或字典序排列。扩展可以通过同一注册表贡献其他定义。段与 schema 提供方是独立的组装输入。限制不会移除段落注册：工具指导插件通过 `text({ scope, toolSet })` 与 `ctx.tools.get(name, scope, toolSet)` 返回空文本或选择适用片段。任意静态段落不会被自动改写。
+对于已交付工具，模型会收到[生成工具 schema](../../../docs/tool-catalog.zh.md#supernova-aisnh-tool-executor-ptc)中对每个 agent 可见的子集；限制与步骤时激活完成后，按配置或字典序排列。扩展可以通过同一注册表贡献其他定义。段与 schema 提供方是独立的组装输入。限制不会移除段落注册：工具指导插件通过 `text({ scope, toolSet })` 与 `ctx.tools.get(name, scope, toolSet)` 返回空文本或选择适用片段。任意静态段落不会被自动改写。
 
 #### Token 影响
 

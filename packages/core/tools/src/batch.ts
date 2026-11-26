@@ -8,17 +8,17 @@
  * Abort records synthetic error results for skipped calls so replay stays
  * valid. A terminal scheduler failure rejects after draining; the owning step
  * records conservative recovery results before closing.
- * @module dsh-tools/batch
+ * @module snh-tools/batch
  */
 
 import { ToolBatchExecutionError } from './executor.ts'
 import { TOOL_ABORTED_BEFORE_DISPATCH } from './contracts.ts'
 import type { ToolBatchInput, ToolBatchResult, ToolCallResult } from './executor.ts'
-import { createToolResultMessage, type ToolCallBlock } from '@deepseek-ai/dsh-llm'
-import type { SessionSeq, UserMessage } from '@deepseek-ai/dsh-session'
+import { createToolResultMessage, type ToolCallBlock } from '@supernova-ai/snh-llm'
+import type { SessionSeq, UserMessage } from '@supernova-ai/snh-session'
 import type { ToolExecutionInput, ToolExecutionMode, ToolExecutionResult, ToolRunContext } from './contracts.ts'
 import type { ScheduledToolDispatch, ToolExecutionPipeline } from './pipeline.ts'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
+import { assertNever } from '@supernova-ai/snh-util-values'
 
 /** One tool call after argument parsing, ready to schedule. */
 interface PlannedCall {

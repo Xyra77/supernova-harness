@@ -2,27 +2,27 @@
 
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import * as FsObservationPolicy from '@deepseek-ai/dsh-fs-observation-policy'
-import SandboxedFileSystem from '@deepseek-ai/dsh-fs-sandbox'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import SandboxPolicyService, { setSandboxMode } from '@deepseek-ai/dsh-sandbox-policy'
-import { createScope, type Scope } from '@deepseek-ai/dsh-scope'
-import { SESSION_FORMAT_VERSION, Session, type SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
+import { Context } from '@supernova-ai/cordis'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
+import type { Agent } from '@supernova-ai/snh-agent'
+import * as FsObservationPolicy from '@supernova-ai/snh-fs-observation-policy'
+import SandboxedFileSystem from '@supernova-ai/snh-fs-sandbox'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import SandboxPolicyService, { setSandboxMode } from '@supernova-ai/snh-sandbox-policy'
+import { createScope, type Scope } from '@supernova-ai/snh-scope'
+import { SESSION_FORMAT_VERSION, Session, type SessionId } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import * as ToolFs from '@supernova-ai/snh-tool-fs'
+import ToolRuntime from '@supernova-ai/snh-tools'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { assertWorkspaceOutsideTemp, outsideTempWorkspaceParent } from '../../../../scripts/snapshot-workspace-parent.ts'
 import { installForkEnforcementForAgent, installSourceSessionAccess } from '../src/host/fork-enforcement.ts'
 import type { ForkToolExecution } from '../src/host/fork-tool-guard.ts'
 import { ForkRegistry } from '../src/host/fork-registry.ts'
 import { executeOneTool } from './tool-call.ts'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 
 const viewer = { providerId: 'feishu', tenantId: 'tenant-a', subjectId: 'viewer' }
 type AccessKind = 'source' | 'fork'
@@ -65,7 +65,7 @@ function standInAgent(id: SessionId, cwd: string): Omit<Agent, 'ctx'> {
 }
 
 beforeEach(async ({ onTestFinished }) => {
-  base = realpathSync(mkdtempSync(join(outsideTempWorkspaceParent(), '.dsh-liveshare-policy-')))
+  base = realpathSync(mkdtempSync(join(outsideTempWorkspaceParent(), '.snh-liveshare-policy-')))
   ctx = new Context()
   disposeAccess = undefined
   onTestFinished(async () => {

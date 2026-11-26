@@ -3,13 +3,13 @@
  * timestamps, goal lifecycle clocks, and hook duration while preserving semantic payload values.
  * The prompt-text and tool-schema scrubbers stay composable so one scenario per header class can
  * pin prompt and tool-schema sidecars.
- * @module @deepseek-ai/dsh-session-snapshot/normalize
+ * @module @supernova-ai/snh-session-snapshot/normalize
  */
 
 import {
   decodeSeqRanges,
-} from '@deepseek-ai/dsh-session'
-import { prepareSessionSnapshotFixtureForComparison } from '@deepseek-ai/dsh-llm-replay'
+} from '@supernova-ai/snh-session'
+import { prepareSessionSnapshotFixtureForComparison } from '@supernova-ai/snh-llm-replay'
 import { redactSessionSnapshotIds } from './identity.ts'
 import { sessionHeaderVersion } from './session-files.ts'
 
@@ -56,7 +56,7 @@ const LOCAL_SPILL_PATH_RE = new RegExp(
   'g',
 )
 const SNAPSHOT_SPILL_PATH_RE = new RegExp(
-  String.raw`(?:[A-Za-z]:)?[\\/]+(?:tmp|t)[\\/]+(?:dsh-acp-snap-[0-9a-f]{9}|dsh-acp-snapshot-spill)[\\/]+session-[0-9a-f]{12}[\\/]+[0-9a-f]{12}-([A-Za-z0-9._~-]+?)`
+  String.raw`(?:[A-Za-z]:)?[\\/]+(?:tmp|t)[\\/]+(?:snh-acp-snap-[0-9a-f]{9}|snh-acp-snapshot-spill)[\\/]+session-[0-9a-f]{12}[\\/]+[0-9a-f]{12}-([A-Za-z0-9._~-]+?)`
   + String.raw`(?=\. Use read with offset/limit|[\s)"]|\\+"|$)`,
   'g',
 )
@@ -517,7 +517,7 @@ export function normalizeSessionFormatMetadata(rawLog: string, sourceVersion?: n
     const record = JSON.parse(line) as Record<string, unknown>
     if (record.type === 'session' && Object.hasOwn(record, 'version')) {
       delete record.version
-    } else if (sourceVersion !== undefined && record.type === 'session-log-deepseek/delivery-accepted') {
+    } else if (sourceVersion !== undefined && record.type === 'session-log-supernova/delivery-accepted') {
       const data = record.data as Record<string, unknown> | undefined
       if (data?.sessionFormatVersion !== sourceVersion) return line
       data.sessionFormatVersion = SOURCE_SESSION_FORMAT

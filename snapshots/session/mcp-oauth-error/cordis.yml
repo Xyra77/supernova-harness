@@ -1,4 +1,4 @@
-- id: llm-deepseek
+- id: llm-supernova
   config:
     thinking: enabled
     reasoningEffort: max
@@ -11,12 +11,12 @@
 
 - insert:
     - id: mcp-oauth-error
-      name: '@deepseek-ai/dsh-mcp-client'
+      name: '@supernova-ai/snh-mcp-client'
       inject: [credentials]
       config:
         transport: streamable-http
         serverName: protected
-        url: !!js process.env.DSH_MCP_DEMO_URL
+        url: !!js process.env.SNH_MCP_DEMO_URL
         oauth:
           credentialKey: mcp-client/snapshot
         expandTemplates: true

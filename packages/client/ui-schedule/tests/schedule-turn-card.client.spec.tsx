@@ -6,19 +6,19 @@
  */
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
+import { makeTranslate } from '@supernova-ai/snh-client-test-runtime'
 import {
   ConversationNodeAssembler, type ConversationLocationDataSource, type ConversationLocationDataStore,
   type ConversationMatch, type ConversationNodeDefinition, type ConversationStartMatch,
   type ConversationTimelineSnapshot, type ConversationTurnDataMap,
   type ConversationViewDefinition, type ConversationViewNode, type ToolResultNode, type TurnLocation,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { SessionLiveEventEntry } from '@deepseek-ai/dsh-api-session-controller/client'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { createToolResultMessage, type ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { SessionEvent, SessionId } from '@deepseek-ai/dsh-session/types'
-import type { ScheduleId, ScheduleCatalogEntry } from '@deepseek-ai/dsh-schedule/client'
-import { PartialArguments } from '@deepseek-ai/dsh-util-values'
+} from '@supernova-ai/snh-client-ui-conversation/client'
+import type { SessionLiveEventEntry } from '@supernova-ai/snh-api-session-controller/client'
+import { brandString } from '@supernova-ai/snh-brand'
+import { createToolResultMessage, type ToolCallId } from '@supernova-ai/snh-llm'
+import type { SessionEvent, SessionId } from '@supernova-ai/snh-session/types'
+import type { ScheduleId, ScheduleCatalogEntry } from '@supernova-ai/snh-schedule/client'
+import { PartialArguments } from '@supernova-ai/snh-util-values'
 import type { CatalogSnapshot } from '../src/client/catalog-source.ts'
 import { ScheduleTurnCard, type ScheduleTurnCardProps } from '../src/client/ScheduleTurnCard.tsx'
 import { zoneLabel } from '../src/client/schedule-format.ts'

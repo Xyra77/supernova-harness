@@ -98,9 +98,9 @@
   },
   "packages/experimental/timeline/src/client/timeline.css": {
     "has-outside-subject": {
-      "body:has(.dsh-timeline[data-timeline-dock-open=\"true\"]) .timeline-dock[data-current-tree=\"true\"] .timeline-dock-action svg": 1,
-      "body:has(.dsh-timeline[data-timeline-dock-open=\"true\"]) .timeline-dock[data-current-tree=\"true\"] .timeline-dock-close": 1,
-      "body:has(.dsh-timeline[data-timeline-dock-open=\"true\"]) .timeline-dock[data-current-tree=\"true\"] .timeline-dock-open": 1
+      "body:has(.snh-timeline[data-timeline-dock-open=\"true\"]) .timeline-dock[data-current-tree=\"true\"] .timeline-dock-action svg": 1,
+      "body:has(.snh-timeline[data-timeline-dock-open=\"true\"]) .timeline-dock[data-current-tree=\"true\"] .timeline-dock-close": 1,
+      "body:has(.snh-timeline[data-timeline-dock-open=\"true\"]) .timeline-dock[data-current-tree=\"true\"] .timeline-dock-open": 1
     }
   }
 }

@@ -1,8 +1,8 @@
 /** Registered program tools with an explicit runtime and private tool bindings. @module */
-import type { Context } from '@deepseek-ai/cordis'
-import type { PtcRuntime } from '@deepseek-ai/dsh-ptc-runtime'
-import type { ToolDefinition } from '@deepseek-ai/dsh-tools'
-import { ToolExecutionPipeline } from '@deepseek-ai/dsh-tools/pipeline'
+import type { Context } from '@supernova-ai/cordis'
+import type { PtcRuntime } from '@supernova-ai/snh-ptc-runtime'
+import type { ToolDefinition } from '@supernova-ai/snh-tools'
+import { ToolExecutionPipeline } from '@supernova-ai/snh-tools/pipeline'
 import { Config } from './config.ts'
 import { PtcCalls } from './ptc-calls.ts'
 import { createRunCodeTransport, requireRuntimeLanguage } from './ptc.ts'

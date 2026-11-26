@@ -1,13 +1,13 @@
 /** The review page's Remote methods of `forgePanel`, which name a change request by URL and need no Session binding. */
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { changeRequestKey } from '@deepseek-ai/dsh-experimental-forge'
+import type { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import { changeRequestKey } from '@supernova-ai/snh-experimental-forge'
 import type {
   ChangeRequestDescription, ChangeRequestKey, ChangeRequestRef, ChangeRequestSnapshot, ForgeActionFailure, ForgeFailure, ForgeProvider,
   ForgeReadiness, ForgeRepository, ForgeReviewData, ForgeReviewWrite, ForgeReviewWriteResult, ForgeThreadId, ForgeViewerFilter,
   ForgeViewerList, ForgeViewerQuery,
-} from '@deepseek-ai/dsh-experimental-forge'
+} from '@supernova-ai/snh-experimental-forge'
 import ForgePanelController from '../src/index.ts'
 import type { Config, ForgeReviewChangeRequest, ForgeReviewCountFrame, ForgeReviewFrame } from '../src/index.ts'
 import { bench, demo, pullUrl, scratch, sendPrompt, snapshot } from './harness.ts'
@@ -28,7 +28,7 @@ const PATCH = 'diff --git a/src/a.ts b/src/a.ts\n--- a/src/a.ts\n+++ b/src/a.ts\
 
 /** A panel Remote whose Session directory is no checkout; review page methods read nothing locally. */
 async function page(config: Config = {}): Promise<Bench> {
-  const { path, remove } = await scratch('dsh-forge-review-page-')
+  const { path, remove } = await scratch('snh-forge-review-page-')
   cleanups.push(remove)
   const opened = await bench(path, config)
   cleanups.push(() => opened.ctx.fiber.dispose())

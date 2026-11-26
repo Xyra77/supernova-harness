@@ -6,11 +6,11 @@ import { join } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import { zstdCompressSync } from 'node:zlib'
 import { describe, expect, it, onTestFinished } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SESSION_FORMAT_VERSION, SessionId, SessionLogOffset, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
-import { SessionPersistenceCorruptionError } from '@deepseek-ai/dsh-session-persistence'
+import { Context } from '@supernova-ai/cordis'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import { SESSION_FORMAT_VERSION, SessionId, SessionLogOffset, SessionSeq } from '@supernova-ai/snh-session'
+import type { SessionEvent, SessionHeader } from '@supernova-ai/snh-session'
+import { SessionPersistenceCorruptionError } from '@supernova-ai/snh-session-persistence'
 import { FRAME_CODEC_UTF8, FRAME_CODEC_ZSTD, decodeFrame, encodeFrame } from '../src/frame.ts'
 import * as plugin from '../src/index.ts'
 import { SqliteSessionPersistence } from '../src/persistence.ts'
@@ -34,7 +34,7 @@ const event = (seq: number): SessionEvent<'user/message'> => {
 const events = (count: number, from = 0): SessionEvent[] => Array.from({ length: count }, (_, index) => event(from + index))
 
 async function fixture(overrides: Partial<SqliteStoreOptions> = {}) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-sqlite-frames-')), path = join(root, 'sessions.sqlite')
+  const root = await mkdtemp(join(tmpdir(), 'snh-sqlite-frames-')), path = join(root, 'sessions.sqlite')
   const logs = sqliteLogs(path, root, overrides)
   onTestFinished(async () => { try { await logs.close() } finally { await rm(root, { recursive: true, force: true }) } })
   const inspect = (): DatabaseSync => {
@@ -102,7 +102,7 @@ describe('plugin configuration', () => {
   })
 
   it('applies the plugin defaults when constructed without frame settings', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-sqlite-frame-defaults-'))
+    const root = await mkdtemp(join(tmpdir(), 'snh-sqlite-frame-defaults-'))
     const ctx = new Context()
     onTestFinished(async () => { await ctx.fiber.dispose(); await rm(root, { recursive: true, force: true }) })
     const provider = new SqliteSessionPersistence(ctx, ctx, { root }, {

@@ -1,10 +1,10 @@
 /** Exclusive legacy Session import with same-provider open sequencing. @module */
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type { JsonlSessionPersistence } from '@deepseek-ai/dsh-session-persistence-jsonl'
-import { HarnessError } from '@deepseek-ai/dsh-llm'
+import type { SessionId } from '@supernova-ai/snh-session'
+import type { JsonlSessionPersistence } from '@supernova-ai/snh-session-persistence-jsonl'
+import { HarnessError } from '@supernova-ai/snh-llm'
 import { setTimeout } from 'node:timers/promises'
-import { SessionAlreadyOwnedError } from '@deepseek-ai/dsh-session-persistence'
-import type { SessionAccess, SessionHandle, SessionPersistenceOpenOptions } from '@deepseek-ai/dsh-session-persistence'
+import { SessionAlreadyOwnedError } from '@supernova-ai/snh-session-persistence'
+import type { SessionAccess, SessionHandle, SessionPersistenceOpenOptions } from '@supernova-ai/snh-session-persistence'
 import type { SqliteStore } from './sqlite.ts'
 
 /** Historical reads used by the persistence service; no JSONL writes or live handles. */

@@ -34,7 +34,7 @@ Function un.BeginCleanup
   InitPluginsDir
   File "/oname=$PLUGINSDIR\window-frame.dll" "${INSTALLER_BUILD_DIR}\window-frame.dll"
   System::Call 'kernel32::GetCurrentProcessId() i.r0'
-  StrCpy $UnReportPath "$TEMP\DeepSeek-Harness-uninstall-$0.txt"
+  StrCpy $UnReportPath "$TEMP\SuperNova-Harness-uninstall-$0.txt"
   System::Call '$PLUGINSDIR\window-frame.dll::UninstallBegin(w "$UnReportPath") p.r0 ?c'
   StrCpy $UnSession $0
   ${If} $UnSession == 0
@@ -42,7 +42,7 @@ Function un.BeginCleanup
     SetErrorLevel 2
     Quit
   ${EndIf}
-  ReadEnvStr $UnHome DSH_HOME
+  ReadEnvStr $UnHome SNH_HOME
   System::Call '$PLUGINSDIR\window-frame.dll::UninstallPrepare(p $UnSession, w "$INSTDIR", w "$UnHome") i.r0 ?c'
   ${If} $0 != 0
     StrCpy $UnMode 4
@@ -126,8 +126,8 @@ Function un.CleanData
   ${IfNot} ${Errors}
     Return
   ${EndIf}
-  ; Only a DSH_HOME published as a Windows environment variable is visible here.
-  ReadEnvStr $UnHome DSH_HOME
+  ; Only a SNH_HOME published as a Windows environment variable is visible here.
+  ReadEnvStr $UnHome SNH_HOME
   ClearErrors
   StrCpy $UnTarget "$APPDATA\${PRODUCT_FILENAME}"
   Call un.RemoveData
@@ -137,15 +137,15 @@ Function un.CleanData
     Call un.RemoveData
     System::Call '$PLUGINSDIR\window-frame.dll::UninstallRemoveEmptyParents(w "$UnTarget", w "$APPDATA") ?c'
   !endif
-  StrCpy $UnTarget "$LOCALAPPDATA\${DSH_UPDATER_CACHE_NAME}"
+  StrCpy $UnTarget "$LOCALAPPDATA\${SNH_UPDATER_CACHE_NAME}"
   Call un.RemoveData
 FunctionEnd
 
 ; Upgrade replacement retains integrations; KEEP_APP_DATA controls only user data.
-!define /ifndef DSH_COMMAND_ENVIRONMENT_KEY "Environment"
-!define /ifndef DSH_COMMAND_OWNER_KEY "Software\DeepSeekHarness\Command"
-!define /ifndef DSH_PROTOCOL_KEY "Software\Classes\dsh"
-!define /ifndef DSH_COMMAND_MUTEX "default"
+!define /ifndef SNH_COMMAND_ENVIRONMENT_KEY "Environment"
+!define /ifndef SNH_COMMAND_OWNER_KEY "Software\SuperNovaHarness\Command"
+!define /ifndef SNH_PROTOCOL_KEY "Software\Classes\snh"
+!define /ifndef SNH_COMMAND_MUTEX "default"
 Function un.CleanRegistration
   ${If} ${isUpdated}
     Return
@@ -179,7 +179,7 @@ Function un.RunRegistrationCleanup
   File /oname=$PLUGINSDIR\command-path.ps1 "${__FILEDIR__}\..\scripts\command-path.ps1"
   File /oname=$PLUGINSDIR\uninstall-registration.ps1 "${__FILEDIR__}\..\scripts\uninstall-registration.ps1"
   Delete "$PLUGINSDIR\registration-report.txt"
-  nsExec::ExecToStack '"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$PLUGINSDIR\uninstall-registration.ps1" -Directory "$INSTDIR" -ExecutableName "${APP_EXECUTABLE_FILENAME}" -EnvironmentKey "${DSH_COMMAND_ENVIRONMENT_KEY}" -OwnerKey "${DSH_COMMAND_OWNER_KEY}" -ProtocolKey "${DSH_PROTOCOL_KEY}" -ReportPath "$PLUGINSDIR\registration-report.txt" -MutexName "${DSH_COMMAND_MUTEX}" -UnownedMarker "$PLUGINSDIR\unowned-path" $UnRegistrationArguments'
+  nsExec::ExecToStack '"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$PLUGINSDIR\uninstall-registration.ps1" -Directory "$INSTDIR" -ExecutableName "${APP_EXECUTABLE_FILENAME}" -EnvironmentKey "${SNH_COMMAND_ENVIRONMENT_KEY}" -OwnerKey "${SNH_COMMAND_OWNER_KEY}" -ProtocolKey "${SNH_PROTOCOL_KEY}" -ReportPath "$PLUGINSDIR\registration-report.txt" -MutexName "${SNH_COMMAND_MUTEX}" -UnownedMarker "$PLUGINSDIR\unowned-path" $UnRegistrationArguments'
   Pop $0
   Pop $1
   System::Call '$PLUGINSDIR\window-frame.dll::UninstallImport(p $UnSession, w "$PLUGINSDIR\registration-report.txt") ?c'
@@ -193,6 +193,6 @@ Function un.RunRegistrationCleanup
         System::Call '$PLUGINSDIR\window-frame.dll::UninstallNote(p $UnSession, w "[unverified] Registration cleanup target: HKCU\${UNINSTALL_REGISTRY_KEY_2}") ?c'
       !endif
     ${EndIf}
-    System::Call '$PLUGINSDIR\window-frame.dll::UninstallNote(p $UnSession, w "Registration cleanup failed or did not return a result. Exit: $0. Targets: HKCU\${DSH_COMMAND_ENVIRONMENT_KEY} [Path]; HKCU\${DSH_COMMAND_OWNER_KEY}; HKCU\${DSH_PROTOCOL_KEY}. Unverified registrations may remain.") ?c'
+    System::Call '$PLUGINSDIR\window-frame.dll::UninstallNote(p $UnSession, w "Registration cleanup failed or did not return a result. Exit: $0. Targets: HKCU\${SNH_COMMAND_ENVIRONMENT_KEY} [Path]; HKCU\${SNH_COMMAND_OWNER_KEY}; HKCU\${SNH_PROTOCOL_KEY}. Unverified registrations may remain.") ?c'
   ${EndIf}
 FunctionEnd

@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-product-analytics",
+  "name": "@supernova-ai/snh-client-product-analytics",
   "description": "Desktop product event collection and authenticated Host reporting",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -37,10 +37,10 @@
     },
     "./locale/*.json": "./locale/*.json"
   },
-  "dsh": {
+  "snh": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-api-gateway"
+        "@supernova-ai/snh-api-gateway"
       ],
       "platform": "web"
     }
@@ -51,23 +51,23 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-api-gateway": "workspace:*",
-    "@deepseek-ai/dsh-compaction": "workspace:*",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-host-product-telemetry-otel": "workspace:*",
-    "@deepseek-ai/dsh-deepseek-account": "workspace:*",
-    "@deepseek-ai/dsh-host-webserver": "workspace:*",
-    "@deepseek-ai/dsh-settings": "workspace:*",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/dsh-otel": "workspace:*",
-    "@deepseek-ai/dsh-app-boot": "workspace:*",
-    "@deepseek-ai/dsh-loader-smoke": "workspace:*"
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-api-gateway": "workspace:*",
+    "@supernova-ai/snh-compaction": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-host-product-telemetry-otel": "workspace:*",
+    "@supernova-ai/snh-deepseek-account": "workspace:*",
+    "@supernova-ai/snh-host-webserver": "workspace:*",
+    "@supernova-ai/snh-settings": "workspace:*",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-otel": "workspace:*",
+    "@supernova-ai/snh-app-boot": "workspace:*",
+    "@supernova-ai/snh-loader-smoke": "workspace:*"
   },
   "files": [
     "locale/*.json",
@@ -84,8 +84,8 @@
     "src"
   ],
   "dependencies": {
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/snh-typert-protocol": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
     "zod": "4.6.6"
   }
 }

@@ -2,13 +2,13 @@
 import { createServer } from 'node:http'
 import type { IncomingMessage, Server, ServerResponse } from 'node:http'
 import { afterEach, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import LlmRuntime, { type ReasoningEffortId } from '@deepseek-ai/dsh-llm'
+import { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import LlmRuntime, { type ReasoningEffortId } from '@supernova-ai/snh-llm'
 import { accountStub } from '../../../account/deepseek-account/tests/account-stub.ts'
-import * as ApiKey from '@deepseek-ai/dsh-llm-deepseek-api-key'
+import * as ApiKey from '@supernova-ai/snh-llm-supernova-api-key'
 import * as Account from '../src/index.ts'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 
 const MESSAGES = { output_modalities: ['text'], api_capabilities: { anthropic_messages: {} } }
 const FLASH = {
@@ -18,7 +18,7 @@ const FLASH = {
   api_capabilities: { anthropic_messages: { system_prompt_update: 'in-history' } },
 }
 const PRO = { id: 'deepseek-v4-pro', name: 'DeepSeek-V4-Pro', context_window: 1_048_576, max_output_tokens: 393_216, input_modalities: ['text'], ...MESSAGES }
-const requires = (version: string) => ({ client_requirements: { 'deepseek-harness': { min_version: version } } })
+const requires = (version: string) => ({ client_requirements: { 'supernova-harness': { min_version: version } } })
 
 const contexts: Context[] = []
 const servers: Server[] = []
@@ -52,7 +52,7 @@ async function host(origin: string, token: () => string | undefined = () => 'fix
   const ctx = new Context()
   contexts.push(ctx)
   await ctx.plugin(LlmRuntime)
-  ctx.provide('deepseekAccount', accountStub({ token: url => new URL(url).origin === origin ? token() : undefined }))
+  ctx.provide('supernovaAccount', accountStub({ token: url => new URL(url).origin === origin ? token() : undefined }))
   return ctx
 }
 
@@ -61,7 +61,7 @@ it('keeps discovery and disposal independent across the two credential routes', 
   const server = await listing(json({ data: [FLASH, PRO] }))
   let token: string | undefined = 'fixture-account-token'
   const ctx = await host(server.origin, () => token)
-  await ctx.plugin(DeepSeekAuth)
+  await ctx.plugin(SuperNovaAuth)
   const account = ctx.plugin(Account, { baseURL: server.baseURL })
   await account
   const official = ctx.plugin(ApiKey, { models: [{ id: 'api-key-model', name: 'API-key model' }] })
@@ -71,14 +71,14 @@ it('keeps discovery and disposal independent across the two credential routes', 
   ])
   expect((await ctx.llm.listModels('deepseek-official')).map(row => row.id)).toEqual(['api-key-model'])
   expect(ctx.llm.listConfigurableProviders().map(row => [row.provider, row.settingsNs])).toEqual([
-    ['deepseek-account', 'llm-deepseek-account'], ['deepseek-official', 'llm-deepseek-api-key'],
+    ['deepseek-account', 'llm-deepseek-account'], ['deepseek-official', 'llm-supernova-api-key'],
   ])
   expect(Account.Config({})).not.toHaveProperty('apiKeyEnv')
   token = undefined
   expect(await ctx.llm.listModels('deepseek-account')).toEqual([])
   token = 'second-account-token'
   expect(await ctx.llm.listModels('deepseek-account')).toHaveLength(2)
-  expect(server.requests.map(request => request.headers['x-dsh-auth-token'])).toEqual(['fixture-account-token', 'second-account-token'])
+  expect(server.requests.map(request => request.headers['x-snh-auth-token'])).toEqual(['fixture-account-token', 'second-account-token'])
   await account.dispose()
   expect(ctx.llm.listProviders().map(row => row.id)).toEqual(['deepseek-official'])
   await official.dispose()
@@ -88,7 +88,7 @@ it('keeps discovery and disposal independent across the two credential routes', 
 it('resolves listed capabilities with this build\'s model knowledge', async () => {
   const server = await listing(json({ data: [FLASH, PRO] }))
   const ctx = await host(server.origin)
-  await ctx.plugin(DeepSeekAuth)
+  await ctx.plugin(SuperNovaAuth)
   await ctx.plugin(Account, { baseURL: server.baseURL })
   await expect(ctx.llm.resolveModelInfo('deepseek-account', 'deepseek-flash')).resolves.toMatchObject({
     name: 'DeepSeek-V4.1-Flash', context: { contextWindow: 1_048_576 }, defaultMaxTokens: 256_000,
@@ -97,14 +97,14 @@ it('resolves listed capabilities with this build\'s model knowledge', async () =
   })
   await expect(ctx.llm.resolveModelInfo('deepseek-account', 'deepseek-v4-pro')).resolves.not.toHaveProperty('systemPromptUpdate')
   expect(server.requests).toHaveLength(1)
-  expect(server.requests[0]?.headers['user-agent']).toMatch(/^deepseek-harness\//)
+  expect(server.requests[0]?.headers['user-agent']).toMatch(/^supernova-harness\//)
 })
 
 it('advertises the badges its listing declares', async () => {
   const badge = { text: { en: 'New', zh: '新' }, tone: 'success' }
-  const server = await listing(json({ data: [{ ...FLASH, client_metadata: { 'deepseek-harness': { badge } } }, PRO] }))
+  const server = await listing(json({ data: [{ ...FLASH, client_metadata: { 'supernova-harness': { badge } } }, PRO] }))
   const ctx = await host(server.origin)
-  await ctx.plugin(DeepSeekAuth)
+  await ctx.plugin(SuperNovaAuth)
   await ctx.plugin(Account, { baseURL: server.baseURL })
   expect((await ctx.llm.listModels('deepseek-account')).map(row => [row.id, row.badge])).toEqual([
     ['deepseek-flash', badge], ['deepseek-v4-pro', undefined],
@@ -114,7 +114,7 @@ it('advertises the badges its listing declares', async () => {
 it('publishes an account badge removal after the default idle refresh interval', async () => {
   let badge: { text: string } | undefined = { text: 'New' }
   const server = await listing((request, response) => {
-    json({ data: [{ ...FLASH, client_metadata: { 'deepseek-harness': { badge } } }] })(request, response)
+    json({ data: [{ ...FLASH, client_metadata: { 'supernova-harness': { badge } } }] })(request, response)
   })
   const ctx = await host(server.origin)
   const refreshed = Promise.withResolvers<undefined>()
@@ -125,7 +125,7 @@ it('publishes an account badge removal after the default idle refresh interval',
   })
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] })
   try {
-    await ctx.plugin(DeepSeekAuth)
+    await ctx.plugin(SuperNovaAuth)
     await ctx.plugin(Account, { baseURL: server.baseURL })
     expect((await ctx.llm.listModels('deepseek-account'))[0]?.badge?.text).toBe('New')
     badge = undefined
@@ -144,7 +144,7 @@ it('falls back to the bundled catalog when the listing fails', async () => {
   const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
   const server = await listing((_request, response) => { response.writeHead(503).end('down') })
   const ctx = await host(server.origin)
-  await ctx.plugin(DeepSeekAuth)
+  await ctx.plugin(SuperNovaAuth)
   await ctx.plugin(Account, { baseURL: server.baseURL })
   expect((await ctx.llm.listModels('deepseek-account')).map(row => row.id)).toEqual(['deepseek-flash', 'deepseek-v4-pro'])
   expect(warn).toHaveBeenCalledExactlyOnceWith('[llm-deepseek-account]', expect.stringContaining('using the bundled catalog') as string)
@@ -162,13 +162,13 @@ it('hides and refuses listed models this build cannot serve before any inference
     { id: 'deepseek-v4-pro' },
   ] }))
   const ctx = await host(server.origin)
-  await ctx.plugin(DeepSeekAuth)
+  await ctx.plugin(SuperNovaAuth)
   await ctx.plugin(Account, { baseURL: server.baseURL })
   expect((await ctx.llm.listModels('deepseek-account')).map(row => row.id)).toEqual(['deepseek-flash', 'deepseek-v5-open'])
   await expect(ctx.llm.prepareCall({ provider: 'deepseek-account', model: 'deepseek-v5' })).rejects.toMatchObject({ code: 'MODEL_UNSUPPORTED' })
   await expect(ctx.llm.prepareCall({ provider: 'deepseek-account', model: 'deepseek-v4-pro' })).rejects.toMatchObject({ code: 'MODEL_UNSUPPORTED' })
   await expect(ctx.llm.prepareCall({ provider: 'deepseek-account', model: 'deepseek-v5-next' }))
-    .rejects.toMatchObject({ code: 'CLIENT_UPGRADE_REQUIRED', message: expect.stringMatching(/requires DeepSeek Harness 99\.0\.0-alpha\.1 or later; current version is /) as string })
+    .rejects.toMatchObject({ code: 'CLIENT_UPGRADE_REQUIRED', message: expect.stringMatching(/requires SuperNova Harness 99\.0\.0-alpha\.1 or later; current version is /) as string })
   await expect(ctx.llm.prepareCall({ provider: 'deepseek-account', model: 'unlisted-pass-through' })).resolves.toBeDefined()
   expect(server.requests.map(request => request.url)).toEqual(['/models'])
   expect(diagnostic).toHaveBeenCalledExactlyOnceWith('[llm-deepseek-account]', expect.stringContaining('loaded 5 model(s), skipped 0 row(s)') as string)
@@ -178,11 +178,11 @@ it('hides and refuses listed models this build cannot serve before any inference
 it('applies model overrides and reports stale ones on the provider directory until they resolve', async () => {
   let token = 'first-account'
   const server = await listing((request, response) => {
-    const rows = request.headers['x-dsh-auth-token'] === 'first-account' ? [FLASH] : [FLASH, { ...PRO, id: 'deepseek-v5', ...requires('0.0.1') }]
+    const rows = request.headers['x-snh-auth-token'] === 'first-account' ? [FLASH] : [FLASH, { ...PRO, id: 'deepseek-v5', ...requires('0.0.1') }]
     json({ data: rows })(request, response)
   })
   const ctx = await host(server.origin, () => token)
-  await ctx.plugin(DeepSeekAuth)
+  await ctx.plugin(SuperNovaAuth)
   await ctx.plugin(Account, { baseURL: server.baseURL, modelOverrides: { 'deepseek-flash': { contextWindow: 524_288 }, 'deepseek-v5': { contextWindow: 9 } } })
   await ctx.llm.listModels('deepseek-account')
   await expect(ctx.llm.resolveModelInfo('deepseek-account', 'deepseek-flash')).resolves.toMatchObject({ context: { contextWindow: 524_288 } })
@@ -197,7 +197,7 @@ it('applies model overrides and reports stale ones on the provider directory unt
 
 it('rejects the retired models setting at load', async () => {
   const ctx = await host('http://127.0.0.1:1')
-  await ctx.plugin(DeepSeekAuth)
+  await ctx.plugin(SuperNovaAuth)
   await expect(ctx.plugin(Account, { models: [] })).rejects.toThrow(/models is no longer configurable/)
   expect(ctx.llm.listProviders()).toEqual([])
 })
@@ -206,7 +206,7 @@ it('aborts an in-flight listing request when the plugin is disposed', async () =
   const held = Promise.withResolvers<IncomingMessage>()
   const server = await listing((request) => { held.resolve(request) })
   const ctx = await host(server.origin)
-  await ctx.plugin(DeepSeekAuth)
+  await ctx.plugin(SuperNovaAuth)
   const account = ctx.plugin(Account, { baseURL: server.baseURL })
   await account
   const pending = ctx.llm.listModels('deepseek-account')
@@ -217,21 +217,21 @@ it('aborts an in-flight listing request when the plugin is disposed', async () =
   await expect(pending).resolves.toEqual(expect.any(Array))
 })
 
-it('connects its route id and deployment, so other DeepSeek consumers send the account sign-in to its origin', async () => {
+it('connects its route id and deployment, so other SuperNova consumers send the account sign-in to its origin', async () => {
   const asked: string[] = []
   const ctx = new Context()
   contexts.push(ctx)
   await ctx.plugin(LlmRuntime)
-  ctx.provide('deepseekAccount', accountStub({ token: (url) => { asked.push(url); return 'fixture-account-token' } }))
-  await ctx.plugin(DeepSeekAuth)
+  ctx.provide('supernovaAccount', accountStub({ token: (url) => { asked.push(url); return 'fixture-account-token' } }))
+  await ctx.plugin(SuperNovaAuth)
   const search = { consumer: 'web-test', accepts: ['account'], billing: 'account', destination: { path: '/v1/tools/search' } } as const
   const route = await ctx.plugin(Account, { baseURL: 'https://account.deepseek.test/anthropic' })
-  expect(ctx.deepseekAuth.routeKind('deepseek-account')).toBe('account')
-  expect(await ctx.deepseekAuth.authorize(search)).toMatchObject({
-    kind: 'account', endpoint: 'https://account.deepseek.test/v1/tools/search', headers: { 'x-dsh-auth-token': 'fixture-account-token' },
+  expect(ctx.supernovaAuth.routeKind('deepseek-account')).toBe('account')
+  expect(await ctx.supernovaAuth.authorize(search)).toMatchObject({
+    kind: 'account', endpoint: 'https://account.deepseek.test/v1/tools/search', headers: { 'x-snh-auth-token': 'fixture-account-token' },
   })
   await route.dispose()
-  expect(ctx.deepseekAuth.routeKind('deepseek-account')).toBeUndefined()
-  expect(await ctx.deepseekAuth.authorize(search)).toMatchObject({ endpoint: 'https://api.deepseek.com/v1/tools/search' })
+  expect(ctx.supernovaAuth.routeKind('deepseek-account')).toBeUndefined()
+  expect(await ctx.supernovaAuth.authorize(search)).toMatchObject({ endpoint: 'https://api.deepseek.com/v1/tools/search' })
   expect(asked).toEqual(['https://account.deepseek.test/v1/tools/search', 'https://api.deepseek.com/v1/tools/search'])
 })

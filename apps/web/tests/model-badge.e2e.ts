@@ -1,7 +1,7 @@
 /** Catalog badges reach every selector placement through the Host catalog without changing catalog identity. */
 import { fileURLToPath } from 'node:url'
-import { LlmAdapter, type LlmModelBadge, type StreamChunk } from '@deepseek-ai/dsh-llm'
-import { parseModelListing } from '@deepseek-ai/dsh-llm-deepseek'
+import { LlmAdapter, type LlmModelBadge, type StreamChunk } from '@supernova-ai/snh-llm'
+import { parseModelListing } from '@supernova-ai/snh-llm-supernova'
 import { chromium, type Browser, type Page } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import {
@@ -10,14 +10,14 @@ import {
 import { connectFreshWorkspaceZh, ZH_BROWSER_LOCALE } from './support.ts'
 
 const NAME = 'DeepSeek-V4.1-Flash'
-const LONG_NAME = 'DeepSeek model with a very long release and capability description that exceeds the selector width'
+const LONG_NAME = 'SuperNova model with a very long release and capability description that exceeds the selector width'
 const FIXTURE = fileURLToPath(new URL('./fixtures/model-badge/session.v4.jsonl', import.meta.url))
 const EXPECTED = fileURLToPath(new URL('./expected/model-badge/models.expected.md', import.meta.url))
 const MODE = webSnapshotMode()
 
-/** DeepSeek fixture declarations pass through the production wire decoder before replay. */
+/** SuperNova fixture declarations pass through the production wire decoder before replay. */
 function listedModel(id: string, name: string, badge: unknown) {
-  const entry = parseModelListing({ data: [{ id, name, client_metadata: { 'deepseek-harness': { badge } } }] }).entries[0]!
+  const entry = parseModelListing({ data: [{ id, name, client_metadata: { 'supernova-harness': { badge } } }] }).entries[0]!
   return { id, name, ...(entry.badge?.kind === 'badge' ? { badge: entry.badge.badge } : {}) }
 }
 
@@ -33,10 +33,10 @@ describe.skipIf(MODE === 'record')('web e2e: catalog model badges', () => {
       replayFixture: FIXTURE,
       replayProvidersOnly: true,
       replayProviders: [
-        { id: 'deepseek-account', name: 'DeepSeek Account', models: [
+        { id: 'deepseek-account', name: 'SuperNova Account', models: [
           listedModel('deepseek-flash', NAME, { text: ' 1017 ', tone: 'info' }),
         ] },
-        { id: 'deepseek-official', name: 'DeepSeek', models: [
+        { id: 'deepseek-official', name: 'SuperNova', models: [
           listedModel('deepseek-flash', NAME, { text: { en: ' New ', zh: ' 新 ' }, tone: 'success' }),
           { id: 'deepseek-v4-pro', name: 'DeepSeek-V4-Pro' },
           listedModel('long', LONG_NAME, { text: 'Preview', tone: 'future-tone' }),
@@ -73,7 +73,7 @@ describe.skipIf(MODE === 'record')('web e2e: catalog model badges', () => {
       expect(await menu.getByRole('group', { name: 'External', exact: true }).locator('[data-tone]').count()).toBe(0)
       expect(await menu.getByRole('menuitemradio', { name: 'Invalid badge model', exact: true }).locator('[data-tone]').count()).toBe(0)
       expect(await menu.getByRole('menuitemradio', { name: `${LONG_NAME} Preview`, exact: true }).locator('[data-tone]').getAttribute('data-tone')).toBe('neutral')
-      const account = menu.getByRole('group', { name: 'DeepSeek 账号', exact: true })
+      const account = menu.getByRole('group', { name: 'SuperNova 账号', exact: true })
       expect(await account.getByText('1017', { exact: true }).getAttribute('data-tone')).toBe('info')
       await account.getByRole('menuitemradio', { name: `${NAME} 1017`, exact: true }).click()
       await expect.poll(() => scaffold.ctx.agentDefaultModel.currentSelection()).toEqual({ provider: 'deepseek-account', model: 'deepseek-flash' })

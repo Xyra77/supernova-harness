@@ -1,5 +1,5 @@
 /**
- * A Host for DingTalk plugin specs: scripted dws processes, a temporary DSH home, bin directory, and skills directory,
+ * A Host for DingTalk plugin specs: scripted dws processes, a temporary SNH home, bin directory, and skills directory,
  * and a recording Plugins page registry.
  */
 
@@ -7,20 +7,20 @@ import { chmod, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { PassThrough } from 'node:stream'
-import { Context } from '@deepseek-ai/cordis'
-import CliAccounts from '@deepseek-ai/dsh-cli-account'
-import type { ConnectorAccountRegistration } from '@deepseek-ai/dsh-client-ui-connector-account/types'
-import SkillRegistry from '@deepseek-ai/dsh-skill'
-import { SubprocessRuntime } from '@deepseek-ai/dsh-subprocess'
+import { Context } from '@supernova-ai/cordis'
+import CliAccounts from '@supernova-ai/snh-cli-account'
+import type { ConnectorAccountRegistration } from '@supernova-ai/snh-client-ui-connector-account/types'
+import SkillRegistry from '@supernova-ai/snh-skill'
+import { SubprocessRuntime } from '@supernova-ai/snh-subprocess'
 import type {
   SubprocessCollectedOutputs,
   SubprocessHandle,
   SubprocessOutcome,
   SubprocessSpawnSpec,
   SubprocessTerminalEnvironment,
-} from '@deepseek-ai/dsh-subprocess'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
+} from '@supernova-ai/snh-subprocess'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
 import { vi } from 'vitest'
 import { executableFileName } from '../src/release.ts'
 import type { DingtalkState } from '../src/types.ts'
@@ -134,7 +134,7 @@ export function byArguments(replies: Record<string, CliReply>): (process: Script
  * @returns the absolute bin directory.
  */
 export async function createBinDir(): Promise<string> {
-  const directory = await mkdtemp(join(tmpdir(), 'dsh-dingtalk-bin-'))
+  const directory = await mkdtemp(join(tmpdir(), 'snh-dingtalk-bin-'))
   await writeFile(join(directory, executableFileName(process.platform)), '')
   await chmod(join(directory, executableFileName(process.platform)), 0o755)
   return directory
@@ -145,7 +145,7 @@ export async function createBinDir(): Promise<string> {
  * @returns the absolute skills directory.
  */
 export async function createSkillsDir(): Promise<string> {
-  const directory = await mkdtemp(join(tmpdir(), 'dsh-dingtalk-skills-'))
+  const directory = await mkdtemp(join(tmpdir(), 'snh-dingtalk-skills-'))
   await mkdir(join(directory, 'dingtalk-shared'))
   await writeFile(join(directory, 'dingtalk-shared', 'SKILL.md'), '---\nname: dingtalk-shared\ndescription: fixture guide\n---\n\n# Fixture guide\n')
   return directory
@@ -158,7 +158,7 @@ export type DingtalkPage = ConnectorAccountRegistration<DingtalkState>
 export interface DingtalkHost {
   readonly ctx: Context
   readonly subprocess: ScriptedSubprocess
-  /** The temporary `DSH_HOME`, whose `cache/dingtalk` the plugin installs into. */
+  /** The temporary `SNH_HOME`, whose `cache/dingtalk` the plugin installs into. */
   readonly home: string
   /** The `binDir` to load the plugin with. */
   readonly binDir: string
@@ -172,7 +172,7 @@ export interface DingtalkHost {
 
 /**
  * Start a Host with the skill registry, a scripted subprocess runtime, the system prompt, a Plugins page registry that
- * records registrations, and the CLI account Service with a 5-second command deadline, and point `DSH_HOME` at a
+ * records registrations, and the CLI account Service with a 5-second command deadline, and point `SNH_HOME` at a
  * temporary directory.
  * @returns the Host; the caller loads the DingTalk plugin with `binDir`, and ends with {@link closeHost}.
  */
@@ -182,8 +182,8 @@ export async function createHost(): Promise<DingtalkHost> {
   await ctx.plugin(ScriptedSubprocess)
   await ctx.plugin(SessionProjectionRegistry)
   await ctx.plugin(SystemPrompt)
-  const home = await mkdtemp(join(tmpdir(), 'dsh-dingtalk-home-'))
-  vi.stubEnv('DSH_HOME', home)
+  const home = await mkdtemp(join(tmpdir(), 'snh-dingtalk-home-'))
+  vi.stubEnv('SNH_HOME', home)
   const host: DingtalkHost = {
     ctx, subprocess: ctx.subprocess as ScriptedSubprocess, home, binDir: await createBinDir(), skillsDir: await createSkillsDir(),
     pages: [], withdrawn: 0,
@@ -199,7 +199,7 @@ export async function createHost(): Promise<DingtalkHost> {
 }
 
 /**
- * Dispose a Host's plugins, restore `DSH_HOME`, and remove the Host's temporary directories.
+ * Dispose a Host's plugins, restore `SNH_HOME`, and remove the Host's temporary directories.
  * @param host - the Host {@link createHost} returned.
  */
 export async function closeHost(host: DingtalkHost): Promise<void> {

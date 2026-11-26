@@ -5,15 +5,15 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { strToU8, zipSync } from 'fflate'
 import { afterEach, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import * as JsonlPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+import { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import { SessionId } from '@supernova-ai/snh-session'
+import * as JsonlPersistence from '@supernova-ai/snh-session-persistence-jsonl'
 import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
-import { importDeepseekChatExport } from '../src/importer.ts'
+import { importSupernovaChatExport } from '../src/importer.ts'
 
 const BASE = Date.UTC(2026, 10, 11, 2, 0, 0)
 const at = (ms: number): string => new Date(BASE + ms).toISOString()
@@ -37,7 +37,7 @@ function text(content: readonly ContentBlock[]): string {
 }
 
 it('continues an imported conversation with its finished history and without excluded replies', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-deepseek-import-resume-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-supernova-import-resume-'))
   cleanups.push(async () => { await rm(root, { recursive: true, force: true }) })
   const conversation = {
     id: 'c1', title: 'Bus route', inserted_at: at(0),
@@ -73,7 +73,7 @@ it('continues an imported conversation with its finished history and without exc
 
   const workspace = join(root, 'workspace')
   await mkdir(workspace)
-  const result = await importDeepseekChatExport({
+  const result = await importSupernovaChatExport({
     persistence: ctx.sessionPersistence,
     workspaceRegistered: () => true,
     createId: () => randomUUID(),

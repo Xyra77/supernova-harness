@@ -3,7 +3,7 @@ description: "Shared Host service of optional action cards: cards read from acti
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-action-cards
+# @supernova-ai/snh-action-cards
 
 English | [中文](README.zh.md)
 
@@ -25,13 +25,13 @@ A feature can offer one optional action below an answer, such as creating a page
 <a id="use-this-package"></a>
 ## Use this package
 
-The Web composition ([`dsh-web-app`](../../bundle/web-app/README.md)) mounts this service and its [browser half](../../client/ui-action-cards/README.md) in every Web and Desktop profile, with the [Personalized pages](../../extensions/creation-recommendations/README.md) and [Plugin recommendations](../../extensions/plugin-recommendations/README.md) kinds. The service has one configuration field:
+The Web composition ([`snh-web-app`](../../bundle/web-app/README.md)) mounts this service and its [browser half](../../client/ui-action-cards/README.md) in every Web and Desktop profile, with the [Personalized pages](../../extensions/creation-recommendations/README.md) and [Plugin recommendations](../../extensions/plugin-recommendations/README.md) kinds. The service has one configuration field:
 
 | Field | Default | Meaning |
 |---|---|---|
 | `enabled` | `true` | List the skills that card kinds register through `skillProvider` in later skill catalogs, for every kind and not only the two recommendation kinds. Settings → General → Personalized recommendations edits it without a restart. Off, those skills can be neither listed nor loaded; a block the model still writes, such as after loading a skill earlier in the Session, still becomes a card, and cards already shown keep their actions. |
 
-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-action-cards) is the exhaustive source for accepted fields.
+The generated [configuration catalog](../../../docs/config-catalog.md#supernova-aisnh-action-cards) is the exhaustive source for accepted fields.
 
 ### Register a card kind
 

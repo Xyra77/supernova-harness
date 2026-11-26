@@ -1,30 +1,30 @@
 import { setImmediate } from 'node:timers/promises'
-import { Context } from '@deepseek-ai/cordis'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+import { Context } from '@supernova-ai/cordis'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
 import { afterEach, describe, expect, it, vi, type MockInstance } from 'vitest'
 import type {
   ISessions, SessionListState, SessionReference, SessionSummary,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import { SessionCreateError } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SubagentAddress } from '@deepseek-ai/dsh-subagent/client'
+} from '@supernova-ai/snh-api-session-controller/client'
+import { SessionCreateError } from '@supernova-ai/snh-api-session-controller/client'
+import type { SubagentAddress } from '@supernova-ai/snh-subagent/client'
 import type {
   IWorkspaces, WorkspaceId, WorkspaceSnapshot, WorkspaceView,
-} from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { ClientRemote, DirectoryListing } from '@deepseek-ai/dsh-api-remotes/client'
-import { RemoteError, SlotTestRuntime } from '@deepseek-ai/dsh-client-test-runtime'
-import type { RemoteResult } from '@deepseek-ai/dsh-api-remotes/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { LayoutController } from '@deepseek-ai/dsh-client-ui-layout/client'
-import type { MainPanelId } from '@deepseek-ai/dsh-client-ui-layout/client'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import type { DraftInitializationOptions, SessionInputResolver } from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { SessionStatusSnapshot } from '@deepseek-ai/dsh-client-ui-session-status/client'
+} from '@supernova-ai/snh-api-workspace-controller/client'
+import type { ClientRemote, DirectoryListing } from '@supernova-ai/snh-api-remotes/client'
+import { RemoteError, SlotTestRuntime } from '@supernova-ai/snh-client-test-runtime'
+import type { RemoteResult } from '@supernova-ai/snh-api-remotes/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { LayoutController } from '@supernova-ai/snh-client-ui-layout/client'
+import type { MainPanelId } from '@supernova-ai/snh-client-ui-layout/client'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import type { DraftInitializationOptions, SessionInputResolver } from '@supernova-ai/snh-client-ui-conversation/client'
+import type { SessionStatusSnapshot } from '@supernova-ai/snh-client-ui-session-status/client'
 import type { RowToast } from '../src/client/contract/slots.ts'
 import { DirectoryBrowseError, UiWorkspaceService } from '../src/client/navigation.ts'
 import { en, zh } from '../src/client/locales.ts'
 import { createWorkspaceViewStore, FLAT_SESSION_ORDER_KEY } from '../src/client/stores.ts'
 import { UNGROUPED_KEY } from '../src/client/tree.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const sid = (id: string): SessionId => brandString<SessionId>(id)
 const wid = (id: string): WorkspaceId => id as WorkspaceId
@@ -41,7 +41,7 @@ function persistSelection(selection: {
   readonly sessionId?: SessionId
   readonly subagentAddress?: SubagentAddress
 }): Map<string, string> {
-  const backing = new Map([['dsh.sessions.current', JSON.stringify(selection)]])
+  const backing = new Map([['snh.sessions.current', JSON.stringify(selection)]])
   vi.stubGlobal('localStorage', {
     getItem: (key: string) => backing.get(key) ?? null,
     setItem: (key: string, value: string) => { backing.set(key, value) },
@@ -926,7 +926,7 @@ describe('UiWorkspaceService', () => {
         expect(binding.sessionId).toBe(sid('actual-target'))
         expect(target.release).not.toHaveBeenCalled()
         expect(previous.release).not.toHaveBeenCalled()
-        expect(JSON.parse(backing.get('dsh.sessions.current')!)).toEqual({ sessionId: sid('previous') })
+        expect(JSON.parse(backing.get('snh.sessions.current')!)).toEqual({ sessionId: sid('previous') })
         expect(b.selectPanel).not.toHaveBeenCalled()
         return 'applied'
       })
@@ -938,7 +938,7 @@ describe('UiWorkspaceService', () => {
       expect(b.sessions.binding).toHaveBeenCalledExactlyOnceWith(sid('actual-target'))
       expect(previous.release).toHaveBeenCalledOnce()
       expect(b.sessions.retained[1]!.release).not.toHaveBeenCalled()
-      expect(JSON.parse(backing.get('dsh.sessions.current')!)).toEqual({ sessionId: sid('actual-target') })
+      expect(JSON.parse(backing.get('snh.sessions.current')!)).toEqual({ sessionId: sid('actual-target') })
       expect(b.notify).not.toHaveBeenCalled()
     })
 
@@ -973,7 +973,7 @@ describe('UiWorkspaceService', () => {
       )
       expect(b.sessions.retained[0]!.release).toHaveBeenCalledOnce()
       expect(b.sessions.retained[1]!.release).not.toHaveBeenCalled()
-      expect(JSON.parse(backing.get('dsh.sessions.current')!)).toEqual({ sessionId: sid('created-a') })
+      expect(JSON.parse(backing.get('snh.sessions.current')!)).toEqual({ sessionId: sid('created-a') })
       expect(b.notify).not.toHaveBeenCalled()
     })
 
@@ -1055,7 +1055,7 @@ describe('UiWorkspaceService', () => {
         expect(b.sessions.retained[0]!.release).not.toHaveBeenCalled()
         expect(b.sessions.retained[1]!.release).toHaveBeenCalledOnce()
         expect(b.sessions.binding(sid('created-a'))).toBeUndefined()
-        expect(JSON.parse(backing.get('dsh.sessions.current')!)).toEqual({ sessionId: sid('previous') })
+        expect(JSON.parse(backing.get('snh.sessions.current')!)).toEqual({ sessionId: sid('previous') })
         expect(b.selectPanel).not.toHaveBeenCalled()
         expect(b.requestDraftInitialization).toHaveBeenCalledTimes(failure === 'blocked' ? 1 : 0)
       },
@@ -1073,7 +1073,7 @@ describe('UiWorkspaceService', () => {
       expect(b.sessions.create).not.toHaveBeenCalled()
       expect(b.requestDraftInitialization).not.toHaveBeenCalled()
       expect(b.sessions.retained[0]!.release).not.toHaveBeenCalled()
-      expect(JSON.parse(backing.get('dsh.sessions.current')!)).toEqual({ sessionId: sid('ungrouped') })
+      expect(JSON.parse(backing.get('snh.sessions.current')!)).toEqual({ sessionId: sid('ungrouped') })
       expect(b.selectPanel).not.toHaveBeenCalled()
     })
 
@@ -1095,7 +1095,7 @@ describe('UiWorkspaceService', () => {
       expect(b.requestDraftInitialization).not.toHaveBeenCalled()
       expect(b.sessions.retained).toHaveLength(1)
       expect(b.sessions.retained[0]!.release).not.toHaveBeenCalled()
-      expect(JSON.parse(backing.get('dsh.sessions.current')!)).toEqual({ sessionId: sid('previous') })
+      expect(JSON.parse(backing.get('snh.sessions.current')!)).toEqual({ sessionId: sid('previous') })
       expect(b.selectPanel).not.toHaveBeenCalled()
     })
   })
@@ -1561,7 +1561,7 @@ describe('UiWorkspaceService', () => {
 
     b.uiWorkspace.openSession(address.childSessionId)
 
-    expect(JSON.parse(backing.get('dsh.sessions.current')!)).toEqual({
+    expect(JSON.parse(backing.get('snh.sessions.current')!)).toEqual({
       sessionId: address.childSessionId,
       subagentAddress: address,
     })

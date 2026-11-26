@@ -1,6 +1,6 @@
 /**
  * Public package manifest and plugin display types, with no runtime exports.
- * @module @deepseek-ai/dsh-package-manifest
+ * @module @supernova-ai/snh-package-manifest
  */
 
 export type {
@@ -10,16 +10,16 @@ export type {
   ClientModuleMetaFactory,
   ClientBundleRequire,
   ClientModuleFactory,
-  DshClientModuleManifest,
+  SnhClientModuleManifest,
 } from './client-module.ts'
 
 export type {
-  DshBundleManifest,
-  DshClientManifest,
-  DshEnginesManifest,
-  DshManifest,
-  DshPackageManifest,
-  DshProfileManifest,
+  SnhBundleManifest,
+  SnhClientManifest,
+  SnhEnginesManifest,
+  SnhManifest,
+  SnhPackageManifest,
+  SnhProfileManifest,
   LocalizedText,
   PluginLocalizedMeta,
 } from './types.ts'

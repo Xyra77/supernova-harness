@@ -7,11 +7,11 @@
  */
 
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { ToolExecution, ToolExecutionToken } from '@deepseek-ai/dsh-tools'
-import { resolveRgPath, runRipgrep } from '@deepseek-ai/dsh-tool-fs-search'
+import { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import type { ToolExecution, ToolExecutionToken } from '@supernova-ai/snh-tools'
+import { resolveRgPath, runRipgrep } from '@supernova-ai/snh-tool-fs-search'
 
 // Any access to the mocked module's surface throws — the shape a missing
 // platform package produces at module evaluation.

@@ -30,7 +30,7 @@
     "user/message",
     "request/header",
     "request/context",
-    "session-log-deepseek/delivery-accepted",
+    "session-log-supernova/delivery-accepted",
     "assistant/message",
     "step/end",
     "turn/end"

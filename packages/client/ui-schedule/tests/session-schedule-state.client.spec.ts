@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { ScheduleId, ScheduleCatalogEntry } from '@deepseek-ai/dsh-schedule/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { ScheduleId, ScheduleCatalogEntry } from '@supernova-ai/snh-schedule/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import type { CatalogSnapshot } from '../src/client/catalog-source.ts'
 import { selectSessionScheduleFacts } from '../src/client/session-schedule-state.ts'
 

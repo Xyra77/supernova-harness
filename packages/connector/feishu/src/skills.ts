@@ -1,9 +1,9 @@
-/** The packaged `feishu` entry skill: the DSH guidance, the index of the guides embedded in lark-cli, and how to open them. */
+/** The packaged `feishu` entry skill: the SNH guidance, the index of the guides embedded in lark-cli, and how to open them. */
 
 import { readFileSync } from 'node:fs'
 import z from 'zod'
-import { BUNDLED_SKILL_RANK, isSkillName } from '@deepseek-ai/dsh-skill'
-import type { SkillCandidate, SkillDefinition, SkillProvider } from '@deepseek-ai/dsh-skill'
+import { BUNDLED_SKILL_RANK, isSkillName } from '@supernova-ai/snh-skill'
+import type { SkillCandidate, SkillDefinition, SkillProvider } from '@supernova-ai/snh-skill'
 import { parse as parseYaml } from 'yaml'
 
 const Frontmatter = z.object({ name: z.string().refine(isSkillName), description: z.string().min(1) })

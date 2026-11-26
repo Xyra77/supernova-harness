@@ -1,6 +1,6 @@
 /**
- * @deepseek-ai/dsh-web-app — the browser-surface bundle's runtime glue plugin
- * plus the bundle patch (`cordis.patch.yml`, declared by the `dsh.bundle.patch`
+ * @supernova-ai/snh-web-app — the browser-surface bundle's runtime glue plugin
+ * plus the bundle patch (`cordis.patch.yml`, declared by the `snh.bundle.patch`
  * manifest field). The plugin owns the browser-surface glue: it resolves
  * the built frontend dist (workspace knowledge of this bundle, never user
  * config), mounts the `frontend-static` fallback owner over it, registers the
@@ -9,34 +9,34 @@
  * `publicUrl` replaces the published bind-address URL. Non-loopback
  * HTTP binds trigger an exposure warning. App command-line values arrive
  * through the `webStartup` service expressions in the bundle patch.
- * @module @deepseek-ai/dsh-web-app
+ * @module @supernova-ai/snh-web-app
  */
 
 import { spawn, type ChildProcess } from 'node:child_process'
 import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { auditStartupEntries } from '@deepseek-ai/dsh-app-boot'
-import type {} from '@deepseek-ai/dsh-client-connection'
-import * as FrontendStatic from '@deepseek-ai/dsh-host-frontend-static'
-import { bindUrlHost, isLoopbackHost, type WebEntryUrl } from '@deepseek-ai/dsh-host-webserver'
-import { launchedThroughSsh, launchEnvironmentOf } from '@deepseek-ai/dsh-launch-environment'
-import { scrubbedParentEnv } from '@deepseek-ai/dsh-subprocess'
-import type {} from '@deepseek-ai/cordis-plugin-loader'
-import type {} from '@deepseek-ai/dsh-shell-env'
+import { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { auditStartupEntries } from '@supernova-ai/snh-app-boot'
+import type {} from '@supernova-ai/snh-client-connection'
+import * as FrontendStatic from '@supernova-ai/snh-host-frontend-static'
+import { bindUrlHost, isLoopbackHost, type WebEntryUrl } from '@supernova-ai/snh-host-webserver'
+import { launchedThroughSsh, launchEnvironmentOf } from '@supernova-ai/snh-launch-environment'
+import { scrubbedParentEnv } from '@supernova-ai/snh-subprocess'
+import type {} from '@supernova-ai/cordis-plugin-loader'
+import type {} from '@supernova-ai/snh-shell-env'
 import { parsePublicUrl } from './public-url.ts'
 
 /** The Web GUI this process serves, provided by the `web-runtime` row. */
 export interface WebApp {
   /**
-   * The URL this GUI advertises, also used for `DSH_WEB_URL` and the startup URL line.
+   * The URL this GUI advertises, also used for `SNH_WEB_URL` and the startup URL line.
    * @returns the configured `publicUrl`, otherwise the listener origin.
    */
   getAdvertisedUrl(): string
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** The Web GUI this process serves; absent when no Web runtime is mounted. */
     webApp: WebApp
@@ -58,13 +58,13 @@ export interface Config {
   /** Print the URL lines on activation; a non-interactive layer can turn them off. */
   printUrl: boolean
   /**
-   * Register the `DSH_WEB_URL` bash variable naming this GUI. A one-shot
+   * Register the `SNH_WEB_URL` bash variable naming this GUI. A one-shot
    * non-interactive layer can turn it off when its user is not in the GUI.
    */
   surfaceContext: boolean
   /**
    * Canonical HTTP(S) root to advertise in the printed and opened URL,
-   * `DSH_WEB_URL`, and `webApp.getAdvertisedUrl()`, which supplies the Web GUI
+   * `SNH_WEB_URL`, and `webApp.getAdvertisedUrl()`, which supplies the Web GUI
    * URL in agent runtime context, e.g. `https://app.example/ui/`, normalized to end in `/`. Configures no routing
    * or authentication; see [public deployments](../README.md#public-deployments).
    * Absent or YAML `null` advertises the bind-address URL.
@@ -80,7 +80,7 @@ export const Config: z<Config> = z.object({
 })
 
 /** Environment variable naming the advertised URL of this Web GUI. */
-const DSH_WEB_URL = 'DSH_WEB_URL' as const
+const SNH_WEB_URL = 'SNH_WEB_URL' as const
 
 const BROWSER_OPENER_MODULE = import.meta.resolve('open')
 
@@ -123,10 +123,10 @@ try {
 function resolveDistIndex(): string {
   const require = createRequire(import.meta.url)
   try {
-    return join(dirname(require.resolve('@deepseek-ai/dsh-web-frontend/package.json')), 'dist', 'index.html')
+    return join(dirname(require.resolve('@supernova-ai/snh-web-frontend/package.json')), 'dist', 'index.html')
   } catch {
     /* v8 ignore next 2 -- reachable only when the frontend package is absent from the checkout */
-    throw new Error('web-app: @deepseek-ai/dsh-web-frontend is not resolvable from this composition')
+    throw new Error('web-app: @supernova-ai/snh-web-frontend is not resolvable from this composition')
   }
 }
 
@@ -205,7 +205,7 @@ export function apply(ctx: Context, config: Config): void {
     )
   }
   if (ctx.webServer.protocol === 'http:' && !isLoopbackHost(boundHost)) {
-    console.warn(`dsh web: listening on ${boundHost} over plain HTTP; restrict this port to a trusted proxy or network`)
+    console.warn(`snh web: listening on ${boundHost} over plain HTTP; restrict this port to a trusted proxy or network`)
   }
   // The bind URL belongs to this host. Under SSH, the operator reaches it
   // through a local forwarding address that this process cannot derive.
@@ -219,9 +219,9 @@ export function apply(ctx: Context, config: Config): void {
       runtimeCtx.shellEnv.register({
         name: 'web-runtime',
         variables: {
-          [DSH_WEB_URL]: { description: 'Advertised URL of the DeepSeek Harness Web GUI serving this session.' },
+          [SNH_WEB_URL]: { description: 'Advertised URL of the SuperNova Harness Web GUI serving this session.' },
         },
-        resolve: () => ({ [DSH_WEB_URL]: appRootUrl() }),
+        resolve: () => ({ [SNH_WEB_URL]: appRootUrl() }),
       })
     })
   }
@@ -242,11 +242,11 @@ export function apply(ctx: Context, config: Config): void {
       }
       const entry = entries.find(entry => entry.open)
       if (handoffBrowser && entry !== undefined) {
-        console.log('dsh web: opening the default browser; pass --no-open to disable')
+        console.log('snh web: opening the default browser; pass --no-open to disable')
         opening = internals.openBrowser(entry.url, lifetime.signal).catch((error: unknown) => {
           if (lifetime.signal.aborted) return
           const reason = (error instanceof Error ? error.message : String(error)).replaceAll(entry.url, '[login URL]')
-          console.error(`web-app: could not open the default browser because ${reason}; use the dsh web URL printed at startup`)
+          console.error(`web-app: could not open the default browser because ${reason}; use the snh web URL printed at startup`)
         })
       }
     }
@@ -255,7 +255,7 @@ export function apply(ctx: Context, config: Config): void {
     else {
       void settled.then(async () => {
         if (lifetime.signal.aborted) return
-        await auditStartupEntries(ctx[Context.root], 'dsh web', () => {})
+        await auditStartupEntries(ctx[Context.root], 'snh web', () => {})
         announceReady()
       }).catch(() => {
         // The Loader/startup audit owns failure diagnostics; failed startup remains unpublished.

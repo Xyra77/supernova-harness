@@ -3,22 +3,22 @@
  * The account takeover inside the shipped composition: the frame-wide notice
  * chain, the account settings page, and the one shared native Platform host.
  */
-import { syncedConfig } from '@deepseek-ai/dsh-client-test-runtime'
-import { apply as applyMenus, inject as injectMenus } from '@deepseek-ai/dsh-client-ui-context-menu/client'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+import { syncedConfig } from '@supernova-ai/snh-client-test-runtime'
+import { apply as applyMenus, inject as injectMenus } from '@supernova-ai/snh-client-ui-context-menu/client'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, fireEvent, screen } from '@testing-library/react'
-import { SlotTestRuntime, stubConfigForm, usePinnedBrowserLanguages } from '@deepseek-ai/dsh-client-test-runtime'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import type { SessionLiveEventEntry, SessionReference } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId, SessionSeq } from '@deepseek-ai/dsh-session/types'
-import type { WorkspaceId } from '@deepseek-ai/dsh-workspace/types'
-import type { AccountView } from '@deepseek-ai/dsh-deepseek-account/types'
-import type { ThemeSnapshot } from '@deepseek-ai/dsh-client-ui-theme/client'
+import { SlotTestRuntime, stubConfigForm, usePinnedBrowserLanguages } from '@supernova-ai/snh-client-test-runtime'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import type { SessionLiveEventEntry, SessionReference } from '@supernova-ai/snh-api-session-controller/client'
+import type { SessionId, SessionSeq } from '@supernova-ai/snh-session/types'
+import type { WorkspaceId } from '@supernova-ai/snh-workspace/types'
+import type { AccountView } from '@supernova-ai/snh-deepseek-account/types'
+import type { ThemeSnapshot } from '@supernova-ai/snh-client-ui-theme/client'
 import {
   apply as applyConversation, inject as injectConversation,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import { apply as applyChat, inject as injectChat } from '@deepseek-ai/dsh-client-ui-chat/client'
+} from '@supernova-ai/snh-client-ui-conversation/client'
+import { apply as applyChat, inject as injectChat } from '@supernova-ai/snh-client-ui-chat/client'
 import { AccountPlatformHost, type AccountPlatformHostInjected } from '../src/client/AccountPlatformHost.tsx'
 import { AccountQuotaNotice, type AccountQuotaNoticeInjected } from '../src/client/AccountQuotaNotice.tsx'
 import { AccountSection, type AccountSectionInjected, type AccountSnapshot } from '../src/client/AccountSection.tsx'
@@ -82,7 +82,7 @@ function sectionOperations(account: AccountSnapshot, pages: PlatformPages): Acco
 async function bench() {
   vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} })
   const runtime = await SlotTestRuntime.create()
-  runtime.ctx.provide('fileDrag', { actions: { prepare: async () => ({ start: () => true, release: () => {} }), reportFailure: () => {} }, read: () => undefined } satisfies import('@deepseek-ai/cordis').Context['fileDrag'])
+  runtime.ctx.provide('fileDrag', { actions: { prepare: async () => ({ start: () => true, release: () => {} }), reportFailure: () => {} }, read: () => undefined } satisfies import('@supernova-ai/cordis').Context['fileDrag'])
   disposers.push(() => runtime.dispose())
   const forms = new Map<string, ReturnType<typeof stubConfigForm>['scope']>()
   const formFor = (namespace: string) => {

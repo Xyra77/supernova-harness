@@ -24,8 +24,8 @@ it('keeps data cleanup out of the upstream template while retaining application 
   const source = readFileSync(join(dirname(require.resolve('app-builder-lib/package.json')), 'templates/nsis/uninstaller.nsh'), 'utf8')
   const adapted = directoryUninstaller(source)
   expect(adapted).not.toContain('--delete-app-data')
-  expect(adapted).toContain('Goto dshUninstallFinished')
-  expect(adapted.indexOf('Goto dshUninstallFinished')).toBeLessThan(adapted.indexOf('WinShell::UninstAppUserModelId'))
+  expect(adapted).toContain('Goto snhUninstallFinished')
+  expect(adapted.indexOf('Goto snhUninstallFinished')).toBeLessThan(adapted.indexOf('WinShell::UninstAppUserModelId'))
   expect(adapted).toContain('Call un.FinishCleanup')
   expect(adapted).toContain('UninstallNote')
   expect(adapted).not.toContain('RMDir /r "$APPDATA')
@@ -49,14 +49,14 @@ it.each(['allowOnlyOneInstallerInstance.nsh', 'installUtil.nsh'])('cleans staged
   const exits = source.match(/^\s*Quit\s*$/gm) ?? []
   expect(exits.length).toBeGreaterThan(0)
   const adapted = directoryInstallerExits(source)
-  expect(adapted.match(/Call dshCleanupDirectories/g)).toHaveLength(exits.length)
+  expect(adapted.match(/Call snhCleanupDirectories/g)).toHaveLength(exits.length)
   expect(adapted).toContain('!ifndef BUILD_UNINSTALLER')
 })
 
 it('stages before stopping the application and promotes before registering the installation', () => {
   const result = directoryInstallSection(section)
-  expect(result.indexOf('!insertmacro dshStageApplication')).toBeLessThan(result.indexOf('!insertmacro CHECK_APP_RUNNING'))
-  expect(result.indexOf('Call dshPromoteDirectories')).toBeLessThan(result.indexOf('!insertmacro registryAddInstallInfo'))
+  expect(result.indexOf('!insertmacro snhStageApplication')).toBeLessThan(result.indexOf('!insertmacro CHECK_APP_RUNNING'))
+  expect(result.indexOf('Call snhPromoteDirectories')).toBeLessThan(result.indexOf('!insertmacro registryAddInstallInfo'))
   expect(result).toContain('!insertmacro addStartMenuLink $keepShortcuts')
   expect(result).toContain('!insertmacro addDesktopLink $keepShortcuts')
   expect(result).toContain('!insertmacro handleUninstallResult HKEY_CURRENT_USER')

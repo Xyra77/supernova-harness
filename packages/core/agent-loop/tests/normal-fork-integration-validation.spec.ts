@@ -1,17 +1,17 @@
 /** Fork creation stores the supplied seed without reading the parent through persistence. */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { Session, SessionId, SessionLogOffset, SessionSeq } from '@deepseek-ai/dsh-session'
-import { buildForkSeed } from '@deepseek-ai/dsh-session/fork'
-import * as persistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { Session, SessionId, SessionLogOffset, SessionSeq } from '@supernova-ai/snh-session'
+import { buildForkSeed } from '@supernova-ai/snh-session/fork'
+import * as persistence from '@supernova-ai/snh-session-persistence-jsonl'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
 
 async function fixture(cold: boolean) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-fork-load-cancel-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-fork-load-cancel-'))
   const ctx = new Context()
   onTestFinished(async () => { try { await ctx.fiber.dispose() } finally { await rm(root, { recursive: true, force: true }) } })
   await mountAgentLoopTestDependencies(ctx)

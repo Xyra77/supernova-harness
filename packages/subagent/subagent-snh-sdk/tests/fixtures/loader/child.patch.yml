@@ -1,0 +1,29 @@
+# SDK-profile patch for the child runtime in the cwd-inheritance proof.
+
+- id: llm-supernova
+  name: '@supernova-ai/snh-llm-supernova-api-key'
+  disabled: true
+
+- id: system-prompt
+  name: '@supernova-ai/snh-system-prompt'
+  config:
+    personaPrefix: 'Echo where you run.'
+
+- id: agent-instructions
+  name: '@supernova-ai/snh-agent-instructions'
+  disabled: true
+
+- id: skill-filesystem
+  name: '@supernova-ai/snh-skill-filesystem'
+  config:
+    includeDefaultRoots: false
+
+- id: session-persistence-jsonl
+  name: '@supernova-ai/snh-session-persistence-jsonl'
+  config:
+    root: !!js snhHomePath('sessions')
+    compression: none
+
+- insert:
+    - id: child-mock-llm
+      name: './child-mock-llm.ts'

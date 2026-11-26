@@ -6,25 +6,25 @@
  * A plugin that carries its own configuration renders it on this page through
  * the slots the page declares (`slot-contract.ts`).
  */
-import type {} from '@deepseek-ai/dsh-client-product-analytics/client'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
+import type {} from '@supernova-ai/snh-client-product-analytics/client'
+import type {} from '@supernova-ai/snh-client-locale/client'
 // Type-only: the ctx.modules Context merge.
-import type {} from '@deepseek-ai/dsh-client-modules/client'
-import type { Context as ClientContext } from '@deepseek-ai/cordis'
+import type {} from '@supernova-ai/snh-client-modules/client'
+import type { Context as ClientContext } from '@supernova-ai/cordis'
 // Type-only: the root `main` keyed slot the page registers into, declared by
 // ui-layout with the panel id brand, and the `sidebar.panellist` list the
 // entry registers into, declared by ui-sidebar.
-import type { HostObservable } from '@deepseek-ai/dsh-client-ui-slots'
-import type { MainPanelId } from '@deepseek-ai/dsh-client-ui-layout/client'
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
+import type { HostObservable } from '@supernova-ai/snh-client-ui-slots'
+import type { MainPanelId } from '@supernova-ai/snh-client-ui-layout/client'
+import type {} from '@supernova-ai/snh-client-ui-sidebar/client'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
 // Type-only: the ctx.remoteAccess Context merge.
-import type {} from '@deepseek-ai/dsh-api-remote-access/client'
+import type {} from '@supernova-ai/snh-api-remote-access/client'
 // Type-only: the ctx.remote Context merge and the forwarded-event key face.
-import type {} from '@deepseek-ai/dsh-api-remotes/client'
+import type {} from '@supernova-ai/snh-api-remotes/client'
 // Type-only: the forwarded events' own declaration (`$on`'s key face resolves
 // through the owning package's client-safe types subpath).
-import type {} from '@deepseek-ai/dsh-plugin-manager/types'
+import type {} from '@supernova-ai/snh-plugin-manager/types'
 import { PluginManagerPage } from './PluginManagerPage.tsx'
 import { createPluginHeaderRef } from './header-scroll.ts'
 import { PluginRefreshToast, type PluginRefreshToastFace } from './PluginRefreshToast.tsx'
@@ -37,7 +37,7 @@ import { en, ja, es, fr, de, ru, pt, zh, type PluginManagerLocaleKey } from './l
 import { createNavigationStore } from './navigation-store.ts'
 import type {} from './slot-contract.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** Read-only management activity, independent of the visible Plugins page. */
     pluginChanges: {
@@ -72,7 +72,7 @@ export type {
   PluginConfigViewProps, PluginDetailProps, PluginPackageRef, PluginRowRef, PluginsSubject,
 } from './slot-contract.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@supernova-ai/snh-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Plugin manager tab copy. */
     'pluginManager': PluginManagerLocaleKey

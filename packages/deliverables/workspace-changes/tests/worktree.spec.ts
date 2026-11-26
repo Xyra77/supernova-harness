@@ -2,17 +2,17 @@
 import { mkdir, realpath, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { afterEach, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { unsupportedInbox, unsupportedModel } from '@deepseek-ai/dsh-agent-loop-testkit'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { Session } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import WorkingDirectoryService from '@deepseek-ai/dsh-working-directory'
+import { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { unsupportedInbox, unsupportedModel } from '@supernova-ai/snh-agent-loop-testkit'
+import LocalFileSystem from '@supernova-ai/snh-fs-local'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { Session } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import WorkingDirectoryService from '@supernova-ai/snh-working-directory'
 import * as WorkspaceChanges from '../src/index.ts'
 import { changes, endTurn, git, mutate, scratchDir, settle, startTurn, toolCall } from './support.ts'
 
@@ -34,7 +34,7 @@ function agentFor(ctx: Context, session: Session): Agent {
 
 it('snapshots the worktree the Session entered, lists paths relative to it, and leaves the original checkout out', async () => {
   // Production headers record canonical paths; anchors compare as recorded, so the fixture does too.
-  const main = await realpath(await scratchDir('dsh-workspace-changes-worktree-', cleanups))
+  const main = await realpath(await scratchDir('snh-workspace-changes-worktree-', cleanups))
   git(main, 'init', '-q', '-b', 'main')
   await writeFile(join(main, 'a.txt'), 'main\n')
   git(main, 'add', '-A')

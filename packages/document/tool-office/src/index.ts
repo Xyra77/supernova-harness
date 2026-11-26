@@ -5,24 +5,24 @@
  * one source byte before the service runs, so a cached result never answers a call that cannot read the source.
  * Converted files stay in the Office kit's private output store; the model copies them into the workspace with the
  * shell, so these tools write no workspace file.
- * @module @deepseek-ai/dsh-tool-office
+ * @module @supernova-ai/snh-tool-office
  */
 
 import { basename } from 'node:path'
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { AttachmentError, type ImageAttachmentRef, type ImageMediaType } from '@deepseek-ai/dsh-attachment'
-import { FsError, type FsInfo, type FsTarget } from '@deepseek-ai/dsh-fs'
-import type {} from '@deepseek-ai/dsh-llm'
-import { SubagentError } from '@deepseek-ai/dsh-subagent'
-import type {} from '@deepseek-ai/dsh-skill'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { OfficeSourceKey } from '@deepseek-ai/dsh-office-kit/types'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { AttachmentError, type ImageAttachmentRef, type ImageMediaType } from '@supernova-ai/snh-attachment'
+import { FsError, type FsInfo, type FsTarget } from '@supernova-ai/snh-fs'
+import type {} from '@supernova-ai/snh-llm'
+import { SubagentError } from '@supernova-ai/snh-subagent'
+import type {} from '@supernova-ai/snh-skill'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { OfficeSourceKey } from '@supernova-ai/snh-office-kit/types'
 import { OfficeKitError, type OfficeDocumentExtension, type OfficeImageInputExtension, type OfficeKit,
-  type OfficeKitSource, type OfficeWorkbookExtension } from '@deepseek-ai/dsh-office-kit'
-import { defineTool, ToolContextUnavailableError, type ToolActivationContext, type ToolExecution } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-working-directory'
+  type OfficeKitSource, type OfficeWorkbookExtension } from '@supernova-ai/snh-office-kit'
+import { defineTool, ToolContextUnavailableError, type ToolActivationContext, type ToolExecution } from '@supernova-ai/snh-tools'
+import type {} from '@supernova-ai/snh-working-directory'
 import { checkParameterNames, checkRenderArguments, checkConversionArguments, extensionOf, inputFamily, OUTPUT_FORMATS,
   RECALCULATION_FORMATS,
   type OfficeRenderArgs, type OfficeConvertArgs, type OfficeRecalculateArgs, type OfficeFamily, type OfficeOperationName,

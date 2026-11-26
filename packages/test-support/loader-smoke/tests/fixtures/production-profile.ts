@@ -5,9 +5,9 @@ import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { homedir } from 'node:os'
-import type { Context } from '@deepseek-ai/cordis'
-import type { EntryOptions } from '@deepseek-ai/cordis-plugin-loader'
-import type { PatchOptions } from '@deepseek-ai/cordis-plugin-include'
+import type { Context } from '@supernova-ai/cordis'
+import type { EntryOptions } from '@supernova-ai/cordis-plugin-loader'
+import type { PatchOptions } from '@supernova-ai/cordis-plugin-include'
 import {
   boot,
   createRuntimeResolution,
@@ -16,7 +16,7 @@ import {
   PluginPackages,
   type ProfileContext,
   type ProfileLayer,
-} from '@deepseek-ai/dsh-app-boot'
+} from '@supernova-ai/snh-app-boot'
 
 const installAnchor = fileURLToPath(new URL('../../../../../apps/cli/package.json', import.meta.url))
 
@@ -103,9 +103,9 @@ export async function bootProductionProfile(options: ProductionProfileOptions): 
       // The launcher's own profile facts, so profile-backed services activate as in production.
       const profileContext: ProfileContext = {
         name: options.profile, dir: profile.dir, patchPath: profile.patchPath, installAnchor,
-        cwd: process.cwd(), home: process.env['DSH_HOME'] ?? join(homedir(), '.dsh'),
+        cwd: process.cwd(), home: process.env['SNH_HOME'] ?? join(homedir(), '.snh'),
         startedBundles: profile.layers.map(layer => layer.packageName),
-        overlayPaths: options.overlayPaths, telemetryDisabledEnv: process.env['DSH_TELEMETRY_DISABLED'],
+        overlayPaths: options.overlayPaths, telemetryDisabledEnv: process.env['SNH_TELEMETRY_DISABLED'],
       }
       ctx.provide('profileContext', profileContext)
       await ctx.plugin(PluginPackages, { resolution })

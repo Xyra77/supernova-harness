@@ -126,8 +126,8 @@ internal static class Program
     {
         Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
         Application.EnableVisualStyles();
-        using var form = new FixtureForm("DSH CUA owned test window");
-        using var sibling = new FixtureForm("DSH CUA sibling test window");
+        using var form = new FixtureForm("SNH CUA owned test window");
+        using var sibling = new FixtureForm("SNH CUA sibling test window");
         form.Shown += (_, _) =>
         {
             Write(new { pid = Environment.ProcessId, state = form.Inspect() });

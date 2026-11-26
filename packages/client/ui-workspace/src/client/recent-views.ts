@@ -1,11 +1,11 @@
 /** Recently viewed Sessions that keep their history stream after leaving the main view. */
 import type {
   ISessions, SessionListState, SessionReference,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { IWorkspaces, WorkspaceSnapshot } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { SessionStatusSnapshot } from '@deepseek-ai/dsh-client-ui-session-status/client'
-import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+} from '@supernova-ai/snh-api-session-controller/client'
+import type { IWorkspaces, WorkspaceSnapshot } from '@supernova-ai/snh-api-workspace-controller/client'
+import type { SessionStatusSnapshot } from '@supernova-ai/snh-client-ui-session-status/client'
+import type { ObservableSnapshot } from '@supernova-ai/snh-client-store'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 
 /**
  * Attention-ordered retention of non-blank Sessions left by the main view.

@@ -3,13 +3,13 @@ description: "Register a connector plugin's account on the Host with `ctx.connec
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-connector-account
+# @supernova-ai/snh-client-ui-connector-account
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-Connector plugins register their account on the Host with `ctx.connectorAccounts` to show it on the Plugins page: CLI app plugins register the account their vendor CLI keeps, and MCP connectors their OAuth server's account. The Host decides what the page shows and does: each registrant maps its account to a display, and the registry starts or cancels only the operations the account lists. The browser half renders each bundle's section, title tag, and activation prompt, and opens authorization pages and reports notices only in the browser that started the operation. The Web and Desktop compositions load both halves through [`dsh-web-app`](../../bundle/web-app/README.md).
+Connector plugins register their account on the Host with `ctx.connectorAccounts` to show it on the Plugins page: CLI app plugins register the account their vendor CLI keeps, and MCP connectors their OAuth server's account. The Host decides what the page shows and does: each registrant maps its account to a display, and the registry starts or cancels only the operations the account lists. The browser half renders each bundle's section, title tag, and activation prompt, and opens authorization pages and reports notices only in the browser that started the operation. The Web and Desktop compositions load both halves through [`snh-web-app`](../../bundle/web-app/README.md).
 
 ## Table of Contents
 
@@ -32,7 +32,7 @@ A registrant's Host row registers its account once; the registrant ships no brow
 The registrant's Host row registers its account source while the registry runs, so a composition without the registry, such as a headless profile, skips the registration:
 
 ```ts ignore-check
-import type {} from '@deepseek-ai/dsh-client-ui-connector-account'
+import type {} from '@supernova-ai/snh-client-ui-connector-account'
 
 export function apply(ctx: Context): void {
   const account = new AcmeAccount(options)
@@ -84,7 +84,7 @@ The `connectorAccount` dictionary holds the copy every account shares: Close, Ca
 
 The Host half, `ConnectorAccounts`, is a Remote service. `register()` observes the account's source, and each `watch` stream reads every account's entry after each change, coalescing changes that arrive before the next read: the key and package, the copy, `present(view)`, the operation in progress, and the latest result with its success text. `start` and `cancel` route by key to the account's source.
 
-[`dsh-api-remotes`](../../api/remotes/README.md) mounts the generated `connectorAccounts` Remote. The browser half opens one `watch` stream through `BrowserAccounts`, whose one store holds the Host's accounts by key, whether the stream is delivering, and the latest notice; it also remembers the operations this browser started. It registers one `plugins.detail.badge` entry and one `shell.overlay` notice for the page, and for each account with a package, `plugins.bundle.config` and `plugins.bundle.activation` keyed by the package name, all under the `connectorAccount` namespace. The surfaces receive `start` and `cancel` callbacks that call the Remote and return its result; the buttons report the operation of a successful start to `BrowserAccounts`, and a failed result or a rejected call as the failure notice. An account the Host drops loses its bundle entries, and unloading withdraws every entry and the stream.
+[`snh-api-remotes`](../../api/remotes/README.md) mounts the generated `connectorAccounts` Remote. The browser half opens one `watch` stream through `BrowserAccounts`, whose one store holds the Host's accounts by key, whether the stream is delivering, and the latest notice; it also remembers the operations this browser started. It registers one `plugins.detail.badge` entry and one `shell.overlay` notice for the page, and for each account with a package, `plugins.bundle.config` and `plugins.bundle.activation` keyed by the package name, all under the `connectorAccount` namespace. The surfaces receive `start` and `cancel` callbacks that call the Remote and return its result; the buttons report the operation of a successful start to `BrowserAccounts`, and a failed result or a rejected call as the failure notice. An account the Host drops loses its bundle entries, and unloading withdraws every entry and the stream.
 
 | File | Role |
 |---|---|

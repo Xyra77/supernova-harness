@@ -1,10 +1,10 @@
-import { unsupportedModel } from '@deepseek-ai/dsh-agent-loop-testkit'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { unsupportedModel } from '@supernova-ai/snh-agent-loop-testkit'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import { describe, expect, expectTypeOf, it, onTestFinished } from 'vitest'
-import { Context, Service, symbols } from '@deepseek-ai/cordis'
-import { Session, type SessionId } from '@deepseek-ai/dsh-session'
-import AgentRegistry, { agentEvents } from '@deepseek-ai/dsh-agent'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
+import { Context, Service, symbols } from '@supernova-ai/cordis'
+import { Session, type SessionId } from '@supernova-ai/snh-session'
+import AgentRegistry, { agentEvents } from '@supernova-ai/snh-agent'
+import TypertRegistry from '@supernova-ai/snh-typert-registry'
 
 import type {
   Agent,
@@ -13,8 +13,8 @@ import type {
   AgentStatus,
   CreateAgentOptions,
   ResumeAgentOptions,
-} from '@deepseek-ai/dsh-agent'
-import { brandString } from '@deepseek-ai/dsh-brand'
+} from '@supernova-ai/snh-agent'
+import { brandString } from '@supernova-ai/snh-brand'
 
 function stubAgent(rawId: string, overrides: Partial<Agent> = {}): Agent {
   const id = brandString<SessionId>(rawId)
@@ -85,8 +85,8 @@ describe('AgentRegistry', () => {
       parameter: 'agent',
       wire: 'agentId',
       resource: 'session',
-      hostTypeSymbol: '@deepseek-ai/dsh-agent#Agent',
-      wireTypeSymbol: '@deepseek-ai/dsh-session/types#SessionId',
+      hostTypeSymbol: '@supernova-ai/snh-agent#Agent',
+      wireTypeSymbol: '@supernova-ai/snh-session/types#SessionId',
     })
     expect(lookup?.resolve(agent.id)).toBe(agent)
     const context = ctx.typert.contexts.getHost('agent')

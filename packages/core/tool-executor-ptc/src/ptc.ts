@@ -8,34 +8,34 @@
 
 import { isDeepStrictEqual } from 'node:util'
 import type { PtcDispatchLog } from './runtime-types.ts'
-import { symbols, type Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { extractTextContent } from '@deepseek-ai/dsh-llm/message'
-import { createUserMessage, HarnessError, resolveImageAttachmentAccess } from '@deepseek-ai/dsh-llm'
+import { symbols, type Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import { extractTextContent } from '@supernova-ai/snh-llm/message'
+import { createUserMessage, HarnessError, resolveImageAttachmentAccess } from '@supernova-ai/snh-llm'
 
-import type { ContentBlock, ToolCallId, ToolSchema } from '@deepseek-ai/dsh-llm'
-import { PtcImage, PtcInspectableValue } from '@deepseek-ai/dsh-ptc-runtime'
-import type { PtcJsonValue, PtcOutput } from '@deepseek-ai/dsh-ptc-runtime'
-import type { PtcBindingFunction, PtcRunResult, PtcRunSandbox, PtcRuntime } from '@deepseek-ai/dsh-ptc-runtime'
-import { approveEscalation, ESCALATION_TARGETS, validateEscalationArgs } from '@deepseek-ai/dsh-sandbox'
-import type { SandboxExecutionPolicy } from '@deepseek-ai/dsh-sandbox'
-import type {} from '@deepseek-ai/dsh-user-approval'
-import type {} from '@deepseek-ai/dsh-working-directory'
-import type {} from '@deepseek-ai/dsh-sandbox-policy'
-import { deepFreeze, snapshotJsonValue, type JsonValue } from '@deepseek-ai/dsh-util-values'
+import type { ContentBlock, ToolCallId, ToolSchema } from '@supernova-ai/snh-llm'
+import { PtcImage, PtcInspectableValue } from '@supernova-ai/snh-ptc-runtime'
+import type { PtcJsonValue, PtcOutput } from '@supernova-ai/snh-ptc-runtime'
+import type { PtcBindingFunction, PtcRunResult, PtcRunSandbox, PtcRuntime } from '@supernova-ai/snh-ptc-runtime'
+import { approveEscalation, ESCALATION_TARGETS, validateEscalationArgs } from '@supernova-ai/snh-sandbox'
+import type { SandboxExecutionPolicy } from '@supernova-ai/snh-sandbox'
+import type {} from '@supernova-ai/snh-user-approval'
+import type {} from '@supernova-ai/snh-working-directory'
+import type {} from '@supernova-ai/snh-sandbox-policy'
+import { deepFreeze, snapshotJsonValue, type JsonValue } from '@supernova-ai/snh-util-values'
 import {
   defineTool, parameterSchemaSpecToJsonSchema, projectToolSchema, RUN_CODE_NAME, TOOL_ABORTED, ToolArgsError,
   ToolContextUnavailableError,
-} from '@deepseek-ai/dsh-tools'
-import type { ToolExecutionPipeline } from '@deepseek-ai/dsh-tools/pipeline'
-import { toolErrorMessage } from '@deepseek-ai/dsh-tools/pipeline'
-import { scopeTarget } from '@deepseek-ai/dsh-scope'
+} from '@supernova-ai/snh-tools'
+import type { ToolExecutionPipeline } from '@supernova-ai/snh-tools/pipeline'
+import { toolErrorMessage } from '@supernova-ai/snh-tools/pipeline'
+import { scopeTarget } from '@supernova-ai/snh-scope'
 import type { PtcCalls } from './ptc-calls.ts'
 import { CodeRunFailedError, ToolCallLimitExceededError } from './errors.ts'
 import { substituteProgramImages } from './program-images.ts'
 import type { Config } from './config.ts'
 import type { RunCodeToolOptions } from './run-code.ts'
-import type { ToolDefinition, ToolExecution, ToolExecutionFailure, ToolExecutionResult, ToolRunContext } from '@deepseek-ai/dsh-tools'
+import type { ToolDefinition, ToolExecution, ToolExecutionFailure, ToolExecutionResult, ToolRunContext } from '@supernova-ai/snh-tools'
 import type {} from './types.ts'
 
 /** The model-facing name of the PTC mode tool. */
@@ -77,7 +77,7 @@ const TYPESCRIPT_FUNCTION_FLAVOR = runCodeFlavor('TypeScript', TYPESCRIPT_OUTPUT
 export function requirePtcRuntime(ctx: Context): PtcRuntime {
   const runtime = ctx.get('ptcRuntime')
   if (runtime === undefined) {
-    throw new ToolContextUnavailableError('dsh-tools: mode "ptc" requires a PTC runtime — load a ctx.ptcRuntime implementation (e.g. @deepseek-ai/dsh-ptc-runtime-node) or load @deepseek-ai/dsh-tool-executor-native')
+    throw new ToolContextUnavailableError('snh-tools: mode "ptc" requires a PTC runtime — load a ctx.ptcRuntime implementation (e.g. @supernova-ai/snh-ptc-runtime-node) or load @supernova-ai/snh-tool-executor-native')
   }
   return requireRuntimeLanguage(runtime)
 }
@@ -90,7 +90,7 @@ export function requirePtcRuntime(ctx: Context): PtcRuntime {
  */
 export function requireRuntimeLanguage(runtime: PtcRuntime): PtcRuntime {
   if (runtime.language !== 'typescript') {
-    throw new ToolContextUnavailableError(`dsh-tools: unsupported PTC runtime language ${JSON.stringify(runtime.language)}; use a TypeScript provider (language: "typescript")`)
+    throw new ToolContextUnavailableError(`snh-tools: unsupported PTC runtime language ${JSON.stringify(runtime.language)}; use a TypeScript provider (language: "typescript")`)
   }
   return runtime
 }
@@ -194,14 +194,14 @@ function renderRunOutput(
 async function resolveWorkingDirectory(ctx: Context, exec: ToolRunContext): Promise<string | undefined> {
   if (exec.agent === undefined) return undefined
   const directories = ctx.get('workingDirectory')
-  if (directories === undefined) throw new ToolContextUnavailableError('dsh-tools: run_code with an Agent requires workingDirectory')
+  if (directories === undefined) throw new ToolContextUnavailableError('snh-tools: run_code with an Agent requires workingDirectory')
   return directories.ensure(exec.agent, exec.signal)
 }
 
 /** Resolve standing authority for a runtime that enforces file policy. */
 function resolveSandboxPolicy(ctx: Context, exec: ToolRunContext): SandboxExecutionPolicy {
   const policy = ctx.get('sandboxPolicy')
-  if (policy === undefined) throw new ToolContextUnavailableError('dsh-tools: confined PTC runtime requires sandboxPolicy')
+  if (policy === undefined) throw new ToolContextUnavailableError('snh-tools: confined PTC runtime requires sandboxPolicy')
   return policy.resolve(exec.agent === undefined ? {} : { session: exec.agent.session })
 }
 

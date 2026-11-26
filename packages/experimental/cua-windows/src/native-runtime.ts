@@ -6,8 +6,8 @@ import { realpath } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { PassThrough, Writable, type Readable, type Duplex } from 'node:stream'
 import assert from 'node:assert/strict'
-import type { SubprocessHandle, SubprocessRuntime } from '@deepseek-ai/dsh-subprocess'
-import { NativeError, type NativeChannel, type NativeClientConfig } from '@deepseek-ai/dsh-cua/native-client'
+import type { SubprocessHandle, SubprocessRuntime } from '@supernova-ai/snh-subprocess'
+import { NativeError, type NativeChannel, type NativeClientConfig } from '@supernova-ai/snh-cua/native-client'
 import { z } from 'zod'
 import { connectWindowsPipe, type WindowsConnection, type WindowsTransport } from './native-transport.ts'
 
@@ -105,7 +105,7 @@ class WindowsHelper {
   private error: Error | undefined
 
   constructor(private readonly owner: Owner, private readonly config: NativeClientConfig) {
-    this.logPath = join(dirname(config.helperPath), 'dsh-cua-windows.log')
+    this.logPath = join(dirname(config.helperPath), 'snh-cua-windows.log')
     this.ready = this.readiness.promise
     void this.ready.catch(() => {})
     this.done = this.run()
@@ -130,7 +130,7 @@ class WindowsHelper {
     }, this.config.connectTimeoutMs)
     try {
       const helperPath = await realpath(this.config.helperPath)
-      this.logPath = join(dirname(helperPath), 'dsh-cua-windows.log')
+      this.logPath = join(dirname(helperPath), 'snh-cua-windows.log')
       const digest = createHash('sha256')
       for await (const chunk of createReadStream(helperPath, { signal: this.startup.signal })) digest.update(chunk as Buffer)
       const runtimeKey = digest.digest('hex')
@@ -212,7 +212,7 @@ class WindowsChannel implements NativeChannel {
 
   constructor(helper: Promise<WindowsHelper>, config: NativeClientConfig, pollIntervalMs: number, launchWaitMs: number,
     owner: Owner, transport: WindowsTransport) {
-    this.logPath = join(dirname(config.helperPath), 'dsh-cua-windows.log')
+    this.logPath = join(dirname(config.helperPath), 'snh-cua-windows.log')
     this.stdin = new Writable({
       write: (chunk: Buffer, _encoding, callback) => {
         void this.readiness.promise.then((socket) => {

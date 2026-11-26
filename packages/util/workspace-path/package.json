@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-util-workspace-path",
+  "name": "@supernova-ai/snh-util-workspace-path",
   "description": "Browser-safe Workspace path and display helpers",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -30,9 +30,9 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

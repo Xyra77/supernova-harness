@@ -1,16 +1,16 @@
 /** Drop target that opens a Session dragged from the Session list in the right Sidebar. */
 import { useState, type DragEvent } from 'react'
 import { createPortal } from 'react-dom'
-import { IconPanelLeftOutlineRegular } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { HostObservable, InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { SessionDragType } from '@deepseek-ai/dsh-client-ui-workspace/client'
-import type { PaneId } from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
+import { IconPanelLeftOutlineRegular } from '@supernova-ai/snh-client-ui-primitives'
+import type { HostObservable, InjectFace, PropsLocale, PropsRuntime } from '@supernova-ai/snh-client-ui-slots'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type { SessionDragType } from '@supernova-ai/snh-client-ui-workspace/client'
+import type { PaneId } from '@supernova-ai/snh-client-ui-sidebar-right/client'
 import type { NS } from '../locales.ts'
 import css from './SessionDropZone.module.css'
 
 /** Drag data type the Session list sets to a dragged row's Session id. */
-export const SESSION_DRAG_TYPE: SessionDragType = 'application/x-dsh-session'
+export const SESSION_DRAG_TYPE: SessionDragType = 'application/x-snh-session'
 
 /** Viewport rectangle, in px, where a dragged Session can land. */
 export interface SessionDropTarget {

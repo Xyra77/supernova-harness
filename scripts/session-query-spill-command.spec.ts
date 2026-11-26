@@ -1,11 +1,11 @@
-import { Context } from '@deepseek-ai/cordis'
-import { LocalSpillStore } from '@deepseek-ai/dsh-spill-local'
-import { LocalFileSystem } from '@deepseek-ai/dsh-fs-local'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import { LocalBashExecutor } from '@deepseek-ai/dsh-bash-local'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm/types'
+import { Context } from '@supernova-ai/cordis'
+import { LocalSpillStore } from '@supernova-ai/snh-spill-local'
+import { LocalFileSystem } from '@supernova-ai/snh-fs-local'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import { LocalBashExecutor } from '@supernova-ai/snh-bash-local'
+import type { SessionId } from '@supernova-ai/snh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm/types'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
@@ -27,7 +27,7 @@ it.skipIf(process.platform === 'win32')('resolves the exact spill verifier, reta
       disposers.push(() => fiber.dispose())
       await fiber
     }
-    const logical = resolve('/tmp/dsh-acp-snap-query-verifier')
+    const logical = resolve('/tmp/snh-acp-snap-query-verifier')
     const mapping = ctx.plugin(locators, { root, locatorRoot: logical })
     disposers.push(() => mapping.dispose())
     await mapping

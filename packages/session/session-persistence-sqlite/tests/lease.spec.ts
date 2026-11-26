@@ -3,13 +3,13 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import { SessionAlreadyOwnedError } from '@deepseek-ai/dsh-session-persistence'
+import { SessionId } from '@supernova-ai/snh-session'
+import { SessionAlreadyOwnedError } from '@supernova-ai/snh-session-persistence'
 import { SessionWriteLease, LEASE_FILENAME } from '../src/lease.ts'
 
 const faults = vi.hoisted(() => ({ flock: '', stat: false, swap: 0, remove: false }))
-vi.mock('@deepseek-ai/node-addon-system/flock', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@deepseek-ai/node-addon-system/flock')>()
+vi.mock('@supernova-ai/node-addon-system/flock', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@supernova-ai/node-addon-system/flock')>()
   return { ...actual, tryLockExclusive: async (fd: number) => {
     if (faults.flock !== '') {
       const code = faults.flock
@@ -42,7 +42,7 @@ vi.mock('node:fs/promises', async (importOriginal) => {
 afterEach(() => { faults.flock = ''; faults.stat = false; faults.swap = 0; faults.remove = false })
 
 async function fixtureRoot() {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-sqlite-lease-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-sqlite-lease-'))
   const leases: SessionWriteLease[] = []
   onTestFinished(async () => {
     try { await Promise.all(leases.map(lease => lease.release())) }

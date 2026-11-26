@@ -3,29 +3,29 @@
  * metadata-only listing, Agent-free history reads, subagent ownership
  * isolation, and prompt failure mapping.
  */
-import { AgentModel, modelSelectionProjectionDefinition } from '@deepseek-ai/dsh-agent'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { AgentModel, modelSelectionProjectionDefinition } from '@supernova-ai/snh-agent'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 
-import { SESSION_FORMAT_VERSION, SessionLogOffset, SessionSeq } from '@deepseek-ai/dsh-session'
+import { SESSION_FORMAT_VERSION, SessionLogOffset, SessionSeq } from '@supernova-ai/snh-session'
 import { describe, expect, it, vi } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { Context } from '@deepseek-ai/cordis'
-import SessionStore from '@deepseek-ai/dsh-session'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import { subagentIdentityProjectionDefinition } from '@deepseek-ai/dsh-subagent/src/projection.ts'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
-import { createUserMessage, type MessageId } from '@deepseek-ai/dsh-llm'
-import { snapshotSubagentDescriptor } from '@deepseek-ai/dsh-subagent'
-import { createInboxStub, mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import type { Agent, Inbox } from '@deepseek-ai/dsh-agent'
-import type { Session, SessionEvent, SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
-import AttachmentStore from '@deepseek-ai/dsh-attachment'
+import { brandString } from '@supernova-ai/snh-brand'
+import { Context } from '@supernova-ai/cordis'
+import SessionStore from '@supernova-ai/snh-session'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import { subagentIdentityProjectionDefinition } from '@supernova-ai/snh-subagent/src/projection.ts'
+import TypertRegistry from '@supernova-ai/snh-typert-registry'
+import { createUserMessage, type MessageId } from '@supernova-ai/snh-llm'
+import { snapshotSubagentDescriptor } from '@supernova-ai/snh-subagent'
+import { createInboxStub, mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import type { Agent, Inbox } from '@supernova-ai/snh-agent'
+import type { Session, SessionEvent, SessionHeader, SessionId } from '@supernova-ai/snh-session'
+import AttachmentStore from '@supernova-ai/snh-attachment'
 import type { SessionPromptRequest, SessionRequestId } from '../src/types.ts'
 import {
   type SessionPersistenceRevision,
   type SessionPersistenceSnapshot,
   type SessionHandle, SessionAccess,
-} from '@deepseek-ai/dsh-session-persistence'
+} from '@supernova-ai/snh-session-persistence'
 import {
   createSessionTestRemote,
   testSessionPersistence,
@@ -425,7 +425,7 @@ describe('Remote Agent and Session lookup policy', () => {
       list: () => Promise.resolve([meta]),
       inspect,
     })
-    const resumedSession = { id: sessionId, header: meta, events: [] } as unknown as import('@deepseek-ai/dsh-session').Session
+    const resumedSession = { id: sessionId, header: meta, events: [] } as unknown as import('@supernova-ai/snh-session').Session
     const resumedAgent = { id: sessionId, session: resumedSession, status: 'idle', ctx } as Agent
     const release = Promise.withResolvers<undefined>()
     const resume = vi.spyOn(ctx.agents, 'resume').mockImplementation(async () => {

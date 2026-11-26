@@ -21,17 +21,17 @@
  */
 
 import { posix, win32 } from 'node:path'
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type {} from '@deepseek-ai/dsh-fs'
-import type { FsDirEntry, FsInfo, FsPathInfo, FsTarget } from '@deepseek-ai/dsh-fs'
-import type {} from '@deepseek-ai/dsh-sandbox-policy'
-import type {} from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-session-persistence'
-import type {} from '@deepseek-ai/dsh-session-projection-cache'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { Remote, RemoteError, TypertRemoteService, type TypertLookup } from '@deepseek-ai/dsh-typert-protocol'
-import type {} from '@deepseek-ai/dsh-working-directory'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type {} from '@supernova-ai/snh-fs'
+import type { FsDirEntry, FsInfo, FsPathInfo, FsTarget } from '@supernova-ai/snh-fs'
+import type {} from '@supernova-ai/snh-sandbox-policy'
+import type {} from '@supernova-ai/snh-session'
+import type {} from '@supernova-ai/snh-session-persistence'
+import type {} from '@supernova-ai/snh-session-projection-cache'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { Remote, RemoteError, TypertRemoteService, type TypertLookup } from '@supernova-ai/snh-typert-protocol'
+import type {} from '@supernova-ai/snh-working-directory'
 import { WorkspaceChangeFeed } from './changes.ts'
 import { searchWorkspace, type SearchLimits } from './search.ts'
 import type {
@@ -50,7 +50,7 @@ import type {
 
 export type * from './types.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** Host owner of the `workspaceFiles` Remote namespace. */
     workspaceFiles: WorkspaceFiles
@@ -89,7 +89,7 @@ async function workspaceFileScopeOf(
   return { sessionId, workspaceRoot: cached ?? stored.header.cwd ?? ctx.sandboxPolicy.workspaceRoot }
 }
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@supernova-ai/snh-typert-protocol' {
   interface TypertLookupMap {
     /** Resolve a Session id to its workspace root without loading its event body or activating an Agent. */
     workspaceFileScope: TypertLookup<WorkspaceFileScope, SessionId>
@@ -243,8 +243,8 @@ export class WorkspaceFiles extends TypertRemoteService {
         parameter: 'workspaceFileScope',
         wire: 'workspaceFileScopeId',
         resource: 'session',
-        hostTypeSymbol: '@deepseek-ai/dsh-api-workspace-files#WorkspaceFileScope',
-        wireTypeSymbol: '@deepseek-ai/dsh-session/types#SessionId',
+        hostTypeSymbol: '@supernova-ai/snh-api-workspace-files#WorkspaceFileScope',
+        wireTypeSymbol: '@supernova-ai/snh-session/types#SessionId',
         resolve: sessionId => workspaceFileScopeOf(scope, sessionId),
       })
     })
@@ -541,7 +541,7 @@ export class WorkspaceFiles extends TypertRemoteService {
 
 /**
  * The backend's non-text refusal, recognized by its code alone: the error class
- * belongs to whichever `dsh-fs` instance the provider loaded, so no class
+ * belongs to whichever `snh-fs` instance the provider loaded, so no class
  * identity is shared across the package boundary.
  */
 function isNotTextRefusal(error: unknown): boolean {

@@ -3,7 +3,7 @@ description: "二维码登录、私密登录链接和 owner 审批的浏览器�
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-remote-connection
+# @supernova-ai/snh-client-remote-connection
 
 [English](README.md) | 中文
 
@@ -49,7 +49,7 @@ Remote 在根地址使用同一份登录文档处理普通登录和二维码兑�
 <a id="pairing-requests"></a>
 ## 配对申请
 
-匿名根页面在共同标题下将 Token 输入和设备配对分为两张卡片。页面说明引导用户选择下方任一可用方式验证登录。两张卡片均按标题、说明、操作控件的顺序排列，并使用相同的字体与间距。令牌输入错误时，在输入框下显示错误信息，标题下的说明保持可见。二维码兑换提示位于两张卡片上方；兑换失败后，两种登录方式均可继续使用。公开的 `pairing/client.js` 脚本以 defer 方式加载，定义 `dsh-device-pairing`；元素自主管理申请控件、样式和词典，无需加载已认证 Client 模块。Host 使用随普通入口发布的自包含浏览器函数及公开数据生成此脚本；重新加载插件后，脚本随实现一同更新。移除元素会中止工作并丢弃私密票据；浏览器前进后退缓存的暂停则保留票据，并在恢复时查询状态。
+匿名根页面在共同标题下将 Token 输入和设备配对分为两张卡片。页面说明引导用户选择下方任一可用方式验证登录。两张卡片均按标题、说明、操作控件的顺序排列，并使用相同的字体与间距。令牌输入错误时，在输入框下显示错误信息，标题下的说明保持可见。二维码兑换提示位于两张卡片上方；兑换失败后，两种登录方式均可继续使用。公开的 `pairing/client.js` 脚本以 defer 方式加载，定义 `snh-device-pairing`；元素自主管理申请控件、样式和词典，无需加载已认证 Client 模块。Host 使用随普通入口发布的自包含浏览器函数及公开数据生成此脚本；重新加载插件后，脚本随实现一同更新。移除元素会中止工作并丢弃私密票据；浏览器前进后退缓存的暂停则保留票据，并在恢复时查询状态。
 
 匿名配对卡片依次显示配对码、重新申请、取消申请和等待状态，倒计时位于状态旁。申请和状态查询失败以占满内容宽度的错误横幅显示，拒绝和过期使用警告横幅。横幅不含图标，描边、间距和圆角与设置页远程连接中的横幅一致。倒计时位于横幅外。网络或服务端暂时失败时显示自动重连状态。HTTP 429 限流时提示稍后自动重试，次数耗尽后提示稍后重新申请。恢复次数耗尽后显示错误横幅和“重新申请”，不再提供独立的状态查询操作。申请操作禁用时保留主按钮的前景色。确认取消后恢复“申请配对”，不显示取消提示。
 
@@ -89,10 +89,10 @@ owner 的审批返回 `approved`、`denied` 或 `unavailable` 后，卡片先从
 在根作用域的列表插槽 `settings.remoteConnection.extensions` 中注册，即可在主面板（包括默认的访问地址、二维码登录和配对卡片）之后添加选项。各插件使用唯一的 `id`；条目按 `order` 升序排列，相同值按注册顺序排列。扩展内容可与默认面板或替换面板同时显示。`RemoteConnectionExtensionProps` 提供与[面板替换组件](#replace-the-settings-panel)相同的共享状态 Hook、操作和 `close()`。各扩展组件负责自己的渲染和本地化文案。
 
 ```ts client
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
+import type { Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
 import type { FunctionComponent } from 'react'
-import type { RemoteConnectionExtensionProps } from '@deepseek-ai/dsh-client-remote-connection/client'
+import type { RemoteConnectionExtensionProps } from '@supernova-ai/snh-client-remote-connection/client'
 
 declare const ConnectionOptions: FunctionComponent<RemoteConnectionExtensionProps>
 
@@ -115,10 +115,10 @@ export function apply(ctx: Context): void {
 在 Client 插件中注册替换组件，优先级应低于默认面板的 `0`：
 
 ```ts client
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
+import type { Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
 import type { FunctionComponent } from 'react'
-import type { RemoteConnectionContentProps } from '@deepseek-ai/dsh-client-remote-connection/client'
+import type { RemoteConnectionContentProps } from '@supernova-ai/snh-client-remote-connection/client'
 
 declare const CustomPanel: FunctionComponent<RemoteConnectionContentProps>
 

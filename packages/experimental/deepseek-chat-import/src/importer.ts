@@ -1,5 +1,5 @@
 /**
- * Import of a complete DeepSeek chat export held in memory into a
+ * Import of a complete SuperNova chat export held in memory into a
  * caller-chosen Workspace, one conversation at a time.
  *
  * `chat_session_index.json` selects the conversations to import. One streaming
@@ -10,11 +10,11 @@
 
 import { stat } from 'node:fs/promises'
 import { extname } from 'node:path'
-import type { ImageAttachmentRef, ImageMediaType, SaveImageAttachment } from '@deepseek-ai/dsh-attachment'
-import { brandNumber, brandString } from '@deepseek-ai/dsh-brand'
-import { SESSION_FORMAT_VERSION, validateSessionLog } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader, SessionId, SessionLogOffset } from '@deepseek-ai/dsh-session'
-import type { SessionHandle } from '@deepseek-ai/dsh-session-persistence'
+import type { ImageAttachmentRef, ImageMediaType, SaveImageAttachment } from '@supernova-ai/snh-attachment'
+import { brandNumber, brandString } from '@supernova-ai/snh-brand'
+import { SESSION_FORMAT_VERSION, validateSessionLog } from '@supernova-ai/snh-session'
+import type { SessionEvent, SessionHeader, SessionId, SessionLogOffset } from '@supernova-ai/snh-session'
+import type { SessionHandle } from '@supernova-ai/snh-session-persistence'
 import { convertConversation, selectBranch } from './conversation.ts'
 import type { ConvertConversationOptions, ConvertedConversation } from './conversation.ts'
 import {
@@ -23,7 +23,7 @@ import {
 import type { ExportSessionFile } from './format.ts'
 import { ExportEntryError, ExportSourceError, openExportArchive } from './archive.ts'
 import type { ExportArchive, ExportEntryInfo, ExportStreamHandler } from './archive.ts'
-import type { DeepseekChatImportFailureReason, DeepseekChatImportResult, DeepseekChatImportSkip } from './types.ts'
+import type { SupernovaChatImportFailureReason, SupernovaChatImportResult, SupernovaChatImportSkip } from './types.ts'
 
 /** The archive entry naming the export format version. */
 const MANIFEST_ENTRY = 'manifest.json'
@@ -35,7 +35,7 @@ const CONVERSATION_ENTRY = /^chat_sessions\/([^/]+)\.json$/u
 const IMAGE_ENTRY = /^chat_sessions\/([^/]+)_files\/[^/]+$/u
 
 /** Services and inputs one import uses. */
-export interface DeepseekChatImportDependencies {
+export interface SupernovaChatImportDependencies {
   /** Durable store receiving each imported Session; a `SessionPersistence` satisfies it. */
   readonly persistence: {
     create(header: SessionHeader, options: { signal: AbortSignal }): Promise<Pick<SessionHandle, 'append' | 'flush' | 'close'>>
@@ -59,7 +59,7 @@ export interface DeepseekChatImportDependencies {
 }
 
 /** The Workspace receiving the imported Sessions; a registry `Workspace` satisfies it. */
-export interface DeepseekChatImportWorkspace {
+export interface SupernovaChatImportWorkspace {
   /** Workspace id reported in the result. */
   readonly id: string
   /** Canonical existing directory, used as every imported Session's working directory. */
@@ -72,7 +72,7 @@ export interface DeepseekChatImportWorkspace {
 }
 
 /** Deployment limits of one import. */
-export interface DeepseekChatImportLimits {
+export interface SupernovaChatImportLimits {
   /** Maximum number of Sessions to write. */
   readonly maxSessions: number
   /** Largest declared uncompressed size of one archive entry. */
@@ -82,13 +82,13 @@ export interface DeepseekChatImportLimits {
 }
 
 /** One import request. */
-export interface DeepseekChatImportRequest {
+export interface SupernovaChatImportRequest {
   /** Complete export ZIP bytes. */
   readonly archive: Uint8Array
   /** Workspace receiving the Sessions. */
-  readonly workspace: DeepseekChatImportWorkspace
+  readonly workspace: SupernovaChatImportWorkspace
   /** Session count and size limits. */
-  readonly limits: DeepseekChatImportLimits
+  readonly limits: SupernovaChatImportLimits
   /**
    * Progress after the selection and after each imported Session.
    * @param done - Sessions imported so far.
@@ -125,8 +125,8 @@ type StoredImage =
 
 /** The `reason` of each metadata entry that cannot be read, by whether it is absent or damaged. */
 interface MetadataReasons {
-  readonly missing: DeepseekChatImportFailureReason
-  readonly damaged: DeepseekChatImportFailureReason
+  readonly missing: SupernovaChatImportFailureReason
+  readonly damaged: SupernovaChatImportFailureReason
 }
 
 /**
@@ -151,15 +151,15 @@ interface MetadataReasons {
  * @returns the import summary.
  * @throws {ExportSourceError} for an archive-level failure, or `workspace-not-found` when the Workspace is removed during the import.
  */
-export async function importDeepseekChatExport(
-  deps: DeepseekChatImportDependencies,
-  request: DeepseekChatImportRequest,
+export async function importSupernovaChatExport(
+  deps: SupernovaChatImportDependencies,
+  request: SupernovaChatImportRequest,
   signal: AbortSignal,
-): Promise<DeepseekChatImportResult> {
+): Promise<SupernovaChatImportResult> {
   const { limits, workspace } = request
   const archive = await openExportArchive(request.archive, limits.maxEntryBytes, signal)
-  const skipped: DeepseekChatImportSkip[] = []
-  const report = (item: DeepseekChatImportSkip): void => {
+  const skipped: SupernovaChatImportSkip[] = []
+  const report = (item: SupernovaChatImportSkip): void => {
     skipped.push(item)
     deps.warn(`deepseek-chat-import: conversation ${item.conversationId} was not imported: ${item.reason}`)
   }
@@ -325,7 +325,7 @@ export async function importDeepseekChatExport(
  * @returns the outcome for each image entry name.
  */
 async function storeImages(
-  deps: DeepseekChatImportDependencies,
+  deps: SupernovaChatImportDependencies,
   archive: ExportArchive,
   conversations: ReadonlySet<string>,
   signal: AbortSignal,
@@ -379,7 +379,7 @@ async function storeImages(
  * @throws {ExportConversationError} when the tree or a mapped fragment is invalid.
  */
 function convertWithStoredImages(
-  deps: DeepseekChatImportDependencies,
+  deps: SupernovaChatImportDependencies,
   file: ExportSessionFile,
   stored: ReadonlyMap<string, StoredImage>,
   options: ConvertConversationOptions,
@@ -544,7 +544,7 @@ function referencedImages(
 }
 
 /** Record one stored Session as a Workspace member, naming the stored id when that fails. */
-async function attachSession(workspace: DeepseekChatImportWorkspace, id: SessionId): Promise<void> {
+async function attachSession(workspace: SupernovaChatImportWorkspace, id: SessionId): Promise<void> {
   try {
     await workspace.attachSession(id)
   } catch (error) {
@@ -554,7 +554,7 @@ async function attachSession(workspace: DeepseekChatImportWorkspace, id: Session
 }
 
 async function writeSession(
-  deps: DeepseekChatImportDependencies,
+  deps: SupernovaChatImportDependencies,
   conversion: ConvertedConversation,
   cwd: string,
   signal: AbortSignal,

@@ -1,18 +1,18 @@
 // @vitest-environment jsdom
-import * as uiPrimitives from '@deepseek-ai/dsh-client-ui-primitives'
+import * as uiPrimitives from '@supernova-ai/snh-client-ui-primitives'
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from 'vitest'
-import { RemoteError, SlotTestRuntime } from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { ModelSelection } from '@deepseek-ai/dsh-api-remotes/client'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+import { RemoteError, SlotTestRuntime } from '@supernova-ai/snh-client-test-runtime'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type { ModelSelection } from '@supernova-ai/snh-api-remotes/client'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
 import type { ComponentProps } from 'react'
-import type { OwnerOf } from '@deepseek-ai/dsh-client-ui-slots'
+import type { OwnerOf } from '@supernova-ai/snh-client-ui-slots'
 import type { ModelDirectoryState } from '../src/client/directory.ts'
 import { ModelSelect } from '../src/client/ModelSelect.tsx'
 import { en, zh } from '../src/client/locales.ts'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { zh as commonZh } from '@supernova-ai/snh-client-locale/src/locales/zh.ts'
+import { brandString } from '@supernova-ai/snh-brand'
 
 // The seat's key domain is model ∪ common; the stub mirrors the real lookup
 // chain: package dictionary, then common vocabulary, then the key.
@@ -44,7 +44,7 @@ function state(overrides: Partial<ModelDirectoryState> = {}): ModelDirectoryStat
     routable: true,
     groups: [{
       id: 'deepseek-official',
-      name: 'DeepSeek',
+      name: 'SuperNova',
       models: [{
         id: 'deepseek-v4-flash',
         name: 'DeepSeek-V4-Flash',
@@ -162,7 +162,7 @@ describe('ModelSelect catalog badges', () => {
     current: { provider: 'deepseek-official', model: 'deepseek-flash' },
     groups: [{
       id: 'deepseek-official',
-      name: 'DeepSeek',
+      name: 'SuperNova',
       models: [
         { id: 'deepseek-flash', name: 'DeepSeek-V4.1-Flash', badge: BADGE },
         { id: 'deepseek-v4-pro', name: 'DeepSeek-V4-Pro' },
@@ -349,7 +349,7 @@ describe('ModelSelect reasoning effort', () => {
   it.each([false, true])('announces rejected selections with ownership guidance only for held writers (%s)', async (sessionInUse) => {
     const groups = [{
       id: 'deepseek-official',
-      name: 'DeepSeek',
+      name: 'SuperNova',
       models: [
         { id: 'deepseek-v4-flash', name: 'DeepSeek-V4-Flash', reasoning },
         { id: 'deepseek-v4-pro', name: 'DeepSeek-V4-Pro' },
@@ -393,7 +393,7 @@ describe('ModelSelect reasoning effort', () => {
   it('spins on the trigger and the chosen model row until the selection settles, across pane changes', async () => {
     const groups = [{
       id: 'deepseek-official',
-      name: 'DeepSeek',
+      name: 'SuperNova',
       models: [
         { id: 'deepseek-v4-flash', name: 'DeepSeek-V4-Flash', reasoning },
         { id: 'deepseek-v4-pro', name: 'DeepSeek-V4-Pro' },
@@ -468,9 +468,9 @@ describe('ModelSelect reasoning effort', () => {
     // Outside the composer subtree — column overflow clips cannot crop it.
     expect(container.contains(menu)).toBe(false)
     expect(menu.parentElement).toBe(document.body)
-    const anchor = trigger.style.getPropertyValue('--dsh-model-anchor')
-    expect(anchor).toMatch(/^--dsh-model-/)
-    expect(menu.style.getPropertyValue('--dsh-model-anchor')).toBe(anchor)
+    const anchor = trigger.style.getPropertyValue('--snh-model-anchor')
+    expect(anchor).toMatch(/^--snh-model-/)
+    expect(menu.style.getPropertyValue('--snh-model-anchor')).toBe(anchor)
     expect(menu.style.left).toBe('')
     expect(menu.style.top).toBe('')
     expect(measure).not.toHaveBeenCalled()
@@ -530,7 +530,7 @@ describe('ModelSelect keyboard walk', () => {
         })
       }
       vi.resetModules()
-      const detection = await import('@deepseek-ai/dsh-client-ui-primitives/src/focus.ts')
+      const detection = await import('@supernova-ai/snh-client-ui-primitives/src/focus.ts')
       const device = vi.spyOn(uiPrimitives, 'isMobileDevice').mockImplementation(detection.isMobileDevice)
       onTestFinished(() => { device.mockRestore() })
       const select = vi.fn()
@@ -966,7 +966,7 @@ describe('ModelSelect search', () => {
     const directory = createSnapshotStore(state({
       current: { provider: 'deepseek-official', model: 'beta' },
       groups: [
-        { id: 'deepseek-official', name: 'DeepSeek', models: [{ id: 'alpha', name: 'Alpha' }, { id: 'beta', name: 'Beta' }] },
+        { id: 'deepseek-official', name: 'SuperNova', models: [{ id: 'alpha', name: 'Alpha' }, { id: 'beta', name: 'Beta' }] },
         { id: 'other', name: 'Other', models: [
           { id: 'delta', name: 'Delta' }, { id: 'epsilon', name: 'Epsilon' }, { id: 'gamma', name: 'Gamma' },
         ] },
@@ -1039,7 +1039,7 @@ describe('ModelSelect search', () => {
     expect(screen.getAllByRole('menuitemradio').map(row => row.textContent)).toEqual(['Gemini Flash'])
     expect(screen.getByRole('searchbox')).toBe(search)
     expect(document.activeElement).toBe(search)
-    expect(screen.queryByRole('group', { name: 'DeepSeek' })).toBeNull()
+    expect(screen.queryByRole('group', { name: 'SuperNova' })).toBeNull()
     expect(trigger.textContent).toContain('DeepSeek-V4-Flash')
     fireEvent.change(search, { target: { value: 'zzzz' } })
     const status = screen.getByRole('status')
@@ -1111,7 +1111,7 @@ it('places account and official models before third-party models', async () => {
 
 it.each([en, zh])('localizes the account group while preserving external names', (copy) => {
   const groups = ['deepseek-account', 'custom'].map(id => ({
-    id, name: id === 'deepseek-account' ? 'DeepSeek Account' : 'My Gateway',
+    id, name: id === 'deepseek-account' ? 'SuperNova Account' : 'My Gateway',
     models: [{ id: 'model', name: 'Model' }],
   }))
   render(<ModelSelect renderSlot={renderLabel} locked={false} available
@@ -1123,18 +1123,18 @@ it.each([en, zh])('localizes the account group while preserving external names',
 })
 
 it('restores the account model name after login without changing the saved route', () => {
-  const groups = [{ id: 'deepseek-account', name: 'DeepSeek Account', models: [
-    { id: 'deepseek-flash', name: 'DeepSeek Flash', reasoning },
+  const groups = [{ id: 'deepseek-account', name: 'SuperNova Account', models: [
+    { id: 'deepseek-flash', name: 'SuperNova Flash', reasoning },
   ] }]
   const selected = { provider: 'deepseek-account', model: 'deepseek-flash', reasoningEffort: 'high' }
   const directory = createSnapshotStore(state({ current: selected, groups, retainedEffort: 'High' }))
   render(<ModelSelect renderSlot={renderLabel} locked={false} available directory={directory} load={vi.fn()}
     resolveText={resolveText} select={vi.fn()} t={t} />)
-  expect(screen.getByRole('button', { name: /选择模型，当前/ }).textContent).toBe('DeepSeek FlashHigh')
+  expect(screen.getByRole('button', { name: /选择模型，当前/ }).textContent).toBe('SuperNova FlashHigh')
   act(() => { directory.update((snapshot) => { snapshot.groups = []; snapshot.routable = false }) })
   expect(screen.getByRole('button', { name: '请选择模型' }).textContent).toBe('请选择模型')
   act(() => { directory.update((snapshot) => { snapshot.groups = groups; snapshot.routable = true }) })
-  expect(screen.getByRole('button', { name: /选择模型，当前/ }).textContent).toBe('DeepSeek FlashHigh')
+  expect(screen.getByRole('button', { name: /选择模型，当前/ }).textContent).toBe('SuperNova FlashHigh')
   expect(directory.getSnapshot().current).toEqual(selected)
 })
 

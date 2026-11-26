@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { SessionEvent, SurfaceEvent, SurfaceEventType } from '@deepseek-ai/dsh-session'
+import type { SessionEvent, SurfaceEvent, SurfaceEventType } from '@supernova-ai/snh-session'
 import {
   Session,
   type SessionId,
@@ -11,9 +11,9 @@ import {
   isReplacementSurfaceEvent,
   isSurfaceEligibleType,
   isSurfaceEvent,
-} from '@deepseek-ai/dsh-session'
-import { SurfaceManager } from '@deepseek-ai/dsh-session/surface'
-import { brandString } from '@deepseek-ai/dsh-brand'
+} from '@supernova-ai/snh-session'
+import { SurfaceManager } from '@supernova-ai/snh-session/surface'
+import { brandString } from '@supernova-ai/snh-brand'
 import {
   type MessageId,
   type ToolCallId,
@@ -23,10 +23,10 @@ import {
   createToolResultMessage,
   createUserMessage,
   freezeMessage,
-} from '@deepseek-ai/dsh-llm'
-import type { ContextFormed, MessageSource } from '@deepseek-ai/dsh-llm'
+} from '@supernova-ai/snh-llm'
+import type { ContextFormed, MessageSource } from '@supernova-ai/snh-llm'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'test': { kind: 'test' } & ContextFormed
     'watcher': { kind: 'watcher' } & ContextFormed

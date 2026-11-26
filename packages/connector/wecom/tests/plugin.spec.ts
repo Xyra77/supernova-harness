@@ -1,10 +1,10 @@
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import type { Context } from '@deepseek-ai/cordis'
-import { renderContextSections } from '@deepseek-ai/dsh-system-prompt'
+import type { Context } from '@supernova-ai/cordis'
+import { renderContextSections } from '@supernova-ai/snh-system-prompt'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { cliPathContextText } from '@deepseek-ai/dsh-cli-account/src/context.ts'
+import { cliPathContextText } from '@supernova-ai/snh-cli-account/src/context.ts'
 import { executableFileName } from '../src/directory.ts'
 import * as Wecom from '../src/index.ts'
 import { WECOM_PACKAGE } from '../src/presentation.ts'
@@ -40,7 +40,7 @@ describe('WeCom plugin', () => {
 
   const runtimeContext = async () => renderContextSections(await ctx.systemPrompt.assemble())
 
-  it('publishes one wecom entry skill over the configured guides, with a body that carries the DSH guidance', async () => {
+  it('publishes one wecom entry skill over the configured guides, with a body that carries the SNH guidance', async () => {
     await start()
     await ctx.plugin(Wecom, { binDir, skillsDir })
 
@@ -54,8 +54,8 @@ describe('WeCom plugin', () => {
   })
 
   it('reports the guides as downloading and then failed when no skills URL answers, and lists no skill', async () => {
-    const home = await mkdtemp(join(tmpdir(), 'dsh-wecom-home-'))
-    vi.stubEnv('DSH_HOME', home)
+    const home = await mkdtemp(join(tmpdir(), 'snh-wecom-home-'))
+    vi.stubEnv('SNH_HOME', home)
     try {
       await start({ skillsUrls: ['https://127.0.0.1:9'], skillsTimeoutMs: 5_000 })
       await ctx.plugin(Wecom, { binDir })

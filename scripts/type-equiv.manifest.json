@@ -4,12 +4,12 @@
     {
       "doc": "docs/subsystems/session.md",
       "symbol": "SessionLogUploadRequest",
-      "source": "packages/session/session-log-deepseek/src/types.ts"
+      "source": "packages/session/session-log-supernova/src/types.ts"
     },
     {
       "doc": "docs/subsystems/session.md",
       "symbol": "SessionLogUploadExclusion",
-      "source": "packages/session/session-log-deepseek/src/types.ts"
+      "source": "packages/session/session-log-supernova/src/types.ts"
     },
     {
       "doc": "docs/subsystems/compaction.md",
@@ -1800,12 +1800,12 @@
     },
     {
       "doc": "docs/subsystems/subprocess.md",
-      "symbol": "DshEnvironmentKey",
+      "symbol": "SnhEnvironmentKey",
       "source": "packages/subprocess/subprocess/src/types.ts"
     },
     {
       "doc": "docs/subsystems/subprocess.md",
-      "symbol": "DshEnvironment",
+      "symbol": "SnhEnvironment",
       "source": "packages/subprocess/subprocess/src/types.ts"
     },
     {

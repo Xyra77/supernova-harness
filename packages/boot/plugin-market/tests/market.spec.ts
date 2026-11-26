@@ -1,9 +1,9 @@
-import { Context, Service } from '@deepseek-ai/cordis'
-import { updateVolatile } from '@deepseek-ai/cosmokit'
-import { getDshRuntimeVersion } from '@deepseek-ai/dsh-app-boot'
-import { DetailFailure } from '@deepseek-ai/dsh-plugin-detail'
-import type { BundleInfo } from '@deepseek-ai/dsh-plugin-manager/types'
-import { remoteErrorOf } from '@deepseek-ai/dsh-typert-protocol'
+import { Context, Service } from '@supernova-ai/cordis'
+import { updateVolatile } from '@supernova-ai/cosmokit'
+import { getSnhRuntimeVersion } from '@supernova-ai/snh-app-boot'
+import { DetailFailure } from '@supernova-ai/snh-plugin-detail'
+import type { BundleInfo } from '@supernova-ai/snh-plugin-manager/types'
+import { remoteErrorOf } from '@supernova-ai/snh-typert-protocol'
 import { afterEach, expect, it, onTestFinished, vi } from 'vitest'
 import PluginMarket, { type Config, type MarketQuery } from '../src/index.ts'
 import { parseIndexBody } from '../src/parse.ts'
@@ -203,18 +203,18 @@ it('refuses a malformed Git URL without including the raw address in the error',
 })
 
 it('reads an index with installation status, compatibility, and install arguments', async () => {
-  const runtime = getDshRuntimeVersion()
+  const runtime = getSnhRuntimeVersion()
   const fetch = serve(json(index([
     entry('absent', { icon: 'a.svg', author: 'Jane' }),
-    entry('same', {}, [release('1.0.0', { engines: { dsh: runtime } })]),
+    entry('same', {}, [release('1.0.0', { engines: { snh: runtime } })]),
     entry('older', {}, [release('2.0.0')]),
     entry('newer'),
     entry('unknown'),
     entry('unparsed'),
     entry('shipped'),
     entry('catalog'),
-    entry('incompatible', {}, [release('1.0.0', { engines: { dsh: '0.0.1' } })]),
-    entry('exempted', {}, [release('1.0.0', { engines: { dsh: '0.0.1' }, source: { type: 'npm', registry: 'https://r.example/' } })]),
+    entry('incompatible', {}, [release('1.0.0', { engines: { snh: '0.0.1' } })]),
+    entry('exempted', {}, [release('1.0.0', { engines: { snh: '0.0.1' }, source: { type: 'npm', registry: 'https://r.example/' } })]),
   ])))
   const { market } = await mount({}, {
     bundles: [
@@ -242,16 +242,16 @@ it('reads an index with installation status, compatibility, and install argument
   expect(by.catalog?.installation).toEqual({ status: 'not-installed' })
   expect(by.incompatible?.defaultVersion).toBeUndefined()
   expect(by.incompatible?.installation).toEqual({ status: 'update-available', installedVersion: '0.9.0' })
-  expect(by.incompatible?.versions[0]?.compatibility).toEqual({ compatible: false, runtimeVersion: runtime, requirements: { 'engines.dsh': '0.0.1' }, exempted: false })
+  expect(by.incompatible?.versions[0]?.compatibility).toEqual({ compatible: false, runtimeVersion: runtime, requirements: { 'engines.snh': '0.0.1' }, exempted: false })
   expect(by.exempted?.versions[0]).toMatchObject({ install: { spec: 'exempted@1.0.0', registry: 'https://r.example/' }, compatibility: { compatible: false, exempted: true } })
   expect(market.listIndexes()).toEqual([{ url: URL_A, title: { en: 'Market', zh: '市场' }, description: 'Bundles' }])
 })
 
 it('defaults to the highest compatible stable version, or the highest compatible prerelease without a stable one', async () => {
   serve(json(index([
-    entry('mixed', {}, [release('2.0.0-rc.1'), release('1.0.0'), release('1.1.0', { engines: { dsh: '0.0.1' } })]),
-    entry('previews', {}, [release('1.0.0-beta.1'), release('1.0.0-rc.1', { engines: { dsh: '0.0.1' } })]),
-    entry('only-preview-stable', {}, [release('2.0.0-rc.1'), release('1.0.0', { engines: { dsh: '0.0.1' } })]),
+    entry('mixed', {}, [release('2.0.0-rc.1'), release('1.0.0'), release('1.1.0', { engines: { snh: '0.0.1' } })]),
+    entry('previews', {}, [release('1.0.0-beta.1'), release('1.0.0-rc.1', { engines: { snh: '0.0.1' } })]),
+    entry('only-preview-stable', {}, [release('2.0.0-rc.1'), release('1.0.0', { engines: { snh: '0.0.1' } })]),
   ])))
   const { market } = await mount({}, { bundles: [bundle('mixed', { version: '1.0.0' })] })
   const by = Object.fromEntries((await read(market, URL_A)).entries.map(item => [item.name, item]))
@@ -491,15 +491,15 @@ const SEARCHABLE = {
     sortKeys: { downloads: { title: 'Downloads', order: 'desc' } },
   },
   plugins: [
-    entry('dsh-weather', {
+    entry('snh-weather', {
       description: { en: 'Shows the forecast without review', ja: '天気予報を表示' }, author: 'Kim',
       metadata: { category: 'fun', labels: ['ui'], sortKeys: { downloads: 10 } },
     }, [release('1.0.0', { publishTimestamp: 30 })]),
-    entry('dsh-auto-review', {
+    entry('snh-auto-review', {
       title: { en: 'Automatic review', zh: '自动代码审查' },
       metadata: { category: 'work', labels: ['official', 'ui'], keywords: ['lint'], sortKeys: { downloads: 50 } },
     }, [release('2.0.0', { publishTimestamp: 10 }), release('1.0.0', { publishTimestamp: 40 })]),
-    entry('dsh-notes', { description: 'Keep a review checklist', metadata: { category: 'work', labels: ['official'] } }, [release('1.0.0', { publishTimestamp: 20 })]),
+    entry('snh-notes', { description: 'Keep a review checklist', metadata: { category: 'work', labels: ['official'] } }, [release('1.0.0', { publishTimestamp: 20 })]),
   ],
 }
 
@@ -514,30 +514,30 @@ async function searching() {
 
 it('preserves publisher order before sorting and through category and label filters', async () => {
   const names = await searching()
-  expect(await names({})).toEqual(['dsh-weather', 'dsh-auto-review', 'dsh-notes'])
-  expect(await names({ labels: ['ui'] })).toEqual(['dsh-weather', 'dsh-auto-review'])
-  expect(await names({ category: 'work' })).toEqual(['dsh-auto-review', 'dsh-notes'])
-  expect(await names({ labels: ['official', 'ui'] })).toEqual(['dsh-auto-review'])
+  expect(await names({})).toEqual(['snh-weather', 'snh-auto-review', 'snh-notes'])
+  expect(await names({ labels: ['ui'] })).toEqual(['snh-weather', 'snh-auto-review'])
+  expect(await names({ category: 'work' })).toEqual(['snh-auto-review', 'snh-notes'])
+  expect(await names({ labels: ['official', 'ui'] })).toEqual(['snh-auto-review'])
   expect(await names({ category: 'fun', labels: ['official'] })).toEqual([])
   expect(await names({ category: 'missing' })).toEqual([])
   expect(await names({ labels: ['missing'] })).toEqual([])
 })
 
 it.each([
-  ['a typo of a word', 'revew', ['dsh-weather', 'dsh-auto-review', 'dsh-notes']],
-  ['a word prefix', 'auto', ['dsh-auto-review']],
-  ['words that must all match, across fields', 'forecast kim', ['dsh-weather']],
-  ['a keyword', 'lint', ['dsh-auto-review']],
-  ['Chinese title text', '代码审查', ['dsh-auto-review']],
-  ['one CJK character', '审', ['dsh-auto-review']],
-  ['the last CJK character of a run', '查', ['dsh-auto-review']],
-  ['Japanese description text', '天気', ['dsh-weather']],
-  ['a localized category title', '效率', ['dsh-auto-review', 'dsh-notes']],
-  ['a label title', 'official', ['dsh-auto-review', 'dsh-notes']],
-  ['upper case', 'KIM', ['dsh-weather']],
+  ['a typo of a word', 'revew', ['snh-weather', 'snh-auto-review', 'snh-notes']],
+  ['a word prefix', 'auto', ['snh-auto-review']],
+  ['words that must all match, across fields', 'forecast kim', ['snh-weather']],
+  ['a keyword', 'lint', ['snh-auto-review']],
+  ['Chinese title text', '代码审查', ['snh-auto-review']],
+  ['one CJK character', '审', ['snh-auto-review']],
+  ['the last CJK character of a run', '查', ['snh-auto-review']],
+  ['Japanese description text', '天気', ['snh-weather']],
+  ['a localized category title', '效率', ['snh-auto-review', 'snh-notes']],
+  ['a label title', 'official', ['snh-auto-review', 'snh-notes']],
+  ['upper case', 'KIM', ['snh-weather']],
   ['words from different plugins', 'forecast lint', []],
   ['a short word with a typo', 'dsx', []],
-  ['text without words', ' -- ', ['dsh-weather', 'dsh-auto-review', 'dsh-notes']],
+  ['text without words', ' -- ', ['snh-weather', 'snh-auto-review', 'snh-notes']],
 ])('matches %s', async (_label, text, expected) => {
   const names = await searching()
   expect(await names({ text })).toEqual(expected)
@@ -545,19 +545,19 @@ it.each([
 
 it('ranks text matches by relevance, and relevance without text is index order', async () => {
   const names = await searching()
-  expect(await names({ text: 'review' })).toEqual(['dsh-weather', 'dsh-auto-review', 'dsh-notes'])
-  expect((await names({ text: 'review', sort: { kind: 'relevance' } }))[0]).toBe('dsh-auto-review')
-  expect(await names({ text: 'checklist review', sort: { kind: 'relevance' } })).toEqual(['dsh-notes'])
-  expect(await names({ sort: { kind: 'relevance' } })).toEqual(['dsh-weather', 'dsh-auto-review', 'dsh-notes'])
+  expect(await names({ text: 'review' })).toEqual(['snh-weather', 'snh-auto-review', 'snh-notes'])
+  expect((await names({ text: 'review', sort: { kind: 'relevance' } }))[0]).toBe('snh-auto-review')
+  expect(await names({ text: 'checklist review', sort: { kind: 'relevance' } })).toEqual(['snh-notes'])
+  expect(await names({ sort: { kind: 'relevance' } })).toEqual(['snh-weather', 'snh-auto-review', 'snh-notes'])
 })
 
 it('orders by latest publish time or a sort key, placing plugins without the key last in either direction', async () => {
   const names = await searching()
-  expect(await names({ sort: { kind: 'published', direction: 'desc' } })).toEqual(['dsh-auto-review', 'dsh-weather', 'dsh-notes'])
-  expect(await names({ sort: { kind: 'published', direction: 'asc' } })).toEqual(['dsh-notes', 'dsh-weather', 'dsh-auto-review'])
-  expect(await names({ sort: { kind: 'key', id: 'downloads', direction: 'desc' } })).toEqual(['dsh-auto-review', 'dsh-weather', 'dsh-notes'])
-  expect(await names({ sort: { kind: 'key', id: 'downloads', direction: 'asc' } })).toEqual(['dsh-weather', 'dsh-auto-review', 'dsh-notes'])
-  expect(await names({ sort: { kind: 'key', id: 'missing', direction: 'asc' } })).toEqual(['dsh-weather', 'dsh-auto-review', 'dsh-notes'])
+  expect(await names({ sort: { kind: 'published', direction: 'desc' } })).toEqual(['snh-auto-review', 'snh-weather', 'snh-notes'])
+  expect(await names({ sort: { kind: 'published', direction: 'asc' } })).toEqual(['snh-notes', 'snh-weather', 'snh-auto-review'])
+  expect(await names({ sort: { kind: 'key', id: 'downloads', direction: 'desc' } })).toEqual(['snh-auto-review', 'snh-weather', 'snh-notes'])
+  expect(await names({ sort: { kind: 'key', id: 'downloads', direction: 'asc' } })).toEqual(['snh-weather', 'snh-auto-review', 'snh-notes'])
+  expect(await names({ sort: { kind: 'key', id: 'missing', direction: 'asc' } })).toEqual(['snh-weather', 'snh-auto-review', 'snh-notes'])
 })
 
 it('pages matches with their total, and annotates only the returned page', async () => {
@@ -566,10 +566,10 @@ it('pages matches with their total, and annotates only the returned page', async
   const listBundles = vi.spyOn(ctx.pluginManager, 'listBundles')
   const first = await market.search(URL_A, { sort: { kind: 'index' }, offset: 0, limit: 2 })
   expect(first).toMatchObject({ url: URL_A, title: 'Market', total: 3, nextOffset: 2, metadata: SEARCHABLE.metadata })
-  expect(first.entries.map(item => [item.name, item.defaultVersion])).toEqual([['dsh-weather', '1.0.0'], ['dsh-auto-review', '2.0.0']])
+  expect(first.entries.map(item => [item.name, item.defaultVersion])).toEqual([['snh-weather', '1.0.0'], ['snh-auto-review', '2.0.0']])
   const last = await market.search(URL_A, { sort: { kind: 'index' }, offset: 2, limit: 2 })
   expect(last).toMatchObject({ total: 3, nextOffset: null, fetchedAt: first.fetchedAt })
-  expect(last.entries.map(item => item.name)).toEqual(['dsh-notes'])
+  expect(last.entries.map(item => item.name)).toEqual(['snh-notes'])
   expect(await market.search(URL_A, { sort: { kind: 'index' }, offset: 5, limit: 2 })).toMatchObject({ entries: [], total: 3, nextOffset: null })
   expect(listBundles).toHaveBeenCalledTimes(3)
 })
@@ -600,11 +600,11 @@ it.each([
 
 it('reads one plugin by name from the cached document', async () => {
   const fetch = serve(json(SEARCHABLE))
-  const { market } = await mount({}, { bundles: [bundle('dsh-notes', { version: '1.0.0' })] })
-  expect(await market.entry(URL_A, 'dsh-notes')).toMatchObject({ name: 'dsh-notes', defaultVersion: '1.0.0', installation: { status: 'installed' } })
-  expect(await market.entry(URL_A, 'dsh-missing')).toBeUndefined()
+  const { market } = await mount({}, { bundles: [bundle('snh-notes', { version: '1.0.0' })] })
+  expect(await market.entry(URL_A, 'snh-notes')).toMatchObject({ name: 'snh-notes', defaultVersion: '1.0.0', installation: { status: 'installed' } })
+  expect(await market.entry(URL_A, 'snh-missing')).toBeUndefined()
   expect(fetch).toHaveBeenCalledOnce()
-  expect(await failure(market.entry(URL_B, 'dsh-notes'))).toMatchObject({ code: 'plugin-market/unknown-index' })
+  expect(await failure(market.entry(URL_B, 'snh-notes'))).toMatchObject({ code: 'plugin-market/unknown-index' })
 })
 
 it('keeps index order among equal sort-key values and among plugins without one', async () => {

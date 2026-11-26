@@ -1,7 +1,7 @@
 /** Routing publication errors and platform-specific durable publication. @module */
-import { Context } from '@deepseek-ai/cordis'
-import type { SessionHeader } from '@deepseek-ai/dsh-session'
-import { SessionId, SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session'
+import { Context } from '@supernova-ai/cordis'
+import type { SessionHeader } from '@supernova-ai/snh-session'
+import { SessionId, SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session'
 import { SqliteSessionPersistence } from '../src/persistence.ts'
 import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
@@ -70,7 +70,7 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 async function fixture() {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-segment-routing-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-segment-routing-'))
   const ctx = new Context()
   onTestFinished(async () => { try { await ctx.fiber.dispose() } finally { await rm(root, { recursive: true, force: true }) } })
   const storage = new Adapter(ctx, root)

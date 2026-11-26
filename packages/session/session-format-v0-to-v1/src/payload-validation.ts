@@ -1,10 +1,10 @@
-import { SessionFormatError, sessionFormatCount, sessionFormatSafeInteger } from '@deepseek-ai/dsh-session-format'
-import { fourDigitYearEpoch } from '@deepseek-ai/dsh-util-time'
-import { deepEqualJson } from '@deepseek-ai/dsh-util-values'
+import { SessionFormatError, sessionFormatCount, sessionFormatSafeInteger } from '@supernova-ai/snh-session-format'
+import { fourDigitYearEpoch } from '@supernova-ai/snh-util-time'
+import { deepEqualJson } from '@supernova-ai/snh-util-values'
 import type {
   SessionFormatEvent,
   SessionFormatJsonValue,
-} from '@deepseek-ai/dsh-session-format'
+} from '@supernova-ai/snh-session-format'
 import { assertReleasedV0Keys, releasedV0Record } from './validation-helpers.ts'
 
 type JsonRecord = Record<string, SessionFormatJsonValue>
@@ -170,7 +170,7 @@ export function assertReleasedPayloadSemantics(event: SessionFormatEvent, versio
     case 'schedule/change':
       scheduleChangeValue(data, label)
       return
-    case 'session-log-deepseek/delivery-accepted':
+    case 'session-log-supernova/delivery-accepted':
       {
         const acceptedVersion = data['sessionFormatVersion'] === undefined
           ? 0
@@ -285,7 +285,7 @@ export function assertReleasedPayloadSemantics(event: SessionFormatEvent, versio
     case 'user/message':
       messageValue(data, label, version, 'user')
       return
-    case 'web/deepseek-search-llm-request':
+    case 'web/supernova-search-llm-request':
       nonEmptyString(data['endpoint'], `${label} endpoint`)
       nonEmptyString(data['apiVersion'], `${label} apiVersion`)
       deepSeekSearchBodyValue(data['body'], `${label} body`)

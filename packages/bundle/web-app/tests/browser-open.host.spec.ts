@@ -3,20 +3,20 @@ import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { basename, dirname, isAbsolute, join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import LocalCredentials from '@deepseek-ai/dsh-credentials-local'
-import * as Connection from '@deepseek-ai/dsh-client-connection'
-import { auditStartupEntries } from '@deepseek-ai/dsh-app-boot'
-import WebServer, { type WebEntryUrl } from '@deepseek-ai/dsh-host-webserver'
-import * as FrontendStatic from '@deepseek-ai/dsh-host-frontend-static'
+import { Context } from '@supernova-ai/cordis'
+import Include from '@supernova-ai/cordis-plugin-include'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import LocalCredentials from '@supernova-ai/snh-credentials-local'
+import * as Connection from '@supernova-ai/snh-client-connection'
+import { auditStartupEntries } from '@supernova-ai/snh-app-boot'
+import WebServer, { type WebEntryUrl } from '@supernova-ai/snh-host-webserver'
+import * as FrontendStatic from '@supernova-ai/snh-host-frontend-static'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import * as Token from '@deepseek-ai/dsh-host-authentication-token'
+import * as Token from '@supernova-ai/snh-host-authentication-token'
 import * as WebApp from '../src/index.ts'
 
 it('opens its tokenized URL only after the complete authenticated page is reachable', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-token-browser-open-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-token-browser-open-'))
   const ctx = new Context()
   const originalOpen = WebApp.internals.openBrowser
   const originalResolve = WebApp.internals.resolveDistIndex
@@ -25,7 +25,7 @@ it('opens its tokenized URL only after the complete authenticated page is reacha
     WebApp.internals.openBrowser = originalOpen
     WebApp.internals.resolveDistIndex = originalResolve
     vi.unstubAllEnvs()
-    if (!isAbsolute(root) || dirname(root) !== resolve(tmpdir()) || !basename(root).startsWith('dsh-token-browser-open-')) {
+    if (!isAbsolute(root) || dirname(root) !== resolve(tmpdir()) || !basename(root).startsWith('snh-token-browser-open-')) {
       throw new Error(`refusing unexpected fixture cleanup path: ${root}`)
     }
     await rm(root, { recursive: true, force: true })

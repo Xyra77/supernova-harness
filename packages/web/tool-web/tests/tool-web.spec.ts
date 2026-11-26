@@ -1,20 +1,20 @@
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { ToolExecutionPipeline } from '@deepseek-ai/dsh-tools/pipeline'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { ToolExecutionPipeline } from '@supernova-ai/snh-tools/pipeline'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent, ModelSelection } from '@deepseek-ai/dsh-agent'
-import { createScope, type Scope } from '@deepseek-ai/dsh-scope'
+import { Context } from '@supernova-ai/cordis'
+import type { Agent, ModelSelection } from '@supernova-ai/snh-agent'
+import { createScope, type Scope } from '@supernova-ai/snh-scope'
 import TurndownService from 'turndown'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm/types'
-import SystemPrompt, { renderPrompt } from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { type ResolvedToolSet, type ToolExecutionInput, type ToolExecutionResult } from '@deepseek-ai/dsh-tools'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import WebRuntime from '@deepseek-ai/dsh-web'
-import type { WebFetchProvider, WebSearchProvider, WebSearchResult } from '@deepseek-ai/dsh-web'
-import * as ToolWeb from '@deepseek-ai/dsh-tool-web'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm/types'
+import SystemPrompt, { renderPrompt } from '@supernova-ai/snh-system-prompt'
+import ToolRuntime, { type ResolvedToolSet, type ToolExecutionInput, type ToolExecutionResult } from '@supernova-ai/snh-tools'
+import type { SessionId } from '@supernova-ai/snh-session'
+import WebRuntime from '@supernova-ai/snh-web'
+import type { WebFetchProvider, WebSearchProvider, WebSearchResult } from '@supernova-ai/snh-web'
+import * as ToolWeb from '@supernova-ai/snh-tool-web'
 import {
   formatSearchOutput,
   formatFetchOutput,
@@ -29,9 +29,9 @@ import {
   fetchMetaFromResult,
   WEB_SEARCH_MAX_QUERIES,
   WEB_SEARCH_MAX_RESULTS,
-} from '@deepseek-ai/dsh-tool-web'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { ToolResult } from '@deepseek-ai/dsh-tools'
+} from '@supernova-ai/snh-tool-web'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import type { ToolResult } from '@supernova-ai/snh-tools'
 import { parseSearchArgs } from '../src/search.ts'
 
 const testToolSignal = new AbortController().signal
@@ -788,13 +788,13 @@ describe('tool-web execution through the real registry', () => {
   })
 
   it.each([
-    ['Messages search for a model request on a DeepSeek model route', 'deepseek-account', 'deepseek-official'],
-    ['the Search API for a model request on another route', 'openai', 'deepseek-search-api'],
-    ['the Search API for a Session that has made no model request', undefined, 'deepseek-search-api'],
+    ['Messages search for a model request on a SuperNova model route', 'deepseek-account', 'deepseek-official'],
+    ['the Search API for a model request on another route', 'openai', 'supernova-search-api'],
+    ['the Search API for a Session that has made no model request', undefined, 'supernova-search-api'],
   ])('with no provider configured, searches through %s', async (_label, route, expected) => {
     const requests: unknown[] = []
     const { ctx, fiber, call } = await mountTools(route === undefined ? {} : { route })
-    for (const id of ['deepseek-search-api', 'deepseek-official']) {
+    for (const id of ['supernova-search-api', 'deepseek-official']) {
       ctx.web.registerSearchProvider({
         id, available: () => available,
         search: (request) => { requests.push(request); return Promise.resolve({ content: id, sources: [], truncated: false }) },
@@ -850,7 +850,7 @@ describe('tool-web execution through the real registry', () => {
       truncated: false,
     })
     // The model schema exposes no timeout: the tool forwards only the url; the
-    // tool-call budget is owned by dsh-tool-call-timeout-policy over exec.signal.
+    // tool-call budget is owned by snh-tool-call-timeout-policy over exec.signal.
     expect(seen.request).toEqual({ url: 'https://a.test' })
     expect(seen.signal).toBe(controller.signal)
     await fiber.dispose()
@@ -1272,7 +1272,7 @@ describe('web tool admission per model step', () => {
 
   it('withholds web_search and its guidance when the selected provider cannot authenticate the route', async () => {
     const asked: (string | undefined)[] = []
-    const { step } = await compose({ providers: [routeProvider('deepseek', ['deepseek-account'], asked)] })
+    const { step } = await compose({ providers: [routeProvider('supernova', ['deepseek-account'], asked)] })
     const { tools, prompt } = await step()
     expect(tools).toContain('web_fetch')
     expect(tools).not.toContain('web_search')
@@ -1281,24 +1281,24 @@ describe('web tool admission per model step', () => {
   })
 
   it('offers web_search and its guidance when the selected provider can authenticate the route', async () => {
-    const { step } = await compose({ providers: [routeProvider('deepseek', ['deepseek-account'])], route: 'deepseek-account' })
+    const { step } = await compose({ providers: [routeProvider('supernova', ['deepseek-account'])], route: 'deepseek-account' })
     const { tools, prompt } = await step()
     expect(tools).toContain('web_search')
     expect(prompt).toContain(searchGuidance)
   })
 
   it('asks only the provider search() selects', async () => {
-    const deepseekAsked: (string | undefined)[] = []
+    const supernovaAsked: (string | undefined)[] = []
     const { step } = await compose({
       searchProvider: 'exa',
-      providers: [routeProvider('exa', ['deepseek-official']), routeProvider('deepseek', [], deepseekAsked)],
+      providers: [routeProvider('exa', ['deepseek-official']), routeProvider('supernova', [], supernovaAsked)],
     })
     expect((await step()).tools).toContain('web_search')
-    expect(deepseekAsked).toEqual([])
+    expect(supernovaAsked).toEqual([])
   })
 
   it('follows the model selected for each step', async () => {
-    const { selection, step } = await compose({ providers: [routeProvider('deepseek', ['deepseek-account'])], route: 'deepseek-account' })
+    const { selection, step } = await compose({ providers: [routeProvider('supernova', ['deepseek-account'])], route: 'deepseek-account' })
     expect((await step()).tools).toContain('web_search')
     selection.provider = 'deepseek-official'
     expect((await step()).tools).not.toContain('web_search')
@@ -1308,7 +1308,7 @@ describe('web tool admission per model step', () => {
 
   it('refuses a web_search call in a step that withheld it', async () => {
     const searched: string[] = []
-    const { ctx, agent, step } = await compose({ providers: [routeProvider('deepseek', ['deepseek-account'], [], searched)] })
+    const { ctx, agent, step } = await compose({ providers: [routeProvider('supernova', ['deepseek-account'], [], searched)] })
     const { toolSet } = await step()
     const result = await executeToolFixture(ctx, {
       agent, toolSet, signal: testToolSignal, callId: brandString<ToolCallId>('withheld-search'), name: 'web_search', arguments: { queries: ['q'] },
@@ -1320,8 +1320,8 @@ describe('web tool admission per model step', () => {
   it('withholds web_fetch, its guidance, and its mention in search guidance when the selected fetch provider cannot authenticate the route', async () => {
     const asked: (string | undefined)[] = []
     const { step } = await compose({
-      providers: [routeProvider('deepseek', ['deepseek-official'])],
-      fetchProviders: [fetchRouteProvider('deepseek-fetch', ['deepseek-account'], asked)],
+      providers: [routeProvider('supernova', ['deepseek-official'])],
+      fetchProviders: [fetchRouteProvider('supernova-fetch', ['deepseek-account'], asked)],
     })
     const { tools, prompt } = await step()
     expect(tools).toContain('web_search')
@@ -1333,7 +1333,7 @@ describe('web tool admission per model step', () => {
 
   it('offers web_fetch and its guidance when the selected fetch provider can authenticate the route', async () => {
     const { step } = await compose({
-      providers: [], fetchProviders: [fetchRouteProvider('deepseek-fetch', ['deepseek-account'])], route: 'deepseek-account',
+      providers: [], fetchProviders: [fetchRouteProvider('supernova-fetch', ['deepseek-account'])], route: 'deepseek-account',
     })
     const { tools, prompt } = await step()
     expect(tools).toContain('web_fetch')
@@ -1341,20 +1341,20 @@ describe('web tool admission per model step', () => {
   })
 
   it('asks only the provider fetch() selects', async () => {
-    const deepseekAsked: (string | undefined)[] = []
+    const supernovaAsked: (string | undefined)[] = []
     const { step } = await compose({
       providers: [],
       fetchProvider: 'http',
-      fetchProviders: [fetchRouteProvider('http', ['deepseek-official']), fetchRouteProvider('deepseek-fetch', [], deepseekAsked)],
+      fetchProviders: [fetchRouteProvider('http', ['deepseek-official']), fetchRouteProvider('supernova-fetch', [], supernovaAsked)],
     })
     expect((await step()).tools).toContain('web_fetch')
-    expect(deepseekAsked).toEqual([])
+    expect(supernovaAsked).toEqual([])
   })
 
   it('refuses a web_fetch call in a step that withheld it', async () => {
     const fetched: string[] = []
     const { ctx, agent, step } = await compose({
-      providers: [], fetchProviders: [fetchRouteProvider('deepseek-fetch', ['deepseek-account'], [], fetched)],
+      providers: [], fetchProviders: [fetchRouteProvider('supernova-fetch', ['deepseek-account'], [], fetched)],
     })
     const { toolSet } = await step()
     const result = await executeToolFixture(ctx, {
@@ -1367,5 +1367,5 @@ describe('web tool admission per model step', () => {
 
 /** Preserve the default persona and exact section separators in the oracle. */
 function withPersona(...sections: string[]): string {
-  return ['You are an AI agent powered by DeepSeek Harness.', ...sections].join('\n\n')
+  return ['You are an AI agent powered by SuperNova Harness.', ...sections].join('\n\n')
 }

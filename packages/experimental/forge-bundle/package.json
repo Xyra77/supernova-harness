@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-experimental-forge-bundle",
+  "name": "@supernova-ai/snh-experimental-forge-bundle",
   "description": "Experimental change request panel and worktree option for Sessions in Git repositories",
   "version": "0.2.3-alpha.2",
   "icon": "./icon.svg",
@@ -37,21 +37,21 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-experimental-client-ui-forge": "workspace:*",
-    "@deepseek-ai/dsh-experimental-forge": "workspace:*",
-    "@deepseek-ai/dsh-experimental-forge-github": "workspace:*",
-    "@deepseek-ai/dsh-experimental-forge-session": "workspace:*",
-    "@deepseek-ai/dsh-experimental-tool-worktree": "workspace:*",
-    "@deepseek-ai/dsh-experimental-worktree": "workspace:*",
-    "@deepseek-ai/dsh-forge-gitlab": "workspace:*"
+    "@supernova-ai/snh-experimental-client-ui-forge": "workspace:*",
+    "@supernova-ai/snh-experimental-forge": "workspace:*",
+    "@supernova-ai/snh-experimental-forge-github": "workspace:*",
+    "@supernova-ai/snh-experimental-forge-session": "workspace:*",
+    "@supernova-ai/snh-experimental-tool-worktree": "workspace:*",
+    "@supernova-ai/snh-experimental-worktree": "workspace:*",
+    "@supernova-ai/snh-forge-gitlab": "workspace:*"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
-  "dsh": {
+  "snh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }

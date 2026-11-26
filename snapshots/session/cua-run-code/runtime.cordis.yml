@@ -2,28 +2,28 @@
   config:
     providers:
       - id: deepseek-official
-        name: DeepSeek
+        name: SuperNova
         models:
           - id: deepseek-v4-flash-vision-exp
             inputModalities: [text, image]
 
 - insert:
     - id: agent-preset-registry
-      name: '@deepseek-ai/dsh-agent-preset-registry'
+      name: '@supernova-ai/snh-agent-preset-registry'
       config:
         default: standard
     - id: cua-standard-preset
-      name: '@deepseek-ai/dsh-agent-preset'
+      name: '@supernova-ai/snh-agent-preset'
       config:
         id: standard
         plugins:
-          - name: '@deepseek-ai/dsh-tool-executor-native'
+          - name: '@supernova-ai/snh-tool-executor-native'
     - id: cua-standard-selection
       name: '../../../packages/test-support/session-snapshot/tests/fixtures/parent-agent-preset.ts'
       config:
         presets: [standard]
     - id: computer-use
-      name: '@deepseek-ai/dsh-computer-use'
+      name: '@supernova-ai/snh-computer-use'
     - id: cua-run-code-fixture
       name: './provider.mjs'
       config:

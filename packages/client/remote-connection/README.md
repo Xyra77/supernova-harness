@@ -3,7 +3,7 @@ description: "QR login, private login links, and owner-approved browser pairing.
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-remote-connection
+# @supernova-ai/snh-client-remote-connection
 
 English | [中文](README.zh.md)
 
@@ -46,7 +46,7 @@ Remote uses one root login document for ordinary sign-in and QR exchange. A trus
 
 ## Pairing requests
 
-The anonymous root page places Token entry and device pairing in separate cards below a shared heading. Its introduction asks users to choose one of the available sign-in methods. Both cards place a heading and description before their controls and use matching typography and spacing. Token errors appear below the field while the sign-in guidance stays visible. QR exchange feedback appears above both cards; a failed exchange leaves both sign-in methods available. Its deferred public `pairing/client.js` script defines `dsh-device-pairing`; the element owns the request controls, styles, and translations without loading authenticated Client modules. The Host generates this script from self-contained browser functions and public data shipped in its ordinary entry; plugin reload replaces the script with the current implementation. Removing the element aborts its work and discards its private ticket; browser back/forward-cache suspension preserves the ticket and resumes status checks.
+The anonymous root page places Token entry and device pairing in separate cards below a shared heading. Its introduction asks users to choose one of the available sign-in methods. Both cards place a heading and description before their controls and use matching typography and spacing. Token errors appear below the field while the sign-in guidance stays visible. QR exchange feedback appears above both cards; a failed exchange leaves both sign-in methods available. Its deferred public `pairing/client.js` script defines `snh-device-pairing`; the element owns the request controls, styles, and translations without loading authenticated Client modules. The Host generates this script from self-contained browser functions and public data shipped in its ordinary entry; plugin reload replaces the script with the current implementation. Removing the element aborts its work and discards its private ticket; browser back/forward-cache suspension preserves the ticket and resumes status checks.
 
 The anonymous pairing card places the code, Request again, Cancel request, and waiting status in order, with the countdown beside the status. Request and status-check failures appear in full-width error banners; denial and expiry use warning banners. These banners have no icons; their border, spacing, and radius match the banners in Remote connection settings. The countdown stays outside these banners. Network and server failures show automatic reconnection status. HTTP 429 responses show an automatic retry notice; exhausted rate-limit retries ask the user to wait before requesting again. Exhausted recovery shows an error banner with Request again and no separate status-query action. The request action retains its primary foreground color while disabled. Confirmed cancellation restores Request to pair without a cancellation notice.
 
@@ -85,10 +85,10 @@ Requests are process-local and remain in the bounded pool until expiry, includin
 Register in the root-scoped list `settings.remoteConnection.extensions` to add options after the main panel, including its default access-address, QR login, and pairing cards. Each plugin uses a unique `id`; entries render in ascending `order`, then registration order. Extensions appear alongside either the default panel or a replacement. `RemoteConnectionExtensionProps` provides the same shared state hooks, actions, and `close()` as [panel replacements](#replace-the-settings-panel). Each extension owns its rendering and localized copy.
 
 ```ts client
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
+import type { Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
 import type { FunctionComponent } from 'react'
-import type { RemoteConnectionExtensionProps } from '@deepseek-ai/dsh-client-remote-connection/client'
+import type { RemoteConnectionExtensionProps } from '@supernova-ai/snh-client-remote-connection/client'
 
 declare const ConnectionOptions: FunctionComponent<RemoteConnectionExtensionProps>
 
@@ -110,10 +110,10 @@ The root-scoped, single `settings.remoteConnection.content` slot replaces the ma
 Register a replacement component from your Client plugin with a lower priority than the default panel's `0`:
 
 ```ts client
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
+import type { Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
 import type { FunctionComponent } from 'react'
-import type { RemoteConnectionContentProps } from '@deepseek-ai/dsh-client-remote-connection/client'
+import type { RemoteConnectionContentProps } from '@supernova-ai/snh-client-remote-connection/client'
 
 declare const CustomPanel: FunctionComponent<RemoteConnectionContentProps>
 

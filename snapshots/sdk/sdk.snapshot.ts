@@ -1,11 +1,11 @@
 /**
  * Keyless snapshot coverage for the TypeScript SDK path: each scenario spawns
- * the real `dsh --profile sdk` or `sdk-minimal` runtime through
- * `@deepseek-ai/dsh-sdk-client`, drives recorded turns and standalone commands over stdio JSON-RPC,
+ * the real `snh --profile sdk` or `sdk-minimal` runtime through
+ * `@supernova-ai/snh-sdk-client`, drives recorded turns and standalone commands over stdio JSON-RPC,
  * and pins the SDK `RunResult`, the complete notification stream, and the
  * persisted session logs. Replay serves recorded model
- * responses via `llm-replay` (`cordis.snapshot.yml`); `DSH_SNAPSHOT=record`
- * re-records against the live API; `DSH_SNAPSHOT=refresh` replays committed
+ * responses via `llm-replay` (`cordis.snapshot.yml`); `SNH_SNAPSHOT=record`
+ * re-records against the live API; `SNH_SNAPSHOT=refresh` replays committed
  * fixtures and rewrites expected outputs.
  */
 
@@ -54,18 +54,18 @@ import {
   type NormalizeContext,
   type SnapshotManifest,
   type WorkspaceSnapshotEntry,
-} from '@deepseek-ai/dsh-session-snapshot'
+} from '@supernova-ai/snh-session-snapshot'
 import {
-  DeepSeekHarness,
+  SuperNovaHarness,
   type HarnessNotification,
   type NotificationSubscription,
   type RunResult,
   type SdkPromptContentBlock,
   type SdkUserQuestionRequest,
   type SdkUserQuestionResult,
-} from '@deepseek-ai/dsh-sdk-client'
-import { SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session'
-import { deriveReplayScript, parseSessionLog } from '@deepseek-ai/dsh-llm-replay'
+} from '@supernova-ai/snh-sdk-client'
+import { SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session'
+import { deriveReplayScript, parseSessionLog } from '@supernova-ai/snh-llm-replay'
 
 const corpusRoot = fileURLToPath(new URL('../', import.meta.url))
 
@@ -79,7 +79,7 @@ const MINIMAL_BASH_DESCRIPTION = `Run commands in a bash shell
 * Please avoid commands that may produce a very large amount of output.
 * Please run long lived commands in the background, e.g. 'sleep 10 &' or start a server in the background.`
 
-const mode = process.env.DSH_SNAPSHOT ?? 'replay'
+const mode = process.env.SNH_SNAPSHOT ?? 'replay'
 /** Every input reports one fixed zone, so recorded prompts and their time context do not follow the host zone. */
 const SNAPSHOT_TIME_ZONE = 'UTC'
 const recording = mode === 'record'
@@ -87,17 +87,17 @@ const refreshing = mode === 'refresh'
 const sessionWriteMode = recording ? 'record' : refreshing ? 'refresh' : 'replay'
 const RUNTIME_WORKSPACE_ENTRIES = [
   '.agents',
-  '.child-dsh',
-  '.dsh',
+  '.child-snh',
+  '.snh',
   '.replay-fixtures',
   '.snapshot-patches',
 ] as const
-const dshSdkDiagnosticChildPatch = fileURLToPath(new URL(
-  './subagent-dsh-sdk-diagnostic/child.cordis.yml',
+const snhSdkDiagnosticChildPatch = fileURLToPath(new URL(
+  './subagent-snh-sdk-diagnostic/child.cordis.yml',
   import.meta.url,
 ))
-const dshSdkChildConfig = fileURLToPath(new URL(
-  '../../packages/subagent/subagent-dsh-sdk/tests/fixtures/loader/child.patch.yml',
+const snhSdkChildConfig = fileURLToPath(new URL(
+  '../../packages/subagent/subagent-snh-sdk/tests/fixtures/loader/child.patch.yml',
   import.meta.url,
 ))
 
@@ -110,7 +110,7 @@ interface SdkAssertions {
   approvalOutcomes?: readonly ('allowed-once' | 'rejected')[]
   /** Additional profile patches applied after the shared composition. */
   patches?: readonly string[]
-  /** Captured model-request JSONL filename under this scenario's private DSH home. */
+  /** Captured model-request JSONL filename under this scenario's private SNH home. */
   modelRequestsFile?: string
   /** Replay caller-owned commands between turns; profile fixtures own any in-turn commands. */
   replayStandaloneCommands?: boolean
@@ -124,8 +124,8 @@ interface SdkAssertions {
   expectedFinalResponse?: string
   /** Environment overrides passed to the runtime subprocess. */
   environment?: Readonly<Record<string, string>>
-  /** A separate DSH SDK child whose persisted session joins the evidence. */
-  dshSdkChild?: {
+  /** A separate SNH SDK child whose persisted session joins the evidence. */
+  snhSdkChild?: {
     /** Profile patch materialized for the child runtime. */
     config: string
     /** Exact request configuration committed by the child runtime. */
@@ -152,7 +152,7 @@ const SDK_ASSERTIONS: Readonly<Record<string, SdkAssertions>> = {
   },
   'approval': {
     approvalOutcomes: ['allowed-once', 'rejected'],
-    environment: { DSH_PERMISSION_MODE: 'workspace-write' },
+    environment: { SNH_PERMISSION_MODE: 'workspace-write' },
     patches: [fileURLToPath(new URL('./approval/runtime.cordis.yml', import.meta.url))],
   },
 
@@ -160,7 +160,7 @@ const SDK_ASSERTIONS: Readonly<Record<string, SdkAssertions>> = {
     expectedFinalResponse: 'SDK snapshot OK',
     runtimeContext: {
       includes: ['Current working directory:'],
-      excludes: ['Current DeepSeek Harness implementation checkout:', 'Current DeepSeek Harness Web GUI URL:'],
+      excludes: ['Current SuperNova Harness implementation checkout:', 'Current SuperNova Harness Web GUI URL:'],
     },
   },
   'desktop-ptc-context': { expectedFinalResponse: 'SDK snapshot OK' },
@@ -170,7 +170,7 @@ const SDK_ASSERTIONS: Readonly<Record<string, SdkAssertions>> = {
   },
   'cua-run-code': {
     expectedFinalResponse: 'The retained application and window report Count: 2. The counter persisted across calls, and the program exposes only tools.cua. The screenshot was attached after the first call.',
-    environment: { DSH_PERMISSION_MODE: 'danger-full-access' },
+    environment: { SNH_PERMISSION_MODE: 'danger-full-access' },
     patches: [fileURLToPath(new URL('./cua-run-code/runtime.cordis.yml', import.meta.url))],
   },
   'manual-compact': {
@@ -181,34 +181,34 @@ const SDK_ASSERTIONS: Readonly<Record<string, SdkAssertions>> = {
   },
   'permission-switch': {
     expectedFinalResponse: 'SDK_PERMISSION_OK',
-    environment: { DSH_PERMISSION_MODE: 'danger-full-access' },
+    environment: { SNH_PERMISSION_MODE: 'danger-full-access' },
     patches: [fileURLToPath(new URL('./permission-switch/capture.cordis.yml', import.meta.url))],
     modelRequestsFile: 'permission-requests.jsonl',
     replayStandaloneCommands: true,
   },
   'command-identity': {
     expectedFinalResponse: 'SDK_PERMISSION_OK',
-    environment: { DSH_PERMISSION_MODE: 'danger-full-access' },
+    environment: { SNH_PERMISSION_MODE: 'danger-full-access' },
     patches: [fileURLToPath(new URL('./command-identity/runtime.cordis.yml', import.meta.url))],
     modelRequestsFile: 'command-identity-requests.jsonl',
     replayStandaloneCommands: true,
   },
   'plan-review': {
     expectedFinalResponse: 'SDK_PLAN_OK',
-    environment: { DSH_PERMISSION_MODE: 'workspace-write' },
+    environment: { SNH_PERMISSION_MODE: 'workspace-write' },
     patches: [fileURLToPath(new URL('./plan-review/capture.cordis.yml', import.meta.url))],
     modelRequestsFile: 'plan-requests.jsonl',
     replayStandaloneCommands: true,
     planReviews: ['keep', 'approve', 'dismiss'],
   },
   'goal-rounds': {
-    environment: { DSH_PERMISSION_MODE: 'workspace-write' },
+    environment: { SNH_PERMISSION_MODE: 'workspace-write' },
     patches: [fileURLToPath(new URL('./goal-rounds/capture.cordis.yml', import.meta.url))],
     modelRequestsFile: 'goal-requests.jsonl',
     replayStandaloneCommands: true,
   },
   'command-attachments': {
-    environment: { DSH_PERMISSION_MODE: 'workspace-write' },
+    environment: { SNH_PERMISSION_MODE: 'workspace-write' },
     patches: [fileURLToPath(new URL('./command-attachments/capture.cordis.yml', import.meta.url))],
     modelRequestsFile: 'command-attachment-requests.jsonl',
     replayStandaloneCommands: true,
@@ -262,26 +262,26 @@ const SDK_ASSERTIONS: Readonly<Record<string, SdkAssertions>> = {
     patches: [fileURLToPath(new URL('./subagent-spawn-in-process/runtime.cordis.yml', import.meta.url))],
   },
   'subagent-continuable': {
-    environment: { DSH_SNAPSHOT_HUMAN_STEER: '1' },
+    environment: { SNH_SNAPSHOT_HUMAN_STEER: '1' },
   },
-  'subagent-dsh-sdk-diagnostic': {
-    expectedFinalResponse: 'PARENT_OBSERVED_DSH_SDK_DIAGNOSTIC',
-    environment: { DSH_TEST_CHILD_PATCH: dshSdkDiagnosticChildPatch },
+  'subagent-snh-sdk-diagnostic': {
+    expectedFinalResponse: 'PARENT_OBSERVED_SNH_SDK_DIAGNOSTIC',
+    environment: { SNH_TEST_CHILD_PATCH: snhSdkDiagnosticChildPatch },
   },
   'persistent-tools': {
-    environment: { DSH_SYSTEM_PROMPT: MINIMAL_SYSTEM_PROMPT },
+    environment: { SNH_SYSTEM_PROMPT: MINIMAL_SYSTEM_PROMPT },
     expectedTools: { bash: ['command'], str_replace_editor: ['command', 'path'] },
     expectedSystem: MINIMAL_SYSTEM_PROMPT,
     expectedToolDescriptions: { bash: MINIMAL_BASH_DESCRIPTION },
     runtimeContext: {
-      includes: ['Current working directory:', 'Current DSH file policy: danger-full-access', 'Approval prompts are disabled in this session'],
+      includes: ['Current working directory:', 'Current SNH file policy: danger-full-access', 'Approval prompts are disabled in this session'],
       excludes: ['workspace-write'],
     },
   },
-  'subagent-dsh-sdk-dynamic-route': {
-    environment: { DSH_TEST_PARENT_PROVIDER: 'deepseek-official' },
-    dshSdkChild: {
-      config: dshSdkChildConfig,
+  'subagent-snh-sdk-dynamic-route': {
+    environment: { SNH_TEST_PARENT_PROVIDER: 'deepseek-official' },
+    snhSdkChild: {
+      config: snhSdkChildConfig,
       agentConfig: {
         provider: 'mock',
         model: 'mock-routed',
@@ -290,10 +290,10 @@ const SDK_ASSERTIONS: Readonly<Record<string, SdkAssertions>> = {
       },
     },
   },
-  'subagent-dsh-sdk-empty-route': {
-    environment: { DSH_TEST_PARENT_PROVIDER: 'deepseek-official', DSH_TEST_PARENT_ROUTE_SCRIPT: 'empty-after-denied' },
-    dshSdkChild: {
-      config: dshSdkChildConfig,
+  'subagent-snh-sdk-empty-route': {
+    environment: { SNH_TEST_PARENT_PROVIDER: 'deepseek-official', SNH_TEST_PARENT_ROUTE_SCRIPT: 'empty-after-denied' },
+    snhSdkChild: {
+      config: snhSdkChildConfig,
       agentConfig: {
         provider: 'mock',
         model: 'mock-routed',
@@ -743,8 +743,8 @@ const legacySdkCompositions = new Set([
   'ptc',
   'sdk-account-provider-signout',
   'sdk-default',
-  'sdk-dsh-sdk-diagnostic',
-  'sdk-dsh-sdk-dynamic-route',
+  'sdk-snh-sdk-diagnostic',
+  'sdk-snh-sdk-dynamic-route',
   'sdk-minimal',
   'sdk-serial-created',
   'sdk-team-session-mode',
@@ -795,8 +795,8 @@ async function runScenario(scenario: CorpusScenario): Promise<{
   }
   const cwd = await realpath(await mkdtemp(join(workspaceParent, workspacePrefix)))
   if (fixedWidthCwd) expect(JSON.stringify(cwd)).toHaveLength(192)
-  const dshHome = join(cwd, '.dsh')
-  const sessionsRoot = join(dshHome, 'sessions')
+  const snhHome = join(cwd, '.snh')
+  const sessionsRoot = join(snhHome, 'sessions')
   const replayFixtures = recording ? [] : await hydrateReplayFixtures(scenario, cwd)
   const fixtureContents = await Promise.all((await fixtureFiles(scenario)).map(file => readFile(file, 'utf8')))
   const primaryFixture = fixtureContents[0]
@@ -814,15 +814,15 @@ async function runScenario(scenario: CorpusScenario): Promise<{
     .map((patch, index) => materializeProfilePatch(patch, cwd, scenario.manifest.profile, patchRoot, index))
   let childSessionsRoot: string | undefined
   let childEnvironment: Record<string, string> = {}
-  if (assertions.dshSdkChild !== undefined) {
-    const childHome = join(cwd, '.child-dsh')
+  if (assertions.snhSdkChild !== undefined) {
+    const childHome = join(cwd, '.child-snh')
     const legacyChildPatch = materializeProfilePatch(legacySdkContextPatch, cwd, 'sdk', patchRoot, patches.length)
-    const childPatch = materializeProfilePatch(assertions.dshSdkChild.config, cwd, 'sdk', patchRoot, patches.length + 1)
+    const childPatch = materializeProfilePatch(assertions.snhSdkChild.config, cwd, 'sdk', patchRoot, patches.length + 1)
     await mkdir(childHome, { recursive: true })
     childSessionsRoot = join(childHome, 'sessions')
     childEnvironment = {
-      DSH_TEST_CHILD_PATCHES: JSON.stringify([legacyChildPatch, childPatch]),
-      DSH_TEST_CHILD_HOME: childHome,
+      SNH_TEST_CHILD_PATCHES: JSON.stringify([legacyChildPatch, childPatch]),
+      SNH_TEST_CHILD_HOME: childHome,
     }
   }
   const workspaceDir = join(scenario.dir, 'workspace')
@@ -854,23 +854,23 @@ async function runScenario(scenario: CorpusScenario): Promise<{
     ...recording ? {} : REPLAY_CREDENTIAL_ENV,
     // A runtime that receives a prompt without a zone, such as an SDK subagent child, samples this process zone.
     TZ: SNAPSHOT_TIME_ZONE,
-    DSH_SNAPSHOT: mode,
-    DSH_SNAPSHOT_PROVIDER: route.provider,
-    DSH_SNAPSHOT_MODEL: route.model,
-    DSH_TELEMETRY_DISABLED: '1',
-    DSH_AGENTS_HOME: join(cwd, '.agents'),
+    SNH_SNAPSHOT: mode,
+    SNH_SNAPSHOT_PROVIDER: route.provider,
+    SNH_SNAPSHOT_MODEL: route.model,
+    SNH_TELEMETRY_DISABLED: '1',
+    SNH_AGENTS_HOME: join(cwd, '.agents'),
     NODE_OPTIONS: [process.env.NODE_OPTIONS, '--disable-warning=ExperimentalWarning'].filter(Boolean).join(' '),
     ...parentFixture === undefined ? {} : {
-      DSH_SNAPSHOT_FILE: parentFixture,
-      ...childFixtures.length > 0 ? { DSH_SNAPSHOT_CHILD_FILES: childFixtures.join(delimiter) } : {},
+      SNH_SNAPSHOT_FILE: parentFixture,
+      ...childFixtures.length > 0 ? { SNH_SNAPSHOT_CHILD_FILES: childFixtures.join(delimiter) } : {},
     },
     ...!recording && scenario.manifest.replay?.override === true
-      ? { DSH_SNAPSHOT_OVERRIDE: join(scenario.dir, 'replay.override.json') }
+      ? { SNH_SNAPSHOT_OVERRIDE: join(scenario.dir, 'replay.override.json') }
       : {},
     ...scenario.manifest.environment,
     ...assertions.environment,
     ...childEnvironment,
-    ...resumeReplayFile === undefined ? {} : { DSH_SNAPSHOT_OVERRIDE: resumeReplayFile },
+    ...resumeReplayFile === undefined ? {} : { SNH_SNAPSHOT_OVERRIDE: resumeReplayFile },
   }
 
   const planReviews = assertions.planReviews === undefined ? undefined : [...assertions.planReviews]
@@ -887,11 +887,11 @@ async function runScenario(scenario: CorpusScenario): Promise<{
       return { answers: [{ id: question.id, selected: [choice === 'approve' ? 'Approve' : 'Keep planning'],
         ...choice === 'keep' ? { custom: 'Add rollback.' } : {} }] }
     }
-  const createHarness = (model = route.model): DeepSeekHarness => new DeepSeekHarness({
+  const createHarness = (model = route.model): SuperNovaHarness => new SuperNovaHarness({
     profile: scenario.manifest.profile,
     ...(assertions.approvalOutcomes === undefined ? {} : { approvalRequests: true }),
     patches,
-    dshHome,
+    snhHome,
     processCwd: cwd,
     env,
     initializeTimeoutMs: 110_000,
@@ -1048,7 +1048,7 @@ async function runScenario(scenario: CorpusScenario): Promise<{
             data: { turn: 2, message: { content: [{ type: 'text', text: 'SUBAGENT_SETTLED_NOTED' }] } },
           })
         }
-        if (scenario.manifest.environment?.DSH_SNAPSHOT_FEEDBACK === '1') {
+        if (scenario.manifest.environment?.SNH_SNAPSHOT_FEEDBACK === '1') {
           const feedback = result.events.filter(event => event.type.startsWith('feedback/'))
           expect(feedback.map(event => event.type)).toEqual([
             'feedback/record', 'feedback/record', 'feedback/message-put', 'feedback/message-put', 'feedback/message-delete',
@@ -1081,7 +1081,7 @@ async function runScenario(scenario: CorpusScenario): Promise<{
       ignoredRootEntries: RUNTIME_WORKSPACE_ENTRIES,
     })
     const modelRequests = assertions.modelRequestsFile !== undefined
-      ? records(await readFile(join(dshHome, assertions.modelRequestsFile), 'utf8'))
+      ? records(await readFile(join(snhHome, assertions.modelRequestsFile), 'utf8'))
       : []
     if (planReviews !== undefined) expect(planReviews).toEqual([])
     return { results, notifications, observedMethods, logs, initialWorkspace, finalWorkspace, cwd, modelRequests }
@@ -1092,8 +1092,8 @@ async function runScenario(scenario: CorpusScenario): Promise<{
 }
 
 /** Order logs parent-first, children by creation time (fixture layout order). */
-function orderLogs(logs: PersistedLog[], expectedCount: number, separateDshSdkChild: boolean): PersistedLog[] {
-  if (separateDshSdkChild) {
+function orderLogs(logs: PersistedLog[], expectedCount: number, separateSnhSdkChild: boolean): PersistedLog[] {
+  if (separateSnhSdkChild) {
     expect(logs).toHaveLength(expectedCount)
     return logs
   }
@@ -1152,7 +1152,7 @@ async function verifyHeaders(
   scenario: CorpusScenario,
   ordered: readonly PersistedLog[],
   ctx: NormalizeContext,
-  dshSdkChildConfig?: Readonly<Record<string, unknown>>,
+  snhSdkChildConfig?: Readonly<Record<string, unknown>>,
 ): Promise<void> {
   const pin = headerPin(scenario)
   const [pinFixturePath] = await fixtureFiles(pin)
@@ -1194,8 +1194,8 @@ async function verifyHeaders(
     for (const [index, header] of headers.entries()) {
       const selectedSchemas = childSchemas.get(logIndex)?.[index]
       const base = reconstructed[index] ?? reconstructed[0]
-      const configured = logIndex === 1 && dshSdkChildConfig !== undefined
-        ? { ...base as JsonObject, config: dshSdkChildConfig }
+      const configured = logIndex === 1 && snhSdkChildConfig !== undefined
+        ? { ...base as JsonObject, config: snhSdkChildConfig }
         : base
       const expected = selectedSchemas === undefined
         ? configured
@@ -1233,7 +1233,7 @@ describe('TypeScript SDK snapshots over the jsonrpc runtime', () => {
       && (scenario.manifest.recording === 'authored' || scenario.manifest.sessionFormat !== undefined)
       ? it.skip
       : it
-    scenarioTest(`${mode}s ${scenario.name} through dsh --profile ${scenario.manifest.profile}`, async () => {
+    scenarioTest(`${mode}s ${scenario.name} through snh --profile ${scenario.manifest.profile}`, async () => {
       const scenarioDir = scenario.dir
       const retained = scenario.manifest.sessionFormat !== undefined
       const notificationsExpectedPath = join(scenarioDir, retained ? 'notifications.current.expected.jsonl' : 'notifications.expected.jsonl')
@@ -1253,7 +1253,7 @@ describe('TypeScript SDK snapshots over the jsonrpc runtime', () => {
       const ordered = orderLogs(
         logs,
         recording ? logs.length : files.length,
-        assertions.dshSdkChild !== undefined,
+        assertions.snhSdkChild !== undefined,
       )
       reconcileCatalogCreationTimes(ordered.map(log => log.content), 'validate')
       const actualContext = contextOf(ordered, cwd)
@@ -1439,7 +1439,7 @@ describe('TypeScript SDK snapshots over the jsonrpc runtime', () => {
         }
         const runtimeContexts = continuationMessages.filter(message => (message.source as JsonObject | undefined)?.kind === 'runtime-context')
         const runtimeText = JSON.stringify(runtimeContexts.at(-1))
-        expect(runtimeText).toContain('Current DSH file policy: read-only.')
+        expect(runtimeText).toContain('Current SNH file policy: read-only.')
         const texts = continuationMessages.flatMap(message => message.content as JsonObject[])
           .flatMap(block => block.type === 'text' ? [block.text] : [])
         expect(texts).toContain('SDK_PERMISSION_READY')
@@ -1559,20 +1559,20 @@ describe('TypeScript SDK snapshots over the jsonrpc runtime', () => {
           .toBeGreaterThan(events.findIndex(event => event.type === 'compaction/summary'))
       }
       expect(logs.some(log => log.content.includes('llm-replay: script exhausted')), `${scenario.name}: replay script covers every model request`).toBe(false)
-      if (scenario.name === 'subagent-dsh-sdk-diagnostic' || scenario.name === 'subagent-dsh-sdk-dynamic-route'
-        || scenario.name === 'subagent-dsh-sdk-empty-route') {
+      if (scenario.name === 'subagent-snh-sdk-diagnostic' || scenario.name === 'subagent-snh-sdk-dynamic-route'
+        || scenario.name === 'subagent-snh-sdk-empty-route') {
         const parentEvents = records(ordered[0]!.content)
         const notices = parentEvents.filter(event => event.type === 'user/message'
           && (event.data as JsonObject | undefined)?.source !== undefined
           && ((event.data as JsonObject).source as JsonObject).kind === 'subagent-settled')
-        const expectedCount = scenario.name === 'subagent-dsh-sdk-diagnostic' ? 2 : 1
+        const expectedCount = scenario.name === 'subagent-snh-sdk-diagnostic' ? 2 : 1
         expect(notices).toHaveLength(expectedCount)
         const catalog = parentEvents.filter(event => event.type === 'subagent/catalog')
         expect(catalog).toHaveLength(expectedCount)
         expect(catalog.every(event => (event.data as JsonObject).mode === 'external')).toBe(true)
-        const expectedContent = scenario.name === 'subagent-dsh-sdk-diagnostic'
+        const expectedContent = scenario.name === 'subagent-snh-sdk-diagnostic'
           ? 'partial child loader answer'
-          : scenario.name === 'subagent-dsh-sdk-empty-route'
+          : scenario.name === 'subagent-snh-sdk-empty-route'
             ? 'child route: mock/mock-routed/default/777; cwd:'
             : 'child route: mock/mock-routed/max/777; cwd:'
         for (const notice of notices) expect(JSON.stringify(notice)).toContain(expectedContent)
@@ -1733,7 +1733,7 @@ describe('TypeScript SDK snapshots over the jsonrpc runtime', () => {
       const actualSnapshots = normalizeSessionSnapshots(ordered.map(log => log.content), actualContext, { nativeWriterOutput: true })
       const expectedSnapshots = normalizeSessionSnapshots(expectedContents, expectedContext, { nativeWriterOutput: true })
       expect(actualSnapshots.map(records), `${scenario.name}: sessions`).toEqual(expectedSnapshots.map(records))
-      await verifyHeaders(scenario, ordered, actualContext, assertions.dshSdkChild?.agentConfig)
+      await verifyHeaders(scenario, ordered, actualContext, assertions.snhSdkChild?.agentConfig)
 
       // Genuine SDK protocol cases retain their secondary wire projections.
       const finalResult = results.at(-1)
@@ -1821,7 +1821,7 @@ describe('TypeScript SDK snapshots over the jsonrpc runtime', () => {
           { kind: 'completed' },
         ])
       }
-      if (ordered.length > 1 && assertions.dshSdkChild === undefined) {
+      if (ordered.length > 1 && assertions.snhSdkChild === undefined) {
         expect(observedMethods.has('subagent.started')).toBe(true)
         expect(observedMethods.has('subagent.finished')).toBe(true)
         for (const notification of notifications.filter(item => item.method === 'subagent.finished')) {

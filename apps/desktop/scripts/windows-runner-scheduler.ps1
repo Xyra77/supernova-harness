@@ -1,7 +1,7 @@
 # Build an unregistered runner task. Credentials are supplied only to the scheduler at installation.
 function New-WindowsRunnerTaskDefinition($Scheduler, [string]$Sid, [string]$RunnerRoot, [string]$PowerShell, [int]$RestartMinutes, [ValidateSet('Interactive','Boot')][string]$StartupMode = 'Interactive') {
     $definition = $Scheduler.NewTask(0)
-    $definition.RegistrationInfo.Description = "DSH packaging runner: $RunnerRoot; owner: $Sid"
+    $definition.RegistrationInfo.Description = "SNH packaging runner: $RunnerRoot; owner: $Sid"
     $definition.Principal.UserId = $Sid
     $definition.Principal.LogonType = if ($StartupMode -eq 'Boot') { 1 } else { 3 } # Password or InteractiveToken.
     $definition.Principal.RunLevel = 0 # TASK_RUNLEVEL_LUA: the job does not inherit installer elevation.
@@ -21,7 +21,7 @@ function New-WindowsRunnerTaskDefinition($Scheduler, [string]$Sid, [string]$Runn
     $recovery.StartBoundary = (Get-Date).AddMinutes($RestartMinutes).ToString('yyyy-MM-ddTHH:mm:ss')
     $recovery.Repetition.Interval = "PT${RestartMinutes}M"
     $execution = $definition.Actions.Create(0) # TASK_ACTION_EXEC
-    $execution.Path = Join-Path $RunnerRoot 'dsh-task/launcher.exe'
+    $execution.Path = Join-Path $RunnerRoot 'snh-task/launcher.exe'
     $execution.Arguments = '"' + $PowerShell + '"'
     $execution.WorkingDirectory = $RunnerRoot
     return $definition
@@ -50,7 +50,7 @@ function Assert-WindowsRunnerBootConfiguration($Config, [string]$Sid, [string]$R
     if ($Config.StartupMode -ne 'Boot' -or $Config.AccountSid -ne $Sid -or $Config.RunnerRoot -ne $RunnerRoot -or $Config.TaskName -ne $TaskName) {
         throw 'Prepared Boot configuration does not match RunAs and RunnerRoot; prepare again as the runner account.'
     }
-    if (($Config.RestartMinutes -isnot [int] -and $Config.RestartMinutes -isnot [long]) -or $Config.RestartMinutes -lt 1 -or $Config.RestartMinutes -gt 1440 -or $Config.PowerShell -isnot [string] -or $Config.PowerShell -notmatch '^[A-Za-z]:[\\/]' -or -not (Test-Path -LiteralPath $Config.PowerShell -PathType Leaf) -or -not (Test-Path -LiteralPath (Join-Path $RunnerRoot 'dsh-task/launcher.exe') -PathType Leaf)) {
+    if (($Config.RestartMinutes -isnot [int] -and $Config.RestartMinutes -isnot [long]) -or $Config.RestartMinutes -lt 1 -or $Config.RestartMinutes -gt 1440 -or $Config.PowerShell -isnot [string] -or $Config.PowerShell -notmatch '^[A-Za-z]:[\\/]' -or -not (Test-Path -LiteralPath $Config.PowerShell -PathType Leaf) -or -not (Test-Path -LiteralPath (Join-Path $RunnerRoot 'snh-task/launcher.exe') -PathType Leaf)) {
         throw 'Prepared Boot startup files or restart interval are invalid; prepare again as the runner account.'
     }
 }

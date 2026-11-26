@@ -14,20 +14,20 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionSeq } from '@deepseek-ai/dsh-session'
-import type { Session, SessionEvent, SessionId } from '@deepseek-ai/dsh-session'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { CommandId } from '@deepseek-ai/dsh-commands/types'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import SessionStore, { SessionSeq } from '@supernova-ai/snh-session'
+import type { Session, SessionEvent, SessionId } from '@supernova-ai/snh-session'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { CommandId } from '@supernova-ai/snh-commands/types'
 // Side-effect type imports: the configuration-event SessionEventMap merges.
-import type {} from '@deepseek-ai/dsh-permission-presets'
-import type {} from '@deepseek-ai/dsh-sandbox-policy'
+import type {} from '@supernova-ai/snh-permission-presets'
+import type {} from '@supernova-ai/snh-sandbox-policy'
 import type { SessionSummary } from '../src/types.ts'
 import { createSessionTestRemote, type TestSessionRemote } from './test-remote.ts'
 
@@ -101,7 +101,7 @@ describe('summary blank = conversation not started', () => {
  * the Session Controller observes the published Session.
  */
 async function resumeHarness(): Promise<{ ctx: Context; remote: TestSessionRemote; cwd: string }> {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-list-blank-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-list-blank-'))
   ownedRoots.add(root)
   const ctx = new Context()
   ownedContexts.add(ctx)

@@ -14,7 +14,7 @@ Status: proposed
 
 | 类别 | 用法 | 包 |
 |---|---|---|
-| A. 页面全局变量下发 Host 配置 | `webserver/index-inject` 写 `window.__DSH_*__`，前端加载时读一次 | `shortcuts`、`ui-sidebar-documentpreview`、`ui-account-notifications`、`ui-settings-models`（引导）、`ui-settings-account`（联系方式）、`connection`（恢复参数） |
+| A. 页面全局变量下发 Host 配置 | `webserver/index-inject` 写 `window.__SNH_*__`，前端加载时读一次 | `shortcuts`、`ui-sidebar-documentpreview`、`ui-account-notifications`、`ui-settings-models`（引导）、`ui-settings-account`（联系方式）、`connection`（恢复参数） |
 | B. 以 `configForms` 读取运行时值 | 前端经设置镜像订阅自身或他人条目的已接受值 | `ui-chat`、`ui-conversation`、`locale`、`ui-theme`、`ui-settings-account`、`ui-settings-general`、`ui-agent-preset`、实验包 `timeline`、`client-ui-cot-translation`、`client-ui-forge`、`cua` |
 | C. 只在前端声明的 `Config` | 前端导出 schema，但条目从不收到配置 | 已在架构 PR 中完成：`ui-context-menu` 的 `resolutionTimeoutMs` 与 `ui-conversation` 的 `maxConcurrentFileUploads` 已改为 Host 顶层 volatile 字段，前端 schema 已删除 |
 | D. 首屏预注入 | 页面 HTML 预注入以避免首屏闪烁 | `ui-theme` 调色板与字号 |

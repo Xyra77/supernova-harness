@@ -7,8 +7,8 @@ from unittest.mock import patch
 
 import pytest
 
-from deepseek_harness import DeepSeekHarness, HarnessClient, ResumeSessionOptions
-from deepseek_harness.errors import JsonRpcError
+from supernova_harness import SuperNovaHarness, HarnessClient, ResumeSessionOptions
+from supernova_harness.errors import JsonRpcError
 
 
 @pytest.mark.parametrize(("outcome", "options", "expected_params"), [
@@ -50,7 +50,7 @@ for line in sys.stdin:
 """,
         encoding="utf-8",
     )
-    with DeepSeekHarness(
+    with SuperNovaHarness(
         _launch_args=(sys.executable, str(script)),
         env={"OUTCOME": outcome, "REQUESTS": str(requests)},
     ) as harness:

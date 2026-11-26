@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-util-text-search",
+  "name": "@supernova-ai/snh-util-text-search",
   "description": "Multilingual fuzzy filtering for in-memory search lists",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -30,13 +30,13 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-package-manifest": "workspace:*",
+    "@supernova-ai/snh-package-manifest": "workspace:*",
     "fuzzysort": "4.0.2"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

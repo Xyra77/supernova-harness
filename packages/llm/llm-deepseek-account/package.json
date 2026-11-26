@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-llm-deepseek-account",
-  "description": "DeepSeek account provider authentication and discovery",
+  "name": "@supernova-ai/snh-llm-deepseek-account",
+  "description": "SuperNova account provider authentication and discovery",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -32,40 +32,40 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/cosmokit": "workspace:~",
-    "@deepseek-ai/schemastery": "workspace:~"
+    "@supernova-ai/cosmokit": "workspace:~",
+    "@supernova-ai/schemastery": "workspace:~"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/dsh-llm-deepseek": "workspace:*",
-    "@deepseek-ai/dsh-launch-environment": "workspace:*",
-    "@deepseek-ai/dsh-deepseek-account": "workspace:*",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-deepseek-auth": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-llm-supernova": "workspace:*",
+    "@supernova-ai/snh-launch-environment": "workspace:*",
+    "@supernova-ai/snh-deepseek-account": "workspace:*",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-supernova-auth": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/dsh-llm-deepseek": "workspace:*",
-    "@deepseek-ai/dsh-launch-environment": "workspace:*",
-    "@deepseek-ai/dsh-deepseek-account": "workspace:*",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/dsh-llm-deepseek-api-key": "workspace:*",
-    "@deepseek-ai/dsh-timeout": "workspace:*",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-deepseek-auth": "workspace:*"
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-llm-supernova": "workspace:*",
+    "@supernova-ai/snh-launch-environment": "workspace:*",
+    "@supernova-ai/snh-deepseek-account": "workspace:*",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
+    "@supernova-ai/snh-timeout": "workspace:*",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-supernova-auth": "workspace:*"
   },
   "peerDependenciesMeta": {
-    "@deepseek-ai/dsh-deepseek-account": {
+    "@supernova-ai/snh-deepseek-account": {
       "optional": true
     },
-    "@deepseek-ai/cordis-plugin-loader": {
+    "@supernova-ai/cordis-plugin-loader": {
       "optional": true
     },
-    "@deepseek-ai/dsh-agent": {
+    "@supernova-ai/snh-agent": {
       "optional": true
     }
   }

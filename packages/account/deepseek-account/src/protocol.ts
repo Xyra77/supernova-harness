@@ -3,7 +3,7 @@ import { z } from 'zod'
 import type { AccountNotificationEvent, AccountNotificationId, SignInErrorCode } from './types.ts'
 
 /** Request header carrying the account token on every request the token authenticates. */
-export const ACCOUNT_TOKEN_HEADER = 'x-dsh-auth-token'
+export const ACCOUNT_TOKEN_HEADER = 'x-snh-auth-token'
 
 /** Protocol errors expose a stable code, never a response body or authorization URL. */
 export class PlatformAuthError extends Error {
@@ -97,7 +97,7 @@ export const exchange = z.object({ token: z.string().regex(/^[\x21-\x7e]+$/), au
  */
 export async function requestPlatform(origin: string, method: string, body: unknown,
   signal: AbortSignal, headers: Record<string, string>): Promise<unknown> {
-  return platformRequest(`${origin}/auth-api/v0/dsh/${method}`, {
+  return platformRequest(`${origin}/auth-api/v0/snh/${method}`, {
     method: 'POST', headers: { ...headers, 'content-type': 'application/json' }, body: JSON.stringify(body),
   }, signal)
 }

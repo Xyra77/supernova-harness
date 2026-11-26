@@ -1,26 +1,26 @@
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { Session, type SessionId } from '@deepseek-ai/dsh-session'
-import { SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session/types'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED } from '@deepseek-ai/dsh-tools'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { unsupportedModel, provideWorkingDirectoryFixture, unsupportedInbox } from '@deepseek-ai/dsh-agent-loop-testkit'
-import LocalJobRegistry from '@deepseek-ai/dsh-jobs-local'
-import * as ToolTasks from '@deepseek-ai/dsh-tool-jobs'
-import { SandboxPreparationError } from '@deepseek-ai/dsh-sandbox'
-import { ShellExecutor } from '@deepseek-ai/dsh-shell'
-import type { ShellExecRequest, ShellExecSpec, ShellExecution, ShellProcess } from '@deepseek-ai/dsh-shell'
+import { Context } from '@supernova-ai/cordis'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import { Session, type SessionId } from '@supernova-ai/snh-session'
+import { SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session/types'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime, { TOOL_ABORTED } from '@supernova-ai/snh-tools'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { unsupportedModel, provideWorkingDirectoryFixture, unsupportedInbox } from '@supernova-ai/snh-agent-loop-testkit'
+import LocalJobRegistry from '@supernova-ai/snh-jobs-local'
+import * as ToolTasks from '@supernova-ai/snh-tool-jobs'
+import { SandboxPreparationError } from '@supernova-ai/snh-sandbox'
+import { ShellExecutor } from '@supernova-ai/snh-shell'
+import type { ShellExecRequest, ShellExecSpec, ShellExecution, ShellProcess } from '@supernova-ai/snh-shell'
 import { renderPwshPromoted } from '../src/render.ts'
-import * as ToolPwsh from '@deepseek-ai/dsh-tool-pwsh'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
+import * as ToolPwsh from '@supernova-ai/snh-tool-pwsh'
+import * as BashEnvPlugin from '@supernova-ai/snh-shell-env'
 import { processSources, ringDelta } from '../src/background.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const testToolSignal = new AbortController().signal
 
@@ -70,7 +70,7 @@ class FakePwsh extends ShellExecutor {
       onExpiry: request.onExpiry ?? 'kill',
       stdoutMaxBytes: request.stdoutMaxBytes ?? 64_000,
       ...request.signal ? { signal: request.signal } : {},
-      ...request.dshEnv !== undefined ? { dshEnv: request.dshEnv } : {},
+      ...request.snhEnv !== undefined ? { snhEnv: request.snhEnv } : {},
       sandboxPolicy: request.sandboxPolicy,
     }
   }
@@ -506,7 +506,7 @@ describe('foreground commands as jobs (pwsh)', () => {
   })
 
   it('runs under the deadline kill when no job controller serves the owner', async () => {
-    // The same composition minus dsh-tool-jobs: the registry exists, so the
+    // The same composition minus snh-tool-jobs: the registry exists, so the
     // job-backed variant is registered, but admission refuses at the start
     // and the call runs under the executor's deadline instead.
     const ctx = new Context()

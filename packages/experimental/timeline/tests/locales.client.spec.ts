@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { Context } from '@deepseek-ai/cordis'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
+import { Context } from '@supernova-ai/cordis'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
 import { describe, expect, it } from 'vitest'
 import { dictionaries, en } from '../src/client/locales.ts'
 

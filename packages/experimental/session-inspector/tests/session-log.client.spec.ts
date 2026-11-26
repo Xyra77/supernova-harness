@@ -1,9 +1,9 @@
 /** Raw log pagination and settlement preserve original delta boundaries. */
 
-import { MutableSessionEventSource } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionEventLikeEntry } from '@deepseek-ai/dsh-api-session-controller/client'
-import { SessionSeq } from '@deepseek-ai/dsh-session/types'
-import type { LlmAttemptId, StreamChunk, ToolCallId } from '@deepseek-ai/dsh-llm'
+import { MutableSessionEventSource } from '@supernova-ai/snh-api-session-controller/client'
+import type { SessionEventLikeEntry } from '@supernova-ai/snh-api-session-controller/client'
+import { SessionSeq } from '@supernova-ai/snh-session/types'
+import type { LlmAttemptId, StreamChunk, ToolCallId } from '@supernova-ai/snh-llm'
 import { expect, it, onTestFinished, vi } from 'vitest'
 import { SessionLogModel } from '../src/client/views/session-log/model.ts'
 import { InspectorTableHierarchy } from '../src/client/views/table-model.ts'

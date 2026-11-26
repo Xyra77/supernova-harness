@@ -11,8 +11,8 @@ description: "后台任务、子智能体与 forge 变更请求从会话标题�
 
 Web 与 Desktop 的会话标题栏此前显示后台任务按钮、子智能体按钮（其菜单末尾是 `conversation.session.header.actions.subagent.footer` slot），以及启用 forge 套件时打开 `forge-panel` 右侧边栏标签页的变更请求按钮。这些入口现在位于由标题栏开关打开的[会话面板](../../../../packages/client/ui-session-panel/README.zh.md)中：
 
-- [`dsh-client-ui-jobs`](../../../../packages/client/ui-jobs/README.zh.md) 与 [`dsh-client-ui-subagent`](../../../../packages/client/ui-subagent/README.zh.md) 注册“后台任务”与“子智能体”分栏；子智能体页脚 slot 已移除，原来填充它的共享任务板现在是独立的“共享任务”分栏。
-- [`dsh-experimental-client-ui-forge`](../../../../packages/experimental/client-ui-forge/README.zh.md) 注册“变更请求”分栏、“环境”分栏中的检出行与本地变更行，以及开关上的提醒标记。它不再注册 `forge-panel` 标签页类型及其标题，也不再注册 `conversation.session.header.utilities` 条目；变更视图仍使用 `forge-changes` 标签页类型。
+- [`snh-client-ui-jobs`](../../../../packages/client/ui-jobs/README.zh.md) 与 [`snh-client-ui-subagent`](../../../../packages/client/ui-subagent/README.zh.md) 注册“后台任务”与“子智能体”分栏；子智能体页脚 slot 已移除，原来填充它的共享任务板现在是独立的“共享任务”分栏。
+- [`snh-experimental-client-ui-forge`](../../../../packages/experimental/client-ui-forge/README.zh.md) 注册“变更请求”分栏、“环境”分栏中的检出行与本地变更行，以及开关上的提醒标记。它不再注册 `forge-panel` 标签页类型及其标题，也不再注册 `conversation.session.header.utilities` 条目；变更视图仍使用 `forge-changes` 标签页类型。
 - forge 变更视图扩展 API 中，`ctx.forgeChanges.kinds` 只保留 `changes`，因为 `panel` 指的是已退役的标签页类型；`forge.change-request.card.actions` slot 的 owner props 不变，改为渲染在“变更请求”分栏每张卡片的操作菜单之前。
 - 类型导出随组件改名：`JobsSection*` 取代 `JobListAction*`/`JobListInjected`，`SubagentsSection*` 取代 `SubagentCatalogAction*`，forge 的 `ChangeRequestsSection*`、`ChangeRequestsActions*`、`CheckoutRow*`、`LocalChangesRow*` 与 `AttentionIndicator*` 类型取代 `ForgeTab*`、`HeaderButton*` 与 `LocalChangesCardProps`。
 

@@ -1,30 +1,30 @@
-import type {} from '@deepseek-ai/dsh-client-ui-context-menu/client'
+import type {} from '@supernova-ai/snh-client-ui-context-menu/client'
 /** Register the Chat Conversation target, renderers, stats, and details surface. */
-import type {} from '@deepseek-ai/dsh-client-ui-file-drag/client'
-import type {} from '@deepseek-ai/dsh-client-product-analytics/client'
-import type { Context } from '@deepseek-ai/cordis'
-import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import type {} from '@deepseek-ai/dsh-api-remotes/client'
-import type { SessionBinding } from '@deepseek-ai/dsh-api-session-controller/client'
-import { sessionDirectory } from '@deepseek-ai/dsh-api-session-controller/client/directories'
-import type { GroupKey } from '@deepseek-ai/dsh-client-ui-conversation/client'
-import { createSnapshotStore, type ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar-browser/client'
-import type {} from '@deepseek-ai/dsh-client-ui-input-trigger/client'
+import type {} from '@supernova-ai/snh-client-ui-file-drag/client'
+import type {} from '@supernova-ai/snh-client-product-analytics/client'
+import type { Context } from '@supernova-ai/cordis'
+import type { ImageAttachmentRef } from '@supernova-ai/snh-attachment'
+import type {} from '@supernova-ai/snh-api-remotes/client'
+import type { SessionBinding } from '@supernova-ai/snh-api-session-controller/client'
+import { sessionDirectory } from '@supernova-ai/snh-api-session-controller/client/directories'
+import type { GroupKey } from '@supernova-ai/snh-client-ui-conversation/client'
+import { createSnapshotStore, type ObservableSnapshot } from '@supernova-ai/snh-client-store'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type {} from '@supernova-ai/snh-client-ui-sidebar-right/client'
+import type {} from '@supernova-ai/snh-client-ui-sidebar-browser/client'
+import type {} from '@supernova-ai/snh-client-ui-input-trigger/client'
 // The `file` entry of `SidebarRightResourceParamsMap`, which types `{ params: { line } }` below.
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar-documentpreview/client'
-import { fileAddressFor } from '@deepseek-ai/dsh-util-workspace-path'
+import type {} from '@supernova-ai/snh-client-ui-sidebar-documentpreview/client'
+import { fileAddressFor } from '@supernova-ai/snh-util-workspace-path'
 // Type-only service and declaration merges used by the apply world.
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type {} from '@deepseek-ai/dsh-client-ui-session/client'
-import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
-import type {} from '@deepseek-ai/dsh-client-ui-workspace/client'
-import type { ConnectionHandle } from '@deepseek-ai/dsh-client-connection/client'
+import type {} from '@supernova-ai/snh-client-locale/client'
+import type {} from '@supernova-ai/snh-client-ui-conversation/client'
+import type {} from '@supernova-ai/snh-client-ui-layout/client'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
+import type {} from '@supernova-ai/snh-client-ui-session/client'
+import type {} from '@supernova-ai/snh-client-ui-settings/client'
+import type {} from '@supernova-ai/snh-client-ui-workspace/client'
+import type { ConnectionHandle } from '@supernova-ai/snh-client-connection/client'
 import type {
   ChatFlowDataInjected, ChatFlowInjected, ChatNodeInjected, ChatScrollPosition, ChatViewInjected,
   QuotaNoticeInjected, QuotaNoticeState,
@@ -187,7 +187,7 @@ export function apply(ctx: Context): void {
       }),
     }, LinkOpeningRow))
   })
-  const transcriptView = new TranscriptViewPolicy(chatSettings, 'dshDesktop' in globalThis ? 'standard' : DEFAULT_TRANSCRIPT_VIEW_MODE)
+  const transcriptView = new TranscriptViewPolicy(chatSettings, 'snhDesktop' in globalThis ? 'standard' : DEFAULT_TRANSCRIPT_VIEW_MODE)
   const presentation = derivePresentationPolicy(transcriptView.mode, transcriptView.collapseTiming, transcriptView.foldedReplies)
   const performancePolicy = new PerformanceUsagePolicy(chatSettings)
   ctx.effect(() => () => { transcriptView.dispose(); performancePolicy.dispose() })
@@ -281,7 +281,7 @@ export function apply(ctx: Context): void {
           // it. An absolute path names its file wherever the Session works. A
           // relative path resolves from the Session's directory at click time,
           // so one written before a directory move follows the move. The
-          // address, `dsh-resource://file/session/<id>/<absolute path>`,
+          // address, `snh-resource://file/session/<id>/<absolute path>`,
           // carries the resolved path: the opened tab keeps its file across
           // later moves. Which tab type claims the address is the Sidebar's
           // decision, not this call site's.

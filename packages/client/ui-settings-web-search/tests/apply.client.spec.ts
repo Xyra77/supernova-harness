@@ -1,12 +1,12 @@
 /** What the browser half registers, when, which credential it watches, and that it all leaves with the fiber. */
 
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { resolveSlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { RemoteError, TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { apply as settingsApply, inject as settingsInject } from '@deepseek-ai/dsh-client-ui-settings/client'
+import { resolveSlotLabel } from '@supernova-ai/snh-client-ui-slots'
+import { SlotRegistry } from '@supernova-ai/snh-client-ui-renderer/client'
+import { RemoteError, TestRemote } from '@supernova-ai/snh-client-test-runtime'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import { apply as settingsApply, inject as settingsInject } from '@supernova-ai/snh-client-ui-settings/client'
 import { apply, inject, NS } from '../src/client/index.ts'
 import type { WebSearchCardFace } from '../src/client/index.ts'
 import { apply as hostApply } from '../src/index.ts'
@@ -72,7 +72,7 @@ describe('ui-settings-web-search apply', () => {
   })
 
   it('registers nothing while the web namespace is not served', async () => {
-    const { ctx, slots, describeSettings } = await bench(['shell', 'web-deepseek-api'])
+    const { ctx, slots, describeSettings } = await bench(['shell', 'web-supernova-api'])
     declareRoot(slots)
     await ctx.plugin({ inject: [...inject], apply }).await()
     await vi.waitFor(() => { expect(describeSettings).toHaveBeenCalled() })

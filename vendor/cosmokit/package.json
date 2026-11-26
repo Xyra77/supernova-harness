@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/cosmokit",
+  "name": "@supernova-ai/cosmokit",
   "description": "A collection of common utilities",
   "version": "1.10.0-alpha.1",
   "publishConfig": {

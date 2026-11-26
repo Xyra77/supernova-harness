@@ -2,21 +2,21 @@
 
 import { hostname } from 'node:os'
 import { resolve } from 'node:path'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-fs'
-import { Context, Service } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { errorChain, type ReasoningEffortId, type MessageSource } from '@deepseek-ai/dsh-llm'
-import type {} from '@deepseek-ai/dsh-client-file-upload'
-import { canOpenNativePath, nativeFileManager, nativeFileApplications, openNativeFileApplication, openNativeAssociatedPath, revealNativePath } from '@deepseek-ai/dsh-native-command'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-session-projection-cache'
-import type { SessionObservation } from '@deepseek-ai/dsh-session-query'
-import { Remote, RemoteError, TypertRemoteService, principalOf } from '@deepseek-ai/dsh-typert-protocol'
-import { canonicalClientTimeZone } from '@deepseek-ai/dsh-util-time'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
-import type {} from '@deepseek-ai/dsh-api-remote-access'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type {} from '@supernova-ai/snh-fs'
+import { Context, Service } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { brandString } from '@supernova-ai/snh-brand'
+import { errorChain, type ReasoningEffortId, type MessageSource } from '@supernova-ai/snh-llm'
+import type {} from '@supernova-ai/snh-client-file-upload'
+import { canOpenNativePath, nativeFileManager, nativeFileApplications, openNativeFileApplication, openNativeAssociatedPath, revealNativePath } from '@supernova-ai/snh-native-command'
+import type { SessionId } from '@supernova-ai/snh-session'
+import type {} from '@supernova-ai/snh-session-projection-cache'
+import type { SessionObservation } from '@supernova-ai/snh-session-query'
+import { Remote, RemoteError, TypertRemoteService, principalOf } from '@supernova-ai/snh-typert-protocol'
+import { canonicalClientTimeZone } from '@supernova-ai/snh-util-time'
+import { assertNever } from '@supernova-ai/snh-util-values'
+import type {} from '@supernova-ai/snh-api-remote-access'
 import {
   ApiSessionAgentController,
   type ApiSessionAgentResult,
@@ -72,7 +72,7 @@ export { ApiSessionNotFound } from './agent.ts'
 export { SessionFileReferences } from './file-references.ts'
 export { SessionSkillCatalog } from './skill-catalog.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** Host Session business API and Remote namespace owner. */
     sessionController: SessionController

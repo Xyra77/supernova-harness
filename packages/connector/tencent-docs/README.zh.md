@@ -3,7 +3,7 @@ description: "通过共用的 MCP 管理器接入腾讯文档托管的 MCP 服�
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-tencent-docs
+# @supernova-ai/snh-tencent-docs
 
 [English](README.md) | 中文
 
@@ -30,10 +30,10 @@ kind: "package-bundle"
 将本包作为 bundle 安装，例如在 Web 侧栏的**插件**页面安装，或使用 CLI：
 
 ```sh
-dsh plugin --profile web add @deepseek-ai/dsh-tencent-docs
+snh plugin --profile web add @supernova-ai/snh-tencent-docs
 ```
 
-bundle patch 在 profile 其他层之后插入 `tencent-docs` 行。插件需要 `mcpManager` 与 `systemPrompt` 服务：[base bundle](../../bundle/base/README.zh.md) 提供 `systemPrompt`，Web 与 Desktop 组合通过 [`dsh-web-app`](../../bundle/web-app/README.zh.md) 补上 MCP 管理器。在没有 MCP 管理器的 profile（例如 `headless`）中，插件不会激活，启动时会打印一条警告，指出缺少 `mcpManager` 服务。
+bundle patch 在 profile 其他层之后插入 `tencent-docs` 行。插件需要 `mcpManager` 与 `systemPrompt` 服务：[base bundle](../../bundle/base/README.zh.md) 提供 `systemPrompt`，Web 与 Desktop 组合通过 [`snh-web-app`](../../bundle/web-app/README.zh.md) 补上 MCP 管理器。在没有 MCP 管理器的 profile（例如 `headless`）中，插件不会激活，启动时会打印一条警告，指出缺少 `mcpManager` 服务。
 
 ### 授权与退出登录
 
@@ -48,13 +48,13 @@ bundle patch 在 profile 其他层之后插入 `tencent-docs` 行。插件需要
 | 已连接 | **退出登录**确认后删除本地 grant |
 | 暂时无法连接 | **重试**重启服务器并保留现有授权 |
 
-授权必须在 Host 所在机器的浏览器中完成。用户在腾讯文档中同意授权后，回调页面说明 DSH 已收到授权，区块随后显示结果。离开页面不会取消授权尝试，尝试由 Host 持有。授权失败时显示**授权未完成，请重试**；页面操作失败时显示 toast。退出登录保留客户端注册，不会撤销腾讯文档签发的 token。
+授权必须在 Host 所在机器的浏览器中完成。用户在腾讯文档中同意授权后，回调页面说明 SNH 已收到授权，区块随后显示结果。离开页面不会取消授权尝试，尝试由 Host 持有。授权失败时显示**授权未完成，请重试**；页面操作失败时显示 toast。退出登录保留客户端注册，不会撤销腾讯文档签发的 token。
 
-页面通过 [`connectorAccounts` Remote](../../client/ui-connector-account/README.zh.md) 以 key `mcp:tencent-docs` 跟随账号，其按钮在该 Remote 上发起 `connect`、`sign-out` 或 `retry`，或取消授权尝试。在 Host 上，[`dsh-mcp-account`](../../mcp/mcp-account/README.zh.md) 通过管理器的 [OAuth 操作](../../mcp/mcp-manager/README.zh.md#oauth-authorization)执行它们：`startAuthorization('tencent-docs')` 返回一次授权尝试，其 `authorizationUrl` 由流报告，`cancelAuthorization('tencent-docs', id)` 取消它，`signOut('tencent-docs')` 删除 grant，`restart('tencent-docs')` 重试。其他 Remote 客户端可以使用同样的操作。
+页面通过 [`connectorAccounts` Remote](../../client/ui-connector-account/README.zh.md) 以 key `mcp:tencent-docs` 跟随账号，其按钮在该 Remote 上发起 `connect`、`sign-out` 或 `retry`，或取消授权尝试。在 Host 上，[`snh-mcp-account`](../../mcp/mcp-account/README.zh.md) 通过管理器的 [OAuth 操作](../../mcp/mcp-manager/README.zh.md#oauth-authorization)执行它们：`startAuthorization('tencent-docs')` 返回一次授权尝试，其 `authorizationUrl` 由流报告，`cancelAuthorization('tencent-docs', id)` 取消它，`signOut('tencent-docs')` 删除 grant，`restart('tencent-docs')` 重试。其他 Remote 客户端可以使用同样的操作。
 
 ### 停用与卸载
 
-在 Plugin Manager 中关闭该行或卸载本包都会结束注册：腾讯文档工具从模型的工具集中撤下，已保存的 grant 留在凭据存储中，因此重新安装会复用它。要删除 grant，请在插件加载期间退出登录，或按[本地凭据提供方](../../credentials/credentials-local/README.zh.md)的说明，从 `$DSH_HOME/.credentials.yaml` 中删除 `mcp-client/tencent-docs` 记录。
+在 Plugin Manager 中关闭该行或卸载本包都会结束注册：腾讯文档工具从模型的工具集中撤下，已保存的 grant 留在凭据存储中，因此重新安装会复用它。要删除 grant，请在插件加载期间退出登录，或按[本地凭据提供方](../../credentials/credentials-local/README.zh.md)的说明，从 `$SNH_HOME/.credentials.yaml` 中删除 `mcp-client/tencent-docs` 记录。
 
 ### 配置
 
@@ -63,7 +63,7 @@ bundle patch 在 profile 其他层之后插入 `tencent-docs` 行。插件需要
 | `url` | `https://docs.qq.com/openapi/mcp` | 腾讯文档服务器的 Streamable HTTP MCP 端点 |
 | `toolLoading` | `on-demand` | `on-demand` 让腾讯文档的工具在 agent 加载前对其隐藏；`eager` 在每次请求中发送全部工具定义 |
 
-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-tencent-docs)是受支持字段的完整来源。连接与授权的预算使用管理器和 mcp-client 的默认值。已保存的 grant 与 `url` 绑定，修改后需要重新连接账号。
+生成的[配置目录](../../../docs/config-catalog.zh.md#supernova-aisnh-tencent-docs)是受支持字段的完整来源。连接与授权的预算使用管理器和 mcp-client 的默认值。已保存的 grant 与 `url` 绑定，修改后需要重新连接账号。
 
 -----
 
@@ -75,7 +75,7 @@ bundle patch 在 profile 其他层之后插入 `tencent-docs` 行。插件需要
 
 [`cordis.patch.yml`](cordis.patch.yml) 插入一行 id 为 `tencent-docs` 的条目，指向本包，因此本包既是 bundle，也是其唯一的一行；`config` 覆盖以该 id 为目标。Host 侧的 [`src/index.ts`](src/index.ts) 进行两项注册，二者都是插件 fiber 的 effect：`ctx.mcpManager.register('tencent-docs', …)` 以配置的 `url` 和 OAuth 凭据 key 添加一个 Streamable HTTP 条目，`ctx.systemPrompt.section()` 在 `MCP_SERVERS` 排序位置添加称呼指引。服务器名固定了 `mcp__tencent-docs__` 工具命名空间，凭据 key 固定了 grant 地址，因此重新加载或重新安装的插件会得到同样的工具和 grant。管理器在注册时校验条目；如果已配置或已注册的服务器占用了该名称或 key，插件会在添加指引之前加载失败。条目未设置 `scope`，因此授权请求腾讯文档 401 challenge 所指资源元数据中列出的 `docs:read docs:write docs:manage` scope，授权页面保留腾讯文档授权端点自带的 `authType=2` 查询参数。
 
-账号注册表运行时，插件还调用 `ctx.mcpAccounts.register({ server: 'tencent-docs', packageName: '@deepseek-ai/dsh-tencent-docs', copy })`，其中 [`src/locales.ts`](src/locales.ts) 以每种已发布语言保存指明腾讯文档的文案；随后由 [`dsh-mcp-account`](../../mcp/mcp-account/README.zh.md) 把账号登记到连接器账号注册表，由注册表渲染上文所述的区块、引导、标签与 toast。没有注册表的组合（如 headless profile）加载插件时不带账号区块。
+账号注册表运行时，插件还调用 `ctx.mcpAccounts.register({ server: 'tencent-docs', packageName: '@supernova-ai/snh-tencent-docs', copy })`，其中 [`src/locales.ts`](src/locales.ts) 以每种已发布语言保存指明腾讯文档的文案；随后由 [`snh-mcp-account`](../../mcp/mcp-account/README.zh.md) 把账号登记到连接器账号注册表，由注册表渲染上文所述的区块、引导、标签与 toast。没有注册表的组合（如 headless profile）加载插件时不带账号区块。
 
 </details>
 
@@ -126,7 +126,7 @@ Tools named `mcp__tencent-docs__*` come from the Tencent Docs plugin. In user-fa
 
 #### Token 影响
 
-工具集与服务器说明由腾讯文档服务器定义，其大小可能在 DSH 不更新的情况下变化。设为 `on-demand` 时，已连接的腾讯文档的开销是约 3,000 字符的服务器说明、加载工具、225 个工具约 37,900 字符的目录，以及 agent 已加载的定义；设为 `eager` 时，全部 225 个定义在每次请求中重复出现。
+工具集与服务器说明由腾讯文档服务器定义，其大小可能在 SNH 不更新的情况下变化。设为 `on-demand` 时，已连接的腾讯文档的开销是约 3,000 字符的服务器说明、加载工具、225 个工具约 37,900 字符的目录，以及 agent 已加载的定义；设为 `eager` 时，全部 225 个定义在每次请求中重复出现。
 
 #### KV Cache 影响
 
@@ -142,7 +142,7 @@ Tools named `mcp__tencent-docs__*` come from the Tencent Docs plugin. In user-fa
 - Desktop 每次启动都监听操作系统分配的端口。重启后再次授权会注册一个新的 OAuth 客户端，并保留之前的注册记录；已保存的 grant 在重启前后正常刷新。
 - 账号连接之前，共享资源的提示词仍把 `tencent-docs` 列为服务器名，对它的资源调用会失败，直到用户完成连接。
 - 一次腾讯文档授权供整个 Host 使用；没有账号或工作区选择器。
-- 停用或卸载插件会保留本地 grant。退出登录会删除本地 grant，但 DSH 不会撤销腾讯文档已签发的 token；腾讯文档的授权服务器没有公布撤销端点。
+- 停用或卸载插件会保留本地 grant。退出登录会删除本地 grant，但 SNH 不会撤销腾讯文档已签发的 token；腾讯文档的授权服务器没有公布撤销端点。
 
 <a id="dev-note"></a>
 ### 开发备注

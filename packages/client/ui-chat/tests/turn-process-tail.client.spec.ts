@@ -1,14 +1,14 @@
 /** Turn-node Locations and Assistant timing across partial windows and transient retirement. */
 import { describe, expect, it } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { createAssistantMessage, createToolResultMessage, type LlmAttemptId, type ToolCallId } from '@deepseek-ai/dsh-llm'
-import { AssistantStreamAccumulator } from '@deepseek-ai/dsh-llm/assistant-stream'
-import { SessionSeq, type SessionEvent } from '@deepseek-ai/dsh-session/types'
+import { brandString } from '@supernova-ai/snh-brand'
+import { createAssistantMessage, createToolResultMessage, type LlmAttemptId, type ToolCallId } from '@supernova-ai/snh-llm'
+import { AssistantStreamAccumulator } from '@supernova-ai/snh-llm/assistant-stream'
+import { SessionSeq, type SessionEvent } from '@supernova-ai/snh-session/types'
 import type {
   SessionAssistantSettlementEntry, SessionEventLikeEntry, SessionLiveEventEntry, SessionTransientEventEntry,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import { ConversationNodeAssembler } from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { ChatSnapshot } from '@deepseek-ai/dsh-client-ui-chat/client'
+} from '@supernova-ai/snh-api-session-controller/client'
+import { ConversationNodeAssembler } from '@supernova-ai/snh-client-ui-conversation/client'
+import type { ChatSnapshot } from '@supernova-ai/snh-client-ui-chat/client'
 import { assistantDefinition } from '../src/client/conversation-nodes/assistant.ts'
 import { chatViewDefinition } from '../src/client/conversation-nodes/chat-snapshot-builder.ts'
 import { turnProcessDefinition } from '../src/client/conversation-nodes/turn-process.ts'

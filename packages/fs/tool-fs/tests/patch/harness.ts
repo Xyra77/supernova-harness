@@ -2,23 +2,23 @@
 import { mkdir, mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
-import type { FsVersion } from '@deepseek-ai/dsh-fs'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { FsObservation } from '@deepseek-ai/dsh-fs'
-import { LocalFileSystem } from '@deepseek-ai/dsh-fs-local'
-import { SandboxedFileSystem } from '@deepseek-ai/dsh-fs-sandbox'
-import * as FsPolicy from '@deepseek-ai/dsh-fs-observation-policy'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import * as PtcToolExecutor from '@deepseek-ai/dsh-tool-executor-ptc'
-import type { ToolExecution, ToolExecutionToken } from '@deepseek-ai/dsh-tools'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import type { SandboxMode } from '@deepseek-ai/dsh-sandbox'
+import { Context } from '@supernova-ai/cordis'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
+import type { FsVersion } from '@supernova-ai/snh-fs'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { FsObservation } from '@supernova-ai/snh-fs'
+import { LocalFileSystem } from '@supernova-ai/snh-fs-local'
+import { SandboxedFileSystem } from '@supernova-ai/snh-fs-sandbox'
+import * as FsPolicy from '@supernova-ai/snh-fs-observation-policy'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import * as PtcToolExecutor from '@supernova-ai/snh-tool-executor-ptc'
+import type { ToolExecution, ToolExecutionToken } from '@supernova-ai/snh-tools'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SandboxPolicyService from '@supernova-ai/snh-sandbox-policy'
+import type { SandboxMode } from '@supernova-ai/snh-sandbox'
 import { onTestFinished, vi } from 'vitest'
 import * as ToolFs from '../../src/index.ts'
 import { executePatch } from '../../src/patch/index.ts'
@@ -33,7 +33,7 @@ export const move = (source: string, destination: string, before = 'old', after 
   `*** Update File: ${source}\n*** Move to: ${destination}\n@@\n-${before}\n+${after}`
 
 export async function setup(options: { policy?: boolean; mode?: SandboxMode; provider?: typeof LocalFileSystem; applyPatch?: boolean; toolMode?: 'native' | 'ptc' } = {}) {
-  const root = await realpath(await mkdtemp(join(tmpdir(), 'dsh-patch-executor-')))
+  const root = await realpath(await mkdtemp(join(tmpdir(), 'snh-patch-executor-')))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
   const workspace = join(root, 'workspace')
   const providerRoot = join(root, 'provider')

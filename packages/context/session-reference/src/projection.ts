@@ -1,13 +1,13 @@
 /** Current-surface projection and byte-bounded rendering. */
 
-import { extractTextContent } from '@deepseek-ai/dsh-llm/message'
+import { extractTextContent } from '@supernova-ai/snh-llm/message'
 
-import { isCompactCheckpointSource } from '@deepseek-ai/dsh-compaction'
-import type { SessionSurfaceSnapshot } from '@deepseek-ai/dsh-session-query'
-import { TextRetainer } from '@deepseek-ai/dsh-output-retention'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
-import { SessionSeq } from '@deepseek-ai/dsh-session'
-import type { OptionalSessionSeq, SessionId } from '@deepseek-ai/dsh-session'
+import { isCompactCheckpointSource } from '@supernova-ai/snh-compaction'
+import type { SessionSurfaceSnapshot } from '@supernova-ai/snh-session-query'
+import { TextRetainer } from '@supernova-ai/snh-output-retention'
+import { assertNever } from '@supernova-ai/snh-util-values'
+import { SessionSeq } from '@supernova-ai/snh-session'
+import type { OptionalSessionSeq, SessionId } from '@supernova-ai/snh-session'
 import { stringifyTagSafeJson } from './serialization.ts'
 import type { ReferencedConversationItem } from './types.ts'
 

@@ -3,13 +3,13 @@ requires = ["hatchling==1.32.0"]
 build-backend = "hatchling.build"
 
 [project]
-name = "deepseek-harness-runtime-bin"
+name = "supernova-harness-runtime-bin"
 version = "0.0.0.dev0"
-description = "Bundled dsh CLI runtime for the DeepSeek Harness Python SDK"
+description = "Bundled snh CLI runtime for the SuperNova Harness Python SDK"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
-authors = [{ name = "DeepSeek" }]
+authors = [{ name = "SuperNova" }]
 
 [project.urls]
 Homepage = "https://github.com/deepseek-ai/deepseek-harness"
@@ -18,21 +18,21 @@ Issues = "https://github.com/deepseek-ai/deepseek-harness/issues"
 Source = "https://github.com/deepseek-ai/deepseek-harness"
 
 [project.scripts]
-dsh = "deepseek_harness_runtime:main"
+snh = "supernova_harness_runtime:main"
 
-# Include the injected dsh executable and sidecars; exclude the dev-only node closure.
+# Include the injected snh executable and sidecars; exclude the dev-only node closure.
 [tool.hatch.build]
 artifacts = [
-  "src/deepseek_harness_runtime/runtime/deepseek-harness-sdk-runtime-*",
-  "src/deepseek_harness_runtime/runtime/deepseek-harness-sdk-runtime-*/**",
-  "src/deepseek_harness_runtime/runtime/linux-*/**",
-  "src/deepseek_harness_runtime/runtime/macos-*/**",
-  "src/deepseek_harness_runtime/runtime/win-*/**",
+  "src/supernova_harness_runtime/runtime/supernova-harness-sdk-runtime-*",
+  "src/supernova_harness_runtime/runtime/supernova-harness-sdk-runtime-*/**",
+  "src/supernova_harness_runtime/runtime/linux-*/**",
+  "src/supernova_harness_runtime/runtime/macos-*/**",
+  "src/supernova_harness_runtime/runtime/win-*/**",
 ]
-exclude = ["src/deepseek_harness_runtime/runtime/node"]
+exclude = ["src/supernova_harness_runtime/runtime/node"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/deepseek_harness_runtime"]
+packages = ["src/supernova_harness_runtime"]
 # The release job uses Twine 6.2.0, which accepts core metadata through 2.4.
 core-metadata-version = "2.4"
 

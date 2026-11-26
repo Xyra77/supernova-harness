@@ -1,22 +1,22 @@
 /** Remote fork failures release any Agent created during setup. @module */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import { AgentRegistry } from '@deepseek-ai/dsh-agent'
-import { Session, SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { SessionId as SessionIdType } from '@deepseek-ai/dsh-session'
-import * as persistence from '@deepseek-ai/dsh-session-persistence-sqlite'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import { AgentRegistry } from '@supernova-ai/snh-agent'
+import { Session, SessionId, SessionSeq } from '@supernova-ai/snh-session'
+import type { SessionId as SessionIdType } from '@supernova-ai/snh-session'
+import * as persistence from '@supernova-ai/snh-session-persistence-sqlite'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
 import { SqliteSessionHandle } from '../../../session/session-persistence-sqlite/src/sqlite.ts'
 import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import { createSessionTestRemote } from './test-remote.ts'
 
 async function fixture() {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-remote-fork-source-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-remote-fork-source-'))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
   const ctx = new Context()
   onTestFinished(() => ctx.fiber.dispose())

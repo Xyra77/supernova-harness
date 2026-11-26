@@ -1,27 +1,27 @@
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { type ToolCallId, createMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import { brandString } from '@supernova-ai/snh-brand'
+import { type ToolCallId, createMessage, createUserMessage } from '@supernova-ai/snh-llm'
 import { afterEach, describe, expect, it, vi, type MockInstance } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { appendFile, mkdtemp, readdir, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
-import SessionStore, { SessionLogOffset, SessionSeq, Session, type SessionId, TOOL_NOT_STARTED, TOOL_OUTCOME_UNKNOWN } from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import AgentRegistry, { type Agent } from '@deepseek-ai/dsh-agent'
-import { SessionAlreadyExistsError, type SessionHandle } from '@deepseek-ai/dsh-session-persistence'
+import LlmRuntime from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
+import SessionStore, { SessionLogOffset, SessionSeq, Session, type SessionId, TOOL_NOT_STARTED, TOOL_OUTCOME_UNKNOWN } from '@supernova-ai/snh-session'
+import type { SessionEvent } from '@supernova-ai/snh-session'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import { defineContentToolFixture } from '@supernova-ai/snh-tool-testkit'
+import AgentRegistry, { type Agent } from '@supernova-ai/snh-agent'
+import { SessionAlreadyExistsError, type SessionHandle } from '@supernova-ai/snh-session-persistence'
 
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import { MockAdapter, textResponse } from './mock-adapter.ts'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'tool-bash': { kind: 'tool-bash' } & ContextFormed
   }
@@ -31,7 +31,7 @@ const dirs: string[] = []
 afterEach(async () => { for (const d of dirs.splice(0)) await rm(d, { recursive: true, force: true }) })
 
 async function persistentHarness(adapter: MockAdapter): Promise<{ ctx: Context; root: string }> {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-resume-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-resume-'))
   dirs.push(root)
   return { ctx: await mountPersistentHarness(root, adapter), root }
 }
@@ -578,7 +578,7 @@ describe('the session-persistence Agent Note: AgentLoop factory create/resume', 
 
   it('resume over a torn physical tail continues from the committed prefix', async () => {
     const sessionId = brandString<SessionId>('torn-tail-resume')
-    const root = await mkdtemp(join(tmpdir(), 'dsh-resume-torn-'))
+    const root = await mkdtemp(join(tmpdir(), 'snh-resume-torn-'))
     dirs.push(root)
     const ctx1 = await mountPersistentHarness(root, new MockAdapter([]), 'none')
     await seedStoredSession(ctx1, sessionId, [

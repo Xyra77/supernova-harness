@@ -1,7 +1,7 @@
 /* The panel floats in the Chat View's aside layer, a zero-height box across
    the top of the Chat frame that passes pointer events through. The layer
-   inherits the scrollport's --dsh-conversation-viewport-height and
-   --dsh-composer-height and publishes --dsh-chat-aside-gutter, the inline
+   inherits the scrollport's --snh-conversation-viewport-height and
+   --snh-composer-height and publishes --snh-chat-aside-gutter, the inline
    space between the transcript column and the frame's end edge. */
 
 /* The docked panel's inline metrics: 40px clear of the transcript column,
@@ -22,16 +22,16 @@
    inherited and changes on every resize, so this step derives on the body
    itself, and as a registered length it reaches the dock probe only when the
    decision flips. */
-@property --dsh-session-panel-reserve-room {
+@property --snh-session-panel-reserve-room {
   syntax: '<length>';
   inherits: true;
   initial-value: 0px;
 }
 
 :global([data-conversation-content]) {
-  --dsh-session-panel-reserve-room: clamp(
+  --snh-session-panel-reserve-room: clamp(
     0px,
-    calc((var(--dsh-chat-end-reserve-max, 0px) - var(--panel-clear) - var(--panel-edge) - var(--panel-min-width)) * 10000000 + 1px),
+    calc((var(--snh-chat-end-reserve-max, 0px) - var(--panel-clear) - var(--panel-edge) - var(--panel-min-width)) * 10000000 + 1px),
     1px
   );
 }
@@ -39,7 +39,7 @@
 /* The dock probe lives in the aside, not the message flow. Crossing its
    threshold must not change the inherited style of every message. */
 :global([data-slot='conversation.chat.flow']) {
-  --dsh-session-panel-reserve-room: initial;
+  --snh-session-panel-reserve-room: initial;
 }
 
 /* While the docking preference is on, the dock probe carries a mark, and
@@ -49,7 +49,7 @@
    (ui-conversation's end reserve) and makes no room when the start gutter
    cannot give it. */
 :global([data-conversation-content]):has(.dockProbe[data-session-panel-reserve]) {
-  --dsh-chat-end-reserve: calc(var(--panel-clear) + var(--panel-edge) + var(--panel-min-width));
+  --snh-chat-end-reserve: calc(var(--panel-clear) + var(--panel-edge) + var(--panel-min-width));
 }
 
 .panel {
@@ -59,11 +59,11 @@
   box-sizing: border-box;
   width: clamp(
     var(--panel-min-width),
-    calc(var(--dsh-chat-aside-gutter, 0px) - var(--panel-clear) - var(--panel-edge)),
+    calc(var(--snh-chat-aside-gutter, 0px) - var(--panel-clear) - var(--panel-edge)),
     360px
   );
   /* Stops above the composer stack, whose seat fades and takes presses across the body's full width. */
-  max-height: calc(var(--dsh-conversation-viewport-height, 100dvh) - var(--dsh-composer-height, 152px) - 24px);
+  max-height: calc(var(--snh-conversation-viewport-height, 100dvh) - var(--snh-composer-height, 152px) - 24px);
   overflow-y: auto;
   overscroll-behavior: contain;
   /* The bar has a place of its own: the content keeps its width whether or not
@@ -71,10 +71,10 @@
      over the panel's own background holds the bar 2px from the edge, as the
      sidebar does, and the track margin keeps the thumb out of the rounded corners. */
   scrollbar-gutter: stable;
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
-  --dsh-scrollbar-track-margin: 12px;
-  padding: 6px calc(8px - 2px - var(--dsh-scrollbar-width)) 6px 8px;
+  --snh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
+  --snh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+  --snh-scrollbar-track-margin: 12px;
+  padding: 6px calc(8px - 2px - var(--snh-scrollbar-width)) 6px 8px;
   border: 0;
   border-right: 2px solid transparent;
   /* The standard menu tier: a compact summary surface, not an enclosing panel. */
@@ -93,18 +93,18 @@
    to another Session or a resized window, carries no mark and does so at
    once. A leaving panel takes no presses. */
 .panel[data-session-panel-motion='enter'] {
-  animation: dsh-session-panel-enter 160ms cubic-bezier(0.4, 0, 0.2, 1);
+  animation: snh-session-panel-enter 160ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .panel[data-session-panel-motion='exit'] {
-  animation: dsh-session-panel-exit 160ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: snh-session-panel-exit 160ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
   pointer-events: none;
 }
 
 /* While the entrance or exit plays, the Conversation body moves the
    transcript into or out of the panel's room over the same time and curve. */
 :global([data-conversation-content]):has(.dockProbe[data-session-panel-moving]) {
-  --dsh-chat-end-reserve-transition: 160ms cubic-bezier(0.4, 0, 0.2, 1);
+  --snh-chat-end-reserve-transition: 160ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Over the transcript the panel is narrower than docked, so it covers less of
@@ -130,8 +130,8 @@
   top: 0;
   right: 0;
   width: max(
-    calc(var(--dsh-chat-aside-gutter, 0px) - var(--panel-clear) - var(--panel-edge) - var(--panel-min-width) + 1px),
-    var(--dsh-session-panel-reserve-room)
+    calc(var(--snh-chat-aside-gutter, 0px) - var(--panel-clear) - var(--panel-edge) - var(--panel-min-width) + 1px),
+    var(--snh-session-panel-reserve-room)
   );
   max-width: 1px;
   height: 0;
@@ -291,12 +291,12 @@
   }
 }
 
-@keyframes dsh-session-panel-enter {
+@keyframes snh-session-panel-enter {
   from { opacity: 0; transform: translateX(var(--panel-edge)); }
   to { opacity: 1; transform: translateX(0); }
 }
 
-@keyframes dsh-session-panel-exit {
+@keyframes snh-session-panel-exit {
   from { opacity: 1; transform: translateX(0); }
   to { opacity: 0; transform: translateX(var(--panel-edge)); }
 }

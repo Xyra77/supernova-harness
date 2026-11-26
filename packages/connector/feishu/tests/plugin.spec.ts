@@ -1,10 +1,10 @@
 import { readFile, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { Context } from '@deepseek-ai/cordis'
-import { renderContextSections } from '@deepseek-ai/dsh-system-prompt'
+import type { Context } from '@supernova-ai/cordis'
+import { renderContextSections } from '@supernova-ai/snh-system-prompt'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { cliPathContextText } from '@deepseek-ai/dsh-cli-account/src/context.ts'
+import { cliPathContextText } from '@supernova-ai/snh-cli-account/src/context.ts'
 import { executableFileName } from '../src/cli.ts'
 import * as Feishu from '../src/index.ts'
 import { FEISHU_PACKAGE } from '../src/presentation.ts'
@@ -56,7 +56,7 @@ describe('Feishu plugin', () => {
     const loaded = await ctx.skills.get('feishu')
     const file = await readFile(ENTRY, 'utf8')
     expect(loaded?.content.trim()).toBe(file.slice(file.indexOf('\n---\n', 4) + '\n---\n'.length).trim())
-    expect(loaded?.content).toContain('# Feishu in DSH')
+    expect(loaded?.content).toContain('# Feishu in SNH')
     expect(loaded?.content).toContain('open one with `lark-cli skills read <name>` in the Host Shell, not with the skill tool')
     expect(subprocess.lookups).toEqual([])
     expect(subprocess.processes).toEqual([])

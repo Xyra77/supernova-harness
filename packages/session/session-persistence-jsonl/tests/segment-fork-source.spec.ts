@@ -1,15 +1,15 @@
 /** Explicit fork source sharing, JSONL copying, and creation ownership. @module */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import { SessionId, SessionSeq, SessionLogOffset, SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
-import { SessionPersistenceNotFoundError } from '@deepseek-ai/dsh-session-persistence'
+import { SessionId, SessionSeq, SessionLogOffset, SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session'
+import type { SessionEvent, SessionHeader } from '@supernova-ai/snh-session'
+import { SessionPersistenceNotFoundError } from '@supernova-ai/snh-session-persistence'
 import * as plugin from '../src/index.ts'
-import * as sqlitePersistence from '@deepseek-ai/dsh-session-persistence-sqlite'
+import * as sqlitePersistence from '@supernova-ai/snh-session-persistence-sqlite'
 import { eventLines, generationLogPath, toHeaderLine } from '../src/format.ts'
 import { JsonlSessionHandle, type JsonlHandleStorage } from '../src/storage.ts'
 
@@ -20,7 +20,7 @@ const marker: SessionEvent<'session/end-seed'> = { type: 'session/end-seed', seq
 const options = { inheritedEventCount: SessionLogOffset(1), parentSource: { sessionId: parentId,
   endSeq: SessionLogOffset(1), events: [first, marker] } }
 async function fixture(storage: 'sqlite' | 'jsonl' = 'sqlite') {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-fork-event-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-fork-event-'))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
   const ctx = new Context()
   onTestFinished(() => ctx.fiber.dispose())

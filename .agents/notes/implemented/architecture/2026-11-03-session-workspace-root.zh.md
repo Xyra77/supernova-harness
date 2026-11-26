@@ -10,7 +10,7 @@ Status: implemented
 
 ## Decision
 
-一个 Session 在一个目录中工作，只有 Host 操作移动它。面向模型的 `working_directory` 工具与委派工具的 `cwd` 参数被移除；模型通过路径和 shell 的单次调用参数 `workdir` 到达子目录。`header.cwd` 仍是不可变的原始项目：Session 身份、工作区归属和恢复目的地。`dsh-working-directory` 拥有该目录，只有一个读取接口 `get`：相对路径从该目录解析，消费方也以它作为工作区根来限定写入、文件视图和发现。服务通过 `set` 或 `ensure` 的恢复记录的每次变更都是 `workspace-root/change`。
+一个 Session 在一个目录中工作，只有 Host 操作移动它。面向模型的 `working_directory` 工具与委派工具的 `cwd` 参数被移除；模型通过路径和 shell 的单次调用参数 `workdir` 到达子目录。`header.cwd` 仍是不可变的原始项目：Session 身份、工作区归属和恢复目的地。`snh-working-directory` 拥有该目录，只有一个读取接口 `get`：相对路径从该目录解析，消费方也以它作为工作区根来限定写入、文件视图和发现。服务通过 `set` 或 `ensure` 的恢复记录的每次变更都是 `workspace-root/change`。
 
 `workspace-root/change` 是新增的普通事件类型，作为同版本持久化变更记录在[确认记录](../../../../docs/persistence-changes/2026-11-13-workspace-root-change.zh.md)中。`working-directory/change` 保留在事件词汇表中，已标为 deprecated，没有写入方。读者忽略已存储的这类事件：同一种事件既记录模型的 `cd`，也记录进入工作树，而已存储的 Session 很少启用工作树插件，其中大多数是 `cd`。含有这类事件的 Session 在原始项目中恢复，或在最近一条 `workspace-root/change` 的目录中恢复，下一次请求的上下文会报告该目录。旧版本拒绝含有 `workspace-root/change` 的日志；从未移动工作区的 Session 不含该事件。
 

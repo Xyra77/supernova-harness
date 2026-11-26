@@ -1,8 +1,8 @@
 /** Tool-owned path resolution supplied by the existing toolview registration. */
-import type { Context } from '@deepseek-ai/cordis'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { sessionDirectory } from '@deepseek-ai/dsh-api-session-controller/client/directories'
-import { resolveWorkspacePath } from '@deepseek-ai/dsh-util-workspace-path'
+import type { Context } from '@supernova-ai/cordis'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { sessionDirectory } from '@supernova-ai/snh-api-session-controller/client/directories'
+import { resolveWorkspacePath } from '@supernova-ai/snh-util-workspace-path'
 
 /** File paths are resolved when a gesture begins, not when the Slot is mounted. */
 export interface ToolFileInjected {

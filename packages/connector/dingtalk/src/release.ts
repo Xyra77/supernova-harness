@@ -1,5 +1,5 @@
 /**
- * The pinned dws release the plugin installs into the DSH cache: the executable and the upstream skills. In a profile
+ * The pinned dws release the plugin installs into the SNH cache: the executable and the upstream skills. In a profile
  * they go to that profile's own cache directory, where the release in place replaces the earlier ones.
  */
 
@@ -8,8 +8,8 @@ import { accessSync, constants, existsSync, mkdirSync, readFileSync, renameSync,
 import { mkdir, readdir, rename, rm, writeFile } from 'node:fs/promises'
 import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { Context } from '@deepseek-ai/cordis'
-import { dshCachePath } from '@deepseek-ai/dsh-home-paths'
+import type { Context } from '@supernova-ai/cordis'
+import { snhCachePath } from '@supernova-ai/snh-home-paths'
 import { unzipSync } from 'fflate'
 import { x as extract } from 'tar'
 
@@ -83,7 +83,7 @@ export interface DwsReleaseOptions {
   readonly releaseTimeoutMs: number
   /**
    * The profile that loads the plugin: its Harness home and its name. Its downloads go to its own cache directory,
-   * `$DSH_HOME/cache/dingtalk/<profile>`. Without one they go to `$DSH_HOME/cache/dingtalk`, which several
+   * `$SNH_HOME/cache/dingtalk/<profile>`. Without one they go to `$SNH_HOME/cache/dingtalk`, which several
    * installations may share.
    */
   readonly profile?: { readonly home: string; readonly name: string } | undefined
@@ -93,7 +93,7 @@ export interface DwsReleaseOptions {
 export class DwsRelease {
   /**
    * The directory holding `dws` (`dws.exe` on Windows): `binDir`, or `dws-<version>-<platform>-<arch>` in the cache
-   * directory, which is `$DSH_HOME/cache/dingtalk/<profile>` in a profile and `$DSH_HOME/cache/dingtalk` without one.
+   * directory, which is `$SNH_HOME/cache/dingtalk/<profile>` in a profile and `$SNH_HOME/cache/dingtalk` without one.
    */
   readonly directory: string
   /**
@@ -125,8 +125,8 @@ export class DwsRelease {
   ) {
     const { profile } = options
     // Only the processes of the profile read its cache directory.
-    this.owned = profile === undefined ? undefined : dshCachePath({ dshHome: profile.home }, 'dingtalk', profile.name)
-    const cache = this.owned ?? dshCachePath('dingtalk')
+    this.owned = profile === undefined ? undefined : snhCachePath({ snhHome: profile.home }, 'dingtalk', profile.name)
+    const cache = this.owned ?? snhCachePath('dingtalk')
     if (options.binDir === undefined) {
       const platform = `${process.platform}-${process.arch}`
       this.archive = release.archives[platform]

@@ -1,7 +1,7 @@
 /** Projection of the section list's registrations into the titles the panel draws, in the reader's order. */
-import type { Context as ClientContext } from '@deepseek-ai/cordis'
-import { createSnapshotStore, type ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
-import { resolveSlotLabel, type StoredEntry } from '@deepseek-ai/dsh-client-ui-slots'
+import type { Context as ClientContext } from '@supernova-ai/cordis'
+import { createSnapshotStore, type ObservableSnapshot } from '@supernova-ai/snh-client-store'
+import { resolveSlotLabel, type StoredEntry } from '@supernova-ai/snh-client-ui-slots'
 import type { SessionPanelSectionEntry } from './slots.ts'
 
 const SECTION_SLOT = 'conversation.session.panel.section'
@@ -10,7 +10,7 @@ const SECTION_SLOT = 'conversation.session.panel.section'
 export const ENVIRONMENT_SECTION_ID = 'environment'
 
 /** localStorage key of the section order the reader chose: section ids, first to last. */
-export const SECTION_ORDER_STORAGE_KEY = 'dsh.sessionPanel.sectionOrder'
+export const SECTION_ORDER_STORAGE_KEY = 'snh.sessionPanel.sectionOrder'
 
 /**
  * Project live section registrations in display order. A registration

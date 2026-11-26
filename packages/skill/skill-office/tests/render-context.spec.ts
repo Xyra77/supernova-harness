@@ -1,11 +1,11 @@
 /** Render detection uses recorded tool names, not JSON spelling or quoted skill instructions. */
-import type { AttachmentId } from '@deepseek-ai/dsh-attachment'
-import { createToolResultMessage, createUserMessage, type ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { ImageBlock } from '@deepseek-ai/dsh-llm'
-import { Session, type SessionId } from '@deepseek-ai/dsh-session'
+import type { AttachmentId } from '@supernova-ai/snh-attachment'
+import { createToolResultMessage, createUserMessage, type ToolCallId } from '@supernova-ai/snh-llm'
+import type { ImageBlock } from '@supernova-ai/snh-llm'
+import { Session, type SessionId } from '@supernova-ai/snh-session'
 import { expect, it } from 'vitest'
 import { expectNoRenderContext, officeCalls, officeImages } from './fixtures/real-office.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 it('collects displayed images from native results, inspect output and PTC additional context', () => {
   const session = Session.create(brandString<SessionId>('displayed-images'))

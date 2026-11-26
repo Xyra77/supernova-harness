@@ -3,13 +3,13 @@ description: "为 Web 或 headless profile 添加实验性逐调用 Auto review�
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-experimental-auto-review
+# @supernova-ai/snh-experimental-auto-review
 
 [English](README.md) | 中文
 
 ## 概述
 
-为 Web 或 headless profile 添加 Auto review。Web 通过当前会话权限选择器提供它；headless 在每次调用时显式选择。每次原生或 PTC inner 工具调用前，当前 agent 的 provider 与模型会评估待执行动作；获准调用以 Full access 执行，被拒绝调用会请求用户审批。dsh 安装随附此层但默认关闭；在 Web 侧栏插件页开启或显式安装之前，默认 Web 保持三种权限模式。Auto review 是实验功能：它可能误放行不安全动作、误拒绝有用操作，并消耗额外 token。
+为 Web 或 headless profile 添加 Auto review。Web 通过当前会话权限选择器提供它；headless 在每次调用时显式选择。每次原生或 PTC inner 工具调用前，当前 agent 的 provider 与模型会评估待执行动作；获准调用以 Full access 执行，被拒绝调用会请求用户审批。snh 安装随附此层但默认关闭；在 Web 侧栏插件页开启或显式安装之前，默认 Web 保持三种权限模式。Auto review 是实验功能：它可能误放行不安全动作、误拒绝有用操作，并消耗额外 token。
 
 ## 目录
 
@@ -32,15 +32,15 @@ kind: "package-bundle"
 从源码 checkout 通过既有 CLI 将包安装到 Web profile：
 
 ```sh
-pnpm dsh plugin --profile web add ./packages/experimental/auto-review
+pnpm snh plugin --profile web add ./packages/experimental/auto-review
 ```
 
-CLI 会在需要时初始化 profile，并将本包声明的 patch 追加到 base 与 Web 层之后。Reconciliation 将 patch 激活为 profile 层；没有 `dsh.bundle.patch` 的包只是已安装依赖。在 composer 菜单或 `/permission` 选择器中选择带 `EXP` 标记的「自动审查」，并确认当前会话风险对话框。显式 `/permission auto` 命令直接切换。通用设置与未来会话默认值不提供 Auto。
+CLI 会在需要时初始化 profile，并将本包声明的 patch 追加到 base 与 Web 层之后。Reconciliation 将 patch 激活为 profile 层；没有 `snh.bundle.patch` 的包只是已安装依赖。在 composer 菜单或 `/permission` 选择器中选择带 `EXP` 标记的「自动审查」，并确认当前会话风险对话框。显式 `/permission auto` 命令直接切换。通用设置与未来会话默认值不提供 Auto。
 
 通过同一 CLI 移除此层：
 
 ```sh
-pnpm dsh plugin --profile web remove @deepseek-ai/dsh-experimental-auto-review
+pnpm snh plugin --profile web remove @supernova-ai/snh-experimental-auto-review
 ```
 
 <a id="headless-supervision"></a>
@@ -49,8 +49,8 @@ pnpm dsh plugin --profile web remove @deepseek-ai/dsh-experimental-auto-review
 为 headless profile 显式启用实验层：
 
 ```sh
-dsh plugin --profile headless add @deepseek-ai/dsh-experimental-auto-review
-dsh headless --permission-mode auto --approval-policy never --json - < task.txt > run.jsonl
+snh plugin --profile headless add @supernova-ai/snh-experimental-auto-review
+snh headless --permission-mode auto --approval-policy never --json - < task.txt > run.jsonl
 ```
 
 如需从此 checkout 单次运行，可传入 `--patch /absolute/path/to/packages/experimental/auto-review/cordis.patch.yml`，无需安装 profile 层。Auto integration 不可用时，权限预设选择会在读取 stdin 或开始模型工作前失败。Auto 使用完全主机访问权限；此模式不需要 `--add-dir`。原生工具让每个工具 body 都经过审查；PTC 的直接 Node 效果仍不在审查范围内。
@@ -110,7 +110,7 @@ Reviewer 使用最新 `request/header.config` 的 provider 与模型，并沿用
 
 #### KV Cache 影响
 
-每次评审的消息都以上一次评审的全部消息（包括其待审调用）开头，因此按 prompt 前缀、按消息结尾或在末尾标记处回溯缓存的路由都能复用策略与先前历史。Compaction、cwd 变化、较早条目离开 surface，以及重启后的第一次评审会让复用中断一次。Auto 不向主 agent 增加专门 runtime context 或模式切换提示词。每个评审请求都携带被评审 Session 的 `sessionId` 和 `purpose: 'auto-review'`，作为模型不可见的传输元数据。按 Session 划分 prompt 缓存或请求路由的路由（例如 OpenAI 的 `prompt_cache_key`，以及 OpenCode 要求的 `x-opencode-session` header）会以该 Session 的键发送评审；[DeepSeek session-log 上传](../../session/session-log-deepseek/README.zh.md#request-field)在启用且没有已注册排除条件匹配时贡献权威 Session 日志。
+每次评审的消息都以上一次评审的全部消息（包括其待审调用）开头，因此按 prompt 前缀、按消息结尾或在末尾标记处回溯缓存的路由都能复用策略与先前历史。Compaction、cwd 变化、较早条目离开 surface，以及重启后的第一次评审会让复用中断一次。Auto 不向主 agent 增加专门 runtime context 或模式切换提示词。每个评审请求都携带被评审 Session 的 `sessionId` 和 `purpose: 'auto-review'`，作为模型不可见的传输元数据。按 Session 划分 prompt 缓存或请求路由的路由（例如 OpenAI 的 `prompt_cache_key`，以及 OpenCode 要求的 `x-opencode-session` header）会以该 Session 的键发送评审；[SuperNova session-log 上传](../../session/session-log-supernova/README.zh.md#request-field)在启用且没有已注册排除条件匹配时贡献权威 Session 日志。
 
 ### 工具拒绝
 

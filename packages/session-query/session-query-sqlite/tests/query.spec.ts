@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { SessionSearchCursor, SessionQueryErrorCode } from '@deepseek-ai/dsh-session-query'
+import type { SessionId } from '@supernova-ai/snh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { SessionSearchCursor, SessionQueryErrorCode } from '@supernova-ai/snh-session-query'
 import {
   buildEventWhere,
   buildSessionWhere,

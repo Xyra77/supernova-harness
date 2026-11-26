@@ -11,8 +11,8 @@ import type {
   RequestView,
   ToolCallBlock,
   ToolResultNode,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { FileAttachmentRef, ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
+} from '@supernova-ai/snh-client-ui-conversation/client'
+import type { FileAttachmentRef, ImageAttachmentRef } from '@supernova-ai/snh-attachment'
 import type {
   TrajectoryCellProps,
   TrajectorySourceBlock,

@@ -5,15 +5,15 @@
 - id: headless-runner
   disabled: true
 
-- id: llm-deepseek
+- id: llm-supernova
   disabled: true
 
 - id: llm-pi-ai
   config:
     providers:
-      deepseek:
+      supernova:
         apiKeyEnv: DEEPSEEK_API_KEY
-        baseURL: !!js process.env.DSH_SNAPSHOT_BASE_URL
+        baseURL: !!js process.env.SNH_SNAPSHOT_BASE_URL
         reasoning: low
         modelOverrides:
           deepseek-flash:
@@ -24,7 +24,7 @@
   config:
     agents:
       - id: main
-        provider: deepseek
+        provider: supernova
         model: deepseek-flash
         cwd: !!js process.cwd()
 
@@ -39,5 +39,5 @@
 - id: sandbox-policy
   inject: []
   config:
-    mode: !!js process.env.DSH_PERMISSION_MODE ?? 'workspace-write'
+    mode: !!js process.env.SNH_PERMISSION_MODE ?? 'workspace-write'
     workspaceRoot: !!js process.cwd()

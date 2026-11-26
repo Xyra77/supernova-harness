@@ -8,11 +8,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AssemblyName>dsh-cua-windows</AssemblyName>
+    <AssemblyName>snh-cua-windows</AssemblyName>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
-	<RootNamespace>DeepSeek.Cua.Windows</RootNamespace>
+	<RootNamespace>SuperNova.Cua.Windows</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

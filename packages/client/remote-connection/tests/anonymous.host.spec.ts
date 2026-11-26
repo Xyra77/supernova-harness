@@ -13,7 +13,7 @@ let dispose: (() => void) | undefined
 
 beforeEach(() => {
   vi.useFakeTimers()
-  document.head.innerHTML = '<base href="https://host.example/tools/dsh/">'
+  document.head.innerHTML = '<base href="https://host.example/tools/snh/">'
   document.body.innerHTML = '<div id="pairing-method"></div>'
 })
 afterEach(() => {
@@ -80,14 +80,14 @@ it('keeps credentials out of the DOM, polls the mounted application, and signs i
   expect(document.getElementById('auth-pair-retry')).toBeNull()
   expect(button('request').textContent).toBe('重新申请')
   expect(button('request').disabled).toBe(false)
-  expect(url(f.request.mock.calls[0]?.[0])).toBe('https://host.example/tools/dsh/pairing/request')
+  expect(url(f.request.mock.calls[0]?.[0])).toBe('https://host.example/tools/snh/pairing/request')
   f.approve()
   await vi.advanceTimersByTimeAsync(1000)
   expect(f.request.mock.calls[1]?.[1]).toMatchObject({
     method: 'POST', credentials: 'same-origin', cache: 'no-store', body: JSON.stringify({ id: ticket.id, secret: ticket.secret }),
   })
   expect(f.issue).toHaveBeenCalledOnce()
-  expect(f.navigate).toHaveBeenCalledExactlyOnceWith('https://host.example/tools/dsh/')
+  expect(f.navigate).toHaveBeenCalledExactlyOnceWith('https://host.example/tools/snh/')
   expect(vi.getTimerCount()).toBe(0)
 })
 

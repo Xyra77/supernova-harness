@@ -8,6 +8,6 @@ header:
   pin: true
   toolSchemasSource: web-fetch
 environment:
-  # No DeepSeek API key, and a fixed DeepSeek origin for the account token.
+  # No SuperNova API key, and a fixed SuperNova origin for the account token.
   DEEPSEEK_API_KEY: ''
   DEEPSEEK_BASE_URL: https://api.deepseek.com/anthropic

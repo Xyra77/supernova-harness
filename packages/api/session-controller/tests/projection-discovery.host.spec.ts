@@ -4,26 +4,26 @@ import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promis
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import SessionStore, { SESSION_FORMAT_VERSION, type SessionId, SessionLogOffset, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { SessionHeader } from '@deepseek-ai/dsh-session'
-import type { SessionPersistenceSnapshot } from '@deepseek-ai/dsh-session-persistence'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import SessionStore, { SESSION_FORMAT_VERSION, type SessionId, SessionLogOffset, SessionSeq } from '@supernova-ai/snh-session'
+import type { SessionHeader } from '@supernova-ai/snh-session'
+import type { SessionPersistenceSnapshot } from '@supernova-ai/snh-session-persistence'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import SessionProjectionCache, {
   checkpointRecord,
   projectionCacheDomainSpec,
   type CheckpointRecord,
-} from '@deepseek-ai/dsh-session-projection-cache'
-import { titleProjectionDefinition } from '@deepseek-ai/dsh-session-title'
-import Storage from '@deepseek-ai/dsh-storage'
-import * as StorageDomain from '@deepseek-ai/dsh-storage-domain'
-import * as StorageJson from '@deepseek-ai/dsh-storage-json'
-import { subagentCatalogProjectionDefinition } from '@deepseek-ai/dsh-subagent/src/catalog.ts'
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
+} from '@supernova-ai/snh-session-projection-cache'
+import { titleProjectionDefinition } from '@supernova-ai/snh-session-title'
+import Storage from '@supernova-ai/snh-storage'
+import * as StorageDomain from '@supernova-ai/snh-storage-domain'
+import * as StorageJson from '@supernova-ai/snh-storage-json'
+import { subagentCatalogProjectionDefinition } from '@supernova-ai/snh-subagent/src/catalog.ts'
+import { RemoteError } from '@supernova-ai/snh-typert-protocol'
 import { createSessionTestController } from './test-remote.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const contexts: Context[] = []
 const roots: string[] = []
@@ -43,7 +43,7 @@ afterEach(async () => {
 })
 
 async function harness(withPersistence = true) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-projection-discovery-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-projection-discovery-'))
   roots.push(root)
   const ctx = new Context()
   contexts.push(ctx)

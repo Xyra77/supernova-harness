@@ -3,11 +3,11 @@ import { once } from 'node:events'
 import { queryObjects } from 'node:v8'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import WebSocket, { type RawData } from 'ws'
-import { Context, symbols } from '@deepseek-ai/cordis'
-import { apply as applyConnection, inject as connectionInject } from '@deepseek-ai/dsh-client-connection'
-import WebServer from '@deepseek-ai/dsh-host-webserver'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
-import type { AppReady } from '@deepseek-ai/dsh-cmdline'
+import { Context, symbols } from '@supernova-ai/cordis'
+import { apply as applyConnection, inject as connectionInject } from '@supernova-ai/snh-client-connection'
+import WebServer from '@supernova-ai/snh-host-webserver'
+import { MAX_TIMER_DELAY_MS } from '@supernova-ai/snh-timeout'
+import type { AppReady } from '@supernova-ai/snh-cmdline'
 import {
   Remote,
   remoteErrorOf,
@@ -19,11 +19,11 @@ import {
   type TypertContextMap,
   type TypertContextWire,
   RemoteError,
-} from '@deepseek-ai/dsh-typert-protocol'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
-import RemoteAccessService from '@deepseek-ai/dsh-api-remote-access'
+} from '@supernova-ai/snh-typert-protocol'
+import TypertRegistry from '@supernova-ai/snh-typert-registry'
+import RemoteAccessService from '@supernova-ai/snh-api-remote-access'
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@supernova-ai/snh-typert-protocol' {
   interface RemoteErrorDetailsMap {
     'fixture/rejected': { readonly retryable: boolean }
     'fixture/broken': { readonly count: bigint }
@@ -36,7 +36,7 @@ import TypertGatewayService, {
   type TypertRemoteEventDispatch,
   type TypertRemoteEventInvocation,
   type TypertRemoteEventOutcome,
-} from '@deepseek-ai/dsh-api-gateway'
+} from '@supernova-ai/snh-api-gateway'
 import { z } from 'zod'
 import type {
   RemoteEventClientId,

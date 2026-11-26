@@ -1,4 +1,4 @@
-/** Web provider credentials, environment fallback, and DeepSeek model selection. */
+/** Web provider credentials, environment fallback, and SuperNova model selection. */
 import { readFile } from 'node:fs/promises'
 import { once } from 'node:events'
 import { createServer } from 'node:http'
@@ -6,9 +6,9 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { chromium, webkit, type Browser, type Page } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import { BlockAssembler, createUserMessage, type StreamChunk } from '@deepseek-ai/dsh-llm'
-import { credentialRef } from '@deepseek-ai/dsh-credentials'
-import { createLaunchEnvironmentSnapshot } from '@deepseek-ai/dsh-launch-environment'
+import { BlockAssembler, createUserMessage, type StreamChunk } from '@supernova-ai/snh-llm'
+import { credentialRef } from '@supernova-ai/snh-credentials'
+import { createLaunchEnvironmentSnapshot } from '@supernova-ai/snh-launch-environment'
 import {
   captureStableAria, compareOrRefreshGolden, launchWebScaffold,
   watchConsole, webSnapshotMode, type WebScaffold,
@@ -57,7 +57,7 @@ it.skipIf(webSnapshotMode() === 'record').each(['deepseek-official', 'google', '
       })
       const profile = { apiKeyEnv: ref, baseURL, models: [{ id: 'clear-model' }],
         ...messages || google ? {} : { api: 'openai-completions' } }
-      await scaffold.ctx.settings.mutate(messages ? 'llm-deepseek' : 'llm-pi-ai', [{
+      await scaffold.ctx.settings.mutate(messages ? 'llm-supernova' : 'llm-pi-ai', [{
         op: 'set', path: messages ? [] : ['providers', provider], value: profile,
       }])
       await scaffold.ctx.credentials.set(ref, 'fixture-saved-key')
@@ -80,11 +80,11 @@ it.skipIf(webSnapshotMode() === 'record').each(['deepseek-official', 'google', '
       await openSettings(page, 'zh')
       const dialog = page.getByRole('dialog', { name: '设置' })
       await dialog.getByRole('button', { name: '模型', exact: true }).click()
-      const edit = dialog.getByRole('button', { name: `编辑 ${messages ? 'DeepSeek API (deepseek-official)' : provider}`, exact: true })
+      const edit = dialog.getByRole('button', { name: `编辑 ${messages ? 'SuperNova API (deepseek-official)' : provider}`, exact: true })
       await edit.click()
       // This row's card alone. Between the credential delete and the profile
       // write that restores native auth, google's row reports no usable
-      // provider and the page mounts the DeepSeek first-run setup card, whose
+      // provider and the page mounts the SuperNova first-run setup card, whose
       // key field would answer a dialog-wide count.
       const key = edit.locator('xpath=ancestor::li').getByLabel('API 密钥', { exact: true })
       await key.press('Delete')
@@ -136,7 +136,7 @@ it.each([{ name: 'Chromium', engine: chromium }, { name: 'WebKit', engine: webki
       await openSettings(page, 'zh')
       const dialog = page.getByRole('dialog', { name: '设置' })
       await dialog.getByRole('button', { name: '模型', exact: true }).click()
-      const edit = dialog.getByRole('button', { name: '编辑 DeepSeek API (deepseek-official)', exact: true })
+      const edit = dialog.getByRole('button', { name: '编辑 SuperNova API (deepseek-official)', exact: true })
       await edit.click()
       // This row's card alone: the dialog can show another provider's card,
       // with its own key field, beside this row.
@@ -165,7 +165,7 @@ it.each([{ name: 'Chromium', engine: chromium }, { name: 'WebKit', engine: webki
       // while the settings snapshot is loading is dropped. The saved notice is
       // published by that reload's completion, so waiting for it also makes the
       // reopen below deterministic.
-      await dialog.getByText('已保存 DeepSeek API (deepseek-official)。', { exact: true }).waitFor()
+      await dialog.getByText('已保存 SuperNova API (deepseek-official)。', { exact: true }).waitFor()
       await expect.poll(() => key.count(), { timeout: 10_000 }).toBe(0)
       await edit.click()
       expect(await key.getAttribute('placeholder')).toBe('•'.repeat('fixture-new-key'.length))
@@ -193,7 +193,7 @@ it.each([{ name: 'Chromium', engine: chromium }, { name: 'WebKit', engine: webki
       await openSettings(page, 'zh')
       const dialog = page.getByRole('dialog', { name: '设置', exact: true })
       await dialog.getByRole('button', { name: '模型', exact: true }).click()
-      const setup = dialog.getByText('DeepSeek API', { exact: true }).locator('xpath=ancestor::li')
+      const setup = dialog.getByText('SuperNova API', { exact: true }).locator('xpath=ancestor::li')
       await setup.getByText('自定义设置', { exact: true }).click()
       await dialog.getByRole('button', { name: '添加模型提供商' }).click()
       await dialog.getByRole('tab', { name: '自定义模型 API' }).click()
@@ -218,7 +218,7 @@ it.each([{ name: 'Chromium', engine: chromium }, { name: 'WebKit', engine: webki
   }, 60_000,
 )
 
-describe.skipIf(webSnapshotMode() === 'record')('web e2e: DeepSeek Messages settings', () => {
+describe.skipIf(webSnapshotMode() === 'record')('web e2e: SuperNova Messages settings', () => {
   let scaffold: WebScaffold
   let browser: Browser
   let page: Page
@@ -240,9 +240,9 @@ describe.skipIf(webSnapshotMode() === 'record')('web e2e: DeepSeek Messages sett
     }
   })
 
-  it('offers one DeepSeek card and saves Messages settings using the existing credential reference', async () => {
+  it('offers one SuperNova card and saves Messages settings using the existing credential reference', async () => {
     onTestFailed(() => saveFailureShot(page, 'web-e2e-deepseek-messages-settings'))
-    expect(scaffold.ctx.llm.listProviders()).toContainEqual({ id: 'deepseek-official', name: 'DeepSeek API' })
+    expect(scaffold.ctx.llm.listProviders()).toContainEqual({ id: 'deepseek-official', name: 'SuperNova API' })
     expect(scaffold.ctx.llm.listProviders().filter(provider => provider.id === 'deepseek-official')).toHaveLength(1)
     expect(scaffold.ctx.agentDefaultModel.currentSelection()).toEqual({ provider: 'deepseek-official', model: 'deepseek-flash' })
     await page.getByRole('dialog', { name: '开始使用', exact: true }).getByRole('button', { name: '添加 API Key', exact: true }).click()
@@ -253,9 +253,9 @@ describe.skipIf(webSnapshotMode() === 'record')('web e2e: DeepSeek Messages sett
     await openSettings(page, 'zh')
     const dialog = page.getByRole('dialog', { name: '设置', exact: true })
     await dialog.getByRole('button', { name: '模型', exact: true }).click()
-    await dialog.getByText('DeepSeek API', { exact: true }).waitFor()
-    expect(await dialog.getByText('DeepSeek API', { exact: true }).count()).toBe(1)
-    await dialog.getByText('DeepSeek API', { exact: true }).locator('xpath=ancestor::li').getByRole('button', { name: '编辑' }).click()
+    await dialog.getByText('SuperNova API', { exact: true }).waitFor()
+    expect(await dialog.getByText('SuperNova API', { exact: true }).count()).toBe(1)
+    await dialog.getByText('SuperNova API', { exact: true }).locator('xpath=ancestor::li').getByRole('button', { name: '编辑' }).click()
     const messages = dialog
     const key = messages.getByLabel('API 密钥', { exact: true })
     expect(await key.inputValue()).toBe('')
@@ -271,21 +271,21 @@ describe.skipIf(webSnapshotMode() === 'record')('web e2e: DeepSeek Messages sett
     expect(await messages.getByLabel('模型 ID 1').inputValue()).toBe('deepseek-flash')
     await messages.getByLabel('显示名称 1', { exact: true }).fill('Messages Flash')
     await messages.getByRole('button', { name: '保存', exact: true }).click()
-    await dialog.getByText('已保存 DeepSeek API (deepseek-official)。', { exact: true }).waitFor()
+    await dialog.getByText('已保存 SuperNova API (deepseek-official)。', { exact: true }).waitFor()
 
     const settings = await readFile(join(scaffold.harnessHome, 'profiles', 'scaffold', 'cordis.patch.yml'), 'utf8')
     expect(settings).toContain('https://messages.example/anthropic')
-    expect(settings).toContain('id: llm-deepseek')
+    expect(settings).toContain('id: llm-supernova')
     await expect(scaffold.ctx.llm.resolveModelInfo('deepseek-official', 'deepseek-flash')).resolves.toMatchObject({
       name: 'Messages Flash', inputModalities: ['text', 'image'], systemPromptUpdate: 'in-history',
     })
-    expect(scaffold.ctx.settings.describe().find(row => row.ns === 'llm-deepseek')?.value).not.toHaveProperty('protocol')
+    expect(scaffold.ctx.settings.describe().find(row => row.ns === 'llm-supernova')?.value).not.toHaveProperty('protocol')
     expect(settings).not.toContain('sk-e2e-')
     const credentials = await readFile(join(scaffold.harnessHome, '.credentials.yaml'), 'utf8')
     expect(credentials).toContain('DEEPSEEK_API_KEY: sk-e2e-messages')
     expect(credentials).not.toContain('DEEPSEEK_MESSAGES_API_KEY')
     expect(await page.locator('body').innerText()).not.toContain('sk-e2e-')
-    await dialog.getByRole('button', { name: '编辑 DeepSeek API (deepseek-official)', exact: true }).click()
+    await dialog.getByRole('button', { name: '编辑 SuperNova API (deepseek-official)', exact: true }).click()
     expect(await key.inputValue()).toBe('')
     await messages.getByText('使用已保存的 API key。', { exact: true }).waitFor()
     expect(await key.getAttribute('type')).toBe('password')
@@ -312,7 +312,7 @@ describe.skipIf(webSnapshotMode() === 'record')('web e2e: DeepSeek Messages sett
     expect(tripwire.pageErrors).toEqual([])
   }, 60_000)
 
-  it('selects an available DeepSeek model after provider settings remove the default', async () => {
+  it('selects an available SuperNova model after provider settings remove the default', async () => {
     onTestFailed(() => saveFailureShot(page, 'web-e2e-deepseek-messages-default'))
     await page.keyboard.press('Escape')
     await scaffold.ctx.agentDefaultModel.saveSelection({ provider: 'deepseek-official', model: 'deepseek-v4-flash' })

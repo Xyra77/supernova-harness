@@ -94,7 +94,7 @@ interface RunningGate {
   promise: Promise<GateResult>
 }
 
-/** The worker count an aggregate uses when `DSH_GATE_CONCURRENCY` is unset, with its diagnostic source. */
+/** The worker count an aggregate uses when `SNH_GATE_CONCURRENCY` is unset, with its diagnostic source. */
 export interface ConcurrencyDefault {
   workers: number
   source: string
@@ -108,7 +108,7 @@ const PROGRAM_MODE_CAP = 8
 
 /**
  * CI pins this supported-floor release in .github/workflows/ci.yml. Its compatibility leg owns the built CLI smoke and
- * requests it with `DSH_NODE_COMPAT_BUILD=1`; the primary lanes can run this same release and stay source-only.
+ * requests it with `SNH_NODE_COMPAT_BUILD=1`; the primary lanes can run this same release and stay source-only.
  */
 export const BUILD_BACKED_NODE_COMPAT_VERSION = '24.22.3'
 
@@ -128,21 +128,21 @@ async function main(args: string[]): Promise<number> {
 
 /**
  * Run one aggregate through the real child-process executor with the CLI's
- * environment-selected scheduling and reporting: `DSH_GATE_CONCURRENCY`
- * overrides the worker default, `DSH_GATE_FAIL_FAST=1` stops at the first
+ * environment-selected scheduling and reporting: `SNH_GATE_CONCURRENCY`
+ * overrides the worker default, `SNH_GATE_FAIL_FAST=1` stops at the first
  * blocking failure, and every settled gate plus a final summary is printed.
  * @param name - aggregate name printed in the start line.
  * @param gates - complete aggregate to execute.
- * @param concurrencyDefault - worker count used when `DSH_GATE_CONCURRENCY` is unset.
+ * @param concurrencyDefault - worker count used when `SNH_GATE_CONCURRENCY` is unset.
  * @returns 1 when a blocking gate failed or was skipped, otherwise 0.
  */
 export async function runAggregate(name: string, gates: Gate[], concurrencyDefault: ConcurrencyDefault): Promise<number> {
-  const concurrencyOverride = process.env.DSH_GATE_CONCURRENCY
-  const maxConcurrency = concurrencyFromEnv('DSH_GATE_CONCURRENCY', concurrencyDefault.workers)
+  const concurrencyOverride = process.env.SNH_GATE_CONCURRENCY
+  const maxConcurrency = concurrencyFromEnv('SNH_GATE_CONCURRENCY', concurrencyDefault.workers)
   const concurrencySource = concurrencyOverride === undefined || concurrencyOverride === ''
     ? concurrencyDefault.source
-    : '$DSH_GATE_CONCURRENCY'
-  const failFast = flagEnabled('DSH_GATE_FAIL_FAST')
+    : '$SNH_GATE_CONCURRENCY'
+  const failFast = flagEnabled('SNH_GATE_FAIL_FAST')
   const startedAt = performance.now()
   console.log(`run-gates: ${name} running ${gates.length} gate(s) with ${maxConcurrency} worker(s) from ${concurrencySource}${failFast ? ', fail-fast after first blocking failure' : ''}.`)
 
@@ -157,7 +157,7 @@ export async function runAggregate(name: string, gates: Gate[], concurrencyDefau
  * The options the CLI entrypoint hands to the scheduler. Host signal
  * forwarding always follows fail-fast: children are detached only then, so
  * without it the forwarding would have no tree to drain.
- * @param failFast - whether `DSH_GATE_FAIL_FAST` is enabled.
+ * @param failFast - whether `SNH_GATE_FAIL_FAST` is enabled.
  * @returns the scheduler options for the entrypoint.
  */
 export function cliGateOptions(failFast: boolean): RunGatesOptions {
@@ -242,8 +242,8 @@ export function ciWorkerEnvironment(
 ): Record<string, string> {
   // ci-unit's gates read none of these settings, while the inventory it runs
   // reads the same variables (run-gates.spec.ts builds coverage gates from
-  // DSH_COVERAGE_PARTITIONS; the oxlint contract spawns run-oxlint, which
-  // reads DSH_OXLINT_THREADS), so the aggregate leaves the environment as
+  // SNH_COVERAGE_PARTITIONS; the oxlint contract spawns run-oxlint, which
+  // reads SNH_OXLINT_THREADS), so the aggregate leaves the environment as
   // `pnpm run test` finds it.
   if (!mode.startsWith('ci-') || mode === 'ci-unit') return {}
   const budget = defaultParallelism(env, cpus)
@@ -253,16 +253,16 @@ export function ciWorkerEnvironment(
     if (env[name] === undefined || env[name] === '') additions[name] = String(value)
   }
   const shared = Math.max(1, Math.floor(budget / 2))
-  setDefault('DSH_OXLINT_THREADS', shared)
-  setDefault('DSH_PUBLINT_CONCURRENCY', shared)
-  setDefault('DSH_SNAPSHOT_MAX_WORKERS', 1)
-  setDefault('DSH_SNAPSHOT_MAX_CONCURRENCY', shared)
-  setDefault('DSH_WEB_SNAPSHOT_WORKERS', env.DSH_GATE_CONCURRENCY === '1' ? 1 : budget)
-  setDefault('DSH_COVERAGE_MAX_WORKERS', testBudget)
-  const coverageBudget = env.DSH_COVERAGE_MAX_WORKERS || String(testBudget)
+  setDefault('SNH_OXLINT_THREADS', shared)
+  setDefault('SNH_PUBLINT_CONCURRENCY', shared)
+  setDefault('SNH_SNAPSHOT_MAX_WORKERS', 1)
+  setDefault('SNH_SNAPSHOT_MAX_CONCURRENCY', shared)
+  setDefault('SNH_WEB_SNAPSHOT_WORKERS', env.SNH_GATE_CONCURRENCY === '1' ? 1 : budget)
+  setDefault('SNH_COVERAGE_MAX_WORKERS', testBudget)
+  const coverageBudget = env.SNH_COVERAGE_MAX_WORKERS || String(testBudget)
   const total = Number(coverageBudget)
   if (!Number.isSafeInteger(total) || total < 1) {
-    throw new Error(`run-gates: DSH_COVERAGE_MAX_WORKERS must be a positive integer, got ${JSON.stringify(coverageBudget)}.`)
+    throw new Error(`run-gates: SNH_COVERAGE_MAX_WORKERS must be a positive integer, got ${JSON.stringify(coverageBudget)}.`)
   }
   // Only the first coverage shard runs the exempt sibling; the others give
   // their partitions the whole budget.
@@ -393,7 +393,7 @@ export function gatesForMode(selected: Mode): Gate[] {
         ...hygieneLeafGates({ artifactNeeds: ['build'] }),
         ...docSyncLeafGates({
           docTypecheckNeeds: ['build'],
-          docTypecheckEnv: { DSH_DOC_TYPECHECK_USE_BUILD_OUTPUT: '1' },
+          docTypecheckEnv: { SNH_DOC_TYPECHECK_USE_BUILD_OUTPUT: '1' },
           docTypecheckScript: 'doc-typecheck:contracts-ready',
         }),
         pnpmScript('module-graph', 'verify-module-graph', { label: 'module graph' }),
@@ -423,7 +423,7 @@ function ciSharedStaticGates(): Gate[] {
     pnpmScript('application-entrypoints', 'verify-application-entrypoints', { label: 'application entrypoints' }),
     pnpmScript('constraints', 'constraints'),
     pnpmScript('package-dependencies', 'verify-package-dependencies', { label: 'package dependencies' }),
-    pnpmScript('dsh-package-licenses', 'verify-dsh-package-licenses', { label: 'DSH package licenses' }),
+    pnpmScript('snh-package-licenses', 'verify-snh-package-licenses', { label: 'SNH package licenses' }),
     pnpmScript('package-meta', 'verify-package-meta', { label: 'package metadata' }),
     pnpmScript('cordis-config', 'verify-cordis-config', { label: 'Cordis config' }),
     ...sharedHygieneGates(),
@@ -490,14 +490,14 @@ function ciPrimaryGates(): Gate[] {
 }
 
 function nodeCompatGates(): Gate[] {
-  const typecheck = flagEnabled('DSH_NODE_COMPAT_SKIP_TYPECHECK')
+  const typecheck = flagEnabled('SNH_NODE_COMPAT_SKIP_TYPECHECK')
     ? []
     : [pnpmScript('typecheck', 'typecheck')]
-  if (!flagEnabled('DSH_NODE_COMPAT_BUILD')) {
+  if (!flagEnabled('SNH_NODE_COMPAT_BUILD')) {
     return [...typecheck, ...nodeCompatSmokeGates()]
   }
   if (process.versions.node !== BUILD_BACKED_NODE_COMPAT_VERSION) {
-    throw new Error(`run-gates: DSH_NODE_COMPAT_BUILD requires Node ${BUILD_BACKED_NODE_COMPAT_VERSION}, got ${process.versions.node}.`)
+    throw new Error(`run-gates: SNH_NODE_COMPAT_BUILD requires Node ${BUILD_BACKED_NODE_COMPAT_VERSION}, got ${process.versions.node}.`)
   }
   return [
     ...typecheck,
@@ -535,7 +535,7 @@ function nodeCompatSmokeGates(options: { cliSmoke?: boolean } = {}): Gate[] {
         'apps/cli/tests/lazy-search-startup.compat.spec.ts',
       ], {
         label: 'CLI lazy-search startup smoke',
-        env: { DSH_REQUIRE_BUILT_CLI_SMOKE: '1' },
+        env: { SNH_REQUIRE_BUILT_CLI_SMOKE: '1' },
         needs: ['build'],
       }),
     )
@@ -552,7 +552,7 @@ function ciStaticGates(options: { ownsBuild: boolean }): Gate[] {
       ...options.ownsBuild
         ? {
           docTypecheckNeeds: ['build'],
-          docTypecheckEnv: { DSH_DOC_TYPECHECK_USE_BUILD_OUTPUT: '1' },
+          docTypecheckEnv: { SNH_DOC_TYPECHECK_USE_BUILD_OUTPUT: '1' },
           docTypecheckScript: 'doc-typecheck:contracts-ready',
         }
         : {},
@@ -604,7 +604,7 @@ function ciConsumerGates(): Gate[] {
     webSnapshotGate(browserTree, buildArtifactReaders),
     pnpmScript('doc-typecheck', 'doc-typecheck:contracts-ready', {
       needs: builtTree,
-      env: { DSH_DOC_TYPECHECK_USE_BUILD_OUTPUT: '1' },
+      env: { SNH_DOC_TYPECHECK_USE_BUILD_OUTPUT: '1' },
     }),
     pnpmScript('node-next-types', 'verify-node-next-types', {
       label: 'node-next types',
@@ -616,17 +616,17 @@ function ciConsumerGates(): Gate[] {
 
 /**
  * Install the web snapshot browsers beside the build instead of before the aggregate.
- * `DSH_CI_PLAYWRIGHT_INSTALL` selects `with-deps` (ephemeral runners, which also install
+ * `SNH_CI_PLAYWRIGHT_INSTALL` selects `with-deps` (ephemeral runners, which also install
  * system packages through apt) or `browsers` (persistent hosts whose image owns those packages);
  * unset leaves browser installation to the caller.
  */
 function ciPlaywrightInstallGate(): Gate | undefined {
-  const raw = process.env.DSH_CI_PLAYWRIGHT_INSTALL
+  const raw = process.env.SNH_CI_PLAYWRIGHT_INSTALL
   if (raw === undefined || raw === '') return undefined
   if (raw !== 'with-deps' && raw !== 'browsers') {
-    throw new Error(`run-gates: DSH_CI_PLAYWRIGHT_INSTALL must be with-deps or browsers, got ${JSON.stringify(raw)}.`)
+    throw new Error(`run-gates: SNH_CI_PLAYWRIGHT_INSTALL must be with-deps or browsers, got ${JSON.stringify(raw)}.`)
   }
-  const args = ['--filter', '@deepseek-ai/dsh-web-frontend', 'exec', 'playwright', 'install',
+  const args = ['--filter', '@supernova-ai/snh-web-frontend', 'exec', 'playwright', 'install',
     ...raw === 'with-deps' ? ['--with-deps'] : [], 'chromium', 'webkit']
   return {
     id: 'playwright-install',
@@ -666,7 +666,7 @@ function ciPrebuiltConsumerGates(): Gate[] {
     snapshotGate([], { skipWebAdapters: true }),
     expectedOutputGate([]),
     pnpmScript('doc-typecheck', 'doc-typecheck:contracts-ready', {
-      env: { DSH_DOC_TYPECHECK_USE_BUILD_OUTPUT: '1' },
+      env: { SNH_DOC_TYPECHECK_USE_BUILD_OUTPUT: '1' },
     }),
     builtBinSmokeGate([]),
   ]
@@ -681,11 +681,11 @@ function ciPrebuiltWebSnapshotGates(): Gate[] {
 }
 
 /**
- * One benchmark phase (`DSH_BENCH_PHASE`) on a checkout whose build output was
+ * One benchmark phase (`SNH_BENCH_PHASE`) on a checkout whose build output was
  * restored from the `ci-build` lane; only the benchmark workers are built here.
  */
 function ciBenchPrebuiltGates(): Gate[] {
-  const phase = parseBenchPhase(process.env.DSH_BENCH_PHASE)
+  const phase = parseBenchPhase(process.env.SNH_BENCH_PHASE)
   return [pnpmExec('bench', ['tsx', 'scripts/run-ci-bench.ts', `--phase=${phase}`], {
     label: `performance benchmarks (${phase} phase)`,
   })]
@@ -693,24 +693,24 @@ function ciBenchPrebuiltGates(): Gate[] {
 
 function webSnapshotGate(needs: string[], after?: string[]): Gate {
   const order = after === undefined ? { needs } : { needs, after }
-  const workerRaw = process.env.DSH_WEB_SNAPSHOT_WORKERS
+  const workerRaw = process.env.SNH_WEB_SNAPSHOT_WORKERS
   if (workerRaw !== undefined && workerRaw !== '') {
     const workers = Number.parseInt(workerRaw, 10)
     if (!Number.isSafeInteger(workers) || workers < 1 || String(workers) !== workerRaw) {
-      throw new Error(`run-gates: DSH_WEB_SNAPSHOT_WORKERS must be a positive integer, got ${JSON.stringify(workerRaw)}.`)
+      throw new Error(`run-gates: SNH_WEB_SNAPSHOT_WORKERS must be a positive integer, got ${JSON.stringify(workerRaw)}.`)
     }
     return pnpmScript('web-snapshot', 'test:web:ci', {
       label: 'web browser snapshot',
-      displayCommand: `DSH_SNAPSHOT=replay DSH_WEB_SNAPSHOT_WORKERS=${workers} pnpm run test:web:ci`,
-      env: { DSH_SNAPSHOT: 'replay' },
+      displayCommand: `SNH_SNAPSHOT=replay SNH_WEB_SNAPSHOT_WORKERS=${workers} pnpm run test:web:ci`,
+      env: { SNH_SNAPSHOT: 'replay' },
       ...order,
       streamOutput: true,
     })
   }
   return pnpmScript('web-snapshot', 'test:web:built', {
     label: 'web browser snapshot',
-    displayCommand: 'DSH_SNAPSHOT=replay pnpm run test:web:built',
-    env: { DSH_SNAPSHOT: 'replay' },
+    displayCommand: 'SNH_SNAPSHOT=replay pnpm run test:web:built',
+    env: { SNH_SNAPSHOT: 'replay' },
     ...order,
   })
 }
@@ -761,8 +761,8 @@ function electronInstallGate(): Gate {
   return {
     id: 'electron-install',
     label: 'Electron binary',
-    displayCommand: 'pnpm --filter @deepseek-ai/dsh-desktop exec install-electron',
-    ...pnpmInvocation(['--filter', '@deepseek-ai/dsh-desktop', 'exec', 'install-electron']),
+    displayCommand: 'pnpm --filter @supernova-ai/snh-desktop exec install-electron',
+    ...pnpmInvocation(['--filter', '@supernova-ai/snh-desktop', 'exec', 'install-electron']),
     env: { ELECTRON_GET_USE_PROXY: '1' },
     retries: 2,
     retryDelayMs: 15000,
@@ -803,12 +803,12 @@ function typertContractsGate(): Gate {
 }
 
 function lintGate(options: { needs?: string[] } = {}): Gate {
-  const raw = process.env.DSH_OXLINT_THREADS
+  const raw = process.env.SNH_OXLINT_THREADS
   const script = 'lint:contracts-ready'
   return pnpmScript('lint', script, {
     ...raw === undefined || raw === ''
       ? {}
-      : { displayCommand: `DSH_OXLINT_THREADS=${raw} pnpm run ${script}` },
+      : { displayCommand: `SNH_OXLINT_THREADS=${raw} pnpm run ${script}` },
     ...options.needs === undefined ? {} : { needs: options.needs },
   })
 }
@@ -818,17 +818,17 @@ function lintGate(options: { needs?: string[] } = {}): Gate {
 // under v8 instrumentation while contributing nothing the thresholds need
 // (membership rules in scripts/coverage-exempt.ts).
 //
-// DSH_COVERAGE_MAX_WORKERS is shared between the two parallel gates. CI
+// SNH_COVERAGE_MAX_WORKERS is shared between the two parallel gates. CI
 // defaults its partition count to the instrumented share; an explicit
-// DSH_COVERAGE_PARTITIONS overrides that share independently. The exempt
+// SNH_COVERAGE_PARTITIONS overrides that share independently. The exempt
 // gate's wall clock is dominated by its longest single file, so it takes the
 // small share. A budget of 1 gives each gate 1 worker; lanes that need a strict
-// total of one (the serial reference jobs) also set DSH_GATE_CONCURRENCY=1,
+// total of one (the serial reference jobs) also set SNH_GATE_CONCURRENCY=1,
 // which keeps the gates from overlapping at all.
-// DSH_COVERAGE_TEST_TIMEOUT_MS is not a gate argument: vitest.config.ts reads
+// SNH_COVERAGE_TEST_TIMEOUT_MS is not a gate argument: vitest.config.ts reads
 // it from the environment every gate inherits (coverageTestTimeoutOptions).
 function coverageWorkerArgs(): { instrumented: string[]; exempt: string[] } {
-  const [flag] = positiveIntArg('DSH_COVERAGE_MAX_WORKERS', '--maxWorkers')
+  const [flag] = positiveIntArg('SNH_COVERAGE_MAX_WORKERS', '--maxWorkers')
   if (flag === undefined) return { instrumented: [], exempt: [] }
   const total = Number.parseInt(flag.split('=')[1] ?? '', 10)
   const exempt = Math.max(1, Math.floor(total / 3))
@@ -883,7 +883,7 @@ function coverageExemptHeavyGate(workerArgs: readonly string[]): Gate {
   })
 }
 
-// One CI file shard of the instrumented inventory (DSH_COVERAGE_SHARD); the
+// One CI file shard of the instrumented inventory (SNH_COVERAGE_SHARD); the
 // coordinator writes coverage/shard/ and the report job merges and applies
 // thresholds. The first shard also runs the uninstrumented heavy suites with
 // the coverage lane's usual worker split. Sharding needs the partition
@@ -907,7 +907,7 @@ function coverageShardGates(): Gate[] {
 
 // The uninstrumented unit inventory for a whole-inventory reference lane
 // (the Sandbox workflow's darwin parity job). It is `pnpm run test`; the lane
-// sets DSH_COVERAGE_TEST_TIMEOUT_MS, which vitest.config.ts reads from the
+// sets SNH_COVERAGE_TEST_TIMEOUT_MS, which vitest.config.ts reads from the
 // inherited environment, because a shared hosted runner delays cases that
 // inherit Vitest's defaults past them. Output streams so the job log keeps
 // per-file timestamps for a 15–30 minute run.
@@ -928,7 +928,7 @@ function ciUnitGates(): Gate[] {
 // that already runs them (vitest.snapshot.config.ts).
 function snapshotGate(needs: string[] = ['build'], options: { skipWebAdapters?: boolean } = {}): Gate {
   return pnpmScript('snapshot', 'test:snapshot', {
-    env: { DSH_EXAMPLE_MODE: 'lib', ...options.skipWebAdapters === true ? { DSH_SNAPSHOT_SKIP_WEB_ADAPTERS: '1' } : {} },
+    env: { SNH_EXAMPLE_MODE: 'lib', ...options.skipWebAdapters === true ? { SNH_SNAPSHOT_SKIP_WEB_ADAPTERS: '1' } : {} },
     needs,
   })
 }
@@ -937,7 +937,7 @@ function snapshotGate(needs: string[] = ['build'], options: { skipWebAdapters?: 
 // the recorded-session corpus or the credentialed provider lane.
 function expectedOutputGate(needs: string[] = ['build']): Gate {
   return pnpmScript('expected-output', 'test:expected', {
-    env: { DSH_EXAMPLE_MODE: 'lib' },
+    env: { SNH_EXAMPLE_MODE: 'lib' },
     needs,
   })
 }
@@ -971,7 +971,7 @@ function hygieneLeafGates(options: { artifactNeeds?: string[] } = {}): Gate[] {
     pnpmScript('provider-data', 'verify-provider-data', { label: 'pi-ai provider metadata' }),
     pnpmScript('package-dependencies', 'verify-package-dependencies', { label: 'package dependencies' }),
     pnpmScript('application-entrypoints', 'verify-application-entrypoints', { label: 'application entrypoints' }),
-    pnpmScript('dsh-package-licenses', 'verify-dsh-package-licenses', { label: 'DSH package licenses' }),
+    pnpmScript('snh-package-licenses', 'verify-snh-package-licenses', { label: 'SNH package licenses' }),
     pnpmScript('node-next-types', 'verify-node-next-types', {
       label: 'node-next types',
       ...artifactOptions,
@@ -1000,7 +1000,7 @@ function docSyncLeafGates(options: {
     pnpmScript('cli-help', 'verify-cli-help', {
       label: 'CLI help reference',
       // Other gate workers already run beside this leaf; direct help generation keeps its own worker budget.
-      env: { DSH_CLI_HELP_CONCURRENCY: process.env.DSH_CLI_HELP_CONCURRENCY || '1' },
+      env: { SNH_CLI_HELP_CONCURRENCY: process.env.SNH_CLI_HELP_CONCURRENCY || '1' },
     }),
     pnpmScript('markdown-links', 'verify-md-links', { label: 'markdown links', quick: true }),
     pnpmScript('type-equivalence', 'verify-type-equiv', { label: 'type equivalence', quick: true }),
@@ -1095,7 +1095,7 @@ function builtBinSmokeGate(needs: string[] = ['build']): Gate {
   ], {
     label: 'built-bin smoke',
     needs,
-    env: { DSH_EXAMPLE_MODE: 'lib' },
+    env: { SNH_EXAMPLE_MODE: 'lib' },
   })
 }
 
@@ -1872,7 +1872,7 @@ export function formatGateResultReason(result: GateResult): string {
 }
 
 function printResult(result: GateResult): void {
-  const verbose = process.env.DSH_GATE_VERBOSE === '1'
+  const verbose = process.env.SNH_GATE_VERBOSE === '1'
   const seconds = (result.durationMs / 1000).toFixed(2)
   if (result.status === 'passed' && !verbose) {
     console.log(`run-gates: PASS ${result.gate.label} (${seconds}s)`)

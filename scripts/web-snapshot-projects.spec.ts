@@ -53,7 +53,7 @@ describe('web snapshot shards', () => {
 
   it.each(['3/2', '0/2', 'a/b'])('rejects shard %s', (raw) => {
     expect(() => parseWebSnapshotShard(raw)).toThrow(
-      `DSH_WEB_SNAPSHOT_SHARD must be <index>/<count> with 1 <= index <= count, got ${JSON.stringify(raw)}.`,
+      `SNH_WEB_SNAPSHOT_SHARD must be <index>/<count> with 1 <= index <= count, got ${JSON.stringify(raw)}.`,
     )
   })
 

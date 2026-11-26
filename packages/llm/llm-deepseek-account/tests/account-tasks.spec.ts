@@ -1,6 +1,6 @@
 /** Account cancellation and running-task reports follow logged routes and the owning plugin lifetime. */
-import { Context } from '@deepseek-ai/cordis'
-import { LlmError } from '@deepseek-ai/dsh-llm'
+import { Context } from '@supernova-ai/cordis'
+import { LlmError } from '@supernova-ai/snh-llm'
 import { expect, it, vi } from 'vitest'
 import { installAccountTaskCancellation } from '../src/account-tasks.ts'
 
@@ -17,7 +17,7 @@ it('cancels running account tasks with their inboxes retained and detaches with 
   ]
   ctx.provide('agents', { list: () => tasks } as never)
   const reports = new Set<() => boolean>()
-  ctx.provide('deepseekAccount', {
+  ctx.provide('supernovaAccount', {
     registerRunningTaskReport: (report: () => boolean) => { reports.add(report); return () => { reports.delete(report) } },
   } as never)
   const owner = ctx.plugin((scope) => { installAccountTaskCancellation(scope, 'deepseek-account') })

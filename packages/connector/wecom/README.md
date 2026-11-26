@@ -3,7 +3,7 @@ description: "Add the WeCom plugin to a profile: the official wecom-cli with its
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-wecom
+# @supernova-ai/snh-wecom
 
 English | [中文](README.zh.md)
 
@@ -30,8 +30,8 @@ The WeCom plugin lets conversations use WeCom through the official `wecom-cli`. 
 Install the plugin from the Web sidebar's **Plugins** page or with the CLI:
 
 ```sh
-dsh plugin --profile web add @deepseek-ai/dsh-wecom
-dsh plugin --profile web remove @deepseek-ai/dsh-wecom
+snh plugin --profile web add @supernova-ai/snh-wecom
+snh plugin --profile web remove @supernova-ai/snh-wecom
 ```
 
 `@wecom/cli` ships its native binary in a platform package such as `@wecom/cli-darwin-arm64`, which installs without a build script. When no platform package matches the computer, or the executable is missing, the `wecom` row fails to load with an error that names the missing package or path.
@@ -40,7 +40,7 @@ dsh plugin --profile web remove @deepseek-ai/dsh-wecom
 
 After the plugin loads, one `wecom` skill joins the skill catalog. The agent loads it with the `skill` tool, opens the guide it needs, such as `wecomcli-doc` or `wecomcli-message`, with the file tools, and runs `wecom-cli` by that path through the ordinary Shell tools under the current sandbox and approval policy. When `wecom-cli auth show --status` reports no authorization, the agent asks the user to connect WeCom on the plugin page; it runs the CLI's own `auth init` only when the user asks to finish it in the conversation, and requests `sandbox_permissions` with a `justification` on the first attempt because the command writes outside the workspace. When a command returns `errcode` 853004 (`cli token expired`), the agent does not ask for a new authorization or pass on the server's upgrade advice: it reruns the command with `sandbox_permissions` and a `justification`, because in the file sandbox the CLI cannot save the token it just refreshed.
 
-The guides come from `skills/` of `WecomTeam/wecom-cli` at commit `4c74ff2`. The row downloads that commit's archive when it loads and keeps the verified files in `$DSH_HOME/cache/wecom/`; until they are in place, the catalog has no `wecom` skill and the plugin page reports the download. A failed download is retried by the page's check.
+The guides come from `skills/` of `WecomTeam/wecom-cli` at commit `4c74ff2`. The row downloads that commit's archive when it loads and keeps the verified files in `$SNH_HOME/cache/wecom/`; until they are in place, the catalog has no `wecom` skill and the plugin page reports the download. A failed download is retried by the page's check.
 
 Turning the plugin off in Plugin Manager withdraws the skills, the path from runtime context, and the authorization section. The CLI authorization and the downloaded guides stay in place.
 
@@ -55,7 +55,7 @@ The Plugins page drives these operations through the connector account registry,
 | `connect` | Runs `auth init --noninteractive --no-browser`, waits for the user to scan the QR code, then checks that the CLI reports the bot authorized. The authorized section offers it again as changing the bot, after a confirmation, because the new binding replaces the one the terminal shares |
 | Cancel | Cancels the connection while it waits for the scan and waits for its command to exit; other steps are ignored |
 
-A check runs `auth show`. The authorization reads `authorized` or `unauthorized` from the CLI's `Status` line, and the bound bot's id from its `Bot ID` line, which the section shows when the CLI prints one; any other output or a nonzero exit fails the check and keeps the previous state. Each link that `auth init` prints alone on a stdout line is offered only when it is an HTTPS address on `work.weixin.qq.com`. Results report succeeded, cancelled, or failed. Failures show the command and the observed exit code on the page and in the Host log; the CLI's output, which can carry the QR-code session, is omitted. `wecom-cli` has no command that revokes the authorization, so the plugin offers no disconnect. The process running DSH needs access to the CLI configuration; `DSH_HOME` does not relocate it.
+A check runs `auth show`. The authorization reads `authorized` or `unauthorized` from the CLI's `Status` line, and the bound bot's id from its `Bot ID` line, which the section shows when the CLI prints one; any other output or a nonzero exit fails the check and keeps the previous state. Each link that `auth init` prints alone on a stdout line is offered only when it is an HTTPS address on `work.weixin.qq.com`. Results report succeeded, cancelled, or failed. Failures show the command and the observed exit code on the page and in the Host log; the CLI's output, which can carry the QR-code session, is omitted. `wecom-cli` has no command that revokes the authorization, so the plugin offers no disconnect. The process running SNH needs access to the CLI configuration; `SNH_HOME` does not relocate it.
 
 ### Configure
 
@@ -66,7 +66,7 @@ A check runs `auth show`. The authorization reads `authorized` or `unauthorized`
 
 An authorization check gets the `commandTimeoutMs` of the [`cli-account` row](../cli-account/README.md#use-this-package), 30 seconds by default. QR-code authorization waits up to 10 minutes for the user, and each command keeps at most 1 MiB of stdout; the CLI account Service fixes both limits. The guides are downloaded from the `skillsUrls` of the [`upstream-skills` row](../upstream-skills/README.md#use-this-package), each within its `skillsTimeoutMs`.
 
-The generated [config catalog](../../../docs/config-catalog.md#deepseek-aidsh-wecom) is the exhaustive source of supported fields.
+The generated [config catalog](../../../docs/config-catalog.md#supernova-aisnh-wecom) is the exhaustive source of supported fields.
 
 -----
 
@@ -78,7 +78,7 @@ The generated [config catalog](../../../docs/config-catalog.md#deepseek-aidsh-we
 
 [`cordis.patch.yml`](cordis.patch.yml) inserts this package as the `wecom` row after the profile's other layers, and the Plugins page keys the authorization section by this package name. [`src/index.ts`](src/index.ts) is a function plugin. It checks that `binDir/wecom-cli` (`wecom-cli.exe` on Windows) is executable, registers the `wecom` skill with `ctx.upstreamSkills` under the pin in [`src/skills.ts`](src/skills.ts), and registers that path and the authorization with `ctx.cliAccounts`. The account view carries the download state, and each check restarts a failed download without waiting for it. [`src/directory.ts`](src/directory.ts) resolves the platform package that `@wecom/cli` installs as an optional dependency. The [CLI account Service](../cli-account/README.md) gives the model that path in runtime context, runs each command by the same path, runs one operation at a time, and reports a failed command by its exit code. [`src/account.ts`](src/account.ts) carries out each operation with the WeCom commands and reads the QR-code link from the output lines of `auth init`. [`src/presentation.ts`](src/presentation.ts) maps each view to the section the registry serves, in the text of [`src/locales.ts`](src/locales.ts). Disposal cancels the active operation, aborts running commands, and settles after their processes exit.
 
-[`skills/wecom/SKILL.md`](skills/wecom/SKILL.md) is the only skill this package carries: the DSH guidance, an index of the guides, and how to open them. Upstream publishes the guides only in its repository and not in the npm package, so the [upstream skills Service](../upstream-skills/README.md) downloads them; they are files under the skill's base directory, not separate skills. Where the DSH guidance and `wecomcli-shared` disagree, the entry tells the agent to follow the DSH guidance: it uses the plugin's `wecom-cli` instead of installing one, and sends authorization to the plugin page. References are ordinary files in each guide's directory.
+[`skills/wecom/SKILL.md`](skills/wecom/SKILL.md) is the only skill this package carries: the SNH guidance, an index of the guides, and how to open them. Upstream publishes the guides only in its repository and not in the npm package, so the [upstream skills Service](../upstream-skills/README.md) downloads them; they are files under the skill's base directory, not separate skills. Where the SNH guidance and `wecomcli-shared` disagree, the entry tells the agent to follow the SNH guidance: it uses the plugin's `wecom-cli` instead of installing one, and sends authorization to the plugin page. References are ordinary files in each guide's directory.
 
 </details>
 
@@ -116,7 +116,7 @@ The catalog is fixed for one plugin version. Loading or unloading the plugin cha
 
 #### What the model sees
 
-A `skill` tool result for `wecom` contains about 2,300 characters: the DSH guidance, an index that gives each of the 15 guides one sentence with the upstream routing rules, and how to open a guide. The DSH guidance tells the agent to run the plugin's `wecom-cli` by the absolute path from the current runtime context, to ask the user to connect on the plugin page before running `auth init --noninteractive` itself, to request `sandbox_permissions` for that command from its first attempt, and to rerun a command that returned `errcode` 853004 with `sandbox_permissions` instead of asking for a new authorization or passing on the server's upgrade advice, asking for a new authorization only when the rerun returns 853004 again; it takes precedence over `wecomcli-shared` where they disagree. Its resource base is the downloaded directory, `skillsDir` or `$DSH_HOME/cache/wecom/skills-<digest>`, so the agent opens `skills/<name>/SKILL.md` with the file tools rather than the `skill` tool, treats a skill the guides name as that guide, and resolves a guide's relative paths against the guide's own directory.
+A `skill` tool result for `wecom` contains about 2,300 characters: the SNH guidance, an index that gives each of the 15 guides one sentence with the upstream routing rules, and how to open a guide. The SNH guidance tells the agent to run the plugin's `wecom-cli` by the absolute path from the current runtime context, to ask the user to connect on the plugin page before running `auth init --noninteractive` itself, to request `sandbox_permissions` for that command from its first attempt, and to rerun a command that returned `errcode` 853004 with `sandbox_permissions` instead of asking for a new authorization or passing on the server's upgrade advice, asking for a new authorization only when the rerun returns 853004 again; it takes precedence over `wecomcli-shared` where they disagree. Its resource base is the downloaded directory, `skillsDir` or `$SNH_HOME/cache/wecom/skills-<digest>`, so the agent opens `skills/<name>/SKILL.md` with the file tools rather than the `skill` tool, treats a skill the guides name as that guide, and resolves a guide's relative paths against the guide's own directory.
 
 #### Token effect
 
@@ -160,11 +160,11 @@ The system prompt does not change; loading or unloading the row, or a changed pa
 
 - Only macOS and Windows x64 are supported; other platforms are unverified. `@wecom/cli` publishes no Windows arm64 package.
 - Commands must run on this Host. When a composition runs them elsewhere, such as over SSH, the plugin still loads, and each command that runs `wecom-cli` fails because the path does not exist there.
-- The plugin uses the CLI's default configuration. Authorizing from DSH affects the user's own terminal, and there is no DSH-private bot or bot picker. `wecom-cli` cannot revoke the authorization, so neither the page nor turning the plugin off removes it; the page can only replace the bound bot with another one.
+- The plugin uses the CLI's default configuration. Authorizing from SNH affects the user's own terminal, and there is no SNH-private bot or bot picker. `wecom-cli` cannot revoke the authorization, so neither the page nor turning the plugin off removes it; the page can only replace the bound bot with another one.
 - Connection reads the QR-code link from the plain-text output of `auth init --noninteractive --no-browser`; a CLI version that changes that output fails the connection with a retryable result.
-- The guides follow upstream commit `4c74ff2`; updating them means a new pin from `scripts/upstream-skills-digest.ts`, after which the entry's index and DSH guidance must be checked against the new guides.
+- The guides follow upstream commit `4c74ff2`; updating them means a new pin from `scripts/upstream-skills-digest.ts`, after which the entry's index and SNH guidance must be checked against the new guides.
 - The first load after a new pin needs access to GitHub or a configured mirror; until a download succeeds, the agent has no `wecom` skill.
-- The downloaded guides stay in `$DSH_HOME/cache/wecom/` after the plugin is removed or pins another commit.
+- The downloaded guides stay in `$SNH_HOME/cache/wecom/` after the plugin is removed or pins another commit.
 - In the file sandbox, `wecom-cli` reads the saved authorization without writing, so commands run there until the saved token expires. It then cannot save the refreshed token in its configuration directory outside the workspace, and the command returns `errcode` 853004 with the server's upgrade advice. Rerunning that command needs one single-command approval, after which commands run in the sandbox again until the next expiry. The page's check reads only local state and does not refresh the token.
 
 <a id="dev-note"></a>

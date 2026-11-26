@@ -1,13 +1,13 @@
 /** Client inspection replies preserve child Session ownership through the shipped Web RPC path. */
 import { chromium } from 'playwright'
 import { expect, it } from 'vitest'
-import { Peer } from '@deepseek-ai/dsh-client-connection'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+import { Peer } from '@supernova-ai/snh-client-connection'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { SessionId } from '@supernova-ai/snh-session'
 import { launchWebScaffold } from './scaffold.ts'
 import { newEnglishPage } from './support.ts'
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@supernova-ai/snh-typert-protocol' {
   interface PrincipalMap {
     /** Test page permitted to use global RPCs but no Session. */
     'inspect-test-page': { readonly kind: 'inspect-test-page' }

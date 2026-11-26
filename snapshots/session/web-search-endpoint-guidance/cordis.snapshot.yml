@@ -1,19 +1,19 @@
 # Keyless replay counterpart: the failed search remains real; only the
 # conversation model adapter is replaced by replay.
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek-api-key'
+- id: llm-supernova
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
-- id: plugin-package-inventory-deepseek
+- id: plugin-package-inventory-supernova
   disabled: true
 
 - insert:
     - id: llm-replay
-      name: '@deepseek-ai/dsh-llm-replay'
+      name: '@supernova-ai/snh-llm-replay'
       config:
         providers:
           - id: deepseek-official
-            name: DeepSeek
+            name: SuperNova
             models:
               - id: deepseek-v4-flash
                 contextWindow: 1000000
@@ -25,16 +25,16 @@
     - id: web-search-error-fixture
       name: './web-search-error-fixture.mjs'
 
-- id: web-deepseek-api
-  name: '@deepseek-ai/dsh-web-deepseek-api'
+- id: web-supernova-api
+  name: '@supernova-ai/snh-web-supernova-api'
   config:
-    searchApiKeyEnv: DSH_SNAPSHOT_SEARCH_KEY
+    searchApiKeyEnv: SNH_SNAPSHOT_SEARCH_KEY
     # The fixture maps this recorded authority to its OS-assigned listener.
     searchBaseURL: http://127.0.0.1:43118/api/v1/tools
 
-# The conversation runs on a DeepSeek model route, where an unconfigured search selects Messages search.
+# The conversation runs on a SuperNova model route, where an unconfigured search selects Messages search.
 - id: web
-  name: '@deepseek-ai/dsh-web'
+  name: '@supernova-ai/snh-web'
   config:
-    searchProvider: deepseek-search-api
+    searchProvider: supernova-search-api
     fetchProvider: http

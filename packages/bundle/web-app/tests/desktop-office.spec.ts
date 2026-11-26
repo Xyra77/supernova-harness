@@ -4,32 +4,32 @@ import { mkdir, mkdtemp, realpath, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import { loadOverlayPatches } from '@deepseek-ai/dsh-app-boot'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import { dshHomePath } from '@deepseek-ai/dsh-home-paths'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import OfficeKit from '@deepseek-ai/dsh-office-kit'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { SESSION_FORMAT_VERSION, Session, type SessionId } from '@deepseek-ai/dsh-session'
-import { resolveKitModule } from '@deepseek-ai/dsh-office-kit/src/locate.ts'
-import SkillRegistry from '@deepseek-ai/dsh-skill'
-import * as SkillOffice from '@deepseek-ai/dsh-skill-office'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import * as ToolOffice from '@deepseek-ai/dsh-tool-office'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import * as WorkspaceDependencies from '@deepseek-ai/dsh-tool-workspace-dependencies'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import { loadOverlayPatches } from '@supernova-ai/snh-app-boot'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
+import LocalFileSystem from '@supernova-ai/snh-fs-local'
+import { snhHomePath } from '@supernova-ai/snh-home-paths'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import OfficeKit from '@supernova-ai/snh-office-kit'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { SESSION_FORMAT_VERSION, Session, type SessionId } from '@supernova-ai/snh-session'
+import { resolveKitModule } from '@supernova-ai/snh-office-kit/src/locate.ts'
+import SkillRegistry from '@supernova-ai/snh-skill'
+import * as SkillOffice from '@supernova-ai/snh-skill-office'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import * as ToolOffice from '@supernova-ai/snh-tool-office'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import * as WorkspaceDependencies from '@supernova-ai/snh-tool-workspace-dependencies'
 import { afterEach, expect, it, onTestFinished, vi } from 'vitest'
 
 // Kit presence is the deployment fact under test; every other row runs unmodified.
-vi.mock('@deepseek-ai/dsh-office-kit/src/locate.ts', async (original) => {
-  const actual = await original<typeof import('@deepseek-ai/dsh-office-kit/src/locate.ts')>()
+vi.mock('@supernova-ai/snh-office-kit/src/locate.ts', async (original) => {
+  const actual = await original<typeof import('@supernova-ai/snh-office-kit/src/locate.ts')>()
   return { ...actual, resolveKitModule: vi.fn(() => ({ kind: 'missing', error: new Error('Cannot find package') })) }
 })
 
@@ -49,8 +49,8 @@ function presetPlugins(preset: string): { id: string; name: string }[] {
 
 it('mounts the Office tools in the standard and PTC presets and omits it from the minimal preset', () => {
   const office = (preset: string) => presetPlugins(preset).filter(row => row.id === 'tool-office').map(row => row.name)
-  expect(office('standard')).toEqual(['@deepseek-ai/dsh-tool-office'])
-  expect(office('ptc')).toEqual(['@deepseek-ai/dsh-tool-office'])
+  expect(office('standard')).toEqual(['@supernova-ai/snh-tool-office'])
+  expect(office('ptc')).toEqual(['@supernova-ai/snh-tool-office'])
   expect(office('minimal')).toEqual([])
   const host = loadOverlayPatches('desktop-office', fileURLToPath(new URL('../cordis.patch.yml', import.meta.url)))
     .flatMap(patch => patch.insert ?? []).map(row => row.id)
@@ -58,10 +58,10 @@ it('mounts the Office tools in the standard and PTC presets and omits it from th
 })
 
 async function boot(profile: string, primaryRuntime: (root: string) => string | undefined, mounted: readonly string[] = ROWS) {
-  const root = await realpath(await mkdtemp(join(tmpdir(), 'dsh-desktop-office-rows-')))
+  const root = await realpath(await mkdtemp(join(tmpdir(), 'snh-desktop-office-rows-')))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
-  vi.stubEnv('DSH_HOME', join(root, 'home'))
-  vi.stubEnv('DSH_PRIMARY_RUNTIME', primaryRuntime(root))
+  vi.stubEnv('SNH_HOME', join(root, 'home'))
+  vi.stubEnv('SNH_PRIMARY_RUNTIME', primaryRuntime(root))
   const nodePath = join(root, 'primary-runtime', 'dependencies', 'node', 'bin', process.platform === 'win32' ? 'node.exe' : 'node')
   await mkdir(dirname(nodePath), { recursive: true })
   await writeFile(nodePath, '')
@@ -73,7 +73,7 @@ async function boot(profile: string, primaryRuntime: (root: string) => string | 
     name: profile, dir: '/profile', patchPath: '/profile/cordis.patch.yml', installAnchor: join(root, 'package.json'),
     cwd: workspace, home: '/home', startedBundles: [], overlayPaths: [], telemetryDisabledEnv: undefined,
   })
-  ctx.provide('dshHomePath', dshHomePath)
+  ctx.provide('snhHomePath', snhHomePath)
   provideWorkingDirectoryFixture(ctx, workspace)
   await ctx.plugin(SessionProjectionRegistry)
   await ctx.plugin(SystemPrompt)
@@ -120,7 +120,7 @@ it('mounts packaged Desktop skills with the primary runtime Python beside the Of
   const { ctx, root } = await boot('desktop', root => join(root, 'primary-runtime'))
   expect(ctx.loader.resolve('skill-office').fiber?.effectiveConfig).toStrictEqual({ pythonEnvironment: 'workspace-dependencies' })
   expect(ctx.loader.resolve('workspace-dependencies').fiber?.effectiveConfig).toEqual({
-    source: join(root, 'primary-runtime'), root: join(root, 'home', 'dsh-runtimes', 'dsh-primary-runtime'),
+    source: join(root, 'primary-runtime'), root: join(root, 'home', 'snh-runtimes', 'snh-primary-runtime'),
   })
   expect((await ctx.skills.list()).map(skill => skill.name)).toEqual(names)
   expect((await ctx.skills.get('office'))?.resourceBase).toEqual({ kind: 'directory', path: join(assets, 'office').split(sep).join('/') })

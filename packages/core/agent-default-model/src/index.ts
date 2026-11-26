@@ -1,20 +1,20 @@
 /**
  * Default model selection for an Agent without a session-specific selection.
  *
- * @module @deepseek-ai/dsh-agent-default-model
+ * @module @supernova-ai/snh-agent-default-model
  */
-import type {} from '@deepseek-ai/dsh-settings'
+import type {} from '@supernova-ai/snh-settings'
 
-import type { Volatile } from '@deepseek-ai/cordis'
+import type { Volatile } from '@supernova-ai/cordis'
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { ModelSelection } from '@deepseek-ai/dsh-agent'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import type {} from '@deepseek-ai/dsh-config-editor'
+import { Context, Service } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type { ModelSelection } from '@supernova-ai/snh-agent'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ReasoningEffortId } from '@supernova-ai/snh-llm'
+import type {} from '@supernova-ai/snh-config-editor'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** Default model selection for Agents created without an explicit model. */
     agentDefaultModel: AgentDefaultModelConfig

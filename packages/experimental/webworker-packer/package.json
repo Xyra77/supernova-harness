@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-experimental-webworker-packer",
+  "name": "@supernova-ai/snh-experimental-webworker-packer",
   "description": "Build-time packer for the browser runtime's base VFS image and ordered data-overlay archives",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -14,7 +14,7 @@
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
   "bin": {
-    "dsh-pack-vfs-image": "./bin.js"
+    "snh-pack-vfs-image": "./bin.js"
   },
   "exports": {
     ".": {
@@ -36,20 +36,20 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/cordis-plugin-include": "workspace:~",
-    "@deepseek-ai/dsh-app-boot": "workspace:*",
-    "@deepseek-ai/dsh-experimental-webworker-runtime": "workspace:*",
-    "@deepseek-ai/dsh-official-bundles": "workspace:*",
-    "@deepseek-ai/dsh-session-format": "workspace:*",
-    "@deepseek-ai/dsh-session-format-catalog": "workspace:*",
-    "@deepseek-ai/dsh-session-format-v3-to-v4": "workspace:*",
+    "@supernova-ai/cordis-plugin-include": "workspace:~",
+    "@supernova-ai/snh-app-boot": "workspace:*",
+    "@supernova-ai/snh-experimental-webworker-runtime": "workspace:*",
+    "@supernova-ai/snh-official-bundles": "workspace:*",
+    "@supernova-ai/snh-session-format": "workspace:*",
+    "@supernova-ai/snh-session-format-catalog": "workspace:*",
+    "@supernova-ai/snh-session-format-v3-to-v4": "workspace:*",
     "picomatch": "^4.0.7"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis": "workspace:~",
     "@types/picomatch": "^4.0.3"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

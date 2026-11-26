@@ -2,7 +2,7 @@
 
 English | [中文](worktrees.zh.md)
 
-The experimental [`dsh-experimental-worktree`](../../packages/experimental/worktree/README.md) service provides `ctx.worktrees`. Its [`enter_worktree`](../../packages/experimental/tool-worktree/README.md) consumer selects a checkout of the pool through the [working-directory service](working-directory.md), creating a new Git branch and checkout when none has the requested name, and `exit_worktree` returns to the checkout the Session came from. The [Change requests & worktrees bundle](../../packages/experimental/forge-bundle/README.md#use-this-package) loads both packages through the GUI plugin manager and ships switched off. Other profiles can select the [standalone worktree bundle](../../packages/experimental/tool-worktree/README.md#use-this-package) or mount the two packages explicitly.
+The experimental [`snh-experimental-worktree`](../../packages/experimental/worktree/README.md) service provides `ctx.worktrees`. Its [`enter_worktree`](../../packages/experimental/tool-worktree/README.md) consumer selects a checkout of the pool through the [working-directory service](working-directory.md), creating a new Git branch and checkout when none has the requested name, and `exit_worktree` returns to the checkout the Session came from. The [Change requests & worktrees bundle](../../packages/experimental/forge-bundle/README.md#use-this-package) loads both packages through the GUI plugin manager and ships switched off. Other profiles can select the [standalone worktree bundle](../../packages/experimental/tool-worktree/README.md#use-this-package) or mount the two packages explicitly.
 
 ## Creation and retention
 

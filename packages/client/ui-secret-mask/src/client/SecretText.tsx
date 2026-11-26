@@ -1,7 +1,7 @@
 /** Masked credential presentation with a per-value reveal control in interactive text. */
 import { useState } from 'react'
-import type { UserTextNodeProps } from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
+import type { UserTextNodeProps } from '@supernova-ai/snh-client-ui-conversation/client'
+import type { PropsLocale } from '@supernova-ai/snh-client-ui-slots'
 import type { NS } from './locales.ts'
 import { MASK } from './credential-masks.ts'
 import css from './SecretText.module.css'

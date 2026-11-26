@@ -1,11 +1,11 @@
 /** Model-facing discovery of LLM routes available to child Agents. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type LlmRuntime from '@deepseek-ai/dsh-llm'
-import type { LlmProviderInfo } from '@deepseek-ai/dsh-llm'
-import { defineTool, ToolArgsError, ToolContextUnavailableError } from '@deepseek-ai/dsh-tools'
-import { parentAgentOptionsForDelegation, SubagentError } from '@deepseek-ai/dsh-subagent'
-import type { ToolRunContext } from '@deepseek-ai/dsh-tools'
+import type { Context } from '@supernova-ai/cordis'
+import type LlmRuntime from '@supernova-ai/snh-llm'
+import type { LlmProviderInfo } from '@supernova-ai/snh-llm'
+import { defineTool, ToolArgsError, ToolContextUnavailableError } from '@supernova-ai/snh-tools'
+import { parentAgentOptionsForDelegation, SubagentError } from '@supernova-ai/snh-subagent'
+import type { ToolRunContext } from '@supernova-ai/snh-tools'
 import type { ModelSelectionPolicy } from './model-selection.ts'
 import type {} from './model-selection-settings.ts'
 import { hasText } from './model-selection.ts'

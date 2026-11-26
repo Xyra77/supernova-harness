@@ -1,6 +1,6 @@
 ﻿<# Remove only owned registrations; independently failed operations leave a diagnostic report. #>
 param([Parameter(Mandatory)][string]$Directory,
-    [string]$ExecutableName = 'DeepSeek Harness.exe',
+    [string]$ExecutableName = 'SuperNova Harness.exe',
     [Parameter(Mandatory)][string]$EnvironmentKey,
     [Parameter(Mandatory)][string]$OwnerKey,
     [Parameter(Mandatory)][string]$ProtocolKey,
@@ -19,19 +19,19 @@ $failures = [Collections.Generic.List[string]]::new()
 try {
     if (-not $MutexName -or $MutexName -eq 'default') {
         $sid = [Security.Principal.WindowsIdentity]::GetCurrent().User.Value
-        $MutexName = 'Global\DeepSeekHarness.Command.' + $sid
+        $MutexName = 'Global\SuperNovaHarness.Command.' + $sid
     }
     $options = @{ EnvironmentKey=$EnvironmentKey; OwnerKey=$OwnerKey; MachinePath=''; MutexName=$MutexName }
     $command = Join-Path $Directory 'resources\runtime\cli\bin'
-    $state = Invoke-DshCommandPath -Request @{operation='inspect'; directory=$command} @options
+    $state = Invoke-SnhCommandPath -Request @{operation='inspect'; directory=$command} @options
     if ($UnownedOnly) {
         if (-not $state.ownedDirectory) {
-            [void](Invoke-DshCommandPath -Request @{operation='remove'; directory=$command; expected=$state.fingerprint} @options -RemovedInstallation $Directory)
-            Send-DshCommandEnvironmentChange
+            [void](Invoke-SnhCommandPath -Request @{operation='remove'; directory=$command; expected=$state.fingerprint} @options -RemovedInstallation $Directory)
+            Send-SnhCommandEnvironmentChange
         }
     } elseif ($state.managed) {
-        [void](Invoke-DshCommandPath -Request @{operation='remove'; directory=$command; expected=$state.fingerprint} @options)
-        Send-DshCommandEnvironmentChange
+        [void](Invoke-SnhCommandPath -Request @{operation='remove'; directory=$command; expected=$state.fingerprint} @options)
+        Send-SnhCommandEnvironmentChange
     } elseif (-not $state.ownedDirectory -and $UnownedMarker) {
         [IO.File]::WriteAllText($UnownedMarker, '')
     }

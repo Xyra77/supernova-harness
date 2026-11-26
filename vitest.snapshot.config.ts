@@ -17,18 +17,18 @@ function positiveIntFromEnv(name: string, fallback: number): number {
 }
 
 const snapshotMaxConcurrency = positiveIntFromEnv(
-  'DSH_SNAPSHOT_MAX_CONCURRENCY',
+  'SNH_SNAPSHOT_MAX_CONCURRENCY',
   Math.min(DEFAULT_SNAPSHOT_MAX_CONCURRENCY, availableParallelism()),
 )
 
-const skipWebAdaptersRaw = process.env.DSH_SNAPSHOT_SKIP_WEB_ADAPTERS
+const skipWebAdaptersRaw = process.env.SNH_SNAPSHOT_SKIP_WEB_ADAPTERS
 if (skipWebAdaptersRaw !== undefined && skipWebAdaptersRaw !== '' && skipWebAdaptersRaw !== '1') {
-  throw new Error(`DSH_SNAPSHOT_SKIP_WEB_ADAPTERS must be 1 when set, got ${JSON.stringify(skipWebAdaptersRaw)}`)
+  throw new Error(`SNH_SNAPSHOT_SKIP_WEB_ADAPTERS must be 1 when set, got ${JSON.stringify(skipWebAdaptersRaw)}`)
 }
 const skipWebAdapters = skipWebAdaptersRaw === '1'
 
-const snapshotMaxWorkers = process.env.DSH_SNAPSHOT_MAX_WORKERS
-  ? positiveIntFromEnv('DSH_SNAPSHOT_MAX_WORKERS', availableParallelism())
+const snapshotMaxWorkers = process.env.SNH_SNAPSHOT_MAX_WORKERS
+  ? positiveIntFromEnv('SNH_SNAPSHOT_MAX_WORKERS', availableParallelism())
   : undefined
 
 // Replay is the keyless default: boot real subprocess paths from recorded model responses and diff
@@ -36,7 +36,7 @@ const snapshotMaxWorkers = process.env.DSH_SNAPSHOT_MAX_WORKERS
 // `record` calls the real API and updates fixtures and expected outputs; `refresh` replays committed scripts
 // and updates current expected outputs. Replay/refresh never load `.env`; only record reads a key from the
 // environment or root `.env`.
-if (process.env.DSH_SNAPSHOT === 'record') {
+if (process.env.SNH_SNAPSHOT === 'record') {
   try {
     process.loadEnvFile(new URL('.env', import.meta.url).pathname)
   } catch (error) {
@@ -58,9 +58,9 @@ export default defineConfig({
       'scripts/session-snapshot-corpus.corpus.ts',
       // The assembled Web snapshot executes generated client bundles; source
       // mode remains the zero-build path, while lib mode requires a prior build.
-      // DSH_SNAPSHOT_SKIP_WEB_ADAPTERS=1 (only unset or 1) drops them for a CI
+      // SNH_SNAPSHOT_SKIP_WEB_ADAPTERS=1 (only unset or 1) drops them for a CI
       // lane whose web snapshot shards already run these files.
-      ...(process.env.DSH_EXAMPLE_MODE === 'lib' && !skipWebAdapters ? ['apps/web/tests/**/*.snapshot.ts'] : []),
+      ...(process.env.SNH_EXAMPLE_MODE === 'lib' && !skipWebAdapters ? ['apps/web/tests/**/*.snapshot.ts'] : []),
       'snapshots/**/*.snapshot.ts',
     ],
     // Replay never writes committed outputs and every scenario owns its
@@ -73,7 +73,7 @@ export default defineConfig({
     // disk, so concurrent writers would corrupt expected outputs.
     testTimeout: 120_000,
     hookTimeout: 30_000,
-    fileParallelism: (process.env.DSH_SNAPSHOT || 'replay') === 'replay'
+    fileParallelism: (process.env.SNH_SNAPSHOT || 'replay') === 'replay'
       && (snapshotMaxWorkers ?? snapshotMaxConcurrency) > 1,
     maxConcurrency: snapshotMaxConcurrency,
     ...snapshotMaxWorkers === undefined ? {} : { maxWorkers: snapshotMaxWorkers },

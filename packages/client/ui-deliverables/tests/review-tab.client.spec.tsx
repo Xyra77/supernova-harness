@@ -4,13 +4,13 @@ import { renderFileActions } from './file-actions.tsx'
 import { useSyncExternalStore } from 'react'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { SessionListState } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { TabId } from '@deepseek-ai/dsh-client-ui-dockkit'
-import type { SidebarRightTabActions } from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { fileAddressFor } from '@deepseek-ai/dsh-util-workspace-path'
-import type { WorkspaceDiffHunk } from '@deepseek-ai/dsh-workspace-changes/types'
+import type { SessionListState } from '@supernova-ai/snh-api-session-controller/client'
+import type { TabId } from '@supernova-ai/snh-client-ui-dockkit'
+import type { SidebarRightTabActions } from '@supernova-ai/snh-client-ui-sidebar-right/client'
+import { makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { fileAddressFor } from '@supernova-ai/snh-util-workspace-path'
+import type { WorkspaceDiffHunk } from '@supernova-ai/snh-workspace-changes/types'
 import {
   changesDiffUrl, changesReviewAddress, changesSummaryUrl, parseChangesReviewAddress, type ChangesDiff, type ChangesSummary,
 } from '../src/changes.ts'
@@ -24,7 +24,7 @@ import { hunkRows, MAX_RENDERED_LINES, renderedHunks, splitRows } from '../src/c
 import { changesReviewDefinition } from '../src/client/review-definition.ts'
 import { createReviewStore } from '../src/client/review-store.ts'
 import { en, zh } from '../src/client/locales.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 afterEach(() => {
   cleanup()
@@ -65,16 +65,16 @@ function hookOf<T>(inst: { subscribe: (fn: () => void) => () => void; getSnapsho
 
 describe('review addresses', () => {
   it('round-trips coordinates and titles the tab by the turn', () => {
-    expect(ADDRESS).toBe('dsh-resource://changes-review/session/viewed/5/2')
+    expect(ADDRESS).toBe('snh-resource://changes-review/session/viewed/5/2')
     expect(parseChangesReviewAddress(ADDRESS)).toEqual(COORDINATES)
     const definition = changesReviewDefinition(makeTranslate(zh))
-    expect(definition).toMatchObject({ kind: 'changes-review', priority: 'builtin', patterns: ['dsh-resource://changes-review/**'] })
+    expect(definition).toMatchObject({ kind: 'changes-review', priority: 'builtin', patterns: ['snh-resource://changes-review/**'] })
     expect(definition.canOpen?.(ADDRESS)).toBe(true)
     expect(definition.title(ADDRESS)).toBe('第 2 轮改动')
     for (const bad of [
-      'dsh-resource://file/session/viewed/a.ts', 'dsh-resource://changes-review/session/viewed/5',
-      'dsh-resource://changes-review/session//5/2', 'dsh-resource://changes-review/session/viewed/x/2',
-      'dsh-resource://changes-review/session/viewed/5/0', 'dsh-resource://changes-review/session/%E0%A4%A/5/2',
+      'snh-resource://file/session/viewed/a.ts', 'snh-resource://changes-review/session/viewed/5',
+      'snh-resource://changes-review/session//5/2', 'snh-resource://changes-review/session/viewed/x/2',
+      'snh-resource://changes-review/session/viewed/5/0', 'snh-resource://changes-review/session/%E0%A4%A/5/2',
     ]) {
       expect(parseChangesReviewAddress(bad)).toBeUndefined()
       expect(definition.canOpen?.(bad)).toBe(false)
@@ -423,7 +423,7 @@ describe('ReviewTab', () => {
 
   it('refuses an address it did not mint', () => {
     const error = vi.spyOn(console, 'error').mockImplementation(() => undefined)
-    expect(() => mount({ address: 'dsh-resource://file/session/viewed/a.ts' })).toThrow('not a review address')
+    expect(() => mount({ address: 'snh-resource://file/session/viewed/a.ts' })).toThrow('not a review address')
     error.mockRestore()
   })
 })

@@ -1,24 +1,24 @@
-import { Service } from '@deepseek-ai/cordis'
+import { Service } from '@supernova-ai/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry, { agentEvents } from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage, HarnessError } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
-import SessionStore, { Session, type SessionId, type UserMessage } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { GoalId } from '@deepseek-ai/dsh-goal/types'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry, { agentEvents } from '@supernova-ai/snh-agent'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { createUserMessage, HarnessError } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
+import SessionStore, { Session, type SessionId, type UserMessage } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { GoalId } from '@supernova-ai/snh-goal/types'
 import GoalService, {
   GoalError,
   decodeGoalChange,
   foldGoal,
-} from '@deepseek-ai/dsh-goal'
-import type { GoalChangeMeta, GoalRef, GoalSnapshotChangeMeta } from '@deepseek-ai/dsh-goal'
-import { unsupportedModel, createInboxStub } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { remoteMethods } from '@deepseek-ai/dsh-typert-protocol'
+} from '@supernova-ai/snh-goal'
+import type { GoalChangeMeta, GoalRef, GoalSnapshotChangeMeta } from '@supernova-ai/snh-goal'
+import { unsupportedModel, createInboxStub } from '@supernova-ai/snh-agent-loop-testkit'
+import { remoteMethods } from '@supernova-ai/snh-typert-protocol'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'test': { kind: 'test' } & ContextFormed
     'ordinary-user-message': { kind: 'ordinary-user-message' } & ContextFormed
@@ -80,7 +80,7 @@ function stubAgentForSession(session: Session, suppliedCtx?: Context): StubAgent
 /** Build a registry-compatible agent around a fresh session. */
 function stubAgent(
   rawId: string,
-  seed?: readonly import('@deepseek-ai/dsh-session').SessionEvent[],
+  seed?: readonly import('@supernova-ai/snh-session').SessionEvent[],
   ctx?: Context,
 ): StubAgent {
   const session = ctx === undefined

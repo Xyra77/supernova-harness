@@ -1,11 +1,11 @@
 /**
  * Scripted owner the assembled viewer page tests read a share from: the page renders a session
- * history without a Relay, an owner DSH, or fixture code inside the page's plugins.
+ * history without a Relay, an owner SNH, or fixture code inside the page's plugins.
  *
  * A spec names the situation it needs on the served address and the owner reads those switches
  * ({@link fixtureOptionsFromLocation}), so the query stays the one place a spec states its world.
  *
- * @module @deepseek-ai/dsh-experimental-liveshare/tests/viewer-fixture
+ * @module @supernova-ai/snh-experimental-liveshare/tests/viewer-fixture
  */
 
 import {
@@ -13,10 +13,10 @@ import {
   createSystemMessage,
   createToolResultMessage,
   createUserMessage,
-} from '@deepseek-ai/dsh-llm/message'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { RemoteAccessFrame, RemoteAccessGrant } from '@deepseek-ai/dsh-api-remote-access/client'
-import type { MessageId, ReasoningEffortId, ToolCallId } from '@deepseek-ai/dsh-llm/types'
+} from '@supernova-ai/snh-llm/message'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { RemoteAccessFrame, RemoteAccessGrant } from '@supernova-ai/snh-api-remote-access/client'
+import type { MessageId, ReasoningEffortId, ToolCallId } from '@supernova-ai/snh-llm/types'
 import type {
   AssistantMessage,
   ContentBlock,
@@ -25,18 +25,18 @@ import type {
   TokenUsage,
   ToolResultMessage,
   UserMessage,
-} from '@deepseek-ai/dsh-llm'
-import type { LlmAttemptId } from '@deepseek-ai/dsh-llm/types'
+} from '@supernova-ai/snh-llm'
+import type { LlmAttemptId } from '@supernova-ai/snh-llm/types'
 import {
   AssistantStreamAccumulator,
   expandAssistantStream,
   type AssistantStreamRecord,
-} from '@deepseek-ai/dsh-llm/assistant-stream'
-import type { AttachmentIdType, ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import type { RetryId } from '@deepseek-ai/dsh-llm-retry/types'
-import type { SessionTitleEventData, SessionTitleProviderId } from '@deepseek-ai/dsh-session-title/types'
-import type {} from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-tool-present/types'
+} from '@supernova-ai/snh-llm/assistant-stream'
+import type { AttachmentIdType, ImageAttachmentRef } from '@supernova-ai/snh-attachment'
+import type { RetryId } from '@supernova-ai/snh-llm-retry/types'
+import type { SessionTitleEventData, SessionTitleProviderId } from '@supernova-ai/snh-session-title/types'
+import type {} from '@supernova-ai/snh-agent'
+import type {} from '@supernova-ai/snh-tool-present/types'
 import type {
   SessionEvent,
   SessionEventMap,
@@ -45,20 +45,20 @@ import type {
   SessionSeqCursor,
   SurfaceEventType,
   SurfaceOp,
-} from '@deepseek-ai/dsh-session/types'
-import { SESSION_FORMAT_VERSION, SessionSeq } from '@deepseek-ai/dsh-session/types'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
-import type { TodoItem } from '@deepseek-ai/dsh-tool-todo/client'
-import type { CommandDefinitionId, CommandId, CommandDescriptor, CommandExecution, CommandResult } from '@deepseek-ai/dsh-commands/types'
-import type { CredentialInfo } from '@deepseek-ai/dsh-credentials/types'
-import type { DirectoryListing as FixtureDirectoryListing } from '@deepseek-ai/dsh-host-directory-picker/types'
-import type { SettingsDescribeValue, SettingsNamespaceView } from '@deepseek-ai/dsh-settings/types'
-import { deriveEventMessage, foldSurface } from '@deepseek-ai/dsh-session/surface'
+} from '@supernova-ai/snh-session/types'
+import { SESSION_FORMAT_VERSION, SessionSeq } from '@supernova-ai/snh-session/types'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
+import type { TodoItem } from '@supernova-ai/snh-tool-todo/client'
+import type { CommandDefinitionId, CommandId, CommandDescriptor, CommandExecution, CommandResult } from '@supernova-ai/snh-commands/types'
+import type { CredentialInfo } from '@supernova-ai/snh-credentials/types'
+import type { DirectoryListing as FixtureDirectoryListing } from '@supernova-ai/snh-host-directory-picker/types'
+import type { SettingsDescribeValue, SettingsNamespaceView } from '@supernova-ai/snh-settings/types'
+import { deriveEventMessage, foldSurface } from '@supernova-ai/snh-session/surface'
 import type {
   ClientConnectionRpc, ConnectionRpcFailure, ConnectionRpcResult, RpcResult,
-} from '@deepseek-ai/dsh-client-connection/client'
+} from '@supernova-ai/snh-client-connection/client'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     /** Fixture-authored context injection, namespaced as the v3-to-v4 migration names external producers. */
     'plugin:fixture': { kind: 'plugin:fixture' }
@@ -72,19 +72,19 @@ declare module '@deepseek-ai/dsh-llm' {
  * message source above) and its fabricated log stays a real discriminated
  * {@link SessionEvent} union.
  */
-declare module '@deepseek-ai/dsh-session/types' {
+declare module '@supernova-ai/snh-session/types' {
   interface SessionEventMap {
     /** Host-only title event uses the title domain's client-safe payload. */
     'session/title': SessionTitleEventData
     /** Host-only approval override, matching the current user-approval declaration. */
     'approval/policy': { policy: 'ask' | 'never'; source?: 'delegation' }
-    /** Mirrors `@deepseek-ai/dsh-permission-presets`'s durable preset intent. */
+    /** Mirrors `@supernova-ai/snh-permission-presets`'s durable preset intent. */
     'permission/preset': { preset: string }
-    /** Mirrors `@deepseek-ai/dsh-sandbox-policy`'s durable sandbox-mode switch. */
+    /** Mirrors `@supernova-ai/snh-sandbox-policy`'s durable sandbox-mode switch. */
     'sandbox/mode': { mode: string }
-    /** Mirrors `@deepseek-ai/dsh-plan-mode`'s log-only plan-mode switch. */
+    /** Mirrors `@supernova-ai/snh-plan-mode`'s log-only plan-mode switch. */
     'plan/mode': { active: boolean }
-    /** Mirrors `@deepseek-ai/dsh-goal`'s durable goal mutation. */
+    /** Mirrors `@supernova-ai/snh-goal`'s durable goal mutation. */
     'goal/change': FxGoalChange
   }
 }
@@ -609,7 +609,7 @@ const MARKDOWN_FIXTURE = [
   '| history | rendered |',
   '| streaming | stable |',
   '',
-  '[DeepSeek](https://www.deepseek.com)',
+  '[SuperNova](https://www.deepseek.com)',
   '',
   '```ts',
   'const markdown = true',
@@ -753,11 +753,11 @@ const READ_SAMPLE_TEXT = [
  * titled source without a snippet; `truncated` exercises the capped indicator.
  */
 const WEB_SEARCH_META = {
-  answer: 'DeepSeek Harness is a plugin-based agent harness on vendored Cordis where **every capability is a plugin**.',
+  answer: 'SuperNova Harness is a plugin-based agent harness on vendored Cordis where **every capability is a plugin**.',
   sources: [
     {
       url: 'https://github.com/deepseek-ai/deepseek-harness',
-      title: 'DeepSeek Harness — plugin-based agent harness',
+      title: 'SuperNova Harness — plugin-based agent harness',
       snippet: 'Everything is a plugin: session, tools, agent-loop, and LLM adapters all mount on the same Cordis context.',
       publishedAt: '2026-07-01',
     },
@@ -805,7 +805,7 @@ function fixtureModelGroups(): ModelProviderGroup[] {
   return [
     {
       id: 'deepseek-official',
-      name: 'DeepSeek',
+      name: 'SuperNova',
       models: [
         {
           id: 'deepseek-v4-flash',
@@ -874,7 +874,7 @@ function fixtureSettledStream(
 }
 
 /** Rendered system prompt of the fx-alpha history: surface node 0. */
-const FIXTURE_SYSTEM_PROMPT = '你是 DeepSeek Harness 的 fixture 助手。用简洁的中文回答，并在需要时调用工具。'
+const FIXTURE_SYSTEM_PROMPT = '你是 SuperNova Harness 的 fixture 助手。用简洁的中文回答，并在需要时调用工具。'
 
 /** fx-alpha history script: 75 turns (~150+ messages -> 4 pages at PAGE_MESSAGES=50),
  *  mixing reasoning blocks / tool call+result / context. */
@@ -1148,8 +1148,8 @@ function buildAlphaLog(presented = false): SessionEvent[] {
   toolTurn(
     70,
     'web_search',
-    '{"queries":["deepseek harness architecture"]}',
-    'Search results for deepseek harness architecture.',
+    '{"queries":["supernova harness architecture"]}',
+    'Search results for supernova harness architecture.',
     WEB_SEARCH_META,
   )
   toolTurn(
@@ -1866,7 +1866,7 @@ function backscanTodos(log: readonly SessionEvent[]): TodoItem[] | undefined {
   return undefined
 }
 
-/** Fixture-local mirror of the goal projection value (dsh-goal's GoalProjection shape). */
+/** Fixture-local mirror of the goal projection value (snh-goal's GoalProjection shape). */
 interface FxGoalProjection {
   goal: {
     id: string
@@ -2064,13 +2064,13 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
   /** Credential store double: set/unset flip the describe badge, values never read back. */
   const fixtureCredentials = new Map<string, true>([
     // The assembled fixture represents an already-configured shipped
-    // DeepSeek route so unrelated GUI journeys do not enter first-run setup.
+    // SuperNova route so unrelated GUI journeys do not enter first-run setup.
     ['DEEPSEEK_API_KEY', true],
   ])
 
   /** Canonical fixture implementation of the generated Settings Remote contract. */
   const settingsRemotes = {
-    // Only the resolved DeepSeek address needed by first-run readiness is
+    // Only the resolved SuperNova address needed by first-run readiness is
     // represented here. Fixture-backed journeys do not open its Models editor;
     // real schema-driven forms ride the HTTP transport.
     describe(): RpcResult<SettingsDescribeValue> {
@@ -2080,7 +2080,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
           writable: true,
           hasDocument: true,
           namespaces: [{
-            ns: 'llm-deepseek',
+            ns: 'llm-supernova',
             autoGenerate: true,
             schema: {},
             value: { apiKeyEnv: 'DEEPSEEK_API_KEY' },
@@ -2170,9 +2170,9 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
    * roster a GUI journey sees after writing is the text it wrote.
    */
   const fixturePresets = new Map<string, { trust: 'system' | 'user'; content: string }>([
-    ['standard', { trust: 'system', content: "- id: tool-bash\n  name: '@deepseek-ai/dsh-tool-bash'\n" }],
-    ['minimal', { trust: 'system', content: "- id: tool-web-search\n  name: '@deepseek-ai/dsh-tool-web-search'\n" }],
-    ['my-agent', { trust: 'user', content: "- id: tool-read\n  name: '@deepseek-ai/dsh-tool-read'\n" }],
+    ['standard', { trust: 'system', content: "- id: tool-bash\n  name: '@supernova-ai/snh-tool-bash'\n" }],
+    ['minimal', { trust: 'system', content: "- id: tool-web-search\n  name: '@supernova-ai/snh-tool-web-search'\n" }],
+    ['my-agent', { trust: 'user', content: "- id: tool-read\n  name: '@supernova-ai/snh-tool-read'\n" }],
   ])
   let fixtureDefaultPreset = 'standard'
   const nextTurn = new Map<SessionId, number>([[sid('fx-alpha'), 75]])
@@ -2225,8 +2225,8 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
     ['/home', ['fixture']],
     [FIXTURE_HOME, ['Documents', 'Downloads', '.config']],
     [`${FIXTURE_HOME}/Documents`, [
-      'project', 'deepseek-iOS', 'deepseek-android', 'deepseek-platform',
-      'deepseek-web', 'deepseek-harness', 'deepseek-app', 'deepseek-landing-blog',
+      'project', 'supernova-iOS', 'supernova-android', 'supernova-platform',
+      'supernova-web', 'supernova-harness', 'supernova-app', 'supernova-landing-blog',
     ]],
   ])
   const childrenOf = (path: string): string[] | undefined => {
@@ -2535,9 +2535,9 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
         value: [
           { name: 'compact', description: 'fixture：压缩当前会话上下文' },
           { name: 'echo', description: 'fixture：回显参数', input: { hint: 'text to echo' } },
-          { definitionId: brandString<CommandDefinitionId>('@deepseek-ai/dsh-command-goal'), name: 'goal', description: 'Set or view the goal for a long-running task', input: { hint: '<objective>', attachments: true } },
-          { definitionId: brandString<CommandDefinitionId>('@deepseek-ai/dsh-permission-presets'), name: 'permission', description: 'Switch the permission preset (sandbox mode + approval policy)', input: { hint: '<preset>' } },
-          { definitionId: brandString<CommandDefinitionId>('@deepseek-ai/dsh-plan-mode'), name: 'plan', description: 'Enter or leave plan mode', input: { hint: '[off|message]', attachments: true } },
+          { definitionId: brandString<CommandDefinitionId>('@supernova-ai/snh-command-goal'), name: 'goal', description: 'Set or view the goal for a long-running task', input: { hint: '<objective>', attachments: true } },
+          { definitionId: brandString<CommandDefinitionId>('@supernova-ai/snh-permission-presets'), name: 'permission', description: 'Switch the permission preset (sandbox mode + approval policy)', input: { hint: '<preset>' } },
+          { definitionId: brandString<CommandDefinitionId>('@supernova-ai/snh-plan-mode'), name: 'plan', description: 'Enter or leave plan mode', input: { hint: '[off|message]', attachments: true } },
         ],
       }
     },
@@ -2688,7 +2688,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
             label,
             ...item.cwd === undefined ? {} : { cwd: item.cwd },
             createdAt: item.updatedAt,
-            mention: `@[${label}](dsh-session:${encoded})`,
+            mention: `@[${label}](snh-session:${encoded})`,
           }
         })
       return { ok: true, value }
@@ -3508,7 +3508,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
       })
       // The host echoes the prompt's requestId as the user source's rpcId;
       // the Session object retires its local submission echo on it. The
-      // user-rpc source member is declared by dsh-api-session-controller,
+      // user-rpc source member is declared by snh-api-session-controller,
       // which this standalone fixture does not import — hence the assertion.
       const promptSource = { kind: 'user', rpcId: request.requestId } as MessageSource
       if (mode === 'steer' && replays.has(id)) {
@@ -3530,7 +3530,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
       // Capacity parallel of the host token-meter's request/context record:
       // log-only, appended inside the open turn, and deduplicated against the
       // route already recorded (the fixture never varies contextWindow).
-      const selection = modelSelections.get(id) ?? { provider: 'deepseek', model: 'deepseek-v4-flash' }
+      const selection = modelSelections.get(id) ?? { provider: 'supernova', model: 'deepseek-v4-flash' }
       const previousHeader = logOf(id).findLast(event => event.type === 'request/header')
       const previousSelection = previousHeader?.type === 'request/header'
         ? {
@@ -4122,7 +4122,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
         case 'llm/listProviders': return Promise.resolve({
           ok: true,
           value: [
-            { id: 'deepseek-official', name: 'DeepSeek' },
+            { id: 'deepseek-official', name: 'SuperNova' },
             { id: 'openai', name: 'openai' },
             { id: 'acme-gateway', name: 'Acme Gateway' },
           ],
@@ -4130,7 +4130,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
         case 'llm/listConfigurableProviders': return Promise.resolve({
           ok: true,
           value: [
-            { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [] },
+            { provider: 'deepseek-official', displayName: 'SuperNova', settingsNs: 'llm-supernova', settingsPath: [] },
             { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'], declared: false },
             { provider: 'anthropic', displayName: 'anthropic', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'anthropic'], declared: false },
             { provider: 'acme-gateway', displayName: 'Acme Gateway', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'acme-gateway'], declared: true },

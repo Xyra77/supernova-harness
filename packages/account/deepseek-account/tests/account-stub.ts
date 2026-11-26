@@ -1,5 +1,5 @@
-/** `deepseekAccount` stand-ins for consumers of the account's request credential. */
-import type { DeepSeekAccount } from '../src/index.ts'
+/** `supernovaAccount` stand-ins for consumers of the account's request credential. */
+import type { SuperNovaAccount } from '../src/index.ts'
 import { ACCOUNT_TOKEN_HEADER } from '../src/protocol.ts'
 
 /** Token policy and rejection observer of one stand-in. */
@@ -18,9 +18,9 @@ export interface AccountStubOptions {
  * @param options - token policy, rejection observer, and sign-out signal.
  * @returns the stand-in, typed as the service for `ctx.provide`.
  */
-export function accountStub(options: AccountStubOptions): DeepSeekAccount {
+export function accountStub(options: AccountStubOptions): SuperNovaAccount {
   const signedOut = options.signedOut ?? new AbortController().signal
-  const stub: Pick<DeepSeekAccount, 'resolveRequestCredential'> = {
+  const stub: Pick<SuperNovaAccount, 'resolveRequestCredential'> = {
     async resolveRequestCredential(url) {
       const token = await options.token(url)
       if (token === undefined || token.length === 0) return undefined
@@ -34,5 +34,5 @@ export function accountStub(options: AccountStubOptions): DeepSeekAccount {
       }
     },
   }
-  return stub as DeepSeekAccount
+  return stub as SuperNovaAccount
 }

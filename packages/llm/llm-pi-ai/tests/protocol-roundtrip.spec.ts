@@ -1,11 +1,11 @@
 /** Cross-protocol requests must not overwrite the history needed by its original provider. */
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import LlmRuntime, { createToolResultMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { Message } from '@deepseek-ai/dsh-llm'
-import * as LlmPiAi from '@deepseek-ai/dsh-llm-pi-ai'
-import * as DeepSeek from '@deepseek-ai/dsh-llm-deepseek-api-key'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
+import { Context } from '@supernova-ai/cordis'
+import LlmRuntime, { createToolResultMessage, createUserMessage } from '@supernova-ai/snh-llm'
+import type { Message } from '@supernova-ai/snh-llm'
+import * as LlmPiAi from '@supernova-ai/snh-llm-pi-ai'
+import * as SuperNova from '@supernova-ai/snh-llm-supernova-api-key'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import { assemble } from './assemble.ts'
 import { anthropicFrame, closeMockServers, mockServer } from './mock-server.ts'
 
@@ -132,8 +132,8 @@ describe('protocol history round trips', () => {
         'route-b': { api: b, baseURL: target.url, apiKeyEnv: 'PROTOCOL_ROUNDTRIP_KEY', cacheRetention: 'none', models: [{ id: 'model' }] },
       },
     } })
-    await ctx.plugin(DeepSeekAuth)
-    if (b === 'deepseek-messages') await ctx.plugin(DeepSeek, {
+    await ctx.plugin(SuperNovaAuth)
+    if (b === 'deepseek-messages') await ctx.plugin(SuperNova, {
       baseURL: target.url, apiKeyEnv: 'PROTOCOL_ROUNDTRIP_KEY', models: [{ id: 'model' }], thinking: 'disabled',
     })
     let history: Message[] = [createUserMessage({ source: { kind: 'user' }, content: [{ type: 'text', text: 'Look up both values.' }] })]

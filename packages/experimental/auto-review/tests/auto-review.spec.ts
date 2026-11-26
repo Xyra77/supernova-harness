@@ -1,14 +1,14 @@
-import { executeToolFixture, executeModelToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import { executeToolFixture, executeModelToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { externalTestParent } from '../../../subagent/subagent/tests/external-activation-helpers.ts'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { Context, FiberState } from '@deepseek-ai/cordis'
-import AgentRegistry, { type Agent } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-agent-instructions'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { CompactionId } from '@deepseek-ai/dsh-compaction/types'
-import { compactCheckpointSource } from '@deepseek-ai/dsh-compaction'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
+import { Context, FiberState } from '@supernova-ai/cordis'
+import AgentRegistry, { type Agent } from '@supernova-ai/snh-agent'
+import type {} from '@supernova-ai/snh-agent-instructions'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { CompactionId } from '@supernova-ai/snh-compaction/types'
+import { compactCheckpointSource } from '@supernova-ai/snh-compaction'
 import LlmRuntime, {
   createMessage,
   createSystemMessage,
@@ -20,30 +20,30 @@ import LlmRuntime, {
   type GenerateOptions,
   type StreamChunk,
   type ToolSchema,
-} from '@deepseek-ai/dsh-llm'
+} from '@supernova-ai/snh-llm'
 import PermissionPresetService, {
   AUTO_PRESET,
   type Config as PermissionConfig,
-} from '@deepseek-ai/dsh-permission-presets'
+} from '@supernova-ai/snh-permission-presets'
 import SessionStore, {
   type SessionId,
   SessionLogOffset,
   type Session,
   type SessionEvent,
-} from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+} from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import SubagentRuntime, {
   NO_START_CAPABILITIES,
   SUBAGENT_DESCRIPTOR_VERSION,
   type SubagentStartRequest,
-} from '@deepseek-ai/dsh-subagent'
-import type {} from '@deepseek-ai/dsh-shell'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import * as ToolSubagent from '@deepseek-ai/dsh-tool-subagent'
-import ToolRuntime, { RUN_CODE_NAME, TOOL_ABORTED_BEFORE_DISPATCH, type PreToolDecision, type ToolExecutionToken } from '@deepseek-ai/dsh-tools'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import ApprovalService, { setApprovalPolicy, type ApprovalOutcome } from '@deepseek-ai/dsh-user-approval'
-import * as AutoReview from '@deepseek-ai/dsh-experimental-auto-review'
+} from '@supernova-ai/snh-subagent'
+import type {} from '@supernova-ai/snh-shell'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import * as ToolSubagent from '@supernova-ai/snh-tool-subagent'
+import ToolRuntime, { RUN_CODE_NAME, TOOL_ABORTED_BEFORE_DISPATCH, type PreToolDecision, type ToolExecutionToken } from '@supernova-ai/snh-tools'
+import { defineContentToolFixture } from '@supernova-ai/snh-tool-testkit'
+import ApprovalService, { setApprovalPolicy, type ApprovalOutcome } from '@supernova-ai/snh-user-approval'
+import * as AutoReview from '@supernova-ai/snh-experimental-auto-review'
 
 const EXPECTED_REVIEW_POLICY = `REVIEW_POLICY
 You are the final authorization reviewer for exactly one pending tool call. Your decision replaces human approval for this call. If you allow it, the call executes immediately with full host access and no later confirmation.

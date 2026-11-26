@@ -1,6 +1,6 @@
 /** Literal display for text-derived quote nodes. */
-import { QuotePreview } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { UserTextNodeProps } from '@deepseek-ai/dsh-client-ui-conversation/client'
+import { QuotePreview } from '@supernova-ai/snh-client-ui-primitives'
+import type { UserTextNodeProps } from '@supernova-ai/snh-client-ui-conversation/client'
 
 /**
  * Display decoded quote text without further interpretation.

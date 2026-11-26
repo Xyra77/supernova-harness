@@ -1,13 +1,13 @@
-/** Canonical tool-definition fixtures for repository tests. @module @deepseek-ai/dsh-tool-testkit */
+/** Canonical tool-definition fixtures for repository tests. @module @supernova-ai/snh-tool-testkit */
 
-import type { Context } from '@deepseek-ai/cordis'
-import { ToolExecutionPipeline } from '@deepseek-ai/dsh-tools/pipeline'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import { defineTool } from '@deepseek-ai/dsh-tools'
+import type { Context } from '@supernova-ai/cordis'
+import { ToolExecutionPipeline } from '@supernova-ai/snh-tools/pipeline'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import { defineTool } from '@supernova-ai/snh-tools'
 import type {
   DefineToolOptions, InferArgs, ParameterSchemaSpec, ToolDefinition,
   ToolExecutionInput, ToolExecutionResult, ToolRunContext,
-} from '@deepseek-ai/dsh-tools'
+} from '@supernova-ai/snh-tools'
 
 // Expand interface fields so the fixture's content value is checked as JSON without changing runtime values.
 type JsonFields<T> = T extends string | number | boolean | null | undefined ? T

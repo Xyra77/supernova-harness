@@ -1,5 +1,5 @@
-import type { Context } from '@deepseek-ai/cordis'
-import type { ToolExecutionInput, ToolExecutionResult } from '@deepseek-ai/dsh-tools'
+import type { Context } from '@supernova-ai/cordis'
+import type { ToolExecutionInput, ToolExecutionResult } from '@supernova-ai/snh-tools'
 
 /** Dispatch one fixture call through the selected Harness tool executor. */
 export async function executeTool(

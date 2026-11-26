@@ -2,11 +2,11 @@
 using System.Runtime.ExceptionServices;
 using System.Text;
 
-namespace DeepSeek.Cua.Windows;
+namespace SuperNova.Cua.Windows;
 
 internal sealed class NativeExceptionLog : IDisposable
 {
-    private readonly string path = Path.Combine(AppContext.BaseDirectory, "dsh-cua-windows.log");
+    private readonly string path = Path.Combine(AppContext.BaseDirectory, "snh-cua-windows.log");
     private readonly object gate = new();
     private bool writing;
     private bool disposed;

@@ -38,8 +38,8 @@ function travel(text: HTMLElement): void {
   if (text.dataset.marquee !== undefined) return
   const range = text.scrollWidth - text.clientWidth
   if (range <= MIN_REVEAL_PX) return
-  text.style.setProperty('--dsh-marquee-range', `${range}px`)
-  text.style.setProperty('--dsh-marquee-duration', `${Math.round(range / PX_PER_MS)}ms`)
+  text.style.setProperty('--snh-marquee-range', `${range}px`)
+  text.style.setProperty('--snh-marquee-duration', `${Math.round(range / PX_PER_MS)}ms`)
   text.dataset.marquee = ''
 }
 
@@ -50,8 +50,8 @@ function travel(text: HTMLElement): void {
  */
 function rest(text: HTMLElement): void {
   delete text.dataset.marquee
-  text.style.removeProperty('--dsh-marquee-range')
-  text.style.removeProperty('--dsh-marquee-duration')
+  text.style.removeProperty('--snh-marquee-range')
+  text.style.removeProperty('--snh-marquee-duration')
 }
 
 /**

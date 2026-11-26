@@ -1,16 +1,16 @@
 // @vitest-environment jsdom
-import { SlotTestRuntime } from '@deepseek-ai/dsh-client-test-runtime'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { MenuRegistry } from '@deepseek-ai/dsh-client-ui-context-menu/src/client/registry.ts'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { ContextMenuTarget } from '@deepseek-ai/dsh-client-ui-context-menu/client'
-import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
+import { SlotTestRuntime } from '@supernova-ai/snh-client-test-runtime'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import { MenuRegistry } from '@supernova-ai/snh-client-ui-context-menu/src/client/registry.ts'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import type { ContextMenuTarget } from '@supernova-ai/snh-client-ui-context-menu/client'
+import type { PropsRuntime } from '@supernova-ai/snh-client-ui-slots'
 import { act, fireEvent, screen } from '@testing-library/react'
 import { afterEach, expect, it, onTestFinished, vi } from 'vitest'
 import { apply, inject } from '../src/client/index.ts'
 
 // The test frame changes a real Session binding without depending on a feature Header.
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@supernova-ai/snh-client-ui-slots' {
   interface SlotMap {
     'test.sessionLogExport.session': { kind: 'single'; scope: 'session' }
   }

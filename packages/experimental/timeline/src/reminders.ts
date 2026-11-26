@@ -1,7 +1,7 @@
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { MessageId } from '@deepseek-ai/dsh-llm'
+import type { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import type { MessageId } from '@supernova-ai/snh-llm'
 import type { Config } from './config.ts'
 import { isWorker } from './delegation.ts'
 import type { OwnsAgent } from './delegation.ts'
@@ -9,7 +9,7 @@ import { fixedText } from './policy.ts'
 import type { TimelineStorage } from './storage.ts'
 import { prioritizedTasks } from './tasks.ts'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'timeline-priority': { kind: 'timeline-priority'; form: 'notice'; summary: string }
   }

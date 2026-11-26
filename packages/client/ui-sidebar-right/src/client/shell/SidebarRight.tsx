@@ -31,17 +31,17 @@
  */
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties, ReactNode, RefObject } from 'react'
-import type { ContextMenuTarget } from '@deepseek-ai/dsh-client-ui-context-menu/client'
-import type { ShortcutCatalogEntry } from '@deepseek-ai/dsh-client-shortcuts/client'
-import { IconPanelLeftOutlineRegular, Tooltip } from '@deepseek-ai/dsh-client-ui-primitives'
+import type { ContextMenuTarget } from '@supernova-ai/snh-client-ui-context-menu/client'
+import type { ShortcutCatalogEntry } from '@supernova-ai/snh-client-shortcuts/client'
+import { IconPanelLeftOutlineRegular, Tooltip } from '@supernova-ai/snh-client-ui-primitives'
 import type {
   HostObservable, InjectFace, PropsLocale, PropsRenderSlots, PropsRuntime, PropsStore,
-} from '@deepseek-ai/dsh-client-ui-slots'
+} from '@supernova-ai/snh-client-ui-slots'
 import type {} from '../contract/slots.ts'
-import type { DockIntents, DockMode, DockSurfaceProps, FloatRect, TabId, TabRecord, TabRenderer } from '@deepseek-ai/dsh-client-ui-dockkit'
-import { canSplit, dockPaneIds, DockLayout, findPaneContentTab } from '@deepseek-ai/dsh-client-ui-dockkit'
-import type { HalvesFit, LayoutState, PaneId } from '@deepseek-ai/dsh-client-ui-dockkit'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { DockIntents, DockMode, DockSurfaceProps, FloatRect, TabId, TabRecord, TabRenderer } from '@supernova-ai/snh-client-ui-dockkit'
+import { canSplit, dockPaneIds, DockLayout, findPaneContentTab } from '@supernova-ai/snh-client-ui-dockkit'
+import type { HalvesFit, LayoutState, PaneId } from '@supernova-ai/snh-client-ui-dockkit'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import { GUIDE_KIND, isContentTab, pageAddress } from '../contract/seed.ts'
 import { dockLabels } from '../labels.ts'
 import type { SidebarRightFlash, SidebarRightOpenTabOptions } from '../service.ts'
@@ -346,7 +346,7 @@ function SidebarPanel(panel: PanelProps & { width: number; panelRef: RefObject<H
       // Fullscreen is 1px wider than the viewport: the first column's divider,
       // which separates the panel from the conversation, sits past the window's
       // left edge where the frame clips it, and slides into view with the panel.
-      style={{ '--dsh-sidebar-right-panel-width': fullscreen ? 'calc(100vw + 1px)' : `${width}px` } as CSSProperties}
+      style={{ '--snh-sidebar-right-panel-width': fullscreen ? 'calc(100vw + 1px)' : `${width}px` } as CSSProperties}
       data-sidebar-right-session={sessionId}
       data-sidebar-right-panel={fullscreen ? 'fullscreen' : 'push'}
       data-sidebar-right-open={expanded || undefined}

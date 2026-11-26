@@ -1,11 +1,11 @@
-# Live-recording patch for a deterministic failed DeepSeek search request. No search provider is
-# configured: the conversation runs on a DeepSeek model route, where a search selects Messages search.
+# Live-recording patch for a deterministic failed SuperNova search request. No search provider is
+# configured: the conversation runs on a SuperNova model route, where a search selects Messages search.
 - insert:
     - id: web-search-error-fixture
       name: './web-search-error-fixture.mjs'
 
-- id: web-search-deepseek
-  name: '@deepseek-ai/dsh-web-search-deepseek'
+- id: web-search-supernova
+  name: '@supernova-ai/snh-web-search-supernova'
   config:
     apiKey: snapshot-key
     # The fixture maps this recorded authority to its OS-assigned listener.

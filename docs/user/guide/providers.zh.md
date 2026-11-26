@@ -4,19 +4,19 @@
 
 本指南假定你已按照[根 README](../../../README.zh.md#run)启动 Web UI。模型变更会在下一次请求时生效，不需要重启服务器。
 
-## 配置 DeepSeek
+## 配置 SuperNova
 
-打开**设置 → 模型**。DeepSeek API 卡片提供一个 API 密钥字段；输入密钥并保存。
+打开**设置 → 模型**。SuperNova API 卡片提供一个 API 密钥字段；输入密钥并保存。
 
-![模型页：DeepSeek 卡片，及其下方的添加模型提供商入口](providers-models-page.zh.png)
+![模型页：SuperNova 卡片，及其下方的添加模型提供商入口](providers-models-page.zh.png)
 
-密钥是只写的。保存后，页面只会收到脱敏描述符，永远不会收到明文密钥。密钥存储在 `$DSH_HOME/.credentials.yaml` 中，settings 只保留它的凭据引用。
+密钥是只写的。保存后，页面只会收到脱敏描述符，永远不会收到明文密钥。密钥存储在 `$SNH_HOME/.credentials.yaml` 中，settings 只保留它的凭据引用。
 
-保存了密钥且使用默认端点时，DeepSeek 的模型跟随 DeepSeek API 发布的列表。第一次需要模型时加载列表，使用期间约每十分钟在后台刷新一次，无法加载时退回内置模型。在**自定义设置**里编辑**模型目录**会改用你自己的列表，不再跟随发布的列表；点**恢复默认模型**会重新跟随并重新加载。使用发布的列表时，卡片上显示的是内置模型，因此新发布的模型只出现在模型选择器中。列表、兜底和门控规则见 [API key 提供方参考](../../../packages/llm/llm-deepseek-api-key/README.zh.md)。
+保存了密钥且使用默认端点时，SuperNova 的模型跟随 SuperNova API 发布的列表。第一次需要模型时加载列表，使用期间约每十分钟在后台刷新一次，无法加载时退回内置模型。在**自定义设置**里编辑**模型目录**会改用你自己的列表，不再跟随发布的列表；点**恢复默认模型**会重新跟随并重新加载。使用发布的列表时，卡片上显示的是内置模型，因此新发布的模型只出现在模型选择器中。列表、兜底和门控规则见 [API key 提供方参考](../../../packages/llm/llm-supernova-api-key/README.zh.md)。
 
 ## 添加第三方提供商
 
-选择**添加模型提供商**。卡片默认打开在**第三方模型提供商**：选取 dsh 自带的提供商——列表显示的是提供商 id，例如 `anthropic`、`openai`、Kimi 对应的 `moonshotai`、GLM 对应的 `zai`——输入其 API 密钥并保存。已安装目录会提供端点、协议和模型列表。
+选择**添加模型提供商**。卡片默认打开在**第三方模型提供商**：选取 snh 自带的提供商——列表显示的是提供商 id，例如 `anthropic`、`openai`、Kimi 对应的 `moonshotai`、GLM 对应的 `zai`——输入其 API 密钥并保存。已安装目录会提供端点、协议和模型列表。
 
 认证 **?** 说明已保存凭据的优先级和环境后备。密钥留空时，使用已保存凭据，或尝试读取列出的环境变量。绿色提示标明已检测到环境变量。黄色提示表示未检测到凭据变量；请输入 API 密钥或配置列出的变量。状态未确认表示读取失败。检测不验证凭据，也不测试连接。AWS profile 和 Google 应用默认凭据等提供商管理的凭据文件不在检查范围内。没有原生密钥认证的提供商（例如 `openai-codex`）不显示密钥字段，除非 profile 显式指定了凭据引用。
 
@@ -48,19 +48,19 @@ Provider ID 是永久的，因为请求、已保存会话、模型默认值和�
 
 ## 进阶配置
 
-自动生成的[插件配置目录](../../config-catalog.zh.md)列出每个插件的所有受支持字段与默认值；[`dsh-llm-pi-ai`](../../config-catalog.zh.md#deepseek-aidsh-llm-pi-ai) 就是本页所配置的那个提供商段落。[`dsh-llm-pi-ai`](../../../packages/llm/llm-pi-ai/README.zh.md) 和 [`dsh-llm-deepseek`](../../../packages/llm/llm-deepseek/README.zh.md) 参考文档负责直接 `cordis.patch.yml` 配置、目录解析、推理控制、凭据与适配器错误。
+自动生成的[插件配置目录](../../config-catalog.zh.md)列出每个插件的所有受支持字段与默认值；[`snh-llm-pi-ai`](../../config-catalog.zh.md#supernova-aisnh-llm-pi-ai) 就是本页所配置的那个提供商段落。[`snh-llm-pi-ai`](../../../packages/llm/llm-pi-ai/README.zh.md) 和 [`snh-llm-supernova`](../../../packages/llm/llm-supernova/README.zh.md) 参考文档负责直接 `cordis.patch.yml` 配置、目录解析、推理控制、凭据与适配器错误。
 
 ::: tip 其他设置
-模型页提供 API 密钥、显示名称、API 地址、API 协议，以及每个模型的 ID、显示名称、上下文窗口、最大输出 token 数和输入类型；内置提供商和自定义模型 API 提供商的模型还可以在这里设置推理等级。请求兼容性开关、请求头、超时和重试策略在 `$DSH_HOME/profiles/<profile>/cordis.patch.yml` 中设置，也就是模型页写入的同一份文档。可以直接编辑它；浏览器与服务器在同一台机器时，也可以点击设置页顶部的**打开配置文件**打开它。适配器会在下一次请求时重新读取，无需重启任何东西。下面各小节介绍多数网关会用到的字段。
+模型页提供 API 密钥、显示名称、API 地址、API 协议，以及每个模型的 ID、显示名称、上下文窗口、最大输出 token 数和输入类型；内置提供商和自定义模型 API 提供商的模型还可以在这里设置推理等级。请求兼容性开关、请求头、超时和重试策略在 `$SNH_HOME/profiles/<profile>/cordis.patch.yml` 中设置，也就是模型页写入的同一份文档。可以直接编辑它；浏览器与服务器在同一台机器时，也可以点击设置页顶部的**打开配置文件**打开它。适配器会在下一次请求时重新读取，无需重启任何东西。下面各小节介绍多数网关会用到的字段。
 
-按常规方式通过 `dsh web` 启动 Web UI 时，`<profile>` 就是 `web`，完整路径为 `$DSH_HOME/profiles/web/cordis.patch.yml`。如果使用自定义 profile，请替换为启动时指定的名称。
+按常规方式通过 `snh web` 启动 Web UI 时，`<profile>` 就是 `web`，完整路径为 `$SNH_HOME/profiles/web/cordis.patch.yml`。如果使用自定义 profile，请替换为启动时指定的名称。
 :::
 
 ### 图片输入
 
 在**设置 → 模型**中编辑提供商，打开**自定义设置**并展开该模型的**模型选项**。**输入类型**独占容量字段下方的一行。对于支持图片的模型，勾选**图片**并保存。没有继承图片能力的新自定义模型默认勾选**文本**。至少保留一种输入类型；仅图片模型需先勾选图片，再取消文本。
 
-复选框将 pi-ai 模型的选择保存为 `input`，将直连 DeepSeek 适配器的选择保存为 `inputModalities`。也可以在 `$DSH_HOME/profiles/<profile>/cordis.patch.yml` 中编辑模型；例如，以下自定义 pi-ai 提供商声明了一个纯文本模型和一个视觉模型：
+复选框将 pi-ai 模型的选择保存为 `input`，将直连 SuperNova 适配器的选择保存为 `inputModalities`。也可以在 `$SNH_HOME/profiles/<profile>/cordis.patch.yml` 中编辑模型；例如，以下自定义 pi-ai 提供商声明了一个纯文本模型和一个视觉模型：
 
 这些示例展示 profile patch 中的配置字段。Cordis 配置覆盖会替换完整条目配置；编辑已有覆盖项时，请保留其他 provider 和字段。
 
@@ -80,7 +80,7 @@ Provider ID 是永久的，因为请求、已保存会话、模型默认值和�
 
 Pi-ai 的 `input` 接受 `text` 和 `image`，且只作用于该模型。显式的非空选择优先。省略或为空的 `input` 先继承已安装目录的输入类型，再回退到路由的 `defaultInput`，后者默认为 `[text]`。复选框会显示这些继承值，仅打开模型行不会保存覆盖值。
 
-DeepSeek 将省略的 `inputModalities` 视为纯文本，并拒绝空列表。取消图片还会移除该模型的 `imagePixelBudget` 和 `imageTargetBytes`，因为 DeepSeek 拒绝纯文本模型上的图片限制。以后重新启用图片且需要自定义限制时，需再次设置这些限制。
+SuperNova 将省略的 `inputModalities` 视为纯文本，并拒绝空列表。取消图片还会移除该模型的 `imagePixelBudget` 和 `imageTargetBytes`，因为 SuperNova 拒绝纯文本模型上的图片限制。以后重新启用图片且需要自定义限制时，需再次设置这些限制。
 
 修改复选框后如需恢复继承，可在 `cordis.patch.yml` 中移除模型的 `input` 或 `inputModalities` 字段。**恢复默认模型**会移除整个模型目录覆盖，包括其他模型编辑，因此仅在需要恢复整个目录时使用。
 
@@ -116,9 +116,9 @@ DeepSeek 将省略的 `inputModalities` 视为纯文本，并拒绝空列表。�
 
 这两个字段都是对你端点的断言，而不是对它的检查。声明了端点并不提供的图片能力的模型不会在这里被拦下，改由提供商拒绝该请求。
 
-### DeepSeek 账号的模型
+### SuperNova 账号的模型
 
-已登录 DeepSeek 账号的模型列表来自账号服务，因此模型页不为它提供模型编辑器。要调整单个模型，在 `$DSH_HOME/profiles/<profile>/cordis.patch.yml` 中使用 `modelOverrides`；字段与 DeepSeek 的 `models` 条目相同，未设置的字段沿用列表中的值：
+已登录 SuperNova 账号的模型列表来自账号服务，因此模型页不为它提供模型编辑器。要调整单个模型，在 `$SNH_HOME/profiles/<profile>/cordis.patch.yml` 中使用 `modelOverrides`；字段与 SuperNova 的 `models` 条目相同，未设置的字段沿用列表中的值：
 
 ```yaml
 - id: llm-deepseek-account
@@ -129,15 +129,15 @@ DeepSeek 将省略的 `inputModalities` 视为纯文本，并拒绝空列表。�
         maxTokens: 131072
 ```
 
-需要更新版 DeepSeek Harness 的模型会以 `CLIENT_UPGRADE_REQUIRED` 失败，并写明需要安装的版本。列表、兜底和门控规则见[账号提供方参考](../../../packages/llm/llm-deepseek-account/README.zh.md)。
+需要更新版 SuperNova Harness 的模型会以 `CLIENT_UPGRADE_REQUIRED` 失败，并写明需要安装的版本。列表、兜底和门控规则见[账号提供方参考](../../../packages/llm/llm-deepseek-account/README.zh.md)。
 
 ### 推理等级
 
-对于声明了推理等级的模型，模型选择器会提供**推理等级**菜单。内置提供商的模型从已安装目录继承其等级，DeepSeek 的模型沿用适配器提供的等级。手动录入的模型在添加等级之前不声明任何等级，因此模型菜单里不会出现推理等级项，由端点自身的默认值决定模型是否思考。
+对于声明了推理等级的模型，模型选择器会提供**推理等级**菜单。内置提供商的模型从已安装目录继承其等级，SuperNova 的模型沿用适配器提供的等级。手动录入的模型在添加等级之前不声明任何等级，因此模型菜单里不会出现推理等级项，由端点自身的默认值决定模型是否思考。
 
 内置提供商和自定义模型 API 提供商都可以在**设置 → 模型**中声明等级：编辑该提供商，打开**自定义设置**，展开该模型的**模型选项**，然后打开**推理等级**。默认带有 off、low、medium、high 四行。每行把一个档位与发送给它的 **API 参数值**配成一对，参数值默认与档位名相同；只有模型提供商的 API 文档写法不同时才需要修改。按端点支持的档位增删行，至少保留一个 off 以外的档位，然后保存。为内置提供商的模型声明的等级会取代它继承的等级。关闭开关会删除该声明，内置提供商的模型随即重新继承其等级。
 
-模型页会把 `reasoningEfforts` 写入 `$DSH_HOME/profiles/<profile>/cordis.patch.yml`，也可以直接在其中声明等级：
+模型页会把 `reasoningEfforts` 写入 `$SNH_HOME/profiles/<profile>/cordis.patch.yml`，也可以直接在其中声明等级：
 
 ```yaml
 - id: llm-pi-ai
@@ -158,23 +158,23 @@ DeepSeek 将省略的 `inputModalities` 视为纯文本，并拒绝空列表。�
 
 每个键都是菜单提供的一个等级，其值是在协议上以 `reasoning_effort` 发送的写法，因此 `max: xhigh` 可以为自有一套词汇的网关重命名某个等级。只有 `off` 可以留空，因为对多数端点来说，不思考就是不传该参数。路由的 `reasoning` 是会话尚未选择等级时采用的等级；在选择器中选定某个等级后，它会与模型一起保存为新会话的默认值。
 
-留空的 `off` 什么都不发送，这只能让「按请求才思考」的模型停下来；给 `off` 一个值，则会把该值作为 `reasoning_effort` 发送。对于「不明确关闭就会思考」的模型——例如 OpenAI 兼容网关后面的 DeepSeek V4——需要 `compat.thinkingFormat: deepseek`：它让 `off` 发送 `thinking: {type: disabled}`，其他每个等级则在 effort 之外再发送 `thinking: {type: enabled}`：
+留空的 `off` 什么都不发送，这只能让「按请求才思考」的模型停下来；给 `off` 一个值，则会把该值作为 `reasoning_effort` 发送。对于「不明确关闭就会思考」的模型——例如 OpenAI 兼容网关后面的 SuperNova V4——需要 `compat.thinkingFormat: supernova`：它让 `off` 发送 `thinking: {type: disabled}`，其他每个等级则在 effort 之外再发送 `thinking: {type: enabled}`：
 
 ```yaml
         models:
           - id: deepseek-v4-pro
             compat:
-              thinkingFormat: deepseek
+              thinkingFormat: supernova
             reasoningEfforts:
               off:
               high: high
               max: max
 ```
 
-网关并不提供推理能力的内置提供商模型，可在 `modelOverrides` 下用 `reasoningEfforts: false` 去掉其等级；之后再为它选择等级会被拒绝并报 `UNSUPPORTED_REASONING_EFFORT`。DeepSeek 自身的路由不需要以上任何配置：其模型已经提供 `off`、`low`、`high` 和 `max`，`llm-deepseek.reasoningEffort` 设置选择器的起始默认值：
+网关并不提供推理能力的内置提供商模型，可在 `modelOverrides` 下用 `reasoningEfforts: false` 去掉其等级；之后再为它选择等级会被拒绝并报 `UNSUPPORTED_REASONING_EFFORT`。SuperNova 自身的路由不需要以上任何配置：其模型已经提供 `off`、`low`、`high` 和 `max`，`llm-supernova.reasoningEffort` 设置选择器的起始默认值：
 
 ```yaml
-- id: llm-deepseek
+- id: llm-supernova
   config:
     reasoningEffort: max
 ```
@@ -183,7 +183,7 @@ DeepSeek 将省略的 `inputModalities` 视为纯文本，并拒绝空列表。�
 
 网关可能持有可用的密钥、地址也通得到，却仍然拒绝每一个请求。pi-ai 依据端点的 URL 决定请求的形状——系统提示词由哪个角色承载、输出上限写在哪个字段、思考级别如何传输——而对于它无法识别的地址，会当作 OpenAI 本身来对待。多数 OpenAI 兼容网关至少会拒绝 OpenAI 所接受的某一样东西。
 
-其中两样占了绝大多数。声明了推理能力的模型，其系统提示词会以 `role: "developer"` 发出，很多网关直接拒绝；输出上限则写作 `max_completion_tokens`，只认 `max_tokens` 的服务端会拒绝。表单里没有这两个字段；请在 `$DSH_HOME/profiles/<profile>/cordis.patch.yml` 的路由上更正：
+其中两样占了绝大多数。声明了推理能力的模型，其系统提示词会以 `role: "developer"` 发出，很多网关直接拒绝；输出上限则写作 `max_completion_tokens`，只认 `max_tokens` 的服务端会拒绝。表单里没有这两个字段；请在 `$SNH_HOME/profiles/<profile>/cordis.patch.yml` 的路由上更正：
 
 ```yaml
 - id: llm-pi-ai
@@ -207,14 +207,14 @@ DeepSeek 将省略的 `inputModalities` 视为纯文本，并拒绝空列表。�
           - id: my-model
           - id: my-reasoner
             compat:
-              thinkingFormat: deepseek
+              thinkingFormat: supernova
 ```
 
 两者都未设置的字段，沿用已安装 catalog 为该模型记录的值；catalog 也未描述的，落到 pi-ai 的检测。凡是写下的开关都要给值：冒号后留空的键（`supportsDeveloperRole:`）会被拒绝而不是被忽略，因为空值会抹掉 catalog 已知的信息，却又没有给出任何替代。任何协议都不接受的名字同样会被拒绝，报错会列出可用的那些。
 
 每个开关归属于声明了它的那些协议，因此在某个 `api` 上合法的开关，在另一个上可能被拒绝——报错会点名该协议实际提供哪些。与上面的 `input` 一样，开关陈述的是关于你的端点的一个断言，而不是对它的检查：设置一个网关其实并不需要的开关，只是发出一个不同的请求而已。
 
-全部开关、各自接受的取值，以及接受它们的协议，都列在[生成的 `dsh-llm-pi-ai` 配置参考](../../config-catalog.zh.md#deepseek-aidsh-llm-pi-ai)的 `PiAiCompatProfile` 之下——该参考派生自源码，因此不会落后于适配器实际接受的内容。
+全部开关、各自接受的取值，以及接受它们的协议，都列在[生成的 `snh-llm-pi-ai` 配置参考](../../config-catalog.zh.md#supernova-aisnh-llm-pi-ai)的 `PiAiCompatProfile` 之下——该参考派生自源码，因此不会落后于适配器实际接受的内容。
 
 ## 排错
 
@@ -225,7 +225,7 @@ DeepSeek 将省略的 `inputModalities` 视为纯文本，并拒绝空列表。�
 - **密钥与地址都正确，网关却拒绝每一个请求**：它的请求形状与 OpenAI 不同。先在路由上设 `compat.supportsDeveloperRole: false` 与 `compat.maxTokensField: max_tokens`。
 - **只有推理模型失败**：pi-ai 把它们的系统提示词以 `developer` 角色发出，而网关拒绝该角色。设 `compat.supportsDeveloperRole: false`。
 - **手动录入的模型没有推理等级菜单**：该模型没有声明任何等级。在该模型的**模型选项**中打开**推理等级**，或在 `cordis.patch.yml` 中给该模型加上 `reasoningEfforts`。
-- **`off` 无法让 DeepSeek 模型停止思考**：留空的 `off` 不发送任何推理字段，默认思考的端点就继续思考。请在模型或路由上设置 `compat.thinkingFormat: deepseek`。
+- **`off` 无法让 SuperNova 模型停止思考**：留空的 `off` 不发送任何推理字段，默认思考的端点就继续思考。请在模型或路由上设置 `compat.thinkingFormat: supernova`。
 - **某个 compat 开关因没有值而被拒绝**：冒号后什么都没写。给它一个值，或删掉该键以沿用已安装 catalog 的值。
-- **图片在发送前被拒绝**：该模型未声明图片模态。请给自定义提供商的模型加上 `input: [text, image]`；在 DeepSeek 自身的路由上，请从配置的目录中选择支持图片的条目（默认为 `deepseek-flash`），并确认网关提供该模型且支持图片输入。
+- **图片在发送前被拒绝**：该模型未声明图片模态。请给自定义提供商的模型加上 `input: [text, image]`；在 SuperNova 自身的路由上，请从配置的目录中选择支持图片的条目（默认为 `deepseek-flash`），并确认网关提供该模型且支持图片输入。
 - **提供商拒绝了带图片的请求**：该模型声明了其端点实际并不提供的图片能力。请从授予它图片能力的那个列表中移除 `image`——可能是模型的 `input`，也可能是路由的 `defaultInput`——然后开启新会话：附加的图片会留在会话日志里，因此在会话离开它之前，同一个请求会不断重复。

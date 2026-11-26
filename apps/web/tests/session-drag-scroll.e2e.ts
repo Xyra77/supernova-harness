@@ -32,7 +32,7 @@ describe('web e2e: session drag scrolling', () => {
     page = await newEnglishPage(browser)
     tripwire = watchConsole(page)
     await page.addInitScript((account) => {
-      localStorage.setItem('dsh.workspace.view.v5', JSON.stringify({
+      localStorage.setItem('snh.workspace.view.v5', JSON.stringify({
         groupBy: 'workspace', orderBy: 'updated', groupExpansion: { [account]: true },
         sessionOrderByAccount: {},
       }))

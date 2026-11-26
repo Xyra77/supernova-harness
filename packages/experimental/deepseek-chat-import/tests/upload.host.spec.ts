@@ -1,17 +1,17 @@
 import { strToU8 } from 'fflate'
 import { describe, expect, it, vi } from 'vitest'
 import { ExportSourceError } from '../src/archive.ts'
-import type { DeepseekChatImportWorkspace } from '../src/importer.ts'
+import type { SupernovaChatImportWorkspace } from '../src/importer.ts'
 import { UPLOAD_PATH } from '../src/protocol.ts'
 import { createUploadRoute } from '../src/upload.ts'
 import type { UploadRouteHandler } from '../src/upload.ts'
-import type { DeepseekChatImportLine, DeepseekChatImportResult } from '../src/types.ts'
+import type { SupernovaChatImportLine, SupernovaChatImportResult } from '../src/types.ts'
 
-const WORKSPACE: DeepseekChatImportWorkspace = { id: 'w1', path: '/work', attachSession: () => Promise.resolve() }
-const RESULT: DeepseekChatImportResult = {
+const WORKSPACE: SupernovaChatImportWorkspace = { id: 'w1', path: '/work', attachSession: () => Promise.resolve() }
+const RESULT: SupernovaChatImportResult = {
   workspaceId: 'w1', workspacePath: '/work', sessionIds: ['s1'], conversationCount: 1, omittedByLimit: 0, skipped: [],
 }
-const SUCCESS: DeepseekChatImportLine = { type: 'outcome', outcome: { ok: true, value: RESULT } }
+const SUCCESS: SupernovaChatImportLine = { type: 'outcome', outcome: { ok: true, value: RESULT } }
 
 /** A route over a stand-in for the service's single import slot. */
 function route(overrides: Partial<UploadRouteHandler> = {}) {
@@ -70,8 +70,8 @@ function stream(chunks: Uint8Array[], open = false): ReadableStream<Uint8Array> 
   })
 }
 
-const lines = async (response: Response): Promise<DeepseekChatImportLine[]> =>
-  (await response.text()).split('\n').filter(line => line !== '').map(line => JSON.parse(line) as DeepseekChatImportLine)
+const lines = async (response: Response): Promise<SupernovaChatImportLine[]> =>
+  (await response.text()).split('\n').filter(line => line !== '').map(line => JSON.parse(line) as SupernovaChatImportLine)
 
 const failure = (reason: string, message: string) => [{ type: 'outcome', outcome: { ok: false, error: { reason, message } } }]
 const text = (bytes: Uint8Array | undefined): string => new TextDecoder().decode(bytes)
@@ -116,7 +116,7 @@ describe('createUploadRoute', () => {
   })
 
   it('runs one import at a time', async () => {
-    const pending = Promise.withResolvers<DeepseekChatImportResult>()
+    const pending = Promise.withResolvers<SupernovaChatImportResult>()
     const { fetch, busy } = route({ import: () => pending.promise })
     const first = await fetch(upload('a', { workspaceId: 'w1' }))
     expect(await lines(await fetch(upload('b', { workspaceId: 'w1' })))).toEqual(failure('busy', 'another import is running'))

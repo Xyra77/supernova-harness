@@ -1,16 +1,16 @@
 /** Right-Sidebar presentation of an existing subagent or dragged root Session Conversation. */
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
 import type {
   ISessions, SessionReference, SessionTarget,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { ResourceProvider } from '@deepseek-ai/dsh-client-resources/client'
-import type { ConversationViewsProps, WorkspaceSelectedHandler } from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { PaneId, SidebarRightTabDefinition } from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
+} from '@supernova-ai/snh-api-session-controller/client'
+import type { ResourceProvider } from '@supernova-ai/snh-client-resources/client'
+import type { ConversationViewsProps, WorkspaceSelectedHandler } from '@supernova-ai/snh-client-ui-conversation/client'
+import type { PaneId, SidebarRightTabDefinition } from '@supernova-ai/snh-client-ui-sidebar-right/client'
 import type {
   HostObservable, PropsRenderFactories, PropsRenderSlots, PropsRuntime, TranslateNS,
-} from '@deepseek-ai/dsh-client-ui-slots'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { SubagentAddress } from '@deepseek-ai/dsh-subagent/client'
+} from '@supernova-ai/snh-client-ui-slots'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type { SubagentAddress } from '@supernova-ai/snh-subagent/client'
 import { NS } from '../locales.ts'
 import css from './SidebarChat.module.css'
 import {
@@ -18,10 +18,10 @@ import {
 } from './SessionDropZone.tsx'
 
 /** Stable implementation identity for the Sidebar tab body. */
-export const SUBAGENT_CHAT_ID = '@deepseek-ai/dsh-client-ui-subagent'
+export const SUBAGENT_CHAT_ID = '@supernova-ai/snh-client-ui-subagent'
 
 /** Resource-address prefix for an embedded Session chat. */
-export const SUBAGENT_CHAT_ADDRESS = 'dsh-resource://subagentchat/session/'
+export const SUBAGENT_CHAT_ADDRESS = 'snh-resource://subagentchat/session/'
 
 /** Value retained by one live chat resource occurrence. */
 export interface SubagentChatResource {
@@ -29,13 +29,13 @@ export interface SubagentChatResource {
   readonly reference: SessionReference
 }
 
-declare module '@deepseek-ai/dsh-api-session-controller/client' {
+declare module '@supernova-ai/snh-api-session-controller/client' {
   interface SessionReferenceSourceMap {
     sidebarChat: unknown
   }
 }
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@supernova-ai/snh-client-ui-slots' {
   interface ResourceProtocolMap {
     subagentchat: SubagentChatResource
   }
@@ -81,7 +81,7 @@ export function parseSubagentChatAddress(value: string): SessionTarget | undefin
   } catch (_invalidUrl) {
     return undefined
   }
-  if (url.protocol !== 'dsh-resource:' || url.hostname.toLowerCase() !== 'subagentchat') return undefined
+  if (url.protocol !== 'snh-resource:' || url.hostname.toLowerCase() !== 'subagentchat') return undefined
   const parts = url.pathname.split('/').filter(Boolean)
   if (parts.length !== 2 || parts[0] !== 'session') return undefined
   let sessionId: SessionId

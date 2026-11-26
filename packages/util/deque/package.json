@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-deque",
+  "name": "@supernova-ai/snh-deque",
   "description": "Zero-dependency circular deque with amortized constant-time end operations and bounded vacant storage",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -30,9 +30,9 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

@@ -10,8 +10,8 @@ from pathlib import Path
 
 import pytest
 
-from deepseek_harness import DeepSeekHarness, HarnessClient, HarnessConfig, Notification, RunResult, SdkProtocolError
-from deepseek_harness.errors import JsonRpcError
+from supernova_harness import SuperNovaHarness, HarnessClient, HarnessConfig, Notification, RunResult, SdkProtocolError
+from supernova_harness.errors import JsonRpcError
 
 
 def test_high_level_sdk_runs_turn_and_preserves_auto_review_errors(tmp_path: Path) -> None:
@@ -29,9 +29,9 @@ env_dump = os.environ["ENV_DUMP"]
 json.dump({
     "DEEPSEEK_API_KEY": os.environ.get("DEEPSEEK_API_KEY"),
     "DEEPSEEK_BASE_URL": os.environ.get("DEEPSEEK_BASE_URL"),
-    "DSH_CWD": os.environ.get("DSH_CWD"),
-    "DSH_SESSION_ROOT": os.environ.get("DSH_SESSION_ROOT"),
-    "DSH_CORDIS_CONFIG": os.environ.get("DSH_CORDIS_CONFIG"),
+    "SNH_CWD": os.environ.get("SNH_CWD"),
+    "SNH_SESSION_ROOT": os.environ.get("SNH_SESSION_ROOT"),
+    "SNH_CORDIS_CONFIG": os.environ.get("SNH_CORDIS_CONFIG"),
 }, open(env_dump, "w"))
 
 for line in sys.stdin:
@@ -166,7 +166,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(
+    with SuperNovaHarness(
         approval_requests=True,
         model="deepseek-v4-flash",
         reasoning_effort="max",
@@ -210,9 +210,9 @@ for line in sys.stdin:
     dumped_env = json.loads(env_dump.read_text())
     assert dumped_env["DEEPSEEK_API_KEY"] == "env-key"
     assert dumped_env["DEEPSEEK_BASE_URL"] == "http://127.0.0.1:4321"
-    assert dumped_env["DSH_CWD"] is None
-    assert dumped_env["DSH_SESSION_ROOT"] is None
-    assert dumped_env["DSH_CORDIS_CONFIG"] is None
+    assert dumped_env["SNH_CWD"] is None
+    assert dumped_env["SNH_SESSION_ROOT"] is None
+    assert dumped_env["SNH_CORDIS_CONFIG"] is None
     assert json.loads(init_dump.read_text()) == {
         "approvalRequests": True,
         "cwd": str(tmp_path),
@@ -249,7 +249,7 @@ for line in sys.stdin:
     )
 
     seen: list[str] = []
-    with DeepSeekHarness(
+    with SuperNovaHarness(
         _launch_args=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -288,7 +288,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(
+    with SuperNovaHarness(
         _launch_args=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -314,7 +314,7 @@ import sys
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        json.dump({"process": os.getcwd(), "environment": os.environ.get("DSH_CWD"), "wire": msg["params"]["cwd"]}, open(os.environ["CAPTURE"], "w"))
+        json.dump({"process": os.getcwd(), "environment": os.environ.get("SNH_CWD"), "wire": msg["params"]["cwd"]}, open(os.environ["CAPTURE"], "w"))
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-runtime"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
@@ -323,7 +323,7 @@ for line in sys.stdin:
     )
     monkeypatch.chdir(tmp_path)
 
-    with DeepSeekHarness(
+    with SuperNovaHarness(
         cwd=".",
         runtime_cwd=".",
         _launch_args=(sys.executable, str(script)),
@@ -365,7 +365,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(
+    with SuperNovaHarness(
         _launch_args=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -415,7 +415,7 @@ for line in sys.stdin:
     )
 
     seen: list[str] = []
-    with DeepSeekHarness(
+    with SuperNovaHarness(
         _launch_args=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -471,7 +471,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(
+    with SuperNovaHarness(
         _launch_args=(sys.executable, str(script)),
         cwd=str(tmp_path),
     ) as harness:
@@ -507,7 +507,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(_launch_args=(sys.executable, str(script)), cwd=str(tmp_path)) as harness:
+    with SuperNovaHarness(_launch_args=(sys.executable, str(script)), cwd=str(tmp_path)) as harness:
         result = harness.run([{"type": "text", "text": "one turn"}], session_id="main")
         assert harness.client._notifications.qsize() == 0
 
@@ -548,7 +548,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    with DeepSeekHarness(_launch_args=(sys.executable, str(script)), cwd=str(tmp_path)) as harness:
+    with SuperNovaHarness(_launch_args=(sys.executable, str(script)), cwd=str(tmp_path)) as harness:
         first = harness.run([{"type": "text", "text": "first turn"}], session_id="main")
         second = harness.run([{"type": "text", "text": "second turn"}], session_id="main")
 
@@ -569,7 +569,7 @@ for line in sys.stdin:
     msg = json.loads(line)
     method = msg.get("method")
     if method == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-snh"}}}), flush=True)
     elif method == "session/prompt":
         params = msg.get("params") or {}
         print(json.dumps({"jsonrpc": "2.0", "method": "llm/request", "params": {"requestId": "req-1", "sessionId": params["sessionId"], "model": "dsagent", "messages": []}}), flush=True)
@@ -582,7 +582,7 @@ for line in sys.stdin:
 
     with HarnessClient(_launch_args=(sys.executable, str(script))) as client:
         init = client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
-        assert init.serverInfo.name == "fake-dsh"
+        assert init.serverInfo.name == "fake-snh"
 
         client.session_prompt("main", [{"type": "text", "text": "fix it"}])
         notification = client.next_notification()
@@ -739,7 +739,7 @@ for line in sys.stdin:
     msg = json.loads(line)
     method = msg.get("method")
     if method == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-snh"}}}), flush=True)
     elif method in {"emit-first", "emit-second"}:
         print(json.dumps({"jsonrpc": "2.0", "method": "tick", "params": {"source": method}}), flush=True)
     elif method == "session/prompt":
@@ -782,7 +782,7 @@ for line in sys.stdin:
     msg = json.loads(line)
     method = msg.get("method")
     if method == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-snh"}}}), flush=True)
     elif method == "session/prompt":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"accepted": False}}), flush=True)
     elif method == "shutdown":
@@ -809,7 +809,7 @@ for line in sys.stdin:
     msg = json.loads(line)
     method = msg.get("method")
     if method == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-snh"}}}), flush=True)
         print(json.dumps({"jsonrpc": "2.0", "id": "bridge-req-1", "method": "llm.request", "params": {"requestId": "req-1", "sessionId": "main", "model": "dsagent", "messages": []}}), flush=True)
     elif "id" in msg and "method" not in msg:
         print(json.dumps({"jsonrpc": "2.0", "method": "response/seen", "params": {"result": msg.get("result")}}), flush=True)
@@ -845,7 +845,7 @@ print("node warning: experimental loader", flush=True)
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-snh"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
         break
@@ -854,7 +854,7 @@ for line in sys.stdin:
 
     with HarnessClient(_launch_args=(sys.executable, str(script))) as client:
         init = client.initialize(provider="deepseek-official", cwd="/workspace", model="dsagent")
-        assert init.serverInfo.name == "fake-dsh"
+        assert init.serverInfo.name == "fake-snh"
 
 
 def test_client_request_times_out_when_bridge_does_not_respond(tmp_path: Path) -> None:
@@ -902,7 +902,7 @@ signal.signal(signal.SIGTERM, signal.SIG_IGN)
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-snh"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         time.sleep(60)
 """.strip()
@@ -940,7 +940,7 @@ import time
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-snh"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
 
@@ -997,32 +997,32 @@ for line in sys.stdin:
 
 
 def test_public_signatures_omit_unsupported_wire_parameters() -> None:
-    from deepseek_harness import DeepSeekHarnessConfig, Session
+    from supernova_harness import SuperNovaHarnessConfig, Session
 
     assert "session_root" not in inspect.signature(HarnessClient.initialize).parameters
     assert "system_prompt" not in inspect.signature(HarnessClient.initialize).parameters
     assert "profile" not in inspect.signature(HarnessClient.session_prompt).parameters
-    assert "profile" not in inspect.signature(DeepSeekHarness.run).parameters
+    assert "profile" not in inspect.signature(SuperNovaHarness.run).parameters
     assert "profile" not in inspect.signature(Session.run).parameters
-    assert "system_prompt" not in DeepSeekHarnessConfig.__dataclass_fields__
-    assert "max_tokens" in DeepSeekHarnessConfig.__dataclass_fields__
-    assert "reasoning_effort" in DeepSeekHarnessConfig.__dataclass_fields__
+    assert "system_prompt" not in SuperNovaHarnessConfig.__dataclass_fields__
+    assert "max_tokens" in SuperNovaHarnessConfig.__dataclass_fields__
+    assert "reasoning_effort" in SuperNovaHarnessConfig.__dataclass_fields__
     assert "max_tokens" in inspect.signature(HarnessClient.initialize).parameters
     assert "reasoning_effort" in inspect.signature(HarnessClient.initialize).parameters
     assert "client_name" not in HarnessConfig.__dataclass_fields__
     assert "client_version" not in HarnessConfig.__dataclass_fields__
-    assert {"dsh_bin", "profile", "patches", "dsh_home"} <= set(
-        DeepSeekHarnessConfig.__dataclass_fields__
+    assert {"snh_bin", "profile", "patches", "snh_home"} <= set(
+        SuperNovaHarnessConfig.__dataclass_fields__
     )
-    assert {"dsh_bin", "profile", "patches", "dsh_home"} <= set(
+    assert {"snh_bin", "profile", "patches", "snh_home"} <= set(
         HarnessConfig.__dataclass_fields__
     )
-    assert "initialize_timeout_seconds" in DeepSeekHarnessConfig.__dataclass_fields__
+    assert "initialize_timeout_seconds" in SuperNovaHarnessConfig.__dataclass_fields__
     assert "initialize_timeout_seconds" in HarnessConfig.__dataclass_fields__
-    assert DeepSeekHarnessConfig().initialize_timeout_seconds == 30.0
+    assert SuperNovaHarnessConfig().initialize_timeout_seconds == 30.0
     assert HarnessConfig().initialize_timeout_seconds == 30.0
     for removed in ("cordis", "session_root", "runtime_bin", "bridge_bin", "launch_args_override"):
-        assert removed not in DeepSeekHarnessConfig.__dataclass_fields__
+        assert removed not in SuperNovaHarnessConfig.__dataclass_fields__
         assert removed not in HarnessConfig.__dataclass_fields__
     assert "_launch_args" not in HarnessConfig.__dataclass_fields__
     assert "session_root" not in RunResult.__dataclass_fields__
@@ -1041,7 +1041,7 @@ import sys
 for line in sys.stdin:
     msg = json.loads(line)
     if msg.get("method") == "initialize":
-        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+        print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-snh"}}}), flush=True)
     elif msg.get("method") == "shutdown":
         print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
         break
@@ -1092,7 +1092,7 @@ with open(os.environ["SEEN"], "w") as seen:
         seen.flush()
         msg = json.loads(line)
         if "id" in msg and msg.get("method") == "initialize":
-            print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-dsh"}}}), flush=True)
+            print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {"serverInfo": {"name": "fake-snh"}}}), flush=True)
         elif "id" in msg and msg.get("method") == "shutdown":
             print(json.dumps({"jsonrpc": "2.0", "id": msg["id"], "result": {}}), flush=True)
             break
@@ -1119,11 +1119,11 @@ with open(os.environ["SEEN"], "w") as seen:
         json.loads(line)
 
 
-def _install_fake_bundled_dsh(
+def _install_fake_bundled_snh(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    """Install a fake runtime package that records dsh argv and serves lifecycle calls."""
-    runtime = tmp_path / "dsh.py"
+    """Install a fake runtime package that records snh argv and serves lifecycle calls."""
+    runtime = tmp_path / "snh.py"
     runtime.write_text(
         """
 import json
@@ -1133,8 +1133,8 @@ import sys
 
 json.dump({
     "argv": sys.argv[1:],
-    "DSH_HOME": os.environ.get("DSH_HOME"),
-    "DSH_CORDIS_CONFIG": os.environ.get("DSH_CORDIS_CONFIG"),
+    "SNH_HOME": os.environ.get("SNH_HOME"),
+    "SNH_CORDIS_CONFIG": os.environ.get("SNH_CORDIS_CONFIG"),
 }, open(os.environ["ENV_DUMP"], "w"))
 for line in sys.stdin:
     msg = json.loads(line)
@@ -1146,7 +1146,7 @@ for line in sys.stdin:
 """.strip()
     )
 
-    module_dir = tmp_path / "deepseek_harness_runtime"
+    module_dir = tmp_path / "supernova_harness_runtime"
     module_dir.mkdir()
     (module_dir / "__init__.py").write_text(
         f"""
@@ -1156,72 +1156,72 @@ def resolve_bundled_launch_args(mode=None):
     )
 
     monkeypatch.syspath_prepend(str(tmp_path))
-    monkeypatch.delitem(sys.modules, "deepseek_harness_runtime", raising=False)
+    monkeypatch.delitem(sys.modules, "supernova_harness_runtime", raising=False)
 
 
-def test_client_default_launch_uses_bundled_dsh_sdk_profile_and_explicit_home(
+def test_client_default_launch_uses_bundled_snh_sdk_profile_and_explicit_home(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     env_dump = tmp_path / "env.json"
     home = tmp_path / "home"
     patch = tmp_path / "sdk.patch.yml"
     patch.write_text("[]\n")
-    _install_fake_bundled_dsh(tmp_path, monkeypatch)
+    _install_fake_bundled_snh(tmp_path, monkeypatch)
     monkeypatch.chdir(tmp_path)
-    monkeypatch.setenv("DSH_HOME", str(tmp_path / "ambient-home"))
-    monkeypatch.delenv("DSH_CORDIS_CONFIG", raising=False)
+    monkeypatch.setenv("SNH_HOME", str(tmp_path / "ambient-home"))
+    monkeypatch.delenv("SNH_CORDIS_CONFIG", raising=False)
 
     with HarnessClient(HarnessConfig(
         profile="sdk",
         patches=("sdk.patch.yml",),
-        dsh_home=str(home),
-        env={"ENV_DUMP": str(env_dump), "DSH_HOME": str(tmp_path / "env-home")},
+        snh_home=str(home),
+        env={"ENV_DUMP": str(env_dump), "SNH_HOME": str(tmp_path / "env-home")},
     )) as client:
         init = client.initialize(provider="deepseek-official", cwd="/workspace", model="deepseek-v4-pro")
 
     assert init.serverInfo.name == "bundled-runtime"
     assert json.loads(env_dump.read_text()) == {
         "argv": ["--profile", "sdk", "--patch", str(patch)],
-        "DSH_HOME": str(home),
-        "DSH_CORDIS_CONFIG": None,
+        "SNH_HOME": str(home),
+        "SNH_CORDIS_CONFIG": None,
     }
 
 
-def test_client_accepts_explicit_environment_dsh_home(
+def test_client_accepts_explicit_environment_snh_home(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     env_dump = tmp_path / "env.json"
     home = tmp_path / "environment-home"
-    _install_fake_bundled_dsh(tmp_path, monkeypatch)
+    _install_fake_bundled_snh(tmp_path, monkeypatch)
 
     with HarnessClient(
-        HarnessConfig(profile="custom", env={"ENV_DUMP": str(env_dump), "DSH_HOME": str(home)})
+        HarnessConfig(profile="custom", env={"ENV_DUMP": str(env_dump), "SNH_HOME": str(home)})
     ) as client:
         client.initialize(provider="deepseek-official", cwd="/workspace", model="deepseek-v4-pro")
 
     assert json.loads(env_dump.read_text()) == {
         "argv": ["--profile", "custom"],
-        "DSH_HOME": str(home),
-        "DSH_CORDIS_CONFIG": None,
+        "SNH_HOME": str(home),
+        "SNH_CORDIS_CONFIG": None,
     }
 
 
-def test_client_rejects_an_implicit_default_dsh_home(
+def test_client_rejects_an_implicit_default_snh_home(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    _install_fake_bundled_dsh(tmp_path, monkeypatch)
-    monkeypatch.delenv("DSH_HOME", raising=False)
+    _install_fake_bundled_snh(tmp_path, monkeypatch)
+    monkeypatch.delenv("SNH_HOME", raising=False)
 
-    with pytest.raises(ValueError, match="explicit dsh_home or non-empty DSH_HOME"):
+    with pytest.raises(ValueError, match="explicit snh_home or non-empty SNH_HOME"):
         HarnessClient(HarnessConfig(env={})).start()
 
 
 def test_client_reports_missing_bundled_runtime_dependency(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delitem(sys.modules, "deepseek_harness_runtime", raising=False)
+    monkeypatch.delitem(sys.modules, "supernova_harness_runtime", raising=False)
     monkeypatch.setattr(sys, "path", [])
 
-    with pytest.raises(FileNotFoundError, match="Install deepseek-harness-runtime-bin"):
-        HarnessClient(HarnessConfig(dsh_home="/explicit/home")).start()
+    with pytest.raises(FileNotFoundError, match="Install supernova-harness-runtime-bin"):
+        HarnessClient(HarnessConfig(snh_home="/explicit/home")).start()
 
 
 def test_runtime_stderr_lines_reach_the_runtime_logger(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
@@ -1230,13 +1230,13 @@ def test_runtime_stderr_lines_reach_the_runtime_logger(tmp_path: Path, caplog: p
         """
 import sys
 
-print("dsh: fatal load failure: TypeError: boom", file=sys.stderr, flush=True)
+print("snh: fatal load failure: TypeError: boom", file=sys.stderr, flush=True)
 print("    at node:internal/deps/undici/undici:6933:28", file=sys.stderr, flush=True)
 sys.exit(1)
 """.strip()
     )
 
-    with caplog.at_level(logging.INFO, logger="deepseek_harness.runtime"):
+    with caplog.at_level(logging.INFO, logger="supernova_harness.runtime"):
         with HarnessClient(HarnessConfig(request_timeout_seconds=2), _launch_args=(sys.executable, str(script))) as client:
             pid = client._proc.pid
             with pytest.raises(Exception, match="fatal load failure"):
@@ -1245,8 +1245,8 @@ sys.exit(1)
             client._stderr_thread.join(timeout=5)
             assert not client._stderr_thread.is_alive()
 
-    records = [record for record in caplog.records if record.name == "deepseek_harness.runtime"]
+    records = [record for record in caplog.records if record.name == "supernova_harness.runtime"]
     assert [(record.levelno, record.getMessage()) for record in records] == [
-        (logging.INFO, f"dsh runtime[{pid}] stderr: dsh: fatal load failure: TypeError: boom"),
-        (logging.INFO, f"dsh runtime[{pid}] stderr:     at node:internal/deps/undici/undici:6933:28"),
+        (logging.INFO, f"snh runtime[{pid}] stderr: snh: fatal load failure: TypeError: boom"),
+        (logging.INFO, f"snh runtime[{pid}] stderr:     at node:internal/deps/undici/undici:6933:28"),
     ]

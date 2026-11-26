@@ -14,9 +14,9 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed, onTestFinished } from 'vitest'
-import { createLaunchEnvironmentSnapshot } from '@deepseek-ai/dsh-launch-environment'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { createLaunchEnvironmentSnapshot } from '@supernova-ai/snh-launch-environment'
+import type { SessionId } from '@supernova-ai/snh-session'
+import { brandString } from '@supernova-ai/snh-brand'
 import { launchWebScaffold, seedSession, watchConsole, webSnapshotMode, type WebScaffold } from './scaffold.ts'
 import { saveFailureShot } from './support.ts'
 
@@ -173,7 +173,7 @@ describe.skipIf(MODE === 'record')('web e2e: Session panel layout', () => {
       const scroll = document.querySelector<HTMLElement>('[data-conversation-scroll]')
       const frame = document.querySelector<HTMLElement>('[data-chat-aside]')
       if (body === null || scroll === null || frame === null) return null
-      const published = body.style.getPropertyValue('--dsh-conversation-viewport-width')
+      const published = body.style.getPropertyValue('--snh-conversation-viewport-width')
       return published === `${scroll.clientWidth}px` ? frame.getBoundingClientRect().width : null
     }), { timeout: 10_000 }).toBe(width)
   }
@@ -185,7 +185,7 @@ describe.skipIf(MODE === 'record')('web e2e: Session panel layout', () => {
 
   /** Forget a dragged transcript width, so the next resize publishes the default again. */
   function forgetWidth(): Promise<void> {
-    return page.evaluate(() => { localStorage.removeItem('dsh.conversation.contentWidth') })
+    return page.evaluate(() => { localStorage.removeItem('snh.conversation.contentWidth') })
   }
 
   beforeAll(async () => {
@@ -280,7 +280,7 @@ describe.skipIf(MODE === 'record')('web e2e: Session panel layout', () => {
     await openSession()
     const toggle = page.locator('[data-session-panel-toggle]')
     // A stored width holds the column at 880px in these frames, so the boundary is 880 + 32 + 348.
-    await page.evaluate(() => { localStorage.setItem('dsh.conversation.contentWidth', '880') })
+    await page.evaluate(() => { localStorage.setItem('snh.conversation.contentWidth', '880') })
     onTestFinished(forgetWidth)
 
     // The narrowest frame that makes room leaves the column its 32px side inset at the start edge.
@@ -335,7 +335,7 @@ describe.skipIf(MODE === 'record')('web e2e: Session panel layout', () => {
       await page.mouse.down()
       await page.mouse.move(x + dx, 400)
       await page.mouse.up()
-      await expect.poll(() => page.evaluate(() => localStorage.getItem('dsh.conversation.contentWidth'))).toBe(stored)
+      await expect.poll(() => page.evaluate(() => localStorage.getItem('snh.conversation.contentWidth'))).toBe(stored)
     }
     const beside = { presentation: 'docked', panel: { width: 300, clear: 40, edge: 8 } }
 
@@ -509,7 +509,7 @@ describe.skipIf(MODE === 'record')('web e2e: Session panel layout', () => {
     const order = (): Promise<(string | null)[]> => panel.evaluate(element => [...element.querySelectorAll('[data-session-panel-section]')]
       .filter(node => getComputedStyle(node).display !== 'none').map(node => node.getAttribute('data-session-panel-section')))
     const stored = async (): Promise<unknown> =>
-      JSON.parse(await page.evaluate(() => localStorage.getItem('dsh.sessionPanel.sectionOrder')) ?? 'null')
+      JSON.parse(await page.evaluate(() => localStorage.getItem('snh.sessionPanel.sectionOrder')) ?? 'null')
     const registered = ['environment', 'subagents', 'background-jobs']
     await expect.poll(order, { timeout: 20_000 }).toEqual(registered)
 

@@ -1,6 +1,6 @@
-import type {} from '@deepseek-ai/dsh-client-ui-slots'
+import type {} from '@supernova-ai/snh-client-ui-slots'
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@supernova-ai/snh-client-ui-slots' {
   interface LocaleNamespaceMap {
     timeline: TimelineKey
   }

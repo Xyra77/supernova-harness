@@ -3,7 +3,7 @@ description: "渐进加载的单个 Office 技能，内联精简的创作与工�
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-skill-office
+# @supernova-ai/snh-skill-office
 
 [English](README.md) | 中文
 
@@ -26,10 +26,10 @@ kind: "package-reference"
 <a id="use-this-package"></a>
 ## 使用本包
 
-在技能注册表和 `dsh-tool-skill` 旁挂载技能提供者。提供者负责 `office` 说明，并追加 Python 环境说明。说明把操作交给 `office_render`、`office_convert` 和 `office_recalculate`，因此需在本提供者旁组合 [`tool-office`](../../document/tool-office/README.zh.md)。
+在技能注册表和 `snh-tool-skill` 旁挂载技能提供者。提供者负责 `office` 说明，并追加 Python 环境说明。说明把操作交给 `office_render`、`office_convert` 和 `office_recalculate`，因此需在本提供者旁组合 [`tool-office`](../../document/tool-office/README.zh.md)。
 
 ```yaml
-- name: '@deepseek-ai/dsh-skill-office'
+- name: '@supernova-ai/snh-skill-office'
 
 ```
 
@@ -38,7 +38,7 @@ kind: "package-reference"
 | `assetRoot` | 包内 `assets/` | 包含 `office` 技能目录（内有 `SKILL.md`）的绝对路径。 |
 | `pythonEnvironment` | `'workspace-dependencies'` | `office` 技能指引模型使用的 Python；见下文。 |
 
-`pythonEnvironment` 选择追加到 `office` 技能末尾的一段固定说明。两个取值都先遵守用户或适用 AGENTS.md 明确要求的环境。`'workspace-dependencies'` 指引模型调用 `load_workspace_dependencies`，使用其返回的内置 Python 与库；仅在同时挂载 `dsh-tool-workspace-dependencies` 时使用。只挂载本包而不挂载 `dsh-tool-workspace-dependencies` 的自定义组合必须配置 `pythonEnvironment: user`。`'user'` 指引模型使用项目或用户已有的 PATH 上的 Python，先检查所需库能否 import，缺少时说明需要安装的包，未经用户同意不向全局环境安装。
+`pythonEnvironment` 选择追加到 `office` 技能末尾的一段固定说明。两个取值都先遵守用户或适用 AGENTS.md 明确要求的环境。`'workspace-dependencies'` 指引模型调用 `load_workspace_dependencies`，使用其返回的内置 Python 与库；仅在同时挂载 `snh-tool-workspace-dependencies` 时使用。只挂载本包而不挂载 `snh-tool-workspace-dependencies` 的自定义组合必须配置 `pythonEnvironment: user`。`'user'` 指引模型使用项目或用户已有的 PATH 上的 Python，先检查所需库能否 import，缺少时说明需要安装的包，未经用户同意不向全局环境安装。
 
 相对路径的 `assetRoot` 会阻止注册。目录发现和加载时读取 `office/SKILL.md`。技能文件缺失或无效时，该技能从目录中省略，并记录给出该路径的警告；发现之后文件消失时，加载失败，技能从目录中移除。其他读取错误（例如文件被锁）会使本次发现不完整，由注册表重试。加载说明时不解析任何可执行文件，也不准备引擎；调用 Office 工具时才会报告 LibreOffice Kit 不可用。把转换后的文件复制进工作区时，由 Bash 或 PowerShell 负责审批、沙箱和取消。
 
@@ -107,7 +107,7 @@ flowchart TD
 <a id="model-experience"></a>
 ## 模型体验
 
-间接影响：`dsh-tool-skill` 在目录中渲染一行 `office` 摘要，并通过 `skill(office)` 返回完整说明。说明末尾的 Python 环境部分按 `pythonEnvironment` 指向 `load_workspace_dependencies` 或用户已有的 Python。
+间接影响：`snh-tool-skill` 在目录中渲染一行 `office` 摘要，并通过 `skill(office)` 返回完整说明。说明末尾的 Python 环境部分按 `pythonEnvironment` 指向 `load_workspace_dependencies` 或用户已有的 Python。
 
 #### KV Cache 影响
 

@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-api-workspace-files",
+  "name": "@supernova-ai/snh-api-workspace-files",
   "description": "Workspace file service and Client resource provider: bounded reads, directory listing, and live metadata over the workspaceFiles Remote namespace",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -38,11 +38,11 @@
     "./package.json": "./package.json",
     "./locale/*.json": "./locale/*.json"
   },
-  "dsh": {
+  "snh": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-api-gateway",
-        "@deepseek-ai/dsh-client-resources"
+        "@supernova-ai/snh-api-gateway",
+        "@supernova-ai/snh-client-resources"
       ],
       "platform": "web"
     }
@@ -53,33 +53,33 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-deque": "workspace:*",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/snh-deque": "workspace:*",
+    "@supernova-ai/snh-typert-protocol": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
     "zod": "4.6.6",
-    "@deepseek-ai/dsh-util-ripgrep": "workspace:*"
+    "@supernova-ai/snh-util-ripgrep": "workspace:*"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-api-gateway": "workspace:*",
-    "@deepseek-ai/dsh-api-remote-access": "workspace:*",
-    "@deepseek-ai/dsh-client-connection": "workspace:*",
-    "@deepseek-ai/dsh-client-resources": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:*",
-    "@deepseek-ai/dsh-fs": "workspace:*",
-    "@deepseek-ai/dsh-remote-mock": "workspace:*",
-    "@deepseek-ai/dsh-sandbox-policy": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-session-persistence": "workspace:*",
-    "@deepseek-ai/dsh-session-projection-cache": "workspace:*",
-    "@deepseek-ai/dsh-subprocess": "workspace:*",
-    "@deepseek-ai/dsh-subprocess-local": "workspace:*",
-    "@deepseek-ai/dsh-util-workspace-path": "workspace:*",
-    "@deepseek-ai/dsh-working-directory": "workspace:*"
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-api-gateway": "workspace:*",
+    "@supernova-ai/snh-api-remote-access": "workspace:*",
+    "@supernova-ai/snh-client-connection": "workspace:*",
+    "@supernova-ai/snh-client-resources": "workspace:*",
+    "@supernova-ai/snh-client-ui-slots": "workspace:*",
+    "@supernova-ai/snh-fs": "workspace:*",
+    "@supernova-ai/snh-remote-mock": "workspace:*",
+    "@supernova-ai/snh-sandbox-policy": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-persistence": "workspace:*",
+    "@supernova-ai/snh-session-projection-cache": "workspace:*",
+    "@supernova-ai/snh-subprocess": "workspace:*",
+    "@supernova-ai/snh-subprocess-local": "workspace:*",
+    "@supernova-ai/snh-util-workspace-path": "workspace:*",
+    "@supernova-ai/snh-working-directory": "workspace:*"
   },
   "files": [
     "locale/*.json",

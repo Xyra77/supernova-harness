@@ -3,14 +3,14 @@
  * The tool pauses until a UI provider returns a human answer, then feeds that
  * answer back into the agent loop as an ordinary tool result.
  *
- * @module @deepseek-ai/dsh-tool-ask-user
+ * @module @supernova-ai/snh-tool-ask-user
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import z from '@deepseek-ai/schemastery'
+import type { Context } from '@supernova-ai/cordis'
+import { defineTool } from '@supernova-ai/snh-tools'
+import z from '@supernova-ai/schemastery'
 import { registerTimedAskUser, skippedAnswerGuidance } from './timed.ts'
-import '@deepseek-ai/dsh-user-questions'
+import '@supernova-ai/snh-user-questions'
 
 /** Cordis row selecting the tool schema and its default foreground wait. */
 export interface Config {

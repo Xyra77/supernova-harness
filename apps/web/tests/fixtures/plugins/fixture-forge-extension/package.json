@@ -8,14 +8,14 @@
     ".": "./index.js",
     "./client": "./client.js"
   },
-  "dsh": {
+  "snh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     },
     "client": {
       "platform": "web",
       "inject": [
-        "@deepseek-ai/dsh-experimental-client-ui-forge"
+        "@supernova-ai/snh-experimental-client-ui-forge"
       ]
     }
   }

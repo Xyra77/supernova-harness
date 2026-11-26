@@ -16,11 +16,11 @@
  */
 
 import { Client } from '@modelcontextprotocol/client'
-import type { Context } from '@deepseek-ai/cordis'
-import type { ScopeKey } from '@deepseek-ai/dsh-scope'
-import { assertNever, deepEqualJson, type JsonValue } from '@deepseek-ai/dsh-util-values'
+import type { Context } from '@supernova-ai/cordis'
+import type { ScopeKey } from '@supernova-ai/snh-scope'
+import { assertNever, deepEqualJson, type JsonValue } from '@supernova-ai/snh-util-values'
 import type { ServerContext } from './server-context.ts'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
+import { MAX_TIMER_DELAY_MS } from '@supernova-ai/snh-timeout'
 import { withDeadline } from './deadline.ts'
 import { McpAuthorizationRequired, McpLocalError, mcpRequestError, McpToolError, oauthFailure } from './diagnostic.ts'
 import type { McpOAuthCredentials, McpOAuthGrant } from './oauth-credentials.ts'
@@ -319,7 +319,7 @@ export function startConnection(
 
   async function connectGeneration(): Promise<void> {
     if (isStopped()) return
-    const client = new Client({ name: 'dsh-mcp-client', version: '0.0.1' }, {
+    const client = new Client({ name: 'snh-mcp-client', version: '0.0.1' }, {
       capabilities: {}, versionNegotiation: { mode: 'auto' },
       listChanged: { tools: { autoRefresh: false, debounceMs: 0, onChanged: () => { void refreshTools() } } },
     })

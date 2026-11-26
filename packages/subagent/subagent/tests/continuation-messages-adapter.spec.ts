@@ -3,22 +3,22 @@ import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { AnonymousUserId } from '@deepseek-ai/dsh-anonymous-user-id'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import { DeepSeekAdapter, resolveAdapterOptions } from '@deepseek-ai/dsh-llm-deepseek'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import * as SubagentSpawn from '@deepseek-ai/dsh-subagent-spawn-in-process'
-import { end, MODEL, server, sse, start } from '../../../llm/llm-deepseek/tests/helpers.ts'
+import { Context } from '@supernova-ai/cordis'
+import type { AnonymousUserId } from '@supernova-ai/snh-anonymous-user-id'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import { SuperNovaAdapter, resolveAdapterOptions } from '@supernova-ai/snh-llm-supernova'
+import type { SessionId } from '@supernova-ai/snh-session'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import * as SubagentSpawn from '@supernova-ai/snh-subagent-spawn-in-process'
+import { end, MODEL, server, sse, start } from '../../../llm/llm-supernova/tests/helpers.ts'
 import SubagentRuntime, { type SubagentRunEndInfo } from '../src/index.ts'
 import { loadStoredSession } from './persistence-helpers.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 it('continues the parent through default Messages after a reasoning-bearing continuable child settles', async () => {
-  const root = mkdtempSync(join(tmpdir(), 'dsh-settlement-messages-'))
+  const root = mkdtempSync(join(tmpdir(), 'snh-settlement-messages-'))
   const ctx = new Context()
   let http: Awaited<ReturnType<typeof server>> | undefined
   try {
@@ -37,7 +37,7 @@ it('continues the parent through default Messages after a reasoning-bearing cont
     })
     const { requests } = http
     const connection = resolveAdapterOptions({ baseURL: http.url })
-    const adapter = new DeepSeekAdapter({
+    const adapter = new SuperNovaAdapter({
       options: () => connection,
       resolveAuth: () => Promise.resolve({ headers: { 'x-api-key': 'test-key' } }),
       resolveUserId: () => '00000000-0000-4000-8000-000000000001' as AnonymousUserId,

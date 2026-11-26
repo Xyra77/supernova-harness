@@ -1,7 +1,7 @@
 // Connection controls never enter the model operation schema.
 using System.Text.Json;
 
-namespace DeepSeek.Cua.Protocol;
+namespace SuperNova.Cua.Protocol;
 
 public enum NativeControl { Close, Cancel, CompletedCancel }
 

@@ -1,14 +1,14 @@
 /** Live tool inspection shares the real Session's unload lifetime, never its replay data. */
-import { Context } from '@deepseek-ai/cordis'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
+import { Context } from '@supernova-ai/cordis'
+import TypertRegistry from '@supernova-ai/snh-typert-registry'
 import { expect, it, onTestFinished } from 'vitest'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { SessionId, SessionEvent } from '@deepseek-ai/dsh-session'
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import type { SessionId, SessionEvent } from '@supernova-ai/snh-session'
+import { defineTool } from '@supernova-ai/snh-tools'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
 import SessionToolResults, { type Config } from '../src/index.ts'
 
 async function setup(value: JsonValue = { answer: 42 }, config: Partial<Config> = {}) {

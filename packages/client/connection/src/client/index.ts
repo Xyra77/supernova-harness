@@ -1,5 +1,5 @@
 /** Browser wire client: Remote transport and connection generations. */
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
 import {
   ConnectionController,
   type ConnectionRecoveryConfig,
@@ -12,7 +12,7 @@ import { createWebConnectionRpc, type RpcFetch, type RpcStreamOpen } from './rpc
 import { isLoopbackHostname } from '../loopback-hostname.ts'
 import type { ClientConnectionRpc } from '../rpc.ts'
 import { resolveConnectionConfig } from '../recovery-config.ts'
-import type { SyncedConfig } from '@deepseek-ai/dsh-client-config/types'
+import type { SyncedConfig } from '@supernova-ai/snh-client-config/types'
 import type { ConnectionConfig } from '../types.ts'
 import type { ConnectionInteractions } from '../connect-protocol.ts'
 import { openConnectionWebSocket, type ConnectionWebSocket, type ConnectionWebSocketFactory } from './socket.ts'
@@ -20,7 +20,7 @@ import { openConnectionWebSocket, type ConnectionWebSocket, type ConnectionWebSo
 export type { ConnectionInteractions } from '../connect-protocol.ts'
 export type { ConnectionWebSocket, ConnectionWebSocketFactory } from './socket.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Events {
     /**
      * A connection generation was established. Wire-derived caches must
@@ -123,7 +123,7 @@ export interface ClientTransportHooks {
 
 /** Page global carrying {@link ClientTransportHooks}; absent in the served web app. */
 interface ClientTransportGlobal {
-  __DSH_TRANSPORT__?: ClientTransportHooks
+  __SNH_TRANSPORT__?: ClientTransportHooks
 }
 
 /** Browser location fields used to classify loopback authority. */
@@ -345,7 +345,7 @@ export function installConnection(ctx: Context, options: ConnectionInstallOption
 export function apply(ctx: Context, config: SyncedConfig<ConnectionConfig>): void {
   const globals = globalThis as ClientTransportGlobal
   const pageLocation = typeof location === 'undefined' ? undefined : location
-  const transport = globals.__DSH_TRANSPORT__
+  const transport = globals.__SNH_TRANSPORT__
   installConnection(ctx, {
     ...(transport === undefined ? {} : { transport }),
     recovery: resolveConnectionConfig(config.recovery.get()),

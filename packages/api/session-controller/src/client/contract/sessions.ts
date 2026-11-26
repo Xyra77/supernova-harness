@@ -4,16 +4,16 @@
  * the concrete class. Widening this interface is the
  * explicit act of widening what features may do to the sessions domain.
  */
-import type { Context } from '@deepseek-ai/cordis'
-import type { SubagentAddress } from '@deepseek-ai/dsh-subagent/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { WorkspaceId } from '@deepseek-ai/dsh-workspace/types'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+import type { Context } from '@supernova-ai/cordis'
+import type { SubagentAddress } from '@supernova-ai/snh-subagent/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type { WorkspaceId } from '@supernova-ai/snh-workspace/types'
+import type { RemoteResult } from '@supernova-ai/snh-typert-protocol'
 import type { AgentContext } from '../scope.ts'
 import type { SessionSearchResultItem } from '../sessions/manager.ts'
 import type { SessionBinding, SessionListState } from '../sessions/service.ts'
 import type { SessionFace } from './session.ts'
-import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
+import type { ObservableSnapshot } from '@supernova-ai/snh-client-store'
 import type { SessionReferenceSource, SessionRetainFacet } from '../index.ts'
 
 export type { AgentContext } from '../scope.ts'

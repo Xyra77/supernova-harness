@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-api-remotes",
+  "name": "@supernova-ai/snh-api-remotes",
   "description": "Remote BFF assembly for application-selected Host capabilities",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -30,10 +30,10 @@
     "./package.json": "./package.json",
     "./locale/*.json": "./locale/*.json"
   },
-  "dsh": {
+  "snh": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-api-gateway"
+        "@supernova-ai/snh-api-gateway"
       ],
       "platform": "web",
       "immediately": true
@@ -55,59 +55,59 @@
     "src"
   ],
   "dependencies": {
-    "@deepseek-ai/dsh-deque": "workspace:*",
-    "@deepseek-ai/dsh-util-values": "workspace:*"
+    "@supernova-ai/snh-deque": "workspace:*",
+    "@supernova-ai/snh-util-values": "workspace:*"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-scope": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-scope": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-agent-preset-registry": "workspace:*",
-    "@deepseek-ai/dsh-api-gateway": "workspace:*",
-    "@deepseek-ai/dsh-api-job-controller": "workspace:*",
-    "@deepseek-ai/dsh-api-session-controller": "workspace:*",
-    "@deepseek-ai/dsh-api-settings-controller": "workspace:*",
-    "@deepseek-ai/dsh-api-workspace-controller": "workspace:*",
-    "@deepseek-ai/dsh-api-workspace-files": "workspace:*",
-    "@deepseek-ai/dsh-client-connection": "workspace:*",
-    "@deepseek-ai/dsh-client-file-upload": "workspace:*",
-    "@deepseek-ai/dsh-commands": "workspace:*",
-    "@deepseek-ai/dsh-cordis-host-runner": "workspace:*",
-    "@deepseek-ai/dsh-credentials": "workspace:*",
-    "@deepseek-ai/dsh-file-reference": "workspace:*",
-    "@deepseek-ai/dsh-goal": "workspace:*",
-    "@deepseek-ai/dsh-host-plugin-inventory": "workspace:*",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/dsh-message-feedback": "workspace:*",
-    "@deepseek-ai/dsh-permission-presets": "workspace:*",
-    "@deepseek-ai/dsh-schedule": "workspace:*",
-    "@deepseek-ai/dsh-scope": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-session-reference": "workspace:*",
-    "@deepseek-ai/dsh-settings": "workspace:*",
-    "@deepseek-ai/dsh-subagent": "workspace:*",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*",
-    "@deepseek-ai/dsh-user-approval": "workspace:*",
-    "@deepseek-ai/dsh-user-questions": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-agent-preset-registry": "workspace:*",
+    "@supernova-ai/snh-api-gateway": "workspace:*",
+    "@supernova-ai/snh-api-job-controller": "workspace:*",
+    "@supernova-ai/snh-api-session-controller": "workspace:*",
+    "@supernova-ai/snh-api-settings-controller": "workspace:*",
+    "@supernova-ai/snh-api-workspace-controller": "workspace:*",
+    "@supernova-ai/snh-api-workspace-files": "workspace:*",
+    "@supernova-ai/snh-client-connection": "workspace:*",
+    "@supernova-ai/snh-client-file-upload": "workspace:*",
+    "@supernova-ai/snh-commands": "workspace:*",
+    "@supernova-ai/snh-cordis-host-runner": "workspace:*",
+    "@supernova-ai/snh-credentials": "workspace:*",
+    "@supernova-ai/snh-file-reference": "workspace:*",
+    "@supernova-ai/snh-goal": "workspace:*",
+    "@supernova-ai/snh-host-plugin-inventory": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-message-feedback": "workspace:*",
+    "@supernova-ai/snh-permission-presets": "workspace:*",
+    "@supernova-ai/snh-schedule": "workspace:*",
+    "@supernova-ai/snh-scope": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-reference": "workspace:*",
+    "@supernova-ai/snh-settings": "workspace:*",
+    "@supernova-ai/snh-subagent": "workspace:*",
+    "@supernova-ai/snh-typert-protocol": "workspace:*",
+    "@supernova-ai/snh-user-approval": "workspace:*",
+    "@supernova-ai/snh-user-questions": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
     "zod": "4.6.6",
-    "@deepseek-ai/dsh-command-feedback": "workspace:*",
-    "@deepseek-ai/dsh-api-terminal-controller": "workspace:*",
-    "@deepseek-ai/dsh-plugin-manager": "workspace:*",
-    "@deepseek-ai/dsh-mcp-manager": "workspace:*",
-    "@deepseek-ai/dsh-plugin-market": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-connector-account": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-plugin-manager": "workspace:*",
-    "@deepseek-ai/dsh-office-kit": "workspace:*",
-    "@deepseek-ai/dsh-deepseek-account": "workspace:*",
-    "@deepseek-ai/dsh-client-product-analytics": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-session-status": "workspace:*",
-    "@deepseek-ai/dsh-agent-team": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-trajectory": "workspace:*",
-    "@deepseek-ai/dsh-web": "workspace:*",
-    "@deepseek-ai/dsh-action-cards": "workspace:*",
-    "@deepseek-ai/dsh-plugin-recommendations": "workspace:*"
+    "@supernova-ai/snh-command-feedback": "workspace:*",
+    "@supernova-ai/snh-api-terminal-controller": "workspace:*",
+    "@supernova-ai/snh-plugin-manager": "workspace:*",
+    "@supernova-ai/snh-mcp-manager": "workspace:*",
+    "@supernova-ai/snh-plugin-market": "workspace:*",
+    "@supernova-ai/snh-client-ui-connector-account": "workspace:*",
+    "@supernova-ai/snh-client-ui-plugin-manager": "workspace:*",
+    "@supernova-ai/snh-office-kit": "workspace:*",
+    "@supernova-ai/snh-deepseek-account": "workspace:*",
+    "@supernova-ai/snh-client-product-analytics": "workspace:*",
+    "@supernova-ai/snh-client-ui-session-status": "workspace:*",
+    "@supernova-ai/snh-agent-team": "workspace:*",
+    "@supernova-ai/snh-client-ui-trajectory": "workspace:*",
+    "@supernova-ai/snh-web": "workspace:*",
+    "@supernova-ai/snh-action-cards": "workspace:*",
+    "@supernova-ai/snh-plugin-recommendations": "workspace:*"
   }
 }

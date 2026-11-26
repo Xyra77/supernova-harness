@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-forge-gitlab",
+  "name": "@supernova-ai/snh-forge-gitlab",
   "description": "GitLab provider for the experimental forge registry, read and written through the GitLab CLI on the host",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -32,29 +32,29 @@
     "directory": "packages/experimental/forge-gitlab"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-timeout": "workspace:*",
-    "@deepseek-ai/dsh-util-values": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/snh-timeout": "workspace:*",
+    "@supernova-ai/snh-util-values": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
     "diff": "^9.0.0",
     "execa": "^10.0.1",
     "p-limit": "7.3.3",
     "zod": "4.6.6"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-experimental-forge": "workspace:*",
-    "@deepseek-ai/dsh-experimental-forge-session": "workspace:*",
-    "@deepseek-ai/dsh-subprocess": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-experimental-forge": "workspace:*",
+    "@supernova-ai/snh-experimental-forge-session": "workspace:*",
+    "@supernova-ai/snh-subprocess": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/dsh-experimental-forge": "workspace:*",
-    "@deepseek-ai/dsh-experimental-forge-session": "workspace:*",
-    "@deepseek-ai/dsh-subprocess": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-experimental-forge": "workspace:*",
+    "@supernova-ai/snh-experimental-forge-session": "workspace:*",
+    "@supernova-ai/snh-subprocess": "workspace:*"
   },
   "peerDependenciesMeta": {
-    "@deepseek-ai/dsh-experimental-forge-session": {
+    "@supernova-ai/snh-experimental-forge-session": {
       "optional": true
     }
   }

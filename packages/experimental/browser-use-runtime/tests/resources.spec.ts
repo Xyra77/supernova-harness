@@ -1,13 +1,13 @@
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { unsupportedModel, unsupportedInbox } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { Session, type SessionId } from '@deepseek-ai/dsh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { unsupportedModel, unsupportedInbox } from '@supernova-ai/snh-agent-loop-testkit'
+import { Session, type SessionId } from '@supernova-ai/snh-session'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { BrowserSessionError, SessionResources } from '../src/index.ts'
 import type { BrowserSessionErrorCode } from '../src/index.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const contexts: Context[] = []
 

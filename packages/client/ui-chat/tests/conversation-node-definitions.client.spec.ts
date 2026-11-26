@@ -1,21 +1,21 @@
 import { describe, expect, it } from 'vitest'
 import type {
   ChatConversationViewNode, ChatSnapshot,
-} from '@deepseek-ai/dsh-client-ui-chat/client'
+} from '@supernova-ai/snh-client-ui-chat/client'
 import type {
   SessionEventLikeEntry, SessionLiveEventEntry,
-} from '@deepseek-ai/dsh-api-session-controller/client'
+} from '@supernova-ai/snh-api-session-controller/client'
 import {
   ConversationNodeAssembler,
   type ConversationNodeDefinition,
   type ConversationViewDefinition,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { SessionEvent } from '@deepseek-ai/dsh-session/types'
+} from '@supernova-ai/snh-client-ui-conversation/client'
+import type { SessionEvent } from '@supernova-ai/snh-session/types'
 import { inspectSystemPrompt } from '../../ui-conversation/src/client/contract/system-prompt.ts'
-import { AssistantStreamAccumulator } from '@deepseek-ai/dsh-llm/assistant-stream'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { LlmAttemptId, ToolCallId } from '@deepseek-ai/dsh-llm/types'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
+import { AssistantStreamAccumulator } from '@supernova-ai/snh-llm/assistant-stream'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { LlmAttemptId, ToolCallId } from '@supernova-ai/snh-llm/types'
+import type { StreamChunk } from '@supernova-ai/snh-llm'
 import { hasAssistantReplyContent } from '../src/client/contract/assistant-content.ts'
 import { assistantDefinition } from '../src/client/conversation-nodes/assistant.ts'
 import { chatViewDefinition } from '../src/client/conversation-nodes/chat-snapshot-builder.ts'
@@ -25,7 +25,7 @@ import { unknownFallbackDefinition } from '../src/client/conversation-nodes/fall
 import { nextStepInboxDefinition, nextTurnInboxDefinition } from '../src/client/conversation-nodes/inbox.ts'
 import { inheritedHistoryDefinition } from '../src/client/conversation-nodes/inherited-history.ts'
 import { developerMessageDefinition, messageDefinition } from '../src/client/conversation-nodes/message.ts'
-import { inspectRequestPrompt } from '@deepseek-ai/dsh-client-ui-conversation/client'
+import { inspectRequestPrompt } from '@supernova-ai/snh-client-ui-conversation/client'
 import { requestPromptDefinition, systemMessageDefinition } from '../src/client/conversation-nodes/request-prompt.ts'
 import { retryDefinition } from '../src/client/conversation-nodes/retry.ts'
 import { toolDefinition } from '../src/client/conversation-nodes/tool.ts'
@@ -3224,7 +3224,7 @@ it('retains a sign-out cancellation notice when reopening a partial turn', () =>
     at(7, 'turn/end', { turn: 1, reason: { kind: 'aborted', reason: { kind: 'hook', reason: 'deepseek-account/signed-out' } } }),
   ], true)
   expect(node(snapshot(value), 'turn-error')?.data).toMatchObject({
-    code: 'ACCOUNT_SIGNED_OUT', message: 'Stopped because you signed out of DeepSeek.',
+    code: 'ACCOUNT_SIGNED_OUT', message: 'Stopped because you signed out of SuperNova.',
   })
 })
 
@@ -3233,7 +3233,7 @@ it('reports a turn closed after its process exited as a stopped turn', () => {
     at(7, 'turn/end', { turn: 1, reason: { kind: 'interrupted' } }),
   ], true)
   expect(node(snapshot(value), 'turn-error')?.data).toMatchObject({
-    code: 'INTERRUPTED', message: 'The DSH process exited before this turn finished.',
+    code: 'INTERRUPTED', message: 'The SNH process exited before this turn finished.',
   })
 })
 

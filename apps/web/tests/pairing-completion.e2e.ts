@@ -7,7 +7,7 @@ import { openSettings, ZH_BROWSER_LOCALE } from './support.ts'
 
 it('recognizes a delivered browser session when the pairing result crosses the local deadline', async () => {
   const scaffold = await launchWebScaffold({
-    publicMount: { prefix: '/tools/dsh/' },
+    publicMount: { prefix: '/tools/snh/' },
     extraOverlayPath: fileURLToPath(new URL('./pin-browse-picker.overlay.yml', import.meta.url)),
   })
   onTestFinished(() => scaffold.close())
@@ -15,7 +15,7 @@ it('recognizes a delivered browser session when the pairing result crosses the l
   try {
     const owner = await browser.newPage({ locale: ZH_BROWSER_LOCALE })
     await owner.goto(scaffold.authenticatedUrl)
-    await owner.waitForFunction(() => '__DSH_BOOT__' in window)
+    await owner.waitForFunction(() => '__SNH_BOOT__' in window)
     await openSettings(owner, 'zh')
     await owner.getByRole('dialog', { name: '设置', exact: true })
       .getByRole('button', { name: '远程连接', exact: true }).click()
@@ -69,13 +69,13 @@ it('recognizes a delivered browser session when the pairing result crosses the l
     await approvals.getByRole('button', { name: '批准', exact: true }).click()
     await expect.poll(() => applicant.evaluate(() => document.documentElement.dataset.completionHeld), { timeout: 15_000 }).toBe('true')
 
-    const delivered = (await applicant.context().cookies()).some(cookie => cookie.name.startsWith('dsh-remote-') && cookie.httpOnly)
+    const delivered = (await applicant.context().cookies()).some(cookie => cookie.name.startsWith('snh-remote-') && cookie.httpOnly)
     const protectedResponse = await applicant.request.get(scaffold.baseUrl)
     const protectedStatus = protectedResponse.status()
     await protectedResponse.dispose()
     expect(delivered).toBe(true)
     expect(protectedStatus).toBe(200)
-    expect(await applicant.evaluate(() => '__DSH_BOOT__' in window)).toBe(false)
+    expect(await applicant.evaluate(() => '__SNH_BOOT__' in window)).toBe(false)
 
     await applicant.clock.fastForward(ticket.expiresInMs)
     await expect.poll(() => applicant.evaluate(() => document.documentElement.dataset.sessionCheckStatus)).toBe('200')
@@ -92,11 +92,11 @@ it('recognizes a delivered browser session when the pairing result crosses the l
     await applicant.evaluate(() => { globalThis.dispatchEvent(new Event('release-pairing-completion')) })
     await expect.poll(() => applicant.evaluate(() => document.documentElement.dataset.completionReleased)).toBe('true')
     expect(await applicant.locator('#auth-pair-panel').getAttribute('data-state')).toBe('checking')
-    expect(await applicant.evaluate(() => '__DSH_BOOT__' in window)).toBe(false)
+    expect(await applicant.evaluate(() => '__SNH_BOOT__' in window)).toBe(false)
     expect(creations).toBe(1)
 
     await applicant.evaluate(() => { globalThis.dispatchEvent(new Event('release-session-check')) })
-    await applicant.waitForFunction(() => '__DSH_BOOT__' in window)
+    await applicant.waitForFunction(() => '__SNH_BOOT__' in window)
     expect(applicant.url()).toBe(scaffold.baseUrl)
     expect(creations).toBe(1)
     expect(errors).toEqual([])

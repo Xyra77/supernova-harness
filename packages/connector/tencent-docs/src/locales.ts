@@ -1,5 +1,5 @@
 /** The Plugins page text that names Tencent Docs; the shared account copy comes from the account surfaces' dictionary. */
-import type { McpAccountCopy } from '@deepseek-ai/dsh-mcp-account'
+import type { McpAccountCopy } from '@supernova-ai/snh-mcp-account'
 
 /** Every language the Web app ships. */
 type ShippedText = Readonly<Record<'zh' | 'en' | 'ja' | 'es' | 'fr' | 'de' | 'ru' | 'pt', string>>
@@ -132,14 +132,14 @@ export const COPY: McpAccountCopy<ShippedText> = {
       pt: 'Sair do Tencent Docs?',
     },
     body: {
-      zh: '将删除 DSH 保存的腾讯文档授权，之后对话中无法使用腾讯文档。',
-      en: 'This deletes the Tencent Docs authorization DSH saved, so conversations can no longer use Tencent Docs.',
-      ja: 'DSH が保存した Tencent Docs の認可を削除します。以後、会話の中で Tencent Docs は使用できなくなります。',
-      es: 'Se eliminará la autorización de Tencent Docs que guardó DSH, por lo que las conversaciones ya no podrán usar Tencent Docs.',
-      fr: 'Cela supprime l’autorisation Tencent Docs enregistrée par DSH : les conversations ne pourront plus utiliser Tencent Docs.',
-      de: 'Dadurch wird die von DSH gespeicherte Tencent Docs-Autorisierung gelöscht, sodass Unterhaltungen Tencent Docs nicht mehr verwenden können.',
-      ru: 'Сохранённая DSH авторизация Tencent Docs будет удалена, и беседы больше не смогут использовать Tencent Docs.',
-      pt: 'Isso exclui a autorização do Tencent Docs salva pelo DSH, e as conversas não poderão mais usar o Tencent Docs.',
+      zh: '将删除 SNH 保存的腾讯文档授权，之后对话中无法使用腾讯文档。',
+      en: 'This deletes the Tencent Docs authorization SNH saved, so conversations can no longer use Tencent Docs.',
+      ja: 'SNH が保存した Tencent Docs の認可を削除します。以後、会話の中で Tencent Docs は使用できなくなります。',
+      es: 'Se eliminará la autorización de Tencent Docs que guardó SNH, por lo que las conversaciones ya no podrán usar Tencent Docs.',
+      fr: 'Cela supprime l’autorisation Tencent Docs enregistrée par SNH : les conversations ne pourront plus utiliser Tencent Docs.',
+      de: 'Dadurch wird die von SNH gespeicherte Tencent Docs-Autorisierung gelöscht, sodass Unterhaltungen Tencent Docs nicht mehr verwenden können.',
+      ru: 'Сохранённая SNH авторизация Tencent Docs будет удалена, и беседы больше не смогут использовать Tencent Docs.',
+      pt: 'Isso exclui a autorização do Tencent Docs salva pelo SNH, e as conversas não poderão mais usar o Tencent Docs.',
     },
   },
   notice: {

@@ -2,16 +2,16 @@
 /** ToolCallTree-owned root/subcall markers and keyed Tool dispatch. */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { bindDisclosure, useDisclosure } from '@deepseek-ai/dsh-client-ui-chat/src/client/chat/use-disclosure.ts'
-import type { SessionSnapshot } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { ToolCallBlock, ToolResultNode } from '@deepseek-ai/dsh-client-ui-chat/client'
-import { contextMenuHook, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import { bindDisclosure, useDisclosure } from '@supernova-ai/snh-client-ui-chat/src/client/chat/use-disclosure.ts'
+import type { SessionSnapshot } from '@supernova-ai/snh-api-session-controller/client'
+import type { ToolCallBlock, ToolResultNode } from '@supernova-ai/snh-client-ui-chat/client'
+import { contextMenuHook, makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import { zh as commonZh } from '@supernova-ai/snh-client-locale/src/locales/zh.ts'
 import type { ToolCallOwnerProps, ToolTreeProps } from '../src/client/contract/slots.ts'
 import { ToolCallTree } from '../src/client/tool/ToolCallTree.tsx'
-import { zh } from '@deepseek-ai/dsh-client-ui-conversation/src/client/locales.ts'
-import { PartialArguments } from '@deepseek-ai/dsh-util-values'
+import { zh } from '@supernova-ai/snh-client-ui-conversation/src/client/locales.ts'
+import { PartialArguments } from '@supernova-ai/snh-util-values'
 
 afterEach(cleanup)
 

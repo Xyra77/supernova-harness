@@ -5,15 +5,15 @@ import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { expect, it, onTestFinished } from 'vitest'
 import { z } from 'zod'
-import { SESSION_FORMAT_VERSION, SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import { SESSION_FORMAT_VERSION, SessionId, SessionSeq } from '@supernova-ai/snh-session'
+import type { SessionEvent, SessionHeader } from '@supernova-ai/snh-session'
+import { createUserMessage } from '@supernova-ai/snh-llm'
 import { SCHEMA_VERSION } from '../src/sqlite.ts'
 import { countSqliteReads, sharedHistory, sqliteLogs, storedEvents, storedFrames, tailSegment } from './fixtures/store.ts'
 import type { SqliteStoreOptions } from '../src/sqlite.ts'
 
 async function fixture(overrides: Partial<SqliteStoreOptions> = {}) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-sqlite-persistence-')), path = join(root, 'sessions.sqlite')
+  const root = await mkdtemp(join(tmpdir(), 'snh-sqlite-persistence-')), path = join(root, 'sessions.sqlite')
   const logs = sqliteLogs(path, root, overrides)
   onTestFinished(async () => { try { await logs.close() } finally { await rm(root, { recursive: true, force: true }) } })
   const id = SessionId('selected')

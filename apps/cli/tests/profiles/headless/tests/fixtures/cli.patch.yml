@@ -5,7 +5,7 @@
 - id: headless-runner
   disabled: true
 
-- id: llm-deepseek
+- id: llm-supernova
   disabled: true
 
 - id: agent-loop
@@ -18,14 +18,14 @@
 
 - id: shell-env
   config:
-    dshHome: './.dsh-home'
+    snhHome: './.snh-home'
 
 - id: agent-instructions
   disabled: true
 
 - id: skill-filesystem
   config:
-    dshHome: './.dsh-home'
+    snhHome: './.snh-home'
     agentsHome: './.agents-home'
 
 - id: session-persistence-jsonl
@@ -39,17 +39,17 @@
 - id: sandbox-policy
   inject: []
   config:
-    mode: !!js process.env.DSH_PERMISSION_MODE ?? 'workspace-write'
+    mode: !!js process.env.SNH_PERMISSION_MODE ?? 'workspace-write'
     workspaceRoot: !!js process.cwd()
 
-# Own key references no runner sets on the DeepSeek Search and Fetch APIs: the
+# Own key references no runner sets on the SuperNova Search and Fetch APIs: the
 # turn runs as a deployment without web search credentials, whatever
 # DEEPSEEK_API_KEY the launching environment exports.
-- id: web-deepseek-api
+- id: web-supernova-api
   config:
-    searchApiKeyEnv: DSH_KEYLESS_SMOKE_SEARCH_KEY
-    fetchApiKeyEnv: DSH_KEYLESS_SMOKE_FETCH_KEY
+    searchApiKeyEnv: SNH_KEYLESS_SMOKE_SEARCH_KEY
+    fetchApiKeyEnv: SNH_KEYLESS_SMOKE_FETCH_KEY
 
-- id: web-search-deepseek
+- id: web-search-supernova
   config:
-    apiKeyEnv: DSH_KEYLESS_SMOKE_SEARCH_KEY
+    apiKeyEnv: SNH_KEYLESS_SMOKE_SEARCH_KEY

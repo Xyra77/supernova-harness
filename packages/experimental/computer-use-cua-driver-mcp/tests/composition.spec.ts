@@ -1,26 +1,26 @@
 /** Loader composition with a real stdio child and a scripted external model. */
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context, FiberState } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import ComputerUse from '@deepseek-ai/dsh-computer-use'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ComputerUseProviderName } from '@deepseek-ai/dsh-computer-use/types'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import LlmRuntime, { LlmAdapter, type ToolCallId, createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { GenerateOptions, LlmResolvedModelInfo, StreamChunk } from '@deepseek-ai/dsh-llm'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import LocalAttachmentStore from '@deepseek-ai/dsh-attachment-local'
+import { Context, FiberState } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import Include from '@supernova-ai/cordis-plugin-include'
+import ComputerUse from '@supernova-ai/snh-computer-use'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ComputerUseProviderName } from '@supernova-ai/snh-computer-use/types'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import LlmRuntime, { LlmAdapter, type ToolCallId, createUserMessage } from '@supernova-ai/snh-llm'
+import type { GenerateOptions, LlmResolvedModelInfo, StreamChunk } from '@supernova-ai/snh-llm'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import LocalAttachmentStore from '@supernova-ai/snh-attachment-local'
 import * as Provider from '../src/index.ts'
 
 const TOOL = 'mcp__cua-driver-mcp__screenshot'
@@ -59,37 +59,37 @@ class ScreenshotModel extends LlmAdapter {
 }
 
 async function load(mode?: string): Promise<{ ctx: Context; root: string; model: ScreenshotModel }> {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-computer-use-mcp-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-computer-use-mcp-'))
   roots.push(root)
   const model = new ScreenshotModel()
   const modules = new Map<string, unknown>([
-    ['@deepseek-ai/dsh-computer-use', ComputerUse],
-    ['@deepseek-ai/dsh-system-prompt', SystemPrompt],
-    ['@deepseek-ai/dsh-tools', ToolRuntime],
-    ['@deepseek-ai/dsh-tool-executor-native', NativeToolExecutor],
-    ['@deepseek-ai/dsh-llm', LlmRuntime],
-    ['@deepseek-ai/dsh-session', SessionStore],
-    ['@deepseek-ai/dsh-agent', AgentRegistry],
-    ['@deepseek-ai/dsh-agent-loop', AgentLoop],
-    ['@deepseek-ai/dsh-session-projection', SessionProjectionRegistry],
+    ['@supernova-ai/snh-computer-use', ComputerUse],
+    ['@supernova-ai/snh-system-prompt', SystemPrompt],
+    ['@supernova-ai/snh-tools', ToolRuntime],
+    ['@supernova-ai/snh-tool-executor-native', NativeToolExecutor],
+    ['@supernova-ai/snh-llm', LlmRuntime],
+    ['@supernova-ai/snh-session', SessionStore],
+    ['@supernova-ai/snh-agent', AgentRegistry],
+    ['@supernova-ai/snh-agent-loop', AgentLoop],
+    ['@supernova-ai/snh-session-projection', SessionProjectionRegistry],
 
-    ['@deepseek-ai/dsh-attachment-local', LocalAttachmentStore],
+    ['@supernova-ai/snh-attachment-local', LocalAttachmentStore],
     ['@fixture/model', { inject: ['llm'], apply(ctx: Context) { ctx.effect(() => ctx.llm.registerAdapter(['fixture'], model)) } }],
-    ['@deepseek-ai/dsh-experimental-computer-use-cua-driver-mcp', Provider],
+    ['@supernova-ai/snh-experimental-computer-use-cua-driver-mcp', Provider],
   ])
   const configPath = join(root, 'cordis.yml')
   await writeFile(configPath, JSON.stringify([...modules.keys()].map(name => ({
-    id: name === '@deepseek-ai/dsh-experimental-computer-use-cua-driver-mcp' ? 'computer-use-driver' : undefined,
+    id: name === '@supernova-ai/snh-experimental-computer-use-cua-driver-mcp' ? 'computer-use-driver' : undefined,
     name,
-    config: name === '@deepseek-ai/dsh-experimental-computer-use-cua-driver-mcp'
+    config: name === '@supernova-ai/snh-experimental-computer-use-cua-driver-mcp'
       ? {
         command: process.execPath,
         args: [fixture, root, ...(mode === undefined ? [] : [mode])],
         reconnect: { initialDelayMs: 20, maxDelayMs: 40, maxAttempts: 2 },
       }
-      : name === '@deepseek-ai/dsh-attachment-local'
-        ? { dshHome: root }
-        : name === '@deepseek-ai/dsh-agent-loop' ? { agents: [] } : {},
+      : name === '@supernova-ai/snh-attachment-local'
+        ? { snhHome: root }
+        : name === '@supernova-ai/snh-agent-loop' ? { agents: [] } : {},
   }))))
   const ctx = new Context()
   contexts.push(ctx)

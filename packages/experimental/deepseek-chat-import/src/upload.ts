@@ -6,8 +6,8 @@
  */
 
 import { ExportSourceError } from './archive.ts'
-import type { DeepseekChatImportWorkspace } from './importer.ts'
-import type { DeepseekChatImportFailureReason, DeepseekChatImportLine, DeepseekChatImportResult } from './types.ts'
+import type { SupernovaChatImportWorkspace } from './importer.ts'
+import type { SupernovaChatImportFailureReason, SupernovaChatImportLine, SupernovaChatImportResult } from './types.ts'
 
 /** The single import slot of the owning service. */
 export interface ImportClaim {
@@ -31,7 +31,7 @@ export interface UploadRouteHandler {
    * @param workspaceId - id from the request query.
    * @returns the Workspace, or undefined when unknown.
    */
-  workspace(workspaceId: string): DeepseekChatImportWorkspace | undefined
+  workspace(workspaceId: string): SupernovaChatImportWorkspace | undefined
   /**
    * Import one buffered archive.
    * @param archive - complete body bytes.
@@ -41,8 +41,8 @@ export interface UploadRouteHandler {
    * @returns the import summary.
    */
   import(
-    archive: Uint8Array, workspace: DeepseekChatImportWorkspace, onProgress: (done: number, total: number) => void, signal: AbortSignal,
-  ): Promise<DeepseekChatImportResult>
+    archive: Uint8Array, workspace: SupernovaChatImportWorkspace, onProgress: (done: number, total: number) => void, signal: AbortSignal,
+  ): Promise<SupernovaChatImportResult>
   /**
    * Report an import failure that is neither an archive failure nor a cancellation.
    * @param error - the thrown value; the response then ends without an outcome line.
@@ -102,7 +102,7 @@ export function createUploadRoute(handler: UploadRouteHandler): (request: Reques
 function importStream(
   handler: UploadRouteHandler,
   archive: Uint8Array,
-  workspace: DeepseekChatImportWorkspace,
+  workspace: SupernovaChatImportWorkspace,
   claim: ImportClaim,
   cancel: AbortController,
   signal: AbortSignal,
@@ -110,7 +110,7 @@ function importStream(
   let open = true
   return new ReadableStream<Uint8Array>({
     start: (controller) => {
-      const send = (line: DeepseekChatImportLine): void => { if (open) controller.enqueue(encodeLine(line)) }
+      const send = (line: SupernovaChatImportLine): void => { if (open) controller.enqueue(encodeLine(line)) }
       const end = (): void => {
         if (open) controller.close()
         open = false
@@ -183,14 +183,14 @@ async function readBounded(request: Request, limit: number, signal: AbortSignal)
   return total === buffer.byteLength ? buffer : buffer.subarray(0, total)
 }
 
-function encodeLine(line: DeepseekChatImportLine): Uint8Array<ArrayBuffer> {
+function encodeLine(line: SupernovaChatImportLine): Uint8Array<ArrayBuffer> {
   return new TextEncoder().encode(`${JSON.stringify(line)}\n`)
 }
 
-function outcomeLine(reason: DeepseekChatImportFailureReason, message: string): DeepseekChatImportLine {
+function outcomeLine(reason: SupernovaChatImportFailureReason, message: string): SupernovaChatImportLine {
   return { type: 'outcome', outcome: { ok: false, error: { reason, message } } }
 }
 
-function failure(reason: DeepseekChatImportFailureReason, message: string): Response {
+function failure(reason: SupernovaChatImportFailureReason, message: string): Response {
   return new Response(encodeLine(outcomeLine(reason, message)), { status: 200, headers: NDJSON_HEADERS })
 }

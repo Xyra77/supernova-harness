@@ -4,8 +4,8 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { chromium, type Browser, type Page } from 'playwright'
 import { afterAll, beforeAll, expect, it, onTestFailed } from 'vitest'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
-import type { ReplayOverrideDoc } from '@deepseek-ai/dsh-llm-replay'
+import type { StreamChunk } from '@supernova-ai/snh-llm'
+import type { ReplayOverrideDoc } from '@supernova-ai/snh-llm-replay'
 import { launchWebScaffold, watchConsole, webSnapshotMode, type WebScaffold } from './scaffold.ts'
 import { connectFreshWorkspace, newEnglishPage, saveFailureShot } from './support.ts'
 
@@ -27,7 +27,7 @@ let replayDir: string
 let scaffold: WebScaffold
 
 beforeAll(async () => {
-  replayDir = await mkdtemp(join(tmpdir(), 'dsh-composer-history-'))
+  replayDir = await mkdtemp(join(tmpdir(), 'snh-composer-history-'))
   const replayOverride = join(replayDir, 'replay.override.json')
   const doc: ReplayOverrideDoc = PROMPTS.map((_, index) => ({ kind: 'chunks', chunks: reply(`Reply ${String(index + 1)}`) }))
   await writeFile(replayOverride, JSON.stringify(doc))

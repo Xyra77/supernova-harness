@@ -1,9 +1,9 @@
 /** Chip title of a changes tab: the changes icon and the view's name in the current language. */
 
 import type { ReactNode } from 'react'
-import { IconFilesDiffOutlineRegular } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
+import { IconFilesDiffOutlineRegular } from '@supernova-ai/snh-client-ui-primitives'
+import type { PropsLocale, PropsRuntime } from '@supernova-ai/snh-client-ui-slots'
+import type {} from '@supernova-ai/snh-client-ui-sidebar-right/client'
 import { changesTitle, parseChangesAddress } from './changes-address.ts'
 import type { NS } from './locales.ts'
 import css from './Forge.module.css'

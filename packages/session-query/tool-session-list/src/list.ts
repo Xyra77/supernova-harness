@@ -1,12 +1,12 @@
 /** Header-only selection and cached metadata for the read-only listing tools. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-session-query'
-import type {} from '@deepseek-ai/dsh-session-projection-cache'
-import type {} from '@deepseek-ai/dsh-session-title'
-import { ToolArgsError } from '@deepseek-ai/dsh-tools'
-import { WorkspaceId } from '@deepseek-ai/dsh-workspace'
+import type { Context } from '@supernova-ai/cordis'
+import type { SessionHeader, SessionId } from '@supernova-ai/snh-session'
+import type {} from '@supernova-ai/snh-session-query'
+import type {} from '@supernova-ai/snh-session-projection-cache'
+import type {} from '@supernova-ai/snh-session-title'
+import { ToolArgsError } from '@supernova-ai/snh-tools'
+import { WorkspaceId } from '@supernova-ai/snh-workspace'
 
 /** Optional model pagination arguments. */
 export interface PageInput {

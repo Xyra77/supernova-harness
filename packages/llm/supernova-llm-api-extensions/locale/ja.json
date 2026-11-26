@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "SuperNova API 拡張",
+    "description": "他のプラグインが SuperNova モデルのリクエストに拡張フィールドを追加できます。"
+  }
+}

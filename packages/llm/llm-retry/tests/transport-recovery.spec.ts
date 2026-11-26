@@ -1,19 +1,19 @@
-import { createUserMessage, expandAssistantStream } from '@deepseek-ai/dsh-llm'
+import { createUserMessage, expandAssistantStream } from '@supernova-ai/snh-llm'
 import { createServer } from 'node:http'
 import type { AddressInfo } from 'node:net'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek-api-key'
-import type { MockLlmBehavior, MockLlmServer } from '@deepseek-ai/dsh-llm-mock-server'
-import { startMockLlmServer } from '@deepseek-ai/dsh-llm-mock-server'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
+import type { MockLlmBehavior, MockLlmServer } from '@supernova-ai/snh-llm-mock-server'
+import { startMockLlmServer } from '@supernova-ai/snh-llm-mock-server'
+import type { SessionId } from '@supernova-ai/snh-session'
+import type { SessionEvent } from '@supernova-ai/snh-session'
 import * as Retry from '../src/index.ts'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
+import { brandString } from '@supernova-ai/snh-brand'
 
 let context: Context | undefined
 const servers: Promise<MockLlmServer>[] = []
@@ -55,8 +55,8 @@ async function harness(
   vi.stubEnv('DEEPSEEK_API_KEY', 'mock-key')
   const ctx = new Context()
   await mountAgentLoopTestDependencies(ctx)
-  await ctx.plugin(DeepSeekAuth)
-  await ctx.plugin(LlmDeepSeek, {
+  await ctx.plugin(SuperNovaAuth)
+  await ctx.plugin(LlmSuperNova, {
     baseURL,
     streamIdleTimeoutMs: options.streamIdleTimeoutMs ?? 1_000,
     retryPolicy: {
@@ -101,7 +101,7 @@ async function unusedPort(): Promise<number> {
   return port
 }
 
-describe('bounded retry through the real DeepSeek HTTP/SSE adapter', () => {
+describe('bounded retry through the real SuperNova HTTP/SSE adapter', () => {
   it('recovers from a true refused connection after the endpoint starts during backoff', async () => {
     const port = await unusedPort()
     context = await harness(`http://127.0.0.1:${port}`, { initialDelayMs: 100 })
@@ -213,7 +213,7 @@ describe('bounded retry through the real DeepSeek HTTP/SSE adapter', () => {
     expect(agent.session.snapshotEvents().some(event => event.type === 'llm/retry')).toBe(false)
     expect(agent.session.snapshotEvents().at(-1)).toMatchObject({
       type: 'turn/end',
-      data: { reason: { kind: 'error', error: { message: 'DeepSeek Messages stream ended before message_stop', code: 'STREAM_CLOSED' } } },
+      data: { reason: { kind: 'error', error: { message: 'SuperNova Messages stream ended before message_stop', code: 'STREAM_CLOSED' } } },
     })
   })
 
@@ -317,7 +317,7 @@ describe('bounded retry through the real DeepSeek HTTP/SSE adapter', () => {
       data: { reason: { kind: 'error', error: { code: 'TRANSPORT' } } },
     })
     if (end?.type === 'turn/end' && end.data.reason.kind === 'error') {
-      expect(end.data.reason.error.message).toBe('DeepSeek Messages transport failed')
+      expect(end.data.reason.error.message).toBe('SuperNova Messages transport failed')
     }
   })
 })

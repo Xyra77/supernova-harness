@@ -26,7 +26,7 @@
       - option "cerebras"
       - option "cloudflare-ai-gateway"
       - option "cloudflare-workers-ai"
-      - option "deepseek"
+      - option "supernova"
       - option "fireworks"
       - option "github-copilot"
       - option "google"

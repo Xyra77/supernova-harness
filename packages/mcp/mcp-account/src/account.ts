@@ -3,17 +3,17 @@
  * authorization as the operation, and the page's operations run through the manager.
  */
 import { randomUUID } from 'node:crypto'
-import type { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import type { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
 import type {
   ConnectorAccountButton, ConnectorAccountCopy, ConnectorAccountDisplay, ConnectorAccountSource, ConnectorAccountView,
   ConnectorOperationId, ConnectorOperationResult,
-} from '@deepseek-ai/dsh-client-ui-connector-account/types'
-import type { McpAuthorizationReason, McpOAuthAttemptId, McpOAuthAttemptView } from '@deepseek-ai/dsh-mcp-client/types'
-import type {} from '@deepseek-ai/dsh-mcp-manager'
-import type { McpManagedServerView } from '@deepseek-ai/dsh-mcp-manager/types'
-import type { LocalizedText } from '@deepseek-ai/dsh-package-manifest'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
+} from '@supernova-ai/snh-client-ui-connector-account/types'
+import type { McpAuthorizationReason, McpOAuthAttemptId, McpOAuthAttemptView } from '@supernova-ai/snh-mcp-client/types'
+import type {} from '@supernova-ai/snh-mcp-manager'
+import type { McpManagedServerView } from '@supernova-ai/snh-mcp-manager/types'
+import type { LocalizedText } from '@supernova-ai/snh-package-manifest'
+import { assertNever } from '@supernova-ai/snh-util-values'
 import { text, type McpAccountKey } from './locales.ts'
 import type { McpAccountCopy } from './types.ts'
 

@@ -1,6 +1,6 @@
 /** Locale bundles for the agent loop's settings page. */
 
-import type { SettingsFormLabels } from '@deepseek-ai/dsh-client-ui-primitives'
+import type { SettingsFormLabels } from '@supernova-ai/snh-client-ui-primitives'
 
 /** Locale keys the page renders. */
 export type AgentLoopSettingsLocaleKey =

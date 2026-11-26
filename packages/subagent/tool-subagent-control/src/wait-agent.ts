@@ -1,10 +1,10 @@
 /** Input waiting owned by the subagent control plugin. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { MessageId, ToolCallId } from '@deepseek-ai/dsh-llm'
-import { HarnessError } from '@deepseek-ai/dsh-llm'
-import { defineTool } from '@deepseek-ai/dsh-tools'
+import type { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type { MessageId, ToolCallId } from '@supernova-ai/snh-llm'
+import { HarnessError } from '@supernova-ai/snh-llm'
+import { defineTool } from '@supernova-ai/snh-tools'
 
 /** Wait failures retain a stable machine-readable reason through tool execution. */
 class AgentWaitError extends HarnessError {

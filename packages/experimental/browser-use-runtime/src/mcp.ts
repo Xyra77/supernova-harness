@@ -1,18 +1,18 @@
 /** Session-owned MCP browser processes and provider catalog activation. @module */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import Schema from '@deepseek-ai/schemastery'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { BrowserUseProviderName } from '@deepseek-ai/dsh-browser-use/types'
-import * as McpClient from '@deepseek-ai/dsh-mcp-client'
-import { createScope } from '@deepseek-ai/dsh-scope'
-import type { Scope } from '@deepseek-ai/dsh-scope'
+import type { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import Schema from '@supernova-ai/schemastery'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { BrowserUseProviderName } from '@supernova-ai/snh-browser-use/types'
+import * as McpClient from '@supernova-ai/snh-mcp-client'
+import { createScope } from '@supernova-ai/snh-scope'
+import type { Scope } from '@supernova-ai/snh-scope'
 import { BrowserSessionError, SessionResources } from './index.ts'
-import type {} from '@deepseek-ai/dsh-browser-use'
-import { ToolContextUnavailableError } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-system-prompt'
-import type {} from '@deepseek-ai/dsh-working-directory'
+import type {} from '@supernova-ai/snh-browser-use'
+import { ToolContextUnavailableError } from '@supernova-ai/snh-tools'
+import type {} from '@supernova-ai/snh-system-prompt'
+import type {} from '@supernova-ai/snh-working-directory'
 
 /** Browser launch settings shared by the MCP integrations. */
 export interface BrowserMcpLaunchConfig {

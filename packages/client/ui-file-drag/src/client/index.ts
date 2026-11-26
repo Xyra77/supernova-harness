@@ -1,11 +1,11 @@
 /** Cordis-owned file transfers and localized feedback shared across independent entries. */
-import type { Context } from '@deepseek-ai/cordis'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { DesktopFileDrag } from '@deepseek-ai/dsh-util-file-drag'
-import type { FileDragActions } from '@deepseek-ai/dsh-client-ui-primitives'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
+import type { Context } from '@supernova-ai/cordis'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import type { DesktopFileDrag } from '@supernova-ai/snh-util-file-drag'
+import type { FileDragActions } from '@supernova-ai/snh-client-ui-primitives'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
+import type {} from '@supernova-ai/snh-client-ui-layout/client'
+import type {} from '@supernova-ai/snh-client-locale/client'
 import { FileDragFeedback, type FileDragFailure, type FileDragFeedbackInjected } from './feedback.tsx'
 import { FileTransfers } from './transfers.ts'
 import { en, ja, es, fr, de, ru, pt, zh } from './locales.ts'
@@ -17,7 +17,7 @@ export interface FileDragService {
   readonly read: (transfer: DataTransfer) => File | undefined
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** File transfer ownership scoped to this plugin's lifetime. */
     fileDrag: FileDragService
@@ -29,7 +29,7 @@ export const inject = ['slots', 'locale']
 
 /** @param ctx - client plugin context carrying slots and locale. */
 export function apply(ctx: Context): void {
-  const bridge = (globalThis as typeof globalThis & { dshDesktop?: { protocolVersion: number; fileDrag?: DesktopFileDrag } }).dshDesktop
+  const bridge = (globalThis as typeof globalThis & { snhDesktop?: { protocolVersion: number; fileDrag?: DesktopFileDrag } }).snhDesktop
   const desktop = bridge?.protocolVersion === 1 ? bridge.fileDrag : undefined
   const failure = createSnapshotStore<FileDragFailure | null>(null)
   const t = ctx.locale.bind('fileDrag')

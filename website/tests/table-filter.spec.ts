@@ -54,7 +54,7 @@ function renderTable(count = 10) {
   for (let index = 0; index < count; index++) {
     const row = body.insertRow()
     row.innerHTML = index === 0
-      ? '<td><code>ctx.llm</code></td><td><a href="/reference/llm">llm-deepseek</a></td><td>Streams completions</td>'
+      ? '<td><code>ctx.llm</code></td><td><a href="/reference/llm">llm-supernova</a></td><td>Streams completions</td>'
       : `<td>service-${index}</td><td>package-${index}</td><td>说明 ${index}</td>`
     for (const cell of row.cells) {
       // jsdom has no layout-backed innerText; these fixtures contain only visible text.
@@ -104,7 +104,7 @@ describe('documentation table filtering', () => {
   })
 
   it.each([
-    ['  CTX.LLM  ', 0], ['LLM-DEEPSEEK', 0], ['streams', 0], ['说明 9', 9],
+    ['  CTX.LLM  ', 0], ['LLM-SUPERNOVA', 0], ['streams', 0], ['说明 9', 9],
   ])('matches visible text across columns for %s', (query, index) => {
     const fixture = renderTable()
     install()
@@ -116,7 +116,7 @@ describe('documentation table filtering', () => {
   it('retains cell content and links and restores row order and input focus on clear', () => {
     const fixture = renderTable()
     const content = fixture.table.textContent
-    const link = getByRole(fixture.table, 'link', { name: 'llm-deepseek' })
+    const link = getByRole(fixture.table, 'link', { name: 'llm-supernova' })
     install()
     expect(queryAllByRole(fixture.section, 'button')).toHaveLength(0)
     const input = filter(fixture.section, 'unmatched')
@@ -128,7 +128,7 @@ describe('documentation table filtering', () => {
     clear.focus()
     clear.click()
     expect(visible(fixture.table)).toEqual(fixture.rows)
-    expect(getByRole(fixture.table, 'link', { name: 'llm-deepseek' })).toBe(link)
+    expect(getByRole(fixture.table, 'link', { name: 'llm-supernova' })).toBe(link)
     expect(link.getAttribute('href')).toBe('/reference/llm')
     expect(document.activeElement).toBe(input)
     expect(input.value).toBe('')
@@ -204,25 +204,25 @@ describe('documentation table filtering', () => {
     vi.spyOn(head, 'offsetHeight', 'get').mockReturnValue(40)
     install()
     paint()
-    expect(head.style.getPropertyValue('--dsh-table-header-offset')).toBe('0px')
+    expect(head.style.getPropertyValue('--snh-table-header-offset')).toBe('0px')
     layout.top = -120
     fireEvent.scroll(window)
     fireEvent.scroll(window)
     expect(frames.size).toBe(1)
     paint()
-    expect(head.style.getPropertyValue('--dsh-table-header-offset')).toBe('184px')
+    expect(head.style.getPropertyValue('--snh-table-header-offset')).toBe('184px')
     layout.nav = 48
     fireEvent.resize(window)
     paint()
-    expect(head.style.getPropertyValue('--dsh-table-header-offset')).toBe('168px')
+    expect(head.style.getPropertyValue('--snh-table-header-offset')).toBe('168px')
     layout.top = -450
     observers[0]?.notify()
     paint()
-    expect(head.style.getPropertyValue('--dsh-table-header-offset')).toBe('460px')
+    expect(head.style.getPropertyValue('--snh-table-header-offset')).toBe('460px')
     layout.height = 40
     filter(section, 'unmatched')
     paint()
-    expect(head.style.getPropertyValue('--dsh-table-header-offset')).toBe('0px')
+    expect(head.style.getPropertyValue('--snh-table-header-offset')).toBe('0px')
   })
 
   it('restores initial visibility and stops pending frames, input handlers, and layout subscriptions on disposal', () => {
@@ -237,7 +237,7 @@ describe('documentation table filtering', () => {
     expect(frames.size).toBe(0)
     expect(queryAllByRole(section, 'searchbox')).toHaveLength(0)
     expect(table.className).toBe('')
-    expect(table.tHead?.style.getPropertyValue('--dsh-table-header-offset')).toBe('')
+    expect(table.tHead?.style.getPropertyValue('--snh-table-header-offset')).toBe('')
     expect(visible(table)).toEqual(rows.slice(1))
     expect(observers[0]?.disconnect).toHaveBeenCalledOnce()
     fireEvent.input(input, { target: { value: 'unmatched' } })

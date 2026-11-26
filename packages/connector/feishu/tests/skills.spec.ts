@@ -4,7 +4,7 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { renderSkillContent } from '@deepseek-ai/dsh-skill'
+import { renderSkillContent } from '@supernova-ai/snh-skill'
 import { expect, it } from 'vitest'
 import { FeishuSkillProvider } from '../src/skills.ts'
 
@@ -57,7 +57,7 @@ it('lists the entry with an opaque resource base and returns its body without th
 })
 
 it('refuses an entry without YAML frontmatter or without a skill name and description', async () => {
-  const dir = await mkdtemp(join(tmpdir(), 'dsh-feishu-entry-'))
+  const dir = await mkdtemp(join(tmpdir(), 'snh-feishu-entry-'))
   try {
     const file = join(dir, 'SKILL.md')
     await writeFile(file, '# No frontmatter\n')

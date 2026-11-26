@@ -1,7 +1,7 @@
 /** Retained V3 replay inputs, current-writer fixtures, and bounded older migration coverage. */
 
-import { SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session'
-import type { SnapshotSessionFormatManifest } from '@deepseek-ai/dsh-session-snapshot'
+import { SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session'
+import type { SnapshotSessionFormatManifest } from '@supernova-ai/snh-session-snapshot'
 
 /** One owning scenario's selected parent and child generations. */
 export interface SnapshotCorpusScenarioGenerations {

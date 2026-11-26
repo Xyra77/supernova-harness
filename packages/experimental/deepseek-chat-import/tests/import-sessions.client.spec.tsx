@@ -1,17 +1,17 @@
 // @vitest-environment jsdom
-import { allowAllAccess, contextMenuHook, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
+import { allowAllAccess, contextMenuHook, makeTranslate } from '@supernova-ai/snh-client-test-runtime'
 import { act, cleanup, fireEvent, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { SessionListState, SessionSummary } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { WorkspaceId, WorkspaceSnapshot } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { GlobalStandardProps, PropsRenderFactories } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { WorkspacePickerInput } from '@deepseek-ai/dsh-client-ui-workspace/client'
+import type { SessionListState, SessionSummary } from '@supernova-ai/snh-api-session-controller/client'
+import type { WorkspaceId, WorkspaceSnapshot } from '@supernova-ai/snh-api-workspace-controller/client'
+import type { GlobalStandardProps, PropsRenderFactories } from '@supernova-ai/snh-client-ui-slots'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type { WorkspacePickerInput } from '@supernova-ai/snh-client-ui-workspace/client'
 import { ImportSessionsAction } from '../src/client/ImportSessions.tsx'
-import type { DeepseekChatImportOutcome, ImportSessionsActionProps } from '../src/client/ImportSessions.tsx'
+import type { SupernovaChatImportOutcome, ImportSessionsActionProps } from '../src/client/ImportSessions.tsx'
 import type { UploadProgress } from '../src/client/upload.ts'
 import { en } from '../src/client/locales.ts'
-import type { DeepseekChatImportResult } from '../src/types.ts'
+import type { SupernovaChatImportResult } from '../src/types.ts'
 
 const unused = (): never => { throw new Error('the import action reads no other Session hooks') }
 const W1 = 'w1' as WorkspaceId
@@ -39,7 +39,7 @@ function sessions(current: string): SessionListState {
   return { ids: [sid('other'), sid(current)], byId: { [sid('other')]: summary('other', false), [sid(current)]: summary(current, true) }, phase: 'ready', projectionsBySession: {} }
 }
 
-const RESULT: DeepseekChatImportResult = {
+const RESULT: SupernovaChatImportResult = {
   workspaceId: W2, workspacePath: '/home/a/project-two', sessionIds: ['s1', 's2'],
   conversationCount: 4, omittedByLimit: 1, skipped: [{ conversationId: 'c4', title: null, reason: 'conversation has no messages' }],
 }
@@ -78,11 +78,11 @@ function bench(options: { allowed?: boolean; wide?: boolean; current?: string; i
 }
 
 function open(view: ReturnType<typeof render>) {
-  fireEvent.click(view.getByRole('button', { name: 'Import DeepSeek chats' }))
-  return view.getByRole('dialog', { name: 'Import DeepSeek chat history' })
+  fireEvent.click(view.getByRole('button', { name: 'Import SuperNova chats' }))
+  return view.getByRole('dialog', { name: 'Import SuperNova chat history' })
 }
 
-function choose(view: ReturnType<typeof render>, file = new File([new Uint8Array(2048)], 'deepseek_data-2026-11-11.zip', { type: 'application/zip' })) {
+function choose(view: ReturnType<typeof render>, file = new File([new Uint8Array(2048)], 'supernova_data-2026-11-11.zip', { type: 'application/zip' })) {
   const input = view.getByLabelText('Export file') as HTMLInputElement
   fireEvent.change(input, { target: { files: [file] } })
   return file
@@ -94,19 +94,19 @@ describe('ImportSessionsAction', () => {
   it('keeps the New-session row content and adds no trigger for a Peer without import access', () => {
     const { view, useRemoteAccess } = bench({ allowed: false })
     expect(view.getByTestId('new-session-content')).toBeTruthy()
-    expect(view.queryByRole('button', { name: 'Import DeepSeek chats' })).toBeNull()
+    expect(view.queryByRole('button', { name: 'Import SuperNova chats' })).toBeNull()
     expect(view.queryByRole('dialog')).toBeNull()
-    expect(useRemoteAccess).toHaveBeenCalledWith('deepseekChatImport/limits')
+    expect(useRemoteAccess).toHaveBeenCalledWith('supernovaChatImport/limits')
   })
 
   it('renders the row content before its trigger', () => {
     const { view } = bench()
     const content = view.getByTestId('new-session-content')
-    expect(content.nextElementSibling).toBe(view.getByRole('button', { name: 'Import DeepSeek chats' }))
+    expect(content.nextElementSibling).toBe(view.getByRole('button', { name: 'Import SuperNova chats' }))
   })
 
   it('uploads the chosen file into the chosen workspace and summarizes the result', async () => {
-    const pending = Promise.withResolvers<DeepseekChatImportOutcome>()
+    const pending = Promise.withResolvers<SupernovaChatImportOutcome>()
     let report: ((progress: UploadProgress) => void) | undefined
     const importArchive = vi.fn<ImportArchive>((_file, _workspace, onProgress) => { report = onProgress; return pending.promise })
     const { view, picker } = bench({ importArchive, wide: false })
@@ -118,7 +118,7 @@ describe('ImportSessionsAction', () => {
     expect(picker()).toMatchObject({ open: false, selectedId: W1 })
     expect(submit).toHaveProperty('disabled', true)
     const file = choose(view)
-    expect(dialog.textContent).toContain('deepseek_data-2026-11-11.zip')
+    expect(dialog.textContent).toContain('supernova_data-2026-11-11.zip')
     expect(dialog.textContent).toContain('2.0KB')
     expect(view.getByRole('button', { name: 'Change' })).toBeTruthy()
     fireEvent.click(view.getByRole('button', { name: /project-one/ }))
@@ -153,7 +153,7 @@ describe('ImportSessionsAction', () => {
 
   it('chooses plural forms by count', async () => {
     const skip = { conversationId: 'c', title: null, reason: 'conversation has no messages' }
-    const importArchive = vi.fn(() => Promise.resolve<DeepseekChatImportOutcome>({
+    const importArchive = vi.fn(() => Promise.resolve<SupernovaChatImportOutcome>({
       ok: true, result: { ...RESULT, sessionIds: ['s1'], omittedByLimit: 2, skipped: [skip, skip] },
     }))
     const { view } = bench({ importArchive })
@@ -178,7 +178,7 @@ describe('ImportSessionsAction', () => {
     expect(view.getByRole('alert').textContent).toBe('Import failed: limits unavailable')
     await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Import' })) })
     expect(view.getByRole('alert').textContent).toBe('Import failed: offline')
-    const pending = Promise.withResolvers<DeepseekChatImportOutcome>()
+    const pending = Promise.withResolvers<SupernovaChatImportOutcome>()
     importArchive.mockReturnValueOnce(pending.promise)
     fireEvent.click(view.getByRole('button', { name: 'Import' }))
     fireEvent.click(view.getByRole('button', { name: 'Cancel' }))
@@ -187,7 +187,7 @@ describe('ImportSessionsAction', () => {
   })
 
   it('omits empty summary lines and toggles and closes the workspace menu', async () => {
-    const importArchive = vi.fn(() => Promise.resolve<DeepseekChatImportOutcome>({
+    const importArchive = vi.fn(() => Promise.resolve<SupernovaChatImportOutcome>({
       ok: true, result: { ...RESULT, omittedByLimit: 0, skipped: [] },
     }))
     const { view, picker } = bench({ importArchive })
@@ -229,8 +229,8 @@ describe('ImportSessionsAction', () => {
     // A Host failure knows its own limit, so its message is shown instead of the pre-check one.
     [{ reason: 'too-large' }, 'gateway closed'],
     [{ reason: 'unreadable-archive' }, 'The file is not a readable ZIP archive.'],
-    [{ reason: 'missing-manifest' }, 'This is not a DeepSeek export: manifest.json is missing.'],
-    [{ reason: 'missing-index' }, 'This is not a DeepSeek export: chat_session_index.json is missing or unreadable.'],
+    [{ reason: 'missing-manifest' }, 'This is not a SuperNova export: manifest.json is missing.'],
+    [{ reason: 'missing-index' }, 'This is not a SuperNova export: chat_session_index.json is missing or unreadable.'],
     [{ reason: 'unsupported-version' }, 'This export format version is not supported.'],
     [{ reason: 'no-conversations' }, 'The export contains no conversations that can be imported.'],
     [{ reason: 'workspace-not-found' }, 'The chosen workspace no longer exists. Choose another one.'],
@@ -238,7 +238,7 @@ describe('ImportSessionsAction', () => {
     [{ reason: 'upload-failed' }, 'Upload failed: gateway closed'],
     [{ reason: 'unknown' }, 'Import failed: gateway closed'],
   ] as const)('explains a %o failure and clears it on a new choice', async (failure, text) => {
-    const importArchive = vi.fn(() => Promise.resolve<DeepseekChatImportOutcome>({ ok: false, message: 'gateway closed', ...failure }))
+    const importArchive = vi.fn(() => Promise.resolve<SupernovaChatImportOutcome>({ ok: false, message: 'gateway closed', ...failure }))
     const { view, picker } = bench({ importArchive })
     open(view)
     choose(view)
@@ -253,7 +253,7 @@ describe('ImportSessionsAction', () => {
   })
 
   it('aborts the running import when the dialog closes and ignores its late progress and outcome', async () => {
-    const pending = Promise.withResolvers<DeepseekChatImportOutcome>()
+    const pending = Promise.withResolvers<SupernovaChatImportOutcome>()
     let report: ((progress: UploadProgress) => void) | undefined
     const importArchive = vi.fn<ImportArchive>((_file, _workspace, onProgress) => { report = onProgress; return pending.promise })
     const { view } = bench({ importArchive })

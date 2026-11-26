@@ -1,10 +1,10 @@
 /** Deferred system replacements survive native reads under the released step rules. */
-import { Context } from '@deepseek-ai/cordis'
-import { KNOWN_SESSION_EVENT_TYPES, SESSION_FORMAT_VERSION, SessionId } from '@deepseek-ai/dsh-session'
-import { sessionFormatCatalog } from '@deepseek-ai/dsh-session-format-catalog'
-import { assertReleasedV4Relationships } from '@deepseek-ai/dsh-session-format-v3-to-v4'
-import type { SessionFormatEvent, SessionFormatJsonObject } from '@deepseek-ai/dsh-session-format'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+import { Context } from '@supernova-ai/cordis'
+import { KNOWN_SESSION_EVENT_TYPES, SESSION_FORMAT_VERSION, SessionId } from '@supernova-ai/snh-session'
+import { sessionFormatCatalog } from '@supernova-ai/snh-session-format-catalog'
+import { assertReleasedV4Relationships } from '@supernova-ai/snh-session-format-v3-to-v4'
+import type { SessionFormatEvent, SessionFormatJsonObject } from '@supernova-ai/snh-session-format'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
@@ -57,7 +57,7 @@ function history(): SessionFormatEvent[] {
 
 describe.each(modes)('deferred system replacements ($compression, $access)', ({ compression, access }) => {
   async function stored(events: readonly SessionFormatEvent[]) {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-current-system-'))
+    const root = await mkdtemp(join(tmpdir(), 'snh-current-system-'))
     const ctx = new Context()
     onTestFinished(async () => {
       try { await ctx.fiber.dispose() } finally { await rm(root, { recursive: true, force: true }) }

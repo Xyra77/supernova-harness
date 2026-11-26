@@ -1,11 +1,11 @@
 /** Window-specific input notices for an already scheduled model step. */
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
 import { z } from 'zod'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { CuaBackend, CuaWindowRead } from '@deepseek-ai/dsh-cua'
-import { NativeError } from '@deepseek-ai/dsh-cua/native-client'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import type { CuaBackend, CuaWindowRead } from '@supernova-ai/snh-cua'
+import { NativeError } from '@supernova-ai/snh-cua/native-client'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     /** Activity detected since the Agent last observed a window. */
     'cua-activity': { kind: 'cua-activity'; form: 'notice'; summary: string }

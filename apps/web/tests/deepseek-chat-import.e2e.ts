@@ -1,12 +1,12 @@
 /**
- * Web snapshot: the optional DeepSeek chat import bundle stores a synthetic
+ * Web snapshot: the optional SuperNova chat import bundle stores a synthetic
  * export as Sessions through its owner upload route, and one imported Session
  * continues with one recorded model turn. The committed Session is the imported
  * history the model receives: the newest-leaf branch, reasoning, the
  * `web_search` / `web_fetch` pair, and an excluded reply; a content-filtered
  * round is left out entirely.
- * Record: DSH_SNAPSHOT=record writes the current Session generation; a keyless
- * DSH_SNAPSHOT=refresh then writes the system-prompt and tool-schema pins.
+ * Record: SNH_SNAPSHOT=record writes the current Session generation; a keyless
+ * SNH_SNAPSHOT=refresh then writes the system-prompt and tool-schema pins.
  */
 import { readFile } from 'node:fs/promises'
 import { basename, join } from 'node:path'
@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url'
 import { strToU8, zipSync } from 'fflate'
 import { chromium, type Browser } from 'playwright'
 import { expect, it, onTestFailed } from 'vitest'
-import { SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session'
+import { SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session'
 import {
   assertFixtureInventory, fixtureUserPrompts, launchWebScaffold, recordFixture, selectedSessionFixture,
   watchConsole, webSnapshotMode, type WebScaffold,
@@ -87,7 +87,7 @@ interface ImportOutcomeLine {
     | { readonly ok: false; readonly error: { readonly reason: string; readonly message: string } }
 }
 
-/** A `deepseek_data` ZIP holding the manifest and both conversations. */
+/** A `supernova_data` ZIP holding the manifest and both conversations. */
 function exportArchive(): Uint8Array<ArrayBuffer> {
   return new Uint8Array(zipSync({
     'manifest.json': strToU8(JSON.stringify({ export_format_version: 3 })),
@@ -119,7 +119,7 @@ async function importArchive(scaffold: WebScaffold, workspaceId: string): Promis
   return outcomes[0]!.outcome
 }
 
-it('continues a Session imported from a DeepSeek chat export with one model turn', async () => {
+it('continues a Session imported from a SuperNova chat export with one model turn', async () => {
   if (MODE !== 'record') {
     expect(fixtureUserPrompts(await readFile(await selectedSessionFixture(FIXTURE), 'utf8')).at(-1)).toBe(PROMPT)
   }

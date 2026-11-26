@@ -1,10 +1,10 @@
-# DSH 核心准则
+# SNH 核心准则
 
 [English](README.md) | 中文
 
 ## 概述
 
-编写 DeepSeek Harness 代码的规则，风格沿用 [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)。每条规则有一个稳定编号，以及 [G.1](general.zh.md#g1) 规定的各个部分。
+编写 SuperNova Harness 代码的规则，风格沿用 [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)。每条规则有一个稳定编号，以及 [G.1](general.zh.md#g1) 规定的各个部分。
 
 ## 分组
 
@@ -17,7 +17,7 @@
 
 ## 地位与范围
 
-本准则之于 DeepSeek Harness，相当于 C++ Core Guidelines 之于 C++：它是本仓库关于“如何写代码”的编码标准，与代码实现什么功能无关。
+本准则之于 SuperNova Harness，相当于 C++ Core Guidelines 之于 C++：它是本仓库关于“如何写代码”的编码标准，与代码实现什么功能无关。
 
 一条规则若在代码实现其他功能时依然适用，就属于本准则。例如关于接口、类型、错误、资源所有权、并发、状态、组件结构和数据格式的规则。
 

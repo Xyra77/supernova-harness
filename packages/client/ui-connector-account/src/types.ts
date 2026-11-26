@@ -4,8 +4,8 @@
  * plugins and MCP connectors share one registry and one page.
  */
 
-import type { Branded } from '@deepseek-ai/dsh-brand'
-import type { LocalizedText } from '@deepseek-ai/dsh-package-manifest'
+import type { Branded } from '@supernova-ai/snh-brand'
+import type { LocalizedText } from '@supernova-ai/snh-package-manifest'
 
 /** Identifies one Host-owned account operation across the browsers that show the account. */
 export type ConnectorOperationId = Branded<'ConnectorOperationId'>
@@ -70,7 +70,7 @@ export interface ConnectorAccountButton {
   readonly command: ConnectorAccountCommand
   /** Defaults to an outline button. */
   readonly variant?: 'primary' | 'ghost'
-  /** Ask first, for an action that changes the account outside DSH, such as signing out. */
+  /** Ask first, for an action that changes the account outside SNH, such as signing out. */
   readonly confirm?: ConnectorAccountConfirmation
 }
 

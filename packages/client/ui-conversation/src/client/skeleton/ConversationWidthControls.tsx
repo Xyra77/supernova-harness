@@ -3,7 +3,7 @@ import type { ConversationWidthControlsProps } from '../contract/slots.ts'
 import css from './ConversationRoot.module.css'
 
 /** localStorage key for the dragged transcript width preference (px). */
-const WIDTH_PREF_KEY = 'dsh.conversation.contentWidth'
+const WIDTH_PREF_KEY = 'snh.conversation.contentWidth'
 /** Floor for a dragged content width; matches the layout center-column minimum. */
 const CONTENT_MIN = 640
 /** Horizontal room reserved for both handles and their safe edge zones. */
@@ -99,7 +99,7 @@ function WidthHandle(props: {
     if (!dragging.current) return
     if (!event.currentTarget.hasPointerCapture(event.pointerId)) return
     const box = event.currentTarget.getBoundingClientRect()
-    event.currentTarget.style.setProperty('--dsh-width-handle-pointer-y', `${event.clientY - box.top}px`)
+    event.currentTarget.style.setProperty('--snh-width-handle-pointer-y', `${event.clientY - box.top}px`)
     latest.current = event.clientX
     frame.current ??= requestAnimationFrame(() => {
       frame.current = null
@@ -160,10 +160,10 @@ function WidthHandle(props: {
 export function ConversationWidthControls({ container, phase }: ConversationWidthControlsProps) {
   const publishWidths = useCallback((container: HTMLDivElement, column: number): void => {
     // The axis registers these inputs without inheritance, so they belong on the body that derives from them.
-    container.style.setProperty('--dsh-conversation-column-width', `${column}px`)
+    container.style.setProperty('--snh-conversation-column-width', `${column}px`)
     const preference = readWidthPreference()
-    if (preference === null) container.style.removeProperty('--dsh-chat-user-width')
-    else container.style.setProperty('--dsh-chat-user-width', `${resolveContentWidth(column, preference)}px`)
+    if (preference === null) container.style.removeProperty('--snh-chat-user-width')
+    else container.style.setProperty('--snh-chat-user-width', `${resolveContentWidth(column, preference)}px`)
   }, [])
 
   useLayoutEffect(() => {
@@ -184,7 +184,7 @@ export function ConversationWidthControls({ container, phase }: ConversationWidt
   }, [container])
   const onDrag = useCallback((width: number): void => {
     if (container === null) return
-    container.style.setProperty('--dsh-chat-user-width', `${resolveContentWidth(container.offsetWidth, width)}px`)
+    container.style.setProperty('--snh-chat-user-width', `${resolveContentWidth(container.offsetWidth, width)}px`)
   }, [container])
   const onCommit = useCallback((width: number): void => {
     if (container === null) return

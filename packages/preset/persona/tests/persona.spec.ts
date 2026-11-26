@@ -1,10 +1,10 @@
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { Context } from '@deepseek-ai/cordis'
-import SystemPrompt, { renderPrompt } from '@deepseek-ai/dsh-system-prompt'
-import { bindScopeParent, createScope, type ScopeKey } from '@deepseek-ai/dsh-scope'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { Context } from '@supernova-ai/cordis'
+import SystemPrompt, { renderPrompt } from '@supernova-ai/snh-system-prompt'
+import { bindScopeParent, createScope, type ScopeKey } from '@supernova-ai/snh-scope'
 import { afterEach, describe, expect, it } from 'vitest'
-import * as Persona from '@deepseek-ai/dsh-persona'
-import { PERSONA_SUFFIX_SECTION, PERSONA_PREFIX_SECTION } from '@deepseek-ai/dsh-persona'
+import * as Persona from '@supernova-ai/snh-persona'
+import { PERSONA_SUFFIX_SECTION, PERSONA_PREFIX_SECTION } from '@supernova-ai/snh-persona'
 
 const contexts: Context[] = []
 afterEach(async () => {
@@ -38,7 +38,7 @@ describe('the persona row', () => {
       const fiber = await scope.ctx.plugin(Persona, { prefix: 'Preset.', suffix: 'Workspace {{cwd}}.' })
       const assembly = await ctx.systemPrompt.assemble({ scope: key })
       expect(assembly.sections.find(section => section.name === PERSONA_SUFFIX_SECTION)?.text).toBe('Workspace {{cwd}}.')
-      expect(renderPrompt(assembly)).toBe('You are an AI agent powered by DeepSeek Harness.\n\nPreset.\n\nUse tools.\n\nWorkspace /local.')
+      expect(renderPrompt(assembly)).toBe('You are an AI agent powered by SuperNova Harness.\n\nPreset.\n\nUse tools.\n\nWorkspace /local.')
       expect(renderPrompt(await ctx.systemPrompt.assemble())).toContain('Global workspace.')
       await fiber.dispose()
       const restored = renderPrompt(await ctx.systemPrompt.assemble({ scope: key }))
@@ -90,7 +90,7 @@ describe('the persona row', () => {
       ctx.systemPrompt.section({ name: 'guidance', order: 100, text: 'Use tools.' })
 
       expect(renderPrompt(await ctx.systemPrompt.assemble({ scope: childKey })))
-        .toBe('You are an AI agent powered by DeepSeek Harness.\n\nChild.\n\nUse tools.\n\nInherited policy.')
+        .toBe('You are an AI agent powered by SuperNova Harness.\n\nChild.\n\nUse tools.\n\nInherited policy.')
       expect(renderPrompt(await ctx.systemPrompt.assemble({ scope: parentKey }))).toBe('Parent only.')
       await childPersona.dispose()
       expect(renderPrompt(await ctx.systemPrompt.assemble({ scope: childKey }))).toBe('Parent only.')
@@ -140,10 +140,10 @@ describe('the persona row', () => {
       }, { inject: ['systemPrompt'] }))
 
       expect(renderPrompt(await ctx.systemPrompt.assemble({ scope: childKey })))
-        .toBe('You are an AI agent powered by DeepSeek Harness.\n\nParent.\n\nChild policy.')
+        .toBe('You are an AI agent powered by SuperNova Harness.\n\nParent.\n\nChild policy.')
       await childPersona.dispose()
       expect(renderPrompt(await ctx.systemPrompt.assemble({ scope: childKey })))
-        .toBe('You are an AI agent powered by DeepSeek Harness.\n\nParent.\n\nParent policy.')
+        .toBe('You are an AI agent powered by SuperNova Harness.\n\nParent.\n\nParent policy.')
     } finally {
       await ctx.fiber.dispose()
     }
@@ -156,10 +156,10 @@ describe('the persona row', () => {
     const first = await scope.ctx.plugin(Persona, { prefix: 'First.', suffix: 'First suffix.' })
     const second = await scope.ctx.plugin(Persona, { prefix: 'Second.', suffix: 'Second suffix.' })
     expect(renderPrompt(await ctx.systemPrompt.assemble({ scope: key })))
-      .toBe('You are an AI agent powered by DeepSeek Harness.\n\nSecond.\n\nSecond suffix.')
+      .toBe('You are an AI agent powered by SuperNova Harness.\n\nSecond.\n\nSecond suffix.')
     await second.dispose()
     expect(renderPrompt(await ctx.systemPrompt.assemble({ scope: key })))
-      .toBe('You are an AI agent powered by DeepSeek Harness.\n\nFirst.\n\nFirst suffix.')
+      .toBe('You are an AI agent powered by SuperNova Harness.\n\nFirst.\n\nFirst suffix.')
     await first.dispose()
     expect(await personaText(ctx, key)).toBe('Deployment.')
   })

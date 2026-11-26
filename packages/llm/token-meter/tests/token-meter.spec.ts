@@ -1,16 +1,16 @@
 import { describe, expect, expectTypeOf, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { AssistantStreamAccumulator, createAssistantMessage, createUserMessage, createSystemMessage, type ToolCallId, createMessage } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock, Message, TokenUsage } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
-import SessionStore, { Session, type SessionId, SessionSeq, canonicalHeader } from '@deepseek-ai/dsh-session'
-import type { EpochHeader, SessionEvent, SessionSeq as SessionSeqType } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
-import type { TokenMeasurement, TokenMeterConfig } from '@deepseek-ai/dsh-token-meter'
+import { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import { AssistantStreamAccumulator, createAssistantMessage, createUserMessage, createSystemMessage, type ToolCallId, createMessage } from '@supernova-ai/snh-llm'
+import type { ContentBlock, Message, TokenUsage } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
+import SessionStore, { Session, type SessionId, SessionSeq, canonicalHeader } from '@supernova-ai/snh-session'
+import type { EpochHeader, SessionEvent, SessionSeq as SessionSeqType } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import TokenMeter from '@supernova-ai/snh-token-meter'
+import type { TokenMeasurement, TokenMeterConfig } from '@supernova-ai/snh-token-meter'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'test': { kind: 'test' } & ContextFormed
   }

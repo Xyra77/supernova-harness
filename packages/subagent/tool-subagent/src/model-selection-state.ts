@@ -2,7 +2,7 @@
 
 import type { AllowedModelRoute } from './model-selection.ts'
 
-declare module '@deepseek-ai/dsh-session/types' {
+declare module '@supernova-ai/snh-session/types' {
   interface SessionEventMap {
     /**
      * Child provider/model routes recorded by earlier releases. Current

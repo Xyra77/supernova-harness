@@ -1,18 +1,18 @@
 /** GitHub HTTP authentication, parsing, and fire-and-forget dispatch. */
 
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { Webhooks } from '@octokit/webhooks'
-import type { CredentialRef } from '@deepseek-ai/dsh-credentials'
-import { snapshotJsonValue } from '@deepseek-ai/dsh-util-values'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import type { CredentialRef } from '@supernova-ai/snh-credentials'
+import { snapshotJsonValue } from '@supernova-ai/snh-util-values'
+import { brandString } from '@supernova-ai/snh-brand'
 import type {
   WebhookDeliveryId,
   WebhookSourceId,
   VerifiedWebhookDelivery,
-} from '@deepseek-ai/dsh-webhook/types'
-import type {} from '@deepseek-ai/dsh-webhook'
-import type { WebRoute } from '@deepseek-ai/dsh-host-webserver'
+} from '@supernova-ai/snh-webhook/types'
+import type {} from '@supernova-ai/snh-webhook'
+import type { WebRoute } from '@supernova-ai/snh-host-webserver'
 import { readBoundedUtf8Body, WebhookHttpError } from './body.ts'
 import type { GitHubJsonObject } from './types.ts'
 

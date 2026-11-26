@@ -1,10 +1,10 @@
-# DSH Core Guidelines
+# SNH Core Guidelines
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-Rules for writing DeepSeek Harness code, in the style of the [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines). Each rule has a stable ID and the parts that [G.1](general.md#g1) defines.
+Rules for writing SuperNova Harness code, in the style of the [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines). Each rule has a stable ID and the parts that [G.1](general.md#g1) defines.
 
 ## Sections
 
@@ -17,7 +17,7 @@ Rules for writing DeepSeek Harness code, in the style of the [C++ Core Guideline
 
 ## Status and scope
 
-These guidelines are to DeepSeek Harness what the C++ Core Guidelines are to C++: the repository's coding standard for how to write code, independent of what the code does.
+These guidelines are to SuperNova Harness what the C++ Core Guidelines are to C++: the repository's coding standard for how to write code, independent of what the code does.
 
 A rule belongs here when it would still apply if the code implemented a different feature. Examples are rules about interfaces, types, errors, resource ownership, concurrency, state, component structure, and data formats.
 

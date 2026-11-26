@@ -3,13 +3,13 @@ description: "通过 `ctx.connectorAccounts` 在 Host 上注册连接器插件�
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-connector-account
+# @supernova-ai/snh-client-ui-connector-account
 
 [English](README.md) | 中文
 
 ## 概述
 
-连接器插件在 Host 上通过 `ctx.connectorAccounts` 注册账号，在插件页显示账号：CLI 应用插件注册其厂商 CLI 保存的账号，MCP 连接器注册其 OAuth 服务器的账号。页面显示什么、能做什么由 Host 决定：每个注册方把自己的账号映射为展示内容，注册表只启动或取消该账号列出的操作。浏览器一半渲染每个插件包的区块、标题旁标签和开启引导，并且只在发起操作的浏览器中打开授权页、报告提示。Web 与桌面端组合通过 [`dsh-web-app`](../../bundle/web-app/README.zh.md) 加载这两半。
+连接器插件在 Host 上通过 `ctx.connectorAccounts` 注册账号，在插件页显示账号：CLI 应用插件注册其厂商 CLI 保存的账号，MCP 连接器注册其 OAuth 服务器的账号。页面显示什么、能做什么由 Host 决定：每个注册方把自己的账号映射为展示内容，注册表只启动或取消该账号列出的操作。浏览器一半渲染每个插件包的区块、标题旁标签和开启引导，并且只在发起操作的浏览器中打开授权页、报告提示。Web 与桌面端组合通过 [`snh-web-app`](../../bundle/web-app/README.zh.md) 加载这两半。
 
 ## 目录
 
@@ -32,7 +32,7 @@ kind: "package-reference"
 注册方的 Host 行在注册表运行时注册其账号来源，因此没有注册表的组合（如 headless profile）会跳过注册：
 
 ```ts ignore-check
-import type {} from '@deepseek-ai/dsh-client-ui-connector-account'
+import type {} from '@supernova-ai/snh-client-ui-connector-account'
 
 export function apply(ctx: Context): void {
   const account = new AcmeAccount(options)
@@ -84,7 +84,7 @@ export function apply(ctx: Context): void {
 
 Host 一半 `ConnectorAccounts` 是一个 Remote 服务。`register()` 观察账号来源，每条 `watch` 流在每次变化后读取每个账号的条目，并合并在下一次读取前到达的变化：键和包、文案、`present(view)`、进行中的操作，以及带成功文本的最新结果。`start` 和 `cancel` 按键路由到该账号的来源。
 
-[`dsh-api-remotes`](../../api/remotes/README.zh.md) 挂载生成的 `connectorAccounts` Remote。浏览器一半通过 `BrowserAccounts` 打开一条 `watch` 流；它的一个 store 保存按键索引的 Host 账号、流是否在推送，以及最新提示，同时记住本浏览器发起的操作。它为页面注册一个 `plugins.detail.badge` 条目和一个 `shell.overlay` 提示，并为每个带包名的账号注册以包名为键的 `plugins.bundle.config` 和 `plugins.bundle.activation`，全部使用 `connectorAccount` 命名空间。各界面收到 `start` 和 `cancel` 两个回调：它们调用 Remote 并返回其结果；按钮把启动成功时返回的操作报告给 `BrowserAccounts`，结果为失败或调用被 reject 时报告失败提示。Host 撤下的账号会失去其插件包条目；卸载时撤下所有条目和流。
+[`snh-api-remotes`](../../api/remotes/README.zh.md) 挂载生成的 `connectorAccounts` Remote。浏览器一半通过 `BrowserAccounts` 打开一条 `watch` 流；它的一个 store 保存按键索引的 Host 账号、流是否在推送，以及最新提示，同时记住本浏览器发起的操作。它为页面注册一个 `plugins.detail.badge` 条目和一个 `shell.overlay` 提示，并为每个带包名的账号注册以包名为键的 `plugins.bundle.config` 和 `plugins.bundle.activation`，全部使用 `connectorAccount` 命名空间。各界面收到 `start` 和 `cancel` 两个回调：它们调用 Remote 并返回其结果；按钮把启动成功时返回的操作报告给 `BrowserAccounts`，结果为失败或调用被 reject 时报告失败提示。Host 撤下的账号会失去其插件包条目；卸载时撤下所有条目和流。
 
 | 文件 | 职责 |
 |---|---|

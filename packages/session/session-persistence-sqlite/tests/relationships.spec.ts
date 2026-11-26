@@ -4,12 +4,12 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { expect, it, onTestFinished } from 'vitest'
-import { SessionId, SessionSeq, SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session'
-import { SessionFormatUnsupportedError, SessionPersistenceCorruptionError } from '@deepseek-ai/dsh-session-persistence'
+import { SessionId, SessionSeq, SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session'
+import { SessionFormatUnsupportedError, SessionPersistenceCorruptionError } from '@supernova-ai/snh-session-persistence'
 import { sqliteLogs, tailSegment } from './fixtures/store.ts'
 
 async function fixture() {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-sqlite-v4-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-sqlite-v4-'))
   // One event per frame lets a test rewrite a single stored event by its frame.
   const path = join(root, 'sessions.sqlite'), logs = sqliteLogs(path, root, { frameEvents: 1 }), id = SessionId('v4')
   onTestFinished(async () => { try { await logs.close() } finally { await rm(root, { recursive: true, force: true }) } })

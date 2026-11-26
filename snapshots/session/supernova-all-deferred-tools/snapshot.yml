@@ -1,0 +1,8 @@
+version: 1
+scenario: supernova-all-deferred-tools
+profile: headless
+composition: supernova-all-deferred-tools
+recording: authored
+header:
+  class: supernova-all-deferred-tools
+  pin: true

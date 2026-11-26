@@ -1,11 +1,11 @@
 /** Account-route quota classification stays separate from API-key and third-party quota. */
-import { Context } from '@deepseek-ai/cordis'
-import { BlockAssembler, LlmRuntime } from '@deepseek-ai/dsh-llm'
+import { Context } from '@supernova-ai/cordis'
+import { BlockAssembler, LlmRuntime } from '@supernova-ai/snh-llm'
 import { accountStub } from '../../../account/deepseek-account/tests/account-stub.ts'
-import * as ApiKey from '@deepseek-ai/dsh-llm-deepseek-api-key'
+import * as ApiKey from '@supernova-ai/snh-llm-supernova-api-key'
 import { afterEach, expect, it, vi } from 'vitest'
 import * as Account from '../src/index.ts'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 
 const contexts: Context[] = []
 afterEach(async () => {
@@ -34,8 +34,8 @@ async function routeFor(token: string | undefined, provider: 'deepseek-account' 
   const ctx = new Context()
   contexts.push(ctx)
   await ctx.plugin(LlmRuntime)
-  ctx.provide('deepseekAccount', accountStub({ token: () => token }))
-  await ctx.plugin(DeepSeekAuth)
+  ctx.provide('supernovaAccount', accountStub({ token: () => token }))
+  await ctx.plugin(SuperNovaAuth)
   await ctx.plugin(provider === 'deepseek-account' ? Account : ApiKey)
   return ctx
 }
@@ -70,8 +70,8 @@ it('still expires the stored credential on an account-route 401', async () => {
   contexts.push(ctx)
   await ctx.plugin(LlmRuntime)
   const rejectToken = vi.fn(async (_token: string): Promise<void> => {})
-  ctx.provide('deepseekAccount', accountStub({ token: () => 'account-token', reject: rejectToken }))
-  await ctx.plugin(DeepSeekAuth)
+  ctx.provide('supernovaAccount', accountStub({ token: () => 'account-token', reject: rejectToken }))
+  await ctx.plugin(SuperNovaAuth)
   await ctx.plugin(Account)
   vi.spyOn(globalThis, 'fetch').mockImplementation(messagesOnly(() => new Response('Unauthorized', { status: 401 })))
   await expect(finishOf(ctx, 'deepseek-account')).resolves.toMatchObject({

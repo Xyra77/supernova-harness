@@ -1,14 +1,14 @@
 /** Compiled worker for Client history folding, live Assistant text, and tool preparation. */
 
 import { performance } from 'node:perf_hooks'
-import { Context } from '@deepseek-ai/cordis'
-import { AssistantStreamAccumulator } from '@deepseek-ai/dsh-llm/assistant-stream'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { LlmAttemptId, ToolCallId } from '@deepseek-ai/dsh-llm/types'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
-import type { SessionEvent } from '@deepseek-ai/dsh-session/types'
-import type { ChatNode, ChatSnapshot } from '@deepseek-ai/dsh-client-ui-chat/client'
-import type { SessionEventLikeEntry } from '@deepseek-ai/dsh-api-session-controller/client'
+import { Context } from '@supernova-ai/cordis'
+import { AssistantStreamAccumulator } from '@supernova-ai/snh-llm/assistant-stream'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { LlmAttemptId, ToolCallId } from '@supernova-ai/snh-llm/types'
+import type { StreamChunk } from '@supernova-ai/snh-llm'
+import type { SessionEvent } from '@supernova-ai/snh-session/types'
+import type { ChatNode, ChatSnapshot } from '@supernova-ai/snh-client-ui-chat/client'
+import type { SessionEventLikeEntry } from '@supernova-ai/snh-api-session-controller/client'
 // These Client-only fold modules have no plain-Node package export and are compiled into this worker.
 import { ConversationNodeAssembler } from '../../packages/client/ui-conversation/src/client/conversation/assembler.ts'
 import { ConversationEventRegistry } from '../../packages/client/ui-conversation/src/client/conversation/event-registry.ts'
@@ -341,12 +341,12 @@ function streamingText(assembler: ConversationNodeAssembler, blockType: Streamin
 }
 
 assertBuiltBenchmarkRuntime(import.meta.url, {
-  '@deepseek-ai/dsh-brand': import.meta.resolve('@deepseek-ai/dsh-brand'),
-  '@deepseek-ai/dsh-client-store': import.meta.resolve('@deepseek-ai/dsh-client-store'),
-  '@deepseek-ai/dsh-llm/assistant-stream': import.meta.resolve('@deepseek-ai/dsh-llm/assistant-stream'),
-  '@deepseek-ai/dsh-session/surface': import.meta.resolve('@deepseek-ai/dsh-session/surface'),
-  '@deepseek-ai/dsh-token-meter/client': import.meta.resolve('@deepseek-ai/dsh-token-meter/client'),
-  '@deepseek-ai/dsh-util-values': import.meta.resolve('@deepseek-ai/dsh-util-values'),
+  '@supernova-ai/snh-brand': import.meta.resolve('@supernova-ai/snh-brand'),
+  '@supernova-ai/snh-client-store': import.meta.resolve('@supernova-ai/snh-client-store'),
+  '@supernova-ai/snh-llm/assistant-stream': import.meta.resolve('@supernova-ai/snh-llm/assistant-stream'),
+  '@supernova-ai/snh-session/surface': import.meta.resolve('@supernova-ai/snh-session/surface'),
+  '@supernova-ai/snh-token-meter/client': import.meta.resolve('@supernova-ai/snh-token-meter/client'),
+  '@supernova-ai/snh-util-values': import.meta.resolve('@supernova-ai/snh-util-values'),
 })
 const scope = new Context()
 try {

@@ -1,5 +1,5 @@
 /**
- * SessionTelemetryBackend Service Definition for the DeepSeek Harness.
+ * SessionTelemetryBackend Service Definition for the SuperNova Harness.
  *
  * This package owns the CAPTURE side of session-event reporting — the complete
  * one-record-per-event ledger mirror, what records carry, when
@@ -11,13 +11,13 @@
  * backend responsibilities are documented in the
  * [Session telemetry reference](../README.md#understand-the-implementation).
  *
- * @module @deepseek-ai/dsh-session-telemetry
+ * @module @supernova-ai/snh-session-telemetry
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import type { SessionEvent, SessionId } from '@deepseek-ai/dsh-session'
+import { Context, Service } from '@supernova-ai/cordis'
+import type { SessionEvent, SessionId } from '@supernova-ai/snh-session'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     sessionTelemetry: SessionTelemetryBackend
   }

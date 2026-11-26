@@ -7,24 +7,24 @@
  * unless `maxConsecutiveWakes` caps it per owner. A notice carries the job's
  * output and result when it fits `inlineOutputBytes`, and `job_output`
  * withdraws a notice still pending.
- * @module @deepseek-ai/dsh-tool-jobs
+ * @module @supernova-ai/snh-tool-jobs
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { boundContextSummary, createUserMessage, type ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed, MessageId } from '@deepseek-ai/dsh-llm'
-import { TextRetainer } from '@deepseek-ai/dsh-output-retention'
-import { defineTool, ToolArgsError } from '@deepseek-ai/dsh-tools'
-import type { GenericCallView, ToolDefinition, ToolExecution } from '@deepseek-ai/dsh-tools'
-import type { JobId } from '@deepseek-ai/dsh-jobs'
-import type { JobEvent, JobView, JobRead } from '@deepseek-ai/dsh-jobs'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-agent'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { boundContextSummary, createUserMessage, type ContentBlock } from '@supernova-ai/snh-llm'
+import type { ContextFormed, MessageId } from '@supernova-ai/snh-llm'
+import { TextRetainer } from '@supernova-ai/snh-output-retention'
+import { defineTool, ToolArgsError } from '@supernova-ai/snh-tools'
+import type { GenericCallView, ToolDefinition, ToolExecution } from '@supernova-ai/snh-tools'
+import type { JobId } from '@supernova-ai/snh-jobs'
+import type { JobEvent, JobView, JobRead } from '@supernova-ai/snh-jobs'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type {} from '@supernova-ai/snh-agent'
 import { publicJob, renderModelDelta, statusLine } from './render.ts'
 import type { PublicJobSnapshot } from './render.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
-declare module '@deepseek-ai/dsh-llm' {
+import { brandString } from '@supernova-ai/snh-brand'
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'tool-jobs': { kind: 'tool-jobs' } & ContextFormed
   }

@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "SuperNova 会话日志上传",
+    "description": "启用后，随官方模型 API 请求向 SuperNova 上传会话日志。"
+  }
+}

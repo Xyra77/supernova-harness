@@ -1,4 +1,4 @@
-# Agent Note: 导入 DeepSeek 官网会话导出
+# Agent Note: 导入 SuperNova 官网会话导出
 
 Status: implemented
 
@@ -6,33 +6,33 @@ Status: implemented
 
 ## Problem
 
-DeepSeek 官网（chat.deepseek.com）的“导出全部会话”产物是一个 `deepseek_data-*.zip`。用户希望把这些历史会话带进 DSH 继续使用：在 Web GUI 里浏览原有的提问、思考与回答，并在任意一条会话上接着对话，模型能看到原有的上下文。没有导入功能时，DSH 只能从空白会话开始。
+SuperNova 官网（chat.deepseek.com）的“导出全部会话”产物是一个 `supernova_data-*.zip`。用户希望把这些历史会话带进 SNH 继续使用：在 Web GUI 里浏览原有的提问、思考与回答，并在任意一条会话上接着对话，模型能看到原有的上下文。没有导入功能时，SNH 只能从空白会话开始。
 
-导出格式（`export_format_version: 3`）与 DSH Session 有四点结构差异，导入必须逐一处理：
+导出格式（`export_format_version: 3`）与 SNH Session 有四点结构差异，导入必须逐一处理：
 
-- 每个官网会话的 `messages` 是一棵靠 `parent_id` 连接的消息树（重新生成、编辑提问都会产生分叉）；DSH Session 是线性的追加日志。
+- 每个官网会话的 `messages` 是一棵靠 `parent_id` 连接的消息树（重新生成、编辑提问都会产生分叉）；SNH Session 是线性的追加日志。
 - 消息 `id` 只在会话内自增，跨会话不可比较；`inserted_at` 在同一会话内也不单调（assistant 常比配对的 user 早几毫秒）。
-- 一条 assistant 消息的 `fragments` 交错记录思考、联网搜索、打开网页、正文等块；DSH 用 step 内的 `assistant/message` 加 `tool/call` / `tool/result` 表达同样的过程。
+- 一条 assistant 消息的 `fragments` 交错记录思考、联网搜索、打开网页、正文等块；SNH 用 step 内的 `assistant/message` 加 `tool/call` / `tool/result` 表达同样的过程。
 - 产物还包含模板回答、失败状态、加密的链接正文、提示条等**不能**进入模型上下文的内容。
 
 一个导出可能包含上千个会话和数百兆字节的图片；用户只需要最近的会话，并放进自己选择的工作区，而且 Host 在导入期间必须保持响应。
 
 ## Decision
 
-实验性包 [`@deepseek-ai/dsh-deepseek-chat-import`](../../../../packages/experimental/deepseek-chat-import/README.zh.md) 同时提供 Host 与 Client 两个编译面：
+实验性包 [`@supernova-ai/snh-deepseek-chat-import`](../../../../packages/experimental/deepseek-chat-import/README.zh.md) 同时提供 Host 与 Client 两个编译面：
 
-- Host 面：一个 `TypertRemoteService`，在 `ctx.connection.fetch` 上注册精确上传路由 `POST /api/deepseek-chat-import/archive?workspaceId=…`，并提供 `@Remote limits()` 方法。路由把上传的 ZIP 缓存在内存中，把最近的会话逐个写成所选工作区中的持久化 DSH Session，并以流式方式报告进度。
+- Host 面：一个 `TypertRemoteService`，在 `ctx.connection.fetch` 上注册精确上传路由 `POST /api/deepseek-chat-import/archive?workspaceId=…`，并提供 `@Remote limits()` 方法。路由把上传的 ZIP 缓存在内存中，把最近的会话逐个写成所选工作区中的持久化 SNH Session，并以流式方式报告进度。
 - Client 面：在侧栏“新建会话”右侧放一个导入按钮。点击后弹出对话框，包含导出文件字段（浏览器原生文件输入，`accept=.zip`）和工作区字段（渲染 ui-workspace 的 `workspace.picker` Factory）；浏览器上传文件，显示上传与导入进度以及结果。
 
 按钮位置通过 ui-sidebar 的 HOC slot `sidebar.session.action` 提供：插件在那里包裹新建会话行的内容，原样返回后追加自己的按钮，因此装饰该行不新增包裹元素。不在 ui-sidebar 里写死按钮，因为那样侧栏外壳要直接调用导入插件的 Remote 命名空间，把业务逻辑放进了外壳。工作区字段复用新建会话的工作区菜单，即 `workspace.picker` Factory：列出已有工作区，并提供“添加工作区…”，通过 `workspace.picker.directoryFlow` 洞运行已组合的目录选择器。
 
-该能力作为 Official 实验性可选 bundle 发布：包本身声明 `dsh.bundle.patch` 并插入自己的 `deepseek-chat-import` 行，列入 `OPTIONAL_BUNDLES`，在用户于插件页启用之前保持关闭。默认 Web 组合不挂载它。
+该能力作为 Official 实验性可选 bundle 发布：包本身声明 `snh.bundle.patch` 并插入自己的 `deepseek-chat-import` 行，列入 `OPTIONAL_BUNDLES`，在用户于插件页启用之前保持关闭。默认 Web 组合不挂载它。
 
 ### 用户流程
 
-1. 用户在插件页启用“DeepSeek 会话导入”，然后点击“新建会话”右侧的导入按钮（窄栏模式下是一个图标按钮，位于“新建会话”图标下方）。只有 owner 看得到这个按钮。
-2. 对话框需要 DeepSeek 官网导出的 ZIP 文件（`deepseek_data-*.zip`）以及接收会话的工作区。工作区字段预选当前会话所在的工作区；“添加工作区…”通过目录选择器添加新目录。
-3. 导入时，浏览器先调用 `limits()`；大于 `maxUploadBytes` 的文件在上传前就被拒绝。服务页面随后显示上传百分比、Host 读取压缩包时的不确定进度，以及写入会话时的“正在导入 n/K”。Host 跑在页面之外执行上下文中的页面经 `__DSH_TRANSPORT__.fetch` 携带压缩包，该载体不报告字节进度，因此对话框从读取阶段开始。关闭对话框会中止请求。
+1. 用户在插件页启用“SuperNova 会话导入”，然后点击“新建会话”右侧的导入按钮（窄栏模式下是一个图标按钮，位于“新建会话”图标下方）。只有 owner 看得到这个按钮。
+2. 对话框需要 SuperNova 官网导出的 ZIP 文件（`supernova_data-*.zip`）以及接收会话的工作区。工作区字段预选当前会话所在的工作区；“添加工作区…”通过目录选择器添加新目录。
+3. 导入时，浏览器先调用 `limits()`；大于 `maxUploadBytes` 的文件在上传前就被拒绝。服务页面随后显示上传百分比、Host 读取压缩包时的不确定进度，以及写入会话时的“正在导入 n/K”。Host 跑在页面之外执行上下文中的页面经 `__SNH_TRANSPORT__.fetch` 携带压缩包，该载体不报告字节进度，因此对话框从读取阶段开始。关闭对话框会中止请求。
 4. 成功后对话框以单数或复数形式显示导入了多少个会话、导入到哪个工作区、多少个会话超出上限、多少个会话无法导入。
 5. 失败时对话框显示该失败原因的本地化说明，或意外错误的信息。
 6. 无论导入以何种方式结束，浏览器都会刷新会话列表，使失败或取消之前已写入的会话出现在列表中。
@@ -43,14 +43,14 @@ DeepSeek 官网（chat.deepseek.com）的“导出全部会话”产物是一个
 
 | 文件 | 职责 |
 |---|---|
-| `src/types.ts` | 只放浏览器安全的线上类型：结果、失败原因、上限、NDJSON 应答行，以及 `deepseekChatImport/owner-only` Remote 错误码 |
+| `src/types.ts` | 只放浏览器安全的线上类型：结果、失败原因、上限、NDJSON 应答行，以及 `supernovaChatImport/owner-only` Remote 错误码 |
 | `src/protocol.ts` | `UPLOAD_PATH` 及其相对文档的形式 `UPLOAD_ROUTE` |
 | `src/format.ts` | 用 zod 校验 `manifest.json`、`chat_sessions/{id}.json` 和本包映射的 fragment 类型；未知 fragment 类型原样保留给转换器忽略 |
 | `src/archive.ts` | `openExportArchive(bytes, maxEntryBytes, signal)`：ZIP 中央目录、只解压调用方所需条目的流式扫描，以及按名读取单个条目 |
 | `src/conversation.ts` | 纯函数 `selectBranch(file)` 与 `convertConversation(file, options)`：消息树到种子事件 |
-| `src/importer.ts` | `importDeepseekChatExport(deps, request, signal)`：索引选择、图片扫描、会话扫描、写入与附加工作区 |
+| `src/importer.ts` | `importSupernovaChatExport(deps, request, signal)`：索引选择、图片扫描、会话扫描、写入与附加工作区 |
 | `src/upload.ts` | `createUploadRoute(handler)`：请求校验、有界缓存、流式应答与取消 |
-| `src/index.ts` | `DeepseekChatImportService`、`Config`、单一导入槽位与 `@Remote limits()` |
+| `src/index.ts` | `SupernovaChatImportService`、`Config`、单一导入槽位与 `@Remote limits()` |
 | `src/client/*` | 按钮、对话框、经页面载体或 XHR 的浏览器上传、locale 字典、slot 注册 |
 | `cordis.patch.yml` | 可选 bundle 的 `deepseek-chat-import` 行 |
 
@@ -72,11 +72,11 @@ interface Config {
 }
 ```
 
-`POST /api/deepseek-chat-import/archive?workspaceId=…` 是共享 API 通道上的精确路由，只有 owner Peer 能访问。`limits()` 以 `deepseekChatImport/owner-only` 拒绝所有非 owner 调用方，因此共享会话的访客等非 owner principal 永远不能导入。路由要求 `content-type: application/octet-stream`（否则 415）和非空的 `workspaceId`（否则 400）；其他方法在路由运行前就由共享处理器应答。
+`POST /api/deepseek-chat-import/archive?workspaceId=…` 是共享 API 通道上的精确路由，只有 owner Peer 能访问。`limits()` 以 `supernovaChatImport/owner-only` 拒绝所有非 owner 调用方，因此共享会话的访客等非 owner principal 永远不能导入。路由要求 `content-type: application/octet-stream`（否则 415）和非空的 `workspaceId`（否则 400）；其他方法在路由运行前就由共享处理器应答。
 
 服务拥有一个导入槽位。请求先占用槽位，否则应答 `busy`；随后解析工作区（`workspace-not-found`），把流式请求体读入一个按有效 `content-length` 分配的缓冲区，只有请求体比声明的更长时才扩容，直到读完或超过 `maxUploadBytes`（`too-large`）。上传内容从不写入磁盘。每个请求拥有一个 AbortController，与请求信号以及应答体的取消合并。卸载插件会中止正在运行的导入（包括仍在上传的请求体），并且只有在导入停止写入后才完成卸载。
 
-应答为 `application/x-ndjson`，带 `cache-control: no-store, no-transform`：先是进度行 `{ type: 'progress', done, total }`，然后恰好一行 `{ type: 'outcome', outcome }`，其中 `outcome` 为 `{ ok: true, value: DeepseekChatImportResult }` 或 `{ ok: false, error: { reason, message } }`。Web server 逐块写出应答体，浏览器在完整的行到达时读取，代理一次性交付整个应答体时同样可用。浏览器校验每一条解码后的行：必须是已知 `type` 的对象，并携带该类型对应的字段，因此 `null`、缺少 `done` 的行，或 `ok` 不是布尔值的 outcome 都会让应答以无效失败，而不是在 `onload`/`onprogress` 回调里抛错。`reason` 取 `too-large | unreadable-archive | missing-manifest | missing-index | unsupported-version | no-conversations | workspace-not-found | busy` 之一。意外失败会记入 Host 日志，并在没有 outcome 行的情况下结束应答体，浏览器将其报告为上传失败。
+应答为 `application/x-ndjson`，带 `cache-control: no-store, no-transform`：先是进度行 `{ type: 'progress', done, total }`，然后恰好一行 `{ type: 'outcome', outcome }`，其中 `outcome` 为 `{ ok: true, value: SupernovaChatImportResult }` 或 `{ ok: false, error: { reason, message } }`。Web server 逐块写出应答体，浏览器在完整的行到达时读取，代理一次性交付整个应答体时同样可用。浏览器校验每一条解码后的行：必须是已知 `type` 的对象，并携带该类型对应的字段，因此 `null`、缺少 `done` 的行，或 `ok` 不是布尔值的 outcome 都会让应答以无效失败，而不是在 `onload`/`onprogress` 回调里抛错。`reason` 取 `too-large | unreadable-archive | missing-manifest | missing-index | unsupported-version | no-conversations | workspace-not-found | busy` 之一。意外失败会记入 Host 日志，并在没有 outcome 行的情况下结束应答体，浏览器将其报告为上传失败。
 
 `attachments` 与 `sessionProjectionCache` 是通过 `ctx.get()` 读取的可选服务：缺少附件服务时图片变成伪造的文件卡片；缺少投影缓存时，冷会话的列表行在会话首次打开前不显示原标题与活动时间。
 
@@ -104,7 +104,7 @@ interface Config {
 
 ### 消息链到 Session 事件（`convertConversation`）
 
-链上的消息按“每个 USER 消息开一个 turn”分组：USER 消息与紧随其后的 ASSISTANT 消息组成一个 turn。没有前置 USER 的 ASSISTANT 消息（只可能来自异常数据）被丢弃。回答状态为 `CONTENT_FILTER` 的 USER 消息与该回答一起丢弃：两个节点都不产生事件，界面上什么都不显示，后续 turn 的编号不留空缺。链以 USER 结尾时最后一个 turn 只有提问。不要求 user / assistant 严格交替：被排除的回答不会产生 `assistant/message`，下一个提问直接跟在上一个提问之后，这与 DSH 中一个 turn 收到多条 steer 消息的历史形态一致。没有剩余 turn 的会话转换失败并记入 `skipped`。
+链上的消息按“每个 USER 消息开一个 turn”分组：USER 消息与紧随其后的 ASSISTANT 消息组成一个 turn。没有前置 USER 的 ASSISTANT 消息（只可能来自异常数据）被丢弃。回答状态为 `CONTENT_FILTER` 的 USER 消息与该回答一起丢弃：两个节点都不产生事件，界面上什么都不显示，后续 turn 的编号不留空缺。链以 USER 结尾时最后一个 turn 只有提问。不要求 user / assistant 严格交替：被排除的回答不会产生 `assistant/message`，下一个提问直接跟在上一个提问之后，这与 SNH 中一个 turn 收到多条 steer 消息的历史形态一致。没有剩余 turn 的会话转换失败并记入 `skipped`。
 
 一个 turn 的事件序列：
 
@@ -119,11 +119,11 @@ interface Config {
 
 空的 system 头不产生模型消息，也不渲染提示卡片。存储格式只接受作为 surface 节点 0 或位于这样的头之后的 `system/message`，每次读取存储的日志都会检查这一点；有了这个头，恢复的 Agent 会用真实的系统提示替换它，而不是在导入的历史之后追加一条系统消息。
 
-文本为空或只有空白、且没有附件的用户消息写入一个内容为空字符串的文本块：Turn 与它的行都存在，而 DeepSeek 请求序列化会跳过这条空用户消息，因此该轮提问不在模型上下文里；首轮没有文本时，请求会直接从它的 assistant 消息开始。
+文本为空或只有空白、且没有附件的用户消息写入一个内容为空字符串的文本块：Turn 与它的行都存在，而 SuperNova 请求序列化会跳过这条空用户消息，因此该轮提问不在模型上下文里；首轮没有文本时，请求会直接从它的 assistant 消息开始。
 
 第 1 个 turn 结束后，会话标题追加 `session/title { title, messageSeqs: [], source: { kind: 'user' } }`。标题经 session-title 的 `normalizeSessionTitle` 规范化：空白折叠为单个空格，文本截断到 `maxTitleBytes` 个 UTF-8 字节。没有标题，或标题规范化后为空时，不写标题事件。`user` 来源会固定标题，导入后不会再触发标题生成。
 
-Assistant 消息的 `source` 为 `{ kind: 'model', provider: 'deepseek-chat-export', model: 'deepseek-chat-export' }`，没有 `replayState`。DeepSeek adapter 把这类外来历史的 reasoning 按无签名 thinking 发送，这是已有的跨模型历史路径。不写 `usage`、`request/header`、`request/context`、`model/selection`：恢复后的首个请求记 `initial` header，使用部署的默认模型，不出现“模型已切换”提示。
+Assistant 消息的 `source` 为 `{ kind: 'model', provider: 'deepseek-chat-export', model: 'deepseek-chat-export' }`，没有 `replayState`。SuperNova adapter 把这类外来历史的 reasoning 按无签名 thinking 发送，这是已有的跨模型历史路径。不写 `usage`、`request/header`、`request/context`、`model/selection`：恢复后的首个请求记 `initial` header，使用部署的默认模型，不出现“模型已切换”提示。
 
 `stream` 写空数组。导出不包含逐 token 的流记录，伪造的流无法满足“流精确重建内容”的校验；空数组能通过现有校验，Web 的 assistant 行从 `message.content` 渲染。
 
@@ -138,7 +138,7 @@ Assistant 消息的 `source` 为 `{ kind: 'model', provider: 'deepseek-chat-expo
 | `FILE`（非图片） | USER | 伪造的文件卡片：`{ type: 'file', attachment }`，引用为 `attachmentId = sha256('deepseek-chat-export:' + file.id)`、`name = file_name`、`bytes = file_size`（缺失时 0）；本体不在导出里，因此不存在对应对象，句柄里的路径读不到内容 | 是，为文件句柄文本 |
 | `THINK` | ASSISTANT | 当前 step 的 `{ type: 'reasoning', text }`；空文本忽略 | 是（按 adapter 规则） |
 | `RESPONSE` | ASSISTANT | 当前 step 的 `{ type: 'text', text }`；空文本忽略 | 是 |
-| `TOOL_SEARCH` | ASSISTANT | `web_search` 调用：参数 `{"queries": [...]}`；结果正文由 `dsh-tool-web` 的 `formatSearchOutput` 生成；`meta` 为 `{ sources: [{ url, title, snippet, publishedAt }], truncated: false }`，渲染为标准搜索卡片。`WIP` 视为未完成并略去；`FAILED` 生成 `isError: true` 的结果，文本固定为 `Error: the export records this search as failed.`；缺少 `status` 时按 `FINISHED` 处理。查询全为空或空白时忽略 | 是 |
+| `TOOL_SEARCH` | ASSISTANT | `web_search` 调用：参数 `{"queries": [...]}`；结果正文由 `snh-tool-web` 的 `formatSearchOutput` 生成；`meta` 为 `{ sources: [{ url, title, snippet, publishedAt }], truncated: false }`，渲染为标准搜索卡片。`WIP` 视为未完成并略去；`FAILED` 生成 `isError: true` 的结果，文本固定为 `Error: the export records this search as failed.`；缺少 `status` 时按 `FINISHED` 处理。查询全为空或空白时忽略 | 是 |
 | `TOOL_OPEN`（有 url） | ASSISTANT | `web_fetch` 调用：参数 `{"url": ...}`；结果正文为标题、URL 与“页面正文未包含在导出中”的说明；`status: FINISHED` 时 `meta` 为 `{ url, statusCode: 200, truncated: false }`，渲染为标准抓取卡片；`FAILED` 时结果为 `isError: true`；`WIP` 忽略 | 是 |
 | `TOOL_OPEN`（url 为 null 或空串） | ASSISTANT | 不生成任何内容：导出端会在一个 stage 的真实打开记录旁写一条全 null、只带 `stage_id` 和 `group_id` 的记录，它不指向任何页面 | 否 |
 | `TOOL_FIND` | ASSISTANT | 不生成任何内容：官网把它显示成单独一行，消息里没有对应的块 | 否 |
@@ -188,9 +188,9 @@ Assistant 消息的 `source` 为 `{ kind: 'model', provider: 'deepseek-chat-expo
 ### Client
 
 - ui-sidebar 声明 HOC slot `sidebar.session.action`（`scope: 'root'`，owner `{ wide: boolean }`），包裹新建会话行的内容，占用方以 `children` 收到该内容，返回它（可再包裹）并附上自己的控件。导入按钮在“新建会话”按钮右侧渲染（宽栏同一行，“新建会话”按钮占剩余宽度；窄栏纵向排列在“新建会话”图标下方）。
-- 插件的 client 面 `$mount` 自己的 `/remote` 贡献（与 `dsh-api-remote-access` 相同的自挂载方式，不进入 `dsh-api-remotes` 聚合），作为 `sidebar.session.action` 层注册 `ImportSessionsAction`。它先渲染行内容，再渲染触发按钮，最后渲染对话框；不能导入的 Peer 会原样得到行内容，因此新建会话按钮继续渲染。按钮仅在 `useRemoteAccess('deepseekChatImport/limits')` 为真时显示；对话框是该层的本地状态，通过 `Modal` portal 渲染。
-- 服务页面上的上传使用 `XMLHttpRequest`，因为 Fetch 不提供上传进度。Host 跑在页面之外执行上下文中的页面（静态 Cloudflare Pages 预览）提供 `__DSH_TRANSPORT__.fetch`：压缩包经该载体传输，没有字节进度，直接进入读取与导入阶段。URL 是相对 `document.baseURI` 解析的 `UPLOAD_ROUTE`，因此加路径前缀的代理仍然可用。非 200 应答、没有 outcome 行的应答、不是合法协议值的行或连接失败归为 `upload-failed` 结果；抛出的错误以未知失败文案显示。
-- 载体选择没有复用 `@deepseek-ai/dsh-client-file-upload`。该包的服务会缓冲整个应答，流式 NDJSON 进度会丢失，而且它的 `post` 方法不在公开接口上；把选择留在本包内同时保住了进度行与包依赖边界。
+- 插件的 client 面 `$mount` 自己的 `/remote` 贡献（与 `snh-api-remote-access` 相同的自挂载方式，不进入 `snh-api-remotes` 聚合），作为 `sidebar.session.action` 层注册 `ImportSessionsAction`。它先渲染行内容，再渲染触发按钮，最后渲染对话框；不能导入的 Peer 会原样得到行内容，因此新建会话按钮继续渲染。按钮仅在 `useRemoteAccess('supernovaChatImport/limits')` 为真时显示；对话框是该层的本地状态，通过 `Modal` portal 渲染。
+- 服务页面上的上传使用 `XMLHttpRequest`，因为 Fetch 不提供上传进度。Host 跑在页面之外执行上下文中的页面（静态 Cloudflare Pages 预览）提供 `__SNH_TRANSPORT__.fetch`：压缩包经该载体传输，没有字节进度，直接进入读取与导入阶段。URL 是相对 `document.baseURI` 解析的 `UPLOAD_ROUTE`，因此加路径前缀的代理仍然可用。非 200 应答、没有 outcome 行的应答、不是合法协议值的行或连接失败归为 `upload-failed` 结果；抛出的错误以未知失败文案显示。
+- 载体选择没有复用 `@supernova-ai/snh-client-file-upload`。该包的服务会缓冲整个应答，流式 NDJSON 进度会丢失，而且它的 `post` 方法不在公开接口上；把选择留在本包内同时保住了进度行与包依赖边界。
 - 文案走 8 种语言的 locale 字典，英文用 sentence case；摘要行有 `.one` / `.other` 两种形式，按 `count === 1` 选择。
 
 ### Realization
@@ -238,7 +238,7 @@ Assistant 消息的 `source` 为 `{ kind: 'model', provider: 'deepseek-chat-expo
 
 **通过 `ctx.agents.create({ seed })` 创建 live Agent。** 它是现有的受支持入口，但 `createdAt` 只能是当前时间，导入的会话会全部挤在侧栏顶部；导入上千个会话还会同时创建上千个 live Agent。直接写持久化层保留原始时间，也不占用运行时资源。
 
-**每个分支一个 Session，或在 DSH 中表达分叉。** DSH Session 是线性日志；为分支各建 Session 会让一个官网会话变成多个难以区分的会话。需求明确只导入最新链。
+**每个分支一个 Session，或在 SNH 中表达分叉。** SNH Session 是线性日志；为分支各建 Session 会让一个官网会话变成多个难以区分的会话。需求明确只导入最新链。
 
 **保留被内容过滤回答的提问并写错误行。** 官网把这类轮次显示为已撤回，用户决定两个节点都不导入；剩下的轮次与用户在官网看到的一致。
 
@@ -252,7 +252,7 @@ Assistant 消息的 `source` 为 `{ kind: 'model', provider: 'deepseek-chat-expo
 
 ## Consequences
 
-导入把官网历史带进 DSH，保留原始标题、时间、思考与搜索卡片，导入的会话通过普通恢复路径继续对话。Host 内存受压缩包（`maxUploadBytes`）加一个条目（`maxEntryBytes`）、一个转换后的会话以及已保存图片的引用约束，事件循环在会话之间保持响应。代价是取消或导入中途失败时只有已写入的会话保留，而且补位的会话要按名读取，并再跑一次图片扫描。
+导入把官网历史带进 SNH，保留原始标题、时间、思考与搜索卡片，导入的会话通过普通恢复路径继续对话。Host 内存受压缩包（`maxUploadBytes`）加一个条目（`maxEntryBytes`）、一个转换后的会话以及已保存图片的引用约束，事件循环在会话之间保持响应。代价是取消或导入中途失败时只有已写入的会话保留，而且补位的会话要按名读取，并再跑一次图片扫描。
 
 - **冷写入是 agent loop 之外的生产写入方。** 导入使用全新的 Session id 且写完即关闭句柄，不与 live Session 竞争所有权；如果持久化层以后假设所有写入都经过 agent loop（例如在创建时注册额外的派生状态），导入路径需要同步更新。
 - **已存储但未附加的会话会留在存储中。** `SessionPersistence` 不提供删除；导入在 `skipped` 中报告这样的会话及其 id。

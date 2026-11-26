@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import { Context } from '@supernova-ai/cordis'
+import { createUserMessage } from '@supernova-ai/snh-llm'
 import SessionStore, {
   appendPluginRecord,
   buildForkSeed,
@@ -9,10 +9,10 @@ import SessionStore, {
   type SessionId,
   SessionLogOffset,
   SessionSeq,
-} from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+} from '@supernova-ai/snh-session'
+import type { SessionEvent } from '@supernova-ai/snh-session'
 import type { PluginRequestFixture } from './plugin-records.type-test.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 /** One user turn opening, so a record lands between model-visible events. */
 function openTurn(session: Session): void {

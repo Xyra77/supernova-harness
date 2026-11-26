@@ -1,16 +1,16 @@
 /** Register interactive terminal tabs and explicit process cleanup with the sidebar. */
-import type { ShortcutCommandId } from '@deepseek-ai/dsh-client-shortcuts/client'
-import type { Context } from '@deepseek-ai/cordis'
-import type { WebTerminalId, WebTerminalInfo } from '@deepseek-ai/dsh-api-terminal-controller/types'
-import type { SidebarRightTabParamsMap, TabId } from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type {} from '@deepseek-ai/dsh-api-terminal-controller/client'
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type {} from '@deepseek-ai/dsh-client-ui-session/client'
-import type {} from '@deepseek-ai/dsh-client-ui-theme/client'
-import { PluginArtworkTerminal } from '@deepseek-ai/dsh-client-ui-primitives'
+import type { ShortcutCommandId } from '@supernova-ai/snh-client-shortcuts/client'
+import type { Context } from '@supernova-ai/cordis'
+import type { WebTerminalId, WebTerminalInfo } from '@supernova-ai/snh-api-terminal-controller/types'
+import type { SidebarRightTabParamsMap, TabId } from '@supernova-ai/snh-client-ui-sidebar-right/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type {} from '@supernova-ai/snh-api-terminal-controller/client'
+import type {} from '@supernova-ai/snh-client-ui-sidebar-right/client'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
+import type {} from '@supernova-ai/snh-client-locale/client'
+import type {} from '@supernova-ai/snh-client-ui-session/client'
+import type {} from '@supernova-ai/snh-client-ui-theme/client'
+import { PluginArtworkTerminal } from '@supernova-ai/snh-client-ui-primitives'
 import { TerminalGuide, type TerminalGuideInjected } from './TerminalGuide.tsx'
 import { LazyTerminalBody } from './LazyTerminalBody.tsx'
 import { TerminalTitle } from './TerminalTitle.tsx'
@@ -50,7 +50,7 @@ export function apply(ctx: Context): void {
       params !== undefined && 'shellPath' in params ? params.shellPath : undefined)
   }
   const namespace = 'sidebarTerminal'
-  const id = '@deepseek-ai/dsh-client-ui-sidebar-terminal'
+  const id = '@supernova-ai/snh-client-ui-sidebar-terminal'
   const t = ctx.locale.bind(namespace)
   ctx.effect(() => ctx.shortcuts.register({
     id: 'terminal.new' as ShortcutCommandId, label: () => t('new'), aliases: ['new terminal', 'shell'],

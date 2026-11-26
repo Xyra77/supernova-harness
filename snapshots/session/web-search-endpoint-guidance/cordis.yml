@@ -1,18 +1,18 @@
-# Live-recording patch for a deterministic failed DeepSeek search request.
+# Live-recording patch for a deterministic failed SuperNova search request.
 - insert:
     - id: web-search-error-fixture
       name: './web-search-error-fixture.mjs'
 
-- id: web-deepseek-api
-  name: '@deepseek-ai/dsh-web-deepseek-api'
+- id: web-supernova-api
+  name: '@supernova-ai/snh-web-supernova-api'
   config:
-    searchApiKeyEnv: DSH_SNAPSHOT_SEARCH_KEY
+    searchApiKeyEnv: SNH_SNAPSHOT_SEARCH_KEY
     # The fixture maps this recorded authority to its OS-assigned listener.
     searchBaseURL: http://127.0.0.1:43118/api/v1/tools
 
-# The conversation runs on a DeepSeek model route, where an unconfigured search selects Messages search.
+# The conversation runs on a SuperNova model route, where an unconfigured search selects Messages search.
 - id: web
-  name: '@deepseek-ai/dsh-web'
+  name: '@supernova-ai/snh-web'
   config:
-    searchProvider: deepseek-search-api
+    searchProvider: supernova-search-api
     fetchProvider: http

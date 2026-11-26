@@ -5,7 +5,7 @@ import { connectDesktopWelcome } from '../src/welcome-backend.ts'
 function transport(preference?: string) {
   const keys = new Map<string, string>()
   const namespaces = [
-    { ns: 'llm-deepseek', value: { apiKeyEnv: 'CUSTOM_DEEPSEEK_KEY' } },
+    { ns: 'llm-supernova', value: { apiKeyEnv: 'CUSTOM_DEEPSEEK_KEY' } },
     { ns: 'llm-pi-ai', value: { profiles: { example: { apiKeyEnv: 'EXAMPLE_API_KEY' } } } },
     { ns: 'locale', value: preference === undefined ? {} : { preference } },
   ]
@@ -29,7 +29,7 @@ function transport(preference?: string) {
 }
 
 const url = 'http://127.0.0.1:19387/'
-const cookie = 'dsh-auth-fixture=signed'
+const cookie = 'snh-auth-fixture=signed'
 
 describe('desktop welcome Web operations', () => {
   it.each(['light', 'dark', 'system'] as const)('reads the live %s theme in the existing settings request', async (preference) => {

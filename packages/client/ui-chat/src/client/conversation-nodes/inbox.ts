@@ -1,7 +1,7 @@
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
 import type {
   ConversationNodeDefinition, ConversationPreviousContext,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@supernova-ai/snh-client-ui-conversation/client'
 
 interface InboxIdentity {
   readonly id: string

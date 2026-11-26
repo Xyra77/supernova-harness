@@ -1,10 +1,10 @@
 /** A request the account route authenticated ends with the sign-out of its credential and ends the route's running tasks. */
-import { Context } from '@deepseek-ai/cordis'
-import { BlockAssembler, LlmRuntime } from '@deepseek-ai/dsh-llm'
+import { Context } from '@supernova-ai/cordis'
+import { BlockAssembler, LlmRuntime } from '@supernova-ai/snh-llm'
 import { afterEach, expect, it, vi } from 'vitest'
 import { accountStub } from '../../../account/deepseek-account/tests/account-stub.ts'
 import * as Account from '../src/index.ts'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 
 const contexts: Context[] = []
 afterEach(async () => {
@@ -15,7 +15,7 @@ afterEach(async () => {
 const SIGNED_OUT_CANCEL = [{ kind: 'hook', reason: 'deepseek-account/signed-out' }, { keepInbox: true }]
 const SIGNED_OUT_FAILURE = {
   code: 'ACCOUNT_SIGN_IN_REQUIRED',
-  message: 'The DeepSeek account signed out before this request finished. Sign in to DeepSeek to use the account provider.',
+  message: 'The SuperNova account signed out before this request finished. Sign in to SuperNova to use the account provider.',
 }
 
 /**
@@ -39,11 +39,11 @@ async function route(options: { reject?: (token: string) => void; agents?: boole
     ] } as never)
   }
   // The route registers its running-task report once Agents and the account service are both mounted.
-  ctx.provide('deepseekAccount', Object.assign(
+  ctx.provide('supernovaAccount', Object.assign(
     accountStub({ token: () => 'account-token', signedOut: signedOut.signal, ...reject === undefined ? {} : { reject } }),
     { registerRunningTaskReport: () => () => {} },
   ))
-  await ctx.plugin(DeepSeekAuth)
+  await ctx.plugin(SuperNovaAuth)
   const plugin = ctx.plugin(Account)
   await plugin
   return { ctx, signedOut, cancelAccountTask, cancelApiKeyTask, plugin }

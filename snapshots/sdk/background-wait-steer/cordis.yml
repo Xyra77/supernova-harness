@@ -3,17 +3,17 @@
 # next-step inbox, where the fixture checks the single notice the released read
 # withheld; no provider title or durable session-log mirror may add records.
 - id: skill-filesystem
-  name: '@deepseek-ai/dsh-skill-filesystem'
+  name: '@supernova-ai/snh-skill-filesystem'
   config:
     includeDefaultRoots: false
 
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@supernova-ai/snh-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
+    root: !!js snhHomePath('sessions')
     compression: none
 
-- id: session-log-deepseek
+- id: session-log-supernova
   config:
     enabled: false
 
@@ -30,7 +30,7 @@
   disabled: true
 
 - id: tool-jobs
-  name: '@deepseek-ai/dsh-tool-jobs'
+  name: '@supernova-ai/snh-tool-jobs'
   config:
     completionDelivery: quiet
 

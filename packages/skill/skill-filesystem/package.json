@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-skill-filesystem",
-  "description": "Local filesystem skill provider for the DeepSeek Harness",
+  "name": "@supernova-ai/snh-skill-filesystem",
+  "description": "Local filesystem skill provider for the SuperNova Harness",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -32,21 +32,21 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-fs": "workspace:*",
-    "@deepseek-ai/dsh-home-paths": "workspace:*",
-    "@deepseek-ai/dsh-skill": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/snh-fs": "workspace:*",
+    "@supernova-ai/snh-home-paths": "workspace:*",
+    "@supernova-ai/snh-skill": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~"
   },
   "dependencies": {
     "chokidar": "5.0.0",
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/schemastery": "workspace:~",
     "yaml": "^2.4.2"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/dsh-fs": "workspace:*",
-    "@deepseek-ai/dsh-home-paths": "workspace:*",
-    "@deepseek-ai/dsh-skill": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-fs": "workspace:*",
+    "@supernova-ai/snh-home-paths": "workspace:*",
+    "@supernova-ai/snh-skill": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

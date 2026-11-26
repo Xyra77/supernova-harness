@@ -10,18 +10,18 @@
  */
 
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { Context } from '@deepseek-ai/cordis'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { createScope } from '@deepseek-ai/dsh-scope'
-import CommandRuntime from '@deepseek-ai/dsh-commands'
-import PermissionPresetService from '@deepseek-ai/dsh-permission-presets'
-import { AUTO_PRESET } from '@deepseek-ai/dsh-permission-presets'
-import ApprovalService from '@deepseek-ai/dsh-user-approval'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import { Context } from '@supernova-ai/cordis'
+import type { SessionId } from '@supernova-ai/snh-session'
+import type { Session } from '@supernova-ai/snh-session'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { createScope } from '@supernova-ai/snh-scope'
+import CommandRuntime from '@supernova-ai/snh-commands'
+import PermissionPresetService from '@supernova-ai/snh-permission-presets'
+import { AUTO_PRESET } from '@supernova-ai/snh-permission-presets'
+import ApprovalService from '@supernova-ai/snh-user-approval'
 import { omitsGeneratedPage } from '../../../settings/settings/tests/live-config.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 async function harness(options: {
   withPermission?: boolean

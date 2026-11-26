@@ -1,15 +1,15 @@
 /** Account route configuration: Messages settings, the model-listing endpoint, and per-model overrides. */
-import type { Volatile } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { isVolatile } from '@deepseek-ai/cosmokit'
-import type { LaunchEnvironmentSnapshot } from '@deepseek-ai/dsh-launch-environment'
+import type { Volatile } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { isVolatile } from '@supernova-ai/cosmokit'
+import type { LaunchEnvironmentSnapshot } from '@supernova-ai/snh-launch-environment'
 import {
   catalogModelFields, deepSeekConfigFields, modelListingConfigFields, modelListingURL, resolveAdapterOptions, resolveListingTiming,
-} from '@deepseek-ai/dsh-llm-deepseek'
+} from '@supernova-ai/snh-llm-supernova'
 import type {
   Config as ProtocolConfig, ListingSettings, ModelListingConfig, ModelListingOptions, ModelOverride, Options as ProtocolOptions,
-  ResolvedDeepSeekOptions,
-} from '@deepseek-ai/dsh-llm-deepseek'
+  ResolvedSuperNovaOptions,
+} from '@supernova-ai/snh-llm-supernova'
 
 /** Account route configuration; authentication comes exclusively from the account service. */
 export interface Config extends Omit<ProtocolConfig, 'models'>, ModelListingConfig {
@@ -39,7 +39,7 @@ export type AccountOptions = Omit<ProtocolOptions, 'models'> & ModelListingOptio
 /** One validated configuration generation of the account route. */
 export interface ResolvedAccountOptions {
   /** Messages settings; request resolution replaces `models` with the resolved account catalog. */
-  readonly protocol: ResolvedDeepSeekOptions
+  readonly protocol: ResolvedSuperNovaOptions
   /** Listing endpoint and cache timing. */
   readonly catalog: ListingSettings
   /** Overrides by model id, holding only the fields each one declares. */

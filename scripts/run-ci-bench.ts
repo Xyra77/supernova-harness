@@ -24,7 +24,7 @@ export function buildCiBenchArtifacts(root: string): void {
 }
 
 /**
- * Build the `benchmarks/.dsh-build/` workers, the only output the shared CI build does not emit.
+ * Build the `benchmarks/.snh-build/` workers, the only output the shared CI build does not emit.
  * @param root - Repository root containing the benchmark bundle configuration.
  * @throws If the bundle fails.
  */

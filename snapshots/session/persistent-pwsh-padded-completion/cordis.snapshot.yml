@@ -1,96 +1,96 @@
 # Keyless replay for padded persistent PowerShell completion frames.
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek-api-key'
+- id: llm-supernova
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - insert:
     - id: llm-replay
-      name: '@deepseek-ai/dsh-llm-replay'
+      name: '@supernova-ai/snh-llm-replay'
       config:
         providers:
           - id: deepseek-official
-            name: DeepSeek
+            name: SuperNova
             models:
               - id: deepseek-v4-pro
 
 - insert:
     - id: terminal
-      name: '@deepseek-ai/dsh-terminal'
+      name: '@supernova-ai/snh-terminal'
 
 - id: sandbox-policy
-  name: '@deepseek-ai/dsh-sandbox-policy'
+  name: '@supernova-ai/snh-sandbox-policy'
   config:
     mode: danger-full-access
     workspaceRoot: !!js process.cwd()
 
 - id: subprocess
-  name: '@deepseek-ai/dsh-subprocess-local'
+  name: '@supernova-ai/snh-subprocess-local'
 
 - insert:
     - id: padded-pwsh-backend
       name: './pwsh-snapshot-backend.mjs'
 
 - id: agent-default-model
-  name: '@deepseek-ai/dsh-agent-default-model'
+  name: '@supernova-ai/snh-agent-default-model'
   config:
     provider: deepseek-official
     model: deepseek-v4-pro
 
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@supernova-ai/snh-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
+    root: !!js snhHomePath('sessions')
     compression: none
 
 - id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
+  name: '@supernova-ai/snh-agent-instructions'
   disabled: true
 
 - id: system-prompt
-  name: '@deepseek-ai/dsh-system-prompt'
+  name: '@supernova-ai/snh-system-prompt'
   config:
     personaPrefix: You are a concise snapshot agent.
 
 - id: tool-jobs
-  name: '@deepseek-ai/dsh-tool-jobs'
+  name: '@supernova-ai/snh-tool-jobs'
   disabled: true
 
 - id: goal
-  name: '@deepseek-ai/dsh-goal'
+  name: '@supernova-ai/snh-goal'
   disabled: true
 
 - id: goal-round-driver
-  name: '@deepseek-ai/dsh-goal-round-driver'
+  name: '@supernova-ai/snh-goal-round-driver'
   disabled: true
 
 - id: command-goal
-  name: '@deepseek-ai/dsh-command-goal'
+  name: '@supernova-ai/snh-command-goal'
   disabled: true
 
 - id: tool-goal
-  name: '@deepseek-ai/dsh-tool-goal'
+  name: '@supernova-ai/snh-tool-goal'
   disabled: true
 
 - id: skill
-  name: '@deepseek-ai/dsh-skill'
+  name: '@supernova-ai/snh-skill'
   disabled: true
 
 - id: skill-filesystem
-  name: '@deepseek-ai/dsh-skill-filesystem'
+  name: '@supernova-ai/snh-skill-filesystem'
   disabled: true
 
 - id: tool-skill
-  name: '@deepseek-ai/dsh-tool-skill'
+  name: '@supernova-ai/snh-tool-skill'
   disabled: true
 
 - id: upstream-skills
-  name: '@deepseek-ai/dsh-upstream-skills'
+  name: '@supernova-ai/snh-upstream-skills'
   disabled: true
 
 - id: tool-bash
-  name: '@deepseek-ai/dsh-tool-bash'
+  name: '@supernova-ai/snh-tool-bash'
   disabled: true
 
 - insert:
     - id: tool-pwsh-persistent
-      name: '@deepseek-ai/dsh-tool-pwsh-persistent'
+      name: '@supernova-ai/snh-tool-pwsh-persistent'

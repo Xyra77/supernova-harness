@@ -1,4 +1,4 @@
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import Sessions, {
   appendPluginRecord,
   pluginRecordOf,
@@ -6,9 +6,9 @@ import Sessions, {
   SessionId,
   SessionLogOffset,
   SessionSeq,
-} from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import Projections from '@deepseek-ai/dsh-session-projection'
+} from '@supernova-ai/snh-session'
+import type { SessionEvent } from '@supernova-ai/snh-session'
+import Projections from '@supernova-ai/snh-session-projection'
 import { describe, expect, it } from 'vitest'
 import { createProjection, foldRecord, registerProjection } from '../src/projection.ts'
 import { annotationSchema, failureRecordSchema, reportSchema, treeSchema } from '../src/records.ts'

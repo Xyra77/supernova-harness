@@ -200,10 +200,10 @@
       "event": "schedule/change",
       "surface": false
     },
-    "event:session-log-deepseek/delivery-accepted": {
+    "event:session-log-supernova/delivery-accepted": {
       "kind": "event",
       "digest": "d63b8b8ffad9c02fd80c43a17df4f240c1fe8118ecca9de34f9d5871838ab5b9",
-      "event": "session-log-deepseek/delivery-accepted",
+      "event": "session-log-supernova/delivery-accepted",
       "surface": false
     },
     "event:session/end-seed": {
@@ -356,10 +356,10 @@
       "event": "user/message",
       "surface": true
     },
-    "event:web/deepseek-search-llm-request": {
+    "event:web/supernova-search-llm-request": {
       "kind": "event",
       "digest": "cf6e3aaf1e2de6480aa0157730a41b9a492108a55304100b0f7e112711dd4331",
-      "event": "web/deepseek-search-llm-request",
+      "event": "web/supernova-search-llm-request",
       "surface": false
     },
     "event:workspace/changes": {

@@ -3,7 +3,7 @@ description: "在完整回答之后显示官方插件推荐卡片。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-plugin-recommendations
+# @supernova-ai/snh-client-ui-plugin-recommendations
 
 [English](README.md) | 中文
 
@@ -25,7 +25,7 @@ kind: "package-reference"
 <a id="use-this-package"></a>
 ## 使用本包
 
-Web 组合（[`dsh-web-app`](../../bundle/web-app/README.zh.md)）会挂载本包。这个浏览器端贡献没有配置项；它为 `enable_official_plugin` 卡片填充共享的[操作卡片框架](../ui-action-cards/README.zh.md)。
+Web 组合（[`snh-web-app`](../../bundle/web-app/README.zh.md)）会挂载本包。这个浏览器端贡献没有配置项；它为 `enable_official_plugin` 卡片填充共享的[操作卡片框架](../ui-action-cards/README.zh.md)。
 
 -----
 

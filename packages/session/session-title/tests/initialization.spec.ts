@@ -1,13 +1,13 @@
 /** Live title input remains owned while projection registration is pending. */
-import { Context, FiberState } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import LlmRuntime, { createUserMessage, markAgentLoopRequest } from '@deepseek-ai/dsh-llm'
-import SessionStore, { type Session } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { SessionTitleProviderId } from '@deepseek-ai/dsh-session-title/types'
-import SessionTitleService, { type SessionTitleProviderRequest } from '@deepseek-ai/dsh-session-title'
-import { deepFreeze } from '@deepseek-ai/dsh-util-values'
+import { Context, FiberState } from '@supernova-ai/cordis'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import LlmRuntime, { createUserMessage, markAgentLoopRequest } from '@supernova-ai/snh-llm'
+import SessionStore, { type Session } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { SessionTitleProviderId } from '@supernova-ai/snh-session-title/types'
+import SessionTitleService, { type SessionTitleProviderRequest } from '@supernova-ai/snh-session-title'
+import { deepFreeze } from '@supernova-ai/snh-util-values'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 
 const CONFIG = { fallbackMaxWords: 8, fallbackMaxBytes: 64, maxTitleBytes: 256 }

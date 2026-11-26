@@ -2,12 +2,12 @@
 import { writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { beforeEach, afterEach, expect, it, vi } from 'vitest'
-import SessionStore from '@deepseek-ai/dsh-session'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
-import TypertGateway from '@deepseek-ai/dsh-api-gateway'
-import RemoteAccessService from '@deepseek-ai/dsh-api-remote-access'
-import { ConnectionAuthentication, HostConnectionService } from '@deepseek-ai/dsh-client-connection'
-import { createWebConnectionRpc } from '@deepseek-ai/dsh-client-connection/src/client/rpc.ts'
+import SessionStore from '@supernova-ai/snh-session'
+import TypertRegistry from '@supernova-ai/snh-typert-registry'
+import TypertGateway from '@supernova-ai/snh-api-gateway'
+import RemoteAccessService from '@supernova-ai/snh-api-remote-access'
+import { ConnectionAuthentication, HostConnectionService } from '@supernova-ai/snh-client-connection'
+import { createWebConnectionRpc } from '@supernova-ai/snh-client-connection/src/client/rpc.ts'
 import WorkspaceFiles, { type WorkspaceByteReadOptions } from '../src/index.ts'
 import { openWorkspace, type Harness } from './harness.ts'
 
@@ -15,7 +15,7 @@ let harness: Harness
 let rpc: ReturnType<typeof createWebConnectionRpc>
 
 beforeEach(async () => {
-  harness = await openWorkspace('dsh-workspace-binary-rpc-')
+  harness = await openWorkspace('snh-workspace-binary-rpc-')
   const ctx = harness.ctx
   await ctx.plugin(SessionStore)
   await ctx.plugin(TypertRegistry)

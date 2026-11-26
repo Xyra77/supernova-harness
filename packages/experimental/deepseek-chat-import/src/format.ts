@@ -1,5 +1,5 @@
 /**
- * JSON validation for the DeepSeek chat export (`export_format_version: 3`).
+ * JSON validation for the SuperNova chat export (`export_format_version: 3`).
  *
  * Only fields the importer reads are validated. Fragment types the importer
  * does not map are accepted unchecked so later exporter additions do not

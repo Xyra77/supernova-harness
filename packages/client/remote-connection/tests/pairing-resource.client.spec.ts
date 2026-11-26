@@ -1,9 +1,9 @@
 /** Pending-list polling is held by a view and never survives its resource release. */
 import { afterEach, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { ResourceRegistry } from '@deepseek-ai/dsh-client-resources/src/client/resources.ts'
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+import { Context } from '@supernova-ai/cordis'
+import { ResourceRegistry } from '@supernova-ai/snh-client-resources/src/client/resources.ts'
+import { RemoteError } from '@supernova-ai/snh-typert-protocol'
+import type { RemoteResult } from '@supernova-ai/snh-typert-protocol'
 import type { PairingRequestId, PairingRequestsValue } from '../src/types.ts'
 import { requestsResource } from '../src/client/pairing-resource.ts'
 
@@ -19,13 +19,13 @@ const listed: PairingRequestsValue = {
   pollIntervalMs: 1000,
 }
 const remaining: PairingRequestsValue = { ...listed, requests: listed.requests.slice(1) }
-const address = 'dsh-resource://device-pairing/requests'
+const address = 'snh-resource://device-pairing/requests'
 
 it('polls with the server interval and releases the timer on abort', async () => {
   vi.useFakeTimers()
   const requests = vi.fn(async () => ({ ok: true as const, value }))
   const controller = new AbortController()
-  const stream = requestsResource({ pairingRequests: requests }).provider.open('dsh-resource://device-pairing/requests', { signal: controller.signal })[Symbol.asyncIterator]()
+  const stream = requestsResource({ pairingRequests: requests }).provider.open('snh-resource://device-pairing/requests', { signal: controller.signal })[Symbol.asyncIterator]()
   try {
     expect(await stream.next()).toEqual({ done: false, value: { ok: true, value } })
     const next = stream.next()
@@ -49,7 +49,7 @@ it.each(['refused', 'disconnected', 'typed-error'] as const)('yields a %s read a
   else if (failure === 'typed-error') requests.mockRejectedValue(ownerRequired)
   else requests.mockRejectedValue(new Error('disconnected'))
   const controller = new AbortController()
-  const stream = requestsResource({ pairingRequests: requests }).provider.open('dsh-resource://device-pairing/requests', { signal: controller.signal })[Symbol.asyncIterator]()
+  const stream = requestsResource({ pairingRequests: requests }).provider.open('snh-resource://device-pairing/requests', { signal: controller.signal })[Symbol.asyncIterator]()
   try {
     expect(await stream.next()).toMatchObject({ done: false, value: {
       ok: false, error: { code: failure === 'disconnected' ? 'pairing/read-failed' : 'remote-connection/owner-required' },
@@ -64,13 +64,13 @@ it.each(['response', 'rejection'] as const)('ignores an in-flight %s after relea
   const requests = vi.fn(() => pending.promise)
   const controller = new AbortController()
   const { provider } = requestsResource({ pairingRequests: requests })
-  const stream = provider.open('dsh-resource://device-pairing/requests', { signal: controller.signal })[Symbol.asyncIterator]()
+  const stream = provider.open('snh-resource://device-pairing/requests', { signal: controller.signal })[Symbol.asyncIterator]()
   const next = stream.next()
   controller.abort()
   if (outcome === 'response') pending.resolve({ ok: true, value })
   else pending.reject(new Error('transport aborted'))
   expect(await next).toEqual({ done: true, value: undefined })
-  const stopped = provider.open('dsh-resource://device-pairing/requests', { signal: controller.signal })[Symbol.asyncIterator]()
+  const stopped = provider.open('snh-resource://device-pairing/requests', { signal: controller.signal })[Symbol.asyncIterator]()
   expect(await stopped.next()).toEqual({ done: true, value: undefined })
   expect(requests).toHaveBeenCalledOnce()
 })

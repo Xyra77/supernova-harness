@@ -3,13 +3,13 @@ description: "会话面板的「后台任务」分栏：可展开的流式输出
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-jobs
+# @supernova-ai/snh-client-ui-jobs
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-client-ui-jobs` 在会话面板的「后台任务」分栏中展示本会话的后台任务，包括生命周期、耗时、进度与终态详情。进行中的任务和保留了输出的已结束任务提供可展开的输出面板；收起即停流。进行中的行在标签下方展示类型、当前进度与持续更新的时长。已结束的行折叠在计数之下；没有保留输出的任务保持静态，包括回答已交给模型的 subagent。
+`snh-client-ui-jobs` 在会话面板的「后台任务」分栏中展示本会话的后台任务，包括生命周期、耗时、进度与终态详情。进行中的任务和保留了输出的已结束任务提供可展开的输出面板；收起即停流。进行中的行在标签下方展示类型、当前进度与持续更新的时长。已结束的行折叠在计数之下；没有保留输出的任务保持静态，包括回答已交给模型的 subagent。
 
 ## 目录
 
@@ -39,7 +39,7 @@ kind: "package-reference"
 
 ### 展开的面板
 
-展开可观察的行会从 `ctx.jobs`（由 `dsh-api-job-controller` 安装）打开该 job 的输出观测流，注入内嵌终端面板。面板复制的是命令（不是输出），命令与输出行完整换行，输出在固定高度内滚动而非折叠，且不绘制自己的运行状态点——上方的行承载状态。保留缺口与流中断在面板上方渲染为提示。
+展开可观察的行会从 `ctx.jobs`（由 `snh-api-job-controller` 安装）打开该 job 的输出观测流，注入内嵌终端面板。面板复制的是命令（不是输出），命令与输出行完整换行，输出在固定高度内滚动而非折叠，且不绘制自己的运行状态点——上方的行承载状态。保留缺口与流中断在面板上方渲染为提示。
 
 -----
 
@@ -67,17 +67,17 @@ kind: "package-reference"
 <a id="further-exploration"></a>
 ## 进一步探索
 
-- [`dsh-api-job-controller`](../../api/job-controller/README.zh.md) —— 行、面板与停止控件背后的 `job.list`、`job.follow` 流、`job.kill` Remote 与 `ctx.jobs` 服务。
-- [`dsh-jobs`](../../jobs/jobs/README.zh.md) —— 拥有环与投影语义的注册表契约。
-- [`dsh-client-ui-session-panel`](../ui-session-panel/README.zh.md) —— 为本分栏排序、绘制标题并负责滚动的会话面板。
-- [`dsh-client-ui-primitives`](../ui-primitives/README.zh.md) —— 面板所配置的 `TerminalBlock` 表面。
+- [`snh-api-job-controller`](../../api/job-controller/README.zh.md) —— 行、面板与停止控件背后的 `job.list`、`job.follow` 流、`job.kill` Remote 与 `ctx.jobs` 服务。
+- [`snh-jobs`](../../jobs/jobs/README.zh.md) —— 拥有环与投影语义的注册表契约。
+- [`snh-client-ui-session-panel`](../ui-session-panel/README.zh.md) —— 为本分栏排序、绘制标题并负责滚动的会话面板。
+- [`snh-client-ui-primitives`](../ui-primitives/README.zh.md) —— 面板所配置的 `TerminalBlock` 表面。
 
 -----
 
 <a id="model-experience"></a>
 ## 模型体验
 
-无。本包为人类渲染宿主观测到的状态与实时输出，不触碰任何提示词、消息、schema、流或工具结果。模型对同一工作的视图仍在 [`dsh-tool-jobs`](../../jobs/tool-jobs/README.zh.md)。
+无。本包为人类渲染宿主观测到的状态与实时输出，不触碰任何提示词、消息、schema、流或工具结果。模型对同一工作的视图仍在 [`snh-tool-jobs`](../../jobs/tool-jobs/README.zh.md)。
 
 #### KV 缓存影响
 

@@ -5,7 +5,7 @@
   gap: 4px;
   min-width: 0;
   color: var(--dsw-alias-label-primary);
-  font-size: var(--dsh-content-font-size-secondary, 13px);
+  font-size: var(--snh-content-font-size-secondary, 13px);
   line-height: 20px;
 }
 

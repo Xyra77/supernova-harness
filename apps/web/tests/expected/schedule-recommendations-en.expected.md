@@ -8,7 +8,7 @@
     - listitem:
       - button "Issue scan": Issue scan Sort new issues into bugs, requests, and questions, and flag duplicates and ones that need a reply. Weekdays at {{clock}}
     - listitem:
-      - button "Plugin compatibility check": Plugin compatibility check When a new DSH version ships, check whether installed and self-made plugins need changes. Daily at {{clock}}
+      - button "Plugin compatibility check": Plugin compatibility check When a new SNH version ships, check whether installed and self-made plugins need changes. Daily at {{clock}}
     - listitem:
       - button "Topic and paper tracking": Topic and paper tracking Search for news and new arXiv papers on chosen topics and list the key points. Daily at 9:00
     - listitem:

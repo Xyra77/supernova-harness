@@ -1,7 +1,7 @@
 /**
  * Default Agent driver over queued turns and step-boundary input. Every request
  * is derived from the session log.
- * @module dsh-agent-loop/agent
+ * @module snh-agent-loop/agent
  */
 
 import type {
@@ -17,26 +17,26 @@ import type {
   InboxState,
   PreStepDecision,
   RequestErrorAction,
-} from '@deepseek-ai/dsh-agent'
-import { AgentModel, agentEvents, assembleContextFor } from '@deepseek-ai/dsh-agent'
-import type { GenerateOptions, LlmCallConfig, Message, PreparedLlmCall } from '@deepseek-ai/dsh-llm'
+} from '@supernova-ai/snh-agent'
+import { AgentModel, agentEvents, assembleContextFor } from '@supernova-ai/snh-agent'
+import type { GenerateOptions, LlmCallConfig, Message, PreparedLlmCall } from '@supernova-ai/snh-llm'
 import {
   LlmError,
   createAssistantMessage,
   createDeveloperMessage,
   errorChain,
   markAgentLoopRequest,
-} from '@deepseek-ai/dsh-llm'
-import { assertNever, deepFreeze } from '@deepseek-ai/dsh-util-values'
-import type { Scope } from '@deepseek-ai/dsh-scope'
-import { createScope } from '@deepseek-ai/dsh-scope'
-import type { EpochHeader, RequestContext, Session, SessionId, SessionSeq, TurnEndReason, UserMessage } from '@deepseek-ai/dsh-session'
-import { canonicalHeader, headerEquals, ToolCallRecovery } from '@deepseek-ai/dsh-session'
-import { renderContextSections } from '@deepseek-ai/dsh-system-prompt'
-import type { PromptAssembly } from '@deepseek-ai/dsh-system-prompt'
-import { ToolActivationError, ToolBatchExecutionError } from '@deepseek-ai/dsh-tools'
-import type { ResolvedToolSet } from '@deepseek-ai/dsh-tools'
-import type { Context } from '@deepseek-ai/cordis'
+} from '@supernova-ai/snh-llm'
+import { assertNever, deepFreeze } from '@supernova-ai/snh-util-values'
+import type { Scope } from '@supernova-ai/snh-scope'
+import { createScope } from '@supernova-ai/snh-scope'
+import type { EpochHeader, RequestContext, Session, SessionId, SessionSeq, TurnEndReason, UserMessage } from '@supernova-ai/snh-session'
+import { canonicalHeader, headerEquals, ToolCallRecovery } from '@supernova-ai/snh-session'
+import { renderContextSections } from '@supernova-ai/snh-system-prompt'
+import type { PromptAssembly } from '@supernova-ai/snh-system-prompt'
+import { ToolActivationError, ToolBatchExecutionError } from '@supernova-ai/snh-tools'
+import type { ResolvedToolSet } from '@supernova-ai/snh-tools'
+import type { Context } from '@supernova-ai/cordis'
 import { ReactLoopInbox } from './inbox.ts'
 import { RuntimeContextProjection } from './runtime-context.ts'
 import { AssistantStreamAttempt } from './assistant-stream.ts'

@@ -3,7 +3,7 @@ description: "Automation task management and Session reminder entries in the exi
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-schedule
+# @supernova-ai/snh-client-ui-schedule
 
 English | [中文](README.zh.md)
 

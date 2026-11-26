@@ -1,8 +1,8 @@
 /** Host-resolved file identities across pending stats, reconnects, and disposal. */
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
-import { sessionFileAddress } from '@deepseek-ai/dsh-util-workspace-path'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { RemoteError } from '@supernova-ai/snh-typert-protocol'
+import type { RemoteResult } from '@supernova-ai/snh-typert-protocol'
+import { sessionFileAddress } from '@supernova-ai/snh-util-workspace-path'
 import { describe, expect, it, onTestFinished } from 'vitest'
 import { ChangeFeed } from '../src/client/change-feed.ts'
 import { createFileResourceProvider } from '../src/client/provider.ts'

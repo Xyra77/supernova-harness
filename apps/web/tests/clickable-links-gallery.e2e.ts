@@ -21,11 +21,11 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { type ToolCallId, createAssistantMessage, createToolResultMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SESSION_FORMAT_VERSION, Session, type SessionId } from '@deepseek-ai/dsh-session'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
-import type {} from '@deepseek-ai/dsh-session-title'
+import { brandString } from '@supernova-ai/snh-brand'
+import { type ToolCallId, createAssistantMessage, createToolResultMessage, createUserMessage } from '@supernova-ai/snh-llm'
+import { SESSION_FORMAT_VERSION, Session, type SessionId } from '@supernova-ai/snh-session'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
+import type {} from '@supernova-ai/snh-session-title'
 import {
   assertFixtureInventory,
   captureStableAria,
@@ -498,7 +498,7 @@ describe('web e2e: clickable links gallery', () => {
     // The link language itself — ARIA records none of it, so pin the computed
     // styles: link-blue 500-weight text, no underline at rest, dotted underline
     // on hover, and a leading currentColor glyph. Light theme, so the link
-    // alias resolves to deepseek-500.
+    // alias resolves to supernova-500.
     const LINK_BLUE = 'rgb(65, 118, 230)'
     const styleOf = async (target: ReturnType<Page['locator']>, property: string): Promise<string> =>
       target.evaluate((el, p) => getComputedStyle(el).getPropertyValue(p), property)

@@ -3,7 +3,7 @@
 import type {
   ChangeRequestRef, ForgeAnchor, ForgeCommentAuthor, ForgeCommentId, ForgeFailure, ForgeReviewComment, ForgeReviewData, ForgeReviewEvent,
   ForgeReviewId, ForgeReviewThread, ForgeThreadId,
-} from '@deepseek-ai/dsh-experimental-forge'
+} from '@supernova-ai/snh-experimental-forge'
 import { parsePatch } from 'diff'
 import { z } from 'zod'
 import type { GitLabApi } from './api.ts'

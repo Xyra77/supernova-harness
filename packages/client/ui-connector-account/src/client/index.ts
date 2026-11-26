@@ -4,12 +4,12 @@
  * operations this browser started. The surfaces read the shared copy from this package's dictionary and each
  * registrant's text from the Host.
  */
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-api-remotes/client'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
-import type {} from '@deepseek-ai/dsh-client-ui-plugin-manager/client'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
+import type { Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-api-remotes/client'
+import type {} from '@supernova-ai/snh-client-locale/client'
+import type {} from '@supernova-ai/snh-client-ui-layout/client'
+import type {} from '@supernova-ai/snh-client-ui-plugin-manager/client'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
 import {
   ConnectorAccountActivationEntry, ConnectorAccountBadgeEntry, ConnectorAccountSectionEntry, ConnectorAccountToastEntry,
 } from './components.tsx'
@@ -22,7 +22,7 @@ export type {
   ConnectorAccountFace, ConnectorAccountNotice, ConnectorAccountsState, ConnectorBundleAccountFace,
 } from './types.ts'
 
-/** The `connectorAccounts` Remote that `dsh-api-remotes` mounts, and the services the slot registrations need. */
+/** The `connectorAccounts` Remote that `snh-api-remotes` mounts, and the services the slot registrations need. */
 export const inject = ['remote', 'remote.connectorAccounts', 'slots', 'locale']
 
 function registerBundle(ctx: Context, face: ConnectorAccountFace, packageName: string, account: string): () => void {

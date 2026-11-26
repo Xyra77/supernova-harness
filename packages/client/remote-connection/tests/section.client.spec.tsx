@@ -2,10 +2,10 @@
 /** What the Remote connection panel exposes during each login-code outcome. */
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { bindSnapshotSelector } from '@deepseek-ai/dsh-client-test-runtime'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+import { Context } from '@supernova-ai/cordis'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import { bindSnapshotSelector } from '@supernova-ai/snh-client-test-runtime'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
 import { RemoteConnectionSection, type RemoteConnectionSectionProps } from '../src/client/RemoteConnectionSection.tsx'
 import type { RemoteConnectionState } from '../src/client/remote-connection-controller.ts'
 import type { LoginLinkState } from '../src/client/login-link-controller.ts'
@@ -55,7 +55,7 @@ describe('Remote connection section', () => {
   it.each(additionsCases)('keeps pairing approvals visible when QR state is $label', ({ state }) => {
     const { useResource } = panel(state, 'en', {}, true)
     expect(screen.getByRole('region', { name: 'Pairing requests' })).toBeTruthy()
-    expect(useResource).toHaveBeenCalledExactlyOnceWith('dsh-resource://device-pairing/requests?retry=0')
+    expect(useResource).toHaveBeenCalledExactlyOnceWith('snh-resource://device-pairing/requests?retry=0')
   })
 
   it.each(['en', 'zh'] as const)('introduces the access address before QR login and pairing approvals in %s', (language) => {

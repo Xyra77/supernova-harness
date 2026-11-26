@@ -1,10 +1,10 @@
 import { createRequire } from 'node:module'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import { Context } from '@deepseek-ai/cordis'
-import { CordisInspectRegistryService } from '@deepseek-ai/dsh-cordis-host-runner'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRegistry from '@deepseek-ai/dsh-tools'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import { Context } from '@supernova-ai/cordis'
+import { CordisInspectRegistryService } from '@supernova-ai/snh-cordis-host-runner'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRegistry from '@supernova-ai/snh-tools'
 import { describe, expect, it } from 'vitest'
 import * as CordisInspectProviders from '../src/host.ts'
 import * as CordisInspectTools from '../src/index.ts'
@@ -40,12 +40,12 @@ describe('the cordis-inspect-providers host entry', () => {
     expect(ctx.cordisInspect.list()).toEqual([])
   })
 
-  it('answers the Runtime version query with the running DSH version', async () => {
+  it('answers the Runtime version query with the running SNH version', async () => {
     const ctx = await host()
     await ctx.plugin(CordisInspectProviders)
     const agent = { ctx } as never
     const signal = new AbortController().signal
-    expect(await ctx.cordisInspect.query('host', 'Runtime', 'getVersion', undefined, agent, signal)).toEqual({ version: (createRequire(import.meta.url)('@deepseek-ai/dsh-app-boot/package.json') as { version: string }).version })
+    expect(await ctx.cordisInspect.query('host', 'Runtime', 'getVersion', undefined, agent, signal)).toEqual({ version: (createRequire(import.meta.url)('@supernova-ai/snh-app-boot/package.json') as { version: string }).version })
     await ctx.fiber.dispose()
   })
 

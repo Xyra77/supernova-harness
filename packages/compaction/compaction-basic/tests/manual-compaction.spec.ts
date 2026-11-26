@@ -1,19 +1,19 @@
-import { imageOffloadProjection } from '@deepseek-ai/dsh-compaction-image-offload/projection'
+import { imageOffloadProjection } from '@supernova-ai/snh-compaction-image-offload/projection'
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { CommandId } from '@deepseek-ai/dsh-commands/types'
-import { BasicCompactionEngine } from '@deepseek-ai/dsh-compaction-basic'
-import type { CompactionId } from '@deepseek-ai/dsh-compaction/types'
-import { isCompactCheckpointSource, ManualCompactionError } from '@deepseek-ai/dsh-compaction'
-import type { CompactionResult } from '@deepseek-ai/dsh-compaction'
+import { Context } from '@supernova-ai/cordis'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { CommandId } from '@supernova-ai/snh-commands/types'
+import { BasicCompactionEngine } from '@supernova-ai/snh-compaction-basic'
+import type { CompactionId } from '@supernova-ai/snh-compaction/types'
+import { isCompactCheckpointSource, ManualCompactionError } from '@supernova-ai/snh-compaction'
+import type { CompactionResult } from '@supernova-ai/snh-compaction'
 import {
   createAssistantMessage,
   createUserMessage,
   LlmAdapter,
-} from '@deepseek-ai/dsh-llm'
+} from '@supernova-ai/snh-llm'
 import type {
   ContentBlock,
   LlmResolvedModelInfo,
@@ -21,19 +21,19 @@ import type {
   RequestMessage,
   StreamChunk,
   TokenUsage,
-} from '@deepseek-ai/dsh-llm'
-import SessionStore, { buildForkSeed, Session, type SessionId, type SessionEvent } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
-import type { Agent } from '@deepseek-ai/dsh-agent'
+} from '@supernova-ai/snh-llm'
+import SessionStore, { buildForkSeed, Session, type SessionId, type SessionEvent } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import LlmRuntime from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
+import TokenMeter from '@supernova-ai/snh-token-meter'
+import type { Agent } from '@supernova-ai/snh-agent'
 import type {
   SummarizationInput,
   SummaryResult,
-} from '@deepseek-ai/dsh-compaction-basic/src/summarizer.ts'
+} from '@supernova-ai/snh-compaction-basic/src/summarizer.ts'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'listener': { kind: 'listener' } & ContextFormed
     'rival': { kind: 'rival' } & ContextFormed

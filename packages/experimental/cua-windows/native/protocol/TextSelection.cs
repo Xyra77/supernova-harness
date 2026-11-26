@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text;
 
-namespace DeepSeek.Cua.Protocol;
+namespace SuperNova.Cua.Protocol;
 
 public readonly record struct TextMatch(int Start, int Length);
 

@@ -1,10 +1,10 @@
 /** The preference follows namespace availability and plugin disposal. */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { expect, it, vi } from 'vitest'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { apply as settingsApply, inject as settingsInject } from '@deepseek-ai/dsh-client-ui-settings/client'
+import { SlotRegistry } from '@supernova-ai/snh-client-ui-renderer/client'
+import { TestRemote } from '@supernova-ai/snh-client-test-runtime'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import { apply as settingsApply, inject as settingsInject } from '@supernova-ai/snh-client-ui-settings/client'
 import { apply, inject } from '../src/client/index.ts'
 import { apply as hostApply } from '../src/index.ts'
 import type { UploadInjected } from '../src/client/UploadRow.tsx'
@@ -31,15 +31,15 @@ it('adds the last General row only while served and removes all contributions on
     await ctx.configForms.describe().ensure()
     expect(slots.entries('settings.general.item')).toHaveLength(0)
     describe.mockResolvedValue({ ok: true, value: { writable: true, hasDocument: true, namespaces: [{
-      ns: 'session-log-deepseek', schema: {}, value: { enabled: true }, applies: 'live', secrets: [], revision: 1,
+      ns: 'session-log-supernova', schema: {}, value: { enabled: true }, applies: 'live', secrets: [], revision: 1,
     }] } })
-    remote.emit('settings/document-updated', ['session-log-deepseek', 1])
+    remote.emit('settings/document-updated', ['session-log-supernova', 1])
     await vi.waitFor(() => { expect(slots.entries('settings.general.item')).toHaveLength(1) })
-    expect(slots.entries('settings.general.item')[0]!.options).toMatchObject({ id: 'session-log-deepseek', order: 90 })
+    expect(slots.entries('settings.general.item')[0]!.options).toMatchObject({ id: 'session-log-supernova', order: 90 })
     expect(slots.entries('shell.overlay')).toHaveLength(1)
     const row = slots.entries('settings.general.item')[0]!
     const face = row.inject!() as UploadInjected & Record<string, unknown>
-    const form = ctx.configForms.get('session-log-deepseek')
+    const form = ctx.configForms.get('session-log-supernova')
     const set = vi.spyOn(form, 'set').mockResolvedValue(false)
     await face.setEnabled(false)
     expect(set).toHaveBeenCalledWith('enabled', false)
@@ -49,7 +49,7 @@ it('adds the last General row only while served and removes all contributions on
     toast.dismiss()
     expect(face.hooks.mutation.getSnapshot().notice).toBeNull()
     describe.mockResolvedValue({ ok: true, value: { writable: true, hasDocument: true, namespaces: [] } })
-    remote.emit('settings/document-updated', ['session-log-deepseek', 2])
+    remote.emit('settings/document-updated', ['session-log-supernova', 2])
     await vi.waitFor(() => { expect(slots.entries('settings.general.item')).toHaveLength(0) })
     await fiber.dispose()
     expect(slots.entries('shell.overlay')).toHaveLength(0)

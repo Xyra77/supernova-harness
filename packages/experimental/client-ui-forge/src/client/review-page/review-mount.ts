@@ -3,17 +3,17 @@
  * through the forge panel Remote's review methods, which name a change request by URL and need no Session.
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-api-remote-access/client'
-import type {} from '@deepseek-ai/dsh-api-session-controller/client'
-import type {} from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type {} from '@deepseek-ai/dsh-client-ui-workspace/client'
-import type { MainPanelId } from '@deepseek-ai/dsh-client-ui-layout/client'
-import type { HostObservable } from '@deepseek-ai/dsh-client-ui-slots'
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
-import type {} from '@deepseek-ai/dsh-experimental-client-ui-forge/remote'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+import type { Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-api-remote-access/client'
+import type {} from '@supernova-ai/snh-api-session-controller/client'
+import type {} from '@supernova-ai/snh-api-workspace-controller/client'
+import type {} from '@supernova-ai/snh-client-ui-conversation/client'
+import type {} from '@supernova-ai/snh-client-ui-workspace/client'
+import type { MainPanelId } from '@supernova-ai/snh-client-ui-layout/client'
+import type { HostObservable } from '@supernova-ai/snh-client-ui-slots'
+import type {} from '@supernova-ai/snh-client-ui-sidebar/client'
+import type {} from '@supernova-ai/snh-experimental-client-ui-forge/remote'
+import type { RemoteResult } from '@supernova-ai/snh-typert-protocol'
 import type { ChangeRequestActions } from '../ChangeRequestCard.tsx'
 import type { ForgePanelKey } from '../locales.ts'
 import { actionReporter } from '../action-notices.ts'
@@ -28,7 +28,7 @@ import type { ChangeRequestEntry } from '../status.ts'
 import { ViewedFiles } from '../viewed-files.ts'
 import type { ForgeReviewCountFrame } from '../../types.ts'
 
-declare module '@deepseek-ai/dsh-api-session-controller/client' {
+declare module '@supernova-ai/snh-api-session-controller/client' {
   interface SessionReferenceSourceMap {
     /** The review page's conversation about a change request. */
     forgeReview: unknown
@@ -134,7 +134,7 @@ export function registerReviewPage(ctx: Context, deps: ReviewPageDeps): void {
     reviewQueue: ({ id, signal }) => {
       let queue = queues.get(signal)
       if (queue === undefined) {
-        const records = new ReviewQueue(`dsh.forge-review.page.v1.${JSON.stringify(id)}`)
+        const records = new ReviewQueue(`snh.forge-review.page.v1.${JSON.stringify(id)}`)
         queue = records
         queues.set(signal, records)
         const clear = (): void => { if (!records.close()) notices.report('review.saveFailed') }

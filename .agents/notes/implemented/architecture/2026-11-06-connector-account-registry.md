@@ -6,11 +6,11 @@ English | [中文](2026-11-06-connector-account-registry.zh.md)
 
 ## Problem
 
-Connector plugins show an account section on the Plugins page. CLI app plugins keep the account in their vendor CLI; MCP connectors keep an OAuth grant through the MCP manager. Both kinds need the same surfaces: a bundle's section, title tag, and activation prompt, a confirmation before an action that changes the account outside DSH, and a notice in the browser that started the operation. A client plugin cannot share runtime code with another feature plugin ([packages/client/AGENTS.md](../../../../packages/client/AGENTS.md) rule 3), so one browser half per connector kind duplicates the same code and lets the copies drift. When the browser decides an account's state or relays an identifier from one Remote to another, the Host can no longer run the flow without the browser.
+Connector plugins show an account section on the Plugins page. CLI app plugins keep the account in their vendor CLI; MCP connectors keep an OAuth grant through the MCP manager. Both kinds need the same surfaces: a bundle's section, title tag, and activation prompt, a confirmation before an action that changes the account outside SNH, and a notice in the browser that started the operation. A client plugin cannot share runtime code with another feature plugin ([packages/client/AGENTS.md](../../../../packages/client/AGENTS.md) rule 3), so one browser half per connector kind duplicates the same code and lets the copies drift. When the browser decides an account's state or relays an identifier from one Remote to another, the Host can no longer run the flow without the browser.
 
 ## Decision
 
-[`@deepseek-ai/dsh-client-ui-connector-account`](../../../../packages/client/ui-connector-account/README.md) provides one Host registry, `ctx.connectorAccounts`, one `connectorAccounts` Remote, and one browser half for every connector kind.
+[`@supernova-ai/snh-client-ui-connector-account`](../../../../packages/client/ui-connector-account/README.md) provides one Host registry, `ctx.connectorAccounts`, one `connectorAccounts` Remote, and one browser half for every connector kind.
 
 | Part | Contract |
 |---|---|

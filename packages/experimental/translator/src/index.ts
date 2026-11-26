@@ -1,20 +1,20 @@
 /** Anonymous text translation with optional durable provider-independent Session results. */
-import { Context, Service } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import { Context, Service } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
 import type { TranslationProvider, TranslationRequest, TranslationSpec } from './types.ts'
 import { TranslationError } from './error.ts'
 import { anonymousRecipe, translateText } from './provider.ts'
 import { TranslationStorage } from './storage.ts'
 import { addAbortListener } from 'node:events'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
-import { availablePaidProviders, deepseekRecipe, translateWithDeepSeek } from './deepseek.ts'
+import { assertNever } from '@supernova-ai/snh-util-values'
+import { availablePaidProviders, supernovaRecipe, translateWithSuperNova } from './supernova.ts'
 import type { TranslationIdentity } from './types.ts'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 
 export type * from './types.ts'
 export { TranslationError } from './error.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** Experimental text translator with optional durable Session reuse. */
     translator: Translator
@@ -36,9 +36,9 @@ export interface Config {
   /** Maximum anonymous JSON-body bytes or paid assembled UTF-8 translation bytes. */
   maxResponseBytes: number
   /** Deadline for native admission and complete translation output, in milliseconds. */
-  deepseekTimeoutMs: number
+  supernovaTimeoutMs: number
   /** Requested output-token cap for independent native Flash translation. */
-  deepseekMaxOutputTokens: number
+  supernovaMaxOutputTokens: number
 }
 
 function endpoint(value: string): string {
@@ -58,8 +58,8 @@ export default class Translator extends Service {
     timeoutMs: z.natural().min(1).max(2_147_483_647).default(10_000),
     maxTextChars: z.natural().min(2).default(4_000),
     maxResponseBytes: z.natural().min(1).default(1024 * 1024),
-    deepseekTimeoutMs: z.natural().min(1).max(2_147_483_647).default(60_000),
-    deepseekMaxOutputTokens: z.natural().min(1).default(8192),
+    supernovaTimeoutMs: z.natural().min(1).max(2_147_483_647).default(60_000),
+    supernovaMaxOutputTokens: z.natural().min(1).default(8192),
   })
 
   private readonly lifetime = new AbortController()
@@ -126,12 +126,12 @@ export default class Translator extends Service {
     const combined = this.signal(signal)
     const identity: TranslationIdentity = { provider: spec.provider, text: spec.text, sourceLanguage: spec.sourceLanguage,
       targetLanguage: spec.targetLanguage, recipe: spec.provider === 'google' || spec.provider === 'bing'
-        ? anonymousRecipe(spec.provider, this.config) : deepseekRecipe(this.config) }
+        ? anonymousRecipe(spec.provider, this.config) : supernovaRecipe(this.config) }
     const inSession = (id: SessionId) => this.storage.run(id, identity, combined, async (log) => {
       switch (spec.provider) {
         case 'deepseek-account':
         case 'deepseek-official':
-          return translateWithDeepSeek(this.ctx, spec, this.config, combined, (work) => { this.track(work) }, log, identity)
+          return translateWithSuperNova(this.ctx, spec, this.config, combined, (work) => { this.track(work) }, log, identity)
         case 'google':
         case 'bing': {
           const requestSeq = await log.request(identity)

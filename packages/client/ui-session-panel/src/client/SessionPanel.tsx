@@ -2,7 +2,7 @@
 import {
   useCallback, useEffect, useId, useMemo, useRef, useState, type AnimationEvent, type DragEvent, type FocusEvent, type ReactNode,
 } from 'react'
-import { IconDragHandleOutlineRegular, isBehindModal, observeComposition, useRowDragPreview } from '@deepseek-ai/dsh-client-ui-primitives'
+import { IconDragHandleOutlineRegular, isBehindModal, observeComposition, useRowDragPreview } from '@supernova-ai/snh-client-ui-primitives'
 import { panelElementId, toggleElementId } from './element-ids.ts'
 import { ENVIRONMENT_SECTION_ID } from './sections.ts'
 import type { SessionPanelPresentation, SessionPanelProps, SessionPanelSectionOwnerProps } from './slots.ts'
@@ -195,7 +195,7 @@ function useSectionReorder(moveSection: (id: string, target: string, placement: 
             return
           }
           event.dataTransfer.effectAllowed = 'move'
-          event.dataTransfer.setData('application/x-dsh-session-panel-section', id)
+          event.dataTransfer.setData('application/x-snh-session-panel-section', id)
           setDragged(id)
           preview.start(event)
         },

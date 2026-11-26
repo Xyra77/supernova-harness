@@ -5,7 +5,7 @@ description: 钉钉插件：通过 dws 使用钉钉的日程与会议室、待�
 
 # 钉钉插件
 
-## DSH 指引
+## SNH 指引
 
 - 在面向用户的回复中，把这项集成称为“钉钉插件”。`dws` 由钉钉插件下载，按当前 runtime context 给出的绝对路径运行，不要直接按名称运行。不要用 npm、官方安装脚本或 `dws upgrade` 另装或升级 `dws`，也不要运行 `dws skill setup` 把技能装进 Agent 目录。
 - `dws` 的登录保存在这台电脑的 `~/.dws` 和系统钥匙串，与用户自己终端里的 `dws` 共用。除非用户要求，不要执行 `dws auth logout`。

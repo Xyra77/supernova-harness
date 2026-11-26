@@ -1,23 +1,23 @@
 /**
  * Model-facing `get_goal`, `create_goal`, and `update_goal` tools over the
  * persisted same-session goal domain.
- * @module @deepseek-ai/dsh-tool-goal
+ * @module @supernova-ai/snh-tool-goal
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { GoalId, GoalRef, GoalView } from '@deepseek-ai/dsh-goal/types'
-import { boundContextSummary, createUserMessage, HarnessError } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
-declare module '@deepseek-ai/dsh-llm' {
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { GoalId, GoalRef, GoalView } from '@supernova-ai/snh-goal/types'
+import { boundContextSummary, createUserMessage, HarnessError } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'tool-goal': { kind: 'tool-goal' } & ContextFormed
   }
 }
 
-import { defineTool } from '@deepseek-ai/dsh-tools'
-import type { GenericCallView } from '@deepseek-ai/dsh-tools'
+import { defineTool } from '@supernova-ai/snh-tools'
+import type { GenericCallView } from '@supernova-ai/snh-tools'
 import {
   completionAuthority,
   goalToolExecution,

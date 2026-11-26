@@ -6,11 +6,11 @@ import { homedir, tmpdir } from 'node:os'
 import { basename, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
-import type {} from '@deepseek-ai/dsh-experimental-forge-session'
-import { pluginRecordOf, type SessionEvent } from '@deepseek-ai/dsh-session'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { initialShortcutConfig, type DesktopShortcutInput, type ShortcutRevision } from '@deepseek-ai/dsh-client-shortcuts/protocol'
-import { abbreviateHomePath } from '@deepseek-ai/dsh-util-workspace-path'
+import type {} from '@supernova-ai/snh-experimental-forge-session'
+import { pluginRecordOf, type SessionEvent } from '@supernova-ai/snh-session'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { initialShortcutConfig, type DesktopShortcutInput, type ShortcutRevision } from '@supernova-ai/snh-client-shortcuts/protocol'
+import { abbreviateHomePath } from '@supernova-ai/snh-util-workspace-path'
 import { chromium, type Browser, type Locator, type Page } from 'playwright'
 import { expect, it, onTestFailed, onTestFinished } from 'vitest'
 import {
@@ -451,7 +451,7 @@ async function writeReviewFixture(root: string): Promise<void> {
   }))
   const contents = JSON.parse(await readFile(join(root, 'contents.json'), 'utf8')) as Record<string, string>
   for (const commit of ['2'.repeat(40), HEAD7]) {
-    contents[`.gitattributes@${commit}`] = 'docs/schema.json linguist-generated\nlocale/*.json dsh-review-layer=test\n'
+    contents[`.gitattributes@${commit}`] = 'docs/schema.json linguist-generated\nlocale/*.json snh-review-layer=test\n'
   }
   await writeFile(join(root, 'contents.json'), JSON.stringify(contents))
 }
@@ -491,7 +491,7 @@ async function launchPanel(failureShot: string, scenario: 'normal' | 'follow-up'
   } = {}): Promise<PanelLaunch> {
   const { desktop } = options
   const resources: { scaffold?: WebScaffold; browser?: Browser } = {}
-  const root = await mkdtemp(join(tmpdir(), 'dsh-forge-panel-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-forge-panel-'))
   onTestFinished(async () => {
     const failures: unknown[] = []
     await resources.browser?.close().catch((error: unknown) => failures.push(error))
@@ -574,7 +574,7 @@ async function launchPanel(failureShot: string, scenario: 'normal' | 'follow-up'
       Object.assign(window, {
         forgeKeyboard: { revision: config.revision,
           deliver: (input: DesktopShortcutInput) => { for (const listener of listeners) listener(input) } },
-        dshDesktop: { protocolVersion: 1,
+        snhDesktop: { protocolVersion: 1,
           shortcuts: { get: async () => config, subscribe: () => () => {}, recording: async () => {}, edit: async () => { throw new Error('Unused preference edit') } },
           keyboard: {
             subscribe: (listener: (input: DesktopShortcutInput) => void) => {
@@ -834,7 +834,7 @@ it.skipIf(MODE === 'record')('starts a Session in a worktree before its first me
   const directory = scaffold.ctx.workingDirectory.get(session)
   const branch = basename(directory)
   expect(directory).toBe(join(project, '.agents', 'worktrees', branch))
-  expect(branch).toMatch(new RegExp(`^dsh-${sessionId.slice('session-'.length, 'session-'.length + 8)}-[0-9a-f]{4}$`))
+  expect(branch).toMatch(new RegExp(`^snh-${sessionId.slice('session-'.length, 'session-'.length + 8)}-[0-9a-f]{4}$`))
   expect(await git(directory, 'rev-parse', '--abbrev-ref', 'HEAD')).toBe(branch)
   const baseCommit = await git(project, 'rev-parse', 'release')
   expect(await git(directory, 'rev-parse', 'HEAD')).toBe(baseCommit)
@@ -875,7 +875,7 @@ it.skipIf(MODE === 'record')('starts a Session in a worktree before its first me
   const rowHover = page.locator('[data-forge-session-hover]')
   await rowHover.getByText('#7 Add the pull request panel', { exact: true }).waitFor({ timeout: 20_000 })
   await compareOrRefreshGolden(join(EXPECTED, 'session-row-hover.expected.md'),
-    await captureStableAria(page, '[data-forge-session-hover]', scaffold.workspaceCwd, { replacements: [[branch, 'dsh-{{worktree}}']] }), MODE)
+    await captureStableAria(page, '[data-forge-session-hover]', scaffold.workspaceCwd, { replacements: [[branch, 'snh-{{worktree}}']] }), MODE)
   await page.mouse.move(0, 0)
   await rowHover.waitFor({ state: 'detached' })
   // The Host's sign-in probe has answered once the panel state names a readiness, so a later probe would come from showing the panel.
@@ -897,7 +897,7 @@ it.skipIf(MODE === 'record')('starts a Session in a worktree before its first me
   // The random branch suffix can read as a duration, so the branch is replaced before the capture normalizes durations.
   await compareOrRefreshGolden(join(EXPECTED, 'panel.expected.md'),
     await captureStableAria(page, '[data-session-panel]', scaffold.workspaceCwd, {
-      replacements: [[branch, 'dsh-{{worktree}}'], [abbreviateHomePath(scaffold.workspaceCwd, homedir()), '{{cwd}}']],
+      replacements: [[branch, 'snh-{{worktree}}'], [abbreviateHomePath(scaffold.workspaceCwd, homedir()), '{{cwd}}']],
     }), MODE)
   const beforeChecks = (await readFile(join(root, 'calls.jsonl'), 'utf8')).trim().split('\n').map(line => JSON.parse(line) as string[])
   expect(beforeChecks.some(args => args.includes('id=rollup-7'))).toBe(false)
@@ -1006,7 +1006,7 @@ it.skipIf(MODE === 'record')('keeps the first message waiting when the worktree 
   const failure = card.getByRole('region', { name: '创建工作树失败', exact: true })
   await failure.getByText('原因', { exact: true }).waitFor({ timeout: 20_000 })
   const attempted = await failure.getByRole('definition').first().textContent()
-  expect(attempted).toMatch(/^dsh-[0-9a-f]{8}-[0-9a-f]{4}$/)
+  expect(attempted).toMatch(/^snh-[0-9a-f]{8}-[0-9a-f]{4}$/)
   await failure.getByText('消息会在工作树建好后发送', { exact: true }).waitFor()
 
   // Retry makes another attempt with a new branch name while the message keeps waiting.
@@ -1960,7 +1960,7 @@ it.skipIf(MODE === 'record')('archives a clean UI worktree and restores its reta
   const missing = page.locator('[data-forge-missing]')
   await missing.getByRole('button', { name: '恢复工作树', exact: true }).waitFor({ timeout: 20_000 })
   await compareOrRefreshGolden(join(EXPECTED, 'archive-restore.expected.md'),
-    await captureStableAria(page, '[data-forge-missing]', scaffold.workspaceCwd, { replacements: [[branch, 'dsh-{{worktree}}']] }), MODE)
+    await captureStableAria(page, '[data-forge-missing]', scaffold.workspaceCwd, { replacements: [[branch, 'snh-{{worktree}}']] }), MODE)
   expect(scaffold.ctx.workingDirectory.get(session)).toBe(directory)
   await missing.getByRole('button', { name: '恢复工作树', exact: true }).click()
   await missing.waitFor({ state: 'detached', timeout: 20_000 })
@@ -2564,7 +2564,7 @@ const OVERVIEW = {
   closingIssues: { totalCount: 2, nodes: [
     { number: 6, title: 'Show review progress in the panel', state: 'OPEN', url: 'https://github.com/octo/demo/issues/6',
       repository: { name: 'demo', owner: { login: 'octo' } } },
-    { number: 12, title: 'Rerun failed checks from DSH', state: 'OPEN', url: 'https://github.com/octo/tracker/issues/12',
+    { number: 12, title: 'Rerun failed checks from SNH', state: 'OPEN', url: 'https://github.com/octo/tracker/issues/12',
       repository: { name: 'tracker', owner: { login: 'octo' } } },
   ] },
 }
@@ -2617,7 +2617,7 @@ it.skipIf(MODE === 'record')('summarizes checks, reviewers, and the merge state 
   const issues = card.locator('[data-forge-closing-issues]')
   expect(await issues.textContent()).toBe('关联 issue #6、octo/tracker#12')
   await issues.getByRole('link', { name: '打开 issue #6：Show review progress in the panel', exact: true }).waitFor()
-  await issues.getByRole('link', { name: '打开 issue octo/tracker#12：Rerun failed checks from DSH', exact: true }).waitFor()
+  await issues.getByRole('link', { name: '打开 issue octo/tracker#12：Rerun failed checks from SNH', exact: true }).waitFor()
 
   const update = card.locator('[data-forge-update-branch]')
   await expect.poll(() => update.textContent()).toBe('合并无冲突 · 落后于 main更新分支')

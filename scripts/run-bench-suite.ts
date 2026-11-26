@@ -34,7 +34,7 @@ const CONFIG = ['--config', 'vitest.bench.config.ts'] as const
  * @throws If the phase fails.
  */
 export function runBenchPhase(root: string, phase: BenchPhase, reportPhase: BenchReportPhase = phase): void {
-  process.env.DSH_BENCH_REPORT_PHASE = reportPhase
+  process.env.SNH_BENCH_REPORT_PHASE = reportPhase
   try {
     if (phase === 'first') {
       runPnpmCommand(root, [
@@ -49,7 +49,7 @@ export function runBenchPhase(root: string, phase: BenchPhase, reportPhase: Benc
       ...SERIAL_BENCH_FILES,
     ])
   } finally {
-    delete process.env.DSH_BENCH_REPORT_PHASE
+    delete process.env.SNH_BENCH_REPORT_PHASE
   }
 }
 

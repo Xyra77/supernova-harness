@@ -1,5 +1,5 @@
 /** DOM ids that connect a Session's toggle and panel across their separate slot entries. */
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 
 /**
  * Id of a Session's panel element, which the toggle names in `aria-controls`.
@@ -7,7 +7,7 @@ import type { SessionId } from '@deepseek-ai/dsh-session/types'
  * @returns the element id.
  */
 export function panelElementId(sessionId: SessionId): string {
-  return `dsh-session-panel-${sessionId}`
+  return `snh-session-panel-${sessionId}`
 }
 
 /**
@@ -16,5 +16,5 @@ export function panelElementId(sessionId: SessionId): string {
  * @returns the element id.
  */
 export function toggleElementId(sessionId: SessionId): string {
-  return `dsh-session-panel-toggle-${sessionId}`
+  return `snh-session-panel-toggle-${sessionId}`
 }

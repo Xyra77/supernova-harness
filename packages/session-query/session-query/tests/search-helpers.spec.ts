@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createUserMessage, type ToolCallId, createMessage, createToolResultMessage } from '@deepseek-ai/dsh-llm'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
+import { Context } from '@supernova-ai/cordis'
+import { createUserMessage, type ToolCallId, createMessage, createToolResultMessage } from '@supernova-ai/snh-llm'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
 import SessionStore, {
   SESSION_FORMAT_VERSION,
   type SessionId,
   SessionSeq,
-} from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
+} from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import type { SessionEvent, SessionHeader } from '@supernova-ai/snh-session'
 import {
   buildSessionEventRecords,
   buildSessionEventSearchDocuments,
@@ -20,10 +20,10 @@ import {
   materializeSessionEventResultFilters,
   materializeSessionResultFilters,
   type SessionQueryErrorCode,
-} from '@deepseek-ai/dsh-session-query'
+} from '@supernova-ai/snh-session-query'
 import { TestSessionQueryEngine } from './test-service.ts'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'test': { kind: 'test' } & ContextFormed
   }

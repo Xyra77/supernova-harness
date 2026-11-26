@@ -34,12 +34,12 @@
  * forwards the seats' reports; callers use the service's navigation methods.
  */
 import { sidebarTargetFromElement, type SidebarRightTarget } from './focus.ts'
-import { randomUUID } from '@deepseek-ai/dsh-util-crypto'
-import { createSnapshotStore, type ObservableSnapshot, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { FloatRect, LayoutState, PaneId, TabId, TabRecord } from '@deepseek-ai/dsh-client-ui-dockkit'
-import { activeDockPaneId, canSplit, findContentTab, findPaneContentTab, dockPaneIds, findTabPane, getPane } from '@deepseek-ai/dsh-client-ui-dockkit'
-import type { BoundActions } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import { randomUUID } from '@supernova-ai/snh-util-crypto'
+import { createSnapshotStore, type ObservableSnapshot, type SnapshotStore } from '@supernova-ai/snh-client-store'
+import type { FloatRect, LayoutState, PaneId, TabId, TabRecord } from '@supernova-ai/snh-client-ui-dockkit'
+import { activeDockPaneId, canSplit, findContentTab, findPaneContentTab, dockPaneIds, findTabPane, getPane } from '@supernova-ai/snh-client-ui-dockkit'
+import type { BoundActions } from '@supernova-ai/snh-client-ui-slots'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import type { SidebarRightNavigationParams, SidebarRightResourceParams, SidebarRightTabParamsFor, SidebarRightTabParamsMap } from './contract/params.ts'
 import { contentPrefix, pageAddress } from './contract/seed.ts'
 import type { SidebarRightDestination } from './contract/slots.ts'
@@ -209,7 +209,7 @@ export interface SidebarRightOpenTabOptions<K extends string = string> extends S
 }
 
 /** The scheme every resource address carries; anything else is not a resource this face opens. */
-const RESOURCE_SCHEME = 'dsh-resource://'
+const RESOURCE_SCHEME = 'snh-resource://'
 
 /** A request to highlight the pane holding a revealed tab; `serial` changes on every request, so a repeat restarts the highlight. */
 export interface SidebarRightFlash {
@@ -238,14 +238,14 @@ export interface ISidebarRight {
    * Without `options.kind` the registry ranks the types whose globs and
    * `canOpen` accept the address and the best band wins; with it, that kind's
    * type in force opens the address (its `canOpen` still applies). An address
-   * outside `dsh-resource://`, or one no type will open, is a wiring mistake,
+   * outside `snh-resource://`, or one no type will open, is a wiring mistake,
    * not a user error, so it throws. A docked tab expands the column in the
    * same step, because content the user cannot see is not opened; an open
    * that settles in a floating panel leaves the column as it is.
    * `options.destination` selects the host explicitly and takes precedence
    * over the placement fields; the whole open, including a move between hosts,
    * is one recorded intent.
-   * @param address - a `dsh-resource://<type>/…` address.
+   * @param address - a `snh-resource://<type>/…` address.
    * @param options - placement or an explicit host, the opening type, and navigation parameters.
    */
   openResource(address: string, options?: SidebarRightOpenResourceOptions): void
@@ -391,7 +391,7 @@ export class SidebarRightController implements ISidebarRight {
 
   /**
    * Open a resource: claim it, place it, reveal the column, record the navigation.
-   * @param address - a `dsh-resource://<type>/…` address.
+   * @param address - a `snh-resource://<type>/…` address.
    * @param options - placement, the opening type, and navigation parameters.
    */
   openResource(address: string, options: SidebarRightOpenResourceOptions = {}): void {
@@ -422,7 +422,7 @@ export class SidebarRightController implements ISidebarRight {
    * for a session whose store was never adopted or whose adoption was released.
    * Not part of `ISidebarRight`: the Tab domain's path.
    * @param sessionId - the session the acting tab is in.
-   * @param address - a `dsh-resource://<type>/…` address.
+   * @param address - a `snh-resource://<type>/…` address.
    * @param options - placement, the opening type, and navigation parameters.
    */
   openResourceIn(sessionId: SessionId, address: string, options: SidebarRightOpenResourceOptions = {}): void {

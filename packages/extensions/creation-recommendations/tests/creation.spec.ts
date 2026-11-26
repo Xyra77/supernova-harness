@@ -1,16 +1,16 @@
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { ActionCardId } from '@deepseek-ai/dsh-action-cards'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import { defineTool } from '@deepseek-ai/dsh-tools'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import type { ActionCardId } from '@supernova-ai/snh-action-cards'
+import type { SessionId } from '@supernova-ai/snh-session'
+import { defineTool } from '@supernova-ai/snh-tools'
 import { readFile, readdir, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { ChangeResult } from '@deepseek-ai/dsh-plugin-manager/types'
+import type { ChangeResult } from '@supernova-ai/snh-plugin-manager/types'
 import * as CreationRecommendations from '../src/index.ts'
 import { ACTION, fixture, cardId, proposal, installedBundle, recordCard, writeBundle } from './fixture.ts'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
 
 /** The Remote result for a recorded page decision. */
 function settled(phase: string, data: object) {
@@ -18,10 +18,10 @@ function settled(phase: string, data: object) {
 }
 
 describe('interface creation', () => {
-  it('resolves the Creator guide and location references from the shipped dsh-doc skill', async () => {
-    const skill = new URL('../../../preset/agent-preset/skills/dsh-doc/', import.meta.url)
+  it('resolves the Creator guide and location references from the shipped snh-doc skill', async () => {
+    const skill = new URL('../../../preset/agent-preset/skills/snh-doc/', import.meta.url)
     const content = await readFile(new URL('SKILL.md', skill), 'utf8')
-    expect(content).toContain('name: dsh-doc')
+    expect(content).toContain('name: snh-doc')
     expect(content).toContain('references/plugin-development.md')
     const guides = new URL('../references/', import.meta.url)
     const documents = [await readFile(new URL('references/plugin-development.md', skill), 'utf8')]
@@ -76,12 +76,12 @@ describe('interface creation', () => {
     expect(spec).toMatchObject({ provider: 'spawn', delivery: 'caller', agentPreset: 'cordis' })
     expect(spec.parent).toBe(f.agent)
     const prompt = spec.prompt.find(block => block.type === 'text')!.text
-    expect(prompt).toContain('Load the dsh-doc skill and read references/plugin-development.md from its reported base directory.')
+    expect(prompt).toContain('Load the snh-doc skill and read references/plugin-development.md from its reported base directory.')
     expect(prompt).not.toContain('cordis-plugin-development')
-    const guide = fileURLToPath(import.meta.resolve('@deepseek-ai/dsh-creation-recommendations/references/session-tab.md'))
+    const guide = fileURLToPath(import.meta.resolve('@supernova-ai/snh-creation-recommendations/references/session-tab.md'))
     expect(spec.prompt.find(block => block.type === 'text')?.text).toContain(JSON.stringify(guide))
     expect(await readFile(guide, 'utf8')).toContain('conversation.view')
-    expect(spec.cwd!.startsWith(join(f.agent.session.header.cwd!, '.dsh-created-plugins'))).toBe(true)
+    expect(spec.cwd!.startsWith(join(f.agent.session.header.cwd!, '.snh-created-plugins'))).toBe(true)
     expect(f.manager.installBundle).toHaveBeenCalledOnce()
     const installedDirectory = f.manager.installBundle.mock.calls[0]![0]
     expect(spec.cwd).not.toBe(installedDirectory)
@@ -110,7 +110,7 @@ describe('interface creation', () => {
     const child = await f.ctx.agents.create({ sessionId: brandString<SessionId>('existing-creator-child'),
       meta: { parentSession: f.agent.id, origin: 'subagent' } })
     await f.propose('card-creation-1', proposal, child.agent)
-    const receipt = { cardId, phase: 'interrupted', slot: 'page' as const, bundleName: '@dsh-local/view-existing' }
+    const receipt = { cardId, phase: 'interrupted', slot: 'page' as const, bundleName: '@snh-local/view-existing' }
     recordCard(child.agent.session, receipt)
     f.bundles.push(installedBundle(receipt.bundleName))
     await f.ctx.plugin(CreationRecommendations)
@@ -124,7 +124,7 @@ describe('interface creation', () => {
     await f.act('create', 'sidebar-left')
     const spec = await f.complete()
     const instructions: unknown = JSON.parse(spec.prompt.find(block => block.type === 'text')!.text)
-    expect(instructions).toMatchObject({ location: 'sidebar-left', uiReference: fileURLToPath(import.meta.resolve('@deepseek-ai/dsh-creation-recommendations/references/sidebar-entry.md')),
+    expect(instructions).toMatchObject({ location: 'sidebar-left', uiReference: fileURLToPath(import.meta.resolve('@supernova-ai/snh-creation-recommendations/references/sidebar-entry.md')),
       locationPolicy: 'location and uiReference are the user’s final choice in the card. They override any earlier location described in brief; preserve the requested behavior and data scope while adapting the interface to this chosen location.',
     })
     expect(f.current()).toMatchObject({ phase: 'installed', slot: 'sidebar-left' })
@@ -160,7 +160,7 @@ describe('interface creation', () => {
     await f.propose('card-creation-1', proposal, handle.agent)
     await f.act('create', 'sidebar-right', undefined, handle.agent)
     const spec = await f.entered.promise
-    expect(spec.cwd!.startsWith(join(f.ctx.profileContext.cwd, '.dsh-created-plugins'))).toBe(true)
+    expect(spec.cwd!.startsWith(join(f.ctx.profileContext.cwd, '.snh-created-plugins'))).toBe(true)
     await f.act('cancel', 'sidebar-right', undefined, handle.agent)
     expect(f.manager.installBundle).not.toHaveBeenCalled()
   })
@@ -177,7 +177,7 @@ describe('interface creation', () => {
     const spec = await f.complete()
     const instructions: unknown = JSON.parse(spec.prompt.find(block => block.type === 'text')!.text)
     const references = ['sidebar-right.md', 'session-tab.md', 'sidebar-entry.md'].map(file =>
-      fileURLToPath(import.meta.resolve('@deepseek-ai/dsh-creation-recommendations/references/' + file)))
+      fileURLToPath(import.meta.resolve('@supernova-ai/snh-creation-recommendations/references/' + file)))
     expect(instructions).toMatchObject({ location: { request: '左侧入口打开全屏日历' }, uiReferences: references })
     expect(instructions).toHaveProperty('locationPolicy', expect.stringContaining('instead of silently substituting another location'))
     expect(instructions).not.toHaveProperty('uiReference')
@@ -290,16 +290,16 @@ describe('interface creation', () => {
   })
 
   it('keeps a Session usable when profile recovery fails, and checks again before any retry', async () => {
-    const f = await fixture({ cardId, phase: 'creating', slot: 'page', bundleName: '@dsh-local/recover' })
+    const f = await fixture({ cardId, phase: 'creating', slot: 'page', bundleName: '@snh-local/recover' })
     await f.propose()
-    recordCard(f.agent.session, { cardId: brandString<ActionCardId>('other-kept'), phase: 'kept', slot: 'page', bundleName: '@dsh-local/kept' })
+    recordCard(f.agent.session, { cardId: brandString<ActionCardId>('other-kept'), phase: 'kept', slot: 'page', bundleName: '@snh-local/kept' })
     await f.fiber.dispose()
     f.manager.listBundles.mockRejectedValue(new Error('profile read failed'))
     await f.ctx.plugin(CreationRecommendations)
     expect(f.current()?.phase).toBe('unconfirmed')
     expect(await f.act('create')).toEqual({ status: 'refused', reason: 'unavailable' })
     expect(f.startActivation).not.toHaveBeenCalled()
-    f.manager.listBundles.mockResolvedValue([installedBundle('@dsh-local/recover')])
+    f.manager.listBundles.mockResolvedValue([installedBundle('@snh-local/recover')])
     expect((await f.act('create')).status).toBe('settled')
     expect(f.current()?.phase).toBe('installed')
   })
@@ -322,7 +322,7 @@ describe('interface creation', () => {
     await f.propose()
     recordCard(f.agent.session, { cardId, phase: 'installed', slot: 'page' })
     expect(await f.act('undo')).toEqual({ status: 'refused', reason: 'unavailable' })
-    recordCard(f.agent.session, { cardId, phase: 'installed', slot: 'page', bundleName: '@dsh-local/removed' })
+    recordCard(f.agent.session, { cardId, phase: 'installed', slot: 'page', bundleName: '@snh-local/removed' })
     await f.act('undo')
     expect(f.current()?.phase).toBe('removed')
     expect(f.manager.removeBundle).not.toHaveBeenCalled()
@@ -331,17 +331,17 @@ describe('interface creation', () => {
   it('offers Undo on a page that an earlier build recorded as kept', async () => {
     const f = await fixture()
     await f.propose()
-    recordCard(f.agent.session, { cardId, phase: 'kept', slot: 'page', bundleName: '@dsh-local/view-kept' })
-    f.bundles.push(installedBundle('@dsh-local/view-kept'))
-    expect(await f.act('create')).toEqual(settled('kept', { slot: 'page', bundleName: '@dsh-local/view-kept' }))
-    expect(await f.act('undo')).toEqual(settled('removed', { slot: 'page', bundleName: '@dsh-local/view-kept', application: 'applied' }))
-    expect(f.manager.removeBundle).toHaveBeenCalledExactlyOnceWith('@dsh-local/view-kept')
+    recordCard(f.agent.session, { cardId, phase: 'kept', slot: 'page', bundleName: '@snh-local/view-kept' })
+    f.bundles.push(installedBundle('@snh-local/view-kept'))
+    expect(await f.act('create')).toEqual(settled('kept', { slot: 'page', bundleName: '@snh-local/view-kept' }))
+    expect(await f.act('undo')).toEqual(settled('removed', { slot: 'page', bundleName: '@snh-local/view-kept', application: 'applied' }))
+    expect(f.manager.removeBundle).toHaveBeenCalledExactlyOnceWith('@snh-local/view-kept')
   })
 
   it('ignores page receipts whose data no longer validates and decisions of other kinds', async () => {
     const f = await fixture()
     await f.propose()
-    const other = { cardId: brandString<ActionCardId>('other-card'), action: 'other_action', phase: 'creating', data: { slot: 'page', bundleName: '@dsh-local/other' } }
+    const other = { cardId: brandString<ActionCardId>('other-card'), action: 'other_action', phase: 'creating', data: { slot: 'page', bundleName: '@snh-local/other' } }
     f.agent.session.append('action-cards/decision', other)
     f.ctx.actionCards.record(f.agent, { cardId, action: ACTION, phase: 'installed', data: { slot: 'elsewhere' } })
     expect(await f.act('keep')).toEqual({ status: 'refused', reason: 'unavailable' })
@@ -373,7 +373,7 @@ describe('interface creation', () => {
   })
 
   it('reconciles an unconfirmed card before Not now, so its installed page keeps Undo', async () => {
-    const f = await fixture({ cardId, phase: 'creating', slot: 'page', bundleName: '@dsh-local/view-recover' })
+    const f = await fixture({ cardId, phase: 'creating', slot: 'page', bundleName: '@snh-local/view-recover' })
     await f.propose()
     await f.fiber.dispose()
     f.manager.listBundles.mockRejectedValue(new Error('profile read failed'))
@@ -381,17 +381,17 @@ describe('interface creation', () => {
     expect(f.current()?.phase).toBe('unconfirmed')
     expect(await f.act('dismiss')).toEqual({ status: 'refused', reason: 'unavailable' })
     expect(f.current()?.phase).toBe('unconfirmed')
-    f.manager.listBundles.mockResolvedValue([installedBundle('@dsh-local/view-recover')])
-    expect(await f.act('dismiss')).toEqual(settled('installed', { slot: 'page', bundleName: '@dsh-local/view-recover' }))
-    expect(await f.act('undo')).toEqual(settled('removed', { slot: 'page', bundleName: '@dsh-local/view-recover', application: 'applied' }))
-    expect(f.manager.removeBundle).toHaveBeenCalledWith('@dsh-local/view-recover')
+    f.manager.listBundles.mockResolvedValue([installedBundle('@snh-local/view-recover')])
+    expect(await f.act('dismiss')).toEqual(settled('installed', { slot: 'page', bundleName: '@snh-local/view-recover' }))
+    expect(await f.act('undo')).toEqual(settled('removed', { slot: 'page', bundleName: '@snh-local/view-recover', application: 'applied' }))
+    expect(f.manager.removeBundle).toHaveBeenCalledWith('@snh-local/view-recover')
   })
 
   it('reconciles an interrupted receipt with the installed profile before retrying', async () => {
     const f = await fixture()
     await f.propose()
-    recordCard(f.agent.session, { cardId, phase: 'interrupted', slot: 'page', bundleName: '@dsh-local/recovered' })
-    f.bundles.push(installedBundle('@dsh-local/recovered'))
+    recordCard(f.agent.session, { cardId, phase: 'interrupted', slot: 'page', bundleName: '@snh-local/recovered' })
+    f.bundles.push(installedBundle('@snh-local/recovered'))
     expect((await f.act('create')).status).toBe('settled')
     expect(f.current()?.phase).toBe('installed')
     expect(f.current()?.application).toBeUndefined()
@@ -399,9 +399,9 @@ describe('interface creation', () => {
   })
 
   it('recovers a lost creation as interrupted and retains installation errors', async () => {
-    const f = await fixture({ cardId, phase: 'creating', slot: 'page', bundleName: '@dsh-local/recovered' })
+    const f = await fixture({ cardId, phase: 'creating', slot: 'page', bundleName: '@snh-local/recovered' })
     expect(f.current()?.phase).toBe('interrupted')
-    f.bundles.push({ ...installedBundle('@dsh-local/recovered'), enabled: false })
+    f.bundles.push({ ...installedBundle('@snh-local/recovered'), enabled: false })
     await f.fiber.dispose()
     await f.ctx.plugin(CreationRecommendations)
     expect(f.current()).toMatchObject({ phase: 'installed', application: 'failed' })
@@ -499,7 +499,7 @@ describe('interface creation', () => {
 
   it('does not start after the owner stops or the root disappears during receipt recovery', async () => {
     for (const target of ['plugin', 'agent'] as const) {
-      const f = await fixture({ cardId, phase: 'failed', slot: 'page', bundleName: '@dsh-local/failed' })
+      const f = await fixture({ cardId, phase: 'failed', slot: 'page', bundleName: '@snh-local/failed' })
       await f.propose()
       const entered = Promise.withResolvers<undefined>()
       const gate = Promise.withResolvers<ReturnType<typeof f.manager.listBundles> extends Promise<infer T> ? T : never>()
@@ -659,7 +659,7 @@ describe('interface creation', () => {
     await f.act('create')
     await f.complete()
     const bundleName = f.current()!.bundleName!
-    const directory = join(f.directory, 'created-plugins', bundleName.slice('@dsh-local/view-'.length))
+    const directory = join(f.directory, 'created-plugins', bundleName.slice('@snh-local/view-'.length))
     expect(f.manager.installBundle).toHaveBeenCalledExactlyOnceWith(directory)
     await f.act('undo')
     expect(f.current()).toMatchObject({ phase: 'removed', application: 'applied' })

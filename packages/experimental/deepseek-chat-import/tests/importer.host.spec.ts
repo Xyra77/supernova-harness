@@ -4,12 +4,12 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { strToU8, zipSync } from 'fflate'
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
-import { AttachmentId } from '@deepseek-ai/dsh-attachment'
-import type { FileAttachmentRef, ImageAttachmentRef, SaveImageAttachment } from '@deepseek-ai/dsh-attachment'
-import { SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
-import { importDeepseekChatExport } from '../src/importer.ts'
-import type { DeepseekChatImportDependencies, DeepseekChatImportLimits, DeepseekChatImportWorkspace } from '../src/importer.ts'
+import { AttachmentId } from '@supernova-ai/snh-attachment'
+import type { FileAttachmentRef, ImageAttachmentRef, SaveImageAttachment } from '@supernova-ai/snh-attachment'
+import { SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session'
+import type { SessionEvent, SessionHeader, SessionId } from '@supernova-ai/snh-session'
+import { importSupernovaChatExport } from '../src/importer.ts'
+import type { SupernovaChatImportDependencies, SupernovaChatImportLimits, SupernovaChatImportWorkspace } from '../src/importer.ts'
 import type { ExportSessionFile } from '../src/format.ts'
 import { damagedZip } from './helpers/zip.ts'
 
@@ -39,12 +39,12 @@ beforeEach(() => { archiveReads.length = 0 })
 
 const BASE = Date.UTC(2026, 10, 11, 2, 0, 0)
 const at = (ms: number): string => new Date(BASE + ms).toISOString()
-const LIMITS: DeepseekChatImportLimits = { maxSessions: 1000, maxEntryBytes: 64 * 1024, maxTitleBytes: 80 }
+const LIMITS: SupernovaChatImportLimits = { maxSessions: 1000, maxEntryBytes: 64 * 1024, maxTitleBytes: 80 }
 
 let root = ''
 let WORKSPACE_PATH = ''
 beforeAll(async () => {
-  root = await realpath(await mkdtemp(join(tmpdir(), 'dsh-deepseek-importer-')))
+  root = await realpath(await mkdtemp(join(tmpdir(), 'snh-supernova-importer-')))
   WORKSPACE_PATH = root
 })
 afterAll(async () => { await rm(root, { recursive: true, force: true }) })
@@ -98,14 +98,14 @@ interface Stored {
   closed: boolean
 }
 
-function harness(overrides: Partial<DeepseekChatImportDependencies> = {}) {
+function harness(overrides: Partial<SupernovaChatImportDependencies> = {}) {
   const stored: Stored[] = []
   const attached: string[] = []
   const snapshots: string[] = []
   const warnings: string[] = []
   const progress: Array<[number, number]> = []
   let next = 0
-  const deps: DeepseekChatImportDependencies = {
+  const deps: SupernovaChatImportDependencies = {
     persistence: {
       create: (header) => {
         const record: Stored = { header, events: [], flushed: false, closed: false }
@@ -123,16 +123,16 @@ function harness(overrides: Partial<DeepseekChatImportDependencies> = {}) {
     warn: (message) => { warnings.push(message) },
     ...overrides,
   }
-  const workspace = (): DeepseekChatImportWorkspace => ({
+  const workspace = (): SupernovaChatImportWorkspace => ({
     id: 'workspace-1', path: WORKSPACE_PATH,
     attachSession: (id: SessionId) => { attached.push(id); return Promise.resolve() },
   })
   const run = (
     archive: Uint8Array,
-    limits: Partial<DeepseekChatImportLimits> = {},
+    limits: Partial<SupernovaChatImportLimits> = {},
     signal = new AbortController().signal,
     target = workspace(),
-  ) => importDeepseekChatExport(deps, {
+  ) => importSupernovaChatExport(deps, {
     archive, workspace: target, limits: { ...LIMITS, ...limits }, onProgress: (done, total) => { progress.push([done, total]) },
   }, signal)
   return { deps, run, workspace, stored, attached, snapshots, warnings, progress }
@@ -143,7 +143,7 @@ const titleOf = (record: Stored | undefined): unknown => {
   return event?.type === 'session/title' ? event.data.title : undefined
 }
 
-describe('importDeepseekChatExport', () => {
+describe('importSupernovaChatExport', () => {
   it('imports the conversations the index selects in update order and reports progress', async () => {
     const { run, stored, attached, snapshots, warnings, progress } = harness()
     const result = await run(zip(exportEntries([
@@ -374,7 +374,7 @@ describe('importDeepseekChatExport', () => {
   it('writes without a projection cache and normalizes titles', async () => {
     const { deps, stored, workspace } = harness()
     const { projectionCache: _omitted, ...withoutCache } = deps
-    await importDeepseekChatExport(withoutCache, {
+    await importSupernovaChatExport(withoutCache, {
       archive: zip(exportEntries([chat('untitled', 1_000, null), chat('long', 2_000, `Line one\nline two ${'x'.repeat(100)}`)])),
       workspace: workspace(), limits: { ...LIMITS, maxTitleBytes: 20 }, onProgress: () => {},
     }, new AbortController().signal)

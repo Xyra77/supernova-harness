@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "SuperNova セッションログ送信",
+    "description": "有効にすると、公式モデル API のリクエストと共にセッションログを SuperNova に送信します。"
+  }
+}

@@ -1,12 +1,12 @@
 /**
  * Shared path resolution and regular-file validation for model-facing read tools.
- * @module @deepseek-ai/dsh-tool-fs/src/read-target
+ * @module @supernova-ai/snh-tool-fs/src/read-target
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import { FsError } from '@deepseek-ai/dsh-fs'
-import type { FsInfo, FsTarget } from '@deepseek-ai/dsh-fs'
-import type { ToolExecution } from '@deepseek-ai/dsh-tools'
+import type { Context } from '@supernova-ai/cordis'
+import { FsError } from '@supernova-ai/snh-fs'
+import type { FsInfo, FsTarget } from '@supernova-ai/snh-fs'
+import type { ToolExecution } from '@supernova-ai/snh-tools'
 import { sessionResolveOptions } from './session-cwd.ts'
 
 /**

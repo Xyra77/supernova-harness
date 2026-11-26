@@ -4,7 +4,7 @@ English | [中文](contributing-system-messages.zh.md)
 
 ## Summary
 
-Register named instructions with `ctx.systemPrompt.section()` so accepted agent steps introduce them, send changed text, and retire them after their owner unloads. This tutorial assumes a Cordis plugin mounted in a `dsh` profile that provides `systemPrompt`; use the [package checklist](adding-a-package.md) to create that plugin.
+Register named instructions with `ctx.systemPrompt.section()` so accepted agent steps introduce them, send changed text, and retire them after their owner unloads. This tutorial assumes a Cordis plugin mounted in a `snh` profile that provides `systemPrompt`; use the [package checklist](adding-a-package.md) to create that plugin.
 
 ## Table of Contents
 
@@ -23,8 +23,8 @@ Register named instructions with `ctx.systemPrompt.section()` so accepted agent 
 Declare the service dependency and register through your plugin's `ctx`. Cordis owns the returned disposer and cleans up the registration when the plugin unloads.
 
 ```ts
-import type { Context } from '@deepseek-ai/cordis'
-import '@deepseek-ai/dsh-system-prompt'
+import type { Context } from '@supernova-ai/cordis'
+import '@supernova-ai/snh-system-prompt'
 
 export const name = 'example-response-style'
 export const inject = ['systemPrompt']
@@ -49,8 +49,8 @@ Use a stable, namespaced `name`: it identifies the same instructions across upda
 For changing instructions, keep one registration and let its synchronous `text` callback read current state. Call this helper from your plugin's `apply(ctx)`, then call the returned `update()` from the state-change handler you own.
 
 ```ts
-import type { Context } from '@deepseek-ai/cordis'
-import '@deepseek-ai/dsh-system-prompt'
+import type { Context } from '@supernova-ai/cordis'
+import '@supernova-ai/snh-system-prompt'
 
 export function registerInstructions(ctx: Context, initialText: string) {
   let currentText = initialText

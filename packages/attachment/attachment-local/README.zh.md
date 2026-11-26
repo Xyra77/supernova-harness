@@ -1,15 +1,15 @@
 ---
-description: "DSH_HOME 下附加图片的本地存储，供用户与维护者选择或排查图片附件的存放位置。"
+description: "SNH_HOME 下附加图片的本地存储，供用户与维护者选择或排查图片附件的存放位置。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-attachment-local
+# @supernova-ai/snh-attachment-local
 
 [English](README.md) | 中文
 
 ## 概述
 
-在运行 DSH 的机器上，把图片与通用文件附件持久存储到 `DSH_HOME` 下。图片经过校验、针对模型请求完成规范化并按路由缓存；通用文件不设准入限制，按字节原样保存。即使上传时使用不同显示名称，相同字节也只存储一次；读取会校验文件长度与内容，之后收紧限制也不会让已接纳的图片不可读。随附的 `dsh` 组合无需配置即可使用本包。对象仅限本机，并且永远不会自动删除。
+在运行 SNH 的机器上，把图片与通用文件附件持久存储到 `SNH_HOME` 下。图片经过校验、针对模型请求完成规范化并按路由缓存；通用文件不设准入限制，按字节原样保存。即使上传时使用不同显示名称，相同字节也只存储一次；读取会校验文件长度与内容，之后收紧限制也不会让已接纳的图片不可读。随附的 `snh` 组合无需配置即可使用本包。对象仅限本机，并且永远不会自动删除。
 
 ## 目录
 
@@ -32,12 +32,12 @@ kind: "package-reference"
 挂载插件，无需任何必填配置。下列默认值规定了可以附加的内容；生成的配置目录完整列出了所有字段。
 
 ```yaml
-- name: '@deepseek-ai/dsh-attachment-local'
+- name: '@supernova-ai/snh-attachment-local'
 ```
 
 | 字段 | 默认值 | 含义 |
 |---|---|---|
-| `dshHome` | 自动解析 | 显式 harness home；省略时依次跟随 `$DSH_HOME` 与 `~/.dsh` |
+| `snhHome` | 自动解析 | 显式 harness home；省略时依次跟随 `$SNH_HOME` 与 `~/.snh` |
 | `maxImageBytes` | `50 MiB` | 单张图片接受的最大编码源字节数 |
 | `maxImagesPerMessage` | `20` | 单条提交消息接受的最大图片数量 |
 | `maxMessageImageBytes` | `200 MiB` | 单条提交消息接受的最大编码源图字节总数 |
@@ -50,11 +50,11 @@ kind: "package-reference"
 | `requestImageMinShrinkFactor` | `1.1` | 请求图片超过硬字节上限后，长边缩小倍数的最小值；必须大于 1 |
 | `requestImageByteHeadroom` | `0.95` | 估算下一次尺寸时使用的硬字节上限比例；范围为 `(0, 1]` |
 
-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-attachment-local)完整列出了所有受支持的字段及其 JSDoc。
+生成的[配置目录](../../../docs/config-catalog.zh.md#supernova-aisnh-attachment-local)完整列出了所有受支持的字段及其 JSDoc。
 
 ### 图片存储在哪里、会保留多久
 
-附加的图片保存在本机的 `<DSH_HOME>/attachments/v1` 下。已存储的图片永远不会被自动删除，相同图片只会存储一份，之后收紧限制也绝不会让已保存的图片不可读。如果你的图片需要能从另一台机器读取，本包并不合适。
+附加的图片保存在本机的 `<SNH_HOME>/attachments/v1` 下。已存储的图片永远不会被自动删除，相同图片只会存储一份，之后收紧限制也绝不会让已保存的图片不可读。如果你的图片需要能从另一台机器读取，本包并不合适。
 
 ### 附加图片时会发生什么
 
@@ -87,15 +87,15 @@ kind: "package-reference"
 
 ### 写入与读取路径
 
-对象存放在 `<DSH_HOME>/attachments/v1/objects/<sha256-prefix>/<sha256>`；相同字节会去重为同一个对象和同一个 `sha256:` 标识符。首次写入前，进程会把 home 的每个祖先目录逐级同步到文件系统根目录，因此绝不会把另一个进程已创建但尚未同步的目录误认为安全边界。随后，写入过程把字节暂存到 `v1/tmp`、同步临时文件、以原子且排他的硬链接发布，并同步发布目录——在 Windows 上，文件系统元数据日志负责目录项持久性。保存操作完成后，返回的引用已具备持久性。
+对象存放在 `<SNH_HOME>/attachments/v1/objects/<sha256-prefix>/<sha256>`；相同字节会去重为同一个对象和同一个 `sha256:` 标识符。首次写入前，进程会把 home 的每个祖先目录逐级同步到文件系统根目录，因此绝不会把另一个进程已创建但尚未同步的目录误认为安全边界。随后，写入过程把字节暂存到 `v1/tmp`、同步临时文件、以原子且排他的硬链接发布，并同步发布目录——在 Windows 上，文件系统元数据日志负责目录项持久性。保存操作完成后，返回的引用已具备持久性。
 
 图片读取接收包含规范 `sha256:` ID 的完整引用，在该存储目录内推导对象路径，校验完整摘要，并探测图片文件头。实际格式、字节数、宽度和高度必须与传入引用一致。返回的引用把可选的 `name` 和 `originalDimensions` 作为调用方提交的显示信息原样保留，不根据对象校验这两个字段。读取不查询 Session 历史，也不重新应用准入限制；对象缺失或校验失败都会拒绝读取。
 
 准入允许每条消息最多 20 张图片与 200 MiB 源字节；单个源图最多 50 MiB、6400 万像素与单边 65,535 像素。系统应用方向、移除元数据与色彩配置，并把规范化结果限制在 2048×2048 总像素预算、8192 像素长边和 4 MiB 编码字节目标内，因此，即使宽高比极端，图片也会保留短边分辨率。已经满足限制的干净、单帧、8-bit sRGB/sRGBA PNG、JPEG 或 WebP 会逐字节直通；GIF、动画、元数据、方向、16-bit PNG 与不兼容色彩空间会触发转换。
 
-请求版本位于 `<DSH_HOME>/cache/attachments/request-images/`，由 `dshCachePath` 解析；显式 `dshHome` 同时用于缓存和持久存储。请求之间清空此缓存不会影响持久附件，后续读取会重新生成变体。`readImageRequest` 按路由目标缩放且不放大，沿长边调整以保持比例，再按相同的透明度分流和质量阶梯处理软目标及硬字节上限，仅在硬上限仍不满足时继续降低分辨率。缓存身份包含附件 id、变换版本、目标尺寸、两项字节限制、缩放参数和固定编码设置。缓存读取检查格式、8 位 sRGB/sRGBA、尺寸、透明度和硬字节上限，不匹配时重新生成。并发调用共享一次变换和缓存写入，仅在所有等待方均离开后取消共享工作。`imageHostPath` 派生规范化对象的宿主路径，文件系统可以将其映射到执行环境，不写入持久历史。
+请求版本位于 `<SNH_HOME>/cache/attachments/request-images/`，由 `snhCachePath` 解析；显式 `snhHome` 同时用于缓存和持久存储。请求之间清空此缓存不会影响持久附件，后续读取会重新生成变体。`readImageRequest` 按路由目标缩放且不放大，沿长边调整以保持比例，再按相同的透明度分流和质量阶梯处理软目标及硬字节上限，仅在硬上限仍不满足时继续降低分辨率。缓存身份包含附件 id、变换版本、目标尺寸、两项字节限制、缩放参数和固定编码设置。缓存读取检查格式、8 位 sRGB/sRGBA、尺寸、透明度和硬字节上限，不匹配时重新生成。并发调用共享一次变换和缓存写入，仅在所有等待方均离开后取消共享工作。`imageHostPath` 派生规范化对象的宿主路径，文件系统可以将其映射到执行环境，不写入持久历史。
 
-通用文件字节的唯一规范对象位于 `<DSH_HOME>/attachments/v1/file-objects/<digest-prefix>/<digest>`。每条引用路径 `<DSH_HOME>/attachments/v1/files/<digest-prefix>/<digest>/<name>` 都是只读硬链接，所以名称不同但字节相同的文件不会重复占用磁盘。`readFileStream` 以有界分块读取引用路径，并在消费方成功结束前校验完整摘要与记录的字节数。对象缺失、被改写或截断时，消费方会失败，不会得到字节已经变化的完整导出。
+通用文件字节的唯一规范对象位于 `<SNH_HOME>/attachments/v1/file-objects/<digest-prefix>/<digest>`。每条引用路径 `<SNH_HOME>/attachments/v1/files/<digest-prefix>/<digest>/<name>` 都是只读硬链接，所以名称不同但字节相同的文件不会重复占用磁盘。`readFileStream` 以有界分块读取引用路径，并在消费方成功结束前校验完整摘要与记录的字节数。对象缺失、被改写或截断时，消费方会失败，不会得到字节已经变化的完整导出。
 
 ### 源码地图
 
@@ -119,8 +119,8 @@ kind: "package-reference"
 
 - [附件子系统参考](../../../docs/subsystems/attachment.zh.md)——服务约定、载荷类型与 `ctx.attachments` 的 Cordis 接口面。
 - [附件 seam 包](../attachment/README.zh.md)——本存储支撑的图片附件能力。
-- [生成配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-attachment-local)——每个受支持配置字段及其源声明。
-- [Home 路径解析](../../util/home-paths/README.zh.md)——`DSH_HOME` 如何从显式配置、环境变量与用户主目录解析。
+- [生成配置目录](../../../docs/config-catalog.zh.md#supernova-aisnh-attachment-local)——每个受支持配置字段及其源声明。
+- [Home 路径解析](../../util/home-paths/README.zh.md)——`SNH_HOME` 如何从显式配置、环境变量与用户主目录解析。
 
 -----
 
@@ -155,6 +155,6 @@ kind: "package-reference"
 
 #### 未来：保留与远程存储
 
-保留与垃圾回收被推迟，因为恢复和 fork 后的会话可能共享不可变对象；服务于远程运行时或共享存储的后端则需要自己的持久性证明。两个方向都尚未决定；本地存储当前在 `DSH_HOME` 下保留所有对象。
+保留与垃圾回收被推迟，因为恢复和 fork 后的会话可能共享不可变对象；服务于远程运行时或共享存储的后端则需要自己的持久性证明。两个方向都尚未决定；本地存储当前在 `SNH_HOME` 下保留所有对象。
 
 </details>

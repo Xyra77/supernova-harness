@@ -2,7 +2,7 @@
 
 [English](permission-presets.md) | 中文
 
-[dsh-permission-presets](../../packages/interaction/permission-presets) 的权限预设层（`ctx.permissionPresets`，`PermissionPresetService`）把两个相互独立的强制执行 knob，即[沙箱模式](sandbox.zh.md)（`sandbox/mode`）与[审批策略](approval.zh.md)（`approval/policy`），捆绑成具名预设，供客户端作为单个 Permissions 选择器提供。配置表拥有未来会话默认值，而固定的 `registerAuto(admit)` 钩子让 [Auto review](../../packages/experimental/auto-review/README.zh.md) integration 在一个 effect 生命周期内发布仅限当前会话的选项。该层是可选能力，且不拥有执行策略：提示词叙述与回放仍读取各自 knob 的折叠结果，额外强制执行由 Auto review 拥有。[包 README](../../packages/interaction/permission-presets/README.zh.md)负责组合状态与限制；[历史沙箱切换设计](../../.agents/notes/archived/feature/2026-07-06-sandbox.md)负责原始旋钮依据。
+[snh-permission-presets](../../packages/interaction/permission-presets) 的权限预设层（`ctx.permissionPresets`，`PermissionPresetService`）把两个相互独立的强制执行 knob，即[沙箱模式](sandbox.zh.md)（`sandbox/mode`）与[审批策略](approval.zh.md)（`approval/policy`），捆绑成具名预设，供客户端作为单个 Permissions 选择器提供。配置表拥有未来会话默认值，而固定的 `registerAuto(admit)` 钩子让 [Auto review](../../packages/experimental/auto-review/README.zh.md) integration 在一个 effect 生命周期内发布仅限当前会话的选项。该层是可选能力，且不拥有执行策略：提示词叙述与回放仍读取各自 knob 的折叠结果，额外强制执行由 Auto review 拥有。[包 README](../../packages/interaction/permission-presets/README.zh.md)负责组合状态与限制；[历史沙箱切换设计](../../.agents/notes/archived/feature/2026-07-06-sandbox.md)负责原始旋钮依据。
 
 源码：[`packages/interaction/permission-presets/src/index.ts`](../../packages/interaction/permission-presets/src/index.ts)
 
@@ -70,7 +70,7 @@ interface PresetOption {
 
 ## 切换与 `permission/preset` 事件
 
-`set(session, name)` 解析预设（未知名称抛出异常），在适用时运行 Auto 准入，在 `name` 尚不是生效预设时追加一条仅记日志的 `permission/preset` 事件，然后通过各旋钮自己的 setter（[dsh-sandbox-policy](../../packages/sandbox/sandbox-policy) 的 `setSandboxMode` 与 [dsh-user-approval](../../packages/interaction/user-approval) 的 `setApprovalPolicy`）写入，且仅当该 knob 的生效值发生变化时才写。同一轮次内，选择事件先于旋钮事件出现；重新选择当前生效的预设则什么都不追加。
+`set(session, name)` 解析预设（未知名称抛出异常），在适用时运行 Auto 准入，在 `name` 尚不是生效预设时追加一条仅记日志的 `permission/preset` 事件，然后通过各旋钮自己的 setter（[snh-sandbox-policy](../../packages/sandbox/sandbox-policy) 的 `setSandboxMode` 与 [snh-user-approval](../../packages/interaction/user-approval) 的 `setApprovalPolicy`）写入，且仅当该 knob 的生效值发生变化时才写。同一轮次内，选择事件先于旋钮事件出现；重新选择当前生效的预设则什么都不追加。
 
 `permissionPresets/set` Remote（`setPreset`）是这条写入路径的 Remote 面：它通过 `set` 切换一个 live Session，并把该 Session 声明为 Gateway 要判定的 `session` 资源，因此访问控制在解析任何预设之前就已执行。
 

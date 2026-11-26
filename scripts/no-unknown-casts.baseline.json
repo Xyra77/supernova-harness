@@ -80,7 +80,7 @@
     "56cede35ce34488cdae4b19aec217c9c939377eb891fe68827fbd64cd019170c": 1,
     "fda84896a47e7f9d046fcd7e10e9096c8b002bc5f1ea0c7753e57abe87528dea": 1
   },
-  "apps/web/tests/onboarding-deepseek-config.e2e.ts": {
+  "apps/web/tests/onboarding-supernova-config.e2e.ts": {
     "326597b335539db945b2e3b7c86638d40849d2077c0a5670d064e45486f4e407": 2
   },
   "apps/web/tests/scaffold.ts": {
@@ -1195,7 +1195,7 @@
     "0683cfd7f792f1b6333bc8c419d8ce32a7a630179280a31083a8f664e26e0ec0": 1,
     "52faf4558fcd91bd27dbdfa7e497843e8eeb75ea5f68ee231335018d5b3f2053": 2
   },
-  "packages/llm/deepseek-llm-api-extensions/src/index.ts": {
+  "packages/llm/supernova-llm-api-extensions/src/index.ts": {
     "1f519aabb00553384bc9c1c57064a1ed6fcd757032061e1b14e0718d91dd4817": 1
   },
   "packages/llm/llm-pi-ai/src/catalog.ts": {
@@ -1252,7 +1252,7 @@
   "packages/llm/llm/tests/service.spec.ts": {
     "d7a5b4679d56948abe2a2941a5199c4715dac8ad5ecce737195d9a609bb3cf1d": 4
   },
-  "packages/llm/plugin-package-inventory-deepseek/tests/inventory.spec.ts": {
+  "packages/llm/plugin-package-inventory-supernova/tests/inventory.spec.ts": {
     "52d2065a82de4056b5e5d9ae80a45002dc100a8ce5f0434f73f099dc2bc2427f": 1,
     "9f6156b070f787b60db69ad515eec1a0fc8ecbbe3742ec5c2c1e109df7992f62": 2,
     "d80d9fb673065fb4761f9c832abd280ed22b8825c65027bb24ca3d70601223ee": 2
@@ -1457,10 +1457,10 @@
   "packages/session/session-format-v3-to-v4/tests/validation.spec.ts": {
     "e45cff8ca88d996ff7e8eefdf86db1a9976b85de0811c136d662a3b313832fdf": 1
   },
-  "packages/session/session-log-deepseek/tests/feedback-composition.spec.ts": {
+  "packages/session/session-log-supernova/tests/feedback-composition.spec.ts": {
     "59c63f734e8bba862325f776e3fcbebd78a84cfb4161f8df41c216950d9bf351": 1
   },
-  "packages/session/session-log-deepseek/tests/upload.spec.ts": {
+  "packages/session/session-log-supernova/tests/upload.spec.ts": {
     "0c25d15bf9489ae7483b0a31a64a047c12174602071e0aa29714e0f9196889c6": 1,
     "119461c1a63f392b4db54f75a86f852f49b72b7f0342c04d1bc1c8d1677f37c1": 3,
     "8a30636ade7868ec84e15057fb67e6d2f4bc204bf7042fd7e40c2ada8da3f01a": 1,
@@ -1634,7 +1634,7 @@
     "f85c96616fff1bb1e21886bd2fad64e9e34d89d090ab96ab7804f702278cd23d": 4,
     "fa05a5e504ed74b5a07cb6281c787b507eb6c44db768803f4dad034dd69cb3b9": 1
   },
-  "packages/subagent/subagent-codex/tests/real-deepseek.e2e.ts": {
+  "packages/subagent/subagent-codex/tests/real-supernova.e2e.ts": {
     "dee4487a97778a2383f1b378d59b3dae098152273d956dc360f23c69680fe0ea": 1
   },
   "packages/subagent/subagent-codex/tests/real-product.spec.ts": {
@@ -1645,7 +1645,7 @@
   "packages/subagent/subagent-codex/tests/subagent-codex.spec.ts": {
     "fa05a5e504ed74b5a07cb6281c787b507eb6c44db768803f4dad034dd69cb3b9": 1
   },
-  "packages/subagent/subagent-dsh-sdk/tests/subagent-dsh-sdk.spec.ts": {
+  "packages/subagent/subagent-snh-sdk/tests/subagent-snh-sdk.spec.ts": {
     "daa15206e19d6a8fbae646d678889b2e6933ece824e48dd06c95d2096861d5c1": 2,
     "f77e5cbd2d2d911087f7faecc4b0b5bffdfb44ca5d0bcf7823ba9777feca7799": 1
   },

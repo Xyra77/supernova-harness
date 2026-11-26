@@ -21,13 +21,13 @@ $scopePath = Join-Path $roaming $PackageName.Split('/')[0]
 $userDataPath = Join-Path $roaming ($PackageName -replace '/', '\')
 $cachePath = Join-Path $local (($PackageName -replace '[/\\?<>:*|"]', '').ToLowerInvariant() + '-updater')
 $uninstaller = Join-Path $OutputDirectory 'uninstall-copy.exe'
-$environmentKey = "Software\DSHUninstallTests\$RegistryKey\CommandEnvironment"
-$ownerKey = "Software\DSHUninstallTests\$RegistryKey\CommandOwner"
-$protocolKey = "Software\Classes\dsh-test-$RegistryKey"
+$environmentKey = "Software\SNHUninstallTests\$RegistryKey\CommandEnvironment"
+$ownerKey = "Software\SNHUninstallTests\$RegistryKey\CommandOwner"
+$protocolKey = "Software\Classes\snh-test-$RegistryKey"
 $process = $null
 $setup = $null
 $held = $null
-$originalHome = [Environment]::GetEnvironmentVariable('DSH_HOME', 'Process')
+$originalHome = [Environment]::GetEnvironmentVariable('SNH_HOME', 'Process')
 $strings = (Get-Content (Join-Path $PSScriptRoot "../installer/locales/$Language.json") -Encoding UTF8 -Raw | ConvertFrom-Json).strings
 function Wait-Text([string]$Text) {
     $timer = [Diagnostics.Stopwatch]::StartNew()
@@ -125,13 +125,13 @@ try {
             $launchUninstaller = Join-Path $installPath ('Uninstall ' + $ProductName + '.exe')
             $arguments = '/S /KEEP_APP_DATA'
         }
-        if ($mode -eq 'home-inside') { $env:DSH_HOME = Join-Path $userDataPath 'home' } else { Remove-Item Env:DSH_HOME -ErrorAction SilentlyContinue }
-        if ($mode -eq 'home-slash') { $env:DSH_HOME = $homePath.Replace('\', '/') }
+        if ($mode -eq 'home-inside') { $env:SNH_HOME = Join-Path $userDataPath 'home' } else { Remove-Item Env:SNH_HOME -ErrorAction SilentlyContinue }
+        if ($mode -eq 'home-slash') { $env:SNH_HOME = $homePath.Replace('\', '/') }
         if ($mode -eq 'home-tilde') {
             if (-not $homePath.StartsWith($env:USERPROFILE + '\', [StringComparison]::OrdinalIgnoreCase)) { throw 'Tilde fixture must be inside USERPROFILE' }
-            $env:DSH_HOME = '~/' + $homePath.Substring($env:USERPROFILE.Length + 1).Replace('\', '/')
+            $env:SNH_HOME = '~/' + $homePath.Substring($env:USERPROFILE.Length + 1).Replace('\', '/')
         }
-        if ($mode -eq 'home-slash-inside') { $env:DSH_HOME = (Join-Path $userDataPath 'home').Replace('\', '/') }
+        if ($mode -eq 'home-slash-inside') { $env:SNH_HOME = (Join-Path $userDataPath 'home').Replace('\', '/') }
         if ($mode -in @('registration-error', 'save-report')) {
             $key = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey($environmentKey, $true)
             try { $key.SetValue('Path', 42, [Microsoft.Win32.RegistryValueKind]::DWord) } finally { $key.Dispose() }
@@ -147,7 +147,7 @@ try {
             $process = Start-Process -FilePath $launchUninstaller -ArgumentList ('/S _?=' + $linked) -PassThru -WindowStyle Hidden
             if (-not $process.WaitForExit(30000) -or $process.ExitCode -ne 2) { throw 'Linked root was not rejected' }
             if (-not (Test-Path -LiteralPath (Join-Path $externalPath 'keep.txt'))) { throw 'Unsafe root deleted external files' }
-            $report = Get-Content (Join-Path $env:TEMP ('DeepSeek-Harness-uninstall-' + $process.Id + '.txt')) -Raw
+            $report = Get-Content (Join-Path $env:TEMP ('SuperNova-Harness-uninstall-' + $process.Id + '.txt')) -Raw
             if (-not $report.Contains('no deletion started')) { throw 'Unsafe scope missing from report' }
             $process.Dispose(); $process = $null
             [IO.Directory]::Delete($linked)
@@ -176,7 +176,7 @@ try {
                 $filename = [InstallerCapture]::FindClass($picker, 'Edit')
                 if ($filename -eq [IntPtr]::Zero) { throw 'Save filename control missing' }
                 $savedReport = Join-Path $OutputDirectory ('saved-report-' + [Guid]::NewGuid().ToString('N') + '.txt')
-                while ([InstallerCapture]::ControlText($filename) -ne 'DeepSeek-Harness-uninstall-report.txt') {
+                while ([InstallerCapture]::ControlText($filename) -ne 'SuperNova-Harness-uninstall-report.txt') {
                     if ($timer.Elapsed.TotalSeconds -gt 20) { throw 'Save filename initialization did not finish' }
                     Start-Sleep -Milliseconds 25
                 }
@@ -199,7 +199,7 @@ try {
         }
         if ($mode -eq 'main-locked') {
             if (-not $process.WaitForExit(30000) -or $process.ExitCode -ne 2) { throw 'Locked main executable did not stop uninstall' }
-            $report = Get-Content (Join-Path $env:TEMP ("DeepSeek-Harness-uninstall-" + $process.Id + '.txt')) -Raw
+            $report = Get-Content (Join-Path $env:TEMP ("SuperNova-Harness-uninstall-" + $process.Id + '.txt')) -Raw
             if (-not $report.Contains($ProductName + '.exe') -or -not $report.Contains('32')) { throw 'Locked executable missing from report' }
             if (-not (Test-Path -LiteralPath (Join-Path $installPath ('Uninstall ' + $ProductName + '.exe')))) { throw 'Retry uninstaller was removed' }
             if (-not (Test-Path -LiteralPath ('HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\' + $RegistryKey))) { throw 'Retry uninstall entry was removed' }
@@ -209,13 +209,13 @@ try {
         }
         if ($mode -eq 'registration-error') {
             if (-not $process.WaitForExit(30000) -or $process.ExitCode -ne 0) { throw 'Registration failure blocked uninstall' }
-            $report = Get-Content (Join-Path $env:TEMP ("DeepSeek-Harness-uninstall-" + $process.Id + '.txt')) -Raw
+            $report = Get-Content (Join-Path $env:TEMP ("SuperNova-Harness-uninstall-" + $process.Id + '.txt')) -Raw
             if (-not $report.Contains($environmentKey) -or -not $report.Contains('[Path]')) { throw 'Registry residual missing from report' }
         }
         if ($mode -eq 'auxiliary-locked') {
             if (-not $process.WaitForExit(30000) -or $process.ExitCode -ne 0) { throw 'Auxiliary failure blocked uninstall' }
             if (Test-Path -LiteralPath (Join-Path $installPath ($ProductName + '.exe'))) { throw 'Auxiliary failure retained main executable' }
-            $report = Get-Content (Join-Path $env:TEMP ('DeepSeek-Harness-uninstall-' + $process.Id + '.txt')) -Raw
+            $report = Get-Content (Join-Path $env:TEMP ('SuperNova-Harness-uninstall-' + $process.Id + '.txt')) -Raw
             if (-not $report.Contains('held-log.txt')) { throw 'Auxiliary file missing from report' }
             $held.Dispose(); $held = $null
             Remove-Item -LiteralPath $residual
@@ -223,7 +223,7 @@ try {
         }
         Wait-Exit
         $retained = $missingLocation -or $mode -in @('upgrade', 'replaced', 'self-copy')
-        # A DSH_HOME inside the Electron directory protects that directory (and its scope) but not the other roots.
+        # A SNH_HOME inside the Electron directory protects that directory (and its scope) but not the other roots.
         $userDataRetained = $retained -or $mode -in @('home-inside', 'home-slash-inside')
         if ([IO.File]::ReadAllText((Join-Path $externalPath 'keep.txt')) -ne 'outside data root') { throw 'Cleanup followed a junction into a project' }
         if (-not (Test-Path (Join-Path $homePath 'session.txt'))) { throw "Harness home retention failed: $mode" }
@@ -258,7 +258,7 @@ try {
     $relocationData = Join-Path $userDataPath 'relocation-state.txt'
     [IO.File]::WriteAllText($relocationData, 'retained during relocation')
     $newPath = Join-Path $OutputDirectory 'Replacement App'
-    $env:DSH_HOME = $homePath.Replace('\', '/')
+    $env:SNH_HOME = $homePath.Replace('\', '/')
     $setup = Start-Process $Installer -ArgumentList ('/S /D=' + $newPath) -PassThru -WindowStyle Hidden
     Wait-InstallerProcess $setup
     $setup.Dispose(); $setup = $null
@@ -304,7 +304,7 @@ try {
     if (-not (Test-Path -LiteralPath (Join-Path $installPath ($ProductName + '.exe')))) { throw 'Partial takeover fixture lacks the A executable' }
     $process = Start-Process $uninstaller -ArgumentList ('/S /currentuser _?=' + $installPath) -PassThru -WindowStyle Hidden
     if (-not $process.WaitForExit(30000) -or $process.ExitCode -ne 2) { throw 'Existing stale directory was not rejected' }
-    $report = Get-Content (Join-Path $env:TEMP ('DeepSeek-Harness-uninstall-' + $process.Id + '.txt')) -Raw
+    $report = Get-Content (Join-Path $env:TEMP ('SuperNova-Harness-uninstall-' + $process.Id + '.txt')) -Raw
     if (-not $report.Contains('Removal not confirmed') -or -not $report.Contains($newPath) -or -not $report.Contains($installPath)) { throw 'Silent rejection report lacks reason and both paths' }
     $process.Dispose(); $process = $null
     $process = Start-Process $uninstaller -ArgumentList ('/currentuser _?=' + $installPath) -PassThru
@@ -315,7 +315,7 @@ try {
     # TaskDialog common buttons are nested DirectUI controls; use TDM_CLICK_BUTTON with IDCANCEL.
     if (-not [InstallerCapture]::PostMessage([InstallerCapture]::TopLevel($continue), 0x466, [IntPtr]2, [IntPtr]::Zero)) { throw 'Could not cancel owner dialog' }
     if (-not $process.WaitForExit(30000) -or $process.ExitCode -ne 2) { throw 'Owner dialog cancellation did not stop uninstall' }
-    $report = Get-Content (Join-Path $env:TEMP ('DeepSeek-Harness-uninstall-' + $process.Id + '.txt')) -Raw
+    $report = Get-Content (Join-Path $env:TEMP ('SuperNova-Harness-uninstall-' + $process.Id + '.txt')) -Raw
     if (-not $report.Contains('Removal not confirmed') -or -not $report.Contains($newPath) -or -not $report.Contains($installPath)) { throw 'Cancellation report lacks reason and both paths' }
     if (-not (Test-Path -LiteralPath (Join-Path $installPath ($ProductName + '.exe')))) { throw 'Cancellation deleted A' }
     $process.Dispose(); $process = $null
@@ -358,14 +358,14 @@ try {
     if ($setup) { Stop-InstallerProcess $setup; $setup.Dispose() }
     if ($process) { Stop-InstallerProcess $process; $process.Dispose() }
     if ($ProductName -ne ('Harness Installer Test ' + ([Guid]$RegistryKey).ToString('N').Substring(0, 8))) { throw 'Unexpected fixture identity' }
-    foreach ($key in @("Software\DSHUninstallTests\$RegistryKey", $protocolKey, "Software\$RegistryKey", "Software\Microsoft\Windows\CurrentVersion\Uninstall\$RegistryKey")) {
+    foreach ($key in @("Software\SNHUninstallTests\$RegistryKey", $protocolKey, "Software\$RegistryKey", "Software\Microsoft\Windows\CurrentVersion\Uninstall\$RegistryKey")) {
         [Microsoft.Win32.Registry]::CurrentUser.DeleteSubKeyTree($key, $false)
     }
     foreach ($folder in @('DesktopDirectory', 'Programs')) {
         $link = Join-Path ([Environment]::GetFolderPath($folder)) ($ProductName + '.lnk')
         if (Test-Path -LiteralPath $link) { Remove-Item -LiteralPath $link -Force }
     }
-    [Environment]::SetEnvironmentVariable('DSH_HOME', $originalHome, 'Process')
+    [Environment]::SetEnvironmentVariable('SNH_HOME', $originalHome, 'Process')
     # Only unique test identities below known application-data parents are removed.
     foreach ($pair in @(@($productDataPath, $roaming), @($scopePath, $roaming), @($cachePath, $local))) {
         $target = [IO.Path]::GetFullPath($pair[0])

@@ -1,8 +1,8 @@
 /** Saved delivery queries use task storage, never Session history or Agent activation. */
-import type { Context } from '@deepseek-ai/cordis'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { MessageId } from '@deepseek-ai/dsh-llm/types'
+import type { Context } from '@supernova-ai/cordis'
+import type { SessionId } from '@supernova-ai/snh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { MessageId } from '@supernova-ai/snh-llm/types'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
 import { ScheduleInputError, createAfterScheduleRecord } from '../src/domain.ts'
 import { scheduleDomain, type ScheduleTask } from '../src/storage.ts'

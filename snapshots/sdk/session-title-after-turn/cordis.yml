@@ -1,9 +1,9 @@
 # Session-title snapshot composition: the optional first-prompt provider uses
-# the ordinary DeepSeek route while the every other capability stay
+# the ordinary SuperNova route while the every other capability stay
 # identical to the base example.
 - insert:
     - id: session-title-provider
-      name: '@deepseek-ai/dsh-session-title-first-prompt-llm'
+      name: '@supernova-ai/snh-session-title-first-prompt-llm'
       config:
         targetWords: 5
         targetCjkCharacters: 10

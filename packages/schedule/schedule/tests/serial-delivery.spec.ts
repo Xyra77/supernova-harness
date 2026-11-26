@@ -4,20 +4,20 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import Storage from '@deepseek-ai/dsh-storage'
-import * as StorageDomain from '@deepseek-ai/dsh-storage-domain'
-import * as StorageJson from '@deepseek-ai/dsh-storage-json'
+import { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import type { SessionId } from '@supernova-ai/snh-session'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import Storage from '@supernova-ai/snh-storage'
+import * as StorageDomain from '@supernova-ai/snh-storage-domain'
+import * as StorageJson from '@supernova-ai/snh-storage-json'
 import { createAfterScheduleRecord } from '../src/domain.ts'
 import type { ScheduleId } from '../src/types.ts'
 import ScheduleService from '../src/index.ts'
 import { boundTask, seedTasks } from './harness.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const roots: string[] = []
 const contexts: Context[] = []
@@ -37,7 +37,7 @@ async function core(persistenceRoot: string) {
 
 describe('due delivery during Agent creation', () => {
   it('enqueues the reminder without starting a turn before every creation listener finishes', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-schedule-serial-'))
+    const root = await mkdtemp(join(tmpdir(), 'snh-schedule-serial-'))
     roots.push(root)
     const ctx = await core(join(root, 'sessions'))
     const warnings = vi.spyOn(ctx.logger, 'warn')

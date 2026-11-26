@@ -9,7 +9,7 @@ description: "移除 ctx.sessionQuery.inspectSession，经预备 Session 对象�
 
 ## 变更
 
-`@deepseek-ai/dsh-session-query` 的 `SessionQueryEngine.inspectSession(sessionId, read, signal?)` 已移除。它为冷会话准备一个未发布的 `Session`，交给同步读取函数，让投影句柄和属主服务可以读取。这个对象不在 Session 存储中，没有 Agent，也不能追加事件。仓库内唯一的调用方 worktree 归档清理，现在经 `observeSession` 读取投影的对外值。
+`@supernova-ai/snh-session-query` 的 `SessionQueryEngine.inspectSession(sessionId, read, signal?)` 已移除。它为冷会话准备一个未发布的 `Session`，交给同步读取函数，让投影句柄和属主服务可以读取。这个对象不在 Session 存储中，没有 Agent，也不能追加事件。仓库内唯一的调用方 worktree 归档清理，现在经 `observeSession` 读取投影的对外值。
 
 调用 `ctx.sessionQuery.inspectSession` 的第三方插件会受影响：无法通过编译，未标类型的调用会在运行时被拒绝。
 

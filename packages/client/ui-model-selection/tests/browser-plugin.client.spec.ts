@@ -8,18 +8,18 @@
  * (and the reverse), the one-shared-state contract of the dual entry.
  * Scope disposal drops the directory (HMR safety).
  */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import { createScope } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { RemoteError, TestRemote } from '@deepseek-ai/dsh-client-test-runtime'
-import type { ModelSelection } from '@deepseek-ai/dsh-agent/types'
-import type { ModelSelectionProjection } from '@deepseek-ai/dsh-agent/types'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ReasoningEffortId } from '@deepseek-ai/dsh-llm/types'
-import type { CommandContribution, PopupSelectSpec, SelectOption } from '@deepseek-ai/dsh-client-ui-commands/client'
+import { createScope } from '@supernova-ai/snh-api-session-controller/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import { createSnapshotStore, type SnapshotStore } from '@supernova-ai/snh-client-store'
+import { RemoteError, TestRemote } from '@supernova-ai/snh-client-test-runtime'
+import type { ModelSelection } from '@supernova-ai/snh-agent/types'
+import type { ModelSelectionProjection } from '@supernova-ai/snh-agent/types'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ReasoningEffortId } from '@supernova-ai/snh-llm/types'
+import type { CommandContribution, PopupSelectSpec, SelectOption } from '@supernova-ai/snh-client-ui-commands/client'
 import type { ModelSelectInjected } from '../src/client/slots.ts'
 import { apply, inject } from '../src/client/index.ts'
 import { zh } from '../src/client/locales.ts'
@@ -28,7 +28,7 @@ const sid = (k: string): SessionId => k as SessionId
 
 const GROUPS = [{
   id: 'deepseek-official',
-  name: 'DeepSeek',
+  name: 'SuperNova',
   models: [
     {
       id: 'deepseek-v4-flash',
@@ -243,7 +243,7 @@ describe('ui-model-selection dual entry', () => {
     expect(options.map((o: SelectOption) => o.label)).toEqual([
       'DeepSeek-V4-Flash', 'DeepSeek-V4-Pro', 'External Flash',
     ])
-    expect(options.map(option => option.group?.label)).toEqual(['DeepSeek', 'DeepSeek', 'External Provider'])
+    expect(options.map(option => option.group?.label)).toEqual(['SuperNova', 'SuperNova', 'External Provider'])
     expect(options.every(option => option.detail === undefined)).toBe(true)
     expect(options[0]?.active).toBe(true)
     expect(options[1]?.active).toBeUndefined()
@@ -256,7 +256,7 @@ describe('ui-model-selection dual entry', () => {
     const b = await bench()
     try {
       b.setGroups([
-        GROUPS[1]!, GROUPS[0]!, { ...GROUPS[0]!, id: 'deepseek-account', name: 'DeepSeek Account' },
+        GROUPS[1]!, GROUPS[0]!, { ...GROUPS[0]!, id: 'deepseek-account', name: 'SuperNova Account' },
         { ...GROUPS[1]!, id: 'last-provider', name: 'Last Provider' },
       ])
       b.remote.emit('llm/adapters-updated', [])
@@ -311,11 +311,11 @@ describe('ui-model-selection dual entry', () => {
   it.each(['en', 'zh'] as const)('localizes account provider headings in the %s model popup', async (locale) => {
     const b = await bench(locale)
     try {
-      b.setGroups([{ ...GROUPS[0]!, id: 'deepseek-account', name: 'DeepSeek Account' }])
+      b.setGroups([{ ...GROUPS[0]!, id: 'deepseek-account', name: 'SuperNova Account' }])
       b.remote.emit('llm/adapters-updated', [])
       b.mint('s1')
       const options = await b.popup().options(projection('s1'), new AbortController().signal)
-      expect(options[0]?.group?.label).toBe(locale === 'zh' ? 'DeepSeek 账号' : 'DeepSeek Account')
+      expect(options[0]?.group?.label).toBe(locale === 'zh' ? 'SuperNova 账号' : 'SuperNova Account')
     } finally {
       await b.ctx.fiber.dispose()
     }
@@ -324,18 +324,18 @@ describe('ui-model-selection dual entry', () => {
   it('removes account models from the picker after sign-out', async () => {
     const b = await bench('en')
     try {
-      b.setGroups([{ ...GROUPS[0]!, id: 'deepseek-account', name: 'DeepSeek Account' }, ...GROUPS])
+      b.setGroups([{ ...GROUPS[0]!, id: 'deepseek-account', name: 'SuperNova Account' }, ...GROUPS])
       b.remote.emit('llm/adapters-updated', [])
       b.mint('s1')
       const before = await b.popup().options(projection('s1'), new AbortController().signal)
-      expect(before.some(option => option.group?.label === 'DeepSeek Account')).toBe(true)
+      expect(before.some(option => option.group?.label === 'SuperNova Account')).toBe(true)
       b.setGroups(GROUPS)
       b.remote.emit('credentials/record-updated', ['deepseek-account-platform'])
       await vi.waitFor(() => {
         expect(b.ctx.modelDirectories.directoryFor(sid('s1')).store.getSnapshot().groups).toEqual(GROUPS)
       })
       const after = await b.popup().options(projection('s1'), new AbortController().signal)
-      expect(after.some(option => option.group?.label === 'DeepSeek Account')).toBe(false)
+      expect(after.some(option => option.group?.label === 'SuperNova Account')).toBe(false)
       expect(after.length).toBeGreaterThan(0)
     } finally {
       await b.ctx.fiber.dispose()
@@ -420,7 +420,7 @@ describe('ui-model-selection dual entry', () => {
     face.load()
     expect(face.directory.getSnapshot().current?.model).toBe('deepseek-v4-flash')
 
-    b.remote.emit('settings/document-updated', ['llm-deepseek', 1])
+    b.remote.emit('settings/document-updated', ['llm-supernova', 1])
     b.setProjected(sid('s1'), {
       lastUsed: { provider: 'deepseek-official', model: 'deepseek-v4-flash' },
       next: { provider: 'deepseek-official', model: 'deepseek-v4-pro' },
@@ -484,7 +484,7 @@ describe('ui-model-selection dual entry', () => {
       b.setProjected(sid('existing'), { lastUsed: null,
         next: { provider: 'deepseek-official', model: 'deepseek-v4-flash', reasoningEffort: brandString<ReasoningEffortId>('high') } })
       b.setRoutable(false)
-      b.remote.emit('settings/document-updated', ['llm-deepseek', 1])
+      b.remote.emit('settings/document-updated', ['llm-supernova', 1])
       expect(existing.store.getSnapshot().retainedEffort).toBe('High')
       await vi.waitFor(() => {
         expect(existing.store.getSnapshot()).toMatchObject({ current: { provider: 'deepseek-official', model: 'deepseek-v4-flash', reasoningEffort: 'high' }, routable: false, retainedEffort: 'High' })
@@ -510,7 +510,7 @@ describe('ui-model-selection dual entry', () => {
     expect(b.calls.models).toBe(1)
 
     b.setRoutable(false)
-    b.remote.emit('settings/document-updated', ['llm-deepseek', 1])
+    b.remote.emit('settings/document-updated', ['llm-supernova', 1])
     await Promise.resolve()
     await Promise.resolve()
     expect(b.blockOf('s1')).toBeUndefined()
@@ -556,11 +556,11 @@ describe('ui-model-selection dual entry', () => {
     const face = b.seat().inject!(sid('child'))
     expect(face.available).toBe(false)
     face.load()
-    await expect(face.select({ provider: 'deepseek', model: 'deepseek-v4-pro' })).resolves.toBeUndefined()
+    await expect(face.select({ provider: 'supernova', model: 'deepseek-v4-pro' })).resolves.toBeUndefined()
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).load())
       .rejects.toThrow(/unavailable for addressed subagent/)
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).select({
-      provider: 'deepseek',
+      provider: 'supernova',
       model: 'deepseek-v4-pro',
     })).rejects.toThrow(/unavailable for addressed subagent/)
     b.ctx.emit('connection/reset')

@@ -1,8 +1,8 @@
 /** One server's account follows the MCP manager, runs the page's operations through it, and shows the shared section. */
-import { Context } from '@deepseek-ai/cordis'
-import type { McpOAuthAttemptView } from '@deepseek-ai/dsh-mcp-client/types'
-import type { McpManagedServerStatus, McpManagedServerView } from '@deepseek-ai/dsh-mcp-manager/types'
-import type { LocalizedText } from '@deepseek-ai/dsh-package-manifest'
+import { Context } from '@supernova-ai/cordis'
+import type { McpOAuthAttemptView } from '@supernova-ai/snh-mcp-client/types'
+import type { McpManagedServerStatus, McpManagedServerView } from '@supernova-ai/snh-mcp-manager/types'
+import type { LocalizedText } from '@supernova-ai/snh-package-manifest'
 import { expect, it, onTestFinished, vi } from 'vitest'
 import { present, sectionCopy, ServerAccount, type McpAccountView } from '../src/account.ts'
 import { ATTEMPT, COPY, fakeManager, OPERATION } from './fixture.ts'
@@ -83,7 +83,7 @@ it('offers Retry only where restarting the server recovers it', () => {
 
 it('fills the section copy with the connector text and the shared line on where authorization completes', () => {
   expect(sectionCopy(COPY)).toEqual({
-    title: 'Acme account', hint: text({ zh: '授权需要在运行 DSH 的这台电脑上的浏览器中完成。' }),
+    title: 'Acme account', hint: text({ zh: '授权需要在运行 SNH 的这台电脑上的浏览器中完成。' }),
     activation: { title: 'Connect Acme?', body: 'The connector is on.', connect: 'Connect Acme' },
   })
   expect(Object.keys(sectionCopy(COPY).hint)).toEqual(['en', 'zh', 'ja', 'es', 'fr', 'de', 'ru', 'pt'])

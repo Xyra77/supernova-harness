@@ -1,19 +1,19 @@
 /** Plan projection behavior. */
 
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import UserQuestionService from '@deepseek-ai/dsh-user-questions'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { CommandId } from '@deepseek-ai/dsh-commands/types'
-import PlanModeController from '@deepseek-ai/dsh-plan-mode'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import type { Agent } from '@supernova-ai/snh-agent'
+import SessionStore from '@supernova-ai/snh-session'
+import type { Session } from '@supernova-ai/snh-session'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import UserQuestionService from '@supernova-ai/snh-user-questions'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { CommandId } from '@supernova-ai/snh-commands/types'
+import PlanModeController from '@supernova-ai/snh-plan-mode'
 
 interface Bench {
   ctx: Context

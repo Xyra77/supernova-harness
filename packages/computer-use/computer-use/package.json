@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-computer-use",
+  "name": "@supernova-ai/snh-computer-use",
   "description": "Exclusive named computer-use provider registration",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -37,10 +37,10 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-brand": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-brand": "workspace:*"
   }
 }

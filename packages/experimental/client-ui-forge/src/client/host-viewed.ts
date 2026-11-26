@@ -5,8 +5,8 @@
  */
 
 import { useMemo, useRef, useState } from 'react'
-import type { ForgeViewedFiles, ForgeViewedRequest, ForgeViewedState } from '@deepseek-ai/dsh-experimental-forge/types'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+import type { ForgeViewedFiles, ForgeViewedRequest, ForgeViewedState } from '@supernova-ai/snh-experimental-forge/types'
+import type { RemoteResult } from '@supernova-ai/snh-typert-protocol'
 import type { ForgeDiffFile } from '../types.ts'
 import type { ViewedMarks } from './viewed-files.ts'
 

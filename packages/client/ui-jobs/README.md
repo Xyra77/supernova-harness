@@ -3,13 +3,13 @@ description: "The Session panel's background-jobs section: expandable streaming 
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-jobs
+# @supernova-ai/snh-client-ui-jobs
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-client-ui-jobs` shows the session's background jobs in the Session panel's Background jobs section, with lifecycle, elapsed time, progress, and terminal detail. Live jobs and settled jobs with retained output offer expandable output panels; collapsing stops the stream. Live rows show the label above the kind, current progress, and a ticking duration. Settled rows fold under a count; those without retained output, including subagents whose answers went to the model, stay static.
+`snh-client-ui-jobs` shows the session's background jobs in the Session panel's Background jobs section, with lifecycle, elapsed time, progress, and terminal detail. Live jobs and settled jobs with retained output offer expandable output panels; collapsing stops the stream. Live rows show the label above the kind, current progress, and a ticking duration. Settled rows fold under a count; those without retained output, including subagents whose answers went to the model, stay static.
 
 ## Table of Contents
 
@@ -39,7 +39,7 @@ Running job rows also carry a two-press stop control, whose tooltip reads “Sto
 
 ### The expanded panel
 
-Expanding an observable row opens that job's output observation stream from `ctx.jobs` (installed by `dsh-api-job-controller`) into an embedded terminal panel. The panel copies the command (not the output), wraps commands and output lines in full, scrolls its output inside a fixed height instead of folding, and draws no run-state dot of its own — the row above carries the state. Retention gaps and stream interruptions render as notices above the panel.
+Expanding an observable row opens that job's output observation stream from `ctx.jobs` (installed by `snh-api-job-controller`) into an embedded terminal panel. The panel copies the command (not the output), wraps commands and output lines in full, scrolls its output inside a fixed height instead of folding, and draws no run-state dot of its own — the row above carries the state. Retention gaps and stream interruptions render as notices above the panel.
 
 -----
 
@@ -67,17 +67,17 @@ Background-job rows use the standard menu item radius from the [nested geometry 
 <a id="further-exploration"></a>
 ## Further Exploration
 
-- [`dsh-api-job-controller`](../../api/job-controller/README.md) — the `job.list` and `job.follow` streams, the `job.kill` Remote, and the `ctx.jobs` service behind the rows, the panel, and the stop control.
-- [`dsh-jobs`](../../jobs/jobs/README.md) — the registry contract that owns the ring and projection semantics.
-- [`dsh-client-ui-session-panel`](../ui-session-panel/README.md) — the Session panel that orders, titles, and scrolls this section.
-- [`dsh-client-ui-primitives`](../ui-primitives/README.md) — the `TerminalBlock` surface the panel configures.
+- [`snh-api-job-controller`](../../api/job-controller/README.md) — the `job.list` and `job.follow` streams, the `job.kill` Remote, and the `ctx.jobs` service behind the rows, the panel, and the stop control.
+- [`snh-jobs`](../../jobs/jobs/README.md) — the registry contract that owns the ring and projection semantics.
+- [`snh-client-ui-session-panel`](../ui-session-panel/README.md) — the Session panel that orders, titles, and scrolls this section.
+- [`snh-client-ui-primitives`](../ui-primitives/README.md) — the `TerminalBlock` surface the panel configures.
 
 -----
 
 <a id="model-experience"></a>
 ## Model Experience
 
-None, as this package renders host-observed state and live output for a human and touches no prompt, message, schema, stream, or tool result. The model's own view of the same work stays with [`dsh-tool-jobs`](../../jobs/tool-jobs/README.md).
+None, as this package renders host-observed state and live output for a human and touches no prompt, message, schema, stream, or tool result. The model's own view of the same work stays with [`snh-tool-jobs`](../../jobs/tool-jobs/README.md).
 
 #### KV Cache effect
 

@@ -1,36 +1,36 @@
 /**
  * Showcase integration: the real `web_fetch` tool + the real spill stack
- * (`dsh-spill-local` backend + `dsh-spill-policy`), exercised through
+ * (`snh-spill-local` backend + `snh-spill-policy`), exercised through
  * `executeToolFixture()`. Proves the Agent Note's default local-backend path — a large
  * formatted fetch result is automatically retained and spilled with NO
  * tool-specific spill code, and the model-facing text changes ONLY by the
  * deliberate spill notice (the full formatted result lands in the spill file).
  */
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
 
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
 import { AddressInfo } from 'node:net'
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import { estimateContent } from '@deepseek-ai/dsh-token-meter/estimate'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm/types'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import type { ToolExecution } from '@deepseek-ai/dsh-tools'
+import { Context } from '@supernova-ai/cordis'
+import { estimateContent } from '@supernova-ai/snh-token-meter/estimate'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm/types'
+import type { SessionId } from '@supernova-ai/snh-session'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import type { ToolExecution } from '@supernova-ai/snh-tools'
 
 const testToolSignal = new AbortController().signal
-import WebRuntime from '@deepseek-ai/dsh-web'
-import * as WebFetchLocal from '@deepseek-ai/dsh-web-fetch-http'
-import LocalSpillStore from '@deepseek-ai/dsh-spill-local'
-import * as SpillPolicy from '@deepseek-ai/dsh-spill-policy'
-import * as ToolWeb from '@deepseek-ai/dsh-tool-web'
+import WebRuntime from '@supernova-ai/snh-web'
+import * as WebFetchLocal from '@supernova-ai/snh-web-fetch-http'
+import LocalSpillStore from '@supernova-ai/snh-spill-local'
+import * as SpillPolicy from '@supernova-ai/snh-spill-policy'
+import * as ToolWeb from '@supernova-ai/snh-tool-web'
 
 type Handler = (req: IncomingMessage, res: ServerResponse) => void
 
@@ -48,7 +48,7 @@ beforeEach(async () => {
   server = createServer((req, res) => { handler(req, res) })
   await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve))
   base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`
-  spillRoot = mkdtempSync(join(tmpdir(), 'dsh-spill-web-'))
+  spillRoot = mkdtempSync(join(tmpdir(), 'snh-spill-web-'))
 
   ctx = new Context()
   await ctx.plugin(SessionProjectionRegistry)

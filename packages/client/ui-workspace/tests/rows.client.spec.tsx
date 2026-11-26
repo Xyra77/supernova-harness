@@ -1,15 +1,15 @@
 // @vitest-environment jsdom
-import { contextMenuHook } from '@deepseek-ai/dsh-client-test-runtime'
+import { contextMenuHook } from '@supernova-ai/snh-client-test-runtime'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, createEvent, fireEvent, render, screen } from '@testing-library/react'
 import type { ComponentProps } from 'react'
-import type { WorkspaceId } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { allowAllAccess, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { en as commonEn } from '@deepseek-ai/dsh-client-locale/src/locales/en.ts'
-import { HoverCardGroup, Tooltip } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { PropsRenderSlots } from '@deepseek-ai/dsh-client-ui-slots'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
+import type { WorkspaceId } from '@supernova-ai/snh-api-workspace-controller/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { allowAllAccess, makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import { en as commonEn } from '@supernova-ai/snh-client-locale/src/locales/en.ts'
+import { HoverCardGroup, Tooltip } from '@supernova-ai/snh-client-ui-primitives'
+import type { PropsRenderSlots } from '@supernova-ai/snh-client-ui-slots'
+import { zh as commonZh } from '@supernova-ai/snh-client-locale/src/locales/zh.ts'
 import type { RowDragProps } from '../src/client/rows/Rows.tsx'
 import {
   ProjectRowItem as ProjectRowItemComponent, SearchResultItem, SessionNodeItem as SessionNodeItemComponent,
@@ -420,7 +420,7 @@ describe('workspace browser rows', () => {
       Object.defineProperty(title, 'clientWidth', { value: clientWidth, configurable: true })
     }
     const marquee = (): (string | undefined)[] =>
-      [title.dataset.marquee, title.style.getPropertyValue('--dsh-marquee-range'), title.style.getPropertyValue('--dsh-marquee-duration')]
+      [title.dataset.marquee, title.style.getPropertyValue('--snh-marquee-range'), title.style.getPropertyValue('--snh-marquee-duration')]
 
     geometry(320, 180)
     const touch = new Event('pointerover', { bubbles: true })
@@ -462,7 +462,7 @@ describe('workspace browser rows', () => {
     Object.defineProperty(title, 'scrollWidth', { value: 400, configurable: true })
     Object.defineProperty(title, 'clientWidth', { value: 160, configurable: true })
     fireEvent.pointerEnter(row)
-    expect(title.style.getPropertyValue('--dsh-marquee-range')).toBe('240px')
+    expect(title.style.getPropertyValue('--snh-marquee-range')).toBe('240px')
     view.rerender(<SessionNodeItem {...props} useContextMenuTarget={select => select({ kind: 'session',
       value: { sessionId: node.id, displayTitle: node.title } })} />)
     fireEvent.pointerLeave(row)
@@ -678,7 +678,7 @@ describe('workspace browser rows', () => {
     const transfer = { effectAllowed: '', setData: vi.fn(), setDragImage: vi.fn() }
     fireEvent.dragStart(screen.getByRole('treeitem'), { dataTransfer: transfer })
     expect(transfer.effectAllowed).toBe('copy')
-    expect(transfer.setData.mock.calls).toEqual([['application/x-dsh-session', 's1']])
+    expect(transfer.setData.mock.calls).toEqual([['application/x-snh-session', 's1']])
     expect(drag.start).not.toHaveBeenCalled()
     dragEnd(screen.getByRole('treeitem'))
     fireEvent.doubleClick(screen.getByText('One'))

@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 import { cleanup, createEvent, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { HostObservable } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { PaneId } from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
+import type { HostObservable } from '@supernova-ai/snh-client-ui-slots'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type { PaneId } from '@supernova-ai/snh-client-ui-sidebar-right/client'
 import { trackSessionDrags } from '../src/client/sidebar-chat/index.tsx'
 import { SessionDropZone, type SessionDrag, type SessionDropZoneProps } from '../src/client/sidebar-chat/SessionDropZone.tsx'
 
@@ -31,34 +31,34 @@ describe('Session drag tracking', () => {
     const unsubscribe = drags.source.subscribe(listener)
     expect(drags.source.getSnapshot()).toBeUndefined()
 
-    dispatchDrag('dragstart', { 'application/x-dsh-session': OTHER })
+    dispatchDrag('dragstart', { 'application/x-snh-session': OTHER })
     expect(drags.source.getSnapshot()).toEqual(outside)
     dispatchDrag('dragend')
     expect(drags.source.getSnapshot()).toBeUndefined()
     expect(listener).toHaveBeenCalledTimes(2)
 
-    dispatchDrag('dragstart', { 'application/x-dsh-session': OTHER })
+    dispatchDrag('dragstart', { 'application/x-snh-session': OTHER })
     dispatchDrag('drop')
     expect(drags.source.getSnapshot()).toBeUndefined()
 
     // A row unmounted mid-drag never delivers dragend; the next button-free mouse move clears the drag.
-    dispatchDrag('dragstart', { 'application/x-dsh-session': OTHER })
+    dispatchDrag('dragstart', { 'application/x-snh-session': OTHER })
     document.body.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, buttons: 1 }))
     expect(drags.source.getSnapshot()).toEqual(outside)
     document.body.dispatchEvent(new MouseEvent('mousemove', { bubbles: true, buttons: 0 }))
     expect(drags.source.getSnapshot()).toBeUndefined()
 
     // The on-screen Session itself, a drag without Session data, and no on-screen Session publish nothing.
-    dispatchDrag('dragstart', { 'application/x-dsh-session': MAIN })
+    dispatchDrag('dragstart', { 'application/x-snh-session': MAIN })
     dispatchDrag('dragstart', { 'text/plain': OTHER })
     mounted = undefined
-    dispatchDrag('dragstart', { 'application/x-dsh-session': OTHER })
+    dispatchDrag('dragstart', { 'application/x-snh-session': OTHER })
     expect(drags.source.getSnapshot()).toBeUndefined()
     expect(listener).toHaveBeenCalledTimes(6)
 
     unsubscribe()
     mounted = MAIN
-    dispatchDrag('dragstart', { 'application/x-dsh-session': OTHER })
+    dispatchDrag('dragstart', { 'application/x-snh-session': OTHER })
     expect(listener).toHaveBeenCalledTimes(6)
     drags.dispose()
     dispatchDrag('dragend')
@@ -89,11 +89,11 @@ describe('Session drag tracking', () => {
     frame.append(otherPanel, panel)
     const drags = trackSessionDrags(document, () => MAIN)
     // Collapsed: the area the Sidebar would open in, never left of the navigation column.
-    dispatchDrag('dragstart', { 'application/x-dsh-session': OTHER }, row)
+    dispatchDrag('dragstart', { 'application/x-snh-session': OTHER }, row)
     expect(drags.source.getSnapshot()).toEqual({ sessionId: OTHER, targets: [{ left: 920, top: 0, width: 520, height: 800 }] })
     dispatchDrag('dragend')
     panel.getBoundingClientRect = () => ({ width: 1300 }) as DOMRect
-    dispatchDrag('dragstart', { 'application/x-dsh-session': OTHER }, row)
+    dispatchDrag('dragstart', { 'application/x-snh-session': OTHER }, row)
     expect(drags.source.getSnapshot()).toEqual({ sessionId: OTHER, targets: [{ left: 280, top: 0, width: 1160, height: 800 }] })
     dispatchDrag('dragend')
 
@@ -109,7 +109,7 @@ describe('Session drag tracking', () => {
     const left = pane('p1', { left: 920.4, top: 0, width: 259.5, height: 800 })
     pane('p2', { left: 1181, top: 0, width: 259, height: 800 })
     pane('hidden', { left: 0, top: 0, width: 0, height: 0 })
-    dispatchDrag('dragstart', { 'application/x-dsh-session': OTHER }, row)
+    dispatchDrag('dragstart', { 'application/x-snh-session': OTHER }, row)
     expect(drags.source.getSnapshot()).toEqual({ sessionId: OTHER, targets: [
       { paneId: 'p1', left: 920, top: 0, width: 260, height: 800 },
       { paneId: 'p2', left: 1181, top: 0, width: 259, height: 800 },
@@ -118,13 +118,13 @@ describe('Session drag tracking', () => {
     // An open panel without a measured pane falls back to the panel area.
     for (const element of panel.querySelectorAll('[data-dockkit-pane]')) element.remove()
     left.remove()
-    dispatchDrag('dragstart', { 'application/x-dsh-session': OTHER }, row)
+    dispatchDrag('dragstart', { 'application/x-snh-session': OTHER }, row)
     expect(drags.source.getSnapshot()).toEqual({ sessionId: OTHER, targets: [{ left: 280, top: 0, width: 1160, height: 800 }] })
     dispatchDrag('dragend')
     // A drag whose target is not an element starts at the window edge.
     panel.remove()
     otherPanel.remove()
-    dispatchDrag('dragstart', { 'application/x-dsh-session': OTHER }, document)
+    dispatchDrag('dragstart', { 'application/x-snh-session': OTHER }, document)
     expect(drags.source.getSnapshot()).toEqual({ sessionId: OTHER, targets: [{ left: 0, top: 0, width: 1440, height: 800 }] })
     drags.dispose()
     width.mockRestore()

@@ -1,14 +1,14 @@
 /** Session messages activate targets through the Web Session controller and attribute the real sender. */
 
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import type {} from '@deepseek-ai/dsh-api-session-controller'
-import { LlmAdapter, ToolCallId, type GenerateOptions, type StreamChunk } from '@deepseek-ai/dsh-llm'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
+import { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import type {} from '@supernova-ai/snh-api-session-controller'
+import { LlmAdapter, ToolCallId, type GenerateOptions, type StreamChunk } from '@supernova-ai/snh-llm'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { SessionId } from '@supernova-ai/snh-session'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import { RemoteError } from '@supernova-ai/snh-typert-protocol'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import * as ToolSessionControl from '../src/index.ts'
 

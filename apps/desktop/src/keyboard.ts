@@ -1,8 +1,8 @@
 /** Product-window preference IPC and native menu interception during physical-key dispatch/recording. */
 import { ipcMain, type BrowserWindow, type IpcMainInvokeEvent, type Input, type MenuItemConstructorOptions, type WebContents } from 'electron'
-import { bindingKey, effectiveShortcuts, presentBinding, parseShortcutDefinitions, parseShortcutEdit } from '@deepseek-ai/dsh-client-shortcuts/protocol'
-import type { NormalizedBinding, ShortcutConfigSnapshot, ShortcutDefinition, ShortcutPlatform, ShortcutRevision } from '@deepseek-ai/dsh-client-shortcuts/protocol'
-import type { DesktopBrowserLeaseId } from '@deepseek-ai/dsh-client-ui-sidebar-browser/types'
+import { bindingKey, effectiveShortcuts, presentBinding, parseShortcutDefinitions, parseShortcutEdit } from '@supernova-ai/snh-client-shortcuts/protocol'
+import type { NormalizedBinding, ShortcutConfigSnapshot, ShortcutDefinition, ShortcutPlatform, ShortcutRevision } from '@supernova-ai/snh-client-shortcuts/protocol'
+import type { DesktopBrowserLeaseId } from '@supernova-ai/snh-client-ui-sidebar-browser/types'
 import { desktopKeybindings } from './keybindings.ts'
 import { DESKTOP_IPC, assertDesktopSender } from './ipc.ts'
 
@@ -78,7 +78,7 @@ export function installDesktopShortcuts(
       || previousClose !== menuAccelerator(closeBinding)
       || previousSettings !== menuAccelerator(settingsBinding)) updateMenu()
     const window = getWindow()
-    if (window !== undefined && !window.isDestroyed() && window.webContents.mainFrame.url.startsWith('dsh-app://app/')) {
+    if (window !== undefined && !window.isDestroyed() && window.webContents.mainFrame.url.startsWith('snh-app://app/')) {
       window.webContents.send(DESKTOP_IPC.shortcutsChanged, snapshot)
     }
   }
@@ -263,7 +263,7 @@ export function installDesktopShortcuts(
     fileMenu: (labels) => {
       const accelerator = menuAccelerator(closeBinding)
       return { label: labels.fileMenu, submenu: [{
-        id: 'dsh-page-close', label: labels.closePage, enabled: revision !== undefined,
+        id: 'snh-page-close', label: labels.closePage, enabled: revision !== undefined,
         ...accelerator === undefined ? {} : { accelerator },
         click: sendMenuClose,
       }] }
@@ -271,7 +271,7 @@ export function installDesktopShortcuts(
     settingsMenuItem(label, available = true, focusWindow) {
       const accelerator = menuAccelerator(settingsBinding)
       return {
-        id: 'dsh-settings-open',
+        id: 'snh-settings-open',
         label,
         enabled: available && settingsEnabled,
         ...accelerator === undefined ? {} : { accelerator },

@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-error",
-  "description": "Dependency-free HarnessError base class with a stable machine-routable code for the DeepSeek Harness",
+  "name": "@supernova-ai/snh-error",
+  "description": "Dependency-free HarnessError base class with a stable machine-routable code for the SuperNova Harness",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -30,9 +30,9 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

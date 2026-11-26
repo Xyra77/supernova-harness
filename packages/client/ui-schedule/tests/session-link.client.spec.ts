@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import type { SessionListState } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { WorkspaceSnapshot } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { SessionListState } from '@supernova-ai/snh-api-session-controller/client'
+import type { WorkspaceSnapshot } from '@supernova-ai/snh-api-workspace-controller/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import { sessionLinkState } from '../src/client/session-link.ts'
 
 const id = 'session-original' as SessionId

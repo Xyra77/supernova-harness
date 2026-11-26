@@ -27,7 +27,7 @@ export type UpstreamSkillsState = 'installed' | 'downloading' | 'failed'
 
 /** One plugin's packaged entry skill and the upstream files it indexes. */
 export interface UpstreamSkillsRegistration {
-  /** The skill provider's name, also the directory under `$DSH_HOME/cache` that receives the download. */
+  /** The skill provider's name, also the directory under `$SNH_HOME/cache` that receives the download. */
   readonly name: string
   /** Absolute path of the packaged entry `SKILL.md`, whose frontmatter gives the skill's name and description. */
   readonly entry: string

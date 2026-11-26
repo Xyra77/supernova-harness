@@ -7,21 +7,21 @@ import { chmod, mkdtemp, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { PassThrough } from 'node:stream'
-import { Context } from '@deepseek-ai/cordis'
-import CliAccounts from '@deepseek-ai/dsh-cli-account'
-import type { ConnectorAccountRegistration } from '@deepseek-ai/dsh-client-ui-connector-account/types'
-import SkillRegistry from '@deepseek-ai/dsh-skill'
-import { SubprocessRuntime } from '@deepseek-ai/dsh-subprocess'
+import { Context } from '@supernova-ai/cordis'
+import CliAccounts from '@supernova-ai/snh-cli-account'
+import type { ConnectorAccountRegistration } from '@supernova-ai/snh-client-ui-connector-account/types'
+import SkillRegistry from '@supernova-ai/snh-skill'
+import { SubprocessRuntime } from '@supernova-ai/snh-subprocess'
 import type {
   SubprocessCollectedOutputs,
   SubprocessHandle,
   SubprocessOutcome,
   SubprocessSpawnSpec,
   SubprocessTerminalEnvironment,
-} from '@deepseek-ai/dsh-subprocess'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import UpstreamSkills, { type Config as UpstreamSkillsConfig } from '@deepseek-ai/dsh-upstream-skills'
+} from '@supernova-ai/snh-subprocess'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import UpstreamSkills, { type Config as UpstreamSkillsConfig } from '@supernova-ai/snh-upstream-skills'
 import { executableFileName } from '../src/directory.ts'
 import type { WecomState } from '../src/types.ts'
 
@@ -114,7 +114,7 @@ export class ScriptedSubprocess extends SubprocessRuntime {
  * @returns the absolute bin directory.
  */
 export async function createBinDir(): Promise<string> {
-  const directory = await mkdtemp(join(tmpdir(), 'dsh-wecom-bin-'))
+  const directory = await mkdtemp(join(tmpdir(), 'snh-wecom-bin-'))
   await writeFile(join(directory, executableFileName(process.platform)), '')
   await chmod(join(directory, executableFileName(process.platform)), 0o755)
   return directory
@@ -152,7 +152,7 @@ export async function createHost(skills: Partial<UpstreamSkillsConfig> = {}): Pr
   await ctx.plugin(SystemPrompt)
   const host: WecomHost = {
     ctx, subprocess: ctx.subprocess as ScriptedSubprocess, binDir: await createBinDir(),
-    skillsDir: await mkdtemp(join(tmpdir(), 'dsh-wecom-skills-')), pages: [], withdrawn: 0,
+    skillsDir: await mkdtemp(join(tmpdir(), 'snh-wecom-skills-')), pages: [], withdrawn: 0,
   }
   ctx.provide('connectorAccounts', {
     register: (page: WecomPage) => {

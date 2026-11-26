@@ -2,7 +2,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { uploadArchive } from '../src/client/upload.ts'
 import type { UploadProgress } from '../src/client/upload.ts'
-import type { DeepseekChatImportResult } from '../src/types.ts'
+import type { SupernovaChatImportResult } from '../src/types.ts'
 
 /** Minimal XMLHttpRequest double driven by each test. */
 class FakeXhr {
@@ -35,13 +35,13 @@ function current(): FakeXhr {
 }
 
 /** Page global carrying the shell transport the carrier path reads. */
-type TransportGlobal = { __DSH_TRANSPORT__?: { fetch?: (input: string | URL, init: RequestInit) => Promise<Response> } }
+type TransportGlobal = { __SNH_TRANSPORT__?: { fetch?: (input: string | URL, init: RequestInit) => Promise<Response> } }
 
 function installCarrier(fetch: (input: string | URL, init: RequestInit) => Promise<Response>): void {
-  (globalThis as TransportGlobal).__DSH_TRANSPORT__ = { fetch }
+  (globalThis as TransportGlobal).__SNH_TRANSPORT__ = { fetch }
 }
 
-const RESULT: DeepseekChatImportResult = {
+const RESULT: SupernovaChatImportResult = {
   workspaceId: 'w1', workspacePath: '/w', sessionIds: ['s1'], conversationCount: 1, omittedByLimit: 0, skipped: [],
 }
 const OUTCOME_LINE = `${JSON.stringify({ type: 'outcome', outcome: { ok: true, value: RESULT } })}\n`
@@ -112,7 +112,7 @@ function streamed(pieces: readonly string[]): Response {
 
 afterEach(() => {
   vi.unstubAllGlobals()
-  delete (globalThis as TransportGlobal).__DSH_TRANSPORT__
+  delete (globalThis as TransportGlobal).__SNH_TRANSPORT__
   FakeXhr.last = undefined
 })
 

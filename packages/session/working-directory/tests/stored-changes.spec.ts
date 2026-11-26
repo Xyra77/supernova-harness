@@ -2,17 +2,17 @@
 import { mkdtemp, mkdir, realpath, rm, symlink } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { describe, expect, it } from 'vitest'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import WorkingDirectory from '@deepseek-ai/dsh-working-directory'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import type { Session, SessionId } from '@deepseek-ai/dsh-session'
-import { renderContextSnapshot } from '@deepseek-ai/dsh-system-prompt'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import LocalFileSystem from '@supernova-ai/snh-fs-local'
+import WorkingDirectory from '@supernova-ai/snh-working-directory'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import type { Session, SessionId } from '@supernova-ai/snh-session'
+import { renderContextSnapshot } from '@supernova-ai/snh-system-prompt'
+import { brandString } from '@supernova-ai/snh-brand'
 
 async function fixture() {
-  const scratch = await realpath(await mkdtemp(join(tmpdir(), 'dsh-stored-changes-')))
+  const scratch = await realpath(await mkdtemp(join(tmpdir(), 'snh-stored-changes-')))
   const project = join(scratch, 'repo')
   const inside = join(project, 'packages', 'foo')
   const worktree = join(project, '.agents', 'worktrees', 'topic')

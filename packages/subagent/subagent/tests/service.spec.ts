@@ -1,14 +1,14 @@
 import { bindSubagentActivation } from './manager-internals.ts'
 import { mountWorkingDirectoryFixture } from './working-directory-fixture.ts'
 import { describe, expect, expectTypeOf, it, onTestFinished, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { type Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
+import { Context } from '@supernova-ai/cordis'
+import { type Agent } from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
 
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { HarnessError, type ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import { carrierKeyOf } from '@deepseek-ai/dsh-scope'
+import { brandString } from '@supernova-ai/snh-brand'
+import { HarnessError, type ReasoningEffortId } from '@supernova-ai/snh-llm'
+import { carrierKeyOf } from '@supernova-ai/snh-scope'
 import SubagentRuntime, {
   foldSubagentDescriptor,
   snapshotSubagentDescriptor,
@@ -23,9 +23,9 @@ import SubagentRuntime, {
   type SubagentRun,
   type SubagentRunEndInfo,
   type SubagentStartRequest,
-} from '@deepseek-ai/dsh-subagent'
-import { Session, type SessionId, type SessionEvent } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+} from '@supernova-ai/snh-subagent'
+import { Session, type SessionId, type SessionEvent } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 
 function fakeParent(id = 'parent-1'): Agent {
   return { id: brandString<SessionId>(id) } as Agent
@@ -545,7 +545,7 @@ describe('subagent descriptors', () => {
       mode: 'continuable' as const,
       provider: 'spawn',
       label: 'complete child',
-      agentProvider: 'deepseek',
+      agentProvider: 'supernova',
       agentModel: 'chat',
       agentReasoningEffort: brandString<ReasoningEffortId>('high'),
       persona: 'reviewer',

@@ -1,11 +1,11 @@
 /** Scoped tool that declares filesystem deliveries in their owning Session. */
-import type {} from '@deepseek-ai/dsh-working-directory'
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { FsError } from '@deepseek-ai/dsh-fs'
-import { ToolArgsError, ToolContextUnavailableError, defineTool, type ToolExecution } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-agent'
-import type { Session } from '@deepseek-ai/dsh-session'
+import type {} from '@supernova-ai/snh-working-directory'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { FsError } from '@supernova-ai/snh-fs'
+import { ToolArgsError, ToolContextUnavailableError, defineTool, type ToolExecution } from '@supernova-ai/snh-tools'
+import type {} from '@supernova-ai/snh-agent'
+import type { Session } from '@supernova-ai/snh-session'
 import type { PresentedFile } from './types.ts'
 
 /** Stable Loader identity. */

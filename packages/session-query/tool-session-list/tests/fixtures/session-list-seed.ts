@@ -2,11 +2,11 @@
 
 import { mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
-import type { Context } from '@deepseek-ai/cordis'
-import { SessionId } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-session-title'
-import type {} from '@deepseek-ai/dsh-storage-domain'
-import WorkspaceRegistry, { WorkspaceId, workspaceDomainSpec } from '@deepseek-ai/dsh-workspace'
+import type { Context } from '@supernova-ai/cordis'
+import { SessionId } from '@supernova-ai/snh-session'
+import type {} from '@supernova-ai/snh-session-title'
+import type {} from '@supernova-ai/snh-storage-domain'
+import WorkspaceRegistry, { WorkspaceId, workspaceDomainSpec } from '@supernova-ai/snh-workspace'
 
 /** Loader fixture identity. */
 export const name = 'session-list-seed'
@@ -21,7 +21,7 @@ export const inject = ['sessions', 'sessionPersistence', 'storageDomain']
  */
 export async function apply(ctx: Context): Promise<void> {
   const cwd = process.cwd()
-  const emptyPath = join(cwd, '.dsh', 'empty-workspace')
+  const emptyPath = join(cwd, '.snh', 'empty-workspace')
   await mkdir(emptyPath, { recursive: true })
   const alpha = ctx.sessions.create(SessionId('list-alpha'), { meta: { cwd, createdAt: 1_000 } })
   alpha.append('session/title', { title: 'Alpha', messageSeqs: [], source: { kind: 'user' } })

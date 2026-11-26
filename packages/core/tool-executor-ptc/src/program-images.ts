@@ -4,9 +4,9 @@
  * @module
  */
 
-import type { ImageBlock } from '@deepseek-ai/dsh-llm'
-import type { PtcJsonValue } from '@deepseek-ai/dsh-ptc-runtime'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import type { ImageBlock } from '@supernova-ai/snh-llm'
+import type { PtcJsonValue } from '@supernova-ai/snh-ptc-runtime'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
 
 /**
  * Replace each image entry whose attachment is one of the finalized result images.

@@ -3,7 +3,7 @@ description: "通过共用的 MCP 管理器接入 Linear 托管的 MCP 服务器
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-linear
+# @supernova-ai/snh-linear
 
 [English](README.md) | 中文
 
@@ -30,10 +30,10 @@ Linear 插件在加载期间把 Linear 托管的 MCP 服务器 `https://mcp.line
 将本包作为 bundle 安装，例如在 Web 侧栏的**插件**页面安装，或使用 CLI：
 
 ```sh
-dsh plugin --profile web add @deepseek-ai/dsh-linear
+snh plugin --profile web add @supernova-ai/snh-linear
 ```
 
-bundle patch 在 profile 其他层之后插入 `linear` 行。插件需要 `mcpManager` 与 `systemPrompt` 服务：[base bundle](../../bundle/base/README.zh.md) 提供 `systemPrompt`，Web 与 Desktop 组合通过 [`dsh-web-app`](../../bundle/web-app/README.zh.md) 补上 MCP 管理器。在没有 MCP 管理器的 profile（例如 `headless`）中，插件不会激活，启动时会打印一条警告，指出缺少 `mcpManager` 服务。
+bundle patch 在 profile 其他层之后插入 `linear` 行。插件需要 `mcpManager` 与 `systemPrompt` 服务：[base bundle](../../bundle/base/README.zh.md) 提供 `systemPrompt`，Web 与 Desktop 组合通过 [`snh-web-app`](../../bundle/web-app/README.zh.md) 补上 MCP 管理器。在没有 MCP 管理器的 profile（例如 `headless`）中，插件不会激活，启动时会打印一条警告，指出缺少 `mcpManager` 服务。
 
 ### 授权与退出登录
 
@@ -48,13 +48,13 @@ bundle patch 在 profile 其他层之后插入 `linear` 行。插件需要 `mcpM
 | 已连接 | **退出登录**确认后删除本地 grant |
 | 暂时无法连接 | **重试**重启服务器并保留现有授权 |
 
-授权必须在 Host 所在机器的浏览器中完成。用户在 Linear 中同意授权后，回调页面说明 DSH 已收到授权，区块随后显示结果。离开页面不会取消授权尝试，尝试由 Host 持有。授权失败时显示**授权未完成，请重试**；页面操作失败时显示 toast。退出登录保留客户端注册，不会在 Linear 一侧撤销连接。
+授权必须在 Host 所在机器的浏览器中完成。用户在 Linear 中同意授权后，回调页面说明 SNH 已收到授权，区块随后显示结果。离开页面不会取消授权尝试，尝试由 Host 持有。授权失败时显示**授权未完成，请重试**；页面操作失败时显示 toast。退出登录保留客户端注册，不会在 Linear 一侧撤销连接。
 
-页面通过 [`connectorAccounts` Remote](../../client/ui-connector-account/README.zh.md) 以 key `mcp:linear` 跟随账号，其按钮在该 Remote 上发起 `connect`、`sign-out` 或 `retry`，或取消授权尝试。在 Host 上，[`dsh-mcp-account`](../../mcp/mcp-account/README.zh.md) 通过管理器的 [OAuth 操作](../../mcp/mcp-manager/README.zh.md#oauth-authorization)执行它们：`startAuthorization('linear')` 返回一次授权尝试，其 `authorizationUrl` 由流报告，`cancelAuthorization('linear', id)` 取消它，`signOut('linear')` 删除 grant，`restart('linear')` 重试。其他 Remote 客户端可以使用同样的操作。
+页面通过 [`connectorAccounts` Remote](../../client/ui-connector-account/README.zh.md) 以 key `mcp:linear` 跟随账号，其按钮在该 Remote 上发起 `connect`、`sign-out` 或 `retry`，或取消授权尝试。在 Host 上，[`snh-mcp-account`](../../mcp/mcp-account/README.zh.md) 通过管理器的 [OAuth 操作](../../mcp/mcp-manager/README.zh.md#oauth-authorization)执行它们：`startAuthorization('linear')` 返回一次授权尝试，其 `authorizationUrl` 由流报告，`cancelAuthorization('linear', id)` 取消它，`signOut('linear')` 删除 grant，`restart('linear')` 重试。其他 Remote 客户端可以使用同样的操作。
 
 ### 停用与卸载
 
-在 Plugin Manager 中关闭该行或卸载本包都会结束注册：Linear 工具从模型的工具集中撤下，已保存的 grant 留在凭据存储中，因此重新安装会复用它。要删除 grant，请在插件加载期间退出登录，或按[本地凭据提供方](../../credentials/credentials-local/README.zh.md)的说明，从 `$DSH_HOME/.credentials.yaml` 中删除 `mcp-client/linear` 记录。
+在 Plugin Manager 中关闭该行或卸载本包都会结束注册：Linear 工具从模型的工具集中撤下，已保存的 grant 留在凭据存储中，因此重新安装会复用它。要删除 grant，请在插件加载期间退出登录，或按[本地凭据提供方](../../credentials/credentials-local/README.zh.md)的说明，从 `$SNH_HOME/.credentials.yaml` 中删除 `mcp-client/linear` 记录。
 
 ### 配置
 
@@ -63,7 +63,7 @@ bundle patch 在 profile 其他层之后插入 `linear` 行。插件需要 `mcpM
 | `url` | `https://mcp.linear.app/mcp` | Linear 服务器的 Streamable HTTP MCP 端点 |
 | `toolLoading` | `on-demand` | `on-demand` 让 Linear 的工具在 agent 加载前对其隐藏；`eager` 在每次请求中发送全部工具定义 |
 
-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-linear)是受支持字段的完整来源。连接与授权的预算使用管理器和 mcp-client 的默认值。已保存的 grant 与 `url` 绑定，修改后需要重新连接账号。
+生成的[配置目录](../../../docs/config-catalog.zh.md#supernova-aisnh-linear)是受支持字段的完整来源。连接与授权的预算使用管理器和 mcp-client 的默认值。已保存的 grant 与 `url` 绑定，修改后需要重新连接账号。
 
 -----
 
@@ -75,7 +75,7 @@ bundle patch 在 profile 其他层之后插入 `linear` 行。插件需要 `mcpM
 
 [`cordis.patch.yml`](cordis.patch.yml) 插入一行 id 为 `linear` 的条目，指向本包，因此本包既是 bundle，也是其唯一的一行；`config` 覆盖以该 id 为目标。Host 侧的 [`src/index.ts`](src/index.ts) 进行两项注册，二者都是插件 fiber 的 effect：`ctx.mcpManager.register('linear', …)` 以配置的 `url` 和 OAuth 凭据 key 添加一个 Streamable HTTP 条目，`ctx.systemPrompt.section()` 在 `MCP_SERVERS` 排序位置添加称呼指引。服务器名固定了 `mcp__linear__` 工具命名空间，凭据 key 固定了 grant 地址，因此重新加载或重新安装的插件会得到同样的工具和 grant。管理器在注册时校验条目；如果已配置或已注册的服务器占用了该名称或 key，插件会在添加指引之前加载失败。
 
-账号注册表运行时，插件还调用 `ctx.mcpAccounts.register({ server: 'linear', packageName: '@deepseek-ai/dsh-linear', copy })`，其中 [`src/locales.ts`](src/locales.ts) 以每种已发布语言保存指明 Linear 的文案；随后由 [`dsh-mcp-account`](../../mcp/mcp-account/README.zh.md) 把账号登记到连接器账号注册表，由注册表渲染上文所述的区块、引导、标签与 toast。没有注册表的组合（如 headless profile）加载插件时不带账号区块。
+账号注册表运行时，插件还调用 `ctx.mcpAccounts.register({ server: 'linear', packageName: '@supernova-ai/snh-linear', copy })`，其中 [`src/locales.ts`](src/locales.ts) 以每种已发布语言保存指明 Linear 的文案；随后由 [`snh-mcp-account`](../../mcp/mcp-account/README.zh.md) 把账号登记到连接器账号注册表，由注册表渲染上文所述的区块、引导、标签与 toast。没有注册表的组合（如 headless profile）加载插件时不带账号区块。
 
 </details>
 
@@ -126,7 +126,7 @@ Tools named `mcp__linear__*` come from the Linear plugin. In user-facing replies
 
 #### Token 影响
 
-工具集与服务器说明由 Linear 服务器定义，其大小可能在 DSH 不更新的情况下变化。设为 `on-demand` 时，已连接的 Linear 的开销是服务器说明、加载工具、70 个工具约 9,600 字符的目录，以及 agent 已加载的定义；设为 `eager` 时，全部定义（约 97,900 字符）在每次请求中重复出现。
+工具集与服务器说明由 Linear 服务器定义，其大小可能在 SNH 不更新的情况下变化。设为 `on-demand` 时，已连接的 Linear 的开销是服务器说明、加载工具、70 个工具约 9,600 字符的目录，以及 agent 已加载的定义；设为 `eager` 时，全部定义（约 97,900 字符）在每次请求中重复出现。
 
 #### KV Cache 影响
 

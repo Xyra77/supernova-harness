@@ -1,5 +1,5 @@
 /** Ordered live-event batching shared by the persistence backends. @module */
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import type { SessionEvent } from '@supernova-ai/snh-session'
 
 /** Backend-owned serialization and commit operations for a live batch. */
 interface LiveWriteOptions {

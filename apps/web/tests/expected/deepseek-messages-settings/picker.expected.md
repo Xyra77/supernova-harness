@@ -1,6 +1,6 @@
 - group "模型与推理等级":
   - menu "模型":
-    - group "DeepSeek API":
-      - text: DeepSeek API
+    - group "SuperNova API":
+      - text: SuperNova API
       - menuitemradio "Messages Flash" [checked]
       - menuitemradio "DeepSeek-V4-Pro"

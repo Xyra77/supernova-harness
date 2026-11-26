@@ -49,7 +49,7 @@ describe('web e2e: preset roster guidance', () => {
       const sharedGuide = page.getByRole('dialog', { name, exact: true })
       await sharedGuide.getByText(/只读运行时检查/).waitFor()
       expect(await sharedGuide.innerText()).not.toContain('增加了运行时检查')
-      if (name === '创造模式') expect(await sharedGuide.innerText()).toContain('创造模式专注于定制 DSH')
+      if (name === '创造模式') expect(await sharedGuide.innerText()).toContain('创造模式专注于定制 SNH')
       await page.keyboard.press('Escape')
       await sharedGuide.waitFor({ state: 'detached' })
     }
@@ -75,7 +75,7 @@ describe('web e2e: preset roster guidance', () => {
     // the deployment ships, and this lane only asserts it is shown read-only
     // in the Loader's own dialect.
     const shown = await viewer.locator('pre').textContent()
-    expect(shown).toContain("- id: persona\n  name: '@deepseek-ai/dsh-persona'\n")
+    expect(shown).toContain("- id: persona\n  name: '@supernova-ai/snh-persona'\n")
     expect(shown).toContain('- id: workflow-ptc\n')
     expect(shown).toContain("disabled: !!js process.platform === 'win32'\n")
     expect(shown).not.toContain('__jsExpr')

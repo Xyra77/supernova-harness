@@ -1,5 +1,5 @@
 /**
- * Integration tests: the REAL `@deepseek-ai/dsh-pwsh-local` executor plus the
+ * Integration tests: the REAL `@supernova-ai/snh-pwsh-local` executor plus the
  * `pwsh` tool, exercised through `executeToolFixture()` with a real PowerShell
  * process. These verify the world — actual commands run, stdout/stderr come
  * back, exit codes render, timeouts abort, background jobs settle through the
@@ -8,27 +8,27 @@
  * PowerShell); the fake-executor suite (tools.spec.ts) carries the coverage
  * gate.
  */
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
 
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { spawnSync } from 'node:child_process'
-import { Context } from '@deepseek-ai/cordis'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED } from '@deepseek-ai/dsh-tools'
-import LocalJobRegistry from '@deepseek-ai/dsh-jobs-local'
-import * as ToolJobs from '@deepseek-ai/dsh-tool-jobs'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import { PwshLocalExecutor, resolvePwshPath } from '@deepseek-ai/dsh-pwsh-local'
-import * as ToolPwsh from '@deepseek-ai/dsh-tool-pwsh'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
+import { Context } from '@supernova-ai/cordis'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import { brandString } from '@supernova-ai/snh-brand'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime, { TOOL_ABORTED } from '@supernova-ai/snh-tools'
+import LocalJobRegistry from '@supernova-ai/snh-jobs-local'
+import * as ToolJobs from '@supernova-ai/snh-tool-jobs'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import { PwshLocalExecutor, resolvePwshPath } from '@supernova-ai/snh-pwsh-local'
+import * as ToolPwsh from '@supernova-ai/snh-tool-pwsh'
+import * as BashEnvPlugin from '@supernova-ai/snh-shell-env'
 
 const testToolSignal = new AbortController().signal
 
@@ -59,7 +59,7 @@ function text(result: { content: { type: string; text?: string }[] }): string {
 
 describe.skipIf(!hasPwsh)('pwsh tool over the real pwsh executor', () => {
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'dsh-tool-pwsh-'))
+    dir = await mkdtemp(join(tmpdir(), 'snh-tool-pwsh-'))
     await writeFile(join(dir, 'greeting.txt'), 'hello pwsh\n')
 
     ctx = new Context()

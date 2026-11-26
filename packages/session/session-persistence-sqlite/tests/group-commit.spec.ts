@@ -4,8 +4,8 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import type { DatabaseSync } from 'node:sqlite'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import { SESSION_FORMAT_VERSION, SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
+import { SESSION_FORMAT_VERSION, SessionId, SessionSeq } from '@supernova-ai/snh-session'
+import type { SessionEvent, SessionHeader } from '@supernova-ai/snh-session'
 import type { SqliteStoreOptions } from '../src/sqlite.ts'
 import { sqliteLogs } from './fixtures/store.ts'
 
@@ -15,7 +15,7 @@ const event = (seq: number): SessionEvent => seq % 2 === 0
 const batch = (count: number) => Array.from({ length: count }, (_, index) => event(index + 1))
 
 async function fixture(count: number, overrides: Partial<SqliteStoreOptions> = {}) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-group-commit-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-group-commit-'))
   const logs = sqliteLogs(join(root, 'sessions.sqlite'), root, overrides)
   onTestFinished(async () => { try { await logs.close() } finally { await rm(root, { recursive: true, force: true }) } })
   const headers: SessionHeader[] = Array.from({ length: count }, (_, index) => ({

@@ -1,6 +1,6 @@
 /** Pure first-run readiness projection over the shared Models join. */
 import { describe, expect, it } from 'vitest'
-import type { CredentialInfo } from '@deepseek-ai/dsh-api-remotes/client'
+import type { CredentialInfo } from '@supernova-ai/snh-api-remotes/client'
 import type { ModelsSettingsState, ProviderRow } from '../src/client/store.ts'
 import { onboardingReadiness, providerUsable } from '../src/client/store.ts'
 
@@ -10,8 +10,8 @@ function row(overrides: Partial<ProviderRow> = {}): ProviderRow {
   return {
     entry: {
       provider: 'deepseek-official',
-      displayName: 'DeepSeek',
-      settingsNs: 'llm-deepseek',
+      displayName: 'SuperNova',
+      settingsNs: 'llm-supernova',
       settingsPath: [],
       active: true,
     },

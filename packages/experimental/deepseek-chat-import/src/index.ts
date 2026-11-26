@@ -1,35 +1,35 @@
 /**
- * Host plugin importing a DeepSeek chat export (chat.deepseek.com
- * `deepseek_data-*.zip`) uploaded by the browser as stored DSH Sessions in a
+ * Host plugin importing a SuperNova chat export (chat.deepseek.com
+ * `supernova_data-*.zip`) uploaded by the browser as stored SNH Sessions in a
  * chosen Workspace. The upload is processed in memory and never written to disk.
- * @module @deepseek-ai/dsh-deepseek-chat-import
+ * @module @supernova-ai/snh-deepseek-chat-import
  */
 
 import { randomUUID } from 'node:crypto'
-import type { Context } from '@deepseek-ai/cordis'
-import Schema from '@deepseek-ai/schemastery'
-import { principalOf, Remote, RemoteError, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
-import type {} from '@deepseek-ai/dsh-attachment'
-import type {} from '@deepseek-ai/dsh-client-connection'
-import type {} from '@deepseek-ai/dsh-session-persistence'
-import type {} from '@deepseek-ai/dsh-session-projection-cache'
-import type {} from '@deepseek-ai/dsh-workspace'
-import type { WorkspaceId } from '@deepseek-ai/dsh-workspace/types'
-import { importDeepseekChatExport } from './importer.ts'
+import type { Context } from '@supernova-ai/cordis'
+import Schema from '@supernova-ai/schemastery'
+import { principalOf, Remote, RemoteError, TypertRemoteService } from '@supernova-ai/snh-typert-protocol'
+import type {} from '@supernova-ai/snh-attachment'
+import type {} from '@supernova-ai/snh-client-connection'
+import type {} from '@supernova-ai/snh-session-persistence'
+import type {} from '@supernova-ai/snh-session-projection-cache'
+import type {} from '@supernova-ai/snh-workspace'
+import type { WorkspaceId } from '@supernova-ai/snh-workspace/types'
+import { importSupernovaChatExport } from './importer.ts'
 import { UPLOAD_PATH } from './protocol.ts'
 import { createUploadRoute } from './upload.ts'
 import type { ImportClaim } from './upload.ts'
-import type { DeepseekChatImportLimits } from './types.ts'
+import type { SupernovaChatImportLimits } from './types.ts'
 
 export { ExportEntryError, ExportSourceError } from './archive.ts'
 export { ExportConversationError } from './conversation.ts'
 export type { ExportArchive } from './archive.ts'
 export type { ConvertConversationOptions, ConvertedConversation } from './conversation.ts'
-export type { DeepseekChatImportDependencies, DeepseekChatImportRequest, DeepseekChatImportWorkspace } from './importer.ts'
+export type { SupernovaChatImportDependencies, SupernovaChatImportRequest, SupernovaChatImportWorkspace } from './importer.ts'
 export type { ImportClaim, UploadRouteHandler } from './upload.ts'
 export type {
-  DeepseekChatImportFailureReason, DeepseekChatImportLimits, DeepseekChatImportLine, DeepseekChatImportResponse, DeepseekChatImportResult,
-  DeepseekChatImportSkip,
+  SupernovaChatImportFailureReason, SupernovaChatImportLimits, SupernovaChatImportLine, SupernovaChatImportResponse, SupernovaChatImportResult,
+  SupernovaChatImportSkip,
 } from './types.ts'
 
 /** Deployment limits of the importer. */
@@ -44,15 +44,15 @@ export interface Config {
   maxTitleBytes: number
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
-    /** Upload route and Remote limits of the DeepSeek chat export importer. */
-    deepseekChatImport: DeepseekChatImportService
+    /** Upload route and Remote limits of the SuperNova chat export importer. */
+    supernovaChatImport: SupernovaChatImportService
   }
 }
 
 /** Serves the owner-only export upload route and the limits the browser checks first. */
-export default class DeepseekChatImportService extends TypertRemoteService {
+export default class SupernovaChatImportService extends TypertRemoteService {
   static inject = ['typert', 'connection', 'sessionPersistence', 'workspaceRegistry']
   static Config: Schema<Config> = Schema.object({
     maxSessions: Schema.natural().min(1).default(1000)
@@ -69,13 +69,13 @@ export default class DeepseekChatImportService extends TypertRemoteService {
   private active: { readonly controller: AbortController; readonly settled: Promise<void> } | undefined
 
   constructor(ctx: Context, private readonly config: Config) {
-    super(ctx, 'deepseekChatImport', { namespace: 'deepseekChatImport' })
+    super(ctx, 'supernovaChatImport', { namespace: 'supernovaChatImport' })
     const route = createUploadRoute({
       maxUploadBytes: config.maxUploadBytes,
       claim: () => this.claim(),
       // The registry lookup validates the wire id; an unknown id answers undefined.
       workspace: id => ctx.workspaceRegistry.get(id as WorkspaceId),
-      import: (archive, workspace, onProgress, signal) => importDeepseekChatExport({
+      import: (archive, workspace, onProgress, signal) => importSupernovaChatExport({
         persistence: ctx.sessionPersistence,
         projectionCache: ctx.get('sessionProjectionCache'),
         attachments: ctx.get('attachments'),
@@ -106,13 +106,13 @@ export default class DeepseekChatImportService extends TypertRemoteService {
    * import, so every other principal is refused.
    * @param signal - Client cancellation or Remote withdrawal.
    * @returns the largest accepted archive size.
-   * @throws {RemoteError} `deepseekChatImport/owner-only` for a caller that is not the owner.
+   * @throws {RemoteError} `supernovaChatImport/owner-only` for a caller that is not the owner.
    */
   @Remote
-  limits(signal: AbortSignal): DeepseekChatImportLimits {
+  limits(signal: AbortSignal): SupernovaChatImportLimits {
     signal.throwIfAborted()
     if (principalOf(this.ctx.invocation) !== undefined) {
-      throw new RemoteError('deepseekChatImport/owner-only', 'only the owner may import DeepSeek chat exports', {})
+      throw new RemoteError('supernovaChatImport/owner-only', 'only the owner may import SuperNova chat exports', {})
     }
     return { maxUploadBytes: this.config.maxUploadBytes }
   }

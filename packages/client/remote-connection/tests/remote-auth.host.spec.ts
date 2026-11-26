@@ -1,10 +1,10 @@
 /** Remote browser credentials retain their own durable key and fixed authority-scoped expiry. */
 
 import { createHmac, randomBytes } from 'node:crypto'
-import { Context } from '@deepseek-ai/cordis'
-import { CredentialProvider, credentialKey } from '@deepseek-ai/dsh-credentials'
-import type { CredentialKey, CredentialRecord } from '@deepseek-ai/dsh-credentials'
-import { HarnessError } from '@deepseek-ai/dsh-error'
+import { Context } from '@supernova-ai/cordis'
+import { CredentialProvider, credentialKey } from '@supernova-ai/snh-credentials'
+import type { CredentialKey, CredentialRecord } from '@supernova-ai/snh-credentials'
+import { HarnessError } from '@supernova-ai/snh-error'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import { RemoteBrowserAuth } from '../src/remote-auth.ts'
 
@@ -87,7 +87,7 @@ describe('Remote browser credentials', () => {
     const { pair, setCookie } = issue(first)
     expect(setCookie).toContain('; Max-Age=2592000; Path=/; Expires=')
     expect(setCookie).toMatch(/; HttpOnly; SameSite=Strict$/u)
-    expect(pair).toMatch(/^dsh-remote-[A-Za-z0-9_-]+=v1\./u)
+    expect(pair).toMatch(/^snh-remote-[A-Za-z0-9_-]+=v1\./u)
     expect(store.record).toMatchObject({ kind: 'grant', payload: { version: 1 } })
     const saved = structuredClone(store.record)
     const restarted = await RemoteBrowserAuth.create(store, 30)

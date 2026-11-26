@@ -1,25 +1,25 @@
 /**
  * Service Definition for the user-questions capability seam (`ctx.userQuestions`): a UI-backed service for
  * pausing an agent tool call until the human answers a question. The model-
- * facing tool lives in `@deepseek-ai/dsh-tool-ask-user`; UI packages compose
+ * facing tool lives in `@supernova-ai/snh-tool-ask-user`; UI packages compose
  * answerers on the Agent-scoped Cordis waterfall.
  *
- * @module @deepseek-ai/dsh-user-questions
+ * @module @supernova-ai/snh-user-questions
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-agent'
-import { createUserMessage, HarnessError, type MessageId, type ToolCallId, type UserMessage } from '@deepseek-ai/dsh-llm'
-import type { Session } from '@deepseek-ai/dsh-session'
-import { scopeTarget } from '@deepseek-ai/dsh-scope'
-import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { ProjectionHandle } from '@deepseek-ai/dsh-session-projection'
-import z from '@deepseek-ai/schemastery'
+import { Context, Service } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-agent'
+import { createUserMessage, HarnessError, type MessageId, type ToolCallId, type UserMessage } from '@supernova-ai/snh-llm'
+import type { Session } from '@supernova-ai/snh-session'
+import { scopeTarget } from '@supernova-ai/snh-scope'
+import { Remote, TypertRemoteService } from '@supernova-ai/snh-typert-protocol'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type { ProjectionHandle } from '@supernova-ai/snh-session-projection'
+import z from '@supernova-ai/schemastery'
 import { userQuestionProjectionDefinition, type UserQuestionProjectionState } from './projection.ts'
 import { TimedQuestionWait } from './timed-wait.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     userQuestions: UserQuestionService
   }

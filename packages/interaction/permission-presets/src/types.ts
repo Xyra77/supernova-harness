@@ -6,10 +6,10 @@
  * browser half-entry's re-export) for client aggregates — with zero content
  * duplication.
  *
- * @module @deepseek-ai/dsh-permission-presets/types
+ * @module @supernova-ai/snh-permission-presets/types
  */
 
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 
 /** Presentation for an available preset or the derived `custom` current value. */
 export interface PresetOption {
@@ -52,7 +52,7 @@ export interface PermissionPresetSetRequest {
   readonly preset: string
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Events {
     /**
      * The selectable process catalog changed. Payload-free by design:
@@ -63,7 +63,7 @@ declare module '@deepseek-ai/cordis' {
   }
 }
 
-declare module '@deepseek-ai/dsh-session-projection/types' {
+declare module '@supernova-ai/snh-session-projection/types' {
   interface SessionProjectionMap {
     /**
      * The session's current permission, folded from the three whole-value

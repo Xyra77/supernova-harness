@@ -18,7 +18,7 @@ afterEach(() => {
 })
 
 it('mounts, requests, and cancels pairing from the source-launched classic script', async ({ task }) => {
-  // The dsh source launcher applies tsx name preservation that Vitest's transform does not.
+  // The snh source launcher applies tsx name preservation that Vitest's transform does not.
   const entry = pathToFileURL(resolve(import.meta.dirname, '../src/anonymous/index.ts')).href
   const generated = spawnSync(process.execPath, ['--import', 'tsx/esm', '--input-type=module', '--eval',
     `import { renderPairingScript } from ${JSON.stringify(entry)}; process.stdout.write(renderPairingScript(${JSON.stringify(recovery)}))`,
@@ -41,10 +41,10 @@ it('mounts, requests, and cancels pairing from the source-launched classic scrip
   vi.stubGlobal('fetch', request)
   const html = new DOMParser().parseFromString(renderAuthenticationPage({ tokenLoginEnabled: true, pairingEnabled: true }), 'text/html')
   document.documentElement.innerHTML = html.documentElement.innerHTML
-  document.head.insertAdjacentHTML('afterbegin', '<base href="https://host.example/tools/dsh/">')
+  document.head.insertAdjacentHTML('afterbegin', '<base href="https://host.example/tools/snh/">')
   window.eval(generated.stdout)
-  const element = document.querySelector('dsh-device-pairing')!
-  expect(element.querySelector('style')?.textContent).toContain('.dsh-device-pairing-code')
+  const element = document.querySelector('snh-device-pairing')!
+  expect(element.querySelector('style')?.textContent).toContain('.snh-device-pairing-code')
   expect(document.querySelector('#token-form')).not.toBeNull()
   expect(document.querySelector('script[src]')?.getAttribute('src')).toBe('./pairing/client.js')
   expect('__ModuleLoader__' in window).toBe(false)

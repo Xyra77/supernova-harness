@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-file-upload",
+  "name": "@supernova-ai/snh-client-file-upload",
   "description": "Agent-scoped browser file upload, streaming intake, and staged receipt service",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -38,10 +38,10 @@
     "./package.json": "./package.json",
     "./locale/*.json": "./locale/*.json"
   },
-  "dsh": {
+  "snh": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-api-remotes"
+        "@supernova-ai/snh-api-remotes"
       ],
       "platform": "web",
       "immediately": true
@@ -69,20 +69,20 @@
   ],
   "dependencies": {
     "zod": "4.6.6",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*",
-    "@deepseek-ai/dsh-brand": "workspace:*"
+    "@supernova-ai/snh-typert-protocol": "workspace:*",
+    "@supernova-ai/snh-brand": "workspace:*"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-agent": "workspace:*",
-    "@deepseek-ai/dsh-client-connection": "workspace:*",
-    "@deepseek-ai/dsh-commands": "workspace:*",
-    "@deepseek-ai/dsh-util-crypto": "workspace:*",
-    "@deepseek-ai/dsh-api-remotes": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-attachment": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-client-connection": "workspace:*",
+    "@supernova-ai/snh-commands": "workspace:*",
+    "@supernova-ai/snh-util-crypto": "workspace:*",
+    "@supernova-ai/snh-api-remotes": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-attachment": "workspace:*"
   }
 }

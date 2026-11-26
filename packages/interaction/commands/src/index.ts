@@ -1,20 +1,20 @@
 /**
  * Plugin-owned human-command registry shared by interactive UI adapters.
- * @module @deepseek-ai/dsh-commands
+ * @module @supernova-ai/snh-commands
  */
 
-import { Context } from '@deepseek-ai/cordis'
-import { randomUUID } from '@deepseek-ai/dsh-util-crypto'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { AttachmentError, admitEncodedImages } from '@deepseek-ai/dsh-attachment'
-import type { EncodedImageAttachment, FileAttachmentRef, ImageAttachmentRef } from '@deepseek-ai/dsh-attachment/types'
-import type { FileBlock, ImageBlock } from '@deepseek-ai/dsh-llm'
-import { NamedEntries, ScopedLayers } from '@deepseek-ai/dsh-scope'
-import type { ScopeKey, ScopeLayer } from '@deepseek-ai/dsh-scope'
-import { SessionSeq } from '@deepseek-ai/dsh-session'
-import type { Session, SessionEvent, SessionEventMap } from '@deepseek-ai/dsh-session'
-import { TypertRemoteService, Remote } from '@deepseek-ai/dsh-typert-protocol'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { Context } from '@supernova-ai/cordis'
+import { randomUUID } from '@supernova-ai/snh-util-crypto'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { AttachmentError, admitEncodedImages } from '@supernova-ai/snh-attachment'
+import type { EncodedImageAttachment, FileAttachmentRef, ImageAttachmentRef } from '@supernova-ai/snh-attachment/types'
+import type { FileBlock, ImageBlock } from '@supernova-ai/snh-llm'
+import { NamedEntries, ScopedLayers } from '@supernova-ai/snh-scope'
+import type { ScopeKey, ScopeLayer } from '@supernova-ai/snh-scope'
+import { SessionSeq } from '@supernova-ai/snh-session'
+import type { Session, SessionEvent, SessionEventMap } from '@supernova-ai/snh-session'
+import { TypertRemoteService, Remote } from '@supernova-ai/snh-typert-protocol'
+import { brandString } from '@supernova-ai/snh-brand'
 import type { CommandDefinitionId, CommandId } from './brand.ts'
 import type {
   CommandDescriptor,
@@ -110,7 +110,7 @@ class CommandLayer implements ScopeLayer {
   }
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     commands: CommandRuntime
   }

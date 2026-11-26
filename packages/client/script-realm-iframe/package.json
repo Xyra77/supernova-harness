@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-script-realm-iframe",
+  "name": "@supernova-ai/snh-client-script-realm-iframe",
   "description": "Optional iframe ScriptRealm provider",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -28,11 +28,11 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-client-script-realm": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-client-script-realm": "workspace:*"
   },
   "files": [
     "locale/*.json",
@@ -43,10 +43,10 @@
     "lib/**/*.js.map",
     "src"
   ],
-  "dsh": {
+  "snh": {
     "client": {
       "platform": "web",
-      "external": ["@deepseek-ai/dsh-client-script-realm/client"]
+      "external": ["@supernova-ai/snh-client-script-realm/client"]
     }
   },
   "scripts": {

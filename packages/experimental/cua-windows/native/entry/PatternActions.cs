@@ -2,9 +2,9 @@
 using System.Text.Json;
 using Json.Schema;
 using System.Windows.Automation;
-using DeepSeek.Cua.Protocol;
+using SuperNova.Cua.Protocol;
 
-namespace DeepSeek.Cua.Windows;
+namespace SuperNova.Cua.Windows;
 
 // Argument builders are used only while assembling the registered actions.
 internal sealed record Argument<TValue>(Func<JsonElement?, TValue> Parse, JsonSchemaBuilder Schema);

@@ -4,11 +4,11 @@ import { basename, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { chromium, type Browser, type Locator, type Page } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { type ToolCallId, createAssistantMessage, createToolResultMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SESSION_FORMAT_VERSION, Session, type SessionId } from '@deepseek-ai/dsh-session'
-import { sessionFileAddress } from '@deepseek-ai/dsh-util-workspace-path'
-import type {} from '@deepseek-ai/dsh-session-title'
+import { brandString } from '@supernova-ai/snh-brand'
+import { type ToolCallId, createAssistantMessage, createToolResultMessage, createUserMessage } from '@supernova-ai/snh-llm'
+import { SESSION_FORMAT_VERSION, Session, type SessionId } from '@supernova-ai/snh-session'
+import { sessionFileAddress } from '@supernova-ai/snh-util-workspace-path'
+import type {} from '@supernova-ai/snh-session-title'
 import {
   assertFixtureInventory, captureStableAria, compareOrRefreshGolden,
   launchWebScaffold, readPersistedEvents, seedSession, watchConsole, webSnapshotMode, type WebScaffold,
@@ -283,7 +283,7 @@ describe('web e2e: Markdown file links', () => {
     const source = page.getByRole('button', { name: 'Parent file:24–30', exact: true })
     await source.click()
     const column = page.locator('[data-rightbar-col]')
-    const stored = () => page.evaluate(key => localStorage.getItem(key), `dsh.sidebar-right.v1.${id}`)
+    const stored = () => page.evaluate(key => localStorage.getItem(key), `snh.sidebar-right.v1.${id}`)
     const address = sessionFileAddress(id, `${scaffold.workspaceCwd}/${path}`)
     await expect.poll(() => column.locator('[data-textpreview-target="24"]').textContent()).toBe('parent line 24\n')
     await expect.poll(() => column.locator('[data-textpreview-path]').textContent()).toBe(join(scaffold.workspaceCwd, 'parent.txt'))
@@ -377,7 +377,7 @@ describe('web e2e: Markdown file links', () => {
     await page.getByRole('button', { name: 'Relative file', exact: true }).click()
     await expect.poll(openedPath).toBe(join(scaffold.workspaceCwd, 'pinned.txt'))
     await expect.poll(firstLine).toBe('original checkout\n')
-    const stored = () => page.evaluate(key => localStorage.getItem(key), `dsh.sidebar-right.v1.${id}`)
+    const stored = () => page.evaluate(key => localStorage.getItem(key), `snh.sidebar-right.v1.${id}`)
     await expect.poll(stored).toContain(sessionFileAddress(id, join(scaffold.workspaceCwd, 'pinned.txt')))
 
     const agent = scaffold.ctx.agents.list().find(candidate => candidate.session.id === id)

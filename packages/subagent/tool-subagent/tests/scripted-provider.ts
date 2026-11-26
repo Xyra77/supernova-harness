@@ -1,8 +1,8 @@
 /** Package-local scripted child boundary for deterministic tool-subagent tests. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+import type { Context } from '@supernova-ai/cordis'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import type { SessionId } from '@supernova-ai/snh-session'
 import type {
   SubagentCapabilities,
   SubagentProvider,
@@ -10,8 +10,8 @@ import type {
   SubagentRun,
   SubagentStartRequest,
   SubagentStopReason,
-} from '@deepseek-ai/dsh-subagent'
-import { brandString } from '@deepseek-ai/dsh-brand'
+} from '@supernova-ai/snh-subagent'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const DEFAULT_CAPABILITIES: SubagentCapabilities = {
   agentOptions: true,

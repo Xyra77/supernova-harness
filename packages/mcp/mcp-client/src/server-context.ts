@@ -2,13 +2,13 @@
  * Publish connection-owned MCP resources, literal server instructions, and an
  * on-demand server's tool catalog.
  *
- * @module @deepseek-ai/dsh-mcp-client
+ * @module @supernova-ai/snh-mcp-client
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { McpResourceProvider } from '@deepseek-ai/dsh-mcp-resources'
-import type { ScopeKey } from '@deepseek-ai/dsh-scope'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import type { Context } from '@supernova-ai/cordis'
+import type { McpResourceProvider } from '@supernova-ai/snh-mcp-resources'
+import type { ScopeKey } from '@supernova-ai/snh-scope'
+import type {} from '@supernova-ai/snh-system-prompt'
 
 /** Connection-owned values used by the resource and prompt consumers. */
 export interface ServerContext {

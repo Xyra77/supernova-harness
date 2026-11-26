@@ -35,14 +35,14 @@ export const WEB_SNAPSHOT_SERIAL_PROJECT = 'web-serial'
 /** `--project` patterns that select every project of the parallel pool. */
 export const WEB_SNAPSHOT_POOL_PROJECTS: readonly string[] = ['web', 'web-slice:*']
 
-/** One weighted shard of the parallel pool, from `DSH_WEB_SNAPSHOT_SHARD=<index>/<count>`. */
+/** One weighted shard of the parallel pool, from `SNH_WEB_SNAPSHOT_SHARD=<index>/<count>`. */
 export interface WebSnapshotShard {
   readonly index: number
   readonly count: number
 }
 
 /**
- * Parse `DSH_WEB_SNAPSHOT_SHARD`.
+ * Parse `SNH_WEB_SNAPSHOT_SHARD`.
  * @param raw - The variable's value; unset or empty selects the whole pool.
  * @returns The shard, or `undefined` for the whole pool.
  * @throws Error when the value is not `<index>/<count>` with 1 <= index <= count.
@@ -51,7 +51,7 @@ export function parseWebSnapshotShard(raw: string | undefined): WebSnapshotShard
   if (raw === undefined || raw === '') return undefined
   const match = /^([1-9]\d*)\/([1-9]\d*)$/.exec(raw)
   if (match === null || Number(match[1]) > Number(match[2])) {
-    throw new Error(`DSH_WEB_SNAPSHOT_SHARD must be <index>/<count> with 1 <= index <= count, got ${JSON.stringify(raw)}.`)
+    throw new Error(`SNH_WEB_SNAPSHOT_SHARD must be <index>/<count> with 1 <= index <= count, got ${JSON.stringify(raw)}.`)
   }
   return { index: Number(match[1]), count: Number(match[2]) }
 }
@@ -67,7 +67,7 @@ export function ownsWebSnapshotSerialFiles(shard: WebSnapshotShard | undefined):
 }
 
 /** Environment variable that tells a slice project's workers which slice they run, as `<file>#<k>`. */
-export const WEB_SNAPSHOT_SLICE_ENV = 'DSH_WEB_SNAPSHOT_SLICE'
+export const WEB_SNAPSHOT_SLICE_ENV = 'SNH_WEB_SNAPSHOT_SLICE'
 
 /**
  * Slice count of each sliced file, keyed by its root-relative path. These files bound their shard's

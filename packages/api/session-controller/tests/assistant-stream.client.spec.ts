@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { type LlmAttemptId, createAssistantMessage } from '@deepseek-ai/dsh-llm'
-import { SessionSeq, type SessionEvent } from '@deepseek-ai/dsh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import { type LlmAttemptId, createAssistantMessage } from '@supernova-ai/snh-llm'
+import { SessionSeq, type SessionEvent } from '@supernova-ai/snh-session'
 import type {
   SessionAssistantStreamBaseline,
   SessionAssistantStreamFrame,

@@ -1,9 +1,9 @@
 /** Native-open feedback that survives the initiating panel: mobile success and all failures. */
 import type { ReactNode } from 'react'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { IconWarningOutlineRegular, isMobileDevice, Toast } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { HostObservable, InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import { IconWarningOutlineRegular, isMobileDevice, Toast } from '@supernova-ai/snh-client-ui-primitives'
+import type { HostObservable, InjectFace, PropsLocale, PropsRuntime } from '@supernova-ai/snh-client-ui-slots'
+import type {} from '@supernova-ai/snh-client-ui-layout/client'
 import { NS } from './locales.ts'
 import type { OpenInAppOutcome } from './outcome.ts'
 

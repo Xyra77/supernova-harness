@@ -1,21 +1,21 @@
 import { mountWorkingDirectoryFixture } from '../../../subagent/subagent/tests/working-directory-fixture.ts'
 /** A liveness failure states whether the runtime or only the agent loop went away, and what the server observed. */
-import { Context, FiberState } from '@deepseek-ai/cordis'
+import { Context, FiberState } from '@supernova-ai/cordis'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SubagentRuntime, { NO_START_CAPABILITIES } from '@deepseek-ai/dsh-subagent'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { brandString } from '@supernova-ai/snh-brand'
+import LlmRuntime from '@supernova-ai/snh-llm'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SubagentRuntime, { NO_START_CAPABILITIES } from '@supernova-ai/snh-subagent'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import ToolRuntime from '@supernova-ai/snh-tools'
 import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import { HarnessSdkJsonRpcServer, type RuntimeProcessEvent } from '../src/server.ts'
 
@@ -26,7 +26,7 @@ const TIME = String.raw`\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z`
  * The server observes the test's own root context as its runtime.
  */
 async function setup(lastProcessEvent: () => RuntimeProcessEvent | undefined = () => undefined) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-sdk-disposal-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-sdk-disposal-'))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
   const ctx = new Context()
   await ctx.plugin(LlmRuntime)

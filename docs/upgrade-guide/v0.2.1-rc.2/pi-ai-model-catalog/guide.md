@@ -26,7 +26,7 @@ These catalog limits decrease. Values are tokens; `—` means that limit did not
 |---|---|
 | `anthropic/claude-sonnet-4-5` | 200000 / — |
 | `anthropic/claude-sonnet-4-5-20250929` | 200000 / — |
-| `openrouter/deepseek/deepseek-v4-flash` | 1048575 / 943717 |
+| `openrouter/supernova/deepseek-v4-flash` | 1048575 / 943717 |
 | `openrouter/inclusionai/ling-3.0-flash-vl` | 131072 / — |
 | `openrouter/meta-llama/llama-4-scout` | 131072 / — |
 | `openrouter/minimax/minimax-m2` | — / 131072 |
@@ -42,7 +42,7 @@ These catalog limits decrease. Values are tokens; `—` means that limit did not
 | `openrouter/~z-ai/glm-latest` | — / 131072 |
 | `radius/claude-sonnet-4-5` | 200000 / — |
 | `vercel-ai-gateway/alibaba/qwen3-coder` | — / 32768 |
-| `vercel-ai-gateway/deepseek/deepseek-v4.1-flash-fast` | — / 32768 |
+| `vercel-ai-gateway/supernova/deepseek-v4.1-flash-fast` | — / 32768 |
 
 The `vercel-ai-gateway` model `alibaba/qwen-3-235b` is now non-reasoning. Protocol and effort changes have a [separate guide](../pi-ai-protocol-replay/guide.md).
 

@@ -5,15 +5,15 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { DeepSeekHarness } from '@deepseek-ai/dsh-sdk-client'
+import { SuperNovaHarness } from '@supernova-ai/snh-sdk-client'
 import { describe, expect, it, onTestFinished } from 'vitest'
 
-const dshBin = fileURLToPath(new URL('../../../lib/bin.js', import.meta.url))
+const snhBin = fileURLToPath(new URL('../../../lib/bin.js', import.meta.url))
 const fixture = fileURLToPath(new URL('./fixtures/checkpoint-failure.mjs', import.meta.url))
 
-describe.skipIf(!existsSync(dshBin))('sdk-minimal durability checkpoints', () => {
+describe.skipIf(!existsSync(snhBin))('sdk-minimal durability checkpoints', () => {
   it.each([false, true])('checkpoint storage failure with policy disabled=%s', async (disabled) => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-sdk-checkpoint-'))
+    const root = await mkdtemp(join(tmpdir(), 'snh-sdk-checkpoint-'))
     onTestFinished(async () => { await rm(root, { recursive: true, force: true }) })
     let modelRequests = 0
     const server = createServer((request, response) => {
@@ -47,12 +47,12 @@ describe.skipIf(!existsSync(dshBin))('sdk-minimal durability checkpoints', () =>
     if (address === null || typeof address === 'string') throw new Error('model server has no TCP address')
     const patch = join(root, 'checkpoint.patch.yml')
     await writeFile(patch, JSON.stringify([
-      { id: 'session-log-deepseek', config: { enabled: false } },
+      { id: 'session-log-supernova', config: { enabled: false } },
       { insert: [{ id: 'checkpoint-failure', name: fixture }] },
       ...disabled ? [{ id: 'session-checkpoint-policy', disabled: true }] : [],
     ]))
-    const harness = new DeepSeekHarness({
-      dshBin, profile: 'sdk-minimal', dshHome: join(root, 'home'),
+    const harness = new SuperNovaHarness({
+      snhBin, profile: 'sdk-minimal', snhHome: join(root, 'home'),
       cwd: root, processCwd: root, patches: [patch],
       env: { ...process.env, DEEPSEEK_API_KEY: 'keyless-checkpoint-test', DEEPSEEK_BASE_URL: `http://127.0.0.1:${address.port}` },
     })

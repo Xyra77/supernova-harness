@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 import { builtinCommandName, builtinCommandTokens, resolveCommand } from '../src/builtin.ts'
 import type { CommandDefinitionId, CommandDescriptor } from '../src/types.ts'
 
 const definitions = [
-  ['goal', '@deepseek-ai/dsh-command-goal'],
-  ['plan', '@deepseek-ai/dsh-plan-mode'],
-  ['feedback', '@deepseek-ai/dsh-command-feedback'],
-  ['compact', '@deepseek-ai/dsh-command-compact'],
-  ['permission', '@deepseek-ai/dsh-permission-presets'],
-  ['export', '@deepseek-ai/dsh-session-log-export'],
+  ['goal', '@supernova-ai/snh-command-goal'],
+  ['plan', '@supernova-ai/snh-plan-mode'],
+  ['feedback', '@supernova-ai/snh-command-feedback'],
+  ['compact', '@supernova-ai/snh-command-compact'],
+  ['permission', '@supernova-ai/snh-permission-presets'],
+  ['export', '@supernova-ai/snh-session-log-export'],
 ] as const
 
 describe('builtin command resolution', () => {
@@ -25,7 +25,7 @@ describe('builtin command resolution', () => {
 
   it('retains exact-name priority without assigning builtin identity to the replacement', () => {
     const builtin: CommandDescriptor = {
-      name: 'planning', definitionId: brandString<CommandDefinitionId>('@deepseek-ai/dsh-plan-mode'), description: 'Plan',
+      name: 'planning', definitionId: brandString<CommandDefinitionId>('@supernova-ai/snh-plan-mode'), description: 'Plan',
     }
     const replacement: CommandDescriptor = {
       name: 'plan', definitionId: brandString<CommandDefinitionId>('example/plan'), description: 'Other command',

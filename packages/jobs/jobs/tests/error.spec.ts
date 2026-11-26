@@ -1,5 +1,5 @@
-import { HarnessError } from '@deepseek-ai/dsh-error'
-import { JOB_ERROR_CODES, JobError } from '@deepseek-ai/dsh-jobs'
+import { HarnessError } from '@supernova-ai/snh-error'
+import { JOB_ERROR_CODES, JobError } from '@supernova-ai/snh-jobs'
 import { describe, expect, it } from 'vitest'
 
 describe('JobError', () => {

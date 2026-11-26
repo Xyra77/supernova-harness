@@ -1,8 +1,8 @@
 /** Controlled conversion completions pin shared cancellation, freshness, and bounded binary reuse. */
-import type { OfficeKitGeneration } from '@deepseek-ai/dsh-office-kit/types'
-import { RemoteError } from '@deepseek-ai/dsh-client-test-runtime'
+import type { OfficeKitGeneration } from '@supernova-ai/snh-office-kit/types'
+import { RemoteError } from '@supernova-ai/snh-client-test-runtime'
 import { expect, it, vi } from 'vitest'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import type { SessionFile } from '../src/client/rpc.ts'
 import type { ReadOfficeDocument } from '../src/client/office/cache.ts'
 import { OfficePreviewCache } from '../src/client/office/cache.ts'

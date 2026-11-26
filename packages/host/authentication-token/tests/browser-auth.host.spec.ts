@@ -2,8 +2,8 @@
 
 import { createHmac } from 'node:crypto'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { CredentialProvider } from '@deepseek-ai/dsh-credentials'
-import type { PeerId } from '@deepseek-ai/dsh-typert-protocol'
+import type { CredentialProvider } from '@supernova-ai/snh-credentials'
+import type { PeerId } from '@supernova-ai/snh-typert-protocol'
 import { BrowserAuth } from '../src/browser-auth.ts'
 import type { ConnectionIndexRequest, ConnectionIndexResponse } from '../src/types.ts'
 import { RecordCredentials } from './browser-credentials.ts'
@@ -125,7 +125,7 @@ describe('API credentials', () => {
     expect(res.state).toEqual({
       status: 401,
       headers: { 'cache-control': 'no-store', 'content-type': 'text/plain; charset=utf-8' },
-      body: 'dsh web authentication required; reopen the URL printed by dsh web.\n',
+      body: 'snh web authentication required; reopen the URL printed by snh web.\n',
     })
     expect(publish).not.toHaveBeenCalled()
   })
@@ -261,9 +261,9 @@ describe('BrowserAuth', () => {
 
   it('preserves the caller authority and mount while adding only this process token', async () => {
     const auth = await createAuth(new RecordCredentials())
-    const mounted = new URL(auth.authenticatedUrl('https://gateway.example/tools/dsh/'))
+    const mounted = new URL(auth.authenticatedUrl('https://gateway.example/tools/snh/'))
     expect(mounted.origin).toBe('https://gateway.example')
-    expect(mounted.pathname).toBe('/tools/dsh/')
+    expect(mounted.pathname).toBe('/tools/snh/')
     expect([...mounted.searchParams.keys()]).toEqual(['token'])
 
     const loopback = new URL(auth.authenticatedUrl('http://127.0.0.1:3080/'))
@@ -305,7 +305,7 @@ describe('BrowserAuth', () => {
       })
       expect(denied.state.body).toBe(candidate.method === 'HEAD'
         ? undefined
-        : 'dsh web authentication required; reopen the URL printed by dsh web.\n')
+        : 'snh web authentication required; reopen the URL printed by snh web.\n')
     }
   })
 
@@ -362,7 +362,7 @@ describe('BrowserAuth', () => {
 
     // Request order is unrelated to issue order; the three earliest sign-ins go.
     const crowded = exchange(auth, '127.0.0.1:3080', false, [
-      'theme=dark', ...[...others].reverse(), previous, 'dsh-auth-fixture=signed', 'flag',
+      'theme=dark', ...[...others].reverse(), previous, 'snh-auth-fixture=signed', 'flag',
     ].join('; '))
     expect(setCookies(crowded.state)).toEqual([
       expect.stringMatching(new RegExp(`^${cookieNameOf(previous)}=v1\\..*; Max-Age=2592000; Path=/; `, 'u')),

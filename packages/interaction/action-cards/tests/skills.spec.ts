@@ -1,8 +1,8 @@
 /** The user switch decides whether a kind's skill is listed and loadable. */
 import { expect, it } from 'vitest'
-import { createVolatile, updateVolatile } from '@deepseek-ai/cosmokit'
-import type { Context } from '@deepseek-ai/cordis'
-import Skills, { BUNDLED_SKILL_RANK } from '@deepseek-ai/dsh-skill'
+import { createVolatile, updateVolatile } from '@supernova-ai/cosmokit'
+import type { Context } from '@supernova-ai/cordis'
+import Skills, { BUNDLED_SKILL_RANK } from '@supernova-ai/snh-skill'
 import type { Config } from '../src/index.ts'
 import { fixture } from './fixture.ts'
 

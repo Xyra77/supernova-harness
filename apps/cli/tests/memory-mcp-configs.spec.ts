@@ -8,13 +8,13 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
-import type { Context } from '@deepseek-ai/cordis'
-import type { PatchOptions } from '@deepseek-ai/cordis-plugin-include'
-import { boot, loadOverlayPatches } from '@deepseek-ai/dsh-app-boot'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import * as McpClient from '@deepseek-ai/dsh-mcp-client/src/index.ts'
+import type { Context } from '@supernova-ai/cordis'
+import type { PatchOptions } from '@supernova-ai/cordis-plugin-include'
+import { boot, loadOverlayPatches } from '@supernova-ai/snh-app-boot'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import * as McpClient from '@supernova-ai/snh-mcp-client/src/index.ts'
 
 interface ExampleContract {
   file: string
@@ -88,7 +88,7 @@ describe('third-party memory MCP example overlays', () => {
     const row = insertedRow(loadOverlayPatches('memory-mcp-config-test', file))
 
     expect(row.id).toBe(contract.id)
-    expect(row.name).toBe('@deepseek-ai/dsh-mcp-client')
+    expect(row.name).toBe('@supernova-ai/snh-mcp-client')
     expect(row.config?.serverName).toBe(contract.serverName)
     expect(row.config?.transport).toBe(contract.transport)
     expect(source.split('\n', 1)[0]).toContain(contract.pin)

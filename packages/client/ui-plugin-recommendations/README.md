@@ -3,7 +3,7 @@ description: "Show official plugin recommendation cards after completed answers.
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-plugin-recommendations
+# @supernova-ai/snh-client-ui-plugin-recommendations
 
 English | [中文](README.zh.md)
 
@@ -25,7 +25,7 @@ Users see one plugin recommendation below the completed answer, with the plugin'
 <a id="use-this-package"></a>
 ## Use this package
 
-The Web composition ([`dsh-web-app`](../../bundle/web-app/README.md)) mounts this package. This browser contribution has no configuration fields; it fills the shared [action card frame](../ui-action-cards/README.md) for `enable_official_plugin` cards.
+The Web composition ([`snh-web-app`](../../bundle/web-app/README.md)) mounts this package. This browser contribution has no configuration fields; it fills the shared [action card frame](../ui-action-cards/README.md) for `enable_official_plugin` cards.
 
 -----
 

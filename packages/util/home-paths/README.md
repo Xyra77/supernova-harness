@@ -1,15 +1,15 @@
 ---
-description: "Shared resolution of the DeepSeek Harness home, its config, data, state, cache, and backup category paths, and the shared agent configuration root, plus tilde expansion and stable watch paths."
+description: "Shared resolution of the SuperNova Harness home, its config, data, state, cache, and backup category paths, and the shared agent configuration root, plus tilde expansion and stable watch paths."
 kind: "package-library"
 ---
 
-# @deepseek-ai/dsh-home-paths
+# @supernova-ai/snh-home-paths
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`@deepseek-ai/dsh-home-paths` lets package authors resolve the DeepSeek Harness data root and the shared agent configuration root their consumers read. An explicit path wins over the environment variable, which wins over the default under the operating-system home; blank environment values are ignored. Its public helpers can render a root without revealing an absolute machine path, expand only bare or current-user tilde forms, and canonicalize watch targets whose final components do not yet exist. Use it as a direct library dependency, not through `cordis.yml`.
+`@supernova-ai/snh-home-paths` lets package authors resolve the SuperNova Harness data root and the shared agent configuration root their consumers read. An explicit path wins over the environment variable, which wins over the default under the operating-system home; blank environment values are ignored. Its public helpers can render a root without revealing an absolute machine path, expand only bare or current-user tilde forms, and canonicalize watch targets whose final components do not yet exist. Use it as a direct library dependency, not through `cordis.yml`.
 
 ## Table of Contents
 
@@ -29,45 +29,45 @@ Use these helpers wherever a package must agree with the rest of the harness abo
 ### Resolving the home
 
 ```ts
-import { resolveDshHome, dshHomePath, dshCachePath } from '@deepseek-ai/dsh-home-paths'
+import { resolveSnhHome, snhHomePath, snhCachePath } from '@supernova-ai/snh-home-paths'
 
-const home = resolveDshHome()                // configured path, else $DSH_HOME, else ~/.dsh
-const settings = dshHomePath('settings')     // join one child onto the resolved home
-const cache = dshCachePath('models')         // $DSH_HOME/cache/models, default ~/.dsh/cache/models
+const home = resolveSnhHome()                // configured path, else $SNH_HOME, else ~/.snh
+const settings = snhHomePath('settings')     // join one child onto the resolved home
+const cache = snhCachePath('models')         // $SNH_HOME/cache/models, default ~/.snh/cache/models
 ```
 
-An explicit configured path has the highest precedence, then `$DSH_HOME`, then the default `~/.dsh`. An empty or whitespace-only `$DSH_HOME` is treated as unset, so a blank override never resolves the home to the current working directory.
+An explicit configured path has the highest precedence, then `$SNH_HOME`, then the default `~/.snh`. An empty or whitespace-only `$SNH_HOME` is treated as unset, so a blank override never resolves the home to the current working directory.
 
-`dshCachePath(...segments)` derives paths from the resolved home's `cache` directory. With no segments it returns the cache directory itself. Pass an initial options object, `dshCachePath({ dshHome: home }, ...segments)`, to use an explicit configured home with the same precedence and tilde expansion. It returns an absolute path without creating directories.
+`snhCachePath(...segments)` derives paths from the resolved home's `cache` directory. With no segments it returns the cache directory itself. Pass an initial options object, `snhCachePath({ snhHome: home }, ...segments)`, to use an explicit configured home with the same precedence and tilde expansion. It returns an absolute path without creating directories.
 
 <a id="choosing-a-category"></a>
 ### Choosing a category for a new path
 
 ```ts
-import { dshPath } from '@deepseek-ai/dsh-home-paths'
+import { snhPath } from '@supernova-ai/snh-home-paths'
 
-const index = dshPath('state', 'my-plugin', 'index.json')             // $DSH_HOME/state/my-plugin/index.json
-const models = dshPath({ category: 'cache', dshHome: '~/other-dsh' }, 'my-plugin') // ~/other-dsh/cache/my-plugin
+const index = snhPath('state', 'my-plugin', 'index.json')             // $SNH_HOME/state/my-plugin/index.json
+const models = snhPath({ category: 'cache', snhHome: '~/other-snh' }, 'my-plugin') // ~/other-snh/cache/my-plugin
 ```
 
-A new file under the home uses `dshPath(category, ...segments)` and passes its owner's directory name, normally the package name without the `@deepseek-ai/dsh-` prefix, as the first segment. Use `config` for files a person writes to configure the harness, `data` for records whose loss loses user work, sign-ins, or installed software, `state` for logs, indexes, ids, and other records the harness can lose without losing user work, `cache` for content it can rebuild or download again, and `backup` for backup archives, which users can delete at any time without affecting the harness. Loader `!!js` config expressions receive the same function, for example `root: !!js dshPath('data', 'my-plugin')`. `dshPath` returns an absolute path without creating directories.
+A new file under the home uses `snhPath(category, ...segments)` and passes its owner's directory name, normally the package name without the `@supernova-ai/snh-` prefix, as the first segment. Use `config` for files a person writes to configure the harness, `data` for records whose loss loses user work, sign-ins, or installed software, `state` for logs, indexes, ids, and other records the harness can lose without losing user work, `cache` for content it can rebuild or download again, and `backup` for backup archives, which users can delete at any time without affecting the harness. Loader `!!js` config expressions receive the same function, for example `root: !!js snhPath('data', 'my-plugin')`. `snhPath` returns an absolute path without creating directories.
 
-Existing entries keep their current locations: conventional top-level entries such as `sessions/`, `profiles/`, `skills/`, `AGENTS.md`, `.env`, and `.credentials.yaml` stay at the top level, and the [home path categories proposal](../../../.agents/notes/proposed/architecture/2026-11-04-dsh-home-path-categories.md) lists the category of every other existing path.
+Existing entries keep their current locations: conventional top-level entries such as `sessions/`, `profiles/`, `skills/`, `AGENTS.md`, `.env`, and `.credentials.yaml` stay at the top level, and the [home path categories proposal](../../../.agents/notes/proposed/architecture/2026-11-04-snh-home-path-categories.md) lists the category of every other existing path.
 
 ### Resolving the shared agents root
 
 ```ts
-import { resolveAgentsHome, agentsHomeDisplay } from '@deepseek-ai/dsh-home-paths'
+import { resolveAgentsHome, agentsHomeDisplay } from '@supernova-ai/snh-home-paths'
 
-const agents = resolveAgentsHome()   // configured path, else $DSH_AGENTS_HOME, else ~/.agents
-agentsHomeDisplay(agents)            // ~/.agents, or $DSH_AGENTS_HOME for any configured root
+const agents = resolveAgentsHome()   // configured path, else $SNH_AGENTS_HOME, else ~/.agents
+agentsHomeDisplay(agents)            // ~/.agents, or $SNH_AGENTS_HOME for any configured root
 ```
 
-`resolveAgentsHome` applies the same precedence, blank-value handling, and tilde expansion as `resolveDshHome`. The root is deliberately outside `$DSH_HOME` because other agent tools share it; `dsh-agent-instructions` reads its user-global `AGENTS.md`, and `dsh-skill-filesystem` scans its `skills/` directory.
+`resolveAgentsHome` applies the same precedence, blank-value handling, and tilde expansion as `resolveSnhHome`. The root is deliberately outside `$SNH_HOME` because other agent tools share it; `snh-agent-instructions` reads its user-global `AGENTS.md`, and `snh-skill-filesystem` scans its `skills/` directory.
 
 ### Displaying a home
 
-For user-facing paths, render a root symbolically rather than as a machine path: the default harness home displays as `~/.dsh`, any configured harness home as `$DSH_HOME`, the default shared agents root as `~/.agents`, and any configured shared agents root as `$DSH_AGENTS_HOME`. Neither display form leaks an absolute machine path.
+For user-facing paths, render a root symbolically rather than as a machine path: the default harness home displays as `~/.snh`, any configured harness home as `$SNH_HOME`, the default shared agents root as `~/.agents`, and any configured shared agents root as `$SNH_AGENTS_HOME`. Neither display form leaks an absolute machine path.
 
 ### Expanding user paths
 
@@ -95,7 +95,7 @@ The package is built on one principle: harness user data lives under one root, a
 
 ### Resolution rules
 
-`resolveDshHome` reads the explicit override, then `$DSH_HOME`, then falls back to the operating-system home joined with `.dsh`. `resolveAgentsHome` reads the same three levels for `$DSH_AGENTS_HOME` and `~/.agents`. The chosen value is tilde-expanded and normalized to an absolute path; `dshHomePath` and `dshPath` join child segments with Node's platform path rules. `dshHomeDisplay` and `agentsHomeDisplay` compare the resolved path against the default root and return the symbolic label, so a configured root never leaks its absolute path.
+`resolveSnhHome` reads the explicit override, then `$SNH_HOME`, then falls back to the operating-system home joined with `.snh`. `resolveAgentsHome` reads the same three levels for `$SNH_AGENTS_HOME` and `~/.agents`. The chosen value is tilde-expanded and normalized to an absolute path; `snhHomePath` and `snhPath` join child segments with Node's platform path rules. `snhHomeDisplay` and `agentsHomeDisplay` compare the resolved path against the default root and return the symbolic label, so a configured root never leaks its absolute path.
 
 ### Canonicalization mechanics
 
@@ -111,7 +111,7 @@ The package is built on one principle: harness user data lives under one root, a
 Read these pages when you need the launcher or the consumers that depend on a single home root.
 
 - [Boot package](../../boot/app-boot/README.md) — the launcher that resolves the home before any plugin mounts.
-- [Shell environment](../../shell/shell-env/README.md) — how `DSH_HOME` reaches model shell calls.
+- [Shell environment](../../shell/shell-env/README.md) — how `SNH_HOME` reaches model shell calls.
 - [Anonymous user id](../../identity/anonymous-user-id/README.md) — a stored identity file under the resolved home.
 
 -----

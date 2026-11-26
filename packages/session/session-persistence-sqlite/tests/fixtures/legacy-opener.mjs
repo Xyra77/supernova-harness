@@ -1,7 +1,7 @@
 /** Built-package import holder with stdin barriers for ownership handoff. @module */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { createInterface } from 'node:readline'
-import * as persistence from '@deepseek-ai/dsh-session-persistence-sqlite'
+import * as persistence from '@supernova-ai/snh-session-persistence-sqlite'
 
 const [root, id, access, pause] = process.argv.slice(2)
 const ctx = new Context()

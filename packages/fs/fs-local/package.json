@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-fs-local",
-  "description": "Local-filesystem implementation of the DeepSeek Harness filesystem seam (ctx.fs)",
+  "name": "@supernova-ai/snh-fs-local",
+  "description": "Local-filesystem implementation of the SuperNova Harness filesystem seam (ctx.fs)",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -32,19 +32,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-fs": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/snh-fs": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~"
   },
   "dependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
+    "@supernova-ai/snh-brand": "workspace:*",
     "chokidar": "5.0.0",
     "koffi": "3.1.1",
-    "@deepseek-ai/schemastery": "workspace:~",
-    "@deepseek-ai/dsh-fs-patch": "workspace:*"
+    "@supernova-ai/schemastery": "workspace:~",
+    "@supernova-ai/snh-fs-patch": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-fs": "workspace:*",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/snh-fs": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

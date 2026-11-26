@@ -1,4 +1,4 @@
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
 // The Session panel's background-jobs section driven by a real `ctx.jobs`
 // entry. No model call is involved.
 import { readFile, writeFile } from 'node:fs/promises'
@@ -7,11 +7,11 @@ import { join } from 'node:path'
 import type { Browser, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed } from 'vitest'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type { JobId } from '@deepseek-ai/dsh-jobs'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import type { SessionId } from '@supernova-ai/snh-session'
+import type { JobId } from '@supernova-ai/snh-jobs'
+import { brandString } from '@supernova-ai/snh-brand'
 import {
   assertFixtureInventory, captureStableAria, compareOrRefreshGolden,
   launchWebScaffold, seedSession, watchConsole, webSnapshotMode, type WebScaffold,

@@ -1,15 +1,15 @@
 /** Remote-owned QR authentication and an independent shortcut to Token login. */
 import { isIPv4 } from 'node:net'
-import { FiberState, Service, type Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type {} from '@deepseek-ai/dsh-client-connection'
-import type {} from '@deepseek-ai/dsh-host-webserver'
-import type {} from '@deepseek-ai/dsh-web-app'
-import type {} from '@deepseek-ai/dsh-credentials'
-import type { PeerScope } from '@deepseek-ai/dsh-client-connection'
-import type { WebEntryUrl } from '@deepseek-ai/dsh-host-webserver'
-import { HarnessError } from '@deepseek-ai/dsh-error'
-import { Remote, RemoteError, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
+import { FiberState, Service, type Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type {} from '@supernova-ai/snh-client-connection'
+import type {} from '@supernova-ai/snh-host-webserver'
+import type {} from '@supernova-ai/snh-web-app'
+import type {} from '@supernova-ai/snh-credentials'
+import type { PeerScope } from '@supernova-ai/snh-client-connection'
+import type { WebEntryUrl } from '@supernova-ai/snh-host-webserver'
+import { HarnessError } from '@supernova-ai/snh-error'
+import { Remote, RemoteError, TypertRemoteService } from '@supernova-ai/snh-typert-protocol'
 import { LoginTickets } from './login-tickets.ts'
 import { handleLogin, isQrLogin } from './host-route.ts'
 import { RemoteBrowserAuth } from './remote-auth.ts'
@@ -22,7 +22,7 @@ import type { PairingDecision, PairingDecisionResult, PairingRequestId, PairingR
 
 export type * from './types.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** QR invitations, private login links, and owner-approved browser pairing. */
     remoteConnection: RemoteConnection
@@ -111,7 +111,7 @@ export default class RemoteConnection extends TypertRemoteService {
       })
       yield ctx.on('webserver/request', async (request, response, next) => {
         /* v8 ignore next -- node:http always supplies the incoming request URL. */
-        const url = new URL(request.url ?? '/', 'http://dsh.invalid')
+        const url = new URL(request.url ?? '/', 'http://snh.invalid')
         if (request.method !== 'POST' || url.pathname !== '/' || !isQrLogin(url) || this.stopped) {
           await next()
           return

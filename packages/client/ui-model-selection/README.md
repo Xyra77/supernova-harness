@@ -3,7 +3,7 @@ description: "Model selection for the Web GUI: the /model popup and the composer
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-model-selection
+# @supernova-ai/snh-client-ui-model-selection
 
 English | [中文](README.zh.md)
 
@@ -27,7 +27,7 @@ The Web GUI lets users switch the model and reasoning effort for an existing ses
 <a id="use-this-package"></a>
 ## Use this package
 
-DeepSeek account and API-key routes appear as separate provider groups, each exposing the same configured model catalog.
+SuperNova account and API-key routes appear as separate provider groups, each exposing the same configured model catalog.
 
 When no model is selected or the saved selection is absent from the catalog, the composer shows “Select model” in regular weight and hides the reasoning effort caption. Clicking it opens the model list directly; Escape and Shift+Tab close it. An empty catalog hides the model menu from display and the accessibility tree and displays “No models available.” in a status region.
 
@@ -41,7 +41,7 @@ The button's model menu shows search only when its full catalog contains more th
 
 Model and reasoning-effort names use weight 400 (regular) in the composer menu, including the selected item. The search field follows the command popup's compact treatment with transparent background and border in both palettes, with no leading icon and a caption-tone placeholder. Its text is 16px on devices with a coarse primary pointer to avoid Safari focus zoom; fine pointers retain 12px. The clear button appears for a nonempty query and restores the full list with focus in the search field.
 
-Both entries group models by provider, with DeepSeek Account first and DeepSeek API second; third-party providers retain their catalog order. Both use the shared, asynchronously observed sticky headings from [ui-primitives](../ui-primitives/README.md#understand-the-implementation): transparent at rest, with the theme's 94%-opaque fill only while pinned, and `md` corners outside macOS Desktop. The composer menu shows model and effort names only. Navigation chevrons share the foreground color of their associated model or effort value. The `/model` popup shows provider names as group headings and model names as rows, without repeating the provider on each row or showing catalog descriptions. Its search placeholder, no-match text, and empty-catalog text use the same localized labels as the composer model menu. The popup applies the selected model's default effort; the composer can then choose any advertised effort. An adapter without reasoning metadata leaves the Effort row absent; there is no arbitrary effort input.
+Both entries group models by provider, with SuperNova Account first and SuperNova API second; third-party providers retain their catalog order. Both use the shared, asynchronously observed sticky headings from [ui-primitives](../ui-primitives/README.md#understand-the-implementation): transparent at rest, with the theme's 94%-opaque fill only while pinned, and `md` corners outside macOS Desktop. The composer menu shows model and effort names only. Navigation chevrons share the foreground color of their associated model or effort value. The `/model` popup shows provider names as group headings and model names as rows, without repeating the provider on each row or showing catalog descriptions. Its search placeholder, no-match text, and empty-catalog text use the same localized labels as the composer model menu. The popup applies the selected model's default effort; the composer can then choose any advertised effort. An adapter without reasoning metadata leaves the Effort row absent; there is no arbitrary effort input.
 
 The composer replaces the model and effort text with the Models icon when the expanded controls cannot share one line, and restores the text when space permits. The full selection remains available in the trigger's accessible name, tooltip, and menu.
 
@@ -59,7 +59,7 @@ Catalog availability does not block sending with a saved selection; request exec
 
 ### Selection failures
 
-When another writer owns the Session, model-selection failures tell the user to quit other running DSH instances and retry.
+When another writer owns the Session, model-selection failures tell the user to quit other running SNH instances and retry.
 
 The session-scoped `conversation.input.model.options` list appends root controls below model and reasoning options. Render each interactive entry as a `button` with role `menuitem`, `menuitemradio`, or `switch`; Arrow keys and Tab reach only those rows. Entries call `openPane({ key, title })` to show content registered in the session-scoped keyed `conversation.input.model.pane` slot; the invoking button's `data-model-menu-pane` must match the key. Root and detail entries receive `locked`, `reportFailure(message)`, and `dismiss()`: the lock includes model or effort saves, failures use the menu owner's toast, and dismissal focuses its trigger synchronously before another overlay opens. Contributing plugins own settings and confirmation logic. Root and detail panes share a 240px width within 12px viewport insets; model and effort lists remain content-sized. The menu exposes a detail pane as a group named by `title`; the pane places its own initial focus, and focus otherwise stays on the menu surface. Escape returns focus to the invoking row; Tab closes a detail pane without activating its switch.
 
@@ -88,7 +88,7 @@ Read these pages when the model surface is not enough. They move from the browse
 
 - [ui-commands](../ui-commands/README.md) — the popupSelect shell the `/model` contribution registers into.
 - [ui-conversation](../ui-conversation/README.md) — declares the composer's `conversation.input.model` seat.
-- [dsh-agent-default-model](../../core/agent-default-model/README.md) — the default-model service for sessions that never choose.
+- [snh-agent-default-model](../../core/agent-default-model/README.md) — the default-model service for sessions that never choose.
 - [Client package map](../README.md) — adjacent browser UI packages.
 
 -----

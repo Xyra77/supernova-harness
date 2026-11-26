@@ -1,6 +1,6 @@
-import { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { SessionSeq, type SessionEvent } from '@deepseek-ai/dsh-session/types'
+import { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import { SessionSeq, type SessionEvent } from '@supernova-ai/snh-session/types'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import type {
   ConversationTimelineSnapshot, ConversationViewBuilder, ConversationViewDefinition, ConversationViewNode,
@@ -12,7 +12,7 @@ import { ConversationNodeAssembler } from '../src/client/conversation/assembler.
 import { ConversationGroupRegistry } from '../src/client/conversation/group-registry.ts'
 import { ConversationViewRegistry } from '../src/client/conversation/view-registry.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-conversation/client' {
+declare module '@supernova-ai/snh-client-ui-conversation/client' {
   interface ConversationGroupDataMap {
     'group-test': number
   }

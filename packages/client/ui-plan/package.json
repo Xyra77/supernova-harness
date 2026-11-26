@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-plan",
+  "name": "@supernova-ai/snh-client-ui-plan",
   "description": "Plan mode controls, persistent transcript plan cards, and sidebar Markdown previews",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -26,17 +26,17 @@
     "./package.json": "./package.json",
     "./locale/*.json": "./locale/*.json"
   },
-  "dsh": {
+  "snh": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-api-remotes",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-conversation",
-        "@deepseek-ai/dsh-client-ui-sidebar-right",
-        "@deepseek-ai/dsh-client-ui-chat",
-        "@deepseek-ai/dsh-client-ui-user-questions",
-        "@deepseek-ai/dsh-client-resources",
-        "@deepseek-ai/dsh-api-session-controller"
+        "@supernova-ai/snh-api-remotes",
+        "@supernova-ai/snh-client-locale",
+        "@supernova-ai/snh-client-ui-conversation",
+        "@supernova-ai/snh-client-ui-sidebar-right",
+        "@supernova-ai/snh-client-ui-chat",
+        "@supernova-ai/snh-client-ui-user-questions",
+        "@supernova-ai/snh-client-resources",
+        "@supernova-ai/snh-api-session-controller"
       ],
       "platform": "web"
     }
@@ -47,31 +47,31 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-client-store": "workspace:*",
-    "@deepseek-ai/dsh-api-remotes": "workspace:*",
-    "@deepseek-ai/dsh-client-locale": "workspace:*",
-    "@deepseek-ai/dsh-client-test-runtime": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-conversation": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:*",
-    "@deepseek-ai/dsh-plan-mode": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-client-store": "workspace:*",
+    "@supernova-ai/snh-api-remotes": "workspace:*",
+    "@supernova-ai/snh-client-locale": "workspace:*",
+    "@supernova-ai/snh-client-test-runtime": "workspace:*",
+    "@supernova-ai/snh-client-ui-conversation": "workspace:*",
+    "@supernova-ai/snh-client-ui-primitives": "workspace:*",
+    "@supernova-ai/snh-client-ui-slots": "workspace:*",
+    "@supernova-ai/snh-plan-mode": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
     "react": "^18.2.0",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-renderer": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-session": "workspace:*",
-    "@deepseek-ai/dsh-api-session-controller": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-chat": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-sidebar-right": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-user-questions": "workspace:*",
-    "@deepseek-ai/dsh-client-resources": "workspace:*",
-    "@deepseek-ai/dsh-tool-executor-ptc": "workspace:*",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*",
-    "@deepseek-ai/dsh-llm": "workspace:*",
-    "@deepseek-ai/dsh-util-crypto": "workspace:*"
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-client-ui-renderer": "workspace:*",
+    "@supernova-ai/snh-client-ui-session": "workspace:*",
+    "@supernova-ai/snh-api-session-controller": "workspace:*",
+    "@supernova-ai/snh-client-ui-chat": "workspace:*",
+    "@supernova-ai/snh-client-ui-sidebar-right": "workspace:*",
+    "@supernova-ai/snh-client-ui-user-questions": "workspace:*",
+    "@supernova-ai/snh-client-resources": "workspace:*",
+    "@supernova-ai/snh-tool-executor-ptc": "workspace:*",
+    "@supernova-ai/snh-typert-protocol": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-util-crypto": "workspace:*"
   },
   "files": [
     "locale/*.json",

@@ -14,9 +14,9 @@ While the docking preference is on and the end gutter is narrower than 348px, th
 
 ### The body owns the room, and the panel asks for it
 
-[`ui-conversation`](../../../../packages/client/ui-conversation/README.md#end-reserve) owns the transcript's width axis, the scrollport, and the width handles, so it owns the room. A stylesheet asks for it by setting `--dsh-chat-end-reserve` on the Conversation body; the body derives `--dsh-chat-end-inset`, the scrollport's end padding, and `--dsh-chat-end-reserve-max`, the largest reserve the start gutter can give. The panel's stylesheet sets the reserve to 348px through a `:has()` rule that matches while its dock probe carries a mark, so the request needs no Slot prop and no render in the Chat View.
+[`ui-conversation`](../../../../packages/client/ui-conversation/README.md#end-reserve) owns the transcript's width axis, the scrollport, and the width handles, so it owns the room. A stylesheet asks for it by setting `--snh-chat-end-reserve` on the Conversation body; the body derives `--snh-chat-end-inset`, the scrollport's end padding, and `--snh-chat-end-reserve-max`, the largest reserve the start gutter can give. The panel's stylesheet sets the reserve to 348px through a `:has()` rule that matches while its dock probe carries a mark, so the request needs no Slot prop and no render in the Chat View.
 
-The body derives those lengths from the scrollport's width, which it measures and publishes as `--dsh-conversation-viewport-width`. Three boxes read the inset: the scrollport for its padding, the width handles in the body, and the [`ui-chat`](../../../../packages/client/ui-chat/README.md#scroll-ownership) aside layer, which reaches back across the inset so the panel sits at the scrollport's end edge. A length written with percentages resolves against a different box in each of them, and the scrollport's own content box changes with the inset. A measured pixel width gives all three the same value and does not change when the inset does.
+The body derives those lengths from the scrollport's width, which it measures and publishes as `--snh-conversation-viewport-width`. Three boxes read the inset: the scrollport for its padding, the width handles in the body, and the [`ui-chat`](../../../../packages/client/ui-chat/README.md#scroll-ownership) aside layer, which reaches back across the inset so the panel sits at the scrollport's end edge. A length written with percentages resolves against a different box in each of them, and the scrollport's own content box changes with the inset. A measured pixel width gives all three the same value and does not change when the inset does.
 
 ### One probe whose answer does not depend on the room made
 
@@ -28,7 +28,7 @@ The handles follow the column: their positions take half the inset, and each tak
 
 ### One motion for the panel and the transcript
 
-A press that shows or hides the panel plays its entrance or exit, and the transcript moves over the same 160ms and curve: the panel's stylesheet sets `--dsh-chat-end-reserve-transition` on the Conversation body while the animation runs, and the scrollport's padding and the aside layer's margin both take their transition from it. The panel tells a press from a change of room by comparing renders: what it shows changed while its room stayed the same. A change of room shows or hides the panel at once, which covers a mount, a switch to another Session, a resized window, and a dragged transcript width.
+A press that shows or hides the panel plays its entrance or exit, and the transcript moves over the same 160ms and curve: the panel's stylesheet sets `--snh-chat-end-reserve-transition` on the Conversation body while the animation runs, and the scrollport's padding and the aside layer's margin both take their transition from it. The panel tells a press from a change of room by comparing renders: what it shows changed while its room stayed the same. A change of room shows or hides the panel at once, which covers a mount, a switch to another Session, a resized window, and a dragged transcript width.
 
 ## Alternatives considered
 

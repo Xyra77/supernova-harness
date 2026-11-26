@@ -1,31 +1,31 @@
 /** Session commands whose activation policy is explicit at each Remote method. */
 
-import type { ProjectionHandle } from '@deepseek-ai/dsh-session-projection'
+import type { ProjectionHandle } from '@supernova-ai/snh-session-projection'
 import { continuationProjectionDefinition, type ContinuationState } from './continuation.ts'
 
 import { modelAvailable } from './catalog.ts'
 import { randomUUID } from 'node:crypto'
-import type { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { Agent, ModelSelection as AgentModelSelection } from '@deepseek-ai/dsh-agent'
-import { AttachmentError } from '@deepseek-ai/dsh-attachment'
+import type { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { Agent, ModelSelection as AgentModelSelection } from '@supernova-ai/snh-agent'
+import { AttachmentError } from '@supernova-ai/snh-attachment'
 import type {
   AttachmentAdmissionPart,
-} from '@deepseek-ai/dsh-attachment'
-import type { FileUploadReceiptId, StagedAttachment } from '@deepseek-ai/dsh-client-file-upload/types'
-import type {} from '@deepseek-ai/dsh-client-file-upload'
+} from '@supernova-ai/snh-attachment'
+import type { FileUploadReceiptId, StagedAttachment } from '@supernova-ai/snh-client-file-upload/types'
+import type {} from '@supernova-ai/snh-client-file-upload'
 import {
   type ReasoningEffortId, createUserMessage, freezeMessage,
-} from '@deepseek-ai/dsh-llm'
-import type { MessageId, MessageSource } from '@deepseek-ai/dsh-llm'
-import { buildForkSeed } from '@deepseek-ai/dsh-session/fork'
-import { SessionLogOffset, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { Session, SessionEvent, SessionHeader, SessionId, UserMessage } from '@deepseek-ai/dsh-session'
-import { SessionQueryError, type SessionObservation } from '@deepseek-ai/dsh-session-query'
-import { SessionTitleInvalidError } from '@deepseek-ai/dsh-session-title'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
-import { RemoteError, remoteErrorOf } from '@deepseek-ai/dsh-typert-protocol'
-import type { Workspace } from '@deepseek-ai/dsh-workspace'
+} from '@supernova-ai/snh-llm'
+import type { MessageId, MessageSource } from '@supernova-ai/snh-llm'
+import { buildForkSeed } from '@supernova-ai/snh-session/fork'
+import { SessionLogOffset, SessionSeq } from '@supernova-ai/snh-session'
+import type { Session, SessionEvent, SessionHeader, SessionId, UserMessage } from '@supernova-ai/snh-session'
+import { SessionQueryError, type SessionObservation } from '@supernova-ai/snh-session-query'
+import { SessionTitleInvalidError } from '@supernova-ai/snh-session-title'
+import { assertNever } from '@supernova-ai/snh-util-values'
+import { RemoteError, remoteErrorOf } from '@supernova-ai/snh-typert-protocol'
+import type { Workspace } from '@supernova-ai/snh-workspace'
 import {
   ApiSessionAgentController,
   ApiSessionCwdConflict,

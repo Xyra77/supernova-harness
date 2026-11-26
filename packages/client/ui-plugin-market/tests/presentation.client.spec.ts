@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { MarketListingEntry, MarketListingVersion } from '@deepseek-ai/dsh-api-remotes/client'
-import type { LocalizedText } from '@deepseek-ai/dsh-package-manifest'
+import type { MarketListingEntry, MarketListingVersion } from '@supernova-ai/snh-api-remotes/client'
+import type { LocalizedText } from '@supernova-ai/snh-package-manifest'
 import {
   declaredQuery, displayDeclarations, indexLabel, indexMenuItems, INITIAL_QUERY, presentedVersion, sourceFacts, withText,
 } from '../src/client/presentation.ts'
@@ -65,12 +65,12 @@ describe('presentedVersion', () => {
 describe('sourceFacts', () => {
   it('names the npm package and registry, or the Git repository, commit, and directory', () => {
     const commit = 'abcdef0'.padEnd(40, '1')
-    expect(sourceFacts('dsh-a', release('1.0.0'))).toEqual([{ kind: 'package', value: 'dsh-a@1.0.0' }])
+    expect(sourceFacts('snh-a', release('1.0.0'))).toEqual([{ kind: 'package', value: 'snh-a@1.0.0' }])
     const registry = release('1.0.0', { source: { type: 'npm', registry: 'https://registry.example:8443/npm/' } })
-    expect(sourceFacts('dsh-a', registry)).toEqual([{ kind: 'package', value: 'dsh-a@1.0.0' }, { kind: 'registry', value: 'https://registry.example:8443/npm/' }])
+    expect(sourceFacts('snh-a', registry)).toEqual([{ kind: 'package', value: 'snh-a@1.0.0' }, { kind: 'registry', value: 'https://registry.example:8443/npm/' }])
     const git = release('1.0.0', { source: { type: 'git', url: 'https://github.com/o/r', commit } })
-    expect(sourceFacts('dsh-a', git)).toEqual([{ kind: 'repository', value: 'https://github.com/o/r' }, { kind: 'commit', value: commit }])
-    expect(sourceFacts('dsh-a', release('1.0.0', { source: { type: 'git', url: 'https://github.com/o/r', commit, path: 'packages/a' } })).at(-1))
+    expect(sourceFacts('snh-a', git)).toEqual([{ kind: 'repository', value: 'https://github.com/o/r' }, { kind: 'commit', value: commit }])
+    expect(sourceFacts('snh-a', release('1.0.0', { source: { type: 'git', url: 'https://github.com/o/r', commit, path: 'packages/a' } })).at(-1))
       .toEqual({ kind: 'directory', value: 'packages/a' })
   })
 })

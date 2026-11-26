@@ -1,25 +1,25 @@
 /**
  * Log-backed session title service, deterministic fallback, and provider contract.
- * @module @deepseek-ai/dsh-session-title
+ * @module @supernova-ai/snh-session-title
  */
 
-import { Context, FiberState, Service, type Fiber } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import { Context, FiberState, Service, type Fiber } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
 import { z as zod } from 'zod'
 import type { ZodType } from 'zod'
-import type { Branded } from '@deepseek-ai/dsh-brand'
-import { extractTextContent } from '@deepseek-ai/dsh-llm/message'
-import { isAgentLoopRequest } from '@deepseek-ai/dsh-llm'
-import type { GenerateOptions } from '@deepseek-ai/dsh-llm'
-import { assertNever, deepFreeze } from '@deepseek-ai/dsh-util-values'
+import type { Branded } from '@supernova-ai/snh-brand'
+import { extractTextContent } from '@supernova-ai/snh-llm/message'
+import { isAgentLoopRequest } from '@supernova-ai/snh-llm'
+import type { GenerateOptions } from '@supernova-ai/snh-llm'
+import { assertNever, deepFreeze } from '@supernova-ai/snh-util-values'
 import type {
   Session,
   SessionEvent,
-} from '@deepseek-ai/dsh-session'
-import { SessionSeq } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-session-projection'
-import type { ProjectionDefinition, ProjectionHandle } from '@deepseek-ai/dsh-session-projection'
-import type {} from '@deepseek-ai/dsh-agent'
+} from '@supernova-ai/snh-session'
+import { SessionSeq } from '@supernova-ai/snh-session'
+import type {} from '@supernova-ai/snh-session-projection'
+import type { ProjectionDefinition, ProjectionHandle } from '@supernova-ai/snh-session-projection'
+import type {} from '@supernova-ai/snh-agent'
 export type {
   SessionTitleEventData,
   SessionTitleModelIdentity,
@@ -63,13 +63,13 @@ export interface Config {
   readonly maxTitleBytes: number
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     sessionTitle: SessionTitleService
   }
 }
 
-declare module '@deepseek-ai/dsh-session/types' {
+declare module '@supernova-ai/snh-session/types' {
   interface SessionEventMap {
     /**
      * Latest-wins session title snapshot. Log-only: it never enters the model

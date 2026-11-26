@@ -1,11 +1,11 @@
 /** Body of a `create_personalized_page` card: location choice, creation progress, undo and restore. */
 import { useCallback, useId, useState, useSyncExternalStore } from 'react'
 import { z } from 'zod'
-import { Button, IconChevronDownOutlineRegular, IconWarningTriangleOutlineRegular, Menu, Tooltip } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { ActionCardBodyProps } from '@deepseek-ai/dsh-client-ui-action-cards/client'
-import type { CreationSlot, PageData, PageDetails, PageVerb } from '@deepseek-ai/dsh-creation-recommendations/types'
+import { Button, IconChevronDownOutlineRegular, IconWarningTriangleOutlineRegular, Menu, Tooltip } from '@supernova-ai/snh-client-ui-primitives'
+import type { PropsLocale } from '@supernova-ai/snh-client-ui-slots'
+import type { SnapshotStore } from '@supernova-ai/snh-client-store'
+import type { ActionCardBodyProps } from '@supernova-ai/snh-client-ui-action-cards/client'
+import type { CreationSlot, PageData, PageDetails, PageVerb } from '@supernova-ai/snh-creation-recommendations/types'
 import type { RecommendationKey } from './locales.ts'
 import css from './Card.module.css'
 

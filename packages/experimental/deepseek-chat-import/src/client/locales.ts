@@ -1,13 +1,13 @@
-/** `deepseekChatImport` namespace dictionaries for the import action and dialog. */
+/** `supernovaChatImport` namespace dictionaries for the import action and dialog. */
 
 /** Dictionary namespace owned by this plugin. */
-export const NS = 'deepseekChatImport'
+export const NS = 'supernovaChatImport'
 
 /** Simplified Chinese dictionary (the key-set source of truth). */
 export const zh = {
-  'action.label': '导入 DeepSeek 会话',
-  'dialog.title': '导入 DeepSeek 会话记录',
-  'dialog.description': '选择从 DeepSeek 官网导出的 ZIP 文件（deepseek_data-*.zip），以及接收这些会话的工作区。',
+  'action.label': '导入 SuperNova 会话',
+  'dialog.title': '导入 SuperNova 会话记录',
+  'dialog.description': '选择从 SuperNova 官网导出的 ZIP 文件（supernova_data-*.zip），以及接收这些会话的工作区。',
   'dialog.file': '导出文件',
   'dialog.chooseFile': '选择文件…',
   'dialog.changeFile': '重新选择',
@@ -26,8 +26,8 @@ export const zh = {
   'result.omitted.other': '{count} 个较早的会话超出导入上限，未导入。',
   'result.skipped.one': '{count} 个会话无法导入。',
   'result.skipped.other': '{count} 个会话无法导入。',
-  'error.missing-manifest': '这不是 DeepSeek 导出数据：缺少 manifest.json。',
-  'error.missing-index': '这不是 DeepSeek 导出数据：缺少 chat_session_index.json，或该文件无法读取。',
+  'error.missing-manifest': '这不是 SuperNova 导出数据：缺少 manifest.json。',
+  'error.missing-index': '这不是 SuperNova 导出数据：缺少 chat_session_index.json，或该文件无法读取。',
   'error.unsupported-version': '不支持该导出格式版本。',
   'error.unreadable-archive': '该文件不是可读取的 ZIP 压缩包。',
   'error.no-conversations': '导出数据中没有可导入的会话。',
@@ -39,13 +39,13 @@ export const zh = {
 } satisfies Record<string, string>
 
 /** The namespace key union. */
-export type DeepseekChatImportKey = keyof typeof zh
+export type SupernovaChatImportKey = keyof typeof zh
 
 /** English dictionary, checked complete against the zh key set. */
 export const en = {
-  'action.label': 'Import DeepSeek chats',
-  'dialog.title': 'Import DeepSeek chat history',
-  'dialog.description': 'Choose the ZIP file exported from the DeepSeek website (deepseek_data-*.zip) and the workspace that receives the sessions.',
+  'action.label': 'Import SuperNova chats',
+  'dialog.title': 'Import SuperNova chat history',
+  'dialog.description': 'Choose the ZIP file exported from the SuperNova website (supernova_data-*.zip) and the workspace that receives the sessions.',
   'dialog.file': 'Export file',
   'dialog.chooseFile': 'Choose file…',
   'dialog.changeFile': 'Change',
@@ -64,8 +64,8 @@ export const en = {
   'result.omitted.other': '{count} older conversations exceeded the import limit and were not imported.',
   'result.skipped.one': '{count} conversation could not be imported.',
   'result.skipped.other': '{count} conversations could not be imported.',
-  'error.missing-manifest': 'This is not a DeepSeek export: manifest.json is missing.',
-  'error.missing-index': 'This is not a DeepSeek export: chat_session_index.json is missing or unreadable.',
+  'error.missing-manifest': 'This is not a SuperNova export: manifest.json is missing.',
+  'error.missing-index': 'This is not a SuperNova export: chat_session_index.json is missing or unreadable.',
   'error.unsupported-version': 'This export format version is not supported.',
   'error.unreadable-archive': 'The file is not a readable ZIP archive.',
   'error.no-conversations': 'The export contains no conversations that can be imported.',
@@ -74,13 +74,13 @@ export const en = {
   'error.busy': 'Another import is running. Try again later.',
   'error.upload-failed': 'Upload failed: {message}',
   'error.unknown': 'Import failed: {message}',
-} satisfies Record<DeepseekChatImportKey, string>
+} satisfies Record<SupernovaChatImportKey, string>
 
 /** Japanese dictionary, checked complete against the zh key set. */
 export const ja = {
-  'action.label': 'DeepSeek のチャットをインポート',
-  'dialog.title': 'DeepSeek のチャット履歴をインポート',
-  'dialog.description': 'DeepSeek の Web サイトからエクスポートした ZIP ファイル（deepseek_data-*.zip）と、セッションを受け取るワークスペースを選択してください。',
+  'action.label': 'SuperNova のチャットをインポート',
+  'dialog.title': 'SuperNova のチャット履歴をインポート',
+  'dialog.description': 'SuperNova の Web サイトからエクスポートした ZIP ファイル（supernova_data-*.zip）と、セッションを受け取るワークスペースを選択してください。',
   'dialog.file': 'エクスポートファイル',
   'dialog.chooseFile': 'ファイルを選択…',
   'dialog.changeFile': '変更',
@@ -99,8 +99,8 @@ export const ja = {
   'result.omitted.other': '古い {count} 件の会話はインポート上限を超えたため、インポートされませんでした。',
   'result.skipped.one': '{count} 件の会話をインポートできませんでした。',
   'result.skipped.other': '{count} 件の会話をインポートできませんでした。',
-  'error.missing-manifest': 'DeepSeek のエクスポートではありません: manifest.json がありません。',
-  'error.missing-index': 'DeepSeek のエクスポートではありません: chat_session_index.json がないか、読み取れません。',
+  'error.missing-manifest': 'SuperNova のエクスポートではありません: manifest.json がありません。',
+  'error.missing-index': 'SuperNova のエクスポートではありません: chat_session_index.json がないか、読み取れません。',
   'error.unsupported-version': 'このエクスポート形式のバージョンには対応していません。',
   'error.unreadable-archive': 'このファイルは読み取り可能な ZIP アーカイブではありません。',
   'error.no-conversations': 'エクスポートにインポートできる会話がありません。',
@@ -109,13 +109,13 @@ export const ja = {
   'error.busy': '別のインポートが実行中です。しばらくしてからやり直してください。',
   'error.upload-failed': 'アップロードに失敗しました: {message}',
   'error.unknown': 'インポートに失敗しました: {message}',
-} satisfies Record<DeepseekChatImportKey, string>
+} satisfies Record<SupernovaChatImportKey, string>
 
 /** Spanish dictionary, checked complete against the zh key set. */
 export const es = {
-  'action.label': 'Importar chats de DeepSeek',
-  'dialog.title': 'Importar el historial de chats de DeepSeek',
-  'dialog.description': 'Elige el archivo ZIP exportado desde el sitio web de DeepSeek (deepseek_data-*.zip) y el espacio de trabajo que recibirá las sesiones.',
+  'action.label': 'Importar chats de SuperNova',
+  'dialog.title': 'Importar el historial de chats de SuperNova',
+  'dialog.description': 'Elige el archivo ZIP exportado desde el sitio web de SuperNova (supernova_data-*.zip) y el espacio de trabajo que recibirá las sesiones.',
   'dialog.file': 'Archivo exportado',
   'dialog.chooseFile': 'Elegir archivo…',
   'dialog.changeFile': 'Cambiar',
@@ -134,8 +134,8 @@ export const es = {
   'result.omitted.other': '{count} conversaciones más antiguas superaron el límite de importación y no se importaron.',
   'result.skipped.one': 'No se pudo importar {count} conversación.',
   'result.skipped.other': 'No se pudieron importar {count} conversaciones.',
-  'error.missing-manifest': 'No es una exportación de DeepSeek: falta manifest.json.',
-  'error.missing-index': 'No es una exportación de DeepSeek: falta chat_session_index.json o no se puede leer.',
+  'error.missing-manifest': 'No es una exportación de SuperNova: falta manifest.json.',
+  'error.missing-index': 'No es una exportación de SuperNova: falta chat_session_index.json o no se puede leer.',
   'error.unsupported-version': 'Esta versión del formato de exportación no es compatible.',
   'error.unreadable-archive': 'El archivo no es un ZIP legible.',
   'error.no-conversations': 'La exportación no contiene conversaciones que se puedan importar.',
@@ -144,13 +144,13 @@ export const es = {
   'error.busy': 'Ya hay una importación en curso. Inténtalo más tarde.',
   'error.upload-failed': 'Error al subir: {message}',
   'error.unknown': 'Error al importar: {message}',
-} satisfies Record<DeepseekChatImportKey, string>
+} satisfies Record<SupernovaChatImportKey, string>
 
 /** French dictionary, checked complete against the zh key set. */
 export const fr = {
-  'action.label': 'Importer des discussions DeepSeek',
-  'dialog.title': 'Importer l’historique des discussions DeepSeek',
-  'dialog.description': 'Choisissez le fichier ZIP exporté depuis le site DeepSeek (deepseek_data-*.zip) et l’espace de travail qui recevra les sessions.',
+  'action.label': 'Importer des discussions SuperNova',
+  'dialog.title': 'Importer l’historique des discussions SuperNova',
+  'dialog.description': 'Choisissez le fichier ZIP exporté depuis le site SuperNova (supernova_data-*.zip) et l’espace de travail qui recevra les sessions.',
   'dialog.file': 'Fichier exporté',
   'dialog.chooseFile': 'Choisir un fichier…',
   'dialog.changeFile': 'Changer',
@@ -169,8 +169,8 @@ export const fr = {
   'result.omitted.other': '{count} conversations plus anciennes dépassaient la limite d’importation et n’ont pas été importées.',
   'result.skipped.one': '{count} conversation n’a pas pu être importée.',
   'result.skipped.other': '{count} conversations n’ont pas pu être importées.',
-  'error.missing-manifest': 'Ce n’est pas un export DeepSeek : manifest.json est absent.',
-  'error.missing-index': 'Ce n’est pas un export DeepSeek : chat_session_index.json est absent ou illisible.',
+  'error.missing-manifest': 'Ce n’est pas un export SuperNova : manifest.json est absent.',
+  'error.missing-index': 'Ce n’est pas un export SuperNova : chat_session_index.json est absent ou illisible.',
   'error.unsupported-version': 'Cette version du format d’export n’est pas prise en charge.',
   'error.unreadable-archive': 'Le fichier n’est pas une archive ZIP lisible.',
   'error.no-conversations': 'L’export ne contient aucune conversation importable.',
@@ -179,13 +179,13 @@ export const fr = {
   'error.busy': 'Une autre importation est en cours. Réessayez plus tard.',
   'error.upload-failed': 'Échec de l’envoi : {message}',
   'error.unknown': 'Échec de l’importation : {message}',
-} satisfies Record<DeepseekChatImportKey, string>
+} satisfies Record<SupernovaChatImportKey, string>
 
 /** German dictionary, checked complete against the zh key set. */
 export const de = {
   'action.label': 'DeepSeek-Chats importieren',
   'dialog.title': 'DeepSeek-Chatverlauf importieren',
-  'dialog.description': 'Wähle die von der DeepSeek-Website exportierte ZIP-Datei (deepseek_data-*.zip) und den Arbeitsbereich, der die Sitzungen erhält.',
+  'dialog.description': 'Wähle die von der SuperNova-Website exportierte ZIP-Datei (supernova_data-*.zip) und den Arbeitsbereich, der die Sitzungen erhält.',
   'dialog.file': 'Exportdatei',
   'dialog.chooseFile': 'Datei auswählen…',
   'dialog.changeFile': 'Ändern',
@@ -204,8 +204,8 @@ export const de = {
   'result.omitted.other': '{count} ältere Unterhaltungen überschritten das Importlimit und wurden nicht importiert.',
   'result.skipped.one': '{count} Unterhaltung konnte nicht importiert werden.',
   'result.skipped.other': '{count} Unterhaltungen konnten nicht importiert werden.',
-  'error.missing-manifest': 'Das ist kein DeepSeek-Export: manifest.json fehlt.',
-  'error.missing-index': 'Das ist kein DeepSeek-Export: chat_session_index.json fehlt oder ist unlesbar.',
+  'error.missing-manifest': 'Das ist kein SuperNova-Export: manifest.json fehlt.',
+  'error.missing-index': 'Das ist kein SuperNova-Export: chat_session_index.json fehlt oder ist unlesbar.',
   'error.unsupported-version': 'Diese Version des Exportformats wird nicht unterstützt.',
   'error.unreadable-archive': 'Die Datei ist kein lesbares ZIP-Archiv.',
   'error.no-conversations': 'Der Export enthält keine importierbaren Unterhaltungen.',
@@ -214,13 +214,13 @@ export const de = {
   'error.busy': 'Ein anderer Import läuft bereits. Versuche es später erneut.',
   'error.upload-failed': 'Hochladen fehlgeschlagen: {message}',
   'error.unknown': 'Import fehlgeschlagen: {message}',
-} satisfies Record<DeepseekChatImportKey, string>
+} satisfies Record<SupernovaChatImportKey, string>
 
 /** Russian dictionary, checked complete against the zh key set. */
 export const ru = {
-  'action.label': 'Импортировать чаты DeepSeek',
-  'dialog.title': 'Импорт истории чатов DeepSeek',
-  'dialog.description': 'Выберите ZIP-файл, экспортированный с сайта DeepSeek (deepseek_data-*.zip), и рабочее пространство, в которое попадут сеансы.',
+  'action.label': 'Импортировать чаты SuperNova',
+  'dialog.title': 'Импорт истории чатов SuperNova',
+  'dialog.description': 'Выберите ZIP-файл, экспортированный с сайта SuperNova (supernova_data-*.zip), и рабочее пространство, в которое попадут сеансы.',
   'dialog.file': 'Файл экспорта',
   'dialog.chooseFile': 'Выбрать файл…',
   'dialog.changeFile': 'Изменить',
@@ -239,8 +239,8 @@ export const ru = {
   'result.omitted.other': 'Более старые беседы ({count}) превысили лимит импорта и не были импортированы.',
   'result.skipped.one': 'Не удалось импортировать бесед: {count}.',
   'result.skipped.other': 'Не удалось импортировать бесед: {count}.',
-  'error.missing-manifest': 'Это не экспорт DeepSeek: отсутствует manifest.json.',
-  'error.missing-index': 'Это не экспорт DeepSeek: chat_session_index.json отсутствует или не читается.',
+  'error.missing-manifest': 'Это не экспорт SuperNova: отсутствует manifest.json.',
+  'error.missing-index': 'Это не экспорт SuperNova: chat_session_index.json отсутствует или не читается.',
   'error.unsupported-version': 'Эта версия формата экспорта не поддерживается.',
   'error.unreadable-archive': 'Файл не является читаемым ZIP-архивом.',
   'error.no-conversations': 'В экспорте нет бесед, которые можно импортировать.',
@@ -249,13 +249,13 @@ export const ru = {
   'error.busy': 'Уже выполняется другой импорт. Повторите попытку позже.',
   'error.upload-failed': 'Ошибка загрузки: {message}',
   'error.unknown': 'Ошибка импорта: {message}',
-} satisfies Record<DeepseekChatImportKey, string>
+} satisfies Record<SupernovaChatImportKey, string>
 
 /** Portuguese dictionary, checked complete against the zh key set. */
 export const pt = {
-  'action.label': 'Importar conversas do DeepSeek',
-  'dialog.title': 'Importar histórico de conversas do DeepSeek',
-  'dialog.description': 'Escolha o arquivo ZIP exportado do site do DeepSeek (deepseek_data-*.zip) e o espaço de trabalho que receberá as sessões.',
+  'action.label': 'Importar conversas do SuperNova',
+  'dialog.title': 'Importar histórico de conversas do SuperNova',
+  'dialog.description': 'Escolha o arquivo ZIP exportado do site do SuperNova (supernova_data-*.zip) e o espaço de trabalho que receberá as sessões.',
   'dialog.file': 'Arquivo exportado',
   'dialog.chooseFile': 'Escolher arquivo…',
   'dialog.changeFile': 'Alterar',
@@ -274,8 +274,8 @@ export const pt = {
   'result.omitted.other': '{count} conversas mais antigas excederam o limite de importação e não foram importadas.',
   'result.skipped.one': 'Não foi possível importar {count} conversa.',
   'result.skipped.other': 'Não foi possível importar {count} conversas.',
-  'error.missing-manifest': 'Isto não é uma exportação do DeepSeek: falta o manifest.json.',
-  'error.missing-index': 'Isto não é uma exportação do DeepSeek: falta o chat_session_index.json ou ele não pode ser lido.',
+  'error.missing-manifest': 'Isto não é uma exportação do SuperNova: falta o manifest.json.',
+  'error.missing-index': 'Isto não é uma exportação do SuperNova: falta o chat_session_index.json ou ele não pode ser lido.',
   'error.unsupported-version': 'Esta versão do formato de exportação não é compatível.',
   'error.unreadable-archive': 'O arquivo não é um ZIP legível.',
   'error.no-conversations': 'A exportação não contém conversas que possam ser importadas.',
@@ -284,4 +284,4 @@ export const pt = {
   'error.busy': 'Outra importação está em andamento. Tente novamente mais tarde.',
   'error.upload-failed': 'Falha no envio: {message}',
   'error.unknown': 'Falha na importação: {message}',
-} satisfies Record<DeepseekChatImportKey, string>
+} satisfies Record<SupernovaChatImportKey, string>

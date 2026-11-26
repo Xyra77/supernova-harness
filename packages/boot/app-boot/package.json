@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-app-boot",
+  "name": "@supernova-ai/snh-app-boot",
   "description": "Shared boot glue for the app bins: .env loading, fail-loud Loader guards, snapshot-aware config resolution, and the Loader boot sequence",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -35,34 +35,34 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-atomic-write": "workspace:*",
-    "@deepseek-ai/dsh-official-bundles": "workspace:*",
-    "@deepseek-ai/dsh-package-manifest": "workspace:*",
+    "@supernova-ai/snh-atomic-write": "workspace:*",
+    "@supernova-ai/snh-official-bundles": "workspace:*",
+    "@supernova-ai/snh-package-manifest": "workspace:*",
     "@eslint-community/regexpp": "^4.12.2",
     "ajv": "^8.20.0",
     "node-addon-require-builtin": "^0.1.10",
     "resolve.exports": "^2.0.3",
     "semver": "^7.8.5",
-    "@deepseek-ai/dsh-native-command": "workspace:*"
+    "@supernova-ai/snh-native-command": "workspace:*"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis-plugin-group": "workspace:~",
-    "@deepseek-ai/cordis-plugin-include": "workspace:~",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/dsh-launch-environment": "workspace:*",
-    "@deepseek-ai/dsh-home-paths": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis-plugin-group": "workspace:~",
+    "@supernova-ai/cordis-plugin-include": "workspace:~",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-launch-environment": "workspace:*",
+    "@supernova-ai/snh-home-paths": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/schemastery": "workspace:~",
-    "@deepseek-ai/cordis-plugin-group": "workspace:~",
-    "@deepseek-ai/cordis-plugin-include": "workspace:~",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/cordis-plugin-timer": "workspace:~",
-    "@deepseek-ai/dsh-launch-environment": "workspace:*",
-    "@deepseek-ai/dsh-home-paths": "workspace:*",
-    "@deepseek-ai/dsh-system-prompt": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
+    "@supernova-ai/cordis-plugin-group": "workspace:~",
+    "@supernova-ai/cordis-plugin-include": "workspace:~",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/cordis-plugin-timer": "workspace:~",
+    "@supernova-ai/snh-launch-environment": "workspace:*",
+    "@supernova-ai/snh-home-paths": "workspace:*",
+    "@supernova-ai/snh-system-prompt": "workspace:*",
     "@types/semver": "^7.8.0",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

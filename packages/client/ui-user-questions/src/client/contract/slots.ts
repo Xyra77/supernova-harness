@@ -1,21 +1,21 @@
 /** Question composer props and one pending Remote waterfall response. */
-import type { InjectFace, PropsLocale, PropsRenderSlots, PropsRuntime, PropsStore } from '@deepseek-ai/dsh-client-ui-slots'
+import type { InjectFace, PropsLocale, PropsRenderSlots, PropsRuntime, PropsStore } from '@supernova-ai/snh-client-ui-slots'
 // The client module declares the conversation.composer SlotMap entry required by PropsRuntime.
-import type { ToolCallId } from '@deepseek-ai/dsh-llm/types'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { ToolCallId } from '@supernova-ai/snh-llm/types'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import type {
   AskUserQuestionAnswer, AskUserQuestionAnswerItem, AskUserQuestionItem, UserQuestionState,
-} from '@deepseek-ai/dsh-user-questions/types'
+} from '@supernova-ai/snh-user-questions/types'
 import type { createQuestionDraftStore } from '../draft-store.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-session/client' {
+declare module '@supernova-ai/snh-client-ui-session/client' {
   interface SessionPendingInteractionMap {
     /** Pending question or plan-review request. */
     question: PendingQuestion
   }
 }
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@supernova-ai/snh-client-ui-slots' {
   interface SlotMap {
     /** Actions for the exact plan under review; approval remains with the question composer. */
     'conversation.plan-review.actions': { kind: 'list'; scope: 'session'; owner: { review: PlanReview; requestKey: PendingQuestion['key'] } }

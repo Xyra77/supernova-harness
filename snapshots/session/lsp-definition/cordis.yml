@@ -2,9 +2,9 @@
 # The scenario workspace supplies the deterministic stdio server used by this test composition.
 - insert:
     - id: lsp
-      name: '@deepseek-ai/dsh-lsp'
+      name: '@supernova-ai/snh-lsp'
     - id: lsp-stdio
-      name: '@deepseek-ai/dsh-lsp-stdio'
+      name: '@supernova-ai/snh-lsp-stdio'
       config:
         servers:
           fixture:
@@ -13,9 +13,9 @@
             extensionToLanguage:
               '.ts': typescript
     - id: tool-lsp
-      name: '@deepseek-ai/dsh-tool-lsp'
+      name: '@supernova-ai/snh-tool-lsp'
       config:
         maxLocations: 1
 
 - id: timeout-policy
-  name: '@deepseek-ai/dsh-tool-call-timeout-policy'
+  name: '@supernova-ai/snh-tool-call-timeout-policy'

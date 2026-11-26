@@ -1,7 +1,7 @@
 /** Session-authorized, version-checked Office bytes shared by concurrent preview reads. */
-import type { OfficeKitPriority, OfficeKitGeneration } from '@deepseek-ai/dsh-office-kit/types'
-import type { RemoteResult } from '@deepseek-ai/dsh-api-remotes/client'
-import type { WorkspaceFileStat } from '@deepseek-ai/dsh-api-workspace-files/types'
+import type { OfficeKitPriority, OfficeKitGeneration } from '@supernova-ai/snh-office-kit/types'
+import type { RemoteResult } from '@supernova-ai/snh-api-remotes/client'
+import type { WorkspaceFileStat } from '@supernova-ai/snh-api-workspace-files/types'
 import type { DocumentFileBytes, SessionFile } from '../rpc.ts'
 
 /** PDF bytes and conversion metadata owned by Office preview. */

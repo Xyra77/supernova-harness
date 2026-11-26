@@ -6,13 +6,13 @@ Status: implemented
 
 ## 问题
 
-`ctx[Context.root]` 返回应用的根上下文。通过它读取属性会跳过 `inject` 检查，因为根 fiber 没有 runtime；在它上面注册的监听器会跳过 scope 过滤；它读取的是根 realm，而不是调用方所在的 isolate realm。DSH 代码用它读取未声明的服务、监听所有 Agent 的事件、作为应用级状态的键，以及调用要求根上下文的启动 API。这些用法都已有或需要一个显式声明的替代方式：`inject` 条目、监听器上的 `{ global: true }`，或负责根级操作的服务。
+`ctx[Context.root]` 返回应用的根上下文。通过它读取属性会跳过 `inject` 检查，因为根 fiber 没有 runtime；在它上面注册的监听器会跳过 scope 过滤；它读取的是根 realm，而不是调用方所在的 isolate realm。SNH 代码用它读取未声明的服务、监听所有 Agent 的事件、作为应用级状态的键，以及调用要求根上下文的启动 API。这些用法都已有或需要一个显式声明的替代方式：`inject` 条目、监听器上的 `{ global: true }`，或负责根级操作的服务。
 
 仓库中的此类读取分布在 boot、host、preset、protocol、experimental 和测试等多个所有者中。在一次变更中全部替换，会把执行规则的决定与多个服务设计混在一起。
 
 ## 决定
 
-第一方 JavaScript 和 TypeScript（包括测试、fixture 和脚本）禁止新增对 Cordis 根上下文的读取。[检查器](../../../../scripts/verify-cordis-root.ts)通过 `pnpm run verify-cordis-root` 运行，使用 TypeScript 语法树，并对每个文件单独建立类型检查器。读取指通过 `Context` 或 `symbols` 的 Cordis 值绑定访问根符号：`.root`、`['root']`，或在声明、参数默认值或赋值中解构出的 `root`。绑定来自 `@deepseek-ai/cordis` 或其子路径，可以是静态导入（包括重命名、默认、命名空间和 `import =` 形式），也可以是解构或整体接收的 `import()` 或 `require()` 结果；遮蔽导入的局部变量不是绑定。值恰为 `cordis.root` 的任何字符串字面量也算读取，即 `Symbol.for('cordis.root')` 背后的键。类型位置、接口、类型别名、ambient 声明、注释、其他字符串以及嵌入模板中的源码文本不算读取。
+第一方 JavaScript 和 TypeScript（包括测试、fixture 和脚本）禁止新增对 Cordis 根上下文的读取。[检查器](../../../../scripts/verify-cordis-root.ts)通过 `pnpm run verify-cordis-root` 运行，使用 TypeScript 语法树，并对每个文件单独建立类型检查器。读取指通过 `Context` 或 `symbols` 的 Cordis 值绑定访问根符号：`.root`、`['root']`，或在声明、参数默认值或赋值中解构出的 `root`。绑定来自 `@supernova-ai/cordis` 或其子路径，可以是静态导入（包括重命名、默认、命名空间和 `import =` 形式），也可以是解构或整体接收的 `import()` 或 `require()` 结果；遮蔽导入的局部变量不是绑定。值恰为 `cordis.root` 的任何字符串字面量也算读取，即 `Symbol.for('cordis.root')` 背后的键。类型位置、接口、类型别名、ambient 声明、注释、其他字符串以及嵌入模板中的源码文本不算读取。
 
 现有读取使用 `scripts/cordis-root.baseline.json` 中的精确基线记录，由[共享清单模块](../../../../scripts/baseline-inventory.ts)按 [unknown 类型断言清单](2026-09-19-no-unknown-casts.zh.md)的规则维护：基线修改只能删除条目或减少次数，`--prune` 删除已失效的条目并在存在新读取时拒绝写入，且没有任何命令可以添加放行。读取的指纹覆盖以根符号为键的元素访问的 token，因此把已记录的读取换到另一个接收者上会产生新的检查发现。
 

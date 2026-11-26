@@ -1,15 +1,15 @@
 /** Optional Remote contribution and reasoning-slot registration lifecycle. */
-import type { Context } from '@deepseek-ai/cordis'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type {} from '@deepseek-ai/dsh-api-remotes/client'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type {} from '@deepseek-ai/dsh-client-ui-chat/client'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
-import type {} from '@deepseek-ai/dsh-client-ui-plugin-manager/client'
-import type {} from '@deepseek-ai/dsh-experimental-client-ui-cot-translation/remote'
-import type { RemoteResult, TypertRemoteContribution } from '@deepseek-ai/dsh-typert-protocol'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+import type { Context } from '@supernova-ai/cordis'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type {} from '@supernova-ai/snh-api-remotes/client'
+import type {} from '@supernova-ai/snh-client-locale/client'
+import type {} from '@supernova-ai/snh-client-ui-chat/client'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
+import type {} from '@supernova-ai/snh-client-ui-settings/client'
+import type {} from '@supernova-ai/snh-client-ui-plugin-manager/client'
+import type {} from '@supernova-ai/snh-experimental-client-ui-cot-translation/remote'
+import type { RemoteResult, TypertRemoteContribution } from '@supernova-ai/snh-typert-protocol'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
 import type { CotTranslationPreferences, CotTranslationSnapshot } from '../preferences.ts'
 import { TranslationBody, type TranslationBodyInjected } from './TranslationBody.tsx'
 import { TranslationSettings } from './TranslationSettings.tsx'
@@ -103,7 +103,7 @@ async function registerUi(ctx: Context, lifetime: AbortController): Promise<void
     inject: injected,
   }, TranslationBody))
   ctx.slots.inject('plugins.bundle.config', () => ctx.slots.register({
-    name: 'plugins.bundle.config', key: '@deepseek-ai/dsh-experimental-cot-translation-bundle', locale: NS,
+    name: 'plugins.bundle.config', key: '@supernova-ai/snh-experimental-cot-translation-bundle', locale: NS,
     inject: () => {
       const face = form.inject()
       return { ...face, hooks: { ...face.hooks, availableProviders }, refreshProviders: invalidate }

@@ -1,15 +1,15 @@
 ---
-description: "DeepSeek 官网会话导出导入：在浏览器中上传 deepseek_data ZIP，把其中最近的会话存为所选工作区中的会话。"
+description: "SuperNova 官网会话导出导入：在浏览器中上传 supernova_data ZIP，把其中最近的会话存为所选工作区中的会话。"
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-deepseek-chat-import
+# @supernova-ai/snh-deepseek-chat-import
 
 [English](README.md) | 中文
 
 ## 概述
 
-把 DeepSeek 官网（chat.deepseek.com）导出的会话带进 DSH 并继续对话。启用这个可选 bundle 后，“新建会话”右侧的按钮把 `deepseek_data-*.zip` 文件上传到 Host，Host 把最近的会话存为你所选工作区中的会话。导入的会话保留原始标题和时间，显示原有的提问及其附带文件、思考、联网搜索卡片、阅读链接和回答。设计与取舍见 [Agent Note](../../../.agents/notes/implemented/feature/2026-11-11-deepseek-chat-export-import.zh.md)。
+把 SuperNova 官网（chat.deepseek.com）导出的会话带进 SNH 并继续对话。启用这个可选 bundle 后，“新建会话”右侧的按钮把 `supernova_data-*.zip` 文件上传到 Host，Host 把最近的会话存为你所选工作区中的会话。导入的会话保留原始标题和时间，显示原有的提问及其附带文件、思考、联网搜索卡片、阅读链接和回答。设计与取舍见 [Agent Note](../../../.agents/notes/implemented/feature/2026-11-11-deepseek-chat-export-import.zh.md)。
 
 ## 目录
 
@@ -24,20 +24,20 @@ kind: "package-bundle"
 <a id="use-this-package"></a>
 ## 使用本包
 
-在 GUI 中打开插件页，点击“更多”进入“实验性插件”，打开“DeepSeek 会话导入”。安装包默认附带该 bundle 但处于关闭状态；“更多”列表中 bundle 的展示与启用方式见[插件管理页面](../../client/ui-plugin-manager/README.zh.md#use-this-package)。关闭后按钮与上传路由随之移除，已导入的会话保留。
+在 GUI 中打开插件页，点击“更多”进入“实验性插件”，打开“SuperNova 会话导入”。安装包默认附带该 bundle 但处于关闭状态；“更多”列表中 bundle 的展示与启用方式见[插件管理页面](../../client/ui-plugin-manager/README.zh.md#use-this-package)。关闭后按钮与上传路由随之移除，已导入的会话保留。
 
 该 bundle 插入一个 Host 行，显式组合也可以直接挂载：
 
 ```yaml
 - id: deepseek-chat-import
-  name: '@deepseek-ai/dsh-deepseek-chat-import'
+  name: '@supernova-ai/snh-deepseek-chat-import'
 ```
 
-Host 半包注入 `typert`、`connection`、`sessionPersistence` 和 `workspaceRegistry`，挂载了 `sessionProjectionCache` 与 `attachments` 时读取它们。浏览器半包注入 `remote`、`slots`、`locale` 和 `sessions`，通过 ui-sidebar 的 `sidebar.session.action` HOC 插槽包裹新建会话行：原样返回行内容并追加自己的按钮，对不能导入的 Peer 则只返回行内容。只有 owner 能导入：上传路由只接受 owner Peer，`limits()` 拒绝其他所有 principal，按钮也只对能调用 `deepseekChatImport/limits` 的 Peer 显示。
+Host 半包注入 `typert`、`connection`、`sessionPersistence` 和 `workspaceRegistry`，挂载了 `sessionProjectionCache` 与 `attachments` 时读取它们。浏览器半包注入 `remote`、`slots`、`locale` 和 `sessions`，通过 ui-sidebar 的 `sidebar.session.action` HOC 插槽包裹新建会话行：原样返回行内容并追加自己的按钮，对不能导入的 Peer 则只返回行内容。只有 owner 能导入：上传路由只接受 owner Peer，`limits()` 拒绝其他所有 principal，按钮也只对能调用 `supernovaChatImport/limits` 的 Peer 显示。
 
 ### 导入会话导出
 
-1. 在 DeepSeek 官网导出全部会话，下载 `deepseek_data-*.zip` 文件。
+1. 在 SuperNova 官网导出全部会话，下载 `supernova_data-*.zip` 文件。
 2. 点击“新建会话”右侧的上传箭头按钮。
 3. 在“导出文件”中选择该 ZIP 文件。在“工作区”中保留预选的当前会话所在工作区，或选择其他工作区，或选择“添加工作区…”添加一个目录。
 4. 点击“导入”。在服务页面上，进度条显示上传百分比；如果页面通过自己的传输通道携带压缩包，则没有字节进度，进度条直接从 Host 读取压缩包开始。两种情况下随后都显示写入会话时的“正在导入 n/K”；关闭对话框会取消请求。
@@ -57,7 +57,7 @@ Host 半包注入 `typert`、`connection`、`sessionPersistence` 和 `workspaceR
 - 每个官网会话生成一个会话。导入的链以 `current_message_id` 指定的消息结尾；该字段缺失、为 `null` 或指向不存在的消息时，以 id 最大的消息结尾。其他分支丢弃。
 - 会话由 `chat_session_index.json` 选出：按其中的 `updated_at`（相同则按 `inserted_at`，再按 id）取最新的 `maxSessions` 个，按压缩包顺序逐个导入。其中某个会话失败时，由索引中下一个更旧的会话补位。
 - 标题沿用原标题，折叠空白并截断到 `maxTitleBytes`，固定为用户标题，导入后不触发标题生成。规范化后为空的标题不写入。事件时间沿用导出时间且单调不减；思考的 `elapsed_secs` 计入后续 step 的时间。
-- 没有文本、已保存图片和文件的用户消息保留一个空文本块：这一行照常显示，但 DeepSeek 请求序列化会像对待其它空用户消息一样把它丢掉，该轮提问因此不在模型上下文里（首轮没有文本时，请求会直接从 assistant 消息开始）。
+- 没有文本、已保存图片和文件的用户消息保留一个空文本块：这一行照常显示，但 SuperNova 请求序列化会像对待其它空用户消息一样把它丢掉，该轮提问因此不在模型上下文里（首轮没有文本时，请求会直接从 assistant 消息开始）。
 - 导出包含图片文件（png、jpg、jpeg、webp 或 gif）且附件服务保存成功时，用户消息中的图片成为图片附件。其余图片与所有非图片文件成为合成的文件卡片，显示文件类型图标、名称和导出中的大小；卡片不能打开、没有字节，也不指向任何已保存对象，因此模型按句柄里的路径去读什么也读不到。Host 日志记录每张图片未保存的原因。
 - 联网搜索写成 `web_search` 调用，打开的网页写成 `web_fetch` 调用，显示为标准搜索与抓取卡片。导出记录为失败的搜索写成错误结果。仍在进行中的搜索、没有地址的打开网页和以图搜图都略去，官网的回复里也不显示它们。
 - `READ_LINK` 记录按链接页面逐行写成 Markdown 链接 `[title](url)`；缺少标题时以 URL 作为链接文本，缺少 URL 时只写标题。`PARTIAL_FILE_READ`、`TOOL_FIND`、`TIP` 和 `CONTENT_RISK` 记录不导入，官网同样不把它们显示为回答正文。
@@ -99,14 +99,14 @@ Host 半包注入 `typert`、`connection`、`sessionPersistence` 和 `workspaceR
 | [`src/archive.ts`](src/archive.ts) | `openExportArchive()`：ZIP 中央目录、只解压调用方所需条目（受 `maxEntryBytes` 约束）的流式扫描，以及按名读取单个条目 |
 | [`src/format.ts`](src/format.ts) | zod 校验 `manifest.json`、会话文件和本包映射的 fragment 类型 |
 | [`src/conversation.ts`](src/conversation.ts) | 纯函数 `selectBranch()` 与 `convertConversation()`：消息树到种子事件 |
-| [`src/importer.ts`](src/importer.ts) | `importDeepseekChatExport()`：索引选择、图片扫描、会话扫描、写入与附加工作区 |
-| [`src/index.ts`](src/index.ts) | `DeepseekChatImportService`、它的 `Config`、单一导入槽位、路由注册与 `@Remote limits()` |
+| [`src/importer.ts`](src/importer.ts) | `importSupernovaChatExport()`：索引选择、图片扫描、会话扫描、写入与附加工作区 |
+| [`src/index.ts`](src/index.ts) | `SupernovaChatImportService`、它的 `Config`、单一导入槽位、路由注册与 `@Remote limits()` |
 | [`src/client/`](src/client/index.ts) | 按钮、对话框、经页面载体或 XHR 的浏览器上传，以及 locale 字典 |
 | [`cordis.patch.yml`](cordis.patch.yml) | 可选 bundle 的行 |
 
 ### 上传
 
-浏览器先调用 `limits()`，大于 `maxUploadBytes` 的文件不发送。服务页面用 `XMLHttpRequest`（以获得上传进度）把文件 POST 到相对文档基址解析的 `api/deepseek-chat-import/archive?workspaceId=…`。Host 跑在页面之外执行上下文中的页面（例如静态 Cloudflare Pages 预览）改为提供 `__DSH_TRANSPORT__.fetch`：压缩包经该载体传输，不报告字节进度，因此对话框直接进入读取与导入阶段。Host 在 `ctx.connection.fetch` 上把该路径注册为精确路由，只有 owner Peer 能访问。路由要求 `application/octet-stream`，占用服务的单一导入槽位，解析工作区，把流式请求体读入一个按 `content-length` 分配的缓冲区，直到读完或超过上限。上传内容从不写入磁盘。应答为 `application/x-ndjson`：写入会话期间是 `{ type: 'progress', done, total }` 行，最后是一行 `{ type: 'outcome', outcome }`，其中 `outcome` 为 `{ ok: true, value }` 或 `{ ok: false, error: { reason, message } }`；浏览器在完整的行到达时读取；遇到第一行不是合法协议值时立即结算为无效应答，并取消余下的流，后续 outcome 无法覆盖它。关闭对话框、连接断开或卸载插件都会中止导入，卸载只有在导入停止写入后才完成。
+浏览器先调用 `limits()`，大于 `maxUploadBytes` 的文件不发送。服务页面用 `XMLHttpRequest`（以获得上传进度）把文件 POST 到相对文档基址解析的 `api/deepseek-chat-import/archive?workspaceId=…`。Host 跑在页面之外执行上下文中的页面（例如静态 Cloudflare Pages 预览）改为提供 `__SNH_TRANSPORT__.fetch`：压缩包经该载体传输，不报告字节进度，因此对话框直接进入读取与导入阶段。Host 在 `ctx.connection.fetch` 上把该路径注册为精确路由，只有 owner Peer 能访问。路由要求 `application/octet-stream`，占用服务的单一导入槽位，解析工作区，把流式请求体读入一个按 `content-length` 分配的缓冲区，直到读完或超过上限。上传内容从不写入磁盘。应答为 `application/x-ndjson`：写入会话期间是 `{ type: 'progress', done, total }` 行，最后是一行 `{ type: 'outcome', outcome }`，其中 `outcome` 为 `{ ok: true, value }` 或 `{ ok: false, error: { reason, message } }`；浏览器在完整的行到达时读取；遇到第一行不是合法协议值时立即结算为无效应答，并取消余下的流，后续 outcome 无法覆盖它。关闭对话框、连接断开或卸载插件都会中止导入，卸载只有在导入停止写入后才完成。
 
 ### 事件映射
 
@@ -156,7 +156,7 @@ Host 半包注入 `typert`、`connection`、`sessionPersistence` 和 `workspaceR
 - **重复的本地文件头**——重复检测只覆盖中央目录。第二个本地文件头改成已有条目名时不会被发现，因此压缩包可以交付比索引列出的更多的会话，写入数量也没有额外限制。
 - **压缩包损坏时的部分写入**——压缩包结构在部分条目交付之后损坏时，会以 `unreadable-archive` 失败，而那些会话已经写入；失败应答不会列出它们。
 - **`read()` 截断**——`ExportArchive.read` 最多返回条目声明的大小，解压结果更大时截断到该大小；`stream` 把同一情况报告为大小失败。manifest、索引与补位会话按名读取，因此其中一项可能被截断。每次按名读取还会重新解析整个中央目录：manifest 与索引各付一次，补位会话再付一次。
-- **通道形态下没有上传百分比**——页面经 `__DSH_TRANSPORT__.fetch` 携带压缩包时不报告字节进度，对话框只显示读取与导入阶段。
+- **通道形态下没有上传百分比**——页面经 `__SNH_TRANSPORT__.fetch` 携带压缩包时不报告字节进度，对话框只显示读取与导入阶段。
 - **只支持一种导出结构**——导入器针对 2026-11-12 结构：`current_message_id`、`stage_id`、工具状态、链接与查找字段以及新的记录类型。该结构新增的字段按可选读取，因此更旧的 v3 压缩包仍能导入，但它不是支持目标。
 - **只支持上传 ZIP**——不能导入解压后的导出目录或 Host 路径。
 - **重复导入产生重复会话**——再次导入同一导出会写入新的会话；导入不记录哪些会话已经导入过。

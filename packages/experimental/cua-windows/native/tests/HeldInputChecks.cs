@@ -1,7 +1,7 @@
 // The receiver records accepted dispatches and can refuse an individual down or up.
 using System.Text.Json;
-using DeepSeek.Cua.Protocol;
-using DeepSeek.Cua.Windows;
+using SuperNova.Cua.Protocol;
+using SuperNova.Cua.Windows;
 
 internal static class HeldInputChecks
 {

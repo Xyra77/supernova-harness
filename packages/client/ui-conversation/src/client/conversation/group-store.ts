@@ -1,6 +1,6 @@
 /** Keyed group publication and incremental validation of rendering positions. */
-import { createSnapshotStore, type ObservableSnapshot, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
+import { createSnapshotStore, type ObservableSnapshot, type SnapshotStore } from '@supernova-ai/snh-client-store'
+import { assertNever } from '@supernova-ai/snh-util-values'
 import type { ConversationViewNode } from '../contract/conversation.ts'
 import type {
   ConversationGroupedView, GroupKey, GroupSnapshot, GroupUpdate, NodeKey, NodeReference, RenderEntry,

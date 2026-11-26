@@ -2,14 +2,14 @@
  * Concrete agent-loop plugin: creates scoped ReactLoopAgents, publishes them
  * through the agent/session registries, and owns their ordered teardown.
  *
- * @module @deepseek-ai/dsh-agent-loop
+ * @module @supernova-ai/snh-agent-loop
  */
-import type { Volatile } from '@deepseek-ai/cosmokit'
+import type { Volatile } from '@supernova-ai/cosmokit'
 
-import { Context, FiberState, Service } from '@deepseek-ai/cordis'
+import { Context, FiberState, Service } from '@supernova-ai/cordis'
 import { randomUUID } from 'node:crypto'
-import z from '@deepseek-ai/schemastery'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import z from '@supernova-ai/schemastery'
+import { brandString } from '@supernova-ai/snh-brand'
 import type {
   Agent,
   AgentFactory,
@@ -22,16 +22,16 @@ import type {
   ModelSelection,
   ModelSelectionProjectionState,
   InboxState,
-} from '@deepseek-ai/dsh-agent'
-import { modelSelectionProjectionDefinition } from '@deepseek-ai/dsh-agent'
-import { errorChain, type ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import { interruptedTurnClosers, SessionLogOffset, SessionPreparation } from '@deepseek-ai/dsh-session'
-import type { Session, SessionHeader, SessionId } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-system-prompt'
-import type {} from '@deepseek-ai/dsh-tools'
-import type { ProjectionHandle } from '@deepseek-ai/dsh-session-projection'
-import { SessionPersistenceNotFoundError } from '@deepseek-ai/dsh-session-persistence'
-import type { SessionHandle, SessionPersistence } from '@deepseek-ai/dsh-session-persistence'
+} from '@supernova-ai/snh-agent'
+import { modelSelectionProjectionDefinition } from '@supernova-ai/snh-agent'
+import { errorChain, type ReasoningEffortId } from '@supernova-ai/snh-llm'
+import { interruptedTurnClosers, SessionLogOffset, SessionPreparation } from '@supernova-ai/snh-session'
+import type { Session, SessionHeader, SessionId } from '@supernova-ai/snh-session'
+import type {} from '@supernova-ai/snh-system-prompt'
+import type {} from '@supernova-ai/snh-tools'
+import type { ProjectionHandle } from '@supernova-ai/snh-session-projection'
+import { SessionPersistenceNotFoundError } from '@supernova-ai/snh-session-persistence'
+import type { SessionHandle, SessionPersistence } from '@supernova-ai/snh-session-persistence'
 import { ReactLoopAgent } from './agent.ts'
 import { inboxProjectionDefinition } from './inbox.ts'
 import { DEFAULT_MAX_PARALLEL_TOOL_CALLS } from './constants.ts'
@@ -172,7 +172,7 @@ interface AgentInitializationOptions {
   readonly signal?: AbortSignal | undefined
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     agentLoop: AgentLoop
     /**
@@ -761,7 +761,7 @@ export class AgentLoop extends Service implements AgentFactory {
   async resume(ownerCtx: Context, options: ResumeAgentOptions): Promise<AgentHandle> {
     const persistence = this.runtime.ctx.get('sessionPersistence')
     if (persistence === undefined) {
-      throw new Error('cannot resume: session persistence is not configured (load a dsh-session-persistence backend)')
+      throw new Error('cannot resume: session persistence is not configured (load a snh-session-persistence backend)')
     }
     return this.resumeWith(ownerCtx, persistence, options)
   }

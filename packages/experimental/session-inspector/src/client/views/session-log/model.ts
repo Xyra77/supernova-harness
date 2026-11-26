@@ -1,10 +1,10 @@
 /** Incremental raw Session rows with lossless Assistant stream children. */
 
-import type { SessionEventSource, SessionEventWindow, SessionEventLikeEntry } from '@deepseek-ai/dsh-api-session-controller/client'
-import { createSnapshotStore, type ObservableSnapshot, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { expandAssistantStream, type AssistantStreamRecord, type TimedStreamChunk } from '@deepseek-ai/dsh-llm/assistant-stream'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
-import type { SessionSeq } from '@deepseek-ai/dsh-session/types'
+import type { SessionEventSource, SessionEventWindow, SessionEventLikeEntry } from '@supernova-ai/snh-api-session-controller/client'
+import { createSnapshotStore, type ObservableSnapshot, type SnapshotStore } from '@supernova-ai/snh-client-store'
+import { expandAssistantStream, type AssistantStreamRecord, type TimedStreamChunk } from '@supernova-ai/snh-llm/assistant-stream'
+import type { StreamChunk } from '@supernova-ai/snh-llm'
+import type { SessionSeq } from '@supernova-ai/snh-session/types'
 import type { InspectorRecord, InspectorRow } from '../table-model.ts'
 import { AssistantLogStream } from './stream.ts'
 import { SessionLogGroups } from './groups.ts'

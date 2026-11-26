@@ -24,8 +24,8 @@ for ($ancestor = [IO.DirectoryInfo]::new($RunnerRoot); $null -ne $ancestor; $anc
 }
 $sid = [Security.Principal.WindowsIdentity]::GetCurrent().User.Value
 $digest = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($RunnerRoot.ToUpperInvariant())))
-$taskName = 'DSH-Packaging-' + $digest.Substring(0,16)
-$serviceDir = Join-Path $RunnerRoot 'dsh-task'
+$taskName = 'SNH-Packaging-' + $digest.Substring(0,16)
+$serviceDir = Join-Path $RunnerRoot 'snh-task'
 if ($Action -eq 'register-boot') {
     if (-not $RunAs) { throw 'Boot registration requires -RunAs with the prepared runner account.' }
     $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -39,7 +39,7 @@ if ($Action -eq 'register-boot') {
 $scheduler = New-Object -ComObject 'Schedule.Service'
 $scheduler.Connect()
 $task = Get-WindowsRunnerTask $scheduler $taskName
-if ($task -and $task.Definition.RegistrationInfo.Description -ne "DSH packaging runner: $RunnerRoot; owner: $sid") { throw 'Task ownership differs; inspect it in Task Scheduler.' }
+if ($task -and $task.Definition.RegistrationInfo.Description -ne "SNH packaging runner: $RunnerRoot; owner: $sid") { throw 'Task ownership differs; inspect it in Task Scheduler.' }
 
 if ($Action -in @('install','register-boot')) {
     if ($task) { throw 'Task already installed; stop and uninstall before reinstalling.' }
@@ -143,8 +143,8 @@ switch ($Action) {
                 throw 'Running task process identity is unavailable. Automatic starts are disabled; inspect the task before stopping it.'
             }
             # Parent IDs can be reused; this snapshot supplies wait handles, not termination authority.
-            if (-not ('DshRunnerProcesses' -as [type])) { Add-Type -Path (Join-Path $PSScriptRoot 'windows-runner-processes.cs') }
-            $processes = [DshRunnerProcesses]::ReadParents()
+            if (-not ('SnhRunnerProcesses' -as [type])) { Add-Type -Path (Join-Path $PSScriptRoot 'windows-runner-processes.cs') }
+            $processes = [SnhRunnerProcesses]::ReadParents()
             $ownedIds = [Collections.Generic.HashSet[int]]::new()
             $null = $ownedIds.Add($owner.Id)
             do {

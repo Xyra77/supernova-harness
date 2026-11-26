@@ -1,0 +1,26 @@
+- name: '@supernova-ai/snh-llm'
+- name: '@supernova-ai/snh-session'
+- name: '@supernova-ai/snh-session-projection'
+- name: '@supernova-ai/snh-system-prompt'
+- name: '@supernova-ai/snh-tools'
+- name: '@supernova-ai/snh-tool-executor-native'
+- name: '@supernova-ai/snh-agent'
+- name: '@supernova-ai/snh-agent-loop'
+  config:
+    agents: []
+- name: '@supernova-ai/snh-credentials-local'
+  config:
+    path: {{credentials}}
+    watch: false
+- name: '@supernova-ai/snh-supernova-auth'
+- name: '@supernova-ai/snh-llm-supernova-api-key'
+  config:
+    apiKeyEnv: DEEPSEEK_API_KEY
+    baseURL: {{endpoint}}
+    thinking: enabled
+    reasoningEffort: high
+    maxTokens: 256000
+    streamIdleTimeoutMs: 300000
+- name: '@supernova-ai/snh-llm-deepseek-account'
+  config:
+    baseURL: {{endpoint}}

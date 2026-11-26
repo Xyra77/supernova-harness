@@ -2,11 +2,11 @@
  * The page's one subscription to the registered accounts, and what only this browser knows about them: the operations
  * it started, whose authorization pages open here, and the notice to show.
  */
-import type { Context } from '@deepseek-ai/cordis'
-import type { RemoteStream } from '@deepseek-ai/dsh-api-gateway/client'
-import type { ClientRemote } from '@deepseek-ai/dsh-api-remotes/client'
-import { createSnapshotStore, type SnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { LocalizedText } from '@deepseek-ai/dsh-package-manifest'
+import type { Context } from '@supernova-ai/cordis'
+import type { RemoteStream } from '@supernova-ai/snh-api-gateway/client'
+import type { ClientRemote } from '@supernova-ai/snh-api-remotes/client'
+import { createSnapshotStore, type SnapshotStore } from '@supernova-ai/snh-client-store'
+import type { LocalizedText } from '@supernova-ai/snh-package-manifest'
 import type { ConnectorAccountEntry, ConnectorAccountsView, ConnectorOperationId } from '../types.ts'
 import type { ConnectorAccountNotice, ConnectorAccountsState } from './types.ts'
 

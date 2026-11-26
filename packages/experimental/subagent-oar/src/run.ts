@@ -1,8 +1,8 @@
 /**
  * One-shot OAR execution, root-answer selection, and owned session disposal.
- * Native records remain in OAR; DSH receives assistant text and fixed failure facts.
+ * Native records remain in OAR; SNH receives assistant text and fixed failure facts.
  *
- * @module @deepseek-ai/dsh-experimental-subagent-oar/run
+ * @module @supernova-ai/snh-experimental-subagent-oar/run
  */
 
 import { randomUUID } from 'node:crypto'
@@ -15,10 +15,10 @@ import type {
   TurnOutcome,
 } from '@botiverse/oar'
 import { awaitTurnEnd } from '@botiverse/oar/observe'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { HarnessError } from '@deepseek-ai/dsh-error'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import { HarnessError } from '@supernova-ai/snh-error'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import type { SessionId } from '@supernova-ai/snh-session'
 import {
   assertUsableCwd,
   settleRunResult,
@@ -27,8 +27,8 @@ import {
   type SubagentResult,
   type SubagentRun,
   type SubagentStopReason,
-} from '@deepseek-ai/dsh-subagent'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
+} from '@supernova-ai/snh-subagent'
+import { assertNever } from '@supernova-ai/snh-util-values'
 import { oarEnvironment } from './environment.ts'
 
 /** Resolved deployment settings and the runtime owned by one provider instance. */
@@ -282,7 +282,7 @@ function publishRun(
 }
 
 /**
- * Open one OAR session and return a one-shot DSH run. OAR cannot interrupt session
+ * Open one OAR session and return a one-shot SNH run. OAR cannot interrupt session
  * startup; cancellation during that await disposes the returned session before rejection.
  * @param request - text task, resolved child directory, parent, and cancellation signal.
  * @param spec - selected runtime, native settings, deadline, and safe diagnostic observer.

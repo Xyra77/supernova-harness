@@ -3,19 +3,19 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { expect, it } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { SubagentPromptRequestId } from '@deepseek-ai/dsh-subagent'
-import { createUserMessage, type ContentBlock } from '@deepseek-ai/dsh-llm'
-import { parseSessionLog, prepareSessionSnapshotFixtureForComparison } from '@deepseek-ai/dsh-llm-replay'
-import type { Session } from '@deepseek-ai/dsh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { SubagentPromptRequestId } from '@supernova-ai/snh-subagent'
+import { createUserMessage, type ContentBlock } from '@supernova-ai/snh-llm'
+import { parseSessionLog, prepareSessionSnapshotFixtureForComparison } from '@supernova-ai/snh-llm-replay'
+import type { Session } from '@supernova-ai/snh-session'
 import {
   fixtureContext, normalizeSessionSnapshots, normalizedSystemPrompts, normalizedToolSchemas,
   formatSystemPromptSnapshot, parseToolSchemasSnapshot, redactSessionSnapshotIds, refreshFixtureReplacements,
   scrubSessionSnapshot, stabilizeFixtureMessageIds, stabilizeRefreshLog, tokenizeSessionFixtureCwd,
-} from '@deepseek-ai/dsh-session-snapshot'
-import type {} from '@deepseek-ai/dsh-api-session-controller'
-import type {} from '@deepseek-ai/dsh-schedule'
-import type {} from '@deepseek-ai/dsh-subagent'
+} from '@supernova-ai/snh-session-snapshot'
+import type {} from '@supernova-ai/snh-api-session-controller'
+import type {} from '@supernova-ai/snh-schedule'
+import type {} from '@supernova-ai/snh-subagent'
 import {
   fixtureUserPrompts, launchWebScaffold, normalizeWebSessionVolatiles, rawSessionLog, readPersistedEvents,
   recordedSessionFixturePath, selectedSessionFixture, webSnapshotMode,

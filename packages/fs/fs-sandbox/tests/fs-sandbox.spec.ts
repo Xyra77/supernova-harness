@@ -13,15 +13,15 @@ import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promis
 import { existsSync, realpathSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, parse } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import { FsError, type FsTargetKey } from '@deepseek-ai/dsh-fs'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { FsTarget } from '@deepseek-ai/dsh-fs'
-import SandboxPolicyService, { setSandboxMode } from '@deepseek-ai/dsh-sandbox-policy'
-import { Session, type SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import type { SandboxMode } from '@deepseek-ai/dsh-sandbox'
-import { SandboxedFileSystem } from '@deepseek-ai/dsh-fs-sandbox'
+import { Context } from '@supernova-ai/cordis'
+import { FsError, type FsTargetKey } from '@supernova-ai/snh-fs'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { FsTarget } from '@supernova-ai/snh-fs'
+import SandboxPolicyService, { setSandboxMode } from '@supernova-ai/snh-sandbox-policy'
+import { Session, type SessionId } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import type { SandboxMode } from '@supernova-ai/snh-sandbox'
+import { SandboxedFileSystem } from '@supernova-ai/snh-fs-sandbox'
 import { assertWorkspaceOutsideTemp, outsideTempWorkspaceParent } from '../../../../scripts/snapshot-workspace-parent.ts'
 
 let base: string
@@ -41,7 +41,7 @@ async function boot(mode: SandboxMode): Promise<void> {
 
 beforeEach(async ({ onTestFinished }) => {
   // Both siblings must be outside automatic temp grants for containment denials to be meaningful.
-  const directory = await mkdtemp(join(outsideTempWorkspaceParent(), '.dsh-fssbx-'))
+  const directory = await mkdtemp(join(outsideTempWorkspaceParent(), '.snh-fssbx-'))
   onTestFinished(async () => { await rm(directory, { recursive: true, force: true }) })
   base = realpathSync.native(directory)
   assertWorkspaceOutsideTemp(base)
@@ -160,7 +160,7 @@ describe('workspace-write containment', () => {
   })
 
   it('a write to the platform temp area lands (parity with the bash runner grant)', async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'dsh-fssbx-tmp-'))
+    const dir = await mkdtemp(join(tmpdir(), 'snh-fssbx-tmp-'))
     try {
       const path = join(dir, 'temp.txt')
       await fs.writeText(await target(path), 'temp')

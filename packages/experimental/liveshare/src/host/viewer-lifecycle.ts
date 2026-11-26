@@ -4,12 +4,12 @@
  * Every viewer request is admitted against the share's lifecycle here, and every resource a request
  * opens — a reader Peer, an open stream, an in-flight call, a child's enforcement — is released from
  * this module. Closing a share or a viewer walks exactly the resources that belong to it.
- * @module @deepseek-ai/dsh-experimental-liveshare/src/host/viewer-lifecycle
+ * @module @supernova-ai/snh-experimental-liveshare/src/host/viewer-lifecycle
  */
 
-import type { PeerScope } from '@deepseek-ai/dsh-typert-protocol'
-import type { ShareRpcActor } from '@deepseek-ai/dsh-experimental-liveshare-protocol'
-import { identityKeyOf } from '@deepseek-ai/dsh-experimental-liveshare-protocol'
+import type { PeerScope } from '@supernova-ai/snh-typert-protocol'
+import type { ShareRpcActor } from '@supernova-ai/snh-experimental-liveshare-protocol'
+import { identityKeyOf } from '@supernova-ai/snh-experimental-liveshare-protocol'
 import { isExpired, type ForkShareState } from './fork-policy.ts'
 import { shareViewerPrincipal } from './viewer-principal.ts'
 import type { ReaderWriteAction } from './viewer-access-policy.ts'

@@ -43,26 +43,26 @@ describe('SessionPanel.module.css docking geometry', () => {
     const panel = declarationsOf('.panel')
     expect(panel['right']).toBe('var(--panel-edge)')
     expect(panel['width']).toBe(
-      'clamp(var(--panel-min-width), calc(var(--dsh-chat-aside-gutter, 0px) - var(--panel-clear) - var(--panel-edge)), 360px)',
+      'clamp(var(--panel-min-width), calc(var(--snh-chat-aside-gutter, 0px) - var(--panel-clear) - var(--panel-edge)), 360px)',
     )
     const probe = declarationsOf('.dockProbe')
     expect(probe['width']).toBe(
-      'max(calc(var(--dsh-chat-aside-gutter, 0px) - var(--panel-clear) - var(--panel-edge) - var(--panel-min-width) + 1px),'
-      + ' var(--dsh-session-panel-reserve-room))',
+      'max(calc(var(--snh-chat-aside-gutter, 0px) - var(--panel-clear) - var(--panel-edge) - var(--panel-min-width) + 1px),'
+      + ' var(--snh-session-panel-reserve-room))',
     )
     expect(probe['max-width']).toBe('1px')
   })
 
   it('derives the reserve step on the Conversation body, where the non-inherited maximum is readable', () => {
     expect(declarationsOf(':global([data-conversation-content])')).toEqual({
-      '--dsh-session-panel-reserve-room': 'clamp(0px,'
-        + ' calc((var(--dsh-chat-end-reserve-max, 0px) - var(--panel-clear) - var(--panel-edge) - var(--panel-min-width)) * 10000000 + 1px),'
+      '--snh-session-panel-reserve-room': 'clamp(0px,'
+        + ' calc((var(--snh-chat-end-reserve-max, 0px) - var(--panel-clear) - var(--panel-edge) - var(--panel-min-width)) * 10000000 + 1px),'
         + ' 1px)',
     })
-    expect(declarationsOf(":global([data-slot='conversation.chat.flow'])")['--dsh-session-panel-reserve-room']).toBe('initial')
+    expect(declarationsOf(":global([data-slot='conversation.chat.flow'])")['--snh-session-panel-reserve-room']).toBe('initial')
     // The aside inherits the computed step when it flips; the message rows keep the initial value.
     expect(css.replace(/\s+/g, ' ')).toContain(
-      "@property --dsh-session-panel-reserve-room { syntax: '<length>'; inherits: true; initial-value: 0px; }",
+      "@property --snh-session-panel-reserve-room { syntax: '<length>'; inherits: true; initial-value: 0px; }",
     )
   })
 
@@ -92,7 +92,7 @@ describe('SessionPanel.module.css docking geometry', () => {
 
   it('asks the Conversation body for exactly the gutter that docks the panel while the probe carries the mark', () => {
     const request = declarationsOf(':global([data-conversation-content]):has(.dockProbe[data-session-panel-reserve])')
-    expect(request).toEqual({ '--dsh-chat-end-reserve': 'calc(var(--panel-clear) + var(--panel-edge) + var(--panel-min-width))' })
+    expect(request).toEqual({ '--snh-chat-end-reserve': 'calc(var(--panel-clear) + var(--panel-edge) + var(--panel-min-width))' })
   })
 
   it('keeps the probe out of sight, out of the layout flow, and away from the pointer', () => {
@@ -146,19 +146,19 @@ describe('SessionPanel.module.css section reordering', () => {
   it('plays the entrance and the exit only on a panel that carries the mark, and moves the transcript over the same time and curve', () => {
     const motion = '160ms cubic-bezier(0.4, 0, 0.2, 1)'
     expect(declarationsOf('.panel')['animation']).toBeUndefined()
-    expect(declarationsOf(".panel[data-session-panel-motion='enter']")).toEqual({ animation: `dsh-session-panel-enter ${motion}` })
+    expect(declarationsOf(".panel[data-session-panel-motion='enter']")).toEqual({ animation: `snh-session-panel-enter ${motion}` })
     // The exit holds its last frame until the panel is removed, and a leaving panel takes no presses.
     expect(declarationsOf(".panel[data-session-panel-motion='exit']")).toEqual({
-      'animation': `dsh-session-panel-exit ${motion} forwards`, 'pointer-events': 'none',
+      'animation': `snh-session-panel-exit ${motion} forwards`, 'pointer-events': 'none',
     })
     expect(declarationsOf(':global([data-conversation-content]):has(.dockProbe[data-session-panel-moving])'))
-      .toEqual({ '--dsh-chat-end-reserve-transition': motion })
+      .toEqual({ '--snh-chat-end-reserve-transition': motion })
     // The two keyframes mirror each other: transparent at the scrollport's end edge, the panel's own edge inset away,
     // so the slide never puts the panel past that edge.
     const frames = (name: string): string => (new RegExp(`@keyframes ${name} \\{([\\s\\S]*?)\\n\\}`).exec(css)?.[1] ?? '').replace(/\s+/g, ' ').trim()
-    expect(frames('dsh-session-panel-enter'))
+    expect(frames('snh-session-panel-enter'))
       .toBe('from { opacity: 0; transform: translateX(var(--panel-edge)); } to { opacity: 1; transform: translateX(0); }')
-    expect(frames('dsh-session-panel-exit'))
+    expect(frames('snh-session-panel-exit'))
       .toBe('from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(var(--panel-edge)); }')
   })
 

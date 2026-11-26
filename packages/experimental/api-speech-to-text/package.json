@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-experimental-api-speech-to-text",
+  "name": "@supernova-ai/snh-experimental-api-speech-to-text",
   "description": "Authenticated experimental speech transcription for browser clients",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -50,17 +50,17 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/schemastery": "workspace:~",
     "zod": "4.6.6"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-experimental-speech-to-text": "workspace:*",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-experimental-speech-to-text": "workspace:*",
+    "@supernova-ai/snh-typert-protocol": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-experimental-speech-to-text": "workspace:*",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-experimental-speech-to-text": "workspace:*",
+    "@supernova-ai/snh-typert-protocol": "workspace:*"
   }
 }

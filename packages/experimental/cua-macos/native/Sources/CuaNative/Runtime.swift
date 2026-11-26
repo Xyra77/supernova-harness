@@ -94,7 +94,7 @@ struct HelperConfiguration: Sendable {
 
 final class JSONLInput: Sendable {
     // Buffer and reads belong exclusively to queue; stop state uses the shared latch.
-    private let queue = DispatchQueue(label: "dsh.cua.socket-input")
+    private let queue = DispatchQueue(label: "snh.cua.socket-input")
     private let cancellation: CancellationLatch
     private let limit: Int
     private let channel: SharedSocket
@@ -133,7 +133,7 @@ final class JSONLInput: Sendable {
 }
 
 final class JSONLWriter: Sendable {
-    private let queue = DispatchQueue(label: "dsh.cua.socket-output")
+    private let queue = DispatchQueue(label: "snh.cua.socket-output")
     let limit: Int
     private let channel: SharedSocket
     private let writeTimeout: Double

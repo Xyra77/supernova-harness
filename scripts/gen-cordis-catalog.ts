@@ -26,8 +26,8 @@ import {
   renderPageRegion,
   REGION_BEGIN,
   REGION_END,
-} from '@deepseek-ai/dsh-typert-generator'
-import type { CordisCatalogPolicy } from '@deepseek-ai/dsh-typert-generator'
+} from '@supernova-ai/snh-typert-generator'
+import type { CordisCatalogPolicy } from '@supernova-ai/snh-typert-generator'
 import { renderCordisCoreApiPages } from './cordis-core-api.ts'
 import { contextKeyMap, contextMergeFiles, eventNameList } from './cordis-walk.ts'
 import {
@@ -95,13 +95,13 @@ export const SERVICE_PAGE: Record<string, string> = {
   compaction: 'compaction.md',
   cordisInspect: 'extensions.md',
   authorization: 'credentials.md',
-  deepseekAccount: 'account.md',
-  deepseekAuth: 'account.md',
+  supernovaAccount: 'account.md',
+  supernovaAuth: 'account.md',
   credentials: 'credentials.md',
   credentialsController: 'credentials.md',
   settingsController: 'settings.md',
   directoryPicker: 'workspace.md',
-  deepseekLlmApiExtensions: 'llm-streaming.md',
+  supernovaLlmApiExtensions: 'llm-streaming.md',
   dynamicCordisRunner: 'extensions.md',
   fileUploads: 'attachment.md',
   fileReferences: 'session-reference.md',
@@ -122,7 +122,7 @@ export const SERVICE_PAGE: Record<string, string> = {
   sandboxPolicy: 'sandbox.md',
   ssh: 'ssh.md',
   sessionPersistence: 'persistence.md',
-  deepseekChatImport: 'persistence.md',
+  supernovaChatImport: 'persistence.md',
   sessionQuery: 'session-query.md',
   sessionFileReferences: 'session-reference.md',
   sessionReferenceResolver: 'session-reference.md',
@@ -137,7 +137,7 @@ export const SERVICE_PAGE: Record<string, string> = {
   sessionStatus: 'web-client.md',
   sessionSkillCatalog: 'skills.md',
   sessions: 'session.md',
-  sessionLogDeepSeek: 'session.md',
+  sessionLogSuperNova: 'session.md',
   settings: 'settings.md',
   sessionTitle: 'session-title.md',
   skills: 'skills.md',
@@ -176,7 +176,7 @@ export const SERVICE_PAGE: Record<string, string> = {
 /**
  * Context keys declared in `interface Context` merges that the rendering
  * projection cannot see, each with the reason and its documentation owner.
- * The scan that enforces this list reads EVERY `declare module '@deepseek-ai/cordis'`
+ * The scan that enforces this list reads EVERY `declare module '@supernova-ai/cordis'`
  * Context merge under `packages/x/x/src/**` — any depth, not only root
  * `index.ts` files with a same-named service class — so a new service can
  * never silently join this blind spot: it either enters {@link SERVICE_PAGE}
@@ -202,8 +202,8 @@ export const SERVICE_WALK_EXEMPTIONS: Record<string, string> = {
   cmdlineArgs: 'not a service: launcher-provided immutable app argument accessor — packages/boot/cmdline/README.md owns the launcher contract',
   configuredAgentIdentities: 'not a service: launcher-provided boot-context value (ConfiguredAgentIdentities | undefined) — packages/core/agent-loop/README.md owns this launcher contract',
   launcherSessionQueryPath: 'not a service: launcher-provided boot-context value (string | undefined) — packages/session-query/session-query-sqlite/README.md owns this launcher contract',
-  dshHomePath: 'not a service: boot-provided root accessor function (typeof dshHomePath | undefined) for Loader !!js config expressions — packages/boot/app-boot/README.md owns the boot contract',
-  dshPath: 'not a service: boot-provided root accessor function (typeof dshPath | undefined) for Loader !!js config expressions — packages/boot/app-boot/README.md owns the boot contract',
+  snhHomePath: 'not a service: boot-provided root accessor function (typeof snhHomePath | undefined) for Loader !!js config expressions — packages/boot/app-boot/README.md owns the boot contract',
+  snhPath: 'not a service: boot-provided root accessor function (typeof snhPath | undefined) for Loader !!js config expressions — packages/boot/app-boot/README.md owns the boot contract',
   launchEnvironment: 'not a service: launcher-provided root accessor value (LaunchEnvironmentSnapshot | undefined) — packages/util/launch-environment/README.md owns this launcher contract',
   pluginPackages: 'profile-boot-owned package resolver service used by optional consumers — packages/boot/app-boot/README.md owns this internal API',
   fileUpload: 'client-side browser upload service — packages/client/file-upload/README.md owns the API',
@@ -296,7 +296,7 @@ export const EVENT_SCOPE_PAGE: Record<string, string> = {
  * Event names declared in `interface Events` merges that the rendering
  * projection cannot see, each with the reason and its documentation owner.
  * The mirror of {@link SERVICE_WALK_EXEMPTIONS} for events: an independent
- * scan reads EVERY `declare module '@deepseek-ai/cordis'` Events merge under
+ * scan reads EVERY `declare module '@supernova-ai/cordis'` Events merge under
  * `packages/x/x/src/**`, so a declared event either renders onto a subsystems
  * page (via {@link EVENT_SCOPE_PAGE}) or names itself here — never vanishes
  * silently. Keys are full event names rather than scopes, so a scope-level
@@ -509,9 +509,9 @@ export const LINK_MAP: Readonly<Record<string, string>> = {
   SettleReason: 'core.md',
   AdapterRegistrationHandle: 'llm-streaming.md',
   DirectoryRegistrationHandle: 'llm-streaming.md',
-  DeepSeekLlmApiExtensionMap: 'llm-streaming.md',
-  DeepSeekLlmApiExtensionProvider: 'llm-streaming.md',
-  DeepSeekLlmApiExtensionRequest: 'llm-streaming.md',
+  SuperNovaLlmApiExtensionMap: 'llm-streaming.md',
+  SuperNovaLlmApiExtensionProvider: 'llm-streaming.md',
+  SuperNovaLlmApiExtensionRequest: 'llm-streaming.md',
   LlmCallConfig: 'llm-streaming.md',
   PiAiRequestHeaderContext: 'llm-streaming.md',
   ConfigureCall: 'llm-streaming.md',
@@ -650,7 +650,7 @@ export const LINK_MAP: Readonly<Record<string, string>> = {
   ShellProcess: 'shell.md',
   ShellPromotionOffer: 'shell.md',
   ShellRunResult: 'shell.md',
-  DshEnvironment: 'subprocess.md',
+  SnhEnvironment: 'subprocess.md',
   SubprocessHandle: 'subprocess.md',
   SubprocessOutcome: 'subprocess.md',
   SubprocessOutputRead: 'subprocess.md',
@@ -728,7 +728,7 @@ export const LINK_MAP: Readonly<Record<string, string>> = {
   LspQueryResult: 'lsp.md',
   LlmAdapter: 'llm-streaming.md',
   PreparedLlmCall: 'llm-streaming.md',
-  PreparedDeepSeekLlmApiExtensions: 'llm-streaming.md',
+  PreparedSuperNovaLlmApiExtensions: 'llm-streaming.md',
   LlmRuntime: 'llm-streaming.md',
   StreamChunk: 'llm-streaming.md',
   SkillProviderControl: 'skills.md',
@@ -959,15 +959,15 @@ export const LINK_MAP: Readonly<Record<string, string>> = {
   AccountUserId: 'account.md',
   PlatformSession: 'account.md',
   SignInAttemptId: 'account.md',
-  DeepSeekApiKeyHeader: 'account.md',
-  DeepSeekAuthBilling: 'account.md',
-  DeepSeekAuthCandidate: 'account.md',
-  DeepSeekAuthConnection: 'account.md',
-  DeepSeekAuthDestination: 'account.md',
-  DeepSeekAuthKind: 'account.md',
-  DeepSeekAuthRequest: 'account.md',
-  DeepSeekAuthUnresolved: 'account.md',
-  DeepSeekAuthorization: 'account.md',
+  SuperNovaApiKeyHeader: 'account.md',
+  SuperNovaAuthBilling: 'account.md',
+  SuperNovaAuthCandidate: 'account.md',
+  SuperNovaAuthConnection: 'account.md',
+  SuperNovaAuthDestination: 'account.md',
+  SuperNovaAuthKind: 'account.md',
+  SuperNovaAuthRequest: 'account.md',
+  SuperNovaAuthUnresolved: 'account.md',
+  SuperNovaAuthorization: 'account.md',
   AuthorizationPrompt: 'credentials.md',
   AuthorizationRequest: 'credentials.md',
   AuthorizationSession: 'credentials.md',
@@ -1117,7 +1117,7 @@ export const TYPE_LINK_EXEMPTIONS: Readonly<Record<string, string>> = {
   ActionCardResult: 'packages/interaction/action-cards/README.md',
   ActionCardView: 'packages/interaction/action-cards/README.md',
   RecommendationDetails: 'packages/extensions/plugin-recommendations/README.md',
-  DeepseekChatImportLimits: 'upload limits returned to the browser are owned by packages/experimental/deepseek-chat-import/src/types.ts',
+  SupernovaChatImportLimits: 'upload limits returned to the browser are owned by packages/experimental/deepseek-chat-import/src/types.ts',
   ProductEvent: 'Desktop event fields are owned by packages/client/product-analytics/README.md and src/events.ts',
   ConnectionFetchHandler: 'shared Fetch dispatch is owned by packages/client/connection/src/rpc.ts',
   ConnectionTrustRequest: 'transport authentication input is owned by packages/client/connection/src/rpc.ts',

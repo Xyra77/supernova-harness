@@ -1,10 +1,10 @@
 /**
  * Client-safe MCP connection status, probe outcomes, and OAuth attempt views. Types only — no runtime code.
  *
- * @module @deepseek-ai/dsh-mcp-client/types
+ * @module @supernova-ai/snh-mcp-client/types
  */
 
-import type { Branded } from '@deepseek-ai/dsh-brand'
+import type { Branded } from '@supernova-ai/snh-brand'
 
 /**
  * Actionable reasons a passive OAuth connection must await explicit authorization:

@@ -1,11 +1,11 @@
 /** Approval controls and persistent outcome notices, independent of Cordis contexts. */
 import { useId, useState } from 'react'
-import { Button, IconWarningOutlineMedium, StateDot, Toast } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
-import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type {} from '@deepseek-ai/dsh-client-resources/client'
+import { Button, IconWarningOutlineMedium, StateDot, Toast } from '@supernova-ai/snh-client-ui-primitives'
+import type { ObservableSnapshot } from '@supernova-ai/snh-client-store'
+import type { InjectFace, PropsLocale, PropsRuntime } from '@supernova-ai/snh-client-ui-slots'
+import type {} from '@supernova-ai/snh-client-resources/client'
 import type { RemoteConnectionContentProps } from './slots.ts'
-import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
+import type {} from '@supernova-ai/snh-client-ui-layout/client'
 import type { PairingDecision, PairingRequestId } from '../types.ts'
 import type { ApprovalState } from './pairing-approval.ts'
 import type {} from './pairing-resource.ts'
@@ -31,7 +31,7 @@ type Face = InjectFace<PairingInjected> & PropsLocale<'remoteConnection'>
 export function PairingRequests({ useResource, useApproval, decide, t }: Pick<RemoteConnectionContentProps, 'useResource'> & Face) {
   const title = useId()
   const [retry, setRetry] = useState(0)
-  const requests = useResource<'device-pairing'>(`dsh-resource://device-pairing/requests?retry=${String(retry)}`)
+  const requests = useResource<'device-pairing'>(`snh-resource://device-pairing/requests?retry=${String(retry)}`)
   const busy = useApproval(value => value.busy)
   const pendingRequests = requests.status === 'live' ? requests.value?.requests : undefined
   const hasRequests = pendingRequests !== undefined && pendingRequests.length > 0

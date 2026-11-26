@@ -3,11 +3,11 @@ import { mkdir, mkdtemp, rm, readdir, readFile, stat, writeFile } from 'node:fs/
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { DatabaseSync } from 'node:sqlite'
-import { Context } from '@deepseek-ai/cordis'
-import { SessionId, SessionLogOffset, SessionSeq, SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
+import { Context } from '@supernova-ai/cordis'
+import { SessionId, SessionLogOffset, SessionSeq, SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session'
+import type { SessionEvent, SessionHeader } from '@supernova-ai/snh-session'
 import { SessionAlreadyExistsError, SessionAlreadyOwnedError, SessionFormatUnsupportedError, SessionHandleClosedError,
-  SessionPersistenceCorruptionError, SessionPersistenceNotFoundError } from '@deepseek-ai/dsh-session-persistence'
+  SessionPersistenceCorruptionError, SessionPersistenceNotFoundError } from '@supernova-ai/snh-session-persistence'
 import { expect, it, onTestFinished, vi } from 'vitest'
 import { z } from 'zod'
 import { SessionWriteLease } from '../src/lease.ts'
@@ -33,7 +33,7 @@ async function fixture() {
   return { root: fixture.root, ctx, storage }
 }
 async function raw(publish: () => Promise<void> = async () => {}, failedClose = false) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-sqlite-failures-')), path = join(root, 'events.sqlite')
+  const root = await mkdtemp(join(tmpdir(), 'snh-sqlite-failures-')), path = join(root, 'events.sqlite')
   const report = vi.fn()
   const logs = sqliteLogs(path, root, { publish, report })
   onTestFinished(async () => {
@@ -136,7 +136,7 @@ it.each(['{}', '[]', 'null', '4', JSON.stringify({ version: 4.5 }), JSON.stringi
 )
 
 it('classifies a non-database SQLite file', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-segment-corrupt-db-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-segment-corrupt-db-'))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
   const path = join(root, 'sessions.sqlite')
   await writeFile(path, 'not a database')
@@ -608,7 +608,7 @@ it('refuses a missing parent Session row before appending and preserves the comm
 
 it('reports listener failures and joins successful consumer teardown through the owning scope', async () => {
   const { logs } = await raw()
-  const { SessionStore } = await import('@deepseek-ai/dsh-session')
+  const { SessionStore } = await import('@supernova-ai/snh-session')
   const ctx = new Context()
   onTestFinished(() => ctx.fiber.dispose())
   await ctx.plugin(SessionStore)

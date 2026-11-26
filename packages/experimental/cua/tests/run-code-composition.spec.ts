@@ -3,29 +3,29 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import AgentPresets from '@deepseek-ai/dsh-agent-preset-registry'
-import LocalAttachmentStore from '@deepseek-ai/dsh-attachment-local'
-import ComputerUseRegistry from '@deepseek-ai/dsh-computer-use'
-import FileSystem from '@deepseek-ai/dsh-fs-local'
-import LlmRuntime, { createUserMessage, LlmAdapter, type ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { GenerateOptions, LlmResolvedModelInfo, StreamChunk } from '@deepseek-ai/dsh-llm'
-import NodeRuntime from '@deepseek-ai/dsh-ptc-runtime-node'
-import Sandbox from '@deepseek-ai/dsh-sandbox-local'
-import SandboxPolicy from '@deepseek-ai/dsh-sandbox-policy'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import Subprocess from '@deepseek-ai/dsh-subprocess-local'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import * as PtcToolExecutor from '@deepseek-ai/dsh-tool-executor-ptc'
-import type {} from '@deepseek-ai/dsh-tool-executor-ptc/types'
-import ToolRuntime, { defineTool } from '@deepseek-ai/dsh-tools'
-import WorkingDirectory from '@deepseek-ai/dsh-working-directory'
+import { Context } from '@supernova-ai/cordis'
+import Include from '@supernova-ai/cordis-plugin-include'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import AgentPresets from '@supernova-ai/snh-agent-preset-registry'
+import LocalAttachmentStore from '@supernova-ai/snh-attachment-local'
+import ComputerUseRegistry from '@supernova-ai/snh-computer-use'
+import FileSystem from '@supernova-ai/snh-fs-local'
+import LlmRuntime, { createUserMessage, LlmAdapter, type ToolCallId } from '@supernova-ai/snh-llm'
+import type { GenerateOptions, LlmResolvedModelInfo, StreamChunk } from '@supernova-ai/snh-llm'
+import NodeRuntime from '@supernova-ai/snh-ptc-runtime-node'
+import Sandbox from '@supernova-ai/snh-sandbox-local'
+import SandboxPolicy from '@supernova-ai/snh-sandbox-policy'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import Subprocess from '@supernova-ai/snh-subprocess-local'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import * as PtcToolExecutor from '@supernova-ai/snh-tool-executor-ptc'
+import type {} from '@supernova-ai/snh-tool-executor-ptc/types'
+import ToolRuntime, { defineTool } from '@supernova-ai/snh-tools'
+import WorkingDirectory from '@supernova-ai/snh-working-directory'
 import { expect, it, onTestFinished, vi } from 'vitest'
 import { z } from 'zod'
 import { createNativeFixture, png } from '../../../../snapshots/session/cua-run-code/native-channel.mjs'
@@ -33,7 +33,7 @@ import { CuaConfig, installCua } from '../src/index.ts'
 import { COMMON_GUIDANCE } from '../src/guidance.ts'
 import { Request } from '../src/protocol.ts'
 import { NativeClient } from '../src/native-client.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const programs = [
   'globalThis.visits = 1; var initialCua = cua; var app = await cua.getApp("test.fixture"); var win = await app.getWindow("7"); await win.getAccessibilityTree(); await win.click("0"); var screenshot = await win.getScreenshot(); inspect(JSON.stringify({ visits, bindings: Object.keys(tools), app: app.appHandle, window: win.windowId, pid: process.pid })); inspect(screenshot)',
@@ -71,7 +71,7 @@ class ProgramModel extends LlmAdapter {
 }
 
 async function setup(programs: readonly string[], platform = 'macos', selectorPid?: number, presetFree = false, heldInputState = false, timeoutMs = 30_000, disposeNative?: (state: { closedChannels: number }) => Promise<void>) {
-  const directory = await mkdtemp(join(tmpdir(), 'dsh-cua-run-code-'))
+  const directory = await mkdtemp(join(tmpdir(), 'snh-cua-run-code-'))
   const ctx = new Context()
   onTestFinished(async () => {
     try { await ctx.fiber.dispose() } finally { await rm(directory, { recursive: true, force: true }) }
@@ -126,7 +126,7 @@ async function setup(programs: readonly string[], platform = 'macos', selectorPi
     ...name === 'agentPresets' ? { config: { default: 'standard' } } : {},
     ...name === 'sandboxPolicy' ? { config: { mode: 'danger-full-access', workspaceRoot: directory } } : {},
     ...name === 'sharedRuntime' ? { config: { executionMode: 'per-call' } } : {},
-    ...name === 'attachments' ? { config: { dshHome: directory } } : {},
+    ...name === 'attachments' ? { config: { snhHome: directory } } : {},
     ...name === 'cua' ? { config: { timeoutMs, allowedApps: [{ id: 'a'.repeat(64), name: 'Fixture', executablePath: '/fixture/app' }] } } : {},
   }))
   const configPath = join(directory, 'cordis.yml')
@@ -201,7 +201,7 @@ it('presents the object API, retains raw bindings and CUA objects, and preserves
 
   await provider.dispose()
   expect(ctx.tools.schemas(agent).map(tool => tool.name)).toEqual(['outside_cua'])
-  expect((await ctx.systemPrompt.assemble({ scope: agent })).sections.some(section => section.name === 'computer-use:dsh-cua')).toBe(false)
+  expect((await ctx.systemPrompt.assemble({ scope: agent })).sections.some(section => section.name === 'computer-use:snh-cua')).toBe(false)
   expect(native.state).toEqual({ count: 2, openedChannels: 1, closedChannels: 1 })
   expect(() => process.kill(first.pid, 0)).toThrow()
   expect(ctx.ptcRuntime.retainsState).toBe(false)
@@ -374,7 +374,7 @@ it('forwards per-read accessibility limits to the Windows backend', async () => 
 const holdProgram = 'var app = await cua.getApp("test.fixture"); await app.sendKeyEvent("w", "down")'
 const holdWindowProgram = 'var app = await cua.getApp("test.fixture"); var win = await app.getWindow("7"); await win.sendKeyEvent("w", "down")'
 
-function reminders(agent: { session: { snapshotEvents(): readonly import('@deepseek-ai/dsh-session').SessionEvent[] } },
+function reminders(agent: { session: { snapshotEvents(): readonly import('@supernova-ai/snh-session').SessionEvent[] } },
   kind: 'cua-held-inputs' | 'cua-inputs-released' = 'cua-held-inputs') {
   return agent.session.snapshotEvents().filter(event => event.type === 'user/message' && event.data.source.kind === kind)
     .flatMap(event => event.type === 'user/message' ? event.data.content.filter(block => block.type === 'text').map(block => block.text) : [])

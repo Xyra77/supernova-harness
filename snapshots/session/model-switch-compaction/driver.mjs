@@ -9,7 +9,7 @@ export const inject = ['tools', 'systemPrompt', 'llm']
 
 /**
  * Rebuild the latest section version when compaction follows a model switch.
- * @param {import('@deepseek-ai/cordis').Context} ctx - composition context.
+ * @param {import('@supernova-ai/cordis').Context} ctx - composition context.
  * @param {{ switchAfterCalls?: number }} [config] - completed bash calls before the switch; two when omitted.
  */
 export function apply(ctx, config) {

@@ -1,10 +1,10 @@
 /** Anonymous pairing routes admitted by the WebServer's source policy. */
 
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-client-connection'
-import type { ConnectionTrustRequest } from '@deepseek-ai/dsh-client-connection'
-import { normalizeBindAddress } from '@deepseek-ai/dsh-host-webserver'
+import type { Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-client-connection'
+import type { ConnectionTrustRequest } from '@supernova-ai/snh-client-connection'
+import { normalizeBindAddress } from '@supernova-ai/snh-host-webserver'
 import { z } from 'zod'
 import type { PairingRequestId } from './pairing-types.ts'
 import type { PairingRequests } from './pairing-requests.ts'

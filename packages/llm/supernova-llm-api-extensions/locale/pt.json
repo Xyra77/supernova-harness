@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "SuperNova API extensão",
+    "description": "Permitir que outros plug-ins adicionem campos de extensão a SuperNova solicitações de modelo."
+  }
+}

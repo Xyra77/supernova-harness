@@ -1,6 +1,6 @@
 // Web e2e scenario: the configuration pages on the Plugins page — the official
 // pages a deployment's exposed host-plane namespaces produce, one field edited
-// through the real wire down to `$DSH_HOME/cordis.patch.yml`, the override badge
+// through the real wire down to `$SNH_HOME/cordis.patch.yml`, the override badge
 // and reset that layering produces, and a community bundle's row configuration
 // registered by its own browser half. Zero model calls: everything is client
 // state plus the settings document and the profile on a blank frame, so there
@@ -9,7 +9,7 @@ import { readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import type { Browser, Locator, Page } from 'playwright'
 import { chromium } from 'playwright'
-import { HIDDEN_BUNDLES } from '@deepseek-ai/dsh-official-bundles'
+import { HIDDEN_BUNDLES } from '@supernova-ai/snh-official-bundles'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed, onTestFinished } from 'vitest'
 import { join } from 'node:path'
 import {
@@ -24,7 +24,7 @@ const ROW_EXPECTED = join(SNAPSHOT_DIR, 'row.expected.md')
 const BUNDLE_EXPECTED = join(SNAPSHOT_DIR, 'bundle.expected.md')
 const FIXTURE_PLUGINS = fileURLToPath(new URL('./fixtures/plugins', import.meta.url))
 const MODE = webSnapshotMode()
-const UNUSED_KEY_ENV = 'DSH_PLUGIN_CONFIG_E2E_UNUSED_KEY'
+const UNUSED_KEY_ENV = 'SNH_PLUGIN_CONFIG_E2E_UNUSED_KEY'
 
 describe('web e2e: plugin configuration pages', () => {
   let scaffold: WebScaffold
@@ -92,7 +92,7 @@ describe('web e2e: plugin configuration pages', () => {
     const panel = await openPlugins()
 
     // Every page the shipped web composition exposes: the shell executor, the
-    // agent loop, subagent selection, and the DeepSeek search provider.
+    // agent loop, subagent selection, and the SuperNova search provider.
     await panel.getByRole('button', { name: '查看 网页搜索与获取', exact: true }).waitFor({ timeout: 20_000 })
     const basic = panel.locator('[data-plugin-group="basic"]')
     expect(await basic.locator('[data-plugin-item]').count()).toBe(4)
@@ -119,7 +119,7 @@ describe('web e2e: plugin configuration pages', () => {
     const bundles = await scaffold.ctx.pluginManager.listBundles()
     expect(await panel.locator('[data-plugin-group="more"] [data-plugin-package]').count())
       .toBe(bundles.filter(bundle => !HIDDEN_BUNDLES.has(bundle.name)
-        && bundle.name !== '@deepseek-ai/dsh-experimental-liveshare'
+        && bundle.name !== '@supernova-ai/snh-experimental-liveshare'
         && bundle.official && (bundle.listedByDefault !== false || bundle.enabled || bundle.installed)).length)
     expect(await basic.count()).toBe(0)
     expect(await extensions.count()).toBe(0)
@@ -172,16 +172,16 @@ describe('web e2e: plugin configuration pages', () => {
     expect(await fetchMenu.textContent()).toBe('本机直接获取')
     expect(await panel.getByRole('button', { name: '网页搜索提供方 自动选择', exact: true }).count()).toBe(1)
     expect(await panel.getByRole('button', { name: '网页获取提供方 本机直接获取', exact: true }).count()).toBe(1)
-    expect(await entries(searchMenu)).toEqual(['自动选择', 'DeepSeek Search API', 'DeepSeek 服务端搜索'])
-    expect(await entries(fetchMenu)).toEqual(['本机直接获取', 'DeepSeek Fetch API'])
+    expect(await entries(searchMenu)).toEqual(['自动选择', 'SuperNova Search API', 'SuperNova 服务端搜索'])
+    expect(await entries(fetchMenu)).toEqual(['本机直接获取', 'SuperNova Fetch API'])
     expect(await settingsDocument()).not.toContain('searchProvider:')
     // The page fixes the menu order itself; the Loader imports plugins concurrently, so the
     // Host's registration order is not the YAML row order and only its membership is checked here.
     const hostWeb = scaffold.ctx.get('web') as { listProviders(): Record<'search' | 'fetch', { id: string }[]> } | undefined
-    expect(hostWeb?.listProviders().search.map(provider => provider.id).sort()).toEqual(['deepseek-official', 'deepseek-search-api'])
+    expect(hostWeb?.listProviders().search.map(provider => provider.id).sort()).toEqual(['deepseek-official', 'supernova-search-api'])
     // Automatic selection states which provider the Host runs for each model and shows no provider panel.
     expect(await searchSection.getByText(
-      '跟随当前会话的模型：DeepSeek 模型使用 DeepSeek 服务端搜索，搜索不按次收费；其他模型使用 DeepSeek Search API。', { exact: true },
+      '跟随当前会话的模型：SuperNova 模型使用 SuperNova 服务端搜索，搜索不按次收费；其他模型使用 SuperNova Search API。', { exact: true },
     ).count()).toBe(1)
     expect(await searchSection.getByRole('link', { name: '网页搜索与获取指南', exact: true }).getAttribute('href'))
       .toBe('https://api-docs.deepseek.com/zh-cn/guides/search')
@@ -189,11 +189,11 @@ describe('web e2e: plugin configuration pages', () => {
     expect(await save.isDisabled()).toBe(true)
 
     // The composition names no search provider, so a selected one is stored.
-    await choose(searchMenu, 'DeepSeek Search API')
+    await choose(searchMenu, 'SuperNova Search API')
     await save.click()
     await expect.poll(() => save.isDisabled()).toBe(true)
-    await expect.poll(settingsDocument).toContain('searchProvider: deepseek-search-api')
-    expect(await panel.getByRole('button', { name: '网页搜索提供方 DeepSeek Search API', exact: true }).count()).toBe(1)
+    await expect.poll(settingsDocument).toContain('searchProvider: supernova-search-api')
+    expect(await panel.getByRole('button', { name: '网页搜索提供方 SuperNova Search API', exact: true }).count()).toBe(1)
     expect(await panel.getByRole('link', { name: '网页搜索与获取指南', exact: true }).getAttribute('href'))
       .toBe('https://api-docs.deepseek.com/zh-cn/guides/search')
     // Each section shows the description its selected provider registered with the Host, in the active language.
@@ -215,16 +215,16 @@ describe('web e2e: plugin configuration pages', () => {
     expect(await save.isDisabled()).toBe(true)
 
     // The Fetch API shows only its billing menu, and the page saves the billing with the selection.
-    await choose(fetchMenu, 'DeepSeek Fetch API')
+    await choose(fetchMenu, 'SuperNova Fetch API')
     expect(await fetchSection.getByText('无法访问内网和本机。会产生费用，由「计费方式」选定的账号或 API Key 支付。', { exact: true }).count()).toBe(1)
     expect(await fetchSection.getByRole('textbox').count()).toBe(0)
     expect(await fetchSection.getByRole('button').count()).toBe(2)
     const fetchBilling = panel.locator('#plugin-config-web-fetch-billing')
-    await choose(fetchBilling, 'DeepSeek API Key')
+    await choose(fetchBilling, 'SuperNova API Key')
     await fetchSection.getByText('使用「模型」页配置的 API Key，需要先配置。', { exact: true }).waitFor()
     await save.click()
     await expect.poll(() => save.isDisabled()).toBe(true)
-    await expect.poll(settingsDocument).toContain('fetchProvider: deepseek-fetch-api')
+    await expect.poll(settingsDocument).toContain('fetchProvider: supernova-fetch-api')
     await expect.poll(settingsDocument).toContain('fetchBilling: api-key')
     await choose(fetchBilling, '自动')
     await save.click()
@@ -235,17 +235,17 @@ describe('web e2e: plugin configuration pages', () => {
     await page.waitForSelector('[class*="frame"]', { timeout: 30_000 })
     await openPlugins()
     await openPage(panel, '网页搜索与获取')
-    expect(await searchMenu.textContent()).toBe('DeepSeek Search API')
-    expect(await fetchMenu.textContent()).toBe('DeepSeek Fetch API')
+    expect(await searchMenu.textContent()).toBe('SuperNova Search API')
+    expect(await fetchMenu.textContent()).toBe('SuperNova Fetch API')
     const snapshot = await captureStableAria(page, '[data-plugin-panel]', scaffold.workspaceCwd)
     await compareOrRefreshGolden(join(SNAPSHOT_DIR, 'web-search.expected.md'), snapshot, MODE)
 
     await choose(fetchMenu, '本机直接获取')
     await save.click()
     await expect.poll(() => save.isDisabled()).toBe(true)
-    await expect.poll(settingsDocument).not.toContain('fetchProvider: deepseek-fetch-api')
+    await expect.poll(settingsDocument).not.toContain('fetchProvider: supernova-fetch-api')
 
-    await choose(searchMenu, 'DeepSeek 服务端搜索')
+    await choose(searchMenu, 'SuperNova 服务端搜索')
     const messagesEndpoint = panel.locator('#plugin-config-web-search-endpoint')
     expect(await panel.getByLabel('单次请求最多搜索次数', { exact: true }).inputValue()).toBe('5')
     await messagesEndpoint.fill('https://messages.test/anthropic/v1')
@@ -256,16 +256,16 @@ describe('web e2e: plugin configuration pages', () => {
     await page.waitForSelector('[class*="frame"]', { timeout: 30_000 })
     await openPlugins()
     await openPage(panel, '网页搜索与获取')
-    expect(await searchMenu.textContent()).toBe('DeepSeek 服务端搜索')
+    expect(await searchMenu.textContent()).toBe('SuperNova 服务端搜索')
     expect(await messagesEndpoint.inputValue()).toBe('https://messages.test/anthropic/v1')
-    expect(await entries(searchMenu)).toEqual(['自动选择', 'DeepSeek Search API', 'DeepSeek 服务端搜索'])
+    expect(await entries(searchMenu)).toEqual(['自动选择', 'SuperNova Search API', 'SuperNova 服务端搜索'])
     expect(await save.isDisabled()).toBe(true)
     expect(await settingsDocument()).toContain('searchProvider: deepseek-official')
-    await choose(searchMenu, 'DeepSeek Search API')
+    await choose(searchMenu, 'SuperNova Search API')
     await count.fill('20')
     await save.click()
     await expect.poll(() => save.isDisabled()).toBe(true)
-    await expect.poll(settingsDocument).toContain('searchProvider: deepseek-search-api')
+    await expect.poll(settingsDocument).toContain('searchProvider: supernova-search-api')
     expect(await settingsDocument()).toContain('count: 20')
     // Automatic selection clears the stored provider.
     await choose(searchMenu, '自动选择')

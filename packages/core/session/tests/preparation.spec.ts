@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { Session, type SessionId, SessionPreparation } from '@deepseek-ai/dsh-session'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { Session, type SessionId, SessionPreparation } from '@supernova-ai/snh-session'
+import { brandString } from '@supernova-ai/snh-brand'
 
 describe('SessionPreparation', () => {
   it('retains the exact Session and releases provider state only once', () => {

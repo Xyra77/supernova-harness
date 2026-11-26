@@ -1,4 +1,4 @@
-namespace DeepSeek.Cua.Protocol;
+namespace SuperNova.Cua.Protocol;
 
 public static class KeyChord
 {

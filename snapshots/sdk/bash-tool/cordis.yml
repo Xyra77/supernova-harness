@@ -1,29 +1,29 @@
 # SDK snapshot-record composition without provider-specific upload metadata.
 
 - id: skill-filesystem
-  name: '@deepseek-ai/dsh-skill-filesystem'
+  name: '@supernova-ai/snh-skill-filesystem'
   config:
     includeDefaultRoots: false
 
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek-api-key'
+- id: llm-supernova
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   config:
     thinking: enabled
     reasoningEffort: max
 
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@supernova-ai/snh-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
-    compression: !!js "process.env.DSH_SNAPSHOT === undefined ? 'zstd' : 'none'"
+    root: !!js snhHomePath('sessions')
+    compression: !!js "process.env.SNH_SNAPSHOT === undefined ? 'zstd' : 'none'"
 
 - id: tool-subagent
-  name: '@deepseek-ai/dsh-tool-subagent'
+  name: '@supernova-ai/snh-tool-subagent'
   config:
     provider: spawn
     toolName: subagent
     maxDepth: 1
 
-- id: session-log-deepseek
+- id: session-log-supernova
   config:
     enabled: false

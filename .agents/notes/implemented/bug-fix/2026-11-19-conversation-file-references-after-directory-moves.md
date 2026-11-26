@@ -17,7 +17,7 @@ A Session's directory moves during its life: `enter_worktree`, `exit_worktree`, 
 **Each reference carries an absolute path from the moment it is written.** No reader reconstructs the directory a reference was written in.
 
 - The `ui:deliverable-file-references` guidance asks the model for absolute Markdown link and image targets.
-- `fileAddressFor` puts the absolute path in the `dsh-resource://file/session/…` address: an absolute path is kept, and a relative path is joined to the directory the caller knows. An opened tab names one file for its lifetime.
+- `fileAddressFor` puts the absolute path in the `snh-resource://file/session/…` address: an absolute path is kept, and a relative path is joined to the directory the caller knows. An opened tab names one file for its lifetime.
 - A file or folder picked from the `@` list is written as an absolute mention. A file dropped or pasted in Desktop keeps the absolute path the shell reports.
 - A relative path that still reaches the Client resolves against the Session's current directory: one the model wrote despite the guidance, one typed by hand after `@`, or one written before this decision. Links, images, and context-menu actions share that base.
 
@@ -33,10 +33,10 @@ A Session's directory moves during its life: `enter_worktree`, `exit_worktree`, 
 
 ## Consequences
 
-Recorded runs with the absolute-target guidance produced 128 link and image targets in eight Sessions on two DeepSeek models, including project paths with spaces and non-ASCII characters; all were absolute and 127 named an existing file. Link targets averaged 76 characters instead of 19 in a project whose path has 51 characters; output tokens per Session showed no measurable rise.
+Recorded runs with the absolute-target guidance produced 128 link and image targets in eight Sessions on two SuperNova models, including project paths with spaces and non-ASCII characters; all were absolute and 127 named an existing file. Link targets averaged 76 characters instead of 19 in a project whose path has 51 characters; output tokens per Session showed no measurable rise.
 
 A picked or dropped reference carries its absolute path wherever its serialized text appears: the fallback Session title and the turn-navigation preview show the path when a message starts with a reference. The chip label still shows the file name.
 
 References written before this decision keep their relative text and follow the Session's current directory, and so does a hand-typed `@relative/path`. The `@` list omits `out`, `dist`, `build`, and similar directories, so a file there is reachable only by typing. A tab stored with a relative address keeps following the Session's directory, and opening the same file again adds a second tab under the absolute address.
 
-Compliance with the guidance was measured on DeepSeek models only. A model that still writes a relative target gets the current-directory rule above.
+Compliance with the guidance was measured on SuperNova models only. A model that still writes a relative target gets the current-directory rule above.

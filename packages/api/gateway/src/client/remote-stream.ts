@@ -1,7 +1,7 @@
 /** Reconnecting lifecycle for one single-consumer Remote stream. */
 
-import { RemoteError, remoteErrorOf } from '@deepseek-ai/dsh-typert-protocol'
-import type { ConnectionHandle } from '@deepseek-ai/dsh-client-connection/client'
+import { RemoteError, remoteErrorOf } from '@supernova-ai/snh-typert-protocol'
+import type { ConnectionHandle } from '@supernova-ai/snh-client-connection/client'
 import { isRemoteStreamCarrierFailure, type RemoteStreamCarrierFailure } from './stream-client.ts'
 
 /** One item annotated with the physical Remote-stream generation that delivered it. */

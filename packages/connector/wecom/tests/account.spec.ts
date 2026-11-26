@@ -2,8 +2,8 @@
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import type { Context } from '@deepseek-ai/cordis'
-import type { ConnectorOperationId } from '@deepseek-ai/dsh-client-ui-connector-account/types'
+import type { Context } from '@supernova-ai/cordis'
+import type { ConnectorOperationId } from '@supernova-ai/snh-client-ui-connector-account/types'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { executableFileName } from '../src/directory.ts'
 import * as Wecom from '../src/index.ts'
@@ -164,8 +164,8 @@ describe('WeCom guides the plugin downloads', () => {
   let archive: () => Promise<Response>
 
   beforeEach(async () => {
-    home = await mkdtemp(join(tmpdir(), 'dsh-wecom-home-'))
-    vi.stubEnv('DSH_HOME', home)
+    home = await mkdtemp(join(tmpdir(), 'snh-wecom-home-'))
+    vi.stubEnv('SNH_HOME', home)
     vi.stubGlobal('fetch', () => archive())
   })
 

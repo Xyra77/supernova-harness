@@ -21,10 +21,10 @@ export function definePairingElement(
   mount: typeof mountPairing, locales: typeof pairingLocales, labels: typeof pairingMethodLabels, css: string, recovery: PairingRecovery,
 ): new () => PairingElement {
   const styles = Object.fromEntries(['pairing', 'panel', 'title', 'hint', 'message', 'countdown', 'code', 'feedback', 'button', 'primary']
-    .map(name => [name, `dsh-device-pairing-${name}`]))
+    .map(name => [name, `snh-device-pairing-${name}`]))
 
   return ((Element: new () => PairingElement) => {
-    customElements.define('dsh-device-pairing', Element)
+    customElements.define('snh-device-pairing', Element)
     return Element
   })(class extends HTMLElement {
     private dispose: (() => void) | undefined

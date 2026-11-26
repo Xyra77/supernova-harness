@@ -2,7 +2,7 @@
 param([switch]$CheckStartup)
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot '../scripts/windows-runner-network.ps1')
-$root = Join-Path ([IO.Path]::GetTempPath()) ('dsh-network-' + [guid]::NewGuid().ToString('N'))
+$root = Join-Path ([IO.Path]::GetTempPath()) ('snh-network-' + [guid]::NewGuid().ToString('N'))
 $null = New-Item -ItemType Directory -Path $root
 $null = New-Item -ItemType Directory -Path (Join-Path $root 'tools')
 $pwshLink = Join-Path $root 'tools/pwsh-7.6.6'
@@ -46,7 +46,7 @@ server.listen(0, '127.0.0.1', () => fs.writeFileSync(path.join(root, 'port'), St
     @'
 const fs = require('node:fs');
 const path = require('node:path');
-if (process.env.DSH_NETWORK_PROBE_URL) {
+if (process.env.SNH_NETWORK_PROBE_URL) {
   process.once('beforeExit', () => fs.appendFileSync(path.join(__dirname, 'drained'), 'drained\n'));
 }
 '@ | Set-Content -LiteralPath $lifecycle

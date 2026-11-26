@@ -1,22 +1,22 @@
 /** Real file tools preserve Review baselines without depending on git or model observations. */
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import { readFile, realpath, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { FsError } from '@deepseek-ai/dsh-fs'
-import { LocalFileSystem } from '@deepseek-ai/dsh-fs-local'
-import * as FsPolicy from '@deepseek-ai/dsh-fs-observation-policy'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { type ToolCallId, createAssistantMessage, createToolResultMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
+import { Context } from '@supernova-ai/cordis'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
+import { FsError } from '@supernova-ai/snh-fs'
+import { LocalFileSystem } from '@supernova-ai/snh-fs-local'
+import * as FsPolicy from '@supernova-ai/snh-fs-observation-policy'
+import { brandString } from '@supernova-ai/snh-brand'
+import { type ToolCallId, createAssistantMessage, createToolResultMessage } from '@supernova-ai/snh-llm'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import * as ToolFs from '@supernova-ai/snh-tool-fs'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import ToolRuntime from '@supernova-ai/snh-tools'
 import * as captures from '../src/capture.ts'
 import * as WorkspaceChanges from '../src/index.ts'
 import { changes, endTurn, scratchDir, settle, startTurn } from './support.ts'
@@ -36,7 +36,7 @@ const move = (path: string, destination: string, before = 'old') =>
   `*** Update File: ${path}\n*** Move to: ${destination}\n@@\n-${before}\n+moved`
 
 async function boot(environment: string) {
-  const cwd = await realpath(await scratchDir('dsh-patch-review-', cleanups))
+  const cwd = await realpath(await scratchDir('snh-patch-review-', cleanups))
   const ctx = new Context()
   cleanups.push(() => ctx.fiber.dispose())
   await ctx.plugin(SessionStore)

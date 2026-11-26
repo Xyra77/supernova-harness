@@ -1,6 +1,6 @@
 /** Ordered menu resolution with cancellation and contribution-owned action lifetimes. */
-import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
+import type { ObservableSnapshot } from '@supernova-ai/snh-client-store'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
 import type { MenuAction, MenuActionView, MenuContribution, MenuResolution, ContextMenuTarget, ContextMenuTargetMap } from './types.ts'
 
 interface Provider {

@@ -1,0 +1,13 @@
+version: 1
+scenario: supernova-fetch
+profile: headless
+composition: supernova-fetch
+recording: authored
+permission: workspace-write
+header:
+  class: supernova-fetch
+  pin: true
+  systemPromptSource: web-fetch
+  toolSchemasSource: web-fetch
+environment:
+  SNH_SNAPSHOT_FETCH_KEY: snapshot-key

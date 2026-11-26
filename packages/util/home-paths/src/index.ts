@@ -1,21 +1,21 @@
 /**
- * Shared filesystem path helpers for DeepSeek Harness user data.
+ * Shared filesystem path helpers for SuperNova Harness user data.
  *
- * @module @deepseek-ai/dsh-home-paths
+ * @module @supernova-ai/snh-home-paths
  */
 
 import { opendir, realpath } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { basename, dirname, join, resolve } from 'node:path'
 
-/** Directory name for the default DeepSeek Harness home under the OS home. */
-export const DSH_HOME_DIR_NAME = '.dsh'
+/** Directory name for the default SuperNova Harness home under the OS home. */
+export const SNH_HOME_DIR_NAME = '.snh'
 
-/** Stable user-facing display form for the default DeepSeek Harness home. */
-export const DEFAULT_DSH_HOME_DISPLAY = `~/${DSH_HOME_DIR_NAME}`
+/** Stable user-facing display form for the default SuperNova Harness home. */
+export const DEFAULT_SNH_HOME_DISPLAY = `~/${SNH_HOME_DIR_NAME}`
 
-/** Environment variable that overrides the default DeepSeek Harness home. */
-export const DSH_HOME_ENV = 'DSH_HOME'
+/** Environment variable that overrides the default SuperNova Harness home. */
+export const SNH_HOME_ENV = 'SNH_HOME'
 
 /** Directory name for the default shared agent configuration root under the OS home. */
 export const AGENTS_HOME_DIR_NAME = '.agents'
@@ -24,7 +24,7 @@ export const AGENTS_HOME_DIR_NAME = '.agents'
 export const DEFAULT_AGENTS_HOME_DISPLAY = `~/${AGENTS_HOME_DIR_NAME}`
 
 /** Environment variable that overrides the default shared agent configuration root. */
-export const AGENTS_HOME_ENV = 'DSH_AGENTS_HOME'
+export const AGENTS_HOME_ENV = 'SNH_AGENTS_HOME'
 
 /**
  * Give a native filesystem watcher one canonical spelling of a path, even
@@ -64,11 +64,11 @@ export async function canonicalizeWatchPath(path: string): Promise<string> {
 }
 
 /**
- * Resolve the default DeepSeek Harness home using Node's platform path rules.
+ * Resolve the default SuperNova Harness home using Node's platform path rules.
  * @returns the absolute default harness home path.
  */
-export function defaultDshHome(): string {
-  return join(homedir(), DSH_HOME_DIR_NAME)
+export function defaultSnhHome(): string {
+  return join(homedir(), SNH_HOME_DIR_NAME)
 }
 
 /**
@@ -122,30 +122,30 @@ function rootDisplay(resolvedRoot: string, defaultRoot: string, defaultLabel: st
 }
 
 /**
- * Resolve the single-root DeepSeek Harness home.
+ * Resolve the single-root SuperNova Harness home.
  *
- * Precedence, highest first: an explicit configured path, `$DSH_HOME`, then
- * `~/.dsh`. The harness keeps all user data under one root. An empty or
- * whitespace-only `$DSH_HOME` is treated as unset, so a blank override never
+ * Precedence, highest first: an explicit configured path, `$SNH_HOME`, then
+ * `~/.snh`. The harness keeps all user data under one root. An empty or
+ * whitespace-only `$SNH_HOME` is treated as unset, so a blank override never
  * resolves the home to the current working directory.
  * @param configured - explicit harness-home override, which has highest precedence.
- * @param env - environment mapping used to read `DSH_HOME`.
+ * @param env - environment mapping used to read `SNH_HOME`.
  * @returns the normalized absolute harness home path.
  */
-export function resolveDshHome(configured?: string, env: Record<string, string | undefined> = process.env): string {
-  return resolveRoot(configured, env, DSH_HOME_ENV, defaultDshHome)
+export function resolveSnhHome(configured?: string, env: Record<string, string | undefined> = process.env): string {
+  return resolveRoot(configured, env, SNH_HOME_ENV, defaultSnhHome)
 }
 
 /**
  * Resolve the shared agent configuration root.
  *
- * Precedence, highest first: an explicit configured path, `$DSH_AGENTS_HOME`,
+ * Precedence, highest first: an explicit configured path, `$SNH_AGENTS_HOME`,
  * then `~/.agents`. The root holds configuration shared with other agent tools,
- * so it stays independent of the DeepSeek Harness home. An empty or
- * whitespace-only `$DSH_AGENTS_HOME` is treated as unset, so a blank override
+ * so it stays independent of the SuperNova Harness home. An empty or
+ * whitespace-only `$SNH_AGENTS_HOME` is treated as unset, so a blank override
  * never resolves the root to the current working directory.
  * @param configured - explicit shared-root override, which has highest precedence.
- * @param env - environment mapping used to read `DSH_AGENTS_HOME`.
+ * @param env - environment mapping used to read `SNH_AGENTS_HOME`.
  * @returns the normalized absolute shared agent configuration root.
  */
 export function resolveAgentsHome(configured?: string, env: Record<string, string | undefined> = process.env): string {
@@ -153,13 +153,13 @@ export function resolveAgentsHome(configured?: string, env: Record<string, strin
 }
 
 /**
- * Join path segments onto the resolved DeepSeek Harness home. It addresses the
- * existing top-level entries; a new path uses {@link dshPath} with its category.
+ * Join path segments onto the resolved SuperNova Harness home. It addresses the
+ * existing top-level entries; a new path uses {@link snhPath} with its category.
  * @param segments - path segments appended to the Harness home; an empty list returns the home itself.
  * @returns the normalized absolute joined path.
  */
-export function dshHomePath(...segments: string[]): string {
-  return join(resolveDshHome(), ...segments)
+export function snhHomePath(...segments: string[]): string {
+  return join(resolveSnhHome(), ...segments)
 }
 
 /**
@@ -168,17 +168,17 @@ export function dshHomePath(...segments: string[]): string {
  * @param segments - additional path segments after the first child, if any.
  * @returns the normalized absolute cache path.
  */
-export function dshCachePath(optionsOrSegment: { dshHome?: string } | string = {}, ...segments: string[]): string {
-  if (typeof optionsOrSegment === 'string') return dshPath('cache', optionsOrSegment, ...segments)
-  return dshPath({ category: 'cache', dshHome: optionsOrSegment.dshHome }, ...segments)
+export function snhCachePath(optionsOrSegment: { snhHome?: string } | string = {}, ...segments: string[]): string {
+  if (typeof optionsOrSegment === 'string') return snhPath('cache', optionsOrSegment, ...segments)
+  return snhPath({ category: 'cache', snhHome: optionsOrSegment.snhHome }, ...segments)
 }
 
 /**
  * Category directory under the Harness home, named after the XDG Base Directory
- * kinds. A new file kept under `$DSH_HOME` belongs to exactly one category, and
+ * kinds. A new file kept under `$SNH_HOME` belongs to exactly one category, and
  * the category directory name equals the category. Existing top-level entries,
  * such as `sessions/`, `profiles/`, and `.credentials.yaml`, keep their current
- * locations; the [home path categories proposal](../../../../.agents/notes/proposed/architecture/2026-11-04-dsh-home-path-categories.md)
+ * locations; the [home path categories proposal](../../../../.agents/notes/proposed/architecture/2026-11-04-snh-home-path-categories.md)
  * lists every path and its category:
  *
  * - `config`: files a person writes or edits to configure the harness.
@@ -190,48 +190,48 @@ export function dshCachePath(optionsOrSegment: { dshHome?: string } | string = {
  * - `backup`: backup archives the harness writes; deleting them never affects
  *   a running harness or the records they copy.
  */
-export type DshHomeCategory = 'config' | 'data' | 'state' | 'cache' | 'backup'
+export type SnhHomeCategory = 'config' | 'data' | 'state' | 'cache' | 'backup'
 
 /** A category directory under an explicitly configured Harness home. */
-export interface DshPathLocation {
+export interface SnhPathLocation {
   /** Category directory to join under. */
-  category: DshHomeCategory
-  /** Explicit harness-home override, resolved by {@link resolveDshHome}; omission uses `$DSH_HOME`, then `~/.dsh`. */
-  dshHome?: string | undefined
+  category: SnhHomeCategory
+  /** Explicit harness-home override, resolved by {@link resolveSnhHome}; omission uses `$SNH_HOME`, then `~/.snh`. */
+  snhHome?: string | undefined
 }
 
 /**
  * Join path segments onto one category directory of the Harness home without
  * creating it. An owner passes its own directory name, normally its package
- * name without the `@deepseek-ai/dsh-` prefix, as the first segment.
+ * name without the `@supernova-ai/snh-` prefix, as the first segment.
  * @param location - category under the resolved home, or a category with an explicit home override.
  * @param segments - path segments appended to the category directory; an empty list returns the directory itself.
  * @returns the normalized absolute path.
  */
-export function dshPath(location: DshHomeCategory | DshPathLocation, ...segments: string[]): string {
-  const { category, dshHome } = typeof location === 'string' ? { category: location, dshHome: undefined } : location
-  return join(resolveDshHome(dshHome), category, ...segments)
+export function snhPath(location: SnhHomeCategory | SnhPathLocation, ...segments: string[]): string {
+  const { category, snhHome } = typeof location === 'string' ? { category: location, snhHome: undefined } : location
+  return join(resolveSnhHome(snhHome), category, ...segments)
 }
 
 /**
  * Describe a resolved harness home symbolically for user-facing display.
  *
  * It never returns an absolute machine path: the default home is labelled
- * `~/.dsh`, and any configured home is labelled `$DSH_HOME`.
- * @param resolvedHome - the absolute path returned by {@link resolveDshHome}.
- * @returns `~/.dsh` for the default home, otherwise `$DSH_HOME`.
+ * `~/.snh`, and any configured home is labelled `$SNH_HOME`.
+ * @param resolvedHome - the absolute path returned by {@link resolveSnhHome}.
+ * @returns `~/.snh` for the default home, otherwise `$SNH_HOME`.
  */
-export function dshHomeDisplay(resolvedHome: string): string {
-  return rootDisplay(resolvedHome, defaultDshHome(), DEFAULT_DSH_HOME_DISPLAY, DSH_HOME_ENV)
+export function snhHomeDisplay(resolvedHome: string): string {
+  return rootDisplay(resolvedHome, defaultSnhHome(), DEFAULT_SNH_HOME_DISPLAY, SNH_HOME_ENV)
 }
 
 /**
  * Describe a resolved shared agent configuration root symbolically for user-facing display.
  *
  * It never returns an absolute machine path: the default root is labelled
- * `~/.agents`, and any configured root is labelled `$DSH_AGENTS_HOME`.
+ * `~/.agents`, and any configured root is labelled `$SNH_AGENTS_HOME`.
  * @param resolvedHome - the absolute path returned by {@link resolveAgentsHome}.
- * @returns `~/.agents` for the default root, otherwise `$DSH_AGENTS_HOME`.
+ * @returns `~/.agents` for the default root, otherwise `$SNH_AGENTS_HOME`.
  */
 export function agentsHomeDisplay(resolvedHome: string): string {
   return rootDisplay(resolvedHome, defaultAgentsHome(), DEFAULT_AGENTS_HOME_DISPLAY, AGENTS_HOME_ENV)

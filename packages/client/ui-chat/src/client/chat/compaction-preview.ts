@@ -1,9 +1,9 @@
 /** Session-bound Markdown previews for manual and automatic compaction rows. */
-import type { Context } from '@deepseek-ai/cordis'
-import type { SessionAddress } from '@deepseek-ai/dsh-api-session-controller/types'
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar-documentpreview/client'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import type { Context } from '@supernova-ai/cordis'
+import type { SessionAddress } from '@supernova-ai/snh-api-session-controller/types'
+import type {} from '@supernova-ai/snh-client-ui-sidebar-documentpreview/client'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import { NS } from '../locale.ts'
 import type { CompactionRowInjected } from './CompactionItem.tsx'
 

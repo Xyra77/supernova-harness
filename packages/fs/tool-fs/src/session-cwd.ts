@@ -1,12 +1,12 @@
 /**
  * Resolution options for filesystem calls in the Session's current directory.
  * Non-agent calls leave directory defaults to the filesystem provider.
- * @module @deepseek-ai/dsh-tool-fs/session-cwd
+ * @module @supernova-ai/snh-tool-fs/session-cwd
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { ToolExecution } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-working-directory'
+import type { Context } from '@supernova-ai/cordis'
+import type { ToolExecution } from '@supernova-ai/snh-tools'
+import type {} from '@supernova-ai/snh-working-directory'
 
 /**
  * Resolve the current directory and cancellation for a filesystem call.

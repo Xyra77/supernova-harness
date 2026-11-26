@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-util-file-drag",
+  "name": "@supernova-ai/snh-util-file-drag",
   "description": "Shared file drag names and native transfer requests",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -30,11 +30,11 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-brand": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-brand": "workspace:*"
   },
   "dependencies": {
     "mime": "^4.1.1"

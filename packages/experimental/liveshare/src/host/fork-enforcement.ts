@@ -14,8 +14,8 @@
  * `ctx.shell`'s job.
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
+import type { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
 import type {
   FsEditOutcome,
   FsEditRequest,
@@ -23,12 +23,12 @@ import type {
   FsVersion,
   FsWriteOutcome,
   FsWriteIntent,
-} from '@deepseek-ai/dsh-fs'
-import { FsError } from '@deepseek-ai/dsh-fs'
-import { ToolArgsError, type PreToolDecision, type ToolDefinition, type ToolExecution } from '@deepseek-ai/dsh-tools'
-import type { Session } from '@deepseek-ai/dsh-session'
-import type { SandboxExecutionPolicy } from '@deepseek-ai/dsh-sandbox'
-import { scopeOf } from '@deepseek-ai/dsh-scope'
+} from '@supernova-ai/snh-fs'
+import { FsError } from '@supernova-ai/snh-fs'
+import { ToolArgsError, type PreToolDecision, type ToolDefinition, type ToolExecution } from '@supernova-ai/snh-tools'
+import type { Session } from '@supernova-ai/snh-session'
+import type { SandboxExecutionPolicy } from '@supernova-ai/snh-sandbox'
+import { scopeOf } from '@supernova-ai/snh-scope'
 import { forkToolDenial, LiveshareForkDeniedError } from './fork-errors.ts'
 import { forkToolGuard, installChildEnforcement, type ForkToolExecution } from './fork-tool-guard.ts'
 import { READ_ONLY_FORK_CEILING, WRITE_FORK_CEILING } from './fork-policy.ts'

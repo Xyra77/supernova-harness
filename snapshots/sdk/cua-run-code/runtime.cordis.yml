@@ -3,14 +3,14 @@
   config:
     providers:
       - id: deepseek-official
-        name: DeepSeek
+        name: SuperNova
         models:
           - id: deepseek-v4-flash-vision-exp
             inputModalities: [text, image]
 
 - insert:
     - id: computer-use
-      name: '@deepseek-ai/dsh-computer-use'
+      name: '@supernova-ai/snh-computer-use'
     - id: cua-run-code-fixture
       name: '../../session/cua-run-code/provider.mjs'
       config:

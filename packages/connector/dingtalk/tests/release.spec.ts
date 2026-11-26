@@ -10,7 +10,7 @@ import { chmod, mkdir, mkdtemp, readdir, readFile, readlink, rm, symlink, writeF
 import { tmpdir } from 'node:os'
 import { basename, dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { strToU8, zipSync, type Zippable } from 'fflate'
 import { create } from 'tar'
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, onTestFinished, vi } from 'vitest'
@@ -94,7 +94,7 @@ const serve = (body: Buffer) => (response: ServerResponse) => {
 const asset = (prefix: string, name = ASSET) => `/${prefix}/v${VERSION}/${name}`
 
 beforeAll(async () => {
-  fixtures = await mkdtemp(join(tmpdir(), 'dsh-dingtalk-release-'))
+  fixtures = await mkdtemp(join(tmpdir(), 'snh-dingtalk-release-'))
   skillsDir = await createSkillsDir()
   server = createServer((request, response) => {
     const route = routes[request.url ?? '']
@@ -118,9 +118,9 @@ let binDir: string
 beforeEach(async () => {
   ctx = new Context()
   routes = {}
-  home = await mkdtemp(join(tmpdir(), 'dsh-dingtalk-home-'))
+  home = await mkdtemp(join(tmpdir(), 'snh-dingtalk-home-'))
   binDir = await createBinDir()
-  vi.stubEnv('DSH_HOME', home)
+  vi.stubEnv('SNH_HOME', home)
 })
 
 afterEach(async () => {
@@ -445,7 +445,7 @@ describe('installing the pinned skills', () => {
 })
 
 describe("a profile's own cache directory", () => {
-  /** The Harness home of the profile, which differs from `$DSH_HOME` here. */
+  /** The Harness home of the profile, which differs from `$SNH_HOME` here. */
   const harness = () => join(home, 'harness')
   const owned = () => join(harness(), 'cache', 'dingtalk', 'web')
   const profile = () => ({ home: harness(), name: 'web' })

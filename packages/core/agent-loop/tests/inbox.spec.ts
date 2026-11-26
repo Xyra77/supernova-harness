@@ -1,13 +1,13 @@
-import { unsupportedModel } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { Context } from '@deepseek-ai/cordis'
-import { agentEvents, type Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage, freezeMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore, { Session, type SessionId } from '@deepseek-ai/dsh-session'
-import type { UserMessage } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { unsupportedModel } from '@supernova-ai/snh-agent-loop-testkit'
+import { Context } from '@supernova-ai/cordis'
+import { agentEvents, type Agent } from '@supernova-ai/snh-agent'
+import { createUserMessage, freezeMessage } from '@supernova-ai/snh-llm'
+import SessionStore, { Session, type SessionId } from '@supernova-ai/snh-session'
+import type { UserMessage } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import { describe, expect, it, onTestFinished } from 'vitest'
 import { inboxProjectionDefinition, ReactLoopInbox } from '../src/inbox.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 function unsupportedInbox(): Agent['inbox'] {
   const rejectMutation = (): never => {

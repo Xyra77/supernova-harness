@@ -1,27 +1,27 @@
 /** Host Remote of the forge panel: checkout, code host, sign-in, change request, and worktree state per Session. */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-api-remote-access'
-import { changeRequestKey } from '@deepseek-ai/dsh-experimental-forge'
+import { Context, Service } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type {} from '@supernova-ai/snh-api-remote-access'
+import { changeRequestKey } from '@supernova-ai/snh-experimental-forge'
 import type {
   BranchUpdateMethod, ChangeRequestDescription, ChangeRequestKey, ChangeRequestRef, ChangeRequestReviewer, ChangeRequestSnapshot,
   ChangeRequestUpdate, ForgeActionFailure, ForgeCommitList,
   ForgeFailure,
   ForgeLineComment, ForgeRerunRequest, ForgeReviewChange, ForgeReviewData, ForgeReviewerCandidate, ForgeReviewRequest, ForgeReviewResult,
   ForgeReviewWrite, ForgeReviewWriteResult, ForgeViewedFiles, ForgeViewedRequest, MergeMethod,
-} from '@deepseek-ai/dsh-experimental-forge'
-import type { SessionChangeRequest } from '@deepseek-ai/dsh-experimental-forge-session'
-import type { WorktreeCleanup } from '@deepseek-ai/dsh-experimental-worktree/types'
-import { appendPluginRecord } from '@deepseek-ai/dsh-session'
-import type { Session, SessionEvent, SessionId, UserMessage } from '@deepseek-ai/dsh-session'
-import type { ProjectionHandle } from '@deepseek-ai/dsh-session-projection'
-import type {} from '@deepseek-ai/dsh-session-projection-cache'
-import type {} from '@deepseek-ai/dsh-session-query'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
-import { Remote, RemoteError, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
+} from '@supernova-ai/snh-experimental-forge'
+import type { SessionChangeRequest } from '@supernova-ai/snh-experimental-forge-session'
+import type { WorktreeCleanup } from '@supernova-ai/snh-experimental-worktree/types'
+import { appendPluginRecord } from '@supernova-ai/snh-session'
+import type { Session, SessionEvent, SessionId, UserMessage } from '@supernova-ai/snh-session'
+import type { ProjectionHandle } from '@supernova-ai/snh-session-projection'
+import type {} from '@supernova-ai/snh-session-projection-cache'
+import type {} from '@supernova-ai/snh-session-query'
+import { MAX_TIMER_DELAY_MS } from '@supernova-ai/snh-timeout'
+import { Remote, RemoteError, TypertRemoteService } from '@supernova-ai/snh-typert-protocol'
+import { assertNever } from '@supernova-ai/snh-util-values'
 import { gitIn, hasBranch, inspectCheckout } from './git.ts'
 import type { Inspection } from './git.ts'
 import { branchNameProblem } from './branch-name.ts'
@@ -54,7 +54,7 @@ import type { HeldWork } from './worktree.ts'
 
 export type * from './types.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** Remote that serves the forge panel of the GUI. */
     forgePanel: ForgePanelController
@@ -104,7 +104,7 @@ export class ForgePanelController extends TypertRemoteService {
     maxOutputBytes: z.number().default(1_048_576),
     readinessTimeoutMs: z.number().default(15_000),
     maxBranches: z.number().default(50),
-    worktreePrefix: z.string().default('dsh-'),
+    worktreePrefix: z.string().default('snh-'),
     maxDiffBytes: z.number().default(8_388_608),
     maxUntrackedFiles: z.number().default(100),
     maxCachedDiffBytes: z.number().default(16_777_216),

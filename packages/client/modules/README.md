@@ -3,13 +3,13 @@ description: "Client module system for the web GUI: the host composes the boot g
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-modules
+# @supernova-ai/snh-client-modules
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-client-modules` turns a plugin package's `dsh.client` declaration into a loadable browser bundle: the host half scans enabled Loader entries and composes the boot graph, an available Web carrier serves each bundle over `/plugins`, and a shell-owned carrier dispatches the same exact bundle responses through `fetchBundle()`. The browser half loads those bundles lazily on demand. Plugin bundles execute lazily — running a bundle only registers a factory, and module side effects run at materialization — so nothing runs until a plugin is first used. Everything here is browser-kernel machinery; the model never sees it.
+`snh-client-modules` turns a plugin package's `snh.client` declaration into a loadable browser bundle: the host half scans enabled Loader entries and composes the boot graph, an available Web carrier serves each bundle over `/plugins`, and a shell-owned carrier dispatches the same exact bundle responses through `fetchBundle()`. The browser half loads those bundles lazily on demand. Plugin bundles execute lazily — running a bundle only registers a factory, and module side effects run at materialization — so nothing runs until a plugin is first used. Everything here is browser-kernel machinery; the model never sees it.
 
 ## Table of Contents
 
@@ -25,13 +25,13 @@ English | [中文](README.zh.md)
 <a id="use-this-package"></a>
 ## Use this package
 
-Use [`DshClientManifest`](../../util/package-manifest/README.md) for the declaration type. Client-modules validates the JSON and owns the normalized boot graph.
+Use [`SnhClientManifest`](../../util/package-manifest/README.md) for the declaration type. Client-modules validates the JSON and owns the normalized boot graph.
 
-Use it when you compose or build a browser client plugin: the package turns a package's `dsh.client` declaration into a loadable browser bundle with no per-plugin wiring. It activates with the web composition; the shell boots it before any plugin runs.
+Use it when you compose or build a browser client plugin: the package turns a package's `snh.client` declaration into a loadable browser bundle with no per-plugin wiring. It activates with the web composition; the shell boots it before any plugin runs.
 
 ### Declaring a client plugin
 
-A browser plugin package declares `dsh.client` in its `package.json` with `platform: 'web'`, exports a `./client` bundle, and lists any non-baseline module requests under `dsh.client.external`. The host half turns each declaration into a served bundle under `/plugins`, ordered so dynamic providers load before their consumers.
+A browser plugin package declares `snh.client` in its `package.json` with `platform: 'web'`, exports a `./client` bundle, and lists any non-baseline module requests under `snh.client.external`. The host half turns each declaration into a served bundle under `/plugins`, ordered so dynamic providers load before their consumers.
 
 <a id="package-assets"></a>
 ### Package assets
@@ -51,7 +51,7 @@ An open Web page follows the Host's complete module graph through the HMR transp
 
 A plugin's top-level `.volatile()` Config fields reach its browser face. The package puts its Config interface in `src/types.ts` for both faces and keeps the only Schemastery schema on its Host face; ordinary fields and every `role('secret')` position, including positions inside a volatile object, dictionary, or array, stay on the Host. Each graph row carries the values in `config`, so they arrive with the boot graph and with every later graph. Only the owner's page receives the configured values; every other Peer, such as a LiveShare viewer, receives in the boot graph and in every plugin-events frame the values each plugin's schema resolves from an empty Config, and a row whose schema rejects an empty Config carries no values there.
 
-The browser face exports no `Config`; its `apply(ctx, config: SyncedConfig<Config>)` receives one `SyncedConfigRef` per field, both from the types-only package [`@deepseek-ai/dsh-client-config/types`](../config/README.md). `config.field.get()` reads the current frozen value at operation time, as on the Host. A component reads it through a hook: the plugin injects the reference in a slot `inject` `hooks` compartment, such as `hooks: { fontSize: config.fontSize }`, and the component calls `useFontSize(value => value)`. Every field may read `undefined`, so the plugin handles the absent value at each read; a secret field is one case, as the Host never sends it. Changes compare each field as JSON; every changed field is set before any subscriber runs, and the plugin is never remounted. As each Host activation resolves its own volatile references, each plugin activation receives its own Config object holding the latest values; once its teardown begins (code replacement, row removal, or an unload after a required service is withdrawn) it receives no further values. A plugin without synced fields receives an empty object. `ctx.config.resolveConfigByPackage(packageName)` returns the read-only object of another package's current activation, or `undefined` while none runs. On the Host the graph frame carrying new values is queued before the plugin's own `loader/volatile-update` listeners run; this orders the mechanism only, and plugins must not rely on the browser receiving configuration before their other data. A Client face that exports its own `Config` schema keeps ordinary Cordis configuration and fails to activate when its row also carries synced values.
+The browser face exports no `Config`; its `apply(ctx, config: SyncedConfig<Config>)` receives one `SyncedConfigRef` per field, both from the types-only package [`@supernova-ai/snh-client-config/types`](../config/README.md). `config.field.get()` reads the current frozen value at operation time, as on the Host. A component reads it through a hook: the plugin injects the reference in a slot `inject` `hooks` compartment, such as `hooks: { fontSize: config.fontSize }`, and the component calls `useFontSize(value => value)`. Every field may read `undefined`, so the plugin handles the absent value at each read; a secret field is one case, as the Host never sends it. Changes compare each field as JSON; every changed field is set before any subscriber runs, and the plugin is never remounted. As each Host activation resolves its own volatile references, each plugin activation receives its own Config object holding the latest values; once its teardown begins (code replacement, row removal, or an unload after a required service is withdrawn) it receives no further values. A plugin without synced fields receives an empty object. `ctx.config.resolveConfigByPackage(packageName)` returns the read-only object of another package's current activation, or `undefined` while none runs. On the Host the graph frame carrying new values is queued before the plugin's own `loader/volatile-update` listeners run; this orders the mechanism only, and plugins must not rely on the browser receiving configuration before their other data. A Client face that exports its own `Config` schema keeps ordinary Cordis configuration and fails to activate when its row also carries synced values.
 
 <a id="host-release-changes"></a>
 ### Host release changes
@@ -60,7 +60,7 @@ Every graph carries the Host release identity as `release`: this package's `vers
 
 ### Sharing modules
 
-The shell seeds a frozen module table ([`PLATFORM_MODULES`](../web/README.md#the-shared-module-table)); every dynamic bundle resolves its externals against exactly that baseline. `dsh.client.external` adds only exact non-baseline requests, each answered by the dynamic package row it names or an exact static-table key. Type-only imports are erased and create no request. Composition rejects malformed requests, missing suppliers, self-requests, and synchronous request cycles.
+The shell seeds a frozen module table ([`PLATFORM_MODULES`](../web/README.md#the-shared-module-table)); every dynamic bundle resolves its externals against exactly that baseline. `snh.client.external` adds only exact non-baseline requests, each answered by the dynamic package row it names or an exact static-table key. Type-only imports are erased and create no request. Composition rejects malformed requests, missing suppliers, self-requests, and synchronous request cycles.
 
 ### Build requirements
 
@@ -78,7 +78,7 @@ This section explains how the module system is built; observable behavior is cov
 
 ### Design concept
 
-The package has two sides: the Node half is the composition and serving side (`ctx.clientModules`, `ClientModuleRegistry`), the browser half is the loading side (`ctx.modules`, `ClientModuleSystem`). The wire between them is the boot graph — `WebBootEntry` rows injected as `window.__DSH_BOOT__`, with `<` escaped so plugin-controlled strings cannot break out of the script element. The vendored Loader's only consumption point is `EntryTree.import`, so the module system is the single replacement for "how plugin code arrives".
+The package has two sides: the Node half is the composition and serving side (`ctx.clientModules`, `ClientModuleRegistry`), the browser half is the loading side (`ctx.modules`, `ClientModuleSystem`). The wire between them is the boot graph — `WebBootEntry` rows injected as `window.__SNH_BOOT__`, with `<` escaped so plugin-controlled strings cannot break out of the script element. The vendored Loader's only consumption point is `EntryTree.import`, so the module system is the single replacement for "how plugin code arrives".
 
 ### Lazy-CJS model
 
@@ -90,7 +90,7 @@ The module system constructs its own Main Realm around `loadBundle`, or the exis
 
 ### Incremental composition
 
-The Node half reconciles packages by Loader entry name. Every `internal/plugin` emission marks the fiber's entry name dirty. Each nonempty flush, including the synchronous activation flush, traverses all Loader entries once to build a temporary index by entry name, then looks up the pending names for reconciliation. Package resolution must not synchronously add or remove Loader entries during that reconciliation. A pending name absent from the index is reconciled with an empty entry list to remove unloaded sources; all same-name entries remain available for source deduplication and conflict checks. The activation pass seeds the same pending names and flushes synchronously, so initial activation and steady state share one implementation. Each reconciliation reads the package manifest and the bundle metadata again, so an entry that restarts after its package was reinstalled, upgraded, or moved publishes its current `dsh.client` declaration and client export; a reconciliation that finds the same manifest and bundle metadata publishes nothing and reads no bundle bytes, and an unchanged bundle keeps its revision, so the browser keeps the loaded plugin. The resolved manifest package name identifies the browser module. Distinct active Loader sources resolving to one package name are rejected; removing the conflict promotes the remaining source without requiring its fiber to restart. A bundle rebuilt without an entry restart reaches the graph through `rebuilt()` (the HMR hook).
+The Node half reconciles packages by Loader entry name. Every `internal/plugin` emission marks the fiber's entry name dirty. Each nonempty flush, including the synchronous activation flush, traverses all Loader entries once to build a temporary index by entry name, then looks up the pending names for reconciliation. Package resolution must not synchronously add or remove Loader entries during that reconciliation. A pending name absent from the index is reconciled with an empty entry list to remove unloaded sources; all same-name entries remain available for source deduplication and conflict checks. The activation pass seeds the same pending names and flushes synchronously, so initial activation and steady state share one implementation. Each reconciliation reads the package manifest and the bundle metadata again, so an entry that restarts after its package was reinstalled, upgraded, or moved publishes its current `snh.client` declaration and client export; a reconciliation that finds the same manifest and bundle metadata publishes nothing and reads no bundle bytes, and an unchanged bundle keeps its revision, so the browser keeps the loaded plugin. The resolved manifest package name identifies the browser module. Distinct active Loader sources resolving to one package name are rejected; removing the conflict promotes the remaining source without requiring its fiber to restart. A bundle rebuilt without an entry restart reaches the graph through `rebuilt()` (the HMR hook).
 
 If Loader enumeration fails during a flush, the registry consumes the failed batch without changing package state or the published graph. Activation reports the failure through its composition error; steady state logs a warning. Another entry notification is required to retry that name.
 
@@ -119,7 +119,7 @@ The host contributes structured index rows that inject, into `<head>`: the `wind
 | [`src/config-projection.ts`](src/config-projection.ts) | Host projection of volatile Config fields with secrets removed |
 | [`src/config-sync.ts`](src/config-sync.ts) | Host publication of each graph row's synced values and their `loader/volatile-update` watches |
 | [`src/client/entry-lifecycle.ts`](src/client/entry-lifecycle.ts) | Loader fiber teardown through the registry |
-| [`src/client/manifest.ts`](src/client/manifest.ts) | Wire types, boot-manifest parsing, and the `dsh.client` declaration parser |
+| [`src/client/manifest.ts`](src/client/manifest.ts) | Wire types, boot-manifest parsing, and the `snh.client` declaration parser |
 
 </details>
 
@@ -133,7 +133,7 @@ Read these when the module contract is not enough: the subsystem reference, the 
 - [Client modules subsystem](../../../docs/subsystems/client-modules.md) — the web plugin table, `WebBootGraph` wire, and the bundle route.
 - [Web boot kernel](../web/README.md) — the shell that creates the module system and boots the plugin tree.
 - [Client HMR driver](../hmr/README.md) — the reload chain that drives `invalidate`/`prefetch` on rebuilt bundles.
-- [Client authoring rules](../AGENTS.md#shared-modules-and-the-module-graph) — the shared-module baseline and `dsh.client.external` semantics.
+- [Client authoring rules](../AGENTS.md#shared-modules-and-the-module-graph) — the shared-module baseline and `snh.client.external` semantics.
 - [Client group map](../README.md) — the browser half this package belongs to.
 
 -----

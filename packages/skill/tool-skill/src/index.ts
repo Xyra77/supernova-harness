@@ -1,17 +1,17 @@
 /**
  * Durable session skill catalog and model-facing `skill` loader tool.
  *
- * @module @deepseek-ai/dsh-tool-skill
+ * @module @supernova-ai/snh-tool-skill
  */
 
-import type {} from '@deepseek-ai/dsh-working-directory'
+import type {} from '@supernova-ai/snh-working-directory'
 import { createHash } from 'node:crypto'
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
-import { defineTool, ToolArgsError } from '@deepseek-ai/dsh-tools'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import { SessionSeq, type UserMessage } from '@deepseek-ai/dsh-session'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type { Agent, PreStepDecision } from '@supernova-ai/snh-agent'
+import { defineTool, ToolArgsError } from '@supernova-ai/snh-tools'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import { SessionSeq, type UserMessage } from '@supernova-ai/snh-session'
 import {
   escapeText,
   isModelInvocable,
@@ -21,7 +21,7 @@ import {
   SkillError,
   type SkillInvocationSource,
   type SkillSummary,
-} from '@deepseek-ai/dsh-skill'
+} from '@supernova-ai/snh-skill'
 
 export const name = 'tool-skill'
 export const inject = ['agents', 'tools', 'skills', 'workingDirectory']
@@ -44,7 +44,7 @@ export interface SkillCatalogSource {
   readonly entries: readonly { readonly name: string; readonly description: string }[]
 }
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'skill-catalog': SkillCatalogSource
   }

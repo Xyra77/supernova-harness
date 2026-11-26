@@ -3,9 +3,9 @@
 import { afterEach, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import type { ComponentProps } from 'react'
-import { allowAllAccess, bindSnapshotSelector, contextMenuHook, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { ResourceSnapshot } from '@deepseek-ai/dsh-client-resources/client'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+import { allowAllAccess, bindSnapshotSelector, contextMenuHook, makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import type { ResourceSnapshot } from '@supernova-ai/snh-client-resources/client'
+import type { RemoteResult } from '@supernova-ai/snh-typert-protocol'
 import type { PairingDecisionResult, PairingRequestId, PairingRequestsValue } from '../src/types.ts'
 import { PairingApproval } from '../src/client/pairing-approval.ts'
 import { PairingRequests, PairingToast } from '../src/client/PairingRequests.tsx'
@@ -115,7 +115,7 @@ it('hides stalled requests during a read failure and shows the latest requests a
 
     useResource.mockReturnValue({ status: 'loading', value: undefined, failure: undefined })
     fireEvent.click(screen.getByRole('button', { name: en['pairing.retry'] }))
-    expect(useResource).toHaveBeenLastCalledWith('dsh-resource://device-pairing/requests?retry=1')
+    expect(useResource).toHaveBeenLastCalledWith('snh-resource://device-pairing/requests?retry=1')
     expect(screen.getByRole('status', { name: en['pairing.loading'] })).toBeTruthy()
     expect(screen.queryByRole('note')).toBeNull()
 

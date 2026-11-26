@@ -11,12 +11,12 @@ import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createScope } from '@deepseek-ai/dsh-scope'
-import type { FsTargetKey, FsVersion, FsEditOutcome, FsTarget, FsWriteOutcome } from '@deepseek-ai/dsh-fs'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { PreToolDecision, ToolDefinition } from '@deepseek-ai/dsh-tools'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+import { Context } from '@supernova-ai/cordis'
+import { createScope } from '@supernova-ai/snh-scope'
+import type { FsTargetKey, FsVersion, FsEditOutcome, FsTarget, FsWriteOutcome } from '@supernova-ai/snh-fs'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { PreToolDecision, ToolDefinition } from '@supernova-ai/snh-tools'
+import type { SessionId } from '@supernova-ai/snh-session'
 import {
   installForkEnforcement,
   installForkEnforcementForAgent,

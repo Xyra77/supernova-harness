@@ -3,24 +3,24 @@
  * Provider lifecycle controls tool registration and context-sensitive schema
  * wording. Every delegation starts a managed activation and returns its child
  * id; the subagent runtime owns result delivery and resource cleanup.
- * @module @deepseek-ai/dsh-tool-subagent
+ * @module @supernova-ai/snh-tool-subagent
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type {} from '@deepseek-ai/dsh-agent-preset-registry'
-import { defineTool, ToolContextUnavailableError } from '@deepseek-ai/dsh-tools'
-import type { ToolDefinition } from '@deepseek-ai/dsh-tools'
-import type { AgentOptions } from '@deepseek-ai/dsh-agent'
-import type { ReasoningEffortId } from '@deepseek-ai/dsh-llm/types'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type {} from '@supernova-ai/snh-agent-preset-registry'
+import { defineTool, ToolContextUnavailableError } from '@supernova-ai/snh-tools'
+import type { ToolDefinition } from '@supernova-ai/snh-tools'
+import type { AgentOptions } from '@supernova-ai/snh-agent'
+import type { ReasoningEffortId } from '@supernova-ai/snh-llm/types'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
 import {
   assertSubagentMaxDepth,
   delegationDepthOf,
   parentAgentOptionsForDelegation,
   SubagentError,
-} from '@deepseek-ai/dsh-subagent'
-import type { SubagentProvider } from '@deepseek-ai/dsh-subagent'
+} from '@supernova-ai/snh-subagent'
+import type { SubagentProvider } from '@supernova-ai/snh-subagent'
 import {
   delegationModelRequest,
   hasConfiguredLlmSelection,

@@ -21,12 +21,12 @@ import {
   IconWrapFillRegular,
   Menu, Tooltip,
   type MenuEntry,
-} from '@deepseek-ai/dsh-client-ui-primitives'
-import type { HostObservable, InjectFace, PropsLocale, PropsRenderSlots, PropsRuntime, PropsStore } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SidebarRightTabInfo } from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
-import { fileAddressFor, pathPartsOf } from '@deepseek-ai/dsh-util-workspace-path'
+} from '@supernova-ai/snh-client-ui-primitives'
+import type { HostObservable, InjectFace, PropsLocale, PropsRenderSlots, PropsRuntime, PropsStore } from '@supernova-ai/snh-client-ui-slots'
+import type { SidebarRightTabInfo } from '@supernova-ai/snh-client-ui-sidebar-right/client'
+import type { RemoteResult } from '@supernova-ai/snh-typert-protocol'
+import { assertNever } from '@supernova-ai/snh-util-values'
+import { fileAddressFor, pathPartsOf } from '@supernova-ai/snh-util-workspace-path'
 import type {
   ForgeBaseBranch, ForgeBaseBranches, ForgeChangeRequestDiff, ForgeCommitRange, ForgeDiffFile, ForgeExtensionState, ForgeLensFrame,
   ForgeLensKeep, ForgeLensRequest, ForgeLocalCommits, ForgeLocalDiff, ForgeLocalScope,
@@ -35,7 +35,7 @@ import { lensVersion } from '../lens-version.ts'
 import type {
   ForgeCommitList, ForgeReviewData, ForgeReviewRequest, ForgeReviewResult, ForgeReviewThread, ForgeReviewWrite, ForgeReviewWriteResult,
   ForgeThreadId, ForgeViewedFiles, ForgeViewedRequest,
-} from '@deepseek-ai/dsh-experimental-forge/types'
+} from '@supernova-ai/snh-experimental-forge/types'
 import { sameReviewSource, type RemovedRecord, type ReviewQueue } from './review-queue.ts'
 import { ReviewThread, useFileReview } from './ReviewThread.tsx'
 import type { ReviewActions } from './ReviewComposer.tsx'

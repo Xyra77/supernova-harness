@@ -1,22 +1,22 @@
 /** Shared model configuration and context assertions for real Office workflows. */
 import { expect } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ImageBlock } from '@deepseek-ai/dsh-llm'
-import { Session, type SessionId, type SessionEvent } from '@deepseek-ai/dsh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ImageBlock } from '@supernova-ai/snh-llm'
+import { Session, type SessionId, type SessionEvent } from '@supernova-ai/snh-session'
 
 /** @returns Model provider patches for the configured development or official API. */
 export function officeModelPatches() {
   const model = process.env.MODEL_NAME ?? 'deepseek-flash'
-  const completions = process.env.DSH_OFFICE_TEST_API === 'openai-completions'
+  const completions = process.env.SNH_OFFICE_TEST_API === 'openai-completions'
   return [
     ...completions ? [
-      { id: 'llm-deepseek', disabled: true },
+      { id: 'llm-supernova', disabled: true },
       { id: 'llm-pi-ai', config: { providers: { 'office-test': {
         api: 'openai-completions', apiKeyEnv: 'DEEPSEEK_API_KEY', baseURL: process.env.DEEPSEEK_BASE_URL,
-        compat: { thinkingFormat: 'deepseek' },
+        compat: { thinkingFormat: 'supernova' },
         models: [{ id: model, contextWindow: 128000, maxTokens: 8192, input: ['text', 'image'] }],
       } } } },
-    ] : [{ id: 'llm-deepseek', config: { thinking: 'enabled', reasoningEffort: 'high', maxTokens: 8192,
+    ] : [{ id: 'llm-supernova', config: { thinking: 'enabled', reasoningEffort: 'high', maxTokens: 8192,
       models: [{ id: model, contextWindow: 128000, maxTokens: 8192, inputModalities: ['text', 'image'] }],
     } }],
     { id: 'agent-default-model', config: { provider: completions ? 'office-test' : 'deepseek-official', model } },
@@ -26,8 +26,8 @@ export function officeModelPatches() {
 /** @returns Patches mounting the Office kit and tools, which the headless profile does not compose. */
 export function officeToolPatches() {
   return [{ insert: [
-    { id: 'office-kit', name: '@deepseek-ai/dsh-office-kit' },
-    { id: 'tool-office', name: '@deepseek-ai/dsh-tool-office' },
+    { id: 'office-kit', name: '@supernova-ai/snh-office-kit' },
+    { id: 'tool-office', name: '@supernova-ai/snh-tool-office' },
   ] }]
 }
 

@@ -18,7 +18,7 @@ describe('provider metadata', () => {
   })
 
   it('checks the staged snapshot even when the working file is fresh, without changing either', () => {
-    const fixture = mkdtempSync(join(tmpdir(), 'dsh-provider-data-'))
+    const fixture = mkdtempSync(join(tmpdir(), 'snh-provider-data-'))
     const relative = 'packages/llm/llm-pi-ai/src/provider-data.generated.ts'
     const snapshot = readFileSync(new URL('../src/provider-data.generated.ts', import.meta.url), 'utf8')
     const git = (args: readonly string[]): string => execFileSync('git', [...args], { cwd: fixture, encoding: 'utf8' })
@@ -92,13 +92,13 @@ describe('provider metadata', () => {
   })
 
   it('reports a resolver failure before using compatibility metadata, and refuses unknown metadata', async () => {
-    const provider: Provider = { ...catalogProvider('deepseek')!, auth: { apiKey: {
+    const provider: Provider = { ...catalogProvider('supernova')!, auth: { apiKey: {
       name: 'fixture', resolve: () => Promise.reject(new Error('unsupported probe')),
     } } }
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     try {
-      expect((await generateProviderData([provider])).deepseek!.env).toEqual(['DEEPSEEK_API_KEY'])
-      expect(warn).toHaveBeenCalledWith('deepseek: using findEnvKeys auth metadata fallback', expect.any(Error))
+      expect((await generateProviderData([provider])).supernova!.env).toEqual(['DEEPSEEK_API_KEY'])
+      expect(warn).toHaveBeenCalledWith('supernova: using findEnvKeys auth metadata fallback', expect.any(Error))
       await expect(generateProviderData([{ ...provider, id: 'unknown-provider' }])).rejects.toThrow('no auth metadata fallback')
     } finally { warn.mockRestore() }
   })
@@ -106,7 +106,7 @@ describe('provider metadata', () => {
   it('cancels a probe even when a resolver does not observe the signal', async () => {
     vi.useFakeTimers()
     try {
-      const provider: Provider = { ...catalogProvider('deepseek')!, auth: { apiKey: {
+      const provider: Provider = { ...catalogProvider('supernova')!, auth: { apiKey: {
         name: 'fixture', resolve: () => new Promise(() => {}),
       } } }
       const assertion = expect(resolverEnv(provider)).rejects.toThrow('probe timed out')

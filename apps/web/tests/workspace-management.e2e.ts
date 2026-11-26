@@ -17,14 +17,14 @@ import { join, sep } from 'node:path'
 import type { Browser, Locator, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it, onTestFailed, onTestFinished } from 'vitest'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+import type { SessionId } from '@supernova-ai/snh-session'
 import { logPath } from '../../../packages/session/session-persistence-jsonl/src/format.ts'
 import {
   acknowledgeReloadConnectionLoss, assertFixtureInventory, captureStableAria, compareOrRefreshGolden,
   launchWebScaffold, readPersistedEvents, seedSession, watchConsole, webSnapshotMode, type WebScaffold,
 } from './scaffold.ts'
 import { newEnglishPage, saveFailureShot } from './support.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const SNAPSHOT_DIR = fileURLToPath(new URL('../../../snapshots/web/workspace-management', import.meta.url))
 // The seed is another scenario's committed fixture, reused read-only: this
@@ -227,18 +227,18 @@ describe('web e2e: workspace management (create / rename / grouping / hover affo
         slotConsoleErrors.push(message.text())
       }
     })
-    await page.exposeFunction('recordDshSlotError', (key: string) => {
+    await page.exposeFunction('recordSnhSlotError', (key: string) => {
       if (!transientSlotErrors.includes(key)) transientSlotErrors.push(key)
     })
     await page.evaluate(() => {
-      const target = window as unknown as { recordDshSlotError(key: string): Promise<void> }
+      const target = window as unknown as { recordSnhSlotError(key: string): Promise<void> }
       const seen = new Set<string>()
       const collect = (): void => {
         for (const node of document.querySelectorAll<HTMLElement>('[data-slot-error]')) {
           const key = node.dataset.slotError ?? ''
           if (!seen.has(key)) {
             seen.add(key)
-            void target.recordDshSlotError(key)
+            void target.recordSnhSlotError(key)
           }
         }
       }
@@ -368,17 +368,17 @@ describe('web e2e: workspace management (create / rename / grouping / hover affo
     page.on('console', (message) => {
       if (message.type() === 'error') consoleErrors.push(message.text())
     })
-    await page.exposeFunction('recordDshTransientWorkspaceError', (message: string) => {
+    await page.exposeFunction('recordSnhTransientWorkspaceError', (message: string) => {
       if (!transientErrors.includes(message)) transientErrors.push(message)
     })
     await page.evaluate(() => {
       const target = window as unknown as {
-        recordDshTransientWorkspaceError(message: string): Promise<void>
+        recordSnhTransientWorkspaceError(message: string): Promise<void>
       }
       const collect = (): void => {
         for (const node of document.querySelectorAll<HTMLElement>('[data-slot-error], [role="alert"]')) {
           const message = node.dataset.slotError ?? node.textContent?.trim() ?? ''
-          if (message !== '') void target.recordDshTransientWorkspaceError(message)
+          if (message !== '') void target.recordSnhTransientWorkspaceError(message)
         }
       }
       new MutationObserver(collect).observe(document.documentElement, { childList: true, subtree: true })
@@ -423,7 +423,7 @@ describe('web e2e: workspace management (create / rename / grouping / hover affo
     await expect.poll(() => page.getByText('Sessions', { exact: true }).count(), { timeout: 10_000 }).toBeGreaterThanOrEqual(1)
     await expect.poll(() => page.getByText('Ungrouped', { exact: true }).count(), { timeout: 5_000 }).toBe(0)
     await expect.poll(() => page.locator('[role="treeitem"]').count(), { timeout: 10_000 }).toBeGreaterThanOrEqual(1)
-    expect(await page.evaluate(() => localStorage.getItem('dsh.workspace.view.v5'))).toContain('flat')
+    expect(await page.evaluate(() => localStorage.getItem('snh.workspace.view.v5'))).toContain('flat')
     // Persisted across reload; then restore grouped for inter-spec hygiene.
     const warningStart = tripwire.warnings.length
     await page.reload({ waitUntil: 'load' })
@@ -1145,7 +1145,7 @@ it('web e2e: finds a workspace beyond the picker scroll cap and opens a new Sess
   await expect.poll(() => rows.evaluate(node => node.scrollHeight > node.clientHeight)).toBe(true)
   const viewportStyle = await rows.evaluate((node) => {
     const style = getComputedStyle(node)
-    const rowHeight = parseFloat(style.getPropertyValue('--dsh-menu-row-height'))
+    const rowHeight = parseFloat(style.getPropertyValue('--snh-menu-row-height'))
     return { overflowY: style.overflowY, maxRows: parseFloat(style.maxHeight) / rowHeight }
   })
   expect(viewportStyle.overflowY).toBe('auto')

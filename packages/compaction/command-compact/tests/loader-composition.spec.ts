@@ -3,22 +3,22 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import CommandRuntime from '@deepseek-ai/dsh-commands'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { CompactionId } from '@deepseek-ai/dsh-compaction/types'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import Include from '@supernova-ai/cordis-plugin-include'
+import type { Agent } from '@supernova-ai/snh-agent'
+import CommandRuntime from '@supernova-ai/snh-commands'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { CompactionId } from '@supernova-ai/snh-compaction/types'
 import {
   CompactionEngine,
   type CompactionAgentContext,
   type CompactionResult,
   type CompactionTrigger,
   type ManualCompactAgentContext,
-} from '@deepseek-ai/dsh-compaction'
-import * as commandCompact from '@deepseek-ai/dsh-command-compact'
-import { Session, type SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
+} from '@supernova-ai/snh-compaction'
+import * as commandCompact from '@supernova-ai/snh-command-compact'
+import { Session, type SessionId, SessionSeq } from '@supernova-ai/snh-session'
 
 const COMPACTION_ID = brandString<CompactionId>('loader-command-compact-test')
 
@@ -82,12 +82,12 @@ afterEach(async () => {
 
 describe('command-compact real Loader composition', () => {
   it('discovers and executes /compact through the assembled command plane', async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-command-compact-loader-'))
+    root = await mkdtemp(join(tmpdir(), 'snh-command-compact-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
-      "- name: '@deepseek-ai/dsh-commands'",
+      "- name: '@supernova-ai/snh-commands'",
       "- name: '@test/compact-backend'",
-      "- name: '@deepseek-ai/dsh-command-compact'",
+      "- name: '@supernova-ai/snh-command-compact'",
       '',
     ].join('\n'))
 
@@ -96,9 +96,9 @@ describe('command-compact real Loader composition', () => {
     await context.plugin(Loader)
     context.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
-      ['@deepseek-ai/dsh-commands', CommandRuntime],
+      ['@supernova-ai/snh-commands', CommandRuntime],
       ['@test/compact-backend', LoaderCompactionEngine],
-      ['@deepseek-ai/dsh-command-compact', commandCompact],
+      ['@supernova-ai/snh-command-compact', commandCompact],
     ])
     context.loader.internal = {
       version: 'v2',
@@ -121,7 +121,7 @@ describe('command-compact real Loader composition', () => {
       reserveTurnAdmission: () => () => undefined,
     } as unknown as Agent
     expect(context.commands.list(agent)).toContainEqual({
-      definitionId: '@deepseek-ai/dsh-command-compact',
+      definitionId: '@supernova-ai/snh-command-compact',
       name: 'compact',
       description: 'Compact older conversation history',
     })

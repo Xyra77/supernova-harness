@@ -1,6 +1,6 @@
 /**
- * Conversion of one exported DeepSeek conversation tree into the seed log of
- * one DSH Session.
+ * Conversion of one exported SuperNova conversation tree into the seed log of
+ * one SNH Session.
  *
  * The message named by `current_message_id` selects the imported branch, with
  * the greatest message id as the fallback. Each USER message opens a turn; a
@@ -12,17 +12,17 @@
  */
 
 import { createHash } from 'node:crypto'
-import type { AttachmentId, FileAttachmentRef, ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import { brandNumber, brandString } from '@deepseek-ai/dsh-brand'
+import type { AttachmentId, FileAttachmentRef, ImageAttachmentRef } from '@supernova-ai/snh-attachment'
+import { brandNumber, brandString } from '@supernova-ai/snh-brand'
 import type {
   AssistantMessage, ContentBlock, LlmFailure, MessageId, SystemMessage, ToolCallBlock, ToolCallId, ToolResultMessage,
   UserMessage,
-} from '@deepseek-ai/dsh-llm'
-import type { SessionEvent, SessionSeq } from '@deepseek-ai/dsh-session'
-import { normalizeSessionTitle } from '@deepseek-ai/dsh-session-title'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
-import { formatFetchOutput, formatSearchOutput, fetchMetaFromValue, searchMetaFromValue } from '@deepseek-ai/dsh-tool-web'
-import type { WebFetchResult, WebSearchResult } from '@deepseek-ai/dsh-web'
+} from '@supernova-ai/snh-llm'
+import type { SessionEvent, SessionSeq } from '@supernova-ai/snh-session'
+import { normalizeSessionTitle } from '@supernova-ai/snh-session-title'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
+import { formatFetchOutput, formatSearchOutput, fetchMetaFromValue, searchMetaFromValue } from '@supernova-ai/snh-tool-web'
+import type { WebFetchResult, WebSearchResult } from '@supernova-ai/snh-web'
 import { parseExportTime, parseKnownFragment } from './format.ts'
 import type { ExportFileEntry, ExportMessage, ExportSessionFile, KnownFragment } from './format.ts'
 
@@ -131,7 +131,7 @@ export function messageTime(message: ExportMessage): number {
 }
 
 /**
- * Convert one conversation into the seed log of a DSH Session.
+ * Convert one conversation into the seed log of a SNH Session.
  * @param file - one validated conversation file.
  * @param options - id source and saved images.
  * @returns the title, creation time, and seed events.
@@ -471,7 +471,7 @@ function openCall(id: string, fragment: Extract<KnownFragment, { type: 'TOOL_OPE
     return { block, result: [{ type: 'text', text: 'Error: the page could not be opened.' }], isError: true }
   }
   const title = nonEmpty(fragment.title)
-  const notice = 'The page content is not included in the DeepSeek chat export.'
+  const notice = 'The page content is not included in the SuperNova chat export.'
   const value: WebFetchResult = {
     url, statusCode: 200, truncated: false,
     body: { kind: 'text', content: title === undefined ? notice : `${title}\n\n${notice}` },

@@ -1,4 +1,4 @@
 - id: sandbox
-  name: '@deepseek-ai/dsh-sandbox-local'
+  name: '@supernova-ai/snh-sandbox-local'
 - id: skills
-  name: '@deepseek-ai/dsh-skill'
+  name: '@supernova-ai/snh-skill'

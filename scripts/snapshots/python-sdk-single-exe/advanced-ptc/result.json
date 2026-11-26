@@ -194,7 +194,7 @@
         "content": [
           {
             "type": "text",
-            "text": "<system-reminder>\nThe following information describes your current session:\n\nCurrent working directory: \"{{cwd}}\".\n\nCurrent DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.\n\nApproval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).\n</system-reminder>"
+            "text": "<system-reminder>\nThe following information describes your current session:\n\nCurrent working directory: \"{{cwd}}\".\n\nCurrent SNH file policy: danger-full-access. The SNH file sandbox does not restrict file modifications by available operations.\n\nApproval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).\n</system-reminder>"
           }
         ],
         "source": {
@@ -207,7 +207,7 @@
             },
             {
               "name": "sandbox:policy",
-              "text": "Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations."
+              "text": "Current SNH file policy: danger-full-access. The SNH file sandbox does not restrict file modifications by available operations."
             },
             {
               "name": "approval:policy",
@@ -357,7 +357,7 @@
       }
     },
     {
-      "type": "session-log-deepseek/delivery-accepted",
+      "type": "session-log-supernova/delivery-accepted",
       "seq": 20,
       "time": 0,
       "data": {
@@ -621,7 +621,7 @@
       }
     },
     {
-      "type": "session-log-deepseek/delivery-accepted",
+      "type": "session-log-supernova/delivery-accepted",
       "seq": 30,
       "time": 0,
       "data": {
@@ -854,7 +854,7 @@
       }
     },
     {
-      "type": "session-log-deepseek/delivery-accepted",
+      "type": "session-log-supernova/delivery-accepted",
       "seq": 38,
       "time": 0,
       "data": {
@@ -1324,7 +1324,7 @@
             "content": [
               {
                 "type": "text",
-                "text": "<system-reminder>\nThe following information describes your current session:\n\nCurrent working directory: \"{{cwd}}\".\n\nCurrent DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.\n\nApproval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).\n</system-reminder>"
+                "text": "<system-reminder>\nThe following information describes your current session:\n\nCurrent working directory: \"{{cwd}}\".\n\nCurrent SNH file policy: danger-full-access. The SNH file sandbox does not restrict file modifications by available operations.\n\nApproval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).\n</system-reminder>"
               }
             ],
             "source": {
@@ -1337,7 +1337,7 @@
                 },
                 {
                   "name": "sandbox:policy",
-                  "text": "Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations."
+                  "text": "Current SNH file policy: danger-full-access. The SNH file sandbox does not restrict file modifications by available operations."
                 },
                 {
                   "name": "approval:policy",
@@ -1535,7 +1535,7 @@
       "payload": {
         "sessionId": "{{parent}}",
         "event": {
-          "type": "session-log-deepseek/delivery-accepted",
+          "type": "session-log-supernova/delivery-accepted",
           "seq": 20,
           "time": 0,
           "data": {
@@ -1859,7 +1859,7 @@
       "payload": {
         "sessionId": "{{parent}}",
         "event": {
-          "type": "session-log-deepseek/delivery-accepted",
+          "type": "session-log-supernova/delivery-accepted",
           "seq": 30,
           "time": 0,
           "data": {
@@ -2140,7 +2140,7 @@
       "payload": {
         "sessionId": "{{parent}}",
         "event": {
-          "type": "session-log-deepseek/delivery-accepted",
+          "type": "session-log-supernova/delivery-accepted",
           "seq": 38,
           "time": 0,
           "data": {

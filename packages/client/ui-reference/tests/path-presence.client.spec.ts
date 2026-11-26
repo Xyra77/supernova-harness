@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { RemoteFailure, RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
-import type { WorkspaceFileStat } from '@deepseek-ai/dsh-api-remotes/client'
-import { RemoteError } from '@deepseek-ai/dsh-client-test-runtime'
+import type { RemoteFailure, RemoteResult } from '@supernova-ai/snh-typert-protocol'
+import type { WorkspaceFileStat } from '@supernova-ai/snh-api-remotes/client'
+import { RemoteError } from '@supernova-ai/snh-client-test-runtime'
 import { createPathPresence, type MentionSessionId, type PathStat } from '../src/client/path-presence.ts'
 
 const sid = (value: string): MentionSessionId => value as MentionSessionId

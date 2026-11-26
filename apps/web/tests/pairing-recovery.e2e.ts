@@ -9,12 +9,12 @@ import { captureStableAria, compareOrRefreshGolden, launchWebScaffold, webSnapsh
 import { openSettings, ZH_BROWSER_LOCALE } from './support.ts'
 
 it.each(['zh', 'en'])('recovers and replaces a request from the same browser and IP after repeated failures in %s', async (language) => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-pairing-recovery-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-pairing-recovery-'))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
   const overlay = join(root, 'pairing.yml')
   await writeFile(overlay, '- id: remote-connection\n  config:\n    pairing:\n      requestIntervalMs: 1\n      pollIntervalMs: 100\n      requestTimeoutMs: 1000\n      maxRetries: 2\n      retryMaxDelayMs: 400\n')
   const scaffold = await launchWebScaffold({
-    publicMount: { prefix: '/tools/dsh/' },
+    publicMount: { prefix: '/tools/snh/' },
     extraOverlayPath: [fileURLToPath(new URL('./pin-browse-picker.overlay.yml', import.meta.url)), overlay],
   })
   onTestFinished(() => scaffold.close())
@@ -22,7 +22,7 @@ it.each(['zh', 'en'])('recovers and replaces a request from the same browser and
   try {
     const owner = await browser.newPage({ locale: ZH_BROWSER_LOCALE })
     await owner.goto(scaffold.authenticatedUrl)
-    await owner.waitForFunction(() => '__DSH_BOOT__' in window)
+    await owner.waitForFunction(() => '__SNH_BOOT__' in window)
     await openSettings(owner, 'zh')
     await owner.getByRole('dialog', { name: '设置', exact: true }).getByRole('button', { name: '远程连接', exact: true }).click()
     const approvals = owner.getByRole('region', { name: '配对申请', exact: true })
@@ -63,8 +63,8 @@ it.each(['zh', 'en'])('recovers and replaces a request from the same browser and
       releaseOldRead.resolve(undefined)
       await oldReadSettled.promise
       await applicant.unrouteAll({ behavior: 'wait' })
-      expect(await applicant.evaluate(() => '__DSH_BOOT__' in window)).toBe(false)
-      expect((await applicant.context().cookies()).filter(cookie => /^dsh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
+      expect(await applicant.evaluate(() => '__SNH_BOOT__' in window)).toBe(false)
+      expect((await applicant.context().cookies()).filter(cookie => /^snh-(?:auth|remote)-/u.test(cookie.name))).toEqual([])
       expect(await approvals.innerText()).toContain('127.0.0.1')
 
       await applicant.context().setOffline(true)
@@ -81,7 +81,7 @@ it.each(['zh', 'en'])('recovers and replaces a request from the same browser and
         }),
         webSnapshotMode(),
       )
-      const screenshots = process.env.DSH_PAIRING_SCREENSHOT_DIR
+      const screenshots = process.env.SNH_PAIRING_SCREENSHOT_DIR
       if (screenshots !== undefined) {
         await mkdir(screenshots, { recursive: true })
         for (const theme of ['light', 'dark'] as const) {
@@ -102,7 +102,7 @@ it.each(['zh', 'en'])('recovers and replaces a request from the same browser and
       const approved = owner.waitForResponse(response => new URL(response.url()).pathname.endsWith('/remoteConnection/decidePairing'))
       await approvals.getByRole('button', { name: '批准', exact: true }).click()
       await approved
-      await applicant.waitForFunction(() => '__DSH_BOOT__' in window)
+      await applicant.waitForFunction(() => '__SNH_BOOT__' in window)
       expect(errors).toEqual([])
     } finally {
       releaseOldRead.resolve(undefined)

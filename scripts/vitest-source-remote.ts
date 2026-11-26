@@ -16,7 +16,7 @@ export function sourceRemotePlugin(root: string, packageName: string) {
   const virtualId = normalizePath(resolve(root, '.vitest-source-remote', `${encodeURIComponent(packageName)}.ts`))
   let code: string | undefined
   return {
-    name: `dsh-source-remote:${packageName}`,
+    name: `snh-source-remote:${packageName}`,
     enforce: 'pre' as const,
     resolveId(source: string) {
       return source === specifier ? virtualId : undefined

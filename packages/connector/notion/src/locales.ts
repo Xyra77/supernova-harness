@@ -1,5 +1,5 @@
 /** The Plugins page text that names Notion; the shared account copy comes from the account surfaces' dictionary. */
-import type { McpAccountCopy } from '@deepseek-ai/dsh-mcp-account'
+import type { McpAccountCopy } from '@supernova-ai/snh-mcp-account'
 
 /** Every language the Web app ships. */
 type ShippedText = Readonly<Record<'zh' | 'en' | 'ja' | 'es' | 'fr' | 'de' | 'ru' | 'pt', string>>
@@ -132,14 +132,14 @@ export const COPY: McpAccountCopy<ShippedText> = {
       pt: 'Sair do Notion?',
     },
     body: {
-      zh: '将删除 DSH 保存的 Notion 授权，之后对话中无法使用 Notion。如需在 Notion 一侧撤销连接，请到 Notion 的设置中处理。',
-      en: 'This deletes the Notion authorization DSH saved, so conversations can no longer use Notion. To revoke the connection on Notion\'s side, use Notion\'s settings.',
-      ja: 'DSH が保存した Notion の認可を削除します。以後、会話の中で Notion は使用できなくなります。Notion 側で接続を取り消すには、Notion の設定から行ってください。',
-      es: 'Se eliminará la autorización de Notion que guardó DSH, por lo que las conversaciones ya no podrán usar Notion. Para revocar la conexión del lado de Notion, use la configuración de Notion.',
-      fr: 'Cela supprime l’autorisation Notion enregistrée par DSH : les conversations ne pourront plus utiliser Notion. Pour révoquer la connexion côté Notion, utilisez les paramètres de Notion.',
-      de: 'Dadurch wird die von DSH gespeicherte Notion-Autorisierung gelöscht, sodass Unterhaltungen Notion nicht mehr verwenden können. Um die Verbindung auf Notion-Seite zu widerrufen, verwenden Sie die Einstellungen von Notion.',
-      ru: 'Сохранённая DSH авторизация Notion будет удалена, и беседы больше не смогут использовать Notion. Чтобы отозвать подключение на стороне Notion, воспользуйтесь настройками Notion.',
-      pt: 'Isso exclui a autorização do Notion salva pelo DSH, e as conversas não poderão mais usar o Notion. Para revogar a conexão no lado do Notion, use as configurações do Notion.',
+      zh: '将删除 SNH 保存的 Notion 授权，之后对话中无法使用 Notion。如需在 Notion 一侧撤销连接，请到 Notion 的设置中处理。',
+      en: 'This deletes the Notion authorization SNH saved, so conversations can no longer use Notion. To revoke the connection on Notion\'s side, use Notion\'s settings.',
+      ja: 'SNH が保存した Notion の認可を削除します。以後、会話の中で Notion は使用できなくなります。Notion 側で接続を取り消すには、Notion の設定から行ってください。',
+      es: 'Se eliminará la autorización de Notion que guardó SNH, por lo que las conversaciones ya no podrán usar Notion. Para revocar la conexión del lado de Notion, use la configuración de Notion.',
+      fr: 'Cela supprime l’autorisation Notion enregistrée par SNH : les conversations ne pourront plus utiliser Notion. Pour révoquer la connexion côté Notion, utilisez les paramètres de Notion.',
+      de: 'Dadurch wird die von SNH gespeicherte Notion-Autorisierung gelöscht, sodass Unterhaltungen Notion nicht mehr verwenden können. Um die Verbindung auf Notion-Seite zu widerrufen, verwenden Sie die Einstellungen von Notion.',
+      ru: 'Сохранённая SNH авторизация Notion будет удалена, и беседы больше не смогут использовать Notion. Чтобы отозвать подключение на стороне Notion, воспользуйтесь настройками Notion.',
+      pt: 'Isso exclui a autorização do Notion salva pelo SNH, e as conversas não poderão mais usar o Notion. Para revogar a conexão no lado do Notion, use as configurações do Notion.',
     },
   },
   notice: {

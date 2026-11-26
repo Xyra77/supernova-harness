@@ -4,7 +4,7 @@ import { metricReader } from '../src/metrics.ts'
 
 const limits = { timeoutMs: 10, maxTarballBytes: 1024 }
 const TOKEN = 'test-only-github-token'
-const plugin = (name = '@team/dsh-test', source: Record<string, string> = { type: 'npm' }): GeneratedEntry => ({
+const plugin = (name = '@team/snh-test', source: Record<string, string> = { type: 'npm' }): GeneratedEntry => ({
   name, repository: { url: 'https://github.com/team/plugins' },
   versions: [{ version: '1.0.0', publishTimestamp: 0, source }],
 })

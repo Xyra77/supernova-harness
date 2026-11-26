@@ -36,7 +36,7 @@ async function assertAddressLayout(section: Locator, available: boolean): Promis
   })).toEqual({ fontSize: '16px', lineHeight: '24px', fontWeight: '500' })
   const address = section.getByRole('region', { name: '访问地址', exact: true })
   if (available) {
-    const intro = section.getByText('通过以下方式，在其他设备上登录并使用 DeepSeek Harness。', { exact: true })
+    const intro = section.getByText('通过以下方式，在其他设备上登录并使用 SuperNova Harness。', { exact: true })
     expect(await intro.evaluate((element) => {
       const style = getComputedStyle(element)
       return { fontSize: style.fontSize, lineHeight: style.lineHeight }
@@ -186,7 +186,7 @@ describe('web e2e: one-use QR browser login', () => {
       const startupToken = new URL(secure.authenticatedUrl).searchParams.get('token')!
       const body = await response!.text()
       expect(body).not.toContain(startupToken)
-      expect(body).not.toContain('__DSH_BOOT__')
+      expect(body).not.toContain('__SNH_BOOT__')
       await page.getByRole('heading', { name: '连接到此 Host', exact: true }).waitFor()
       const input = page.locator('#token')
       const submit = page.getByRole('button', { name: '继续', exact: true })
@@ -274,7 +274,7 @@ describe('web e2e: one-use QR browser login', () => {
         await captureStableAria(page, 'main', secure.root, {
           replacements: [[tokenPlaceholder, '{{application-url}}?token=xxx']],
         }), MODE)
-      const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+      const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
       if (screenshots !== undefined) {
         await mkdir(screenshots, { recursive: true })
         await page.screenshot({ path: join(screenshots, 'anonymous-mobile-light.png') })
@@ -320,8 +320,8 @@ describe('web e2e: one-use QR browser login', () => {
       await submit.click()
       await page.getByRole('button', { name: '账号菜单', exact: true, includeHidden: true }).waitFor({ state: 'attached' })
       expect(page.url()).toBe(secure.url)
-      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('dsh-auth-'))).toHaveLength(1)
-      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('dsh-remote-'))).toEqual([])
+      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('snh-auth-'))).toHaveLength(1)
+      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('snh-remote-'))).toEqual([])
       expect(await page.evaluate(async () => {
         const reply = await fetch('./', { method: 'HEAD', credentials: 'same-origin', cache: 'no-store', redirect: 'manual' })
         return { status: reply.status, body: await reply.text() }
@@ -374,8 +374,8 @@ describe('web e2e: one-use QR browser login', () => {
       expect(await request.textContent()).toBe(creating)
       expect(await status.textContent()).toBe(limited)
       await compareOrRefreshGolden(join(EXPECTED, `pairing-rate-limited.${language}.expected.md`),
-        await captureStableAria(page, 'dsh-device-pairing', fixture.root), MODE)
-      const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+        await captureStableAria(page, 'snh-device-pairing', fixture.root), MODE)
+      const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
       const screenshotDirectory = screenshots === undefined ? undefined : join(screenshots, 'pairing-rate-limited')
       if (screenshotDirectory !== undefined) await mkdir(screenshotDirectory, { recursive: true })
       for (const colorScheme of ['light', 'dark'] as const) {
@@ -497,7 +497,7 @@ describe('web e2e: one-use QR browser login', () => {
           await captureStableAria(page, 'section[aria-label="远程连接"]', scaffold.workspaceCwd, {
             replacements: [[scaffold.authenticatedUrl, '{{access-address}}?token={{login-token}}'], [plainUrl, '{{access-address}}']],
           }), MODE)
-        const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+        const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
         if (screenshots !== undefined) {
           await mkdir(screenshots, { recursive: true })
           await page.screenshot({ path: join(screenshots, `${name}-${suffix}.png`), mask: loopback ? [address.locator('code')] : [] })
@@ -508,7 +508,7 @@ describe('web e2e: one-use QR browser login', () => {
             await guest.goto(copiedAddress)
             await guest.getByRole('button', { name: '账号菜单', exact: true, includeHidden: true }).waitFor({ state: 'attached' })
             expect(guest.url() === new URL(plainUrl).href).toBe(true)
-            expect((await guest.context().cookies()).some(cookie => cookie.name.startsWith('dsh-auth-'))).toBe(true)
+            expect((await guest.context().cookies()).some(cookie => cookie.name.startsWith('snh-auth-'))).toBe(true)
           } finally {
             await guest.close()
           }
@@ -566,7 +566,7 @@ describe('web e2e: one-use QR browser login', () => {
         const models = await headingTypography(modelsHeading, 4)
         expect(models.title).toMatchObject({ fontSize: '16px', lineHeight: '24px', fontWeight: '500' })
         expect(models.intro).toMatchObject({ fontSize: '14px', lineHeight: '22px' })
-        const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+        const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
         if (screenshots !== undefined) {
           await mkdir(screenshots, { recursive: true })
           await page.screenshot({ path: join(screenshots, `typography-models-${suffix}.png`) })
@@ -577,7 +577,7 @@ describe('web e2e: one-use QR browser login', () => {
         if (screenshots !== undefined) await page.screenshot({ path: join(screenshots, `typography-presets-${suffix}.png`) })
         await dialog.getByRole('button', { name: '远程连接', exact: true }).click()
         const section = dialog.getByRole('region', { name: '远程连接', exact: true })
-        await section.getByText('通过以下方式，在其他设备上登录并使用 DeepSeek Harness。', { exact: true }).waitFor()
+        await section.getByText('通过以下方式，在其他设备上登录并使用 SuperNova Harness。', { exact: true }).waitFor()
         expect(await headingTypography(section.getByRole('heading', { name: '远程连接', level: 2, exact: true }), 12)).toEqual(models)
         await assertAddressLayout(section, true)
         if (screenshots !== undefined) await page.screenshot({ path: join(screenshots, `typography-remote-${suffix}.png`) })
@@ -667,7 +667,7 @@ describe('web e2e: one-use QR browser login', () => {
       await linkSection.getByText('请勿公开分享登录链接', { exact: true }).waitFor()
       expect(await qrSection.getByText('请勿分享登录二维码', { exact: true }).count()).toBe(0)
       await snapshot(page, secure, 'link-copied')
-      const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+      const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
       if (screenshots !== undefined) {
         await mkdir(screenshots, { recursive: true })
         await page.getByText('链接已复制', { exact: true }).waitFor({ state: 'hidden' })
@@ -678,7 +678,7 @@ describe('web e2e: one-use QR browser login', () => {
       await phonePage.goto(copiedUrl)
       await phonePage.getByRole('button', { name: '账号菜单', exact: true, includeHidden: true }).waitFor({ state: 'attached' })
       expect(phonePage.url()).toBe(secure.url)
-      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('dsh-auth-'))).toHaveLength(1)
+      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('snh-auth-'))).toHaveLength(1)
       await phonePage.reload()
       await phonePage.getByRole('button', { name: '账号菜单', exact: true, includeHidden: true }).waitFor({ state: 'attached' })
 
@@ -786,7 +786,7 @@ describe('web e2e: one-use QR browser login', () => {
       expect(await copy.isEnabled()).toBe(false)
       expect(await address.getByText('请勿公开分享登录链接', { exact: true }).count()).toBe(0)
       await snapshot(page, secure, 'address-copying-after-token-load')
-      const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+      const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
       if (screenshots !== undefined) {
         await mkdir(screenshots, { recursive: true })
         await page.screenshot({ path: join(screenshots, 'address-copying-after-token-load.png') })
@@ -842,7 +842,7 @@ describe('web e2e: one-use QR browser login', () => {
       expect(await address.getByText('请勿公开分享登录链接', { exact: true }).count()).toBe(0)
       expect(await section.getByRole('alert').count()).toBe(0)
       await snapshot(page, secure, 'address-clipboard-denied')
-      const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+      const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
       if (screenshots !== undefined) {
         await mkdir(screenshots, { recursive: true })
         await page.screenshot({ path: join(screenshots, 'address-clipboard-denied.png') })
@@ -877,7 +877,7 @@ describe('web e2e: one-use QR browser login', () => {
       const beforeCopy = await copy.boundingBox()
       const scrollport = page.getByRole('dialog', { name: '设置', exact: true }).locator('[data-slot="settings.section"]').locator('..')
       const beforeGutter = await scrollport.evaluate(element => element.getBoundingClientRect().width - element.clientWidth)
-      const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+      const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
       if (screenshots !== undefined) {
         await mkdir(screenshots, { recursive: true })
         await page.screenshot({ path: join(screenshots, 'copy-short-panel-before.png') })
@@ -940,10 +940,10 @@ describe('web e2e: one-use QR browser login', () => {
       expect((await exchanged).status()).toBe(204)
       await phonePage.getByRole('button', { name: '账号菜单', exact: true, includeHidden: true }).waitFor({ state: 'attached' })
       expect(phonePage.url()).toBe(secure.url)
-      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('dsh-remote-'))).toEqual([
+      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('snh-remote-'))).toEqual([
         expect.objectContaining({ httpOnly: true, secure: true, sameSite: 'Strict', domain: 'qr-login.test' }),
       ])
-      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('dsh-auth-'))).toEqual([])
+      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('snh-auth-'))).toEqual([])
       expect(await phonePage.evaluate(async () => (await fetch('./', {
         method: 'HEAD', credentials: 'same-origin', cache: 'no-store', redirect: 'manual',
       })).status)).toBe(200)
@@ -986,7 +986,7 @@ describe('web e2e: one-use QR browser login', () => {
       expect(mobileCancel!.x).toBe(mobileAction!.x)
       expect(mobileCancel!.width).toBe(mobileAction!.width)
       await assertQrDetails(mobileSection)
-      const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+      const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
       if (screenshots !== undefined) {
         await mkdir(screenshots, { recursive: true })
         await returning.screenshot({ path: join(screenshots, 'qr-mobile-light.png') })
@@ -1006,7 +1006,7 @@ describe('web e2e: one-use QR browser login', () => {
       await reusedPage.goto(qrUrl)
       expect((await refused).status()).toBe(410)
       await expect.poll(() => new URL(reusedPage.url()).hash).toBe('')
-      expect((await stranger.cookies()).filter(cookie => cookie.name.startsWith('dsh-remote-'))).toEqual([])
+      expect((await stranger.cookies()).filter(cookie => cookie.name.startsWith('snh-remote-'))).toEqual([])
       expect(await reusedPage.getByRole('button', { name: '账号菜单', exact: true }).count()).toBe(0)
       expect(pageErrors).toEqual([])
     } finally {
@@ -1034,8 +1034,8 @@ describe('web e2e: one-use QR browser login', () => {
       expect(await input.isEnabled()).toBe(true)
       expect(await submit.isEnabled()).toBe(true)
       expect(new URL(page.url()).hash).toBe('')
-      expect((await phone.cookies()).some(cookie => cookie.name.startsWith('dsh-remote-'))).toBe(false)
-      const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+      expect((await phone.cookies()).some(cookie => cookie.name.startsWith('snh-remote-'))).toBe(false)
+      const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
       if (screenshots !== undefined) await mkdir(screenshots, { recursive: true })
       for (const viewport of [{ width: 1200, height: 900 }, MOBILE]) {
         await page.setViewportSize(viewport)
@@ -1053,7 +1053,7 @@ describe('web e2e: one-use QR browser login', () => {
       await submit.click()
       await page.getByRole('button', { name: '账号菜单', exact: true, includeHidden: true }).waitFor({ state: 'attached' })
       expect(page.url()).toBe(secure.url)
-      expect((await phone.cookies()).some(cookie => cookie.name.startsWith('dsh-auth-'))).toBe(true)
+      expect((await phone.cookies()).some(cookie => cookie.name.startsWith('snh-auth-'))).toBe(true)
     } finally {
       await phone.close()
     }
@@ -1079,13 +1079,13 @@ describe('web e2e: one-use QR browser login', () => {
       const submit = page.getByRole('button', { name: '继续', exact: true })
       expect(await input.isEnabled()).toBe(true)
       expect(await submit.isEnabled()).toBe(true)
-      const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+      const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
       if (screenshots !== undefined) await page.screenshot({ path: join(screenshots, 'expired-qr-mobile-light.png') })
       await input.fill(new URL(expired.authenticatedUrl).searchParams.get('token')!)
       await submit.click()
       await page.getByRole('button', { name: '账号菜单', exact: true, includeHidden: true }).waitFor({ state: 'attached' })
       expect(page.url()).toBe(expired.url)
-      expect((await applicant.cookies()).some(cookie => cookie.name.startsWith('dsh-auth-'))).toBe(true)
+      expect((await applicant.cookies()).some(cookie => cookie.name.startsWith('snh-auth-'))).toBe(true)
     } finally {
       await Promise.all([desktop.close(), applicant.close()])
     }
@@ -1102,15 +1102,15 @@ describe('web e2e: one-use QR browser login', () => {
       const page = await phone.newPage()
       await page.goto(secure.authenticatedUrl)
       await page.getByRole('button', { name: '账号菜单', exact: true, includeHidden: true }).waitFor({ state: 'attached' })
-      expect((await phone.cookies()).some(cookie => cookie.name.startsWith('dsh-auth-'))).toBe(true)
-      expect((await phone.cookies()).some(cookie => cookie.name.startsWith('dsh-remote-'))).toBe(false)
+      expect((await phone.cookies()).some(cookie => cookie.name.startsWith('snh-auth-'))).toBe(true)
+      expect((await phone.cookies()).some(cookie => cookie.name.startsWith('snh-remote-'))).toBe(false)
       const exchanged = page.waitForResponse(response => new URL(response.url()).pathname === '/' && new URL(response.url()).search === '?login=qr'
         && response.request().method() === 'POST')
       await page.goto(qrUrl)
       expect((await exchanged).status()).toBe(204)
       await page.getByRole('button', { name: '账号菜单', exact: true, includeHidden: true }).waitFor({ state: 'attached' })
       expect(page.url()).toBe(secure.url)
-      expect((await phone.cookies()).some(cookie => cookie.name.startsWith('dsh-remote-'))).toBe(true)
+      expect((await phone.cookies()).some(cookie => cookie.name.startsWith('snh-remote-'))).toBe(true)
       await settings.getByText('二维码已使用，请在手机上确认是否已登录', { exact: true }).waitFor()
     } finally {
       await Promise.all([desktop.close(), phone.close()])
@@ -1154,7 +1154,7 @@ describe('web e2e: one-use QR browser login', () => {
           expect(Math.abs(spinner!.x + spinner!.width / 2 - symbol!.x - symbol!.width / 2)).toBeLessThanOrEqual(1)
           expect(Math.abs(spinner!.y + spinner!.height / 2 - symbol!.y - symbol!.height / 2)).toBeLessThanOrEqual(1)
           if (viewport.width !== MOBILE.width) await snapshot(page, secure, 'regenerating')
-          const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+          const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
           if (screenshots !== undefined) {
             await mkdir(screenshots, { recursive: true })
             await page.screenshot({ path: join(screenshots, viewport.width === MOBILE.width ? 'qr-generating-mobile.png' : 'qr-generating-desktop.png') })
@@ -1199,7 +1199,7 @@ describe('web e2e: one-use QR browser login', () => {
       expect(desktopNotice!.x).toBe(header!.x)
       expect(desktopNotice!.width).toBe(header!.width)
       await snapshot(page, fixture, 'expired')
-      const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+      const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
       if (screenshots !== undefined) {
         await mkdir(screenshots, { recursive: true })
         await page.screenshot({ path: join(screenshots, 'expired-desktop-light.png') })
@@ -1246,7 +1246,7 @@ describe('web e2e: one-use QR browser login', () => {
       expect(await qr.getByRole('button', { name: '重新生成', exact: true }).count()).toBe(0)
       expect(await section.getByRole('img').count()).toBe(0)
       await snapshot(page, secure, 'cancelled')
-      const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+      const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
       if (screenshots !== undefined) {
         await mkdir(screenshots, { recursive: true })
         await page.getByRole('dialog', { name: '设置', exact: true }).screenshot({ path: join(screenshots, 'cancelled-desktop.png') })
@@ -1256,7 +1256,7 @@ describe('web e2e: one-use QR browser login', () => {
         && response.request().method() === 'POST')
       await other.goto(qrUrl)
       expect((await refused).status()).toBe(410)
-      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('dsh-remote-'))).toEqual([])
+      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('snh-remote-'))).toEqual([])
       expect(await createCode(page, section)).not.toBe(qrUrl)
       await page.reload()
       await page.getByRole('button', { name: '账号菜单', exact: true, includeHidden: true }).waitFor({ state: 'attached' })
@@ -1280,7 +1280,7 @@ describe('web e2e: one-use QR browser login', () => {
       const extension = page.getByRole('region', { name: '连接选项', exact: true })
       const additional = await scaffold.ctx.loader.create({ name: '@fixture/remote-connection-extension' })
       await extension.waitFor()
-      const screenshots = process.env['DSH_REMOTE_CONNECTION_SCREENSHOTS']
+      const screenshots = process.env['SNH_REMOTE_CONNECTION_SCREENSHOTS']
       if (screenshots !== undefined) {
         await mkdir(screenshots, { recursive: true })
         await page.screenshot({ path: join(screenshots, 'extensions-overview-desktop-light.png') })
@@ -1454,10 +1454,10 @@ describe('web e2e: one-use QR browser login', () => {
       expect((await exchanged).status()).toBe(204)
       await phonePage.getByRole('button', { name: '账号菜单', exact: true, includeHidden: true }).waitFor({ state: 'attached' })
       expect(phonePage.url()).toBe(fixture.url)
-      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('dsh-remote-'))).toEqual([
+      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('snh-remote-'))).toEqual([
         expect.objectContaining({ httpOnly: true, secure: false, sameSite: 'Strict', domain: 'qr-login.test' }),
       ])
-      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('dsh-auth-'))).toEqual([])
+      expect((await phone.cookies()).filter(cookie => cookie.name.startsWith('snh-auth-'))).toEqual([])
       expect(await phonePage.evaluate(async () => (await fetch('./', {
         method: 'HEAD', credentials: 'same-origin', cache: 'no-store', redirect: 'manual',
       })).status)).toBe(200)
@@ -1475,7 +1475,7 @@ describe('web e2e: one-use QR browser login', () => {
       await reusedPage.goto(qrUrl)
       expect((await refused).status()).toBe(410)
       await expect.poll(() => new URL(reusedPage.url()).hash).toBe('')
-      expect((await stranger.cookies()).filter(cookie => cookie.name.startsWith('dsh-remote-'))).toEqual([])
+      expect((await stranger.cookies()).filter(cookie => cookie.name.startsWith('snh-remote-'))).toEqual([])
       expect(await reusedPage.getByRole('button', { name: '账号菜单', exact: true }).count()).toBe(0)
     } finally {
       try {

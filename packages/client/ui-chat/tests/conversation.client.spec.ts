@@ -1,9 +1,9 @@
 /** Chat-owned event-to-view projection. */
 
 import { describe, expect, it } from 'vitest'
-import type { AttachmentId } from '@deepseek-ai/dsh-attachment/types'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ContentBlock } from '@deepseek-ai/dsh-api-remotes/client'
+import type { AttachmentId } from '@supernova-ai/snh-attachment/types'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ContentBlock } from '@supernova-ai/snh-api-remotes/client'
 import {
   displayFailure, emptyAssistantBlock, toAssistantBlock, toAssistantBlocks,
   isTokenDelta,

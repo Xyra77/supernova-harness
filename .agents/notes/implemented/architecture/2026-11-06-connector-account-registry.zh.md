@@ -6,11 +6,11 @@ Status: implemented
 
 ## 问题
 
-连接器插件会在插件页显示账号区块。CLI 应用插件的账号保存在厂商 CLI 中；MCP 连接器通过 MCP 管理器保存 OAuth 授权。两类插件需要同样的界面：插件包的区块、标题旁标签和开启引导，在会改变 DSH 之外账号状态的操作前确认，以及只在发起操作的浏览器中显示的提示。客户端插件不能与其他功能插件共享运行时代码（[packages/client/AGENTS.md](../../../../packages/client/AGENTS.md) 第 3 条），因此每类连接器各有一个浏览器一半，就会把同样的代码写两遍，副本还会逐渐不一致。如果由浏览器决定账号状态，或在两个 Remote 之间转发标识，Host 就无法在没有浏览器的情况下完成流程。
+连接器插件会在插件页显示账号区块。CLI 应用插件的账号保存在厂商 CLI 中；MCP 连接器通过 MCP 管理器保存 OAuth 授权。两类插件需要同样的界面：插件包的区块、标题旁标签和开启引导，在会改变 SNH 之外账号状态的操作前确认，以及只在发起操作的浏览器中显示的提示。客户端插件不能与其他功能插件共享运行时代码（[packages/client/AGENTS.md](../../../../packages/client/AGENTS.md) 第 3 条），因此每类连接器各有一个浏览器一半，就会把同样的代码写两遍，副本还会逐渐不一致。如果由浏览器决定账号状态，或在两个 Remote 之间转发标识，Host 就无法在没有浏览器的情况下完成流程。
 
 ## 决定
 
-[`@deepseek-ai/dsh-client-ui-connector-account`](../../../../packages/client/ui-connector-account/README.zh.md) 为所有连接器类型提供一个 Host 注册表 `ctx.connectorAccounts`、一个 `connectorAccounts` Remote 和一个浏览器一半。
+[`@supernova-ai/snh-client-ui-connector-account`](../../../../packages/client/ui-connector-account/README.zh.md) 为所有连接器类型提供一个 Host 注册表 `ctx.connectorAccounts`、一个 `connectorAccounts` Remote 和一个浏览器一半。
 
 | 部分 | 约定 |
 |---|---|

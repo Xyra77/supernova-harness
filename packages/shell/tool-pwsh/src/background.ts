@@ -1,15 +1,15 @@
 /**
  * Generic-job adaptation for pwsh process handles — the shell-agnostic twin
- * of `dsh-tool-bash`'s background adaptation: the terminal
+ * of `snh-tool-bash`'s background adaptation: the terminal
  * outcome the registry records and the pull sources it pumps.
  *
- * @module @deepseek-ai/dsh-tool-pwsh/background
+ * @module @supernova-ai/snh-tool-pwsh/background
  */
 
-import type { SandboxMode } from '@deepseek-ai/dsh-sandbox'
-import { escalationHintMarker, sandboxDenialMarker } from '@deepseek-ai/dsh-sandbox'
-import type { ShellProcess, ShellSandboxInfo } from '@deepseek-ai/dsh-shell'
-import type { JobChunk, JobHooks, JobOutcome, JobOutputSource } from '@deepseek-ai/dsh-jobs'
+import type { SandboxMode } from '@supernova-ai/snh-sandbox'
+import { escalationHintMarker, sandboxDenialMarker } from '@supernova-ai/snh-sandbox'
+import type { ShellProcess, ShellSandboxInfo } from '@supernova-ai/snh-shell'
+import type { JobChunk, JobHooks, JobOutcome, JobOutputSource } from '@supernova-ai/snh-jobs'
 
 /** Job hooks plus the original error of a job that failed before its process produced an outcome. */
 export interface ProcessJobHooks extends JobHooks {
@@ -21,7 +21,7 @@ export interface ProcessJobHooks extends JobHooks {
   failure(): { error: unknown } | undefined
 }
 
-/* jscpd:ignore-start -- deliberate twin of dsh-tool-bash/background.ts (Agent Note). */
+/* jscpd:ignore-start -- deliberate twin of snh-tool-bash/background.ts (Agent Note). */
 
 /**
  * Sandbox facts worth the terminal detail: a runner that never ran the

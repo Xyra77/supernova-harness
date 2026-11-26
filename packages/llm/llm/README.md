@@ -3,13 +3,13 @@ description: "The provider-neutral model-call service for users and maintainers 
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-llm
+# @supernova-ai/snh-llm
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-Use `@deepseek-ai/dsh-llm` to stream model calls through configured provider adapters, discover models, and resolve model capabilities and call defaults. Callers must keep all model-visible input reconstructable from the session log. Loop-built requests arrive deep-frozen, so extensions and adapters cannot rewrite them. Each stream is one provider attempt: provider-specific translation stays with its adapter, while the optional `@deepseek-ai/dsh-llm-retry` package re-runs failed requests. Streams always end with a terminal result, so callers can handle success, failure, and cancellation consistently.
+Use `@supernova-ai/snh-llm` to stream model calls through configured provider adapters, discover models, and resolve model capabilities and call defaults. Callers must keep all model-visible input reconstructable from the session log. Loop-built requests arrive deep-frozen, so extensions and adapters cannot rewrite them. Each stream is one provider attempt: provider-specific translation stays with its adapter, while the optional `@supernova-ai/snh-llm-retry` package re-runs failed requests. Streams always end with a terminal result, so callers can handle success, failure, and cancellation consistently.
 
 ## Table of Contents
 
@@ -29,20 +29,20 @@ Use `@deepseek-ai/dsh-llm` to stream model calls through configured provider ada
 
 Any composition that calls a model provider — an agent loop, a session-title generator, a compaction summarizer — streams its requests through this service. Mount it together with at least one provider adapter; the service itself has no configuration and no provider wire code.
 
-Import message, tool-call, provider-request, attempt, and reasoning-effort identifier types from `@deepseek-ai/dsh-llm/types` or the package root using `import type`. Brand strings with `brandString<IdentifierType>(value)` from `@deepseek-ai/dsh-brand`; branding preserves the string without validation.
+Import message, tool-call, provider-request, attempt, and reasoning-effort identifier types from `@supernova-ai/snh-llm/types` or the package root using `import type`. Brand strings with `brandString<IdentifierType>(value)` from `@supernova-ai/snh-brand`; branding preserves the string without validation.
 
 ### When to choose it
 
-Choose this package whenever a plugin or composition needs to call a model: it is the only supported path into provider adapters, and it keeps one vocabulary across the loop, the session log, and every consumer. Do not reach for it when you need provider-specific wire behavior (that belongs in an adapter such as `dsh-llm-deepseek` or `dsh-llm-pi-ai`) or retry execution (that belongs in `dsh-llm-retry`).
+Choose this package whenever a plugin or composition needs to call a model: it is the only supported path into provider adapters, and it keeps one vocabulary across the loop, the session log, and every consumer. Do not reach for it when you need provider-specific wire behavior (that belongs in an adapter such as `snh-llm-supernova` or `snh-llm-pi-ai`) or retry execution (that belongs in `snh-llm-retry`).
 
 ### Minimal composition
 
-Mount the service and at least one adapter, then select the provider by name in every request. The DeepSeek route below also requires [`dsh-deepseek-auth`](../../account/deepseek-auth/README.md), which releases its API key:
+Mount the service and at least one adapter, then select the provider by name in every request. The SuperNova route below also requires [`snh-supernova-auth`](../../account/supernova-auth/README.md), which releases its API key:
 
 ```yaml
-- name: '@deepseek-ai/dsh-llm'
-- name: '@deepseek-ai/dsh-deepseek-auth'
-- name: '@deepseek-ai/dsh-llm-deepseek-api-key'
+- name: '@supernova-ai/snh-llm'
+- name: '@supernova-ai/snh-supernova-auth'
+- name: '@supernova-ai/snh-llm-supernova-api-key'
   config:
     apiKeyEnv: DEEPSEEK_API_KEY
 ```
@@ -61,7 +61,7 @@ for await (const chunk of ctx.llm.stream({
 
 After a successful mount, `ctx.llm.listProviders()` reports the registered routes in registration order.
 
-Auxiliary request producers declare their `purpose` in `LlmRequestPurposeMap` through module augmentation of `@deepseek-ai/dsh-llm/types`; each key maps to `true`. `GenerateOptions.purpose` accepts the declared keys, while ordinary conversation requests omit it. Import the producer package or its public types before constructing that auxiliary request. Adapters carry the purpose as model-hidden transport metadata and handle unfamiliar purposes without rejecting the request.
+Auxiliary request producers declare their `purpose` in `LlmRequestPurposeMap` through module augmentation of `@supernova-ai/snh-llm/types`; each key maps to `true`. `GenerateOptions.purpose` accepts the declared keys, while ordinary conversation requests omit it. Import the producer package or its public types before constructing that auxiliary request. Adapters carry the purpose as model-hidden transport metadata and handle unfamiliar purposes without rejecting the request.
 
 `GenerateOptions.messages` accepts durable `Message` values and request-only `RequestUserInput` values. Request-only inputs carry user-role content with no `id` or `source`; Session writes and Agent delivery still require durable messages. Callers keep auxiliary inputs unchanged until the stream settles. A caller that records its exact request, such as session-title generation, must use durable messages.
 
@@ -70,7 +70,7 @@ Auxiliary request producers declare their `purpose` in `LlmRequestPurposeMap` th
 Configuration functions select controls before adapter defaults are materialized. For example, combine least-effort selection with an explicit output cap, then pass `configure(maxTokens)` as the third argument:
 
 ```ts
-import type { ConfigureCall } from '@deepseek-ai/dsh-llm'
+import type { ConfigureCall } from '@supernova-ai/snh-llm'
 
 const leastReasoning: ConfigureCall = (controls, model) => {
   const first = model.reasoning?.efforts[0]
@@ -86,7 +86,7 @@ const configure = (maxTokens: number): ConfigureCall =>
 
 ### What you can do
 
-- **Extract content text** — `extractTextContent(content, options?)` from `@deepseek-ai/dsh-llm/message` joins only `text` blocks in order, preserving whitespace and empty text blocks while omitting all other block types without placeholders. The optional `options.separator` defaults to `''`. `options.trim` instead trims each text block and omits blocks left empty, so they add no separator. It accepts read-only content and returns `''` when no text blocks exist.
+- **Extract content text** — `extractTextContent(content, options?)` from `@supernova-ai/snh-llm/message` joins only `text` blocks in order, preserving whitespace and empty text blocks while omitting all other block types without placeholders. The optional `options.separator` defaults to `''`. `options.trim` instead trims each text block and omits blocks left empty, so they add no separator. It accepts read-only content and returns `''` when no text blocks exist.
 - **Stream one model call** — `ctx.llm.stream(options)` yields raw chunks (token-level deltas) for any registered provider and model; consumers assemble them with `BlockAssembler`.
 - **Register provider adapters** — an adapter owns one or more provider routes, and its registration captures that route's retry policy; registering the same route twice fails with `DUPLICATE_ADAPTER`.
 - **Expose and activate providers through configuration** — adapters declare configurable-provider routes plus a settings namespace, so configuration surfaces can activate dormant providers and edit connection facts without a restart. `LlmConfigurableProvider.error` reports a configuration diagnostic for repair; unaffected models can remain serviceable. An entry can also carry `defaultBaseURL`, the endpoint the adapter uses when the profile sets none, and `nativeAuth`, the environment variables and OAuth sign-in that the adapter's authentication reads when the profile names no credential reference; `baseURLEnv` lists environment variables used to configure the endpoint. Configuration UIs read these fields from the directory without calling the adapter.
@@ -96,7 +96,7 @@ const configure = (maxTokens: number): ConfigureCall =>
 
 ### Failures and recovery
 
-Every stream ends in exactly one terminal `finish` chunk: `{ kind: 'error', failure }` on failure, `{ kind: 'aborted', failure }` on cancellation. Failures carry stable codes such as `NO_ADAPTER`, `MISSING_CREDENTIAL`, `AUTH`, `RATE_LIMIT`, and `CONTEXT_WINDOW_EXCEEDED`; consumers route on the code, never on message text. `LLM_FAILURE_CODES` defines every code the built-in providers and this runtime raise; `new LlmError` accepts only those codes or `HTTP_<status>`, and `LlmError.fromFailure` re-raises an observed failure whose code another provider chose. Codes marked `retryChoice` are the choices a provider `retryPolicy.retryableCodes` schema publishes to settings forms; being a choice does not add a code to the default retried set. `QUOTA` is provider-neutral exhaustion, while `ACCOUNT_QUOTA` is reserved for a first-party account balance that the current product can replenish. A request naming an unregistered provider fails with `NO_ADAPTER`, and a malformed credential fails with `INVALID_CREDENTIAL` instead of surfacing as an opaque fetch error. This service never re-runs a request: retrying is the job of `dsh-llm-retry` at the agent's failed-step extension point.
+Every stream ends in exactly one terminal `finish` chunk: `{ kind: 'error', failure }` on failure, `{ kind: 'aborted', failure }` on cancellation. Failures carry stable codes such as `NO_ADAPTER`, `MISSING_CREDENTIAL`, `AUTH`, `RATE_LIMIT`, and `CONTEXT_WINDOW_EXCEEDED`; consumers route on the code, never on message text. `LLM_FAILURE_CODES` defines every code the built-in providers and this runtime raise; `new LlmError` accepts only those codes or `HTTP_<status>`, and `LlmError.fromFailure` re-raises an observed failure whose code another provider chose. Codes marked `retryChoice` are the choices a provider `retryPolicy.retryableCodes` schema publishes to settings forms; being a choice does not add a code to the default retried set. `QUOTA` is provider-neutral exhaustion, while `ACCOUNT_QUOTA` is reserved for a first-party account balance that the current product can replenish. A request naming an unregistered provider fails with `NO_ADAPTER`, and a malformed credential fails with `INVALID_CREDENTIAL` instead of surfacing as an opaque fetch error. This service never re-runs a request: retrying is the job of `snh-llm-retry` at the agent's failed-step extension point.
 
 -----
 
@@ -129,11 +129,11 @@ The service is built on one separation: **the logical contract is provider-neutr
 
 ### Main flow
 
-A request is validated against its exact model's capability — context window, output default, reasoning efforts, input modalities, and `systemPromptUpdate` mode — and any adapter-configured defaults are materialized. The runtime preserves freezing for already-frozen input; hand-built callers own input immutability. `prepareCall()` binds those facts, detached context, and retry policy to the exact adapter generation that performs terminal dispatch, so HMR or dynamic settings cannot combine one generation's image capability with another generation's endpoint. An image-capable adapter projects durable references into route-specific request versions; `resolveImageAttachmentAccess()` separately maps an attachment provider's optional host object into the current tool execution world without changing the request image or its `variantId`. A text-only route receives deterministic per-image placeholders, including tool-role result images, without rewriting append-only session history. Durable `FileBlock` references never reach any adapter: request assembly replaces each one, including tool-role result occurrences, with deterministic handle text naming the file and its saved read-only path, resolved through the mounted attachment and filesystem providers. `ctx.llm.fileRequestText(ref)` exposes that exact synchronous projection to request measurement. An image occurrence derived with `offloaded: true` reaches every route as placeholder text through `projectOffloadedImages()`. An image-capable route whose retained occurrences exceed its `LlmImageRequestBudget` at their exact bytes fails with `IMAGE_OFFLOAD_REQUIRED` naming the additional oldest occurrences (`requiredImageOffload()`), never with an unlogged projection; `dsh-compaction-image-offload` logs the selected occurrences in one `image/offload` event and retries. Adapters that charge visual tokens declare per-route `imageRequestPricing`, which `ctx.llm.imageRequestPricing(provider, model)` resolves synchronously for the token meter. Dispatch goes through the `llm/stream` waterfall, then chunks return as token-level deltas and every adapter outcome reaches the consumer as one terminal `finish` chunk. `imageRequestTarget(provider, model, image)` exposes maximum dimensions and byte budgets; screenshot consumers use the actual dimensions returned by `readImageRequest` after byte-limit resizing.
+A request is validated against its exact model's capability — context window, output default, reasoning efforts, input modalities, and `systemPromptUpdate` mode — and any adapter-configured defaults are materialized. The runtime preserves freezing for already-frozen input; hand-built callers own input immutability. `prepareCall()` binds those facts, detached context, and retry policy to the exact adapter generation that performs terminal dispatch, so HMR or dynamic settings cannot combine one generation's image capability with another generation's endpoint. An image-capable adapter projects durable references into route-specific request versions; `resolveImageAttachmentAccess()` separately maps an attachment provider's optional host object into the current tool execution world without changing the request image or its `variantId`. A text-only route receives deterministic per-image placeholders, including tool-role result images, without rewriting append-only session history. Durable `FileBlock` references never reach any adapter: request assembly replaces each one, including tool-role result occurrences, with deterministic handle text naming the file and its saved read-only path, resolved through the mounted attachment and filesystem providers. `ctx.llm.fileRequestText(ref)` exposes that exact synchronous projection to request measurement. An image occurrence derived with `offloaded: true` reaches every route as placeholder text through `projectOffloadedImages()`. An image-capable route whose retained occurrences exceed its `LlmImageRequestBudget` at their exact bytes fails with `IMAGE_OFFLOAD_REQUIRED` naming the additional oldest occurrences (`requiredImageOffload()`), never with an unlogged projection; `snh-compaction-image-offload` logs the selected occurrences in one `image/offload` event and retries. Adapters that charge visual tokens declare per-route `imageRequestPricing`, which `ctx.llm.imageRequestPricing(provider, model)` resolves synchronously for the token meter. Dispatch goes through the `llm/stream` waterfall, then chunks return as token-level deltas and every adapter outcome reaches the consumer as one terminal `finish` chunk. `imageRequestTarget(provider, model, image)` exposes maximum dimensions and byte budgets; screenshot consumers use the actual dimensions returned by `readImageRequest` after byte-limit resizing.
 
 File detection reads current content, including tool-role result content, on every request without caching message identities or freeze state. The [archived file-scan decision](../../../.agents/notes/archived/simplification/2026-09-07-file-content-scan.md) records the measured traversal cost.
 
-`uniqueRequestImageRefs()` from `@deepseek-ai/dsh-llm/message` returns one reference per retained attachment. Each adapter supplies its model's dimensions and byte limits to `AttachmentStore.readImageRequest()`. Once the wire representation is selected, `requestImageBudgetFailure()` counts the actual encoded size of every retained occurrence, including repeats.
+`uniqueRequestImageRefs()` from `@supernova-ai/snh-llm/message` returns one reference per retained attachment. Each adapter supplies its model's dimensions and byte limits to `AttachmentStore.readImageRequest()`. Once the wire representation is selected, `requestImageBudgetFailure()` counts the actual encoded size of every retained occurrence, including repeats.
 
 ### Invariants
 
@@ -155,11 +155,11 @@ File detection reads current content, including tool-role result content, on eve
 Read these pages when the package-level contract is not enough. They move from the shared types to the concrete adapters, the retry executor, and the measurement service.
 
 - [LLM streaming subsystem](../../../docs/subsystems/llm-streaming.md) — the message and block types, compact Assistant stream records, the `StreamChunk` protocol, and the adapter contract.
-- [llm-deepseek adapter](../llm-deepseek/README.md) — the direct DeepSeek Messages implementation.
+- [llm-supernova adapter](../llm-supernova/README.md) — the direct SuperNova Messages implementation.
 - [llm-pi-ai adapter](../llm-pi-ai/README.md) — the pi-ai-backed multi-provider implementation.
 - [llm-retry](../llm-retry/README.md) — the retry executor that re-runs failed model requests.
 - [Token meter](../token-meter/README.md) — replay-aware request and context pressure measurement.
-- [Twin LLM adapters](../../../.agents/notes/implemented/architecture/2026-06-13-twin-llm-adapters.md) — why the DeepSeek route ships two structurally different adapters.
+- [Twin LLM adapters](../../../.agents/notes/implemented/architecture/2026-06-13-twin-llm-adapters.md) — why the SuperNova route ships two structurally different adapters.
 - [Terminal LLM stream failures](../../../.agents/notes/implemented/architecture/2026-07-29-terminal-llm-stream-failures.md) — the service boundary between model-request outcomes and plugin failures.
 
 -----
@@ -180,12 +180,12 @@ Reasoning-effort materialization preserves the assembled request prefix. Image i
 
 These limits define where this service stops and other packages or future work begin. They are current package constraints, not a task backlog.
 
-- **No retry execution, caching, or rate limiting ships in this service** — provider registration stores the retry policy, but a stream remains a single provider attempt; `@deepseek-ai/dsh-llm-retry` executes the policy at durable agent-step boundaries.
-- **Only `attributionHeaders()` carries the `DSH_USER_AGENT_SUFFIX` token** — DeepSeek web search and web API plugins send their own fixed `User-Agent`, so the profile suffix does not reach those requests.
+- **No retry execution, caching, or rate limiting ships in this service** — provider registration stores the retry policy, but a stream remains a single provider attempt; `@supernova-ai/snh-llm-retry` executes the policy at durable agent-step boundaries.
+- **Only `attributionHeaders()` carries the `SNH_USER_AGENT_SUFFIX` token** — SuperNova web search and web API plugins send their own fixed `User-Agent`, so the profile suffix does not reach those requests.
 - **`GenerateOptions` sampling is `temperature`/`maxTokens`/`stop` only** — no `tool_choice`, `top_p`, or penalty fields; the vocabulary grows when a producer lands ([dropped inert knobs](../../../.agents/notes/archived/simplification/2026-07-04-drop-inert-request-knobs.md)).
 - **Variants normally require a producer** — `prefill`, per-tool `strict`, block `cache` hints, and the `agent` message-source variant have no producer ([Agent Note](../../../.agents/notes/archived/simplification/2026-07-04-prune-producerless-vocabulary-variants.md)).
 - **`BlockAssembler` handles core block kinds only** — a plugin-added block type whose stream is never closed by `block-end` makes `blocks()` throw.
-- **`GenerateOptions.sessionId` is a locally-declared brand** — importing dsh-session's `SessionId` would create a dependency cycle.
+- **`GenerateOptions.sessionId` is a locally-declared brand** — importing snh-session's `SessionId` would create a dependency cycle.
 - **Tool updates require session history** — `GenerateOptions.tools` contains active definitions. `toolHistory` supplies the initial declarations and historically resolved additions from `Session.toolHistory()`. At adapter dispatch, `projectToolUpdates` constructs deferred declarations and retains removed definitions for `in-history`; `addition-only` omits removed definitions and removal messages. Removing any tool or adding tools to an empty set on an addition-only route rebuilds the baseline from the declarations available after that update. Deferred declarations count as existing tools. Superseded tool blocks are omitted while unrelated content survives; subsequent additions remain deferred. Unsupported routes receive active tools without developer messages or `deferLoading`. Missing history or a request prefix omitting recorded updates falls back to current declarations without developer messages. Explicitly deferred tools become immediate during a rebuild only if an addition has already activated them; unactivated declarations remain deferred.
 
 <a id="dev-note"></a>
@@ -198,7 +198,7 @@ This Dev Note is non-authoritative working context: open questions and undecided
 
 #### Open items
 
-- `GenerateOptions.sessionId` is a locally-declared brand because importing dsh-session's `SessionId` would create a dependency cycle; a future ids-owning package could dissolve the workaround.
+- `GenerateOptions.sessionId` is a locally-declared brand because importing snh-session's `SessionId` would create a dependency cycle; a future ids-owning package could dissolve the workaround.
 - Reasoning-effort identifiers are adapter-owned opaque strings resolved only against each adapter's advertised set; a shared cross-adapter effort vocabulary is not decided.
 - The `llm/adapters-updated` event is payload-free by design; consumers re-read the registries instead of receiving the new topology in the event.
 

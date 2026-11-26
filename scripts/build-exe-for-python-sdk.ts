@@ -1,5 +1,5 @@
 /**
- * Build the dsh executables and development Node carrier for the Python runtime wheel. The fixed
+ * Build the snh executables and development Node carrier for the Python runtime wheel. The fixed
  * `@yao-pkg/pkg --sea` route, deploy flags, and artifact layout are owned by
  * .agents/notes/implemented/architecture/2026-07-10-single-file-executable-sdk-runtime-distribution.md.
  * The staged closure is symlink-free, and whole-tree assets cover Cordis's
@@ -24,18 +24,18 @@ import primaryLock from './primary-runtime/lock.json' with { type: 'json' }
 const root = resolve(import.meta.dirname, '..')
 
 /** The closure manifest whose dependencies define the executable. */
-const DEPLOY_ROOT_PACKAGE = 'dsh-python-runtime-closure'
+const DEPLOY_ROOT_PACKAGE = 'snh-python-runtime-closure'
 /** The sole executable entry inside the deployed closure. */
 const ENTRY_BIN = 'runtime-bootstrap.mjs'
 /** Python-visible executable basename. */
-const OUTPUT_BASENAME = 'deepseek-harness-sdk-runtime'
+const OUTPUT_BASENAME = 'supernova-harness-sdk-runtime'
 /** Node major accepted in `--targets`; SEA mode requires at least Node 22. */
 const NODE_RANGE = 'node24'
 /** Exact Node release embedded in every executable, shared with the desktop primary runtime. */
 const NODE_VERSION = primaryLock.nodeVersion
 const OUT_DIR = 'dist-exe'
 /** Python package destination; created when absent. */
-const PYTHON_RUNTIME_DIR = 'python/sdk-runtime/src/deepseek_harness_runtime/runtime'
+const PYTHON_RUNTIME_DIR = 'python/sdk-runtime/src/supernova_harness_runtime/runtime'
 /** The deployed closure doubles as the node-mode carrier. */
 const PYTHON_NODE_SUBDIR = 'node'
 /** Documentation excluded from the generated runtime directory. */
@@ -55,7 +55,7 @@ const ASSET_GLOBS = [
   'node_modules/**/package.json',
   'node_modules/**/*.json',
   // Plugin display metadata resolves these package-owned images at runtime.
-  'node_modules/@deepseek-ai/dsh-*/**/*.{svg,png,jpg,jpeg,webp}',
+  'node_modules/@supernova-ai/snh-*/**/*.{svg,png,jpg,jpeg,webp}',
   // Package-owned Markdown includes runtime skill instructions.
   'node_modules/**/*.md',
   'node_modules/**/*.dylib',
@@ -67,16 +67,16 @@ const ASSET_GLOBS = [
   'node_modules/**/*.yaml',
   'node_modules/**/*.yml',
   // web-app builds this path dynamically, so pkg cannot discover the static frontend.
-  'node_modules/@deepseek-ai/dsh-web-frontend/dist/**/*',
+  'node_modules/@supernova-ai/snh-web-frontend/dist/**/*',
   // The diagnosis provider extracts its PowerShell script for an external interpreter.
-  'node_modules/@deepseek-ai/dsh-sandbox-windows-acl/assets/**/*',
+  'node_modules/@supernova-ai/snh-sandbox-windows-acl/assets/**/*',
 ]
 
 /** Published source and documentation: types and maps already describe the runtime, so no load path needs them. */
 const PUBLISHED_PAYLOAD_IGNORES = [
-  '**/node_modules/@deepseek-ai/dsh/src/**',
-  '**/node_modules/@deepseek-ai/dsh-*/src/**',
-  '**/node_modules/@deepseek-ai/dsh/docs/**',
+  '**/node_modules/@supernova-ai/snh/src/**',
+  '**/node_modules/@supernova-ai/snh-*/src/**',
+  '**/node_modules/@supernova-ai/snh/docs/**',
 ]
 
 const PLATFORMS = ['linux', 'macos', 'win'] as const
@@ -383,7 +383,7 @@ class SingleExeBuild {
     try {
       await bundle({ config: false, tsconfig: false, inputOptions: { tsconfig: false }, target: 'es2024', entry: entries,
         outDir: this.staging, clean: false, format: 'esm', platform: 'node', dts: false,
-        deps: { neverBundle: [/^@deepseek-ai\//u], alwaysBundle: [/.*/u] }, shims: true, outExtensions: () => ({ js: '.mjs' }),
+        deps: { neverBundle: [/^@supernova-ai\//u], alwaysBundle: [/.*/u] }, shims: true, outExtensions: () => ({ js: '.mjs' }),
         define: { 'import.meta.main': 'false' } })
     } finally {
       for (const entry of Object.values(entries)) await rm(entry, { force: true })

@@ -1,5 +1,5 @@
 /**
- * In-memory view of one DeepSeek chat export ZIP archive. Opening reads the
+ * In-memory view of one SuperNova chat export ZIP archive. Opening reads the
  * central directory; a streaming pass inflates only the entries it is asked
  * for, and a by-name read serves a targeted fetch of one entry.
  */
@@ -7,7 +7,7 @@
 import { setImmediate as nextTurn } from 'node:timers/promises'
 import { Unzip, UnzipInflate, unzip } from 'fflate'
 import type { FlateError, Unzipped, UnzipFile, UnzipFileInfo } from 'fflate'
-import type { DeepseekChatImportFailureReason } from './types.ts'
+import type { SupernovaChatImportFailureReason } from './types.ts'
 
 /** One entry the archive directory lists. */
 export interface ExportEntryInfo {
@@ -53,7 +53,7 @@ export class ExportSourceError extends Error {
    * @param message - English diagnostic.
    * @param options - underlying cause.
    */
-  constructor(readonly reason: DeepseekChatImportFailureReason, message: string, options?: ErrorOptions) {
+  constructor(readonly reason: SupernovaChatImportFailureReason, message: string, options?: ErrorOptions) {
     super(message, options)
   }
 }

@@ -5,7 +5,7 @@
 - id: headless-runner
   disabled: true
 
-- id: llm-deepseek
+- id: llm-supernova
   disabled: true
 
 - id: agent-loop
@@ -28,5 +28,5 @@
 - id: sandbox-policy
   inject: []
   config:
-    mode: !!js process.env.DSH_PERMISSION_MODE ?? 'workspace-write'
+    mode: !!js process.env.SNH_PERMISSION_MODE ?? 'workspace-write'
     workspaceRoot: !!js process.cwd()

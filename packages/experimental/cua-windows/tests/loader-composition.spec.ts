@@ -1,15 +1,15 @@
 /** Windows provider registration through the Loader without an interactive desktop. */
-import { Context } from '@deepseek-ai/cordis'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import ComputerUseRegistry from '@deepseek-ai/dsh-computer-use'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import SubprocessLocal from '@deepseek-ai/dsh-subprocess-local'
+import { Context } from '@supernova-ai/cordis'
+import Include from '@supernova-ai/cordis-plugin-include'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import ComputerUseRegistry from '@supernova-ai/snh-computer-use'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import type { SessionId } from '@supernova-ai/snh-session'
+import SubprocessLocal from '@supernova-ai/snh-subprocess-local'
 import { expect, it, onTestFinished } from 'vitest'
 import * as WindowsProvider from '../src/index.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 it.skipIf(process.platform !== 'win32')('loads the Windows provider and rejects a numeric window ID before native dispatch', async () => {
   const ctx = new Context()
@@ -29,10 +29,10 @@ it.skipIf(process.platform !== 'win32')('loads the Windows provider and rejects 
   const { agent } = await ctx.agents.create({ sessionId: brandString<SessionId>('cua-windows-loader') })
   expect(ctx.tools.get('cua', agent)).toBeDefined()
   const prompt = await ctx.systemPrompt.assemble({ scope: agent })
-  expect(prompt.sections.find(section => section.name === 'computer-use:dsh-cua')?.text).toContain('Windows:')
-  expect(prompt.sections.find(section => section.name === 'computer-use:dsh-cua')?.text).not.toContain('useSystemInput')
-  expect(prompt.sections.find(section => section.name === 'computer-use:dsh-cua')?.text).toContain('a system reminder lists any remaining keys and mouse buttons')
-  const toggleMouse = prompt.sections.find(section => section.name === 'computer-use:dsh-cua')?.text
+  expect(prompt.sections.find(section => section.name === 'computer-use:snh-cua')?.text).toContain('Windows:')
+  expect(prompt.sections.find(section => section.name === 'computer-use:snh-cua')?.text).not.toContain('useSystemInput')
+  expect(prompt.sections.find(section => section.name === 'computer-use:snh-cua')?.text).toContain('a system reminder lists any remaining keys and mouse buttons')
+  const toggleMouse = prompt.sections.find(section => section.name === 'computer-use:snh-cua')?.text
     .split('\n').find(line => line.startsWith('- toggleMouse('))
   expect(toggleMouse).toContain("toggleMouse(mouseButton: 'left' | 'right' | 'middle', direction: 'down' | 'up') -> ActionResult")
   expect(toggleMouse).toContain("Send 'up' to release a held button immediately.")

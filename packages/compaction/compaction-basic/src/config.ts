@@ -1,11 +1,11 @@
 /**
  * Load-time validation and routed-model policy resolution for compaction-basic.
  *
- * @module @deepseek-ai/dsh-compaction-basic/config
+ * @module @supernova-ai/snh-compaction-basic/config
  */
 
-import type { LlmCallConfig } from '@deepseek-ai/dsh-llm'
-import { deepFreeze } from '@deepseek-ai/dsh-util-values'
+import type { LlmCallConfig } from '@supernova-ai/snh-llm'
+import { deepFreeze } from '@supernova-ai/snh-util-values'
 import type {
   BasicCompactionConfig,
   CompactionPolicyConfig,

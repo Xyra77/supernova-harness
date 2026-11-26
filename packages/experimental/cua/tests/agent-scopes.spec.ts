@@ -1,21 +1,21 @@
 /** CUA tool and prompt ownership follows live Agent presets and provider disposal. */
 import { resolve } from 'node:path'
-import { Context, FiberState } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import AgentPresets from '@deepseek-ai/dsh-agent-preset-registry'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import ComputerUseRegistry from '@deepseek-ai/dsh-computer-use'
-import NodeRuntime from '@deepseek-ai/dsh-ptc-runtime-node'
-import Subprocess from '@deepseek-ai/dsh-subprocess'
-import Sandbox from '@deepseek-ai/dsh-sandbox-local'
-import SandboxPolicy from '@deepseek-ai/dsh-sandbox-policy'
-import { scopeTarget } from '@deepseek-ai/dsh-scope'
-import WorkingDirectory from '@deepseek-ai/dsh-working-directory'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type { Agent } from '@deepseek-ai/dsh-agent'
+import { Context, FiberState } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import AgentPresets from '@supernova-ai/snh-agent-preset-registry'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import ComputerUseRegistry from '@supernova-ai/snh-computer-use'
+import NodeRuntime from '@supernova-ai/snh-ptc-runtime-node'
+import Subprocess from '@supernova-ai/snh-subprocess'
+import Sandbox from '@supernova-ai/snh-sandbox-local'
+import SandboxPolicy from '@supernova-ai/snh-sandbox-policy'
+import { scopeTarget } from '@supernova-ai/snh-scope'
+import WorkingDirectory from '@supernova-ai/snh-working-directory'
+import type { SessionId } from '@supernova-ai/snh-session'
+import type { Agent } from '@supernova-ai/snh-agent'
 import { expect, it, onTestFinished, vi } from 'vitest'
 import { CuaConfig, installCua } from '../src/index.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const programPrompt = 'Fixture CUA program guidance\n\nAX read defaults: maxElements=2000, maxDepth=25.\n\nMaximum click holdMs: 5000 ms.'
 
@@ -64,7 +64,7 @@ async function setup(presetIds: readonly string[] | false = ['standard', 'ptc'],
 
 async function cuaPrompts(ctx: Context, agent: Agent): Promise<string[]> {
   return (await ctx.systemPrompt.assemble({ scope: agent })).sections
-    .filter(section => section.name === 'computer-use:dsh-cua').map(section => section.text)
+    .filter(section => section.name === 'computer-use:snh-cua').map(section => section.text)
 }
 
 /** Commit the selected Agent's prepared system messages. */
@@ -216,7 +216,7 @@ it('selects one CUA transport for existing and new Agents and removes both on un
   expect(ctx.tools.get('cua_run_code', existing.agent)).toBeUndefined()
   expect(ctx.get('ptcRuntime')).toBeUndefined()
   const { sections } = await ctx.systemPrompt.assemble({ scope: existing.agent })
-  expect(sections.find(section => section.name === 'computer-use:dsh-cua')?.text).toContain('Fixture CUA guidance')
+  expect(sections.find(section => section.name === 'computer-use:snh-cua')?.text).toContain('Fixture CUA guidance')
   await ctx.agentPresets.select(existing.agent, 'ptc')
   expect(ctx.tools.schemas(existing.agent).filter(tool => tool.name === 'cua')).toHaveLength(1)
   const fresh = await create('fresh', 'ptc')
@@ -225,7 +225,7 @@ it('selects one CUA transport for existing and new Agents and removes both on un
   await expect.poll(() => ctx.tools.get('cua', existing.agent)).toBeUndefined()
   await expect.poll(() => ctx.tools.get('cua_run_code', existing.agent)).toBeDefined()
   const standardSections = (await ctx.systemPrompt.assemble({ scope: existing.agent })).sections
-  expect(standardSections.find(section => section.name === 'computer-use:dsh-cua')?.text).toContain('Fixture CUA program guidance')
+  expect(standardSections.find(section => section.name === 'computer-use:snh-cua')?.text).toContain('Fixture CUA program guidance')
   await ctx.agentPresets.select(existing.agent, 'ptc')
   await expect.poll(() => ctx.tools.get('cua', existing.agent)).toBeDefined()
   await commitPrompt(ctx, existing.agent)
@@ -236,11 +236,11 @@ it('selects one CUA transport for existing and new Agents and removes both on un
   expect(ctx.tools.get('cua', existing.agent)).toBeUndefined()
   const retirement = await commitPrompt(ctx, existing.agent)
   expect(admittedMessages(retirement).flatMap(message => message.source.sections ?? []))
-    .toContainEqual(expect.objectContaining({ name: 'computer-use:dsh-cua', state: 'retired' }))
+    .toContainEqual(expect.objectContaining({ name: 'computer-use:snh-cua', state: 'retired' }))
   expect(admittedMessages(retirement).flatMap(message => message.content))
     .toContainEqual({ type: 'text', text: 'The CUA instructions no longer apply.' })
   expect((await ctx.systemPrompt.assemble({ scope: existing.agent })).sections
-    .some(section => section.name === 'computer-use:dsh-cua')).toBe(false)
+    .some(section => section.name === 'computer-use:snh-cua')).toBe(false)
   const reloaded = await ctx.plugin(provider, {})
   await expect.poll(() => ctx.tools.get('cua', existing.agent)).toBeDefined()
   expect(ctx.tools.get('cua', standard.agent)).toBeUndefined()
@@ -528,7 +528,7 @@ it.each([
   ctx.provide('ptcRuntime', runtime)
   await ctx.plugin(provider, {})
   const owner = await create('cua-runtime-guidance', 'ptc')
-  const prompt = (await ctx.systemPrompt.assemble({ scope: owner.agent })).sections.find(section => section.name === 'computer-use:dsh-cua')?.text
+  const prompt = (await ctx.systemPrompt.assemble({ scope: owner.agent })).sections.find(section => section.name === 'computer-use:snh-cua')?.text
   expect(prompt).toBeDefined()
   expect(prompt?.includes('Persistent PTC initialization:')).toBe(runtime.retainsState)
   expect(prompt?.includes('use the host-provided bridge initialization once and retain the returned objects')).toBe(runtime.retainsState)
@@ -538,6 +538,6 @@ it.each([
   expect(prompt).not.toContain('Raw tools use { method, params }')
 })
 
-function admittedMessages(assembly: import('@deepseek-ai/dsh-system-prompt').PromptAssembly) {
+function admittedMessages(assembly: import('@supernova-ai/snh-system-prompt').PromptAssembly) {
   return assembly.systemUpdates(false).map(update => update.message)
 }

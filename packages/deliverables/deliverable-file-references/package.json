@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-deliverable-file-references",
-  "description": "Shared model guidance for file links and deliverables across DeepSeek Harness hosts",
+  "name": "@supernova-ai/snh-deliverable-file-references",
+  "description": "Shared model guidance for file links and deliverables across SuperNova Harness hosts",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -32,12 +32,12 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-system-prompt": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-system-prompt": "workspace:*"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-system-prompt": "workspace:*",
-    "@deepseek-ai/dsh-session-projection": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-system-prompt": "workspace:*",
+    "@supernova-ai/snh-session-projection": "workspace:*"
   }
 }

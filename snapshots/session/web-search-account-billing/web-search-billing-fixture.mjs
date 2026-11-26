@@ -1,5 +1,5 @@
 /**
- * Signed-in DeepSeek account stand-in and Search API endpoint for the billing snapshots. The account releases one fixed
+ * Signed-in SuperNova account stand-in and Search API endpoint for the billing snapshots. The account releases one fixed
  * token, and the endpoint answers only a request that carries that token and no API key. With the plugin config
  * `signOutDuringSearch: true`, the account signs out when that request arrives and the endpoint leaves it unanswered.
  */
@@ -27,7 +27,7 @@ function transportInput(input, transportEndpoint) {
     return input instanceof Request ? new Request(transportEndpoint, input) : transportEndpoint
   }
   if (url !== undefined && url.startsWith('https://api.deepseek.com/')) {
-    throw new Error(`web-search-billing-fixture: unexpected DeepSeek request: ${url}`)
+    throw new Error(`web-search-billing-fixture: unexpected SuperNova request: ${url}`)
   }
   return input
 }
@@ -35,9 +35,9 @@ function transportInput(input, transportEndpoint) {
 /** Provide the signed-in account and start the Search endpoint; both end with the plugin fiber. */
 export async function apply(ctx, config) {
   const signedOut = new AbortController()
-  ctx.provide('deepseekAccount', {
+  ctx.provide('supernovaAccount', {
     resolveRequestCredential: async endpoint => endpoint.startsWith('https://api.deepseek.com/')
-      ? { headers: { 'x-dsh-auth-token': ACCOUNT_TOKEN }, revoked: signedOut.signal, reject: async () => {} }
+      ? { headers: { 'x-snh-auth-token': ACCOUNT_TOKEN }, revoked: signedOut.signal, reject: async () => {} }
       : undefined,
   })
   let restoreFetch = () => {}
@@ -45,7 +45,7 @@ export async function apply(ctx, config) {
     label: 'web-search-billing-fixture',
     requestListener: (request, response) => {
       if (request.method === 'POST' && request.url === '/v1/tools/search') {
-        if (request.headers['x-dsh-auth-token'] !== ACCOUNT_TOKEN || request.headers.authorization !== undefined) {
+        if (request.headers['x-snh-auth-token'] !== ACCOUNT_TOKEN || request.headers.authorization !== undefined) {
           response.writeHead(401, { 'content-type': 'application/json' })
           response.end(JSON.stringify({ error: { message: 'expected only the account token' } }))
           return

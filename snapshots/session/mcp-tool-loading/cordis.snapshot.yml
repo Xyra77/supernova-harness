@@ -1,24 +1,24 @@
 # Replay patch shared by the ordinary headless snapshot composition. The model
 # script comes from the scenario's committed session JSONL.
 
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek-api-key'
+- id: llm-supernova
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
-- id: plugin-package-inventory-deepseek
+- id: plugin-package-inventory-supernova
   disabled: true
 
 - id: session-title-llm
   disabled: true
 
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@supernova-ai/snh-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
+    root: !!js snhHomePath('sessions')
     compression: none
 
 - id: sandbox
-  name: '@deepseek-ai/dsh-sandbox-local'
+  name: '@supernova-ai/snh-sandbox-local'
   config:
     runnerCommand:
       - bash
@@ -30,27 +30,27 @@
 
 - insert:
     - id: llm-replay
-      name: '@deepseek-ai/dsh-llm-replay'
+      name: '@supernova-ai/snh-llm-replay'
       config:
         providers:
           - id: deepseek-official
-            name: DeepSeek
+            name: SuperNova
             models:
               - id: deepseek-v4-flash
               - id: deepseek-v4-pro
           - id: deepseek-messages
-            name: DeepSeek Messages
+            name: SuperNova Messages
             models:
               - id: deepseek-v4-flash
               - id: deepseek-v4-pro
 
 - insert:
     - id: mcp-tool-loading
-      name: '@deepseek-ai/dsh-mcp-client'
+      name: '@supernova-ai/snh-mcp-client'
       config:
         transport: streamable-http
         serverName: demo
-        url: !!js process.env.DSH_MCP_DEMO_URL
+        url: !!js process.env.SNH_MCP_DEMO_URL
         toolLoading: on-demand
         failOnStartupError: true
         reconnect:

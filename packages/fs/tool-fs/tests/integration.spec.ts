@@ -4,29 +4,29 @@
  * policy-service dependency. Assertions read files back byte-for-byte rather than trusting tool
  * messages.
  */
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { executeToolFixture, executeModelToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { executeToolFixture, executeModelToolFixture } from '@supernova-ai/snh-tool-testkit'
 
-import * as PtcToolExecutor from '@deepseek-ai/dsh-tool-executor-ptc'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import { mountAgentLoopTestDependencies, provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
+import * as PtcToolExecutor from '@supernova-ai/snh-tool-executor-ptc'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import { mountAgentLoopTestDependencies, provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { chmod, mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { PtcInspectableValue, PtcRuntime, type PtcRunRequest, type PtcRunResult, type PtcRunSpec } from '@deepseek-ai/dsh-ptc-runtime'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { FsVersion } from '@deepseek-ai/dsh-fs'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH } from '@deepseek-ai/dsh-tools'
-import { LocalFileSystem } from '@deepseek-ai/dsh-fs-local'
-import * as FsPolicy from '@deepseek-ai/dsh-fs-observation-policy'
-import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { Context } from '@supernova-ai/cordis'
+import type { SessionId } from '@supernova-ai/snh-session'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { PtcInspectableValue, PtcRuntime, type PtcRunRequest, type PtcRunResult, type PtcRunSpec } from '@supernova-ai/snh-ptc-runtime'
+import SandboxPolicyService from '@supernova-ai/snh-sandbox-policy'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import type { FsVersion } from '@supernova-ai/snh-fs'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime, { TOOL_ABORTED_BEFORE_DISPATCH } from '@supernova-ai/snh-tools'
+import { LocalFileSystem } from '@supernova-ai/snh-fs-local'
+import * as FsPolicy from '@supernova-ai/snh-fs-observation-policy'
+import * as ToolFs from '@supernova-ai/snh-tool-fs'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const testToolSignal = new AbortController().signal
 
@@ -63,9 +63,9 @@ afterEach(async () => {
 // --------------------------------------------------------------------------
 // GUARDED deployment: the policy gate plugin is loaded (shipped compositions leave it disabled).
 // --------------------------------------------------------------------------
-describe('guarded deployment (with dsh-fs-observation-policy)', () => {
+describe('guarded deployment (with snh-fs-observation-policy)', () => {
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'dsh-tool-fs-'))
+    dir = await mkdtemp(join(tmpdir(), 'snh-tool-fs-'))
     ctx = new Context()
     provideWorkingDirectoryFixture(ctx)
     await ctx.plugin(SessionProjectionRegistry)
@@ -339,9 +339,9 @@ describe('guarded deployment (with dsh-fs-observation-policy)', () => {
 // --------------------------------------------------------------------------
 // BARE deployment: the tool suite WITHOUT the policy gate, as the shipped compositions run.
 // --------------------------------------------------------------------------
-describe('bare provider (no dsh-fs-observation-policy)', () => {
+describe('bare provider (no snh-fs-observation-policy)', () => {
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'dsh-tool-fs-bare-'))
+    dir = await mkdtemp(join(tmpdir(), 'snh-tool-fs-bare-'))
     ctx = new Context()
     provideWorkingDirectoryFixture(ctx)
     await ctx.plugin(SessionProjectionRegistry)
@@ -428,12 +428,12 @@ describe('bare provider (no dsh-fs-observation-policy)', () => {
 
 // Per-session cwd: a relative file_path resolves against the calling session's workspace
 // (`exec.agent.session.header.cwd`), not the backend's config.cwd, so the
-// caller-selected session workspace wins, matching dsh-tool-bash.
+// caller-selected session workspace wins, matching snh-tool-bash.
 describe('per-session cwd', () => {
   let sessionDir: string
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'dsh-tool-fs-cfg-'))
-    sessionDir = await mkdtemp(join(tmpdir(), 'dsh-tool-fs-session-'))
+    dir = await mkdtemp(join(tmpdir(), 'snh-tool-fs-cfg-'))
+    sessionDir = await mkdtemp(join(tmpdir(), 'snh-tool-fs-session-'))
     ctx = new Context()
     provideWorkingDirectoryFixture(ctx)
     await ctx.plugin(SessionProjectionRegistry)
@@ -481,7 +481,7 @@ describe('per-session cwd', () => {
 // --------------------------------------------------------------------------
 describe('signal, concurrency, and the fs/observed contract', () => {
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'dsh-tool-fs-'))
+    dir = await mkdtemp(join(tmpdir(), 'snh-tool-fs-'))
     ctx = new Context()
     provideWorkingDirectoryFixture(ctx)
     await ctx.plugin(SessionProjectionRegistry)
@@ -595,7 +595,7 @@ describe('signal, concurrency, and the fs/observed contract', () => {
 
 describe('current working directory', () => {
   it('routes subsequent files to the new directory, and the permission root follows the directory there and back', async () => {
-    dir = await mkdtemp(join(tmpdir(), 'dsh-tool-fs-current-'))
+    dir = await mkdtemp(join(tmpdir(), 'snh-tool-fs-current-'))
     const next = join(dir, 'next')
     await mkdir(next)
     await writeFile(join(dir, 'note.txt'), 'original')

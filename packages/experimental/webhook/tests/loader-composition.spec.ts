@@ -2,11 +2,11 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
+import { Context } from '@supernova-ai/cordis'
+import Include from '@supernova-ai/cordis-plugin-include'
+import Loader from '@supernova-ai/cordis-plugin-loader'
 import { afterEach, describe, expect, it } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 import WebhookRuntime, {
   type WebhookDeliveryId,
   type WebhookRuleId,
@@ -25,11 +25,11 @@ afterEach(async () => {
 
 describe('real Loader composition', () => {
   it('loads the default Service export and an effect-scoped rule', { timeout: 60_000 }, async () => {
-    root = await mkdtemp(join(tmpdir(), 'dsh-webhook-loader-'))
+    root = await mkdtemp(join(tmpdir(), 'snh-webhook-loader-'))
     const configPath = join(root, 'cordis.yml')
     await writeFile(configPath, [
       '- name: fixture-dependencies',
-      "- name: '@deepseek-ai/dsh-webhook'",
+      "- name: '@supernova-ai/snh-webhook'",
       '- name: fixture-rule',
       '',
     ].join('\n'))
@@ -66,7 +66,7 @@ describe('real Loader composition', () => {
     context.loader.builtins.include = Include
     const modules = new Map<string, unknown>([
       ['fixture-dependencies', dependencies],
-      ['@deepseek-ai/dsh-webhook', WebhookRuntime],
+      ['@supernova-ai/snh-webhook', WebhookRuntime],
       ['fixture-rule', rule],
     ])
     context.loader.internal = {

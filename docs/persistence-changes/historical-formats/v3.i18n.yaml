@@ -503,10 +503,10 @@
 /session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-schedule-change:
   en: 8a1da56ea321cc21
   zh: 47fa2642536b1653
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-session-log-deepseek-delivery-accepted:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-session-log-supernova-delivery-accepted:
   en: 8f61832bbb68b54c
   zh: 1bc9501ef2c58537
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-session-log-deepseek-delivery-accepted-data:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-session-log-supernova-delivery-accepted-data:
   en: 5fe77de51b9fea24
   zh: 0f76c2efdaf01133
 /session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-session-end-seed:
@@ -698,28 +698,28 @@
 /session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-user-message:
   en: 3d91311d41128448
   zh: 933f7f674d88a6e0
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-deepseek-search-llm-request:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-supernova-search-llm-request:
   en: 8194dd1be30cfafa
   zh: cdedb78885a356f7
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-deepseek-search-llm-request-data-body:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-supernova-search-llm-request-data-body:
   en: ec6f04cd497d5a83
   zh: 9ed7846254f0f4a8
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-deepseek-search-llm-request-data-body-messages:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-supernova-search-llm-request-data-body-messages:
   en: 94c0d00c1438e479
   zh: 0d5ecde42b73399c
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-deepseek-search-llm-request-data-body-messages-0:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-supernova-search-llm-request-data-body-messages-0:
   en: 82afd5da1021eafd
   zh: 9ff30fb67acb9d47
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-deepseek-search-llm-request-data-body-messages-0-content:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-supernova-search-llm-request-data-body-messages-0-content:
   en: df62ad03dd879d81
   zh: 03cec7132a7790be
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-deepseek-search-llm-request-data-body-messages-0-content-0:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-supernova-search-llm-request-data-body-messages-0-content-0:
   en: f0d4ef434953834f
   zh: 5f72b73bca6bfd50
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-deepseek-search-llm-request-data-body-tools:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-supernova-search-llm-request-data-body-tools:
   en: 569c3f24ab8092a4
   zh: c44adfa2f1741a0e
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-deepseek-search-llm-request-data-body-tools-0:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/event-web-supernova-search-llm-request-data-body-tools-0:
   en: efaccd67885b7e3f
   zh: 5cb69eb46c3b6b30
 /session-v3-persistence-format/complete-schemas/resolved-persistence-types/every:
@@ -1130,7 +1130,7 @@
 /session-v3-persistence-format/complete-schemas/resolved-persistence-types/packages-todo-tool-todo-src-types-ts-todoitem:
   en: 15c8bda2f0792f31
   zh: 2e700ff542743e3b
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/packages-web-web-search-deepseek-src-provider-ts-deepseeksearchllmrequest:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/packages-web-web-search-supernova-src-provider-ts-supernovasearchllmrequest:
   en: c66826952023871a
   zh: a9e0d0a450319b73
 /session-v3-persistence-format/complete-schemas/resolved-persistence-types/packages-workflow-tool-workflow-src-types-ts-toolworkflowagentenddata:
@@ -1241,7 +1241,7 @@
 /session-v3-persistence-format/complete-schemas/resolved-persistence-types/session:
   en: 048cb1117c9013a5
   zh: 048cb1117c9013a5
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/session-log-deepseek-delivery-accepted:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/session-log-supernova-delivery-accepted:
   en: ffc8a093c3f86b77
   zh: ffc8a093c3f86b77
 /session-v3-persistence-format/complete-schemas/resolved-persistence-types/session-reference:
@@ -1424,7 +1424,7 @@
 /session-v3-persistence-format/complete-schemas/resolved-persistence-types/web-search-20250305:
   en: d7bdd7805e7f8acc
   zh: d7bdd7805e7f8acc
-/session-v3-persistence-format/complete-schemas/resolved-persistence-types/web-deepseek-search-llm-request:
+/session-v3-persistence-format/complete-schemas/resolved-persistence-types/web-supernova-search-llm-request:
   en: c2ac7c44723d7c64
   zh: c2ac7c44723d7c64
 /session-v3-persistence-format/complete-schemas/resolved-persistence-types/webhook:

@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-hmr",
+  "name": "@supernova-ai/snh-client-hmr",
   "description": "Web client graph and rebuilt-bundle delivery over an authenticated Remote stream",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -37,15 +37,15 @@
     "./package.json": "./package.json",
     "./locale/*.json": "./locale/*.json"
   },
-  "dsh": {
+  "snh": {
     "client": {
       "external": [
-        "@deepseek-ai/dsh-api-gateway/client"
+        "@supernova-ai/snh-api-gateway/client"
       ],
       "inject": [
-        "@deepseek-ai/dsh-api-gateway",
-        "@deepseek-ai/dsh-api-remote-access",
-        "@deepseek-ai/dsh-client-modules"
+        "@supernova-ai/snh-api-gateway",
+        "@supernova-ai/snh-api-remote-access",
+        "@supernova-ai/snh-client-modules"
       ],
       "platform": "web",
       "immediately": true
@@ -53,20 +53,20 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-deque": "workspace:*",
-    "@deepseek-ai/dsh-typert-protocol": "workspace:*",
-    "@deepseek-ai/schemastery": "workspace:~",
+    "@supernova-ai/snh-deque": "workspace:*",
+    "@supernova-ai/snh-typert-protocol": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
     "zod": "4.6.6"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/cordis-plugin-loader": "workspace:~",
-    "@deepseek-ai/dsh-api-gateway": "workspace:*",
-    "@deepseek-ai/dsh-api-remote-access": "workspace:*",
-    "@deepseek-ai/dsh-client-modules": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/snh-api-gateway": "workspace:*",
+    "@supernova-ai/snh-api-remote-access": "workspace:*",
+    "@supernova-ai/snh-client-modules": "workspace:*"
   },
   "files": [
     "locale/*.json",

@@ -1,8 +1,8 @@
 /** Agent-facing read-only listing of configured plugin market indexes. */
-import { assertNever } from '@deepseek-ai/dsh-util-values'
-import type { Context } from '@deepseek-ai/cordis'
-import type { LocalizedText } from '@deepseek-ai/dsh-package-manifest'
-import { defineTool, ToolArgsError } from '@deepseek-ai/dsh-tools'
+import { assertNever } from '@supernova-ai/snh-util-values'
+import type { Context } from '@supernova-ai/cordis'
+import type { LocalizedText } from '@supernova-ai/snh-package-manifest'
+import { defineTool, ToolArgsError } from '@supernova-ai/snh-tools'
 import type { MarketListingVersion } from './index.ts'
 import { PluginMarketError, pluginMarketToolError } from './error.ts'
 import { normalizeIndexUrl } from './index-url.ts'

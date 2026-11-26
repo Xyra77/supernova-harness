@@ -1,7 +1,7 @@
-// The executable is a private helper launched by the dsh Windows provider.
+// The executable is a private helper launched by the snh Windows provider.
 using System.CommandLine;
-using DeepSeek.Cua.Protocol;
-using DeepSeek.Cua.Windows;
+using SuperNova.Cua.Protocol;
+using SuperNova.Cua.Windows;
 
 using var exceptionLog = args.Contains("--shared-server", StringComparer.Ordinal) ? new NativeExceptionLog() : null;
 
@@ -36,7 +36,7 @@ try
 
     var parseResult = rootCommand.Parse(args);
     if (parseResult.Errors.Count != 0)
-        throw new NativeFailure("INVALID_ARGUMENT", "The helper must be launched by the dsh Windows provider");
+        throw new NativeFailure("INVALID_ARGUMENT", "The helper must be launched by the snh Windows provider");
 
     var runtime = Applications.Digest(Environment.ProcessPath!);
     if (runtime != parseResult.GetValue(runtimeKey)) throw new NativeFailure("NATIVE_STARTUP", "The helper executable changed before startup");
@@ -48,7 +48,7 @@ try
     else if (parseResult.GetValue(serve))
         await SharedRuntime.Connect(parseResult.GetRequiredValue(instanceId).ToString("N"), runtime, parseResult.GetRequiredValue(connectTimeoutMs), parseResult.GetRequiredValue(graceMs));
     else
-        throw new NativeFailure("INVALID_ARGUMENT", "The helper must be launched by the dsh Windows provider");
+        throw new NativeFailure("INVALID_ARGUMENT", "The helper must be launched by the snh Windows provider");
 
     return 0;
 }

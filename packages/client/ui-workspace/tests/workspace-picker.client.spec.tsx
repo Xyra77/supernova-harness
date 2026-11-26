@@ -1,16 +1,16 @@
 // @vitest-environment jsdom
-import { contextMenuHook } from '@deepseek-ai/dsh-client-test-runtime'
-import type { GlobalStandardProps } from '@deepseek-ai/dsh-client-ui-slots'
+import { contextMenuHook } from '@supernova-ai/snh-client-test-runtime'
+import type { GlobalStandardProps } from '@supernova-ai/snh-client-ui-slots'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import type { SessionListState } from '@deepseek-ai/dsh-api-session-controller/client'
+import type { SessionListState } from '@supernova-ai/snh-api-session-controller/client'
 import type {
   WorkspaceId, WorkspaceSnapshot, WorkspaceView,
-} from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-import { allowAllAccess, bindSnapshotSelector, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
-import type { SessionStatusSnapshot } from '@deepseek-ai/dsh-client-ui-session-status/client'
+} from '@supernova-ai/snh-api-workspace-controller/client'
+import type {} from '@supernova-ai/snh-client-locale/client'
+import { allowAllAccess, bindSnapshotSelector, makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import { zh as commonZh } from '@supernova-ai/snh-client-locale/src/locales/zh.ts'
+import type { SessionStatusSnapshot } from '@supernova-ai/snh-client-ui-session-status/client'
 import type { DirectoryFlowOwnerProps, WorkspacePickerProps } from '../src/client/contract/slots.ts'
 import { WorkspacePicker } from '../src/client/WorkspacePicker.tsx'
 import { zh } from '../src/client/locales.ts'
@@ -246,16 +246,16 @@ describe('WorkspacePicker', () => {
 
   it('ranks name prefixes, substrings and fuzzy hits ahead of path matches', () => {
     const b = mount([
-      { ...workspace('path', 'Archive'), path: '/projects/dsh/Archive' },
-      workspace('fuzzy', 'deepseek-harness'),
-      workspace('substring', 'Team DSH'),
-      workspace('prefix', 'DSH release'),
+      { ...workspace('path', 'Archive'), path: '/projects/snh/Archive' },
+      workspace('fuzzy', 'supernova-harness'),
+      workspace('substring', 'Team SNH'),
+      workspace('prefix', 'SNH release'),
     ])
     const search = screen.getByRole('searchbox', { name: '搜索工作区' })
     expect(screen.queryByRole('button', { name: '清除搜索' })).toBeNull()
     fireEvent.change(search, { target: { value: 'ＤＳＨ' } })
     expect(screen.getAllByRole('menuitem').map(entry => entry.textContent))
-      .toEqual(['DSH release', 'Team DSH', 'deepseek-harness', 'Archive', '添加工作区…'])
+      .toEqual(['SNH release', 'Team SNH', 'supernova-harness', 'Archive', '添加工作区…'])
     fireEvent.keyDown(search, { key: 'Enter' })
     expect(b.onPick).toHaveBeenCalledWith(wid('prefix'))
   })

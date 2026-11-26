@@ -1,0 +1,58 @@
+{
+  "name": "@supernova-ai/snh-supernova-auth",
+  "description": "SuperNova request authentication (ctx.supernovaAuth): choose between the API key and the account sign-in for one SuperNova API request and release its headers",
+  "version": "0.2.3-alpha.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/account/supernova-auth"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./lib/types/types.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "files": [
+    "locale/*.json",
+    "lib/index.js",
+    "lib/types/**/*.js",
+    "lib/types/**/*.d.ts",
+    "lib/types/**/*.d.ts.map",
+    "lib/**/*.js.map",
+    "src"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-credentials": "workspace:*",
+    "@supernova-ai/snh-deepseek-account": "workspace:*",
+    "@supernova-ai/snh-error": "workspace:*",
+    "@supernova-ai/snh-launch-environment": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "@supernova-ai/snh-deepseek-account": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-credentials": "workspace:*",
+    "@supernova-ai/snh-deepseek-account": "workspace:*",
+    "@supernova-ai/snh-error": "workspace:*",
+    "@supernova-ai/snh-launch-environment": "workspace:*"
+  }
+}

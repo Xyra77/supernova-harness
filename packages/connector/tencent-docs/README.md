@@ -3,7 +3,7 @@ description: "Connect Tencent Docs' hosted MCP server through the shared MCP man
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-tencent-docs
+# @supernova-ai/snh-tencent-docs
 
 English | [中文](README.zh.md)
 
@@ -30,10 +30,10 @@ The Tencent Docs plugin registers Tencent Docs' hosted MCP server, `https://docs
 Install the package as a bundle, for example from the Web sidebar's **Plugins** page or with the CLI:
 
 ```sh
-dsh plugin --profile web add @deepseek-ai/dsh-tencent-docs
+snh plugin --profile web add @supernova-ai/snh-tencent-docs
 ```
 
-The bundle patch inserts the `tencent-docs` row after the profile's other layers. The plugin requires the `mcpManager` and `systemPrompt` services: the [base bundle](../../bundle/base/README.md) provides `systemPrompt`, and the Web and Desktop compositions add the MCP manager through [`dsh-web-app`](../../bundle/web-app/README.md). In a profile without the MCP manager, such as `headless`, the plugin does not activate, and startup prints a warning that names the missing `mcpManager` service.
+The bundle patch inserts the `tencent-docs` row after the profile's other layers. The plugin requires the `mcpManager` and `systemPrompt` services: the [base bundle](../../bundle/base/README.md) provides `systemPrompt`, and the Web and Desktop compositions add the MCP manager through [`snh-web-app`](../../bundle/web-app/README.md). In a profile without the MCP manager, such as `headless`, the plugin does not activate, and startup prints a warning that names the missing `mcpManager` service.
 
 ### Authorize and sign out
 
@@ -48,13 +48,13 @@ While the plugin is on, its page on the **Plugins** page shows a **Tencent Docs 
 | Connected | **Sign out** asks for confirmation, then deletes the local grant |
 | Cannot connect right now | **Retry** restarts the server and keeps the existing grant |
 
-Authorization must be completed in a browser on the Host machine. After the user approves access in Tencent Docs, the callback page says DSH received the authorization; the section then shows the result. Leaving the page does not cancel an attempt, which the Host owns. A failed attempt shows **Authorization was not completed. Try again.**; a failed page action shows a toast. Sign-out keeps the client registration and does not revoke the tokens Tencent Docs issued.
+Authorization must be completed in a browser on the Host machine. After the user approves access in Tencent Docs, the callback page says SNH received the authorization; the section then shows the result. Leaving the page does not cancel an attempt, which the Host owns. A failed attempt shows **Authorization was not completed. Try again.**; a failed page action shows a toast. Sign-out keeps the client registration and does not revoke the tokens Tencent Docs issued.
 
-The page follows the account through the [`connectorAccounts` Remote](../../client/ui-connector-account/README.md) under the key `mcp:tencent-docs`, and its buttons start `connect`, `sign-out`, or `retry` or cancel the attempt there. On the Host, [`dsh-mcp-account`](../../mcp/mcp-account/README.md) runs them through the manager's [OAuth operations](../../mcp/mcp-manager/README.md#oauth-authorization): `startAuthorization('tencent-docs')` returns an attempt whose `authorizationUrl` the stream reports, `cancelAuthorization('tencent-docs', id)` cancels it, `signOut('tencent-docs')` deletes the grant, and `restart('tencent-docs')` retries. Other Remote clients can use the same operations.
+The page follows the account through the [`connectorAccounts` Remote](../../client/ui-connector-account/README.md) under the key `mcp:tencent-docs`, and its buttons start `connect`, `sign-out`, or `retry` or cancel the attempt there. On the Host, [`snh-mcp-account`](../../mcp/mcp-account/README.md) runs them through the manager's [OAuth operations](../../mcp/mcp-manager/README.md#oauth-authorization): `startAuthorization('tencent-docs')` returns an attempt whose `authorizationUrl` the stream reports, `cancelAuthorization('tencent-docs', id)` cancels it, `signOut('tencent-docs')` deletes the grant, and `restart('tencent-docs')` retries. Other Remote clients can use the same operations.
 
 ### Turn off and uninstall
 
-Turning the row off in Plugin Manager, or uninstalling the package, ends the registration: the Tencent Docs tools leave the model's tool set, and the saved grant stays in the credentials store, so reinstalling reuses it. To remove the grant, sign out while the plugin is loaded, or delete the `mcp-client/tencent-docs` record from `$DSH_HOME/.credentials.yaml` as the [local credentials provider](../../credentials/credentials-local/README.md) documents.
+Turning the row off in Plugin Manager, or uninstalling the package, ends the registration: the Tencent Docs tools leave the model's tool set, and the saved grant stays in the credentials store, so reinstalling reuses it. To remove the grant, sign out while the plugin is loaded, or delete the `mcp-client/tencent-docs` record from `$SNH_HOME/.credentials.yaml` as the [local credentials provider](../../credentials/credentials-local/README.md) documents.
 
 ### Configure
 
@@ -63,7 +63,7 @@ Turning the row off in Plugin Manager, or uninstalling the package, ends the reg
 | `url` | `https://docs.qq.com/openapi/mcp` | Streamable HTTP MCP endpoint of the Tencent Docs server |
 | `toolLoading` | `on-demand` | `on-demand` keeps Tencent Docs' tools hidden from each agent until it loads them; `eager` sends every tool definition with every request |
 
-The generated [config catalog](../../../docs/config-catalog.md#deepseek-aidsh-tencent-docs) is the exhaustive source of supported fields. Connection and authorization budgets use the manager and mcp-client defaults. The saved grant is bound to `url`; changing it requires connecting the account again.
+The generated [config catalog](../../../docs/config-catalog.md#supernova-aisnh-tencent-docs) is the exhaustive source of supported fields. Connection and authorization budgets use the manager and mcp-client defaults. The saved grant is bound to `url`; changing it requires connecting the account again.
 
 -----
 
@@ -75,7 +75,7 @@ The generated [config catalog](../../../docs/config-catalog.md#deepseek-aidsh-te
 
 [`cordis.patch.yml`](cordis.patch.yml) inserts one row with id `tencent-docs` naming this package, so the package is both the bundle and its only row; `config` overrides target that id. The Host half, [`src/index.ts`](src/index.ts), makes two registrations, both effects of the plugin's fiber: `ctx.mcpManager.register('tencent-docs', …)` adds a Streamable HTTP entry with the configured `url` and OAuth credential key, and `ctx.systemPrompt.section()` adds the naming guidance at the `MCP_SERVERS` order. The server name fixes the `mcp__tencent-docs__` tool namespace, and the credential key fixes the grant address, so a reloaded or reinstalled plugin reaches the same tools and grant. The manager validates the entry when it is registered; a configured or registered server that already uses the name or key makes the plugin fail to load before the guidance is added. The entry sets no `scope`, so authorization requests the `docs:read docs:write docs:manage` scopes listed in the protected-resource metadata that Tencent Docs' 401 challenge names, and the authorization page keeps the `authType=2` query of Tencent Docs' authorization endpoint.
 
-While the account registry runs, the plugin also calls `ctx.mcpAccounts.register({ server: 'tencent-docs', packageName: '@deepseek-ai/dsh-tencent-docs', copy })`, where [`src/locales.ts`](src/locales.ts) holds the text that names Tencent Docs in every shipped language; [`dsh-mcp-account`](../../mcp/mcp-account/README.md) then registers the account with the connector account registry, which renders the section, guidance, tag, and toast described above. A composition without the registry, such as a headless profile, loads the plugin without the account section.
+While the account registry runs, the plugin also calls `ctx.mcpAccounts.register({ server: 'tencent-docs', packageName: '@supernova-ai/snh-tencent-docs', copy })`, where [`src/locales.ts`](src/locales.ts) holds the text that names Tencent Docs in every shipped language; [`snh-mcp-account`](../../mcp/mcp-account/README.md) then registers the account with the connector account registry, which renders the section, guidance, tag, and toast described above. A composition without the registry, such as a headless profile, loads the plugin without the account section.
 
 </details>
 
@@ -126,7 +126,7 @@ After authorization, the model sees Tencent Docs' server instructions under `###
 
 #### Token effect
 
-Tencent Docs' server defines the tool set and instructions, and their size can change without a DSH update. With `on-demand`, a connected Tencent Docs costs about 3,000 characters of instructions, the loader, and a catalog of about 37,900 characters for its 225 tools, plus the definitions an agent has loaded; with `eager`, all 225 definitions repeat on every request.
+Tencent Docs' server defines the tool set and instructions, and their size can change without a SNH update. With `on-demand`, a connected Tencent Docs costs about 3,000 characters of instructions, the loader, and a catalog of about 37,900 characters for its 225 tools, plus the definitions an agent has loaded; with `eager`, all 225 definitions repeat on every request.
 
 #### KV Cache effect
 
@@ -142,7 +142,7 @@ Tencent Docs' instructions (or, with `eager`, its tools) appear when the connect
 - Desktop listens on an OS-assigned port for each launch. Authorizing again after a restart registers a new OAuth client and keeps the earlier registration record; saved grants refresh normally across restarts.
 - Before the account is connected, the shared resource prompt still lists `tencent-docs` as a server name, and resource calls to it fail until the user connects.
 - One Tencent Docs authorization serves the whole Host; there is no account or workspace picker.
-- Turning the plugin off or uninstalling it keeps the local grant. Signing out deletes the local grant, but DSH does not revoke the tokens Tencent Docs issued; Tencent Docs' authorization server publishes no revocation endpoint.
+- Turning the plugin off or uninstalling it keeps the local grant. Signing out deletes the local grant, but SNH does not revoke the tokens Tencent Docs issued; Tencent Docs' authorization server publishes no revocation endpoint.
 
 <a id="dev-note"></a>
 ### Dev Note

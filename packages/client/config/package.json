@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-config",
+  "name": "@supernova-ai/snh-client-config",
   "description": "Types of browser-synced plugin configuration",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -29,7 +29,7 @@
     "./src/*": "./src/*",
     "./package.json": "./package.json"
   },
-  "dsh": {
+  "snh": {
     "client": {
       "inject": [],
       "platform": "web"
@@ -41,12 +41,12 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-client-store": "workspace:*",
-    "@deepseek-ai/dsh-util-values": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-client-store": "workspace:*",
+    "@supernova-ai/snh-util-values": "workspace:*"
   },
   "files": [
     "locale/*.json",

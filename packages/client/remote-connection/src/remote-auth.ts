@@ -1,10 +1,10 @@
 /** Persistent Remote browser credentials, independent of Token authentication and runtime Peers. */
 
 import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto'
-import { credentialKey } from '@deepseek-ai/dsh-credentials'
-import type { CredentialProvider, CredentialRecord } from '@deepseek-ai/dsh-credentials'
-import { HarnessError } from '@deepseek-ai/dsh-error'
-import type { ConnectionTrustRequest } from '@deepseek-ai/dsh-client-connection'
+import { credentialKey } from '@supernova-ai/snh-credentials'
+import type { CredentialProvider, CredentialRecord } from '@supernova-ai/snh-credentials'
+import { HarnessError } from '@supernova-ai/snh-error'
+import type { ConnectionTrustRequest } from '@supernova-ai/snh-client-connection'
 import { decodeBase64Url as decode, encodeBase64Url as encode } from './base64.ts'
 
 const RECORD_KEY = credentialKey('client-remote-connection', 'browser-session')
@@ -103,7 +103,7 @@ function audience(request: ConnectionTrustRequest, secure: boolean): string | un
 }
 
 function cookieName(authority: string): string {
-  return `dsh-remote-${encode(createHash('sha256').update(authority).digest())}`
+  return `snh-remote-${encode(createHash('sha256').update(authority).digest())}`
 }
 
 function cookieValue(value: string, name: string): string | undefined {

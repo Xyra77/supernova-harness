@@ -1,23 +1,23 @@
 import { describe, expect, expectTypeOf, it, onTestFinished, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { AttachmentId } from '@deepseek-ai/dsh-attachment/types'
-import BasicCompactionEngine from '@deepseek-ai/dsh-compaction-basic'
-import type { BasicCompactionConfig } from '@deepseek-ai/dsh-compaction-basic'
-import { selectCompactableRange } from '@deepseek-ai/dsh-compaction-basic/src/region.ts'
-import { answeredRouteProjectionDefinition } from '@deepseek-ai/dsh-compaction-basic/src/answered-route.ts'
-import { frameSummary } from '@deepseek-ai/dsh-compaction-basic/src/summarizer.ts'
-import type { SummarizationInput, SummaryResult } from '@deepseek-ai/dsh-compaction-basic/src/summarizer.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { CompactionId } from '@deepseek-ai/dsh-compaction/types'
-import { toolPairingBalancedAfter, toolPairingBalancedBefore } from '@deepseek-ai/dsh-compaction'
+import { Context } from '@supernova-ai/cordis'
+import type { AttachmentId } from '@supernova-ai/snh-attachment/types'
+import BasicCompactionEngine from '@supernova-ai/snh-compaction-basic'
+import type { BasicCompactionConfig } from '@supernova-ai/snh-compaction-basic'
+import { selectCompactableRange } from '@supernova-ai/snh-compaction-basic/src/region.ts'
+import { answeredRouteProjectionDefinition } from '@supernova-ai/snh-compaction-basic/src/answered-route.ts'
+import { frameSummary } from '@supernova-ai/snh-compaction-basic/src/summarizer.ts'
+import type { SummarizationInput, SummaryResult } from '@supernova-ai/snh-compaction-basic/src/summarizer.ts'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { CompactionId } from '@supernova-ai/snh-compaction/types'
+import { toolPairingBalancedAfter, toolPairingBalancedBefore } from '@supernova-ai/snh-compaction'
 import {
   resolveCompactSpec,
   resolveConfig,
   resolveTargetPolicy,
-} from '@deepseek-ai/dsh-compaction-basic/src/config.ts'
-import type { CompactionResult } from '@deepseek-ai/dsh-compaction'
-import LlmRuntime, { createUserMessage, type ToolCallId, CONTEXT_WINDOW_EXCEEDED_CODE, createSystemMessage, createToolResultMessage, LlmAdapter , createMessage } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
+} from '@supernova-ai/snh-compaction-basic/src/config.ts'
+import type { CompactionResult } from '@supernova-ai/snh-compaction'
+import LlmRuntime, { createUserMessage, type ToolCallId, CONTEXT_WINDOW_EXCEEDED_CODE, createSystemMessage, createToolResultMessage, LlmAdapter , createMessage } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
 import type {
   ContentBlock,
   GenerateOptions,
@@ -27,15 +27,15 @@ import type {
   Message,
   StreamChunk,
   TokenUsage,
-} from '@deepseek-ai/dsh-llm'
-import SessionStore, { Session, type SessionId, SessionLogOffset, SessionSeq } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import type { ProjectionCheckpoint } from '@deepseek-ai/dsh-session-projection'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
-import { agentEvents, type Agent, type RequestErrorAction } from '@deepseek-ai/dsh-agent'
-import ToolResultPruner from '@deepseek-ai/dsh-compaction-tool-result-pruner'
+} from '@supernova-ai/snh-llm'
+import SessionStore, { Session, type SessionId, SessionLogOffset, SessionSeq } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import type { ProjectionCheckpoint } from '@supernova-ai/snh-session-projection'
+import TokenMeter from '@supernova-ai/snh-token-meter'
+import { agentEvents, type Agent, type RequestErrorAction } from '@supernova-ai/snh-agent'
+import ToolResultPruner from '@supernova-ai/snh-compaction-tool-result-pruner'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'test': { kind: 'test' } & ContextFormed
   }

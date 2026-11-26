@@ -5,23 +5,23 @@
  * inherited executor.
  */
 
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { describe, expect, it, onTestFinished } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createScope } from '@deepseek-ai/dsh-scope'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import { PtcRuntime } from '@deepseek-ai/dsh-ptc-runtime'
-import type { PtcRunRequest, PtcRunResult } from '@deepseek-ai/dsh-ptc-runtime'
-import ToolRuntime, { RUN_CODE_NAME, defineTool } from '@deepseek-ai/dsh-tools'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import { apply, Config, inject, name } from '@deepseek-ai/dsh-agent-tool-presentation'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { Context } from '@supernova-ai/cordis'
+import { createScope } from '@supernova-ai/snh-scope'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import { PtcRuntime } from '@supernova-ai/snh-ptc-runtime'
+import type { PtcRunRequest, PtcRunResult } from '@supernova-ai/snh-ptc-runtime'
+import ToolRuntime, { RUN_CODE_NAME, defineTool } from '@supernova-ai/snh-tools'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type { SessionId } from '@supernova-ai/snh-session'
+import { apply, Config, inject, name } from '@supernova-ai/snh-agent-tool-presentation'
+import { brandString } from '@supernova-ai/snh-brand'
 
 /** A runtime that never runs anything: presentation never dispatches. */
 class StubRuntime extends PtcRuntime {
-  resolve(request: import('@deepseek-ai/dsh-ptc-runtime').PtcRunRequest): import('@deepseek-ai/dsh-ptc-runtime').PtcRunSpec { return { ...request, cwd: request.cwd ?? process.cwd(), timeoutMs: request.timeoutMs ?? 120_000 } }
+  resolve(request: import('@supernova-ai/snh-ptc-runtime').PtcRunRequest): import('@supernova-ai/snh-ptc-runtime').PtcRunSpec { return { ...request, cwd: request.cwd ?? process.cwd(), timeoutMs: request.timeoutMs ?? 120_000 } }
 
   readonly language: string
 

@@ -1,5 +1,5 @@
 /**
- * Experimental bridge for Claude Code mods. A mod is a DSH plugin built with
+ * Experimental bridge for Claude Code mods. A mod is a SNH plugin built with
  * {@link defineMod} around the mod's `register(on, options)`; this service
  * keeps the loaded mods and raises their events from harness extension
  * points — `session.start` on `agent/created`, `prompt.submit` and
@@ -7,28 +7,28 @@
  * `turn.complete` on `turn/end`, `session.end` on `agent/disposed`, and
  * `command.run` from the commands a mod registers. The `$` a hook receives is
  * served by {@link createHostOps} over the composed harness services.
- * @module @deepseek-ai/dsh-experimental-claude-code-mods
+ * @module @supernova-ai/snh-experimental-claude-code-mods
  */
 
-import { FiberState, type Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-working-directory'
-import z from '@deepseek-ai/schemastery'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
-import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
-import { extractTextContent } from '@deepseek-ai/dsh-llm/message'
-import type { AssistantMessage, ContentBlock, TokenUsage } from '@deepseek-ai/dsh-llm'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { UserMessage } from '@deepseek-ai/dsh-session'
-import { scopeOf } from '@deepseek-ai/dsh-scope'
-import { validateJsonSchemaValue } from '@deepseek-ai/dsh-tools'
-import type { PostToolDecision, ToolExecutionResult, ToolExecutionToken } from '@deepseek-ai/dsh-tools'
+import { FiberState, type Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-working-directory'
+import z from '@supernova-ai/schemastery'
+import type { Agent, PreStepDecision } from '@supernova-ai/snh-agent'
+import { Remote, TypertRemoteService } from '@supernova-ai/snh-typert-protocol'
+import { extractTextContent } from '@supernova-ai/snh-llm/message'
+import type { AssistantMessage, ContentBlock, TokenUsage } from '@supernova-ai/snh-llm'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type { UserMessage } from '@supernova-ai/snh-session'
+import { scopeOf } from '@supernova-ai/snh-scope'
+import { validateJsonSchemaValue } from '@supernova-ai/snh-tools'
+import type { PostToolDecision, ToolExecutionResult, ToolExecutionToken } from '@supernova-ai/snh-tools'
 import type { LoadedMod } from './chain.ts'
 import { RewriteRefusedError } from './chain.ts'
 import { ModsEngine } from './engine.ts'
 import { createHostOps, toolCallResultOf } from './host-ops.ts'
 import type { AgentBinding } from './host-ops.ts'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
 import { SurfaceTable } from './surfaces.ts'
 import { createToolNameAliases } from './tool-names.ts'
 import { messageOf, record, stringify } from './values.ts'
@@ -38,7 +38,7 @@ import type {
   SurfaceSnapshot, TurnStartResult, TurnUsage, UiRenderInput, UiRenderResult,
 } from './types.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     claudeCodeMods: ClaudeCodeMods
   }

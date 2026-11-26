@@ -2,33 +2,33 @@
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import AuthorizationService from '@deepseek-ai/dsh-authorization'
-import { LocalCredentialProvider } from '@deepseek-ai/dsh-credentials-local'
-import { credentialKey } from '@deepseek-ai/dsh-credentials'
-import { remoteMethods } from '@deepseek-ai/dsh-typert-protocol'
+import { Context } from '@supernova-ai/cordis'
+import AuthorizationService from '@supernova-ai/snh-authorization'
+import { LocalCredentialProvider } from '@supernova-ai/snh-credentials-local'
+import { credentialKey } from '@supernova-ai/snh-credentials'
+import { remoteMethods } from '@supernova-ai/snh-typert-protocol'
 import { afterEach, expect, it } from 'vitest'
-import { DeepSeekAccount } from '../src/index.ts'
+import { SuperNovaAccount } from '../src/index.ts'
 
 const cleanups: Array<() => Promise<unknown>> = []
 afterEach(async () => { while (cleanups.length) await cleanups.pop()!() })
 
 async function fixture() {
-  const home = await mkdtemp(join(tmpdir(), 'dsh-account-remote-'))
+  const home = await mkdtemp(join(tmpdir(), 'snh-account-remote-'))
   cleanups.push(() => rm(home, { recursive: true, force: true }))
   const ctx = new Context()
   cleanups.push(() => ctx.fiber.dispose())
   await ctx.plugin(LocalCredentialProvider, { path: join(home, 'credentials.yaml'), watch: false })
   await ctx.plugin(AuthorizationService)
-  const provider = ctx.plugin(DeepSeekAccount)
+  const provider = ctx.plugin(SuperNovaAccount)
   await provider
-  return { ctx, account: ctx.deepseekAccount, provider }
+  return { ctx, account: ctx.supernovaAccount, provider }
 }
 
 it('binds only client-safe operations to the existing account namespace', async () => {
   const { account } = await fixture()
-  expect(account.typertRemote.service instanceof DeepSeekAccount).toBe(true)
-  expect(account.typertRemote.serviceKey).toBe('deepseekAccount')
+  expect(account.typertRemote.service instanceof SuperNovaAccount).toBe(true)
+  expect(account.typertRemote.serviceKey).toBe('supernovaAccount')
   expect(account.typertRemote.namespace).toBe('account')
   expect(remoteMethods(account).map(method => method.exportName ?? method.method).sort()).toEqual([
     'cancelSignIn', 'getBalance', 'getNotificationContent', 'getNotifications', 'getProfile', 'getState',

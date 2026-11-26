@@ -3,13 +3,13 @@ description: "面向用户与维护者的 web GUI 客户端模块系统说明：
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-modules
+# @supernova-ai/snh-client-modules
 
 [English](README.md) | 中文
 
 ## 概述
 
-`dsh-client-modules` 把插件包的 `dsh.client` 声明变成可加载的浏览器 bundle：宿主半侧扫描已启用的 Loader 条目并组合启动图，可用的 Web 载体通过 `/plugins` 提供每个 bundle，由 shell 持有的载体则通过 `fetchBundle()` 分派完全相同的 bundle 响应。浏览器半侧按需惰性加载这些 bundle。插件 bundle 惰性执行——运行 bundle 只注册 factory，模块副作用在物化时运行——因此插件首次被使用之前什么都不会运行。这里的一切都是浏览器内核机制；模型永远看不到它。
+`snh-client-modules` 把插件包的 `snh.client` 声明变成可加载的浏览器 bundle：宿主半侧扫描已启用的 Loader 条目并组合启动图，可用的 Web 载体通过 `/plugins` 提供每个 bundle，由 shell 持有的载体则通过 `fetchBundle()` 分派完全相同的 bundle 响应。浏览器半侧按需惰性加载这些 bundle。插件 bundle 惰性执行——运行 bundle 只注册 factory，模块副作用在物化时运行——因此插件首次被使用之前什么都不会运行。这里的一切都是浏览器内核机制；模型永远看不到它。
 
 ## 目录
 
@@ -25,13 +25,13 @@ kind: "package-reference"
 <a id="use-this-package"></a>
 ## 使用本包
 
-声明类型使用 [`DshClientManifest`](../../util/package-manifest/README.zh.md)。Client-modules 校验 JSON，并持有归一化后的启动图。
+声明类型使用 [`SnhClientManifest`](../../util/package-manifest/README.zh.md)。Client-modules 校验 JSON，并持有归一化后的启动图。
 
-组合或构建浏览器客户端插件时使用它：本包把包的 `dsh.client` 声明变成可加载的浏览器 bundle，无需任何逐插件接线。它随 web 组合激活；外壳在任何插件运行前启动它。
+组合或构建浏览器客户端插件时使用它：本包把包的 `snh.client` 声明变成可加载的浏览器 bundle，无需任何逐插件接线。它随 web 组合激活；外壳在任何插件运行前启动它。
 
 ### 声明客户端插件
 
-浏览器插件包在其 `package.json` 中以 `platform: 'web'` 声明 `dsh.client`，导出 `./client` bundle，并在 `dsh.client.external` 下列出任何基座之外的模块请求。宿主半侧把每份声明变成 `/plugins` 下提供的 bundle，并让动态提供方先于其消费方加载。
+浏览器插件包在其 `package.json` 中以 `platform: 'web'` 声明 `snh.client`，导出 `./client` bundle，并在 `snh.client.external` 下列出任何基座之外的模块请求。宿主半侧把每份声明变成 `/plugins` 下提供的 bundle，并让动态提供方先于其消费方加载。
 
 <a id="package-assets"></a>
 ### 包资源
@@ -51,7 +51,7 @@ application combo 脚本只携带每个插件的 `client.js` 入口，并在启�
 
 插件 Config 顶层的 `.volatile()` 字段会到达其浏览器面。包把 Config 接口放在 `src/types.ts` 供两个面共用，唯一的 Schemastery schema 只放在 Host 面；普通字段和所有 `role('secret')` 位置（包括 volatile 对象、字典、数组内部的位置）留在 Host。每个图行在 `config` 中携带这些值，因此它们随启动图和之后的每张图一起到达。只有 owner 的页面收到实际配置的值；其他所有 Peer（例如 LiveShare 查看端）在启动图和每个插件事件帧中收到各插件 schema 对空 Config 解析出的值，schema 拒绝空 Config 的行在这类页面上不带值。
 
-浏览器面不导出 `Config`；它的 `apply(ctx, config: SyncedConfig<Config>)` 为每个字段收到一个 `SyncedConfigRef`，二者都来自只放类型的包 [`@deepseek-ai/dsh-client-config/types`](../config/README.zh.md)。`config.field.get()` 在执行操作时读取当前冻结值，写法与 Host 相同。组件通过 hook 读取：插件在 slot `inject` 的 `hooks` 中注入引用，例如 `hooks: { fontSize: config.fontSize }`，组件调用 `useFontSize(value => value)`。每个字段都可能读到 `undefined`，插件需在每次读取时处理缺值；密钥字段是其中一种情况，因为 Host 从不下发它。变化按字段做 JSON 比较，所有变化字段都设置完后才通知订阅者，插件从不重新挂载。与 Host 每次激活重新解析 volatile 引用一样，插件每次激活都得到一个持有最新值的新 Config 对象；该激活开始拆除后（代码替换、行移除，或必需服务撤回后的卸载）不再收到新值。没有同步字段的插件收到一个空对象。`ctx.config.resolveConfigByPackage(packageName)` 返回另一个包当前激活的只读对象，没有运行中的激活时返回 `undefined`。Host 上，携带新值的图帧在插件自己的 `loader/volatile-update` 监听执行之前入队；这只在机制上排序，插件不得依赖浏览器先收到配置、后收到其他数据。导出自身 `Config` schema 的 Client 面保持 Cordis 原有配置解析；其行若同时带同步值，激活失败。
+浏览器面不导出 `Config`；它的 `apply(ctx, config: SyncedConfig<Config>)` 为每个字段收到一个 `SyncedConfigRef`，二者都来自只放类型的包 [`@supernova-ai/snh-client-config/types`](../config/README.zh.md)。`config.field.get()` 在执行操作时读取当前冻结值，写法与 Host 相同。组件通过 hook 读取：插件在 slot `inject` 的 `hooks` 中注入引用，例如 `hooks: { fontSize: config.fontSize }`，组件调用 `useFontSize(value => value)`。每个字段都可能读到 `undefined`，插件需在每次读取时处理缺值；密钥字段是其中一种情况，因为 Host 从不下发它。变化按字段做 JSON 比较，所有变化字段都设置完后才通知订阅者，插件从不重新挂载。与 Host 每次激活重新解析 volatile 引用一样，插件每次激活都得到一个持有最新值的新 Config 对象；该激活开始拆除后（代码替换、行移除，或必需服务撤回后的卸载）不再收到新值。没有同步字段的插件收到一个空对象。`ctx.config.resolveConfigByPackage(packageName)` 返回另一个包当前激活的只读对象，没有运行中的激活时返回 `undefined`。Host 上，携带新值的图帧在插件自己的 `loader/volatile-update` 监听执行之前入队；这只在机制上排序，插件不得依赖浏览器先收到配置、后收到其他数据。导出自身 `Config` schema 的 Client 面保持 Cordis 原有配置解析；其行若同时带同步值，激活失败。
 
 <a id="host-release-changes"></a>
 ### Host release 变化
@@ -60,7 +60,7 @@ application combo 脚本只携带每个插件的 `client.js` 入口，并在启�
 
 ### 共享模块
 
-外壳初始化一张冻结的模块表（[`PLATFORM_MODULES`](../web/README.zh.md#the-shared-module-table)）；每个动态 bundle 都精确针对该基座解析其 external。`dsh.client.external` 只添加基座之外的精确请求；系统会将每个请求解析到其指定的动态包 row 或完全匹配的静态表键。纯类型 import 会被擦除，不产生请求。组合阶段会拒绝畸形请求、缺失提供方、自请求与同步请求环。
+外壳初始化一张冻结的模块表（[`PLATFORM_MODULES`](../web/README.zh.md#the-shared-module-table)）；每个动态 bundle 都精确针对该基座解析其 external。`snh.client.external` 只添加基座之外的精确请求；系统会将每个请求解析到其指定的动态包 row 或完全匹配的静态表键。纯类型 import 会被擦除，不产生请求。组合阶段会拒绝畸形请求、缺失提供方、自请求与同步请求环。
 
 ### 构建要求
 
@@ -78,7 +78,7 @@ application combo 脚本只携带每个插件的 `client.js` 入口，并在启�
 
 ### 设计理念
 
-本包分为两侧：Node 半侧负责组合与提供（`ctx.clientModules`，`ClientModuleRegistry`），浏览器半侧负责加载（`ctx.modules`，`ClientModuleSystem`）。两者之间的协议是启动图——以 `window.__DSH_BOOT__` 注入的 `WebBootEntry` 行，`<` 已转义，插件控制的字符串无法逃出 script 元素。vendored Loader 唯一的消费点是 `EntryTree.import`，因此模块系统就是「插件代码如何到达」的唯一可替换实现。
+本包分为两侧：Node 半侧负责组合与提供（`ctx.clientModules`，`ClientModuleRegistry`），浏览器半侧负责加载（`ctx.modules`，`ClientModuleSystem`）。两者之间的协议是启动图——以 `window.__SNH_BOOT__` 注入的 `WebBootEntry` 行，`<` 已转义，插件控制的字符串无法逃出 script 元素。vendored Loader 唯一的消费点是 `EntryTree.import`，因此模块系统就是「插件代码如何到达」的唯一可替换实现。
 
 ### 惰性 CJS 模型
 
@@ -90,7 +90,7 @@ application combo 脚本只携带每个插件的 `client.js` 入口，并在启�
 
 ### 增量组合
 
-Node 半侧按 Loader entry 名对包进行对账。每次发出 `internal/plugin` 事件时，系统都会把该 fiber 的 entry 名标脏。每次非空 flush（包括同步执行的激活 flush）遍历全部 Loader entries 一次，按 entry 名构建临时索引，再查询待处理名称进行对账。包解析过程不得在对账期间同步添加或移除 Loader entries。待处理名称若不在索引中，则以空 entry 列表对账，移除已卸载的来源；所有同名 entry 都保留，用于来源去重与冲突检查。激活 pass 初始化同一组待处理名称并同步 flush，因此首次激活与稳态共用同一实现。每次对账都会重新读取包 manifest 与 bundle 元数据，因此包在重新安装、升级或移动之后重启的条目会发布其当前的 `dsh.client` 声明与客户端导出；读到相同 manifest 与 bundle 元数据的对账不发布任何内容，也不读取 bundle 字节；未变化的 bundle 保留其 revision，因此浏览器会保留已加载的插件。解析出的 manifest 包名作为浏览器模块身份。若不同的 active Loader source 解析到同一包名，组合会失败；移除冲突来源后，剩余来源无需重启 fiber 即可接替。没有伴随条目重启的 bundle 重建经 `rebuilt()`（HMR 钩子）进入图。
+Node 半侧按 Loader entry 名对包进行对账。每次发出 `internal/plugin` 事件时，系统都会把该 fiber 的 entry 名标脏。每次非空 flush（包括同步执行的激活 flush）遍历全部 Loader entries 一次，按 entry 名构建临时索引，再查询待处理名称进行对账。包解析过程不得在对账期间同步添加或移除 Loader entries。待处理名称若不在索引中，则以空 entry 列表对账，移除已卸载的来源；所有同名 entry 都保留，用于来源去重与冲突检查。激活 pass 初始化同一组待处理名称并同步 flush，因此首次激活与稳态共用同一实现。每次对账都会重新读取包 manifest 与 bundle 元数据，因此包在重新安装、升级或移动之后重启的条目会发布其当前的 `snh.client` 声明与客户端导出；读到相同 manifest 与 bundle 元数据的对账不发布任何内容，也不读取 bundle 字节；未变化的 bundle 保留其 revision，因此浏览器会保留已加载的插件。解析出的 manifest 包名作为浏览器模块身份。若不同的 active Loader source 解析到同一包名，组合会失败；移除冲突来源后，剩余来源无需重启 fiber 即可接替。没有伴随条目重启的 bundle 重建经 `rebuilt()`（HMR 钩子）进入图。
 
 如果 flush 期间 Loader 枚举失败，注册表会消费失败批次，但不修改包状态或已发布的图。激活阶段通过组合错误报告失败；稳态下记录警告。只有收到该名称的另一次条目通知后，才会重试。
 
@@ -119,7 +119,7 @@ bundle 路由随注入的 `webServer` 生命周期注册：服务就绪时注册
 | [`src/config-projection.ts`](src/config-projection.ts) | Host 侧投影 volatile Config 字段并剔除密钥 |
 | [`src/config-sync.ts`](src/config-sync.ts) | Host 侧发布每个图行的同步值，并监听其 `loader/volatile-update` |
 | [`src/client/entry-lifecycle.ts`](src/client/entry-lifecycle.ts) | 通过注册表清理 Loader fiber |
-| [`src/client/manifest.ts`](src/client/manifest.ts) | 协议类型、启动清单解析与 `dsh.client` 声明解析器 |
+| [`src/client/manifest.ts`](src/client/manifest.ts) | 协议类型、启动清单解析与 `snh.client` 声明解析器 |
 
 </details>
 
@@ -133,7 +133,7 @@ bundle 路由随注入的 `webServer` 生命周期注册：服务就绪时注册
 - [客户端模块子系统](../../../docs/subsystems/client-modules.zh.md)——web 插件表、`WebBootGraph` 协议与 bundle 路由。
 - [Web 启动内核](../web/README.zh.md)——创建模块系统并启动插件树的外壳。
 - [客户端 HMR 驱动器](../hmr/README.zh.md)——在重建 bundle 上驱动 `invalidate`/`prefetch` 的重载链路。
-- [客户端编写规则](../AGENTS.md#shared-modules-and-the-module-graph)——共享模块基座与 `dsh.client.external` 语义。
+- [客户端编写规则](../AGENTS.md#shared-modules-and-the-module-graph)——共享模块基座与 `snh.client.external` 语义。
 - [客户端组地图](../README.zh.md)——本包所属的浏览器半侧。
 
 -----

@@ -3,8 +3,8 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using DeepSeek.Cua.Protocol;
-using DeepSeek.Cua.Windows;
+using SuperNova.Cua.Protocol;
+using SuperNova.Cua.Windows;
 using Json.Schema;
 
 var checks = 0;

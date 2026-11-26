@@ -3,22 +3,22 @@
  * preparation, input/token/time bounds, cancellation, exact auxiliary request
  * logging, and stream assembly. Title wording, length targets, reasoning
  * selection, and output interpretation belong to each provider.
- * @module @deepseek-ai/dsh-session-title-llm
+ * @module @supernova-ai/snh-session-title-llm
  */
 
-declare module '@deepseek-ai/dsh-llm/types' {
+declare module '@supernova-ai/snh-llm/types' {
   interface LlmRequestPurposeMap {
     'session-title': true
   }
 }
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { createUserMessage, BlockAssembler } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
-declare module '@deepseek-ai/dsh-llm' {
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { createUserMessage, BlockAssembler } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
-    'dsh-session-title-llm': { kind: 'dsh-session-title-llm' } & ContextFormed
+    'snh-session-title-llm': { kind: 'snh-session-title-llm' } & ContextFormed
   }
 }
 
@@ -29,15 +29,15 @@ import type {
   LlmResolvedModelInfo,
   Message,
   ReasoningEffortId,
-} from '@deepseek-ai/dsh-llm'
-import { deadline, MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
-import { assertNever, deepFreeze } from '@deepseek-ai/dsh-util-values'
-import type { SessionSeq } from '@deepseek-ai/dsh-session'
-import type { SessionTitleProviderId } from '@deepseek-ai/dsh-session-title/types'
+} from '@supernova-ai/snh-llm'
+import { deadline, MAX_TIMER_DELAY_MS } from '@supernova-ai/snh-timeout'
+import { assertNever, deepFreeze } from '@supernova-ai/snh-util-values'
+import type { SessionSeq } from '@supernova-ai/snh-session'
+import type { SessionTitleProviderId } from '@supernova-ai/snh-session-title/types'
 import type {
   SessionTitleModelIdentity,
   SessionTitleProviderRequest,
-} from '@deepseek-ai/dsh-session-title'
+} from '@supernova-ai/snh-session-title'
 
 /** Exact model-visible request recorded before one auxiliary title dispatch. */
 export interface SessionTitleLlmRequestEventData {
@@ -57,7 +57,7 @@ export interface SessionTitleLlmRequestEventData {
   readonly reasoningEffort?: ReasoningEffortId
 }
 
-declare module '@deepseek-ai/dsh-session/types' {
+declare module '@supernova-ai/snh-session/types' {
   interface SessionEventMap {
     /** Log-only pre-dispatch record of one session-title model request. */
     'session/title-llm-request': SessionTitleLlmRequestEventData
@@ -251,7 +251,7 @@ export async function executeSessionTitleLlm(
   const route = resolveRoute(config, request)
   const messages: Message[] = [createUserMessage({
     content: [{ type: 'text', text: prepared.input }],
-    source: { kind: 'dsh-session-title-llm' },
+    source: { kind: 'snh-session-title-llm' },
   })]
   using callDeadline = deadline(request.signal, config.timeoutMs, SESSION_TITLE_TIMEOUT_CODE)
   const maxTokens = config.maxOutputTokens

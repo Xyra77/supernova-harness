@@ -1,16 +1,16 @@
 /** Fork history retains delivery ownership without requiring a source relationship. */
-import { Context } from '@deepseek-ai/cordis'
-import SessionStore, { Session, type SessionId, SessionSeq } from '@deepseek-ai/dsh-session'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+import { Context } from '@supernova-ai/cordis'
+import SessionStore, { Session, type SessionId, SessionSeq } from '@supernova-ai/snh-session'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
 import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it, onTestFinished } from 'vitest'
 import { generationLogPath } from '../src/format.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 async function fixture(compression: 'none' | 'zstd') {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-fork-delivery-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-fork-delivery-'))
   const ctx = new Context()
   onTestFinished(async () => {
     await ctx.fiber.dispose()
@@ -29,7 +29,7 @@ async function fixture(compression: 'none' | 'zstd') {
 function delivered(session: Session): void {
   const start = session.append('turn/start', { turn: 1 })
   session.append('turn/end', { turn: 1, reason: { kind: 'completed' } })
-  session.append('session-log-deepseek/delivery-accepted', {
+  session.append('session-log-supernova/delivery-accepted', {
     sessionId: session.id, sessionFormatVersion: 4, throughSeq: start.seq,
   })
 }
@@ -69,7 +69,7 @@ describe.each(['none', 'zstd'] as const)('fork delivery persistence (%s)', (comp
     const source = ctx.sessions.create(brandString<SessionId>('source'))
     delivered(source)
     const invalidTarget = damage === 'inherited-through' ? source : ctx.sessions.fork(source, undefined, brandString<SessionId>('child'))
-    invalidTarget.append('session-log-deepseek/delivery-accepted', {
+    invalidTarget.append('session-log-supernova/delivery-accepted', {
       sessionId: damage === 'foreign-own' ? source.id : invalidTarget.id,
       sessionFormatVersion: 4,
       throughSeq: damage === 'foreign-own' ? SessionSeq(0) : SessionSeq(invalidTarget.seq),

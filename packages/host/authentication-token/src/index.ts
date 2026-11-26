@@ -1,10 +1,10 @@
 /** Default token authentication, HTTP exchanges, and entry URL contribution. */
-import { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type {} from '@deepseek-ai/dsh-credentials'
-import { CONNECT_PATH } from '@deepseek-ai/dsh-client-connection'
-import type { ConnectionTrustRequest, PeerScope } from '@deepseek-ai/dsh-client-connection'
-import type {} from '@deepseek-ai/dsh-host-webserver'
+import { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type {} from '@supernova-ai/snh-credentials'
+import { CONNECT_PATH } from '@supernova-ai/snh-client-connection'
+import type { ConnectionTrustRequest, PeerScope } from '@supernova-ai/snh-client-connection'
+import type {} from '@supernova-ai/snh-host-webserver'
 import { BrowserAuth } from './browser-auth.ts'
 
 /** Stable plugin name. */
@@ -52,7 +52,7 @@ export async function apply(ctx: Context, config: Config): Promise<void> {
       const facts: ConnectionTrustRequest = request
       if (facts.socket?.destroyed || response.destroyed || facts.signal?.aborted) return
       if (!active) { await next(); return }
-      const url = new URL(request.url ?? '/', 'http://dsh.invalid')
+      const url = new URL(request.url ?? '/', 'http://snh.invalid')
       if (url.pathname !== '/' || !url.searchParams.has('token')) {
         await next()
         return
@@ -79,7 +79,7 @@ export async function apply(ctx: Context, config: Config): Promise<void> {
     }), 'host-authentication-token: API connect')
     webCtx.on('webserver/upgrade', async (request, socket, _head, admittedPeer, next) => {
       if (admittedPeer === undefined) { await next(); return }
-      if (new URL(request.url ?? '/', 'http://dsh.invalid').pathname !== '/api/remote.mux') {
+      if (new URL(request.url ?? '/', 'http://snh.invalid').pathname !== '/api/remote.mux') {
         await next()
         return
       }
@@ -151,6 +151,6 @@ export async function apply(ctx: Context, config: Config): Promise<void> {
     })
   })
   ctx.on('webserver/entry-url', (baseUrl, entries) => {
-    entries.push({ label: 'dsh web', url: auth.authenticatedUrl(baseUrl), open: true })
+    entries.push({ label: 'snh web', url: auth.authenticatedUrl(baseUrl), open: true })
   })
 }

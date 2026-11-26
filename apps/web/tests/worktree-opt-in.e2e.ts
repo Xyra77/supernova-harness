@@ -5,18 +5,18 @@ import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
-import { FiberState } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import type {} from '@deepseek-ai/dsh-experimental-worktree'
-import type {} from '@deepseek-ai/dsh-experimental-client-ui-forge'
+import { FiberState } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import type {} from '@supernova-ai/snh-experimental-worktree'
+import type {} from '@supernova-ai/snh-experimental-client-ui-forge'
 import { chromium } from 'playwright'
 import { expect, it, onTestFailed, onTestFinished } from 'vitest'
 import { launchWebScaffold, watchConsole } from './scaffold.ts'
 import { connectFreshWorkspace, newEnglishPage, PLUGIN_TOGGLE_SETTLE_MS, saveFailureShot } from './support.ts'
 
-const BUNDLE = '@deepseek-ai/dsh-experimental-forge-bundle'
-const STANDALONE = '@deepseek-ai/dsh-experimental-tool-worktree'
+const BUNDLE = '@supernova-ai/snh-experimental-forge-bundle'
+const STANDALONE = '@supernova-ai/snh-experimental-tool-worktree'
 const exec = promisify(execFile)
 
 it('persists the unified review and worktree switch and retains checkouts after disabling', async () => {
@@ -61,9 +61,9 @@ it('persists the unified review and worktree switch and retains checkouts after 
     .filter(entry => ['worktree', 'tool-worktree'].includes(entry.options.id) && entry.fiber?.state === FiberState.ACTIVE)
   const selectedBundles = async (): Promise<string[]> => {
     const manifest = JSON.parse(await readFile(join(scaffold.harnessHome, 'profiles/scaffold/package.json'), 'utf8')) as {
-      dsh: { profile: { bundles: string[] } }
+      snh: { profile: { bundles: string[] } }
     }
-    return manifest.dsh.profile.bundles
+    return manifest.snh.profile.bundles
   }
   const openPlugins = async () => {
     await page.getByRole('navigation', { name: 'Global panels' }).getByRole('button', { name: 'Plugins', exact: true }).click()

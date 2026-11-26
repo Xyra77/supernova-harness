@@ -1,10 +1,10 @@
 /** Shared projection of the live LLM registry into the browser model catalog. */
 
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
-import { credentialRef } from '@deepseek-ai/dsh-credentials'
-import type {} from '@deepseek-ai/dsh-settings'
-import type { LlmModelInfo } from '@deepseek-ai/dsh-llm'
-import type { Context } from '@deepseek-ai/cordis'
+import { RemoteError } from '@supernova-ai/snh-typert-protocol'
+import { credentialRef } from '@supernova-ai/snh-credentials'
+import type {} from '@supernova-ai/snh-settings'
+import type { LlmModelInfo } from '@supernova-ai/snh-llm'
+import type { Context } from '@supernova-ai/cordis'
 import type {
   ModelCatalog,
   ModelReasoning,

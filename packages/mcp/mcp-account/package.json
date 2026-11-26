@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-mcp-account",
+  "name": "@supernova-ai/snh-mcp-account",
   "description": "MCP connector accounts on the Plugins page: each connector's OAuth server in the connector account registry, authorized through the MCP manager",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -35,17 +35,17 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-brand": "workspace:*",
-    "@deepseek-ai/dsh-util-values": "workspace:*"
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-util-values": "workspace:*"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-client-ui-connector-account": "workspace:*",
-    "@deepseek-ai/dsh-mcp-client": "workspace:*",
-    "@deepseek-ai/dsh-mcp-manager": "workspace:*",
-    "@deepseek-ai/dsh-package-manifest": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-client-ui-connector-account": "workspace:*",
+    "@supernova-ai/snh-mcp-client": "workspace:*",
+    "@supernova-ai/snh-mcp-manager": "workspace:*",
+    "@supernova-ai/snh-package-manifest": "workspace:*"
   }
 }

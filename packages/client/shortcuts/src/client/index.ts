@@ -1,8 +1,8 @@
 /** Browser command service, with one keyboard adapter per plugin lifetime. */
-import { Service } from '@deepseek-ai/cordis'
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type { SyncedConfig, SyncedConfigRef } from '@deepseek-ai/dsh-client-config/types'
+import { Service } from '@supernova-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-client-locale/client'
+import type { SyncedConfig, SyncedConfigRef } from '@supernova-ai/snh-client-config/types'
 import type { ShortcutsConfig } from '../types.ts'
 import { ShortcutRegistry } from './registry.ts'
 import { detectEnvironment, installKeyboard } from './dom.ts'
@@ -17,7 +17,7 @@ export type { ShortcutCatalogEntry, ShortcutCommand, ShortcutContext, ShortcutGe
 export type { ShortcutFixedInput, ShortcutFixedCommand, ShortcutFixedCatalogEntry } from './types.ts'
 export type { ShortcutBinding, ShortcutCommandId, ShortcutPlatform, ShortcutRuntime } from '../protocol.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** Window-local application commands and effective keycap catalog. */
     shortcuts: Shortcuts
@@ -50,7 +50,7 @@ export default class ShortcutsService extends Service implements Shortcuts {
   constructor(ctx: Context, config: SyncedConfig<ShortcutsConfig>) {
     const environment = detectEnvironment(document, navigator)
     const keyboard = environment.runtime === 'desktop'
-      ? (window as Window & { dshDesktop?: { keyboard?: DesktopKeyboardApi } }).dshDesktop?.keyboard : undefined
+      ? (window as Window & { snhDesktop?: { keyboard?: DesktopKeyboardApi } }).snhDesktop?.keyboard : undefined
     if (environment.runtime === 'desktop' && keyboard === undefined) throw new Error('Desktop keyboard bridge unavailable')
     super(ctx, 'shortcuts')
     this.keyboard = keyboard

@@ -1,15 +1,15 @@
 ---
-description: "把 CLI 应用插件的入口技能注册到 Host Service `ctx.upstreamSkills`：它从厂商 GitHub 仓库固定提交的一个目录下载入口索引的上游文件，校验后发布到 DSH 缓存，再在这些文件之上列出入口技能。"
+description: "把 CLI 应用插件的入口技能注册到 Host Service `ctx.upstreamSkills`：它从厂商 GitHub 仓库固定提交的一个目录下载入口索引的上游文件，校验后发布到 SNH 缓存，再在这些文件之上列出入口技能。"
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-upstream-skills
+# @supernova-ai/snh-upstream-skills
 
 [English](README.md) | 中文
 
 ## 概述
 
-企业微信、腾讯会议等 CLI 应用插件向 `ctx.upstreamSkills` 注册，以获取厂商只在自己 GitHub 仓库里发布的子指南。插件保留自己的入口 `SKILL.md`，并按提交、总大小和摘要固定该仓库的一个目录。插件加载时，Service 下载这个提交的归档，校验保留的文件，把它们发布到 DSH 缓存，并列出入口技能，把发布目录作为它的基础目录。仓库和插件的 npm 包里都没有这些文件的副本。Service 由基础组合包加载，在有插件注册之前不下载任何内容。
+企业微信、腾讯会议等 CLI 应用插件向 `ctx.upstreamSkills` 注册，以获取厂商只在自己 GitHub 仓库里发布的子指南。插件保留自己的入口 `SKILL.md`，并按提交、总大小和摘要固定该仓库的一个目录。插件加载时，Service 下载这个提交的归档，校验保留的文件，把它们发布到 SNH 缓存，并列出入口技能，把发布目录作为它的基础目录。仓库和插件的 npm 包里都没有这些文件的副本。Service 由基础组合包加载，在有插件注册之前不下载任何内容。
 
 ## 目录
 
@@ -37,7 +37,7 @@ CLI 应用插件的 Host 行注入 `upstreamSkills` 并调用一次 `register`�
 
 ```yaml
 - id: upstream-skills
-  name: '@deepseek-ai/dsh-upstream-skills'
+  name: '@supernova-ai/snh-upstream-skills'
 ```
 
 | 字段 | 默认值 | 含义 |
@@ -45,7 +45,7 @@ CLI 应用插件的 Host 行注入 `upstreamSkills` 并调用一次 `register`�
 | `skillsUrls` | `['https://codeload.github.com']` | 按顺序尝试的 HTTPS 归档下载前缀，不含查询串、片段或凭据；对每个已注册的插件生效 |
 | `skillsTimeoutMs` | `120000` | 一个前缀送达完整归档的时限（整数毫秒），超时后尝试下一个；对每个已注册的插件生效 |
 
-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-upstream-skills)是每个可接受字段的完整来源。`skillsUrls` 为空、某个前缀无法解析为这样的 URL，或 `skillsTimeoutMs` 小于 1 或大于 2147483647，都在加载时失败。
+生成的[配置目录](../../../docs/config-catalog.zh.md#supernova-aisnh-upstream-skills)是每个可接受字段的完整来源。`skillsUrls` 为空、某个前缀无法解析为这样的 URL，或 `skillsTimeoutMs` 小于 1 或大于 2147483647，都在加载时失败。
 
 ### 注册入口技能
 
@@ -53,8 +53,8 @@ CLI 应用插件的 Host 行注入 `upstreamSkills` 并调用一次 `register`�
 
 ```ts
 import { fileURLToPath } from 'node:url'
-import type { Context } from '@deepseek-ai/cordis'
-import type { UpstreamSkillSet } from '@deepseek-ai/dsh-upstream-skills'
+import type { Context } from '@supernova-ai/cordis'
+import type { UpstreamSkillSet } from '@supernova-ai/snh-upstream-skills'
 
 const VENDOR_SKILLS: UpstreamSkillSet = {
   repository: 'vendor/vendor-cli',
@@ -83,12 +83,12 @@ export function apply(ctx: Context, config: Config): void {
 
 `register` 从入口的 YAML frontmatter 读取名称和描述，以 `name` 注册一个技能提供方，文件不在位时开始下载。注册属于用其 `ctx` 发起调用的插件：该插件卸载时，下载被中止，提供方被移除，通知停止。以同一个 `name` 再次注册会抛出异常，第一次注册保持不变。
 
-- `name` 是技能提供方的名称、插件的错误和日志记录的前缀，也是 `$DSH_HOME/cache` 下接收下载内容的目录。
+- `name` 是技能提供方的名称、插件的错误和日志记录的前缀，也是 `$SNH_HOME/cache` 下接收下载内容的目录。
 - `entry` 是随包发布的入口 `SKILL.md` 的绝对路径，其正文按仓库路径引用上游文件，例如 `skills/<子指南>/SKILL.md`。
 - `set` 是 `scripts/upstream-skills-digest.ts` 输出的固定信息。
 - `skillsDir` 是插件自己的可选配置字段：一个已按仓库路径存放保留文件的目录。设置后不下载，路径不是目录时 `register` 抛出异常。
 
-返回的句柄供插件的账号视图和检查使用。`directory` 是 `skillsDir`；没有设置时，在 profile 中是 `$DSH_HOME/cache/<name>/<profile>/skills-<摘要前 16 位>`，没有 profile 时是 `$DSH_HOME/cache/<name>/skills-<摘要前 16 位>`。下载进行中时 `state` 为 `downloading`，否则这个目录存在时为 `installed`，不存在时为 `failed`。`watch(listener)` 报告每次下载的开始和结束；`retry()` 在失败后开始新的下载，并立即返回。插件在账号旁显示这个状态，并在检查中调用 `retry()` 而不等待，因此下载再慢也不会占住账号操作。下载失败会记为警告。`dispose()` 在插件卸载之前撤回注册。以 [`src/index.ts`](src/index.ts) 和 [`src/types.ts`](src/types.ts) 中的约定为准。
+返回的句柄供插件的账号视图和检查使用。`directory` 是 `skillsDir`；没有设置时，在 profile 中是 `$SNH_HOME/cache/<name>/<profile>/skills-<摘要前 16 位>`，没有 profile 时是 `$SNH_HOME/cache/<name>/skills-<摘要前 16 位>`。下载进行中时 `state` 为 `downloading`，否则这个目录存在时为 `installed`，不存在时为 `failed`。`watch(listener)` 报告每次下载的开始和结束；`retry()` 在失败后开始新的下载，并立即返回。插件在账号旁显示这个状态，并在检查中调用 `retry()` 而不等待，因此下载再慢也不会占住账号操作。下载失败会记为警告。`dispose()` 在插件卸载之前撤回注册。以 [`src/index.ts`](src/index.ts) 和 [`src/types.ts`](src/types.ts) 中的约定为准。
 
 ### 保留的文件与校验
 
@@ -96,7 +96,7 @@ Service 按顺序从每个 `skillsUrls` 前缀下载 `<前缀>/<owner>/<reposito
 
 ### 替换旧的固定提交
 
-每个由 `dsh` 启动的 profile 为每个插件的文件保留自己的目录 `$DSH_HOME/cache/<name>/<profile>`，这个 profile 的各个进程共用它。一次注册只删除一次该目录下其他固定提交的目录，时机是它自己的固定提交第一次在那里就位时：加载时已在位，或下载完成后。因此插件更新换了固定提交之后只留下一份，新的固定提交发布之前，旧的保持不动。删除在后台进行，`register` 和下载的结束都不等待它；无法删除的目录记为警告，留到之后的加载时再删。由于一次注册只删除一次，某个进程的固定提交被同一 profile 的另一个进程删除后，它在下一次检查时重新下载，并保留那个进程的固定提交；这种情况见[已知限制](#known-limitations-and-deferred-work)。不是由 `dsh` 启动的组合没有 profile：它的固定提交都留在可能被多个安装共用的 `$DSH_HOME/cache/<name>` 中，一个也不删除。配置的 `skillsDir` 及其同级目录从不删除。
+每个由 `snh` 启动的 profile 为每个插件的文件保留自己的目录 `$SNH_HOME/cache/<name>/<profile>`，这个 profile 的各个进程共用它。一次注册只删除一次该目录下其他固定提交的目录，时机是它自己的固定提交第一次在那里就位时：加载时已在位，或下载完成后。因此插件更新换了固定提交之后只留下一份，新的固定提交发布之前，旧的保持不动。删除在后台进行，`register` 和下载的结束都不等待它；无法删除的目录记为警告，留到之后的加载时再删。由于一次注册只删除一次，某个进程的固定提交被同一 profile 的另一个进程删除后，它在下一次检查时重新下载，并保留那个进程的固定提交；这种情况见[已知限制](#known-limitations-and-deferred-work)。不是由 `snh` 启动的组合没有 profile：它的固定提交都留在可能被多个安装共用的 `$SNH_HOME/cache/<name>` 中，一个也不删除。配置的 `skillsDir` 及其同级目录从不删除。
 
 ### 固定提交
 
@@ -136,11 +136,11 @@ Service 按顺序从每个 `skillsUrls` 前缀下载 `<前缀>/<owner>/<reposito
 <a id="model-experience"></a>
 ## 模型体验
 
-间接影响：上游文件发布后，`dsh-tool-skill` 在目录中列出入口技能，并在返回入口正文时以句柄的 `directory` 作为技能的基础目录。没有插件注册时，Service 不向模型请求添加任何内容。
+间接影响：上游文件发布后，`snh-tool-skill` 在目录中列出入口技能，并在返回入口正文时以句柄的 `directory` 作为技能的基础目录。没有插件注册时，Service 不向模型请求添加任何内容。
 
 #### KV Cache 影响
 
-加载时文件已在位，入口技能就出现在会话的第一份目录中。下载在第一份目录之后完成时，`dsh-tool-skill` 追加一份包含入口技能的替换目录；之前的请求 token 不变。
+加载时文件已在位，入口技能就出现在会话的第一份目录中。下载在第一份目录之后完成时，`snh-tool-skill` 追加一份包含入口技能的替换目录；之前的请求 token 不变。
 
 ## 已知限制与后续工作
 
@@ -150,7 +150,7 @@ Service 按顺序从每个 `skillsUrls` 前缀下载 `<前缀>/<owner>/<reposito
 - 每个加载该插件的 profile 都各自下载一份固定提交。
 - 同一个 profile 的多个进程可以同时运行同一插件的不同版本，例如一个在插件更新之前启动，另一个在更新之后启动。后启动的进程会删除先启动的进程正在读取的固定提交：先启动的进程不再列出入口技能，其中的 Agent 也打不开子指南，直到它下一次检查重新下载完成。此后两个固定提交都保留，直到这个 profile 的某个进程再次加载该插件。
 - 移除插件后，它的固定提交仍留在缓存中。进程在写入下载内容时退出，也会在那里留下它的暂存目录 `.skills-<摘要>-<uuid>`。两者都不会被删除。
-- 没有 profile 时，插件改为固定其他提交后，所有固定提交都留在 `$DSH_HOME/cache/<name>` 中。
+- 没有 profile 时，插件改为固定其他提交后，所有固定提交都留在 `$SNH_HOME/cache/<name>` 中。
 - 只检查已发布的目录是否存在。目录里的文件被删除或改动后，入口技能仍会基于这些文件列出；删除该目录后，下一次检查或加载会重新下载固定的提交。
 - 不保留文件权限，上游脚本不可直接执行；目前的上游子指南都通过 `python3` 运行脚本。
 - 实验性 Web 预览把 Host 插件运行在浏览器 worker 中：服务可以加载，但 node-tar 无法加载，因此那里的每次下载都会失败。

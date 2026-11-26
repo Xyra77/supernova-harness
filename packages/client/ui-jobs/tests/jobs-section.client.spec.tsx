@@ -2,13 +2,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useSyncExternalStore } from 'react'
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { JobsSnapshot, JobView, ObservedJob } from '@deepseek-ai/dsh-api-job-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import { makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import type { JobsSnapshot, JobView, ObservedJob } from '@supernova-ai/snh-api-job-controller/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import { JobsRunningIndicator, JobsSection, type JobsRunningIndicatorProps, type JobsSectionProps } from '../src/client/JobsSection.tsx'
 import { createJobsSectionStore } from '../src/client/jobs-store.ts'
 import { en, zh, ru } from '../src/client/locales.ts'
-import type { PanelDetailsProps, PanelFoldProps } from '@deepseek-ai/dsh-client-ui-session-panel/client'
+import type { PanelDetailsProps, PanelFoldProps } from '@supernova-ai/snh-client-ui-session-panel/client'
 
 beforeEach(() => {
   class TooltipObserver implements ResizeObserver {
@@ -743,9 +743,9 @@ describe('JobsSection hover', () => {
       Object.defineProperty(label, 'clientWidth', { value: 200, configurable: true })
       const row = label.closest<HTMLElement>('[data-job-row]')!
       fireEvent.pointerEnter(row)
-      expect([label.hasAttribute('data-marquee'), label.style.getPropertyValue('--dsh-marquee-range')]).toEqual([true, '100px'])
+      expect([label.hasAttribute('data-marquee'), label.style.getPropertyValue('--snh-marquee-range')]).toEqual([true, '100px'])
       fireEvent.pointerLeave(row)
-      expect([label.hasAttribute('data-marquee'), label.style.getPropertyValue('--dsh-marquee-range')]).toEqual([false, ''])
+      expect([label.hasAttribute('data-marquee'), label.style.getPropertyValue('--snh-marquee-range')]).toEqual([false, ''])
       const stop = screen.getByRole('button', { name: zh['kill.stopAria'].replace('{label}', 'pnpm run build') })
       fireEvent.pointerEnter(stop, { pointerType: 'mouse' })
       act(() => { vi.advanceTimersByTime(499) })

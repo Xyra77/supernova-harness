@@ -2,15 +2,15 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import type { FsVersion } from '@deepseek-ai/dsh-fs'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import type { FsVersion } from '@supernova-ai/snh-fs'
+import { brandString } from '@supernova-ai/snh-brand'
 import { failureOf, openWorkspace, signal, type Harness } from './harness.ts'
 
 let harness: Harness
 let workspace: string
 
 beforeEach(async () => {
-  harness = await openWorkspace('dsh-workspace-files-read-bytes-')
+  harness = await openWorkspace('snh-workspace-files-read-bytes-')
   workspace = harness.workspace
 })
 

@@ -1,17 +1,17 @@
 /**
  * Model-authored messages to ordinary Web Sessions with runtime-owned sender attribution.
- * @module @deepseek-ai/dsh-tool-session-control
+ * @module @supernova-ai/snh-tool-session-control
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-api-session-controller'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { HarnessError } from '@deepseek-ai/dsh-error'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-subagent'
-import { defineTool, ToolArgsError, ToolContextUnavailableError } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-workspace'
+import type { Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-api-session-controller'
+import { brandString } from '@supernova-ai/snh-brand'
+import { HarnessError } from '@supernova-ai/snh-error'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import type { SessionId } from '@supernova-ai/snh-session'
+import type {} from '@supernova-ai/snh-subagent'
+import { defineTool, ToolArgsError, ToolContextUnavailableError } from '@supernova-ai/snh-tools'
+import type {} from '@supernova-ai/snh-workspace'
 
 /** Cordis plugin name. */
 export const name = 'tool-session-control'
@@ -117,7 +117,7 @@ export function apply(ctx: Context): void {
       }
       exec.signal.throwIfAborted()
       assertUnarchived(id)
-      // The source is the agent-message kind dsh-subagent declares. The prefix differs from send_message,
+      // The source is the agent-message kind snh-subagent declares. The prefix differs from send_message,
       // whose `Agent <name>` senders resolve only inside the recipient's subagent tree.
       const message = createUserMessage({
         content: [{ type: 'text', text: `Session ${caller.id} sent a message: ` }, { type: 'text', text: args.message }],

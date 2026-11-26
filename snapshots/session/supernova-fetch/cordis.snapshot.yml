@@ -1,0 +1,36 @@
+# Keyless replay counterpart: deterministic HTTP remains real; only the model
+# adapter is replaced by replay.
+- id: llm-supernova
+  name: '@supernova-ai/snh-llm-supernova-api-key'
+  disabled: true
+
+- insert:
+    - id: llm-replay
+      name: '@supernova-ai/snh-llm-replay'
+      config:
+        providers:
+          - id: deepseek-official
+            name: SuperNova
+            models:
+              - id: deepseek-v4-flash
+              - id: deepseek-v4-pro
+
+    - id: supernova-fetch-fixture
+      name: './supernova-fetch-fixture.mjs'
+
+- id: web
+  name: '@supernova-ai/snh-web'
+  config:
+    searchProvider: supernova-search-api
+    fetchProvider: supernova-fetch-api
+
+- id: web-supernova-api
+  name: '@supernova-ai/snh-web-supernova-api'
+  config:
+    fetchApiKeyEnv: SNH_SNAPSHOT_FETCH_KEY
+    fetchBaseURL: http://127.0.0.1:43118/api/v1/tools
+
+- id: tool-web
+  name: '@supernova-ai/snh-tool-web'
+  config:
+    search: false

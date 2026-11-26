@@ -1,17 +1,17 @@
 // @vitest-environment jsdom
-import { contextMenuHook } from '@deepseek-ai/dsh-client-test-runtime'
-/** First-run DeepSeek prompt behavior over the shared Models join. */
-import type { GlobalStandardProps } from '@deepseek-ai/dsh-client-ui-slots'
+import { contextMenuHook } from '@supernova-ai/snh-client-test-runtime'
+/** First-run SuperNova prompt behavior over the shared Models join. */
+import type { GlobalStandardProps } from '@supernova-ai/snh-client-ui-slots'
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import Schema from '@deepseek-ai/schemastery'
-import type { SettingsNamespaceView } from '@deepseek-ai/dsh-api-remotes/client'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
-import { allowAllAccess, bindSnapshotSelector, RemoteError } from '@deepseek-ai/dsh-client-test-runtime'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { DeepSeekOnboardingDialog } from '../src/client/DeepSeekOnboardingDialog.tsx'
-import type { DeepSeekOnboardingDialogProps } from '../src/client/DeepSeekOnboardingDialog.tsx'
-import { SettingsDescribeMirror } from '@deepseek-ai/dsh-client-ui-settings/src/client/settings-mirror.ts'
+import Schema from '@supernova-ai/schemastery'
+import type { SettingsNamespaceView } from '@supernova-ai/snh-api-remotes/client'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
+import { allowAllAccess, bindSnapshotSelector, RemoteError } from '@supernova-ai/snh-client-test-runtime'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import { SuperNovaOnboardingDialog } from '../src/client/SuperNovaOnboardingDialog.tsx'
+import type { SuperNovaOnboardingDialogProps } from '../src/client/SuperNovaOnboardingDialog.tsx'
+import { SettingsDescribeMirror } from '@supernova-ai/snh-client-ui-settings/src/client/settings-mirror.ts'
 import { ModelsSettingsStore } from '../src/client/store.ts'
 import { createModelsOperations } from '../src/client/operations.ts'
 import { en } from '../src/client/locales.ts'
@@ -34,7 +34,7 @@ function remoteFail(message: string) {
   return { ok: false as const, error: new RemoteError('gateway/internal', message, {}) }
 }
 
-const DeepSeekConfig = Schema.object({
+const SuperNovaConfig = Schema.object({
   apiKeyEnv: Schema.string().role('credential-ref'),
   baseURL: Schema.string().pattern(/^https:\/\//),
   reasoningEffort: Schema.union(['off', 'low', 'high', 'max']),
@@ -47,15 +47,15 @@ const DeepSeekConfig = Schema.object({
   })),
 })
 
-type AttentionSnapshot = Parameters<Parameters<DeepSeekOnboardingDialogProps['useSessionStatus']>[0]>[0]
+type AttentionSnapshot = Parameters<Parameters<SuperNovaOnboardingDialogProps['useSessionStatus']>[0]>[0]
 const noAttention: AttentionSnapshot = new Map()
-const useSessionStatus: DeepSeekOnboardingDialogProps['useSessionStatus'] = selector => selector(noAttention)
+const useSessionStatus: SuperNovaOnboardingDialogProps['useSessionStatus'] = selector => selector(noAttention)
 
 function deepSeekNamespace(apiKeyEnv: string | null): SettingsNamespaceView {
   const value = apiKeyEnv === null ? {} : { apiKeyEnv }
   return {
-    ns: 'llm-deepseek',
-    schema: JSON.parse(JSON.stringify(DeepSeekConfig.toJSON())) as JsonValue,
+    ns: 'llm-supernova',
+    schema: JSON.parse(JSON.stringify(SuperNovaConfig.toJSON())) as JsonValue,
     value,
     base: value,
     user: {},
@@ -100,7 +100,7 @@ function harness(options: {
         return Promise.resolve(remoteOk(
           options.provider === false || options.providerActive === false
             ? []
-            : [{ id: 'deepseek-official', name: 'DeepSeek' }],
+            : [{ id: 'deepseek-official', name: 'SuperNova' }],
         ))
       },
       listConfigurableProviders: () => Promise.resolve(remoteOk(
@@ -108,8 +108,8 @@ function harness(options: {
           ? []
           : [{
             provider: 'deepseek-official',
-            displayName: 'DeepSeek',
-            settingsNs: options.providerSettingsNs ?? 'llm-deepseek',
+            displayName: 'SuperNova',
+            settingsNs: options.providerSettingsNs ?? 'llm-supernova',
             settingsPath: [],
           }],
       )),
@@ -146,7 +146,7 @@ function harness(options: {
   const complete = vi.fn()
   const unusedHook = (() => { throw new Error('unused standard hook') }) as never
   const automatic = createSnapshotStore(options.automatic ?? true)
-  const props: DeepSeekOnboardingDialogProps = {
+  const props: SuperNovaOnboardingDialogProps = {
     stepId: 'deepseek-official',
     complete,
     openSection,
@@ -170,17 +170,17 @@ function harness(options: {
   }
 }
 
-describe('DeepSeekOnboardingDialog', () => {
+describe('SuperNovaOnboardingDialog', () => {
   it('renders when the shell root is absent', async () => {
     const h = harness()
     document.getElementById('root')!.remove()
-    render(<DeepSeekOnboardingDialog {...h.props} />)
+    render(<SuperNovaOnboardingDialog {...h.props} />)
     expect(await screen.findByRole('dialog', { name: en.onboardingTitle })).toBeTruthy()
   })
 
   it('loads a credential-only modal, inerts the product, and focuses the key', async () => {
     const h = harness()
-    render(<DeepSeekOnboardingDialog {...h.props} />)
+    render(<SuperNovaOnboardingDialog {...h.props} />)
     expect(await screen.findByRole('dialog', { name: en.onboardingTitle })).toBeTruthy()
     expect(document.getElementById('root')?.inert).toBe(true)
     expect(screen.getByText(en.onboardingDescription)).toBeTruthy()
@@ -193,7 +193,7 @@ describe('DeepSeekOnboardingDialog', () => {
     const h = harness()
     const appRoot = document.getElementById('root')!
     appRoot.inert = true
-    const view = render(<DeepSeekOnboardingDialog {...h.props} />)
+    const view = render(<SuperNovaOnboardingDialog {...h.props} />)
     await screen.findByRole('dialog')
 
     fireEvent.keyDown(document, { key: 'Escape' })
@@ -207,7 +207,7 @@ describe('DeepSeekOnboardingDialog', () => {
 
   it('requires a non-blank key before Save and continue is available', async () => {
     const h = harness()
-    render(<DeepSeekOnboardingDialog {...h.props} />)
+    render(<SuperNovaOnboardingDialog {...h.props} />)
     await screen.findByRole('dialog')
     const save = screen.getByRole<HTMLButtonElement>('button', { name: en.onboardingSave })
     expect(save.disabled).toBe(true)
@@ -222,7 +222,7 @@ describe('DeepSeekOnboardingDialog', () => {
       [{ setFailure: 'credential was rejected' }, 'credential was rejected'],
     ] as const) {
       const h = harness(options)
-      const view = render(<DeepSeekOnboardingDialog {...h.props} />)
+      const view = render(<SuperNovaOnboardingDialog {...h.props} />)
       await screen.findByRole('dialog')
       fireEvent.change(screen.getByLabelText(en.keyInput), { target: { value: 'sk-live' } })
       fireEvent.click(screen.getByRole('button', { name: en.onboardingSave }))
@@ -237,7 +237,7 @@ describe('DeepSeekOnboardingDialog', () => {
 
   it('allows configure-later dismissal without opening settings', async () => {
     const h = harness()
-    render(<DeepSeekOnboardingDialog {...h.props} />)
+    render(<SuperNovaOnboardingDialog {...h.props} />)
     await screen.findByRole('dialog')
     fireEvent.click(screen.getByRole('button', { name: en.onboardingLater }))
     expect(h.complete).toHaveBeenCalledOnce()
@@ -246,7 +246,7 @@ describe('DeepSeekOnboardingDialog', () => {
     expect(h.mutate).not.toHaveBeenCalled()
   })
 
-  it('does not block the product when DeepSeek setup is unavailable', async () => {
+  it('does not block the product when SuperNova setup is unavailable', async () => {
     for (const h of [
       harness({ describeFailure: 'credentials service is absent' }),
       harness({ credential: { writable: false } }),
@@ -256,7 +256,7 @@ describe('DeepSeekOnboardingDialog', () => {
       harness({ settingsNamespace: false }),
       harness({ apiKeyEnv: null }),
     ]) {
-      const view = render(<DeepSeekOnboardingDialog {...h.props} />)
+      const view = render(<SuperNovaOnboardingDialog {...h.props} />)
       await act(async () => { await h.controller.load() })
       expect(screen.queryByRole('dialog')).toBeNull()
       await waitFor(() => { expect(h.complete).toHaveBeenCalledOnce() })
@@ -271,7 +271,7 @@ describe('DeepSeekOnboardingDialog', () => {
       harness({ providerSettingsNs: '' }),
       harness({ configured: () => true, credential: { source: 'env', writable: false } }),
     ]) {
-      const view = render(<DeepSeekOnboardingDialog {...h.props} />)
+      const view = render(<SuperNovaOnboardingDialog {...h.props} />)
       await act(async () => { await h.controller.load() })
       expect(screen.queryByRole('dialog')).toBeNull()
       await waitFor(() => { expect(h.complete).toHaveBeenCalledOnce() })
@@ -281,7 +281,7 @@ describe('DeepSeekOnboardingDialog', () => {
 
   it('closes when an external credential invalidation refreshes the shared join', async () => {
     const h = harness()
-    render(<DeepSeekOnboardingDialog {...h.props} />)
+    render(<SuperNovaOnboardingDialog {...h.props} />)
     await screen.findByRole('dialog')
     h.configure()
     await act(async () => { await h.controller.load() })
@@ -293,7 +293,7 @@ describe('DeepSeekOnboardingDialog', () => {
 it('offers account choice before reusing the existing API key editor', async () => {
   const h = harness()
   h.props.renderSlot = (_name, owner: unknown) => <button onClick={(owner as { useApiKey: () => void }).useApiKey}>Choose API key</button>
-  render(<DeepSeekOnboardingDialog {...h.props} />)
+  render(<SuperNovaOnboardingDialog {...h.props} />)
   await waitFor(() => { expect(screen.getByRole('button', { name: 'Choose API key' })).toBeTruthy() })
   fireEvent.click(screen.getByRole('button', { name: 'Choose API key' }))
   expect(screen.getByRole('dialog')).toBeTruthy()
@@ -304,7 +304,7 @@ it('explicit account-menu setup reuses the editor without another login choice',
   h.props.explicit = true
   const choice = vi.fn()
   h.props.renderSlot = (_name, _owner, options) => { choice(); return options?.fallback }
-  render(<DeepSeekOnboardingDialog {...h.props} />)
+  render(<SuperNovaOnboardingDialog {...h.props} />)
   await waitFor(() => { expect(screen.getByRole('dialog')).toBeTruthy() })
   expect(choice).not.toHaveBeenCalled()
   expect(h.complete).not.toHaveBeenCalled()
@@ -312,7 +312,7 @@ it('explicit account-menu setup reuses the editor without another login choice',
 
 it('keeps an open step after automatic onboarding turns off', async () => {
   const h = harness()
-  render(<DeepSeekOnboardingDialog {...h.props} />)
+  render(<SuperNovaOnboardingDialog {...h.props} />)
   await waitFor(() => { expect(screen.getByRole('dialog')).toBeTruthy() })
   act(() => { h.automatic.set(false) })
   expect(screen.getByRole('dialog')).toBeTruthy()
@@ -322,7 +322,7 @@ it('keeps an open step after automatic onboarding turns off', async () => {
 it('completes without loading when automatic onboarding is off at mount', () => {
   const h = harness({ automatic: false })
   const load = vi.spyOn(h.controller, 'load')
-  const { container } = render(<DeepSeekOnboardingDialog {...h.props} />)
+  const { container } = render(<SuperNovaOnboardingDialog {...h.props} />)
   expect(container.innerHTML).toBe('')
   expect(h.complete).toHaveBeenCalled()
   expect(load).not.toHaveBeenCalled()
@@ -331,7 +331,7 @@ it('completes without loading when automatic onboarding is off at mount', () => 
 it('keeps explicit API key setup available when automatic onboarding is disabled', async () => {
   const h = harness({ automatic: false })
   h.props.explicit = true
-  render(<DeepSeekOnboardingDialog {...h.props} />)
+  render(<SuperNovaOnboardingDialog {...h.props} />)
   await waitFor(() => { expect(screen.getByRole('dialog')).toBeTruthy() })
   expect(h.complete).not.toHaveBeenCalled()
 })

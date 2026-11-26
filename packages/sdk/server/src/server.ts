@@ -2,31 +2,31 @@
  * JSON-RPC methods and notifications for out-of-process harness SDKs.
  * The surrounding context owns plugins, persistence, and configured adapters.
  *
- * @module @deepseek-ai/dsh-sdk-jsonrpc-server/server
+ * @module @supernova-ai/snh-sdk-jsonrpc-server/server
  */
 
-import type {} from '@deepseek-ai/dsh-fs'
-import { FiberState, type Context, type Fiber } from '@deepseek-ai/cordis'
+import type {} from '@supernova-ai/snh-fs'
+import { FiberState, type Context, type Fiber } from '@supernova-ai/cordis'
 import { AsyncLocalStorage } from 'node:async_hooks'
 import { resolve } from 'node:path'
 import { QueryActivity } from './query-activity.ts'
 import { SdkUserQuestionBridge } from './user-questions.ts'
 import { queryCommand } from './query-input.ts'
 import { queryCommandImages, queryContent } from './query-content.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { Agent, AgentHandle } from '@deepseek-ai/dsh-agent'
-import { admitEncodedImages, type EncodedImageAttachment, type ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import { createUserMessage, type ReasoningEffortId, type ContentBlock, type LlmRuntime } from '@deepseek-ai/dsh-llm'
-import type { SessionId, SessionLogOffset } from '@deepseek-ai/dsh-session'
-import { canonicalClientTimeZone } from '@deepseek-ai/dsh-util-time'
-import type {} from '@deepseek-ai/dsh-working-directory'
-import type {} from '@deepseek-ai/dsh-user-approval'
-import type {} from '@deepseek-ai/dsh-permission-presets'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { Agent, AgentHandle } from '@supernova-ai/snh-agent'
+import { admitEncodedImages, type EncodedImageAttachment, type ImageAttachmentRef } from '@supernova-ai/snh-attachment'
+import { createUserMessage, type ReasoningEffortId, type ContentBlock, type LlmRuntime } from '@supernova-ai/snh-llm'
+import type { SessionId, SessionLogOffset } from '@supernova-ai/snh-session'
+import { canonicalClientTimeZone } from '@supernova-ai/snh-util-time'
+import type {} from '@supernova-ai/snh-working-directory'
+import type {} from '@supernova-ai/snh-user-approval'
+import type {} from '@supernova-ai/snh-permission-presets'
 
-import type {} from '@deepseek-ai/dsh-schedule'
-import type { SubagentRunEndInfo } from '@deepseek-ai/dsh-subagent'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek-api-key'
+import type {} from '@supernova-ai/snh-schedule'
+import type { SubagentRunEndInfo } from '@supernova-ai/snh-subagent'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
 import type {
   ApprovalRequestParams,
   CommandExecution,
@@ -46,9 +46,9 @@ import type {
   SdkEncodedImageBlock,
   SubagentFinishedNotification,
   SubagentStartedNotification,
-} from '@deepseek-ai/dsh-sdk-protocol'
+} from '@supernova-ai/snh-sdk-protocol'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     /** SDK prompt with its canonical user time zone, when one was reported or sampled. */
     'sdk-user': { kind: 'user'; clientTimeZone?: string }
@@ -275,7 +275,7 @@ export class HarnessSdkJsonRpcServer {
   }
 
   /**
-   * Validate and configure the SDK route, mounting the DeepSeek fallback only when unowned.
+   * Validate and configure the SDK route, mounting the SuperNova fallback only when unowned.
    * @param params - SDK handshake parameters.
    * @returns server identity for the handshake.
    */
@@ -299,10 +299,10 @@ export class HarnessSdkJsonRpcServer {
       : brandString<ReasoningEffortId>(params.reasoningEffort)
     if (!this.hasAdapterFor(provider)) {
       if (provider !== 'deepseek-official') throw new Error(`no adapter registered for provider "${provider}"`)
-      // The route requires the DeepSeek authentication service; a composition without one gets it with the fallback route.
-      if (this.ctx.get('deepseekAuth') === undefined) this.authFiber = await this.ctx.plugin(DeepSeekAuth)
+      // The route requires the SuperNova authentication service; a composition without one gets it with the fallback route.
+      if (this.ctx.get('supernovaAuth') === undefined) this.authFiber = await this.ctx.plugin(SuperNovaAuth)
       try {
-        this.llmFiber = await this.ctx.plugin(LlmDeepSeek)
+        this.llmFiber = await this.ctx.plugin(LlmSuperNova)
       } catch (error: unknown) {
         // Without the route nothing here uses the authentication service this call mounted.
         const mounted = this.authFiber
@@ -328,7 +328,7 @@ export class HarnessSdkJsonRpcServer {
     this.userQuestions.enabled = params.capabilities?.userQuestions === true
     this.initialized = true
     this.initialization.resolve()
-    return { serverInfo: { name: 'deepseek-harness-sdk-runtime', version: '0.0.1' } }
+    return { serverInfo: { name: 'supernova-harness-sdk-runtime', version: '0.0.1' } }
   }
 
   /**
@@ -661,7 +661,7 @@ export class HarnessSdkJsonRpcServer {
       case 'shutdown':
         return this.shutdown()
       default:
-        throw new Error(`unknown DeepSeek Harness SDK runtime method: ${method}`)
+        throw new Error(`unknown SuperNova Harness SDK runtime method: ${method}`)
     }
   }
 
@@ -697,7 +697,7 @@ export class HarnessSdkJsonRpcServer {
     // No preset composition: this server's compositions keep the model-facing
     // rows in the host plane, so this agent reads them from the global layer. A
     // deployment that configures a roster has to join one here first
-    // (@deepseek-ai/dsh-agent-preset-registry README, "Composing a child agent").
+    // (@supernova-ai/snh-agent-preset-registry README, "Composing a child agent").
     const agentOptions = {
       provider: this.provider,
       model: this.model,

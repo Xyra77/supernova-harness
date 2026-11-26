@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-package-manifest",
-  "description": "Shared type declarations for package.json.dsh configuration fields",
+  "name": "@supernova-ai/snh-package-manifest",
+  "description": "Shared type declarations for package.json.snh configuration fields",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -30,9 +30,9 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

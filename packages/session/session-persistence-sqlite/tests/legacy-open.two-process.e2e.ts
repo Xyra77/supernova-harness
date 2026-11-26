@@ -8,8 +8,8 @@ import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it, onTestFinished } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { SessionId } from '@deepseek-ai/dsh-session'
+import { Context } from '@supernova-ai/cordis'
+import { SessionId } from '@supernova-ai/snh-session'
 import * as persistence from '../src/index.ts'
 import { eventLines, generationLogPath, toHeaderLine } from '../../session-persistence-jsonl/src/format.ts'
 import { meta, oneTurnLog } from '../../session-persistence/tests/contract.ts'
@@ -17,7 +17,7 @@ import { meta, oneTurnLog } from '../../session-persistence/tests/contract.ts'
 const opener = fileURLToPath(new URL('./fixtures/legacy-opener.mjs', import.meta.url))
 
 async function fixture() {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-sqlite-import-process-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-sqlite-import-process-'))
   const contexts: Context[] = []
   const children: { child: ChildProcess; closed: Promise<{ code: number | null; signal: NodeJS.Signals | null }>; lines: Interface }[] = []
   onTestFinished(async () => {

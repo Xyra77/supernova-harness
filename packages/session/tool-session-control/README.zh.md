@@ -3,7 +3,7 @@ description: "在 Web profile 中启用 session_send_message，让 Agent 向另�
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-tool-session-control
+# @supernova-ai/snh-tool-session-control
 
 [English](README.md) | 中文
 
@@ -25,7 +25,7 @@ kind: "package-reference"
 <a id="use-this-package"></a>
 ## 使用本包
 
-通过 profile patch 启用 `@deepseek-ai/dsh-web-app` bundle 中处于禁用状态的 `tool-session-control` 行；[用户指南](../../../docs/user/session-control.zh.md)给出该 patch 以及检查合成后该行的方法。
+通过 profile patch 启用 `@supernova-ai/snh-web-app` bundle 中处于禁用状态的 `tool-session-control` 行；[用户指南](../../../docs/user/session-control.zh.md)给出该 patch 以及检查合成后该行的方法。
 
 ### 何时选择
 
@@ -38,7 +38,7 @@ kind: "package-reference"
   disabled: false
 ```
 
-本包不声明 `Config` 字段。它注入 `ctx.tools`、来自 [`@deepseek-ai/dsh-api-session-controller`](../../api/session-controller/README.zh.md) 的 `ctx.sessionController`，以及来自 [`@deepseek-ai/dsh-workspace`](../../workspace/workspace/README.zh.md) 的 `ctx.workspaceRegistry`；dsh-web-app bundle 会挂载这两个 Host 服务，缺少它们的组合不会注册本工具。
+本包不声明 `Config` 字段。它注入 `ctx.tools`、来自 [`@supernova-ai/snh-api-session-controller`](../../api/session-controller/README.zh.md) 的 `ctx.sessionController`，以及来自 [`@supernova-ai/snh-workspace`](../../workspace/workspace/README.zh.md) 的 `ctx.workspaceRegistry`；snh-web-app bundle 会挂载这两个 Host 服务，缺少它们的组合不会注册本工具。
 
 ### 投递与失败
 
@@ -63,7 +63,7 @@ kind: "package-reference"
 <details>
 <summary>实现细节 — 点击展开</summary>
 
-工具从运行时的调用智能体获取发送者，因此模型无法选择发送者身份。它先检查 Workspace 注册表的归档列表，在与调用方取消信号竞争的同时等待 Session 控制器完成激活，随后再次检查取消状态和归档列表。它使用 `@deepseek-ai/dsh-subagent` 声明的 `agent-message` 来源构造消息，记录调用方的 `senderSessionId`，在正文前加上 `Session <caller session id> sent a message: ` 前缀，然后对目标调用 `steer()`。该前缀不同于 `send_message` 的 `Agent <name> sent a message: `：后者的名称只能在同一棵 subagent 树内解析。收件箱失败原样传播。[工具流水线](../../core/tools/README.zh.md)沿用普通取消行为。Host 展示器显示目标 id 和消息正文；[Web 工具卡片](../../client/ui-tool/README.zh.md)从已记录的结果中推导接收状态和消息 ID。
+工具从运行时的调用智能体获取发送者，因此模型无法选择发送者身份。它先检查 Workspace 注册表的归档列表，在与调用方取消信号竞争的同时等待 Session 控制器完成激活，随后再次检查取消状态和归档列表。它使用 `@supernova-ai/snh-subagent` 声明的 `agent-message` 来源构造消息，记录调用方的 `senderSessionId`，在正文前加上 `Session <caller session id> sent a message: ` 前缀，然后对目标调用 `steer()`。该前缀不同于 `send_message` 的 `Agent <name> sent a message: `：后者的名称只能在同一棵 subagent 树内解析。收件箱失败原样传播。[工具流水线](../../core/tools/README.zh.md)沿用普通取消行为。Host 展示器显示目标 id 和消息正文；[Web 工具卡片](../../client/ui-tool/README.zh.md)从已记录的结果中推导接收状态和消息 ID。
 
 ### 源码地图
 
@@ -92,7 +92,7 @@ kind: "package-reference"
 
 #### 模型看到什么
 
-[工具目录](../../../docs/tool-catalog.zh.md#deepseek-aidsh-tool-session-control)定义确切 schema。描述向模型发出指令："Use this tool only when the user explicitly asks you to send a message to another session." Schema 既不提供发送者身份，也不提供权限覆盖参数。成功调用返回一个 JSON 文本块 `{"message_id":"..."}`，确认消息已入队，不表示执行完成或对方已回复。目标取消或释放可能使消息未被处理。被拒绝的调用返回 `Error: <message>`；subagent 目标的消息为 `session "<id>" is not available to session_send_message`。
+[工具目录](../../../docs/tool-catalog.zh.md#supernova-aisnh-tool-session-control)定义确切 schema。描述向模型发出指令："Use this tool only when the user explicitly asks you to send a message to another session." Schema 既不提供发送者身份，也不提供权限覆盖参数。成功调用返回一个 JSON 文本块 `{"message_id":"..."}`，确认消息已入队，不表示执行完成或对方已回复。目标取消或释放可能使消息未被处理。被拒绝的调用返回 `Error: <message>`；subagent 目标的消息为 `session "<id>" is not available to session_send_message`。
 
 #### Token 影响
 
@@ -120,7 +120,7 @@ kind: "package-reference"
 
 <a id="known-limitations-and-deferred-work"></a>
 
-- **仅限 Web 组合** — 只有 dsh-web-app bundle 声明该行；`headless`、`sdk`、`sdk-minimal` 和 `acp` profile 不挂载 Session 控制器，也不提供 `session_send_message`。
+- **仅限 Web 组合** — 只有 snh-web-app bundle 声明该行；`headless`、`sdk`、`sdk-minimal` 和 `acp` profile 不挂载 Session 控制器，也不提供 `session_send_message`。
 - **subagent 目标不可用** — subagent 可以向普通 Session 发消息，但该 Session 无法通过本工具回复它。独立的 `send_message` 工具只能访问调用方自身 subagent 树内的成员。
 - **自动回复循环** — 自动回复可能反复唤醒两个 Session 并消耗 token。仅在用户明确要求时使用的指令依赖模型遵循；运行时不限制消息发送速率或转发跳数。
 - **仅文本，不等待回复** — 消息只包含文本；工具不附加文件，也不等待接收方的轮次或回答。

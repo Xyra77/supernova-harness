@@ -1,11 +1,11 @@
 /**
  * The `session` resource kind's default identity extraction: the Session one
  * Remote call names, read from its validated wire arguments.
- * @module @deepseek-ai/dsh-api-session-controller/session-resource
+ * @module @supernova-ai/snh-api-session-controller/session-resource
  */
 
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type { TypertResourceResolveInput } from '@deepseek-ai/dsh-typert-protocol'
+import type { SessionId } from '@supernova-ai/snh-session'
+import type { TypertResourceResolveInput } from '@supernova-ai/snh-typert-protocol'
 import type { SessionAddress } from './types.ts'
 
 /**

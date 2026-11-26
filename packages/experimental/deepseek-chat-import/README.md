@@ -1,15 +1,15 @@
 ---
-description: "Import DeepSeek website chat exports: upload a deepseek_data ZIP from the browser and store its recent conversations as Sessions in a chosen Workspace."
+description: "Import SuperNova website chat exports: upload a supernova_data ZIP from the browser and store its recent conversations as Sessions in a chosen Workspace."
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-deepseek-chat-import
+# @supernova-ai/snh-deepseek-chat-import
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-Bring the chats exported from the DeepSeek website (chat.deepseek.com) into DSH and continue them. After you enable this optional bundle, a button right of "New session" uploads the `deepseek_data-*.zip` file to the Host, which stores the most recent conversations as Sessions in the Workspace you choose. Imported Sessions keep their original titles and times and show the original questions with their attached files, reasoning, web search cards, read links, and answers. The [Agent Note](../../../.agents/notes/implemented/feature/2026-11-11-deepseek-chat-export-import.md) records the design and its trade-offs.
+Bring the chats exported from the SuperNova website (chat.deepseek.com) into SNH and continue them. After you enable this optional bundle, a button right of "New session" uploads the `supernova_data-*.zip` file to the Host, which stores the most recent conversations as Sessions in the Workspace you choose. Imported Sessions keep their original titles and times and show the original questions with their attached files, reasoning, web search cards, read links, and answers. The [Agent Note](../../../.agents/notes/implemented/feature/2026-11-11-deepseek-chat-export-import.md) records the design and its trade-offs.
 
 ## Table of Contents
 
@@ -24,20 +24,20 @@ Bring the chats exported from the DeepSeek website (chat.deepseek.com) into DSH 
 <a id="use-this-package"></a>
 ## Use this package
 
-In the GUI, open the Plugins page, click "More" to open "Experimental plugins", and switch on "DeepSeek chat import". The installation ships the bundle switched off; the [plugin manager page](../../client/ui-plugin-manager/README.md#use-this-package) owns how More bundles are listed and enabled. Switching it off removes the button and the upload route; imported Sessions stay.
+In the GUI, open the Plugins page, click "More" to open "Experimental plugins", and switch on "SuperNova chat import". The installation ships the bundle switched off; the [plugin manager page](../../client/ui-plugin-manager/README.md#use-this-package) owns how More bundles are listed and enabled. Switching it off removes the button and the upload route; imported Sessions stay.
 
 The bundle inserts one Host row, which an explicit composition can also mount:
 
 ```yaml
 - id: deepseek-chat-import
-  name: '@deepseek-ai/dsh-deepseek-chat-import'
+  name: '@supernova-ai/snh-deepseek-chat-import'
 ```
 
-The Host half injects `typert`, `connection`, `sessionPersistence`, and `workspaceRegistry`, and reads `sessionProjectionCache` and `attachments` when they are mounted. The browser half injects `remote`, `slots`, `locale`, and `sessions`, and wraps the ui-sidebar New Session row through its `sidebar.session.action` HOC slot: it returns the row content followed by its own button, or the content alone for a Peer that may not import. Only the owner imports: the upload route admits only owner Peers, `limits()` refuses every other principal, and the button shows only for a Peer that may call `deepseekChatImport/limits`.
+The Host half injects `typert`, `connection`, `sessionPersistence`, and `workspaceRegistry`, and reads `sessionProjectionCache` and `attachments` when they are mounted. The browser half injects `remote`, `slots`, `locale`, and `sessions`, and wraps the ui-sidebar New Session row through its `sidebar.session.action` HOC slot: it returns the row content followed by its own button, or the content alone for a Peer that may not import. Only the owner imports: the upload route admits only owner Peers, `limits()` refuses every other principal, and the button shows only for a Peer that may call `supernovaChatImport/limits`.
 
 ### Import a chat export
 
-1. On the DeepSeek website, export all chats and download the `deepseek_data-*.zip` file.
+1. On the SuperNova website, export all chats and download the `supernova_data-*.zip` file.
 2. Click the upload-arrow button right of "New session".
 3. Under "Export file", choose the ZIP file. Under "Workspace", keep the preselected Workspace of the current Session, pick another one, or choose "Add workspace…" to add a directory.
 4. Click "Import". On a served page the progress bar shows the upload percentage; a page that carries the archive over its own transport has no byte progress, so the bar starts with the Host reading the archive. Both then show "Importing n/K" while Sessions are written; closing the dialog cancels the request.
@@ -57,7 +57,7 @@ The Host half injects `typert`, `connection`, `sessionPersistence`, and `workspa
 - Each website conversation becomes one Session. The imported chain ends at the message named by `current_message_id`; when that field is absent, null, or names no message, it ends at the message with the largest id. Other branches are dropped.
 - `chat_session_index.json` selects the conversations: the newest `maxSessions` by its `updated_at` (ties by `inserted_at`, then id) are imported in archive order, one at a time. When one of them fails, the next older conversation the index lists takes its place.
 - Titles keep the original title with whitespace collapsed and truncated to `maxTitleBytes`, pinned as a user title, so no title generation runs. A title that is empty after normalization writes no title. Event times follow the export and never decrease; the `elapsed_secs` of reasoning advances the time of the following steps.
-- A user message without text, a stored image, or a file keeps one empty text block: the row renders, and DeepSeek request serialization drops it like any other empty user message, so that turn's question is absent from the model context (a first turn without text therefore starts the request with the assistant message).
+- A user message without text, a stored image, or a file keeps one empty text block: the row renders, and SuperNova request serialization drops it like any other empty user message, so that turn's question is absent from the model context (a first turn without text therefore starts the request with the assistant message).
 - Images in user messages become image attachments when the export contains the file (png, jpg, jpeg, webp, or gif) and the attachment service stores it. Other images and every non-image file become a synthetic file card that shows a file-type icon, the name, and the exported size; the card cannot be opened, holds no bytes, and reaches the model as a file handle whose named path holds no bytes. The Host log records why each image was not stored.
 - Web searches become `web_search` calls and opened pages become `web_fetch` calls, shown as the standard search and fetch cards. A search the export records as failed becomes an error result. A search still in progress, an opened page without an address, and an image search are left out, as the website leaves them out of the reply.
 - A `READ_LINK` record becomes one Markdown link line per linked page, `[title](url)`, with the URL as its own text when the title is missing and the title alone when the URL is missing. A `PARTIAL_FILE_READ`, `TOOL_FIND`, `TIP`, or `CONTENT_RISK` record is left out, as the website shows none of them as reply text.
@@ -99,14 +99,14 @@ A conversation file that is oversized, damaged, cannot be parsed or converted, o
 | [`src/archive.ts`](src/archive.ts) | `openExportArchive()`: the ZIP central directory, streaming passes that inflate only the entries they are asked for within `maxEntryBytes`, and a by-name read |
 | [`src/format.ts`](src/format.ts) | zod validation of `manifest.json`, conversation files, and the fragment types this package maps |
 | [`src/conversation.ts`](src/conversation.ts) | Pure `selectBranch()` and `convertConversation()`: message tree to seed events |
-| [`src/importer.ts`](src/importer.ts) | `importDeepseekChatExport()`: index selection, the image pass, the conversation pass, writes, and Workspace attachment |
-| [`src/index.ts`](src/index.ts) | `DeepseekChatImportService`, its `Config`, the single import slot, the route registration, and `@Remote limits()` |
+| [`src/importer.ts`](src/importer.ts) | `importSupernovaChatExport()`: index selection, the image pass, the conversation pass, writes, and Workspace attachment |
+| [`src/index.ts`](src/index.ts) | `SupernovaChatImportService`, its `Config`, the single import slot, the route registration, and `@Remote limits()` |
 | [`src/client/`](src/client/index.ts) | Button, dialog, browser upload over the page carrier or XHR, and locale dictionaries |
 | [`cordis.patch.yml`](cordis.patch.yml) | The optional bundle row |
 
 ### Upload
 
-The browser calls `limits()` and rejects a file over `maxUploadBytes` before sending it. A served page posts the file with `XMLHttpRequest` (for upload progress) to `api/deepseek-chat-import/archive?workspaceId=…`, resolved against the document base. A page whose Host runs in another execution context, such as the static Cloudflare Pages preview, supplies `__DSH_TRANSPORT__.fetch` instead: the archive goes through that carrier, which reports no byte progress, so the dialog moves straight to the reading and importing phases. The Host registers this path as an exact route on `ctx.connection.fetch`, which only owner Peers reach. The route requires `application/octet-stream`, takes the service's single import slot, resolves the Workspace, and reads the streaming body into one buffer sized from `content-length` until it ends or exceeds the limit. The upload is never written to disk. The answer is `application/x-ndjson`: `{ type: 'progress', done, total }` lines while Sessions are written, then one `{ type: 'outcome', outcome }` line whose `outcome` is `{ ok: true, value }` or `{ ok: false, error: { reason, message } }`; the browser reads complete lines as they arrive and settles the answer as invalid at the first line that is not a valid protocol value, cancelling the rest of the stream so a later outcome cannot replace it. Closing the dialog, a dropped connection, or unloading the plugin aborts the import, and unloading completes only after the import stops writing.
+The browser calls `limits()` and rejects a file over `maxUploadBytes` before sending it. A served page posts the file with `XMLHttpRequest` (for upload progress) to `api/deepseek-chat-import/archive?workspaceId=…`, resolved against the document base. A page whose Host runs in another execution context, such as the static Cloudflare Pages preview, supplies `__SNH_TRANSPORT__.fetch` instead: the archive goes through that carrier, which reports no byte progress, so the dialog moves straight to the reading and importing phases. The Host registers this path as an exact route on `ctx.connection.fetch`, which only owner Peers reach. The route requires `application/octet-stream`, takes the service's single import slot, resolves the Workspace, and reads the streaming body into one buffer sized from `content-length` until it ends or exceeds the limit. The upload is never written to disk. The answer is `application/x-ndjson`: `{ type: 'progress', done, total }` lines while Sessions are written, then one `{ type: 'outcome', outcome }` line whose `outcome` is `{ ok: true, value }` or `{ ok: false, error: { reason, message } }`; the browser reads complete lines as they arrive and settles the answer as invalid at the first line that is not a valid protocol value, cancelling the rest of the stream so a later outcome cannot replace it. Closing the dialog, a dropped connection, or unloading the plugin aborts the import, and unloading completes only after the import stops writing.
 
 ### Event mapping
 
@@ -156,7 +156,7 @@ The first request after resume has no reusable cached prefix; later requests ext
 - **Duplicate local file headers** — duplicate detection covers the central directory only. A second local file header renamed to an existing entry name is not detected, so an archive can deliver more conversations than the index lists, and the write count is not additionally guarded.
 - **Partial writes on a corrupted archive** — an archive whose structure breaks after some entries were delivered fails as `unreadable-archive` after those Sessions were written, and the failure response does not list them.
 - **`read()` truncates** — `ExportArchive.read` returns at most the size an entry declares, truncating one that inflates to more, while `stream` reports that condition as a size failure. The manifest, the index, and a replacement conversation are read by name, so one of them can arrive truncated. Each by-name read also re-parses the whole central directory: the manifest and the index pay it once each, and a replacement conversation pays once more.
-- **No upload percentage on the carrier path** — a page that carries the archive through `__DSH_TRANSPORT__.fetch` reports no byte progress; the dialog shows only the reading and importing phases.
+- **No upload percentage on the carrier path** — a page that carries the archive through `__SNH_TRANSPORT__.fetch` reports no byte progress; the dialog shows only the reading and importing phases.
 - **One export structure** — the importer targets the 2026-11-12 structure: `current_message_id`, `stage_id`, the tool statuses, the link and find fields, and the new record types. The fields that structure added are read as optional, so an older v3 archive still imports, but it is not a supported target.
 - **ZIP upload only** — an extracted export directory or a Host path cannot be imported.
 - **Re-import duplicates** — importing the same export again writes new Sessions; the import does not track which conversations it already imported.

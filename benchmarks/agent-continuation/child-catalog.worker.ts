@@ -1,15 +1,15 @@
 /** Cold parent-catalog observations beside fork children with tool-heavy inherited histories. */
 
 import { performance } from 'node:perf_hooks'
-import { Context } from '@deepseek-ai/cordis'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import SessionStore, { SESSION_FORMAT_VERSION, type SessionId, SessionLogOffset, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SessionQueryEngine from '@deepseek-ai/dsh-session-query'
-import SubagentRuntime, { SUBAGENT_DESCRIPTOR_VERSION } from '@deepseek-ai/dsh-subagent'
+import { Context } from '@supernova-ai/cordis'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
+import { brandString } from '@supernova-ai/snh-brand'
+import SessionStore, { SESSION_FORMAT_VERSION, type SessionId, SessionLogOffset, SessionSeq } from '@supernova-ai/snh-session'
+import type { SessionEvent } from '@supernova-ai/snh-session'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SessionQueryEngine from '@supernova-ai/snh-session-query'
+import SubagentRuntime, { SUBAGENT_DESCRIPTOR_VERSION } from '@supernova-ai/snh-subagent'
 import { assertBuiltBenchmarkRuntime } from '../support/built-worker.ts'
 import { PARENT_ID, syntheticHistory, TIME_ZERO, WORKLOAD } from './workload.ts'
 
@@ -107,8 +107,8 @@ async function run(root: string, mode: string): Promise<CatalogReport | { seeded
 }
 
 assertBuiltBenchmarkRuntime(import.meta.url, Object.fromEntries([
-  '@deepseek-ai/dsh-subagent', '@deepseek-ai/dsh-session-query',
-  '@deepseek-ai/dsh-session-persistence-jsonl',
+  '@supernova-ai/snh-subagent', '@supernova-ai/snh-session-query',
+  '@supernova-ai/snh-session-persistence-jsonl',
 ].map(name => [name, import.meta.resolve(name)])))
 const [root, mode] = process.argv.slice(2)
 if (root === undefined || (mode !== 'seed' && mode !== 'catalog')) {

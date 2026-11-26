@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { BlockAssembler, type ToolCallId, type StreamChunk } from '@deepseek-ai/dsh-llm'
+import { brandString } from '@supernova-ai/snh-brand'
+import { BlockAssembler, type ToolCallId, type StreamChunk } from '@supernova-ai/snh-llm'
 
 describe('BlockAssembler', () => {
   it('assembles interleaved text, reasoning, and tool-call deltas', () => {
@@ -200,7 +200,7 @@ describe('BlockAssembler replay metadata', () => {
 
 describe('assertNever', () => {
   it('throws with diagnostics when a value escapes a closed union at runtime', async () => {
-    const { assertNever } = await import('@deepseek-ai/dsh-util-values')
+    const { assertNever } = await import('@supernova-ai/snh-util-values')
     expect(() => assertNever({ type: 'rogue' } as never, 'test-context'))
       .toThrow('unreachable variant in test-context: {"type":"rogue"}')
     expect(() => assertNever(undefined as never)).toThrow('unreachable variant: undefined')

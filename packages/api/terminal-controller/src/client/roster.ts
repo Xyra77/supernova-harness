@@ -1,6 +1,6 @@
 /** One reference-counted terminal roster stream per watched Session. */
-import { RemoteStreamCarrierError, type ClientRemote } from '@deepseek-ai/dsh-api-gateway/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import { RemoteStreamCarrierError, type ClientRemote } from '@supernova-ai/snh-api-gateway/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import type { TerminalRemote } from './model.ts'
 import type { WebTerminalInfo } from '../types.ts'
 

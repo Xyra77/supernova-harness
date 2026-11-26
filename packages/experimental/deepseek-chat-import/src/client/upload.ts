@@ -1,7 +1,7 @@
 /** Browser upload of one export archive to the Host import route. */
 import { UPLOAD_ROUTE } from '../protocol.ts'
 import type {
-  DeepseekChatImportFailureReason, DeepseekChatImportLine, DeepseekChatImportResponse, DeepseekChatImportResult, DeepseekChatImportSkip,
+  SupernovaChatImportFailureReason, SupernovaChatImportLine, SupernovaChatImportResponse, SupernovaChatImportResult, SupernovaChatImportSkip,
 } from '../types.ts'
 
 /** Progress of one upload: bytes still sending, the Host reading the archive, then Sessions written. */
@@ -11,20 +11,20 @@ export type UploadProgress =
   | { readonly phase: 'importing'; readonly done: number; readonly total: number }
 
 /** The Host outcome, or a transport failure before an outcome line arrived. */
-export type UploadAnswer = DeepseekChatImportResponse | { readonly ok: false; readonly transport: string }
+export type UploadAnswer = SupernovaChatImportResponse | { readonly ok: false; readonly transport: string }
 
 /** Fetch-shaped carrier a shell installs when the Host runs in another execution context. */
 type PageTransportFetch = (input: string | URL, init: RequestInit) => Promise<Response>
 
 /** Page global carrying the shell transport, absent in the served web app. */
 interface PageTransportGlobal {
-  __DSH_TRANSPORT__?: { fetch?: PageTransportFetch }
+  __SNH_TRANSPORT__?: { fetch?: PageTransportFetch }
 }
 
 /** One decoded answer step: streamed progress, the outcome, or a line that is not JSON. */
 type AnswerStep =
   | { readonly kind: 'progress'; readonly done: number; readonly total: number }
-  | { readonly kind: 'outcome'; readonly outcome: DeepseekChatImportResponse }
+  | { readonly kind: 'outcome'; readonly outcome: SupernovaChatImportResponse }
   | { readonly kind: 'invalid' }
 
 /**
@@ -76,7 +76,7 @@ function createAnswerCollector(onProgress: (progress: UploadProgress) => void): 
   const read = createAnswerReader()
   // Held in an object so the failure flag survives the closures below without
   // the compiler folding it to its initial value.
-  const state: { outcome?: DeepseekChatImportResponse; invalid: boolean } = { invalid: false }
+  const state: { outcome?: SupernovaChatImportResponse; invalid: boolean } = { invalid: false }
   return {
     take(text: string): boolean {
       for (const step of read(text)) {
@@ -100,7 +100,7 @@ function createAnswerCollector(onProgress: (progress: UploadProgress) => void): 
 /**
  * Send one archive and follow the streamed answer to its outcome line.
  * A page whose Host runs in another execution context supplies the pre-boot
- * `__DSH_TRANSPORT__.fetch` carrier, which carries the body and the streamed
+ * `__SNH_TRANSPORT__.fetch` carrier, which carries the body and the streamed
  * answer over its own channel; that carrier reports no byte progress. Served
  * pages send the archive with XMLHttpRequest, so the browser streams it from
  * disk and reports upload progress.
@@ -117,7 +117,7 @@ export function uploadArchive(
   signal: AbortSignal,
 ): Promise<UploadAnswer> {
   const url = new URL(`${UPLOAD_ROUTE}?${new URLSearchParams({ workspaceId }).toString()}`, document.baseURI)
-  const carrier = (globalThis as PageTransportGlobal).__DSH_TRANSPORT__?.fetch
+  const carrier = (globalThis as PageTransportGlobal).__SNH_TRANSPORT__?.fetch
   return carrier === undefined ? sendWithXhr(file, url, onProgress, signal) : sendWithCarrier(carrier, file, url, onProgress, signal)
 }
 
@@ -230,7 +230,7 @@ function sendWithXhr(
 }
 
 /** Failure categories the Host may report; a decoded line claiming another one is invalid. */
-const FAILURE_REASONS: ReadonlySet<string> = new Set<DeepseekChatImportFailureReason>([
+const FAILURE_REASONS: ReadonlySet<string> = new Set<SupernovaChatImportFailureReason>([
   'too-large', 'unreadable-archive', 'missing-manifest', 'missing-index', 'unsupported-version', 'no-conversations', 'workspace-not-found', 'busy',
 ])
 
@@ -241,18 +241,18 @@ function isObject(value: unknown): value is JsonObject {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
-function isReason(value: unknown): value is DeepseekChatImportFailureReason {
+function isReason(value: unknown): value is SupernovaChatImportFailureReason {
   return typeof value === 'string' && FAILURE_REASONS.has(value)
 }
 
-function isSkip(value: unknown): value is DeepseekChatImportSkip {
+function isSkip(value: unknown): value is SupernovaChatImportSkip {
   return isObject(value)
     && typeof value.conversationId === 'string'
     && (value.title === null || typeof value.title === 'string')
     && typeof value.reason === 'string'
 }
 
-function isResult(value: unknown): value is DeepseekChatImportResult {
+function isResult(value: unknown): value is SupernovaChatImportResult {
   return isObject(value)
     && typeof value.workspaceId === 'string'
     && typeof value.workspacePath === 'string'
@@ -269,7 +269,7 @@ function isResult(value: unknown): value is DeepseekChatImportResult {
  * @param value - whatever the answer line carried under `outcome`.
  * @returns the outcome, or undefined when the value is not a response.
  */
-function responseOf(value: unknown): DeepseekChatImportResponse | undefined {
+function responseOf(value: unknown): SupernovaChatImportResponse | undefined {
   if (!isObject(value)) return undefined
   if (value.ok === true) return isResult(value.value) ? { ok: true, value: value.value } : undefined
   if (value.ok === false) {
@@ -287,7 +287,7 @@ function responseOf(value: unknown): DeepseekChatImportResponse | undefined {
  * @param value - decoded JSON value.
  * @returns the line, or undefined when the value is not one.
  */
-function lineOf(value: unknown): DeepseekChatImportLine | undefined {
+function lineOf(value: unknown): SupernovaChatImportLine | undefined {
   if (!isObject(value)) return undefined
   if (value.type === 'progress') {
     return typeof value.done === 'number' && typeof value.total === 'number'
@@ -302,7 +302,7 @@ function lineOf(value: unknown): DeepseekChatImportLine | undefined {
 }
 
 /** Decode one answer line; undefined marks a line that is not JSON or not a valid line value. */
-function parseLine(text: string): DeepseekChatImportLine | undefined {
+function parseLine(text: string): SupernovaChatImportLine | undefined {
   let value: unknown
   try {
     value = JSON.parse(text)

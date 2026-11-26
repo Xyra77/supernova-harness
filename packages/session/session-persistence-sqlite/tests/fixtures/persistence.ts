@@ -1,20 +1,20 @@
 /** Isolated persistence providers sharing one test-owned storage directory. @module */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { onTestFinished } from 'vitest'
 import * as SqlitePersistence from '../../src/index.ts'
-import * as JsonlPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import type { JsonlCompression } from '@deepseek-ai/dsh-session-persistence-jsonl'
-import SessionStore from '@deepseek-ai/dsh-session'
+import * as JsonlPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import type { JsonlCompression } from '@supernova-ai/snh-session-persistence-jsonl'
+import SessionStore from '@supernova-ai/snh-session'
 
 /**
  * Allocate private storage and close every mounted provider before removing it.
  * @returns storage root and factories for independently owned providers.
  */
 export async function persistenceFixture() {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-sqlite-persistence-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-sqlite-persistence-'))
   const contexts: Context[] = []
   onTestFinished(async () => {
     let failures: unknown[]

@@ -6,12 +6,12 @@ import { request as httpsRequest } from 'node:https'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import type { CredentialKey, CredentialRecord } from '@deepseek-ai/dsh-credentials'
-import * as Connection from '@deepseek-ai/dsh-client-connection'
-import * as Token from '@deepseek-ai/dsh-host-authentication-token'
-import WebServer, { type WebEntryUrl, type WebResourceRoute, type WebRoute } from '@deepseek-ai/dsh-host-webserver'
-import type { Principal, RemoteInvocation } from '@deepseek-ai/dsh-typert-protocol'
+import { Context } from '@supernova-ai/cordis'
+import type { CredentialKey, CredentialRecord } from '@supernova-ai/snh-credentials'
+import * as Connection from '@supernova-ai/snh-client-connection'
+import * as Token from '@supernova-ai/snh-host-authentication-token'
+import WebServer, { type WebEntryUrl, type WebResourceRoute, type WebRoute } from '@supernova-ai/snh-host-webserver'
+import type { Principal, RemoteInvocation } from '@supernova-ai/snh-typert-protocol'
 import { afterEach, expect, it, vi } from 'vitest'
 import { MemoryCredentials } from '../../../credentials/credentials/tests/memory.ts'
 import { materializeTlsFixture } from '../../../host/webserver/tests/tls-fixture.ts'
@@ -22,7 +22,7 @@ import { renderPairingScript } from '../src/anonymous/index.ts'
 import { RemoteBrowserAuth } from '../src/remote-auth.ts'
 import { PairingRequests } from '../src/pairing-requests.ts'
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@supernova-ai/snh-typert-protocol' {
   interface PrincipalMap {
     /** Non-owner used to check approval independently of Gateway grants. */
     'pairing-test-guest': { readonly kind: 'pairing-test-guest' }
@@ -50,7 +50,7 @@ async function mounted(
   advertisedUrl = `${protocol}//localhost/`,
 ) {
   const ctx = new Context()
-  const root = protocol === 'https:' ? await mkdtemp(join(tmpdir(), 'dsh-pairing-tls-')) : undefined
+  const root = protocol === 'https:' ? await mkdtemp(join(tmpdir(), 'snh-pairing-tls-')) : undefined
   cleanups.push(async () => {
     await ctx.fiber.dispose()
     if (root !== undefined) await rm(root, { recursive: true, force: true })
@@ -580,7 +580,7 @@ it('embeds pairing directly in the anonymous Remote page and removes its contrib
   const response = await send('/')
   expect(response.status).toBe(401)
   const html = await response.text()
-  expect(html).toContain('<dsh-device-pairing>')
+  expect(html).toContain('<snh-device-pairing>')
   expect(html).toContain('<script defer src="./pairing/client.js"></script>')
   expect(response.headers.get('content-security-policy')).toContain("script-src 'self'")
   expect(html).not.toContain('name="token"')

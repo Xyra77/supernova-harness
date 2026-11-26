@@ -1,33 +1,33 @@
 /** MCP admission, token retention, recovery files, and PTC forwarding together. */
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { executeToolFixture, executeModelToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import * as PtcToolExecutor from '@deepseek-ai/dsh-tool-executor-ptc'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { executeToolFixture, executeModelToolFixture } from '@supernova-ai/snh-tool-testkit'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import * as PtcToolExecutor from '@supernova-ai/snh-tool-executor-ptc'
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AttachmentStore from '@deepseek-ai/dsh-attachment'
-import type { AttachmentId } from '@deepseek-ai/dsh-attachment/types'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ImageAttachmentRef, SaveImageAttachment, StoredImageAttachment } from '@deepseek-ai/dsh-attachment'
-import FileSystem from '@deepseek-ai/dsh-fs-local'
-import { LlmAdapter, LlmRuntime, type ToolCallId } from '@deepseek-ai/dsh-llm'
-import type { GenerateOptions, StreamChunk, ImageBlock, LlmImageRequestPricing, LlmResolvedModelInfo } from '@deepseek-ai/dsh-llm'
-import { deepSeekImageTokens } from '@deepseek-ai/dsh-llm-deepseek'
-import { estimateContent } from '@deepseek-ai/dsh-token-meter/estimate'
-import { createMcpToolDefinition } from '@deepseek-ai/dsh-mcp-client'
-import { Session, type SessionId } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import LocalSpillStore from '@deepseek-ai/dsh-spill-local'
-import { PtcInspectableValue, PtcRuntime } from '@deepseek-ai/dsh-ptc-runtime'
-import type { PtcRunRequest, PtcRunSpec, PtcRunResult } from '@deepseek-ai/dsh-ptc-runtime'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import { Context } from '@supernova-ai/cordis'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
+import type { Agent } from '@supernova-ai/snh-agent'
+import AttachmentStore from '@supernova-ai/snh-attachment'
+import type { AttachmentId } from '@supernova-ai/snh-attachment/types'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ImageAttachmentRef, SaveImageAttachment, StoredImageAttachment } from '@supernova-ai/snh-attachment'
+import FileSystem from '@supernova-ai/snh-fs-local'
+import { LlmAdapter, LlmRuntime, type ToolCallId } from '@supernova-ai/snh-llm'
+import type { GenerateOptions, StreamChunk, ImageBlock, LlmImageRequestPricing, LlmResolvedModelInfo } from '@supernova-ai/snh-llm'
+import { deepSeekImageTokens } from '@supernova-ai/snh-llm-supernova'
+import { estimateContent } from '@supernova-ai/snh-token-meter/estimate'
+import { createMcpToolDefinition } from '@supernova-ai/snh-mcp-client'
+import { Session, type SessionId } from '@supernova-ai/snh-session'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import { defineContentToolFixture } from '@supernova-ai/snh-tool-testkit'
+import LocalSpillStore from '@supernova-ai/snh-spill-local'
+import { PtcInspectableValue, PtcRuntime } from '@supernova-ai/snh-ptc-runtime'
+import type { PtcRunRequest, PtcRunSpec, PtcRunResult } from '@supernova-ai/snh-ptc-runtime'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
 import * as SpillPolicy from '../src/index.ts'
 
 const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAADElEQVQImWNgZGIGAAAOAAeCcsnOAAAAAElFTkSuQmCC', 'base64')
@@ -70,7 +70,7 @@ class VisionAdapter extends LlmAdapter {
 }
 
 async function setup(content: JsonValue[], maxInlineTokens: number, mode: 'native' | 'ptc' = 'native') {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-multimodal-spill-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-multimodal-spill-'))
   const ctx = new Context()
   provideWorkingDirectoryFixture(ctx, root)
   onTestFinished(async () => {

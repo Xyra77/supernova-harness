@@ -45,11 +45,11 @@ inline bool Normalize(LPCWSTR input, std::wstring& result) {
     return true;
 }
 
-// DSH_HOME accepts Node's tilde and separator spellings; relative roots remain
+// SNH_HOME accepts Node's tilde and separator spellings; relative roots remain
 // unverifiable because the application's working directory is not available here.
 inline bool NormalizeHome(LPCWSTR input, std::wstring& result) {
     std::wstring value = input ? input : L"";
-    if (value.find_first_not_of(L" \t\r\n") == std::wstring::npos) value = L"~/.dsh";
+    if (value.find_first_not_of(L" \t\r\n") == std::wstring::npos) value = L"~/.snh";
     if (value == L"~" || value.compare(0, 2, L"~/") == 0 || value.compare(0, 2, L"~\\") == 0) {
         WCHAR buffer[32768];
         DWORD length = GetEnvironmentVariableW(L"USERPROFILE", buffer, ARRAYSIZE(buffer));

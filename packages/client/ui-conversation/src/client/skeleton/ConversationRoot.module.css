@@ -78,7 +78,7 @@
      controls, ui-layout AppFrame) when it is published; the header already
      pads 20px of it. Zero everywhere else (the fallback makes the max
      negative). */
-  padding-inline-start: max(0px, calc(var(--dsh-frame-leading-clearance, 0px) - 20px));
+  padding-inline-start: max(0px, calc(var(--snh-frame-leading-clearance, 0px) - 20px));
 }
 
 /* Header actions do not shrink, so on a narrow row they overflow the cluster.
@@ -258,13 +258,13 @@
    spans the text and reaches 1px past the tab box to sit over the header
    rule. */
 .tab {
-  --dsh-tab-hit-inline: 10px;
+  --snh-tab-hit-inline: 10px;
 
   position: relative;
   box-sizing: border-box;
   min-height: 35px;
-  margin: -10px calc(-1 * var(--dsh-tab-hit-inline)) 0;
-  padding: 10px var(--dsh-tab-hit-inline) 9px;
+  margin: -10px calc(-1 * var(--snh-tab-hit-inline)) 0;
+  padding: 10px var(--snh-tab-hit-inline) 9px;
   border: none;
   background: transparent;
   font-size: 13px;
@@ -277,9 +277,9 @@
 .tab::after {
   content: '';
   position: absolute;
-  right: var(--dsh-tab-hit-inline);
+  right: var(--snh-tab-hit-inline);
   bottom: -1px;
-  left: var(--dsh-tab-hit-inline);
+  left: var(--snh-tab-hit-inline);
   height: 2px;
   border-radius: 2px;
   background: transparent;
@@ -357,19 +357,19 @@
    on its own side: the start gutter loses that half and the end gutter
    gains it. */
 .widthHandle[data-side='left'] {
-  right: calc(50% + var(--dsh-chat-end-inset) / 2 + var(--dsh-chat-content-width) / 2 + 24px);
-  width: min(10px, calc((100% - var(--dsh-chat-end-inset) - var(--dsh-chat-content-width)) / 2 - 24px - 24px));
+  right: calc(50% + var(--snh-chat-end-inset) / 2 + var(--snh-chat-content-width) / 2 + 24px);
+  width: min(10px, calc((100% - var(--snh-chat-end-inset) - var(--snh-chat-content-width)) / 2 - 24px - 24px));
 }
 
 .widthHandle[data-side='right'] {
-  left: calc(50% - var(--dsh-chat-end-inset) / 2 + var(--dsh-chat-content-width) / 2 + 24px);
-  width: min(10px, calc((100% + var(--dsh-chat-end-inset) - var(--dsh-chat-content-width)) / 2 - 24px - 24px));
+  left: calc(50% - var(--snh-chat-end-inset) / 2 + var(--snh-chat-content-width) / 2 + 24px);
+  width: min(10px, calc((100% + var(--snh-chat-end-inset) - var(--snh-chat-content-width)) / 2 - 24px - 24px));
 }
 
 /* The glow: a short 2px bar following the captured pointer's Y, centered in the strip
    (29px from the content column), not a full-height rule — a 16px solid core
    centered on the pointer
-   (published during drag as --dsh-width-handle-pointer-y), fading to
+   (published during drag as --snh-width-handle-pointer-y), fading to
    transparent over 28px each side (72px total). A solid CORE, not a single
    solid stop: a lone peak washes out over the fade. The resting scrollbar
    tint keeps this secondary affordance quiet in both themes. Before the first
@@ -383,10 +383,10 @@
   border-radius: 2px;
   background: linear-gradient(
     to bottom,
-    transparent calc(var(--dsh-width-handle-pointer-y, 50%) - 36px),
-    var(--dsw-alias-scrollbar-bg-l1) calc(var(--dsh-width-handle-pointer-y, 50%) - 8px),
-    var(--dsw-alias-scrollbar-bg-l1) calc(var(--dsh-width-handle-pointer-y, 50%) + 8px),
-    transparent calc(var(--dsh-width-handle-pointer-y, 50%) + 36px)
+    transparent calc(var(--snh-width-handle-pointer-y, 50%) - 36px),
+    var(--dsw-alias-scrollbar-bg-l1) calc(var(--snh-width-handle-pointer-y, 50%) - 8px),
+    var(--dsw-alias-scrollbar-bg-l1) calc(var(--snh-width-handle-pointer-y, 50%) + 8px),
+    transparent calc(var(--snh-width-handle-pointer-y, 50%) + 36px)
   );
   opacity: 0;
   pointer-events: none;
@@ -421,11 +421,11 @@
 .composerStack {
   /* Horizontal geometry (card width, clearance, dock inset) rides the shared
      .root variables above so takeover siblings match the stack. */
-  --dsh-composer-stack-gap: 6px;
+  --snh-composer-stack-gap: 6px;
 
   display: flex;
   flex-direction: column;
-  gap: var(--dsh-composer-stack-gap);
+  gap: var(--snh-composer-stack-gap);
 }
 
 /* Common seat for the composer chain (fallback + elected overlay siblings). */
@@ -440,7 +440,7 @@
      the seat because it is the chain's only shared ancestor — fallback and
      elected overlay are siblings — and custom properties inherit down to
      whichever entry is mounted. */
-  --dsh-composer-text-max-height: 336px;
+  --snh-composer-text-max-height: 336px;
 }
 
 /* Active phase: header is ordinary column chrome above the scrollport (not
@@ -460,13 +460,13 @@
    The resolved lengths compute to absolute values here, and the public
    aliases the body declares from them inherit text that changes only when a
    resolved width changes. */
-@property --dsh-conversation-column-width {
+@property --snh-conversation-column-width {
   syntax: '<length>';
   inherits: false;
   initial-value: 0px;
 }
 
-@property --dsh-conversation-viewport-width {
+@property --snh-conversation-viewport-width {
   syntax: '<length>';
   inherits: false;
   initial-value: 0px;
@@ -474,24 +474,24 @@
 
 /* Without an initial value an unset preference stays invalid, so the body
    falls back to the adaptive width. */
-@property --dsh-chat-user-width {
+@property --snh-chat-user-width {
   syntax: '*';
   inherits: false;
 }
 
-@property --dsh-chat-content-width-resolved {
+@property --snh-chat-content-width-resolved {
   syntax: '<length>';
   inherits: false;
   initial-value: 0px;
 }
 
-@property --dsh-chat-end-reserve-max {
+@property --snh-chat-end-reserve-max {
   syntax: '<length>';
   inherits: false;
   initial-value: 0px;
 }
 
-@property --dsh-chat-end-inset-resolved {
+@property --snh-chat-end-inset-resolved {
   syntax: '<length>';
   inherits: false;
   initial-value: 0px;
@@ -510,22 +510,22 @@
   /* Shared width axis for the transcript, dock cards, composer, and takeover
      cards. Main width controls publish the live body width and optional user
      preference; embedded occurrences override this adaptive axis below. */
-  --dsh-chat-content-width-resolved: var(
-    --dsh-chat-user-width,
-    clamp(680px, calc(var(--dsh-conversation-column-width) * 0.64), 880px)
+  --snh-chat-content-width-resolved: var(
+    --snh-chat-user-width,
+    clamp(680px, calc(var(--snh-conversation-column-width) * 0.64), 880px)
   );
-  --dsh-chat-content-width: var(--dsh-chat-content-width-resolved);
-  --dsh-composer-card-max-width: calc(var(--dsh-chat-content-width) + 32px);
-  --dsh-composer-side-clearance: 16px;
-  --dsh-composer-dock-inset: 8px;
+  --snh-chat-content-width: var(--snh-chat-content-width-resolved);
+  --snh-composer-card-max-width: calc(var(--snh-chat-content-width) + 32px);
+  --snh-composer-side-clearance: 16px;
+  --snh-composer-dock-inset: 8px;
 
   /* End reserve: room the body keeps free at its inline end for a surface
      that stays beside the transcript. A stylesheet asks for it by setting
-     --dsh-chat-end-reserve on this element. The scrollport then pads its end
-     by --dsh-chat-end-inset, twice the missing gutter, which moves the
+     --snh-chat-end-reserve on this element. The scrollport then pads its end
+     by --snh-chat-end-inset, twice the missing gutter, which moves the
      centered transcript column and the composer toward the start edge at
      their own widths until the space after the column equals the reserve.
-     --dsh-chat-end-reserve-max is the largest reserve the start gutter can
+     --snh-chat-end-reserve-max is the largest reserve the start gutter can
      give while the column keeps its width and its side inset; a larger one
      gets no inset at all, so the surface reads the maximum before it relies
      on the room. The maximum varies with every resize and is not inherited:
@@ -533,32 +533,32 @@
      length that changes only when its own value does. Every length derives from the scrollport's measured width,
      so the same values hold where a percentage would resolve against
      another box. The inset applies at once unless the stylesheet also sets
-     --dsh-chat-end-reserve-transition, a duration and an easing, for as long
+     --snh-chat-end-reserve-transition, a duration and an easing, for as long
      as it wants a change of the inset animated. */
-  --dsh-chat-end-reserve-max: calc(
-    var(--dsh-conversation-viewport-width) - var(--dsh-chat-content-width-resolved) - var(--dsh-composer-side-clearance) - 16px
+  --snh-chat-end-reserve-max: calc(
+    var(--snh-conversation-viewport-width) - var(--snh-chat-content-width-resolved) - var(--snh-composer-side-clearance) - 16px
   );
   /* The first term is 0 for a reserve above the maximum and at least 1000px, above any inset, otherwise: a
      step at the maximum, within a ten-thousandth of a pixel. */
-  --dsh-chat-end-inset-resolved: min(
-    max(0px, calc((var(--dsh-chat-end-reserve-max) - var(--dsh-chat-end-reserve, 0px)) * 10000000 + 1000px)),
+  --snh-chat-end-inset-resolved: min(
+    max(0px, calc((var(--snh-chat-end-reserve-max) - var(--snh-chat-end-reserve, 0px)) * 10000000 + 1000px)),
     calc(2 * max(
       0px,
-      var(--dsh-chat-end-reserve, 0px) - (var(--dsh-conversation-viewport-width) - var(--dsh-chat-content-width-resolved)) / 2
+      var(--snh-chat-end-reserve, 0px) - (var(--snh-conversation-viewport-width) - var(--snh-chat-content-width-resolved)) / 2
     ))
   );
-  --dsh-chat-end-inset: var(--dsh-chat-end-inset-resolved);
+  --snh-chat-end-inset: var(--snh-chat-end-inset-resolved);
 }
 
 /* An embedded occurrence makes no room: its column already follows its frame's width. */
 .embeddedBody {
   overflow: hidden;
-  --dsh-chat-content-width: min(calc(100% - 32px), 880px);
-  --dsh-composer-card-max-width: min(calc(100% - 16px), 912px);
-  --dsh-composer-side-clearance: 8px;
-  --dsh-composer-dock-inset: 8px;
-  --dsh-chat-end-reserve-max: 0px;
-  --dsh-chat-end-inset: 0px;
+  --snh-chat-content-width: min(calc(100% - 32px), 880px);
+  --snh-composer-card-max-width: min(calc(100% - 16px), 912px);
+  --snh-composer-side-clearance: 8px;
+  --snh-composer-dock-inset: 8px;
+  --snh-chat-end-reserve-max: 0px;
+  --snh-chat-end-inset: 0px;
 }
 
 .scrollBody {
@@ -571,8 +571,8 @@
      the column's edge instead of flush against it. */
   margin-right: 2px;
   /* The end reserve: 0 unless a surface beside the transcript asks for room. */
-  padding-inline-end: var(--dsh-chat-end-inset);
-  transition: padding-inline-end var(--dsh-chat-end-reserve-transition, 0s);
+  padding-inline-end: var(--snh-chat-end-inset);
+  transition: padding-inline-end var(--snh-chat-end-reserve-transition, 0s);
   overflow-y: auto;
   /* Reserved unconditionally: the composer seat rides this box's content box in
      Chat and its padding box under a view's composer overlay, so an `auto`
@@ -660,12 +660,12 @@
   /* Chat's seat rides this box's content box, which its own scrolling shortens
      by the bar's width; the overlay seat is against the padding box, so it
      must give back the same width to keep the input card in place across
-     tabs. Reads ui-theme's --dsh-scrollbar-width, which mirrors the WebKit
+     tabs. Reads ui-theme's --snh-scrollbar-width, which mirrors the WebKit
      bar's layout width. Chat reserves the engine-resolved width, so on an
      engine where the resolved width differs from this fixed 8px the card
      drifts by half the difference — accepted residual risk, recorded in
      ([decision](../../../../../../.agents/notes/archived/bug-fix/2026-08-12-composer-overlay-seat-width-compensation.md)). */
-  right: var(--dsh-scrollbar-width);
+  right: var(--snh-scrollbar-width);
   bottom: 0;
   left: 0;
 }
@@ -683,7 +683,7 @@
   padding-bottom: 32px;
   /* Card cap + both clearances: the hero input card lands at exactly the same
      width as the docked composer at every viewport. */
-  width: min(calc(var(--dsh-composer-card-max-width) + 2 * var(--dsh-composer-side-clearance)), 100%);
+  width: min(calc(var(--snh-composer-card-max-width) + 2 * var(--snh-composer-side-clearance)), 100%);
   z-index: 1;
 }
 

@@ -1,11 +1,11 @@
 /** Validated current-layout snapshots; undo history belongs to the live window. */
 import { z } from 'zod'
-import { applyOp, createIdMinter, EMPTY_HISTORY, planSettle, replay, type LayoutState } from '@deepseek-ai/dsh-client-ui-dockkit'
+import { applyOp, createIdMinter, EMPTY_HISTORY, planSettle, replay, type LayoutState } from '@supernova-ai/snh-client-ui-dockkit'
 import { isContentTab } from './contract/seed.ts'
 import type { SurfaceState } from './stores.ts'
 
 /** Persistence namespace shared by scoped stores and startup discovery. */
-export const sidebarPersistence = 'dsh.sidebar-right.v1'
+export const sidebarPersistence = 'snh.sidebar-right.v1'
 
 const paneId = z.string().regex(/^(?:pane|float)[1-9][0-9]*$/u)
 const splitId = z.string().regex(/^split[1-9][0-9]*$/u)

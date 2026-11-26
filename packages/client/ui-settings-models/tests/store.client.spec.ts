@@ -1,8 +1,8 @@
 /** Page-store join: directory × namespaces × credentials, with last-good rows on failure. */
 import { describe, expect, it } from 'vitest'
-import type { RpcResponse } from '@deepseek-ai/dsh-api-remotes/client'
-import { RemoteError } from '@deepseek-ai/dsh-client-test-runtime'
-import { SettingsDescribeMirror } from '@deepseek-ai/dsh-client-ui-settings/src/client/settings-mirror.ts'
+import type { RpcResponse } from '@supernova-ai/snh-api-remotes/client'
+import { RemoteError } from '@supernova-ai/snh-client-test-runtime'
+import { SettingsDescribeMirror } from '@supernova-ai/snh-client-ui-settings/src/client/settings-mirror.ts'
 import { settingsSchema } from './settings-schema.client.ts'
 import { deriveKeyRef, joinProviderDirectory, ModelsSettingsStore, providerUsable } from '../src/client/store.ts'
 
@@ -67,7 +67,7 @@ function remoteFail<T>(message: string): RemoteAnswer<T> {
 }
 
 const DIRECTORY = [
-  { provider: 'deepseek-official', displayName: 'DeepSeek', settingsNs: 'llm-deepseek', settingsPath: [], active: true },
+  { provider: 'deepseek-official', displayName: 'SuperNova', settingsNs: 'llm-supernova', settingsPath: [], active: true },
   { provider: 'openai', displayName: 'openai', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'openai'], active: true },
   { provider: 'anthropic', displayName: 'anthropic', settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'anthropic'], active: false },
   { provider: 'ghost', displayName: 'Ghost', settingsNs: '', settingsPath: [], active: true },
@@ -75,7 +75,7 @@ const DIRECTORY = [
 
 const NAMESPACES = [
   {
-    ns: 'llm-deepseek',
+    ns: 'llm-supernova',
     schema: {},
     value: { apiKeyEnv: 'DEEPSEEK_API_KEY', baseURL: 'https://base' },
     base: { baseURL: 'https://base' },
@@ -541,7 +541,7 @@ describe('edge joins', () => {
 
 it.each([false, true])('uses account availability without asking for an API key: %s', async (accountAvailable) => {
   const { ctx, mirror, seenRefs } = api({ accountAvailable, providers: async () => ok({ providers: [{
-    provider: 'deepseek-account', displayName: 'DeepSeek Account', settingsNs: 'llm-deepseek-account', settingsPath: [], active: true,
+    provider: 'deepseek-account', displayName: 'SuperNova Account', settingsNs: 'llm-deepseek-account', settingsPath: [], active: true,
   }] }) })
   const store = new ModelsSettingsStore(ctx, settingsSchema, mirror)
   await store.load()
@@ -557,7 +557,7 @@ it.each([false, true])('uses account availability without asking for an API key:
 
 it('removes the account row after sign-out and restores it after sign-in', async () => {
   const overrides = { accountAvailable: true, providers: async () => ok({ providers: [{
-    provider: 'deepseek-account', displayName: 'DeepSeek Account', settingsNs: 'llm-deepseek-account', settingsPath: [], active: true,
+    provider: 'deepseek-account', displayName: 'SuperNova Account', settingsNs: 'llm-deepseek-account', settingsPath: [], active: true,
   }, ...DIRECTORY] }) }
   const { ctx, mirror } = api(overrides)
   const store = new ModelsSettingsStore(ctx, settingsSchema, mirror)

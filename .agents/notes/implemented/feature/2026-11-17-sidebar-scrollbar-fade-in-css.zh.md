@@ -10,9 +10,9 @@ Status: implemented
 
 ## 决策
 
-ui-theme 通过 `@property` 把 `--dsh-scrollbar-thumb` 与 `--dsh-scrollbar-thumb-hover` 注册为可继承的 `<color>` 属性，初始值为 `transparent`，因此这组变量的重新绑定可以过渡。`SidebarRoot` 在指针一离开栏的矩形范围时就加上 `quietBars`，不再持有定时器。`.root.quietBars` 规则把两个属性重新绑定为 `transparent`，并带有 `transition: … 200ms linear 500ms`。基础 `.root` 规则不声明过渡，因此显示是立即的；指针在延迟期间返回时，class 在颜色变化前就被移除。在 `prefers-reduced-motion: reduce` 下，隐藏规则设置 `transition-duration: 0s`：时长为零而延迟非零时过渡仍会启动，因此滑块保留 500ms 后在一帧内切换。
+ui-theme 通过 `@property` 把 `--snh-scrollbar-thumb` 与 `--snh-scrollbar-thumb-hover` 注册为可继承的 `<color>` 属性，初始值为 `transparent`，因此这组变量的重新绑定可以过渡。`SidebarRoot` 在指针一离开栏的矩形范围时就加上 `quietBars`，不再持有定时器。`.root.quietBars` 规则把两个属性重新绑定为 `transparent`，并带有 `transition: … 200ms linear 500ms`。基础 `.root` 规则不声明过渡，因此显示是立即的；指针在延迟期间返回时，class 在颜色变化前就被移除。在 `prefers-reduced-motion: reduce` 下，隐藏规则设置 `transition-duration: 0s`：时长为零而延迟非零时过渡仍会启动，因此滑块保留 500ms 后在一帧内切换。
 
-过渡发生在栏元素的自定义属性上，而不是滚动条伪元素上。WebKit 滑块的 `background: var(--dsh-scrollbar-thumb)` 与 Firefox 按元素声明的 `scrollbar-color` 在每次样式更新时读取该属性当前的动画值。在 Chromium 中，`apps/web/tests/sidebar-scrollbar.e2e.ts` 逐个动画帧采样解析后的颜色，能观察到先保留、再淡出；删除减弱动态效果规则后，减弱动态效果用例会观察到中间色并失败。
+过渡发生在栏元素的自定义属性上，而不是滚动条伪元素上。WebKit 滑块的 `background: var(--snh-scrollbar-thumb)` 与 Firefox 按元素声明的 `scrollbar-color` 在每次样式更新时读取该属性当前的动画值。在 Chromium 中，`apps/web/tests/sidebar-scrollbar.e2e.ts` 逐个动画帧采样解析后的颜色，能观察到先保留、再淡出；删除减弱动态效果规则后，减弱动态效果用例会观察到中间色并失败。
 
 淡出为 200ms 线性，与 SimpleBar 的时序相同。这种浅色滑块若用 100ms 缓动淡出，大部分变化在几帧内完成，看起来像直接消失。
 

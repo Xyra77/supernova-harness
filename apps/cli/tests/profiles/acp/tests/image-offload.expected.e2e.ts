@@ -7,7 +7,7 @@ import { expect, it } from 'vitest'
 import {
   runScenario,
   type InputScript,
-} from '@deepseek-ai/dsh-session-snapshot'
+} from '@supernova-ai/snh-session-snapshot'
 
 const AGENT = {
   binScript: fileURLToPath(new URL('../../../../src/bin.ts', import.meta.url)),
@@ -55,7 +55,7 @@ it('pins Messages Files offload and inline fallback in assembled requests', asyn
             type: 'file',
             size_bytes: file.size,
             created_at: new Date(createdAt * 1_000).toISOString(),
-            filename: 'dsh-snapshot.png',
+            filename: 'snh-snapshot.png',
             mime_type: file.type,
           }))
           return
@@ -113,8 +113,8 @@ it('pins Messages Files offload and inline fallback in assembled requests', asyn
       fixtureFile: join(SNAPSHOTS_DIR, 'image-offload-request', 'session.jsonl'),
       workspaceDir: READ_IMAGE_WORKSPACE,
       env: {
-        DSH_SNAPSHOT_API_KEY: 'snapshot-key',
-        DSH_SNAPSHOT_BASE_URL: `http://127.0.0.1:${address.port}`,
+        SNH_SNAPSHOT_API_KEY: 'snapshot-key',
+        SNH_SNAPSHOT_BASE_URL: `http://127.0.0.1:${address.port}`,
       },
     })
     expect(result.stderr).toBe('')
@@ -126,7 +126,7 @@ it('pins Messages Files offload and inline fallback in assembled requests', asyn
     const accessText = (cwd: string): string => {
       const attachmentPath = join(
         cwd,
-        '.dsh',
+        '.snh',
         'attachments',
         'v1',
         'objects',
@@ -144,7 +144,7 @@ it('pins Messages Files offload and inline fallback in assembled requests', asyn
     // The Session header records the canonical spelling of the scenario's directory, which is removed by now.
     const runtimeContext = (cwd: string): string => '<system-reminder>\nThe following information describes your current session:\n\n'
       + `Current working directory: ${JSON.stringify(join(realpathSync.native(dirname(cwd)), basename(cwd)))}.\n\n`
-      + 'Current DSH file policy: danger-full-access. The DSH file sandbox does not restrict file modifications by available operations.\n\n'
+      + 'Current SNH file policy: danger-full-access. The SNH file sandbox does not restrict file modifications by available operations.\n\n'
       + 'Approval prompts are disabled in this session: actions that require approval are rejected automatically — do not request sandbox escalation (do not set `sandbox_permissions`).\n\n'
       + 'You are the root agent. Your name is "lead".\n\n'
       + 'To message other agents, use send_message({ agent: "<agent-name>", message: "..." }).\n'
@@ -189,8 +189,8 @@ it('pins Messages Files offload and inline fallback in assembled requests', asyn
       fixtureFile: join(SNAPSHOTS_DIR, 'image-offload-request', 'session.jsonl'),
       workspaceDir: READ_IMAGE_WORKSPACE,
       env: {
-        DSH_SNAPSHOT_API_KEY: 'snapshot-fallback-key',
-        DSH_SNAPSHOT_BASE_URL: `http://127.0.0.1:${address.port}`,
+        SNH_SNAPSHOT_API_KEY: 'snapshot-fallback-key',
+        SNH_SNAPSHOT_BASE_URL: `http://127.0.0.1:${address.port}`,
       },
     })
     expect(fallback.stderr).toBe('')

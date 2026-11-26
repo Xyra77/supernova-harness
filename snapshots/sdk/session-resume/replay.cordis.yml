@@ -3,7 +3,7 @@
   config:
     providers:
       - id: deepseek-official
-        name: DeepSeek
+        name: SuperNova
         models:
           - id: deepseek-v4-flash
             contextWindow: 1000000

@@ -6,23 +6,23 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
-import { Context } from '@deepseek-ai/cordis'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import ComputerUse from '@deepseek-ai/dsh-computer-use'
-import { createUserMessage, LlmAdapter, type GenerateOptions, type StreamChunk, type ToolCallId } from '@deepseek-ai/dsh-llm'
-import NodeRuntime from '@deepseek-ai/dsh-ptc-runtime-node'
-import Sandbox from '@deepseek-ai/dsh-sandbox-local'
-import SandboxPolicy from '@deepseek-ai/dsh-sandbox-policy'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import Subprocess from '@deepseek-ai/dsh-subprocess-local'
-import UserQuestions from '@deepseek-ai/dsh-user-questions'
+import { Context } from '@supernova-ai/cordis'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import { brandString } from '@supernova-ai/snh-brand'
+import ComputerUse from '@supernova-ai/snh-computer-use'
+import { createUserMessage, LlmAdapter, type GenerateOptions, type StreamChunk, type ToolCallId } from '@supernova-ai/snh-llm'
+import NodeRuntime from '@supernova-ai/snh-ptc-runtime-node'
+import Sandbox from '@supernova-ai/snh-sandbox-local'
+import SandboxPolicy from '@supernova-ai/snh-sandbox-policy'
+import type { SessionId } from '@supernova-ai/snh-session'
+import Subprocess from '@supernova-ai/snh-subprocess-local'
+import UserQuestions from '@supernova-ai/snh-user-questions'
 import { expect, it } from 'vitest'
 import { z } from 'zod'
 import * as Provider from '../src/index.ts'
 
 const run = promisify(execFile)
-const helperPath = process.env.DSH_CUA_TEST_HELPER
+const helperPath = process.env.SNH_CUA_TEST_HELPER
 const State = z.object({
   pid: z.number(), windowId: z.string().nullable(), active: z.boolean(), keyWindow: z.boolean(),
   pad: z.tuple([z.number(), z.number(), z.number(), z.number()]),
@@ -32,8 +32,8 @@ const State = z.object({
 // These cases share the real desktop and deliberately run in order. Run this opt-in file alone.
 it.skipIf(process.platform !== 'darwin' || helperPath === undefined).each(['completed', 'error', 'thinking-stop', 'tool-stop'] as const)(
   'receives mixed releases after %s through cua_run_code', async (ending) => {
-    if (helperPath === undefined) throw new Error('Set DSH_CUA_TEST_HELPER to a signed helper application executable')
-    const directory = await mkdtemp(join(tmpdir(), 'dsh-turn-input-desktop-'))
+    if (helperPath === undefined) throw new Error('Set SNH_CUA_TEST_HELPER to a signed helper application executable')
+    const directory = await mkdtemp(join(tmpdir(), 'snh-turn-input-desktop-'))
     const appDirectory = join(directory, 'Input Receiver.app')
     const executable = join(appDirectory, 'Contents/MacOS/InputReceiver')
     const stateFile = join(directory, 'state.json')
@@ -46,12 +46,12 @@ it.skipIf(process.platform !== 'darwin' || helperPath === undefined).each(['comp
       await writeFile(join(appDirectory, 'Contents/Info.plist'), `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-<key>CFBundleIdentifier</key><string>test.dsh.turn-input</string>
+<key>CFBundleIdentifier</key><string>test.snh.turn-input</string>
 <key>CFBundleName</key><string>Input Receiver</string>
 <key>CFBundleExecutable</key><string>InputReceiver</string>
 <key>CFBundlePackageType</key><string>APPL</string>
-<key>DSHFixtureBackground</key><true/>
-<key>DSHFixtureKeyboard</key><true/>
+<key>SNHFixtureBackground</key><true/>
+<key>SNHFixtureKeyboard</key><true/>
 </dict></plist>`)
       await run('swiftc', [fileURLToPath(new URL('../native/tests/CapabilitiesFixture.swift', import.meta.url)), '-o', executable])
       cursor = z.array(z.number()).parse(JSON.parse((await run(executable, ['--cursor'])).stdout))

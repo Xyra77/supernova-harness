@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-script-realm",
+  "name": "@supernova-ai/snh-client-script-realm",
   "description": "Direct-reference script environments and Cordis-owned provider registration",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -28,11 +28,11 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-brand": "workspace:*"
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-brand": "workspace:*"
   },
   "files": [
     "locale/*.json",
@@ -43,7 +43,7 @@
     "lib/**/*.js.map",
     "src"
   ],
-  "dsh": {
+  "snh": {
     "client": {
       "platform": "web"
     }

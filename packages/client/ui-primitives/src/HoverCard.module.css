@@ -31,29 +31,29 @@
   inset: 0 8px 8px;
   position-try-fallbacks:
     flip-inline,
-    --dsh-hover-card-low,
-    --dsh-hover-card-low flip-inline,
-    --dsh-hover-card-below,
-    --dsh-hover-card-above,
-    --dsh-hover-card-held;
+    --snh-hover-card-low,
+    --snh-hover-card-low flip-inline,
+    --snh-hover-card-below,
+    --snh-hover-card-above,
+    --snh-hover-card-held;
 }
 
-@position-try --dsh-hover-card-low {
+@position-try --snh-hover-card-low {
   position-area: inline-end span-all;
   align-self: end;
 }
 
-@position-try --dsh-hover-card-below {
+@position-try --snh-hover-card-below {
   position-area: block-end span-inline-end;
   inset: 8px 8px 8px 0;
 }
 
-@position-try --dsh-hover-card-above {
+@position-try --snh-hover-card-above {
   position-area: block-start span-inline-end;
   inset: 8px 8px 8px 0;
 }
 
-@position-try --dsh-hover-card-held {
+@position-try --snh-hover-card-held {
   position-area: span-all;
   justify-self: end;
   align-self: end;
@@ -101,7 +101,7 @@
   color: var(--dsw-alias-label-primary);
   box-shadow: var(--dsw-elevation-panel);
   opacity: 1;
-  transition: opacity var(--dsh-hover-preview-fade) linear;
+  transition: opacity var(--snh-hover-preview-fade) linear;
 }
 
 @starting-style {
@@ -119,8 +119,8 @@
 
 .inline { display: inline; }
 .media {
-  --dsh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
-  --dsh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
+  --snh-scrollbar-thumb: var(--dsw-alias-scrollbar-bg-l2);
+  --snh-scrollbar-thumb-hover: var(--dsw-alias-scrollbar-hover-l2);
   overflow: auto;
   padding: 8px;
   border: 0;

@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-plugin-market-index",
+  "name": "@supernova-ai/snh-plugin-market-index",
   "description": "Plugin market index format 1: JSON validation, relative icon resolution, and pinned install arguments",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -35,14 +35,14 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-package-manifest": "workspace:*",
+    "@supernova-ai/snh-package-manifest": "workspace:*",
     "semver": "^7.8.5"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
+    "@supernova-ai/cordis": "workspace:~",
     "@types/semver": "^7.8.0"
   }
 }

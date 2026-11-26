@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { TokenUsage } from '@deepseek-ai/dsh-llm'
-import SessionStore from '@deepseek-ai/dsh-session'
-import type { Session, SessionSeq } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
-import type { ContextPressureProjection, TokenUsageProjection } from '@deepseek-ai/dsh-token-meter/client'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { RetryId } from '@deepseek-ai/dsh-llm-retry/types'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
-import type { CompactionId } from '@deepseek-ai/dsh-compaction/types'
+import { Context } from '@supernova-ai/cordis'
+import { createMessage, createUserMessage } from '@supernova-ai/snh-llm'
+import type { TokenUsage } from '@supernova-ai/snh-llm'
+import SessionStore from '@supernova-ai/snh-session'
+import type { Session, SessionSeq } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import TokenMeter from '@supernova-ai/snh-token-meter'
+import type { ContextPressureProjection, TokenUsageProjection } from '@supernova-ai/snh-token-meter/client'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { RetryId } from '@supernova-ai/snh-llm-retry/types'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
+import type { CompactionId } from '@supernova-ai/snh-compaction/types'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'test': { kind: 'test' } & ContextFormed
   }

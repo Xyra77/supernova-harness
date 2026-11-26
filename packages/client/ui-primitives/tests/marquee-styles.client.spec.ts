@@ -37,21 +37,21 @@ describe('Marquee.module.css', () => {
     const travelling = declarations(base, '.text[data-marquee]')
     expect(travelling.get('text-overflow')).toBe('clip')
     expect(travelling.get('mask-image')).toBe('linear-gradient(to right, transparent, #000 12px, #000 calc(100% - 12px), transparent)')
-    expect(travelling.get('animation')).toBe('dsh-marquee-arrive 0s var(--dsh-marquee-duration) forwards')
-    expect(base.replace(/\s+/g, ' ')).toContain(`@keyframes dsh-marquee-arrive { to { mask-image: ${START_FADE}; } }`)
+    expect(travelling.get('animation')).toBe('snh-marquee-arrive 0s var(--snh-marquee-duration) forwards')
+    expect(base.replace(/\s+/g, ' ')).toContain(`@keyframes snh-marquee-arrive { to { mask-image: ${START_FADE}; } }`)
   })
 
   it('carries the span over the measured distance in the measured time at a constant speed and holds the far edge', () => {
     const travel = declarations(base, '.text[data-marquee] > .travel')
     expect(travel.get('display')).toBe('inline-block')
-    expect(travel.get('animation')).toBe('dsh-marquee-travel var(--dsh-marquee-duration) linear forwards')
-    expect(base.replace(/\s+/g, ' ')).toContain('@keyframes dsh-marquee-travel { to { transform: translateX(calc(-1 * var(--dsh-marquee-range))); } }')
+    expect(travel.get('animation')).toBe('snh-marquee-travel var(--snh-marquee-duration) linear forwards')
+    expect(base.replace(/\s+/g, ' ')).toContain('@keyframes snh-marquee-travel { to { transform: translateX(calc(-1 * var(--snh-marquee-range))); } }')
   })
 
   it('shows the far edge at once under reduced motion, with the start fade alone', () => {
     const text = declarations(reduced, '.text[data-marquee]')
     expect([text.get('mask-image'), text.get('animation')]).toEqual([START_FADE, 'none'])
     const travel = declarations(reduced, '.text[data-marquee] > .travel')
-    expect([travel.get('animation'), travel.get('transform')]).toEqual(['none', 'translateX(calc(-1 * var(--dsh-marquee-range)))'])
+    expect([travel.get('animation'), travel.get('transform')]).toEqual(['none', 'translateX(calc(-1 * var(--snh-marquee-range)))'])
   })
 })

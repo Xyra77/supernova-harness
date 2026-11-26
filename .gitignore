@@ -33,14 +33,14 @@ dist-exe/
 /dist/
 apps/desktop/.desktop-build/
 apps/desktop/.desktop-dev/
-python/sdk-runtime/src/deepseek_harness_runtime/runtime/
+python/sdk-runtime/src/supernova_harness_runtime/runtime/
 __pycache__/
 python/**/.pytest_cache/
 apps/web/dist/
 apps/cli/docs/
 .artifacts/
-.dsh-build/
-.dsh-report/
+.snh-build/
+.snh-report/
 .ui-review/
 .playwright-mcp/
 .orig

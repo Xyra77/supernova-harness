@@ -1,6 +1,6 @@
 /** GitHub event values projected after signature verification. */
 
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
 
 /** Signed GitHub JSON object. Event-specific field validation belongs to each rule. */
 export type GitHubJsonObject = { readonly [key: string]: JsonValue }
@@ -13,7 +13,7 @@ export interface GitHubWebhookEvent {
   readonly payload: GitHubJsonObject
 }
 
-declare module '@deepseek-ai/dsh-webhook' {
+declare module '@supernova-ai/snh-webhook' {
   interface WebhookEventMap {
     github: GitHubWebhookEvent
   }

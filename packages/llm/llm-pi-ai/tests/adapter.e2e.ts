@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import LlmRuntime, { createToolResultMessage, createUserMessage, type ToolCallId, type ReasoningEffortId } from '@deepseek-ai/dsh-llm'
-import type { Message, ToolSchema } from '@deepseek-ai/dsh-llm'
-import * as LlmPiAi from '@deepseek-ai/dsh-llm-pi-ai'
-import type { PiAiProviderProfile } from '@deepseek-ai/dsh-llm-pi-ai'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek-api-key'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
+import { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import LlmRuntime, { createToolResultMessage, createUserMessage, type ToolCallId, type ReasoningEffortId } from '@supernova-ai/snh-llm'
+import type { Message, ToolSchema } from '@supernova-ai/snh-llm'
+import * as LlmPiAi from '@supernova-ai/snh-llm-pi-ai'
+import type { PiAiProviderProfile } from '@supernova-ai/snh-llm-pi-ai'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import { assemble, type AssembledResult } from './assemble.ts'
 
 /**
@@ -24,7 +24,7 @@ async function harness(_model: string, config: Partial<PiAiProviderProfile> = {}
   await ctx.plugin(LlmRuntime)
   await ctx.plugin(LlmPiAi, {
     providers: {
-      deepseek: {
+      supernova: {
         ...process.env.DEEPSEEK_API_KEY === undefined ? {} : { apiKey: process.env.DEEPSEEK_API_KEY },
         ...config,
       },
@@ -144,24 +144,24 @@ describe.skipIf(!process.env.DEEPSEEK_API_KEY)('llm-pi-ai e2e (real API)', () =>
     expect(textOf(second).toLowerCase()).toMatch(/sunny|22/)
   })
 
-  it('produces the same block structure as llm-deepseek for the same prompt', async () => {
+  it('produces the same block structure as llm-supernova for the same prompt', async () => {
     // Loose structural equivalence between the two independent adapters:
     // same block KINDS in the same order for a deterministic prompt — the
     // cross-implementation check that the StreamChunk design holds.
-    const deepseekCtx = new Context()
-    contexts.push(deepseekCtx)
-    await deepseekCtx.plugin(LlmRuntime)
-    await deepseekCtx.plugin(DeepSeekAuth)
-    await deepseekCtx.plugin(LlmDeepSeek, { thinking: 'disabled' })
+    const supernovaCtx = new Context()
+    contexts.push(supernovaCtx)
+    await supernovaCtx.plugin(LlmRuntime)
+    await supernovaCtx.plugin(SuperNovaAuth)
+    await supernovaCtx.plugin(LlmSuperNova, { thinking: 'disabled' })
 
     const piCtx = await harness(FLASH)
 
     const prompt = ask('Reply with exactly the word: pong')
-    const [fromDeepSeek, fromPiAi] = await Promise.all([
-      assemble(deepseekCtx, { provider: 'deepseek-official', model: FLASH, messages: prompt, maxTokens: 50 }),
+    const [fromSuperNova, fromPiAi] = await Promise.all([
+      assemble(supernovaCtx, { provider: 'deepseek-official', model: FLASH, messages: prompt, maxTokens: 50 }),
       assemble(piCtx, { model: FLASH, messages: prompt, maxTokens: 50 }),
     ])
-    expect(blockKinds(fromPiAi)).toEqual(blockKinds(fromDeepSeek))
-    expect(fromPiAi.finish.kind).toBe(fromDeepSeek.finish.kind)
+    expect(blockKinds(fromPiAi)).toEqual(blockKinds(fromSuperNova))
+    expect(fromPiAi.finish.kind).toBe(fromSuperNova.finish.kind)
   })
 })

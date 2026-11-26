@@ -33,9 +33,9 @@ describe('pinned collapsible headers', () => {
   it('leaves the compaction row unpinned: its checkpoint opens in the Sidebar, not below it', () => {
     const css = read('MessageItem.module.css')
     expect(declarationsFrom(css, '.compactionButton')).toEqual(expect.arrayContaining([
-      'height: calc(24px + var(--dsh-content-font-delta, 0px))',
+      'height: calc(24px + var(--snh-content-font-delta, 0px))',
     ]))
     expect(declarationsFrom(css, '.compactionButton')).not.toContain('position: sticky')
-    expect(css).not.toMatch(/compactionBody|--dsh-compaction-header-height/)
+    expect(css).not.toMatch(/compactionBody|--snh-compaction-header-height/)
   })
 })

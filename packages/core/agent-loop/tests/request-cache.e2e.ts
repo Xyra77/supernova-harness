@@ -1,23 +1,23 @@
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import { createUserMessage } from '@supernova-ai/snh-llm'
 import { afterEach, describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import SessionStore, { type SessionId } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import AgentRegistry, { type Agent } from '@deepseek-ai/dsh-agent'
+import { Context } from '@supernova-ai/cordis'
+import LlmRuntime from '@supernova-ai/snh-llm'
+import SessionStore, { type SessionId } from '@supernova-ai/snh-session'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import { defineContentToolFixture } from '@supernova-ai/snh-tool-testkit'
+import AgentRegistry, { type Agent } from '@supernova-ai/snh-agent'
 
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek-api-key'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
+import { brandString } from '@supernova-ai/snh-brand'
 
 /**
  * With-key proof that log-derived requests translate into real provider cache hits: a
- * multi-step tool turn (plus a follow-up turn) against the live DeepSeek API must report
+ * multi-step tool turn (plus a follow-up turn) against the live SuperNova API must report
  * `cacheReadTokens > 0` on every request after the first — the adapter maps the provider's
  * `prompt_cache_hit_tokens`, and the per-step usage recorded on `assistant/message` events is
  * the production observable for cache behavior (the reconstructability Agent Note's measurement
@@ -52,8 +52,8 @@ async function loopHarness(): Promise<Context> {
   await created.plugin(NativeToolExecutor)
   await created.plugin(AgentRegistry)
   await created.plugin(AgentLoop, { agents: [] })
-  await created.plugin(DeepSeekAuth)
-  await created.plugin(LlmDeepSeek)
+  await created.plugin(SuperNovaAuth)
+  await created.plugin(LlmSuperNova)
   created.tools.register(defineContentToolFixture({
     name: 'lookup',
     description: 'Look up the stored value for a key.',

@@ -1,7 +1,7 @@
 /**
- * Node half of the client module system (`dsh.client` dual-face package): scans
- * the host Loader's entries for packages declaring `dsh.client`, composes the
- * `window.__DSH_BOOT__` entry graph (wire single source: {@link WebBootEntry}
+ * Node half of the client module system (`snh.client` dual-face package): scans
+ * the host Loader's entries for packages declaring `snh.client`, composes the
+ * `window.__SNH_BOOT__` entry graph (wire single source: {@link WebBootEntry}
  * in `./client/manifest.ts`) in module-graph order, serves one-or-more-plugin
  * combo scripts plus their source maps, package-local chunks, and the
  * content-revisioned `./assets/*` exports of active client packages,
@@ -24,7 +24,7 @@
  * module; distinct active Loader sources for that package are a composition
  * error. Bundle rebuilds outside
  * an entry restart reach the graph through {@link ClientModuleRegistry.rebuilt}.
- * @module @deepseek-ai/dsh-client-modules
+ * @module @supernova-ai/snh-client-modules
  */
 
 import { createHash } from 'node:crypto'
@@ -35,13 +35,13 @@ import { dirname, isAbsolute, join } from 'node:path'
 import { Readable } from 'node:stream'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { isDeepStrictEqual } from 'node:util'
-import { Service } from '@deepseek-ai/cordis'
-import type { Context } from '@deepseek-ai/cordis'
-import type { Entry } from '@deepseek-ai/cordis-plugin-loader'
-import type { IndexInjection } from '@deepseek-ai/dsh-host-webserver'
-import type { Principal } from '@deepseek-ai/dsh-typert-protocol'
+import { Service } from '@supernova-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
+import type { Entry } from '@supernova-ai/cordis-plugin-loader'
+import type { IndexInjection } from '@supernova-ai/snh-host-webserver'
+import type { Principal } from '@supernova-ai/snh-typert-protocol'
 import { PACKAGE_ASSET_SEGMENT, packageAssetMediaType } from './assets.ts'
-import { exactPackageSpecifier, parseDshClient, stripClientSuffix } from './client/manifest.ts'
+import { exactPackageSpecifier, parseSnhClient, stripClientSuffix } from './client/manifest.ts'
 import { SyncedConfigPublisher } from './config-sync.ts'
 import type { WebBootBatch, WebBootBatchPhase, WebBootEntry, WebBootGraph, WebBootRelease } from './client/manifest.ts'
 
@@ -50,7 +50,7 @@ export type {
   BootManifest, BootModuleRow, BootPluginRow, WebBootBatch, WebBootBatchPhase, WebBootEntry, WebBootGraph, WebBootRelease,
 } from './client/manifest.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** The web plugin table (provided by the client-modules node half). */
     clientModules: ClientModuleRegistry
@@ -400,7 +400,7 @@ function newlineCount(value: string): number {
 function comboSectionMap(resource: ComboResource, original: Record<string, unknown>): Record<string, unknown> {
   const sourcePaths = original.sources as string[]
   const sourceRoot = typeof original.sourceRoot === 'string' ? original.sourceRoot : ''
-  const base = new URL(`/plugins/${resource.id}/client.js.map`, 'http://dsh.invalid')
+  const base = new URL(`/plugins/${resource.id}/client.js.map`, 'http://snh.invalid')
   const relocated = sourcePaths.map((source) => {
     const separator = sourceRoot !== '' && !sourceRoot.endsWith('/') && !source.startsWith('/') ? '/' : ''
     const resolved = new URL(`${sourceRoot}${separator}${source}`, base)
@@ -571,7 +571,7 @@ export function orderByModuleGraph(entries: readonly WebBootEntry[]): WebBootEnt
       if (dependency === entry) {
         throw new Error(
           `client-modules: "${entry.id}" requests module "${name}" that it answers itself `
-          + '— a row must not declare its own package in dsh.client.external',
+          + '— a row must not declare its own package in snh.client.external',
         )
       }
       if (dependency !== undefined) visit(dependency)
@@ -585,7 +585,7 @@ export function orderByModuleGraph(entries: readonly WebBootEntry[]): WebBootEnt
 }
 
 /** Bootstrap package whose ordinary client bundle supplies the module-system implementation. */
-const CLIENT_MODULES_ID = '@deepseek-ai/dsh-client-modules'
+const CLIENT_MODULES_ID = '@supernova-ai/snh-client-modules'
 
 /** Dynamic bundles grouped into the parser bootstrap batch before the Vite shell. */
 const PARSER_PRELOAD_IDS = [CLIENT_MODULES_ID] as const
@@ -634,12 +634,12 @@ window.__ModuleLoader__={
   for (const batch of bootstrap) {
     rows.push({ kind: 'script-src', placement: 'head', src: batch.url })
   }
-  rows.push({ kind: 'global', name: '__DSH_BOOT__', value: graph })
+  rows.push({ kind: 'global', name: '__SNH_BOOT__', value: graph })
   return rows
 }
 
 /**
- * The web plugin table service: incremental `dsh.client` scan + wire composition
+ * The web plugin table service: incremental `snh.client` scan + wire composition
  * + bundle and package-asset route + index injection rows. Construction runs
  * the activation scan synchronously — a malformed declaration or missing bundle among the
  * already-loaded entries aggregates into one loud throw (FAILED fiber; the
@@ -675,7 +675,7 @@ export class ClientModuleRegistry extends Service {
     super(ctx, 'clientModules')
     const { version } = createRequire(import.meta.url)('../package.json') as { version: string }
     // The client build fixes this read into the built Host artifact.
-    const commit = process.env.DSH_CLIENT_COMMIT_HASH
+    const commit = process.env.SNH_CLIENT_COMMIT_HASH
     this.release = commit === undefined ? { version } : { version, commit }
     // Subscribe before seeding so a fiber arriving mid-activation lands in the
     // same dirty set (Set idempotence makes the overlap harmless). An entry-less
@@ -724,7 +724,7 @@ export class ClientModuleRegistry extends Service {
 
   /**
    * Current composed entry graph (stable object between changes), carrying the configured synced values.
-   * @returns the graph served as the owner's `window.__DSH_BOOT__`.
+   * @returns the graph served as the owner's `window.__SNH_BOOT__`.
    */
   graph(): WebBootGraph {
     return this.composed
@@ -920,15 +920,15 @@ export class ClientModuleRegistry extends Service {
     }
     const { packageName, path: pkgPath } = located
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as Record<string, unknown>
-    const dsh = pkg.dsh
-    const decl = parseDshClient(
+    const snh = pkg.snh
+    const decl = parseSnhClient(
       packageName,
-      dsh !== null && typeof dsh === 'object' ? (dsh as Record<string, unknown>).client : undefined,
+      snh !== null && typeof snh === 'object' ? (snh as Record<string, unknown>).client : undefined,
     )
     if (decl === undefined || decl.platform !== 'web') return null
     const clientRel = clientExportOf(packageName, pkg.exports)
     if (clientRel === undefined) {
-      throw new Error(`client-modules: ${packageName} declares dsh.client but exports no "./client" bundle`)
+      throw new Error(`client-modules: ${packageName} declares snh.client but exports no "./client" bundle`)
     }
     const meta: PkgMeta = {
       clientPath: join(dirname(pkgPath), clientRel),

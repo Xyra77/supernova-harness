@@ -6,25 +6,25 @@ import { mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import AgentPresets from '@deepseek-ai/dsh-agent-preset-registry'
-import { HarnessError } from '@deepseek-ai/dsh-error'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import Include from '@supernova-ai/cordis-plugin-include'
+import type { Agent } from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import AgentPresets from '@supernova-ai/snh-agent-preset-registry'
+import { HarnessError } from '@supernova-ai/snh-error'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import type { SessionId } from '@supernova-ai/snh-session'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
 import { managerState, subagentManager } from './manager-internals.ts'
-import * as SubagentFork from '@deepseek-ai/dsh-subagent-fork-in-process'
-import * as SubagentSpawn from '@deepseek-ai/dsh-subagent-spawn-in-process'
+import * as SubagentFork from '@supernova-ai/snh-subagent-fork-in-process'
+import * as SubagentSpawn from '@supernova-ai/snh-subagent-spawn-in-process'
 import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import SubagentRuntime, { SUBAGENT_DESCRIPTOR_VERSION, snapshotSubagentDescriptor } from '../src/index.ts'
 import { TestSessionQuery } from './test-session-query.ts'
 import { loadStoredSession } from './persistence-helpers.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const fixtures = join(dirname(fileURLToPath(import.meta.url)), 'fixtures/activation-presets')
 const contexts: Context[] = []
@@ -43,7 +43,7 @@ async function setup(
   script: ConstructorParameters<typeof MockAdapter>[0] = [textResponse('done'), textResponse('continued'), textResponse('done again')],
   systemPrompt: { personaPrefix?: string; personaSuffix?: string } = {},
 ) {
-  const root = mkdtempSync(join(tmpdir(), 'dsh-continuation-presets-'))
+  const root = mkdtempSync(join(tmpdir(), 'snh-continuation-presets-'))
   roots.push(root)
   const ctx = new Context()
   contexts.push(ctx)
@@ -297,7 +297,7 @@ describe('continuable child presets', () => {
     const system = JSON.stringify(adapter.requests[0]?.messages.filter(message => message.role === 'system'))
     expect(system).toContain('Historical child persona.')
     expect(system).toContain('Keep project policy.')
-    expect(system).toContain('You are an AI agent powered by DeepSeek Harness.')
+    expect(system).toContain('You are an AI agent powered by SuperNova Harness.')
     expect(system).not.toContain('Deployment persona.')
   })
 

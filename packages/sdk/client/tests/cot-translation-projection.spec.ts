@@ -2,12 +2,12 @@
 import { readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import SessionStore, { appendPluginRecord, type SessionId, type SessionEvent } from '@deepseek-ai/dsh-session'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { type ReasoningEffortId, createUserMessage } from '@deepseek-ai/dsh-llm'
-import type {} from '@deepseek-ai/dsh-experimental-translator/types'
-import { createProcessDeepSeekHarness } from '../src/api.ts'
+import { Context } from '@supernova-ai/cordis'
+import SessionStore, { appendPluginRecord, type SessionId, type SessionEvent } from '@supernova-ai/snh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import { type ReasoningEffortId, createUserMessage } from '@supernova-ai/snh-llm'
+import type {} from '@supernova-ai/snh-experimental-translator/types'
+import { createProcessSuperNovaHarness } from '../src/api.ts'
 
 const expectedPath = fileURLToPath(new URL('./expected/cot-translation-projection.json', import.meta.url))
 const fakeRuntime = fileURLToPath(new URL('./fake-runtime.ts', import.meta.url))
@@ -50,7 +50,7 @@ it('preserves common translation requests and results in SDK events without repl
     await ctx.fiber.dispose()
   }
   expect(records).toEqual(expected.auditEvents)
-  const harness = createProcessDeepSeekHarness({
+  const harness = createProcessSuperNovaHarness({
     command: process.execPath, args: [fakeRuntime],
     environment: () => ({ ...process.env, FAKE_TEXT: expected.finalResponse, FAKE_SESSION_EVENTS: JSON.stringify(records) }),
     description: 'scripted SDK audit projection', initializeTimeoutMs: 5000,

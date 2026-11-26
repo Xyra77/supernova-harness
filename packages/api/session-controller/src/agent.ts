@@ -1,18 +1,18 @@
 /** Agent activation, composition, and initial model route owned by API Session. */
 
-import type {} from '@deepseek-ai/dsh-fs'
+import type {} from '@supernova-ai/snh-fs'
 import { randomUUID } from 'node:crypto'
 import { mkdir } from 'node:fs/promises'
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent, AgentOptions, AgentSetup } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-agent-default-model'
-import { installModelSelection } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-agent-preset-registry'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { Session, SessionId } from '@deepseek-ai/dsh-session'
-import { SessionQueryError, type SessionObservation } from '@deepseek-ai/dsh-session-query'
-import { RemoteError, remoteErrorOf } from '@deepseek-ai/dsh-typert-protocol'
-import type {} from '@deepseek-ai/dsh-typert-registry'
+import type { Context } from '@supernova-ai/cordis'
+import type { Agent, AgentOptions, AgentSetup } from '@supernova-ai/snh-agent'
+import type {} from '@supernova-ai/snh-agent-default-model'
+import { installModelSelection } from '@supernova-ai/snh-agent'
+import type {} from '@supernova-ai/snh-agent-preset-registry'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { Session, SessionId } from '@supernova-ai/snh-session'
+import { SessionQueryError, type SessionObservation } from '@supernova-ai/snh-session-query'
+import { RemoteError, remoteErrorOf } from '@supernova-ai/snh-typert-protocol'
+import type {} from '@supernova-ai/snh-typert-registry'
 
 /** Cold Session identity absent from persistence. */
 export class ApiSessionNotFound extends Error {}

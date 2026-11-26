@@ -1,8 +1,8 @@
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
 import type {
   ConversationMatch, ConversationNodeContext, ConversationNodeDefinition, TurnErrorNode,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import type { TurnEndReason } from '@deepseek-ai/dsh-session/types'
+} from '@supernova-ai/snh-client-ui-conversation/client'
+import type { TurnEndReason } from '@supernova-ai/snh-session/types'
 import { chatNode } from './common.ts'
 import { displayFailure } from './event-projection.ts'
 
@@ -31,7 +31,7 @@ function lastStep(context: ConversationNodeContext<TurnErrorState>): number {
 
 /**
  * Failure shown for a turn ending: a recorded error, a sign-out cancellation,
- * or a turn that restart recovery closed because the DSH process exited mid-turn.
+ * or a turn that restart recovery closed because the SNH process exited mid-turn.
  */
 function endFailure(reason: TurnEndReason): { readonly message: string; readonly code?: string } | undefined {
   switch (reason.kind) {
@@ -40,10 +40,10 @@ function endFailure(reason: TurnEndReason): { readonly message: string; readonly
     case 'aborted':
       // User and parent cancellations show only the stopped turn summary.
       return reason.reason.kind === 'hook' && reason.reason.reason === 'deepseek-account/signed-out'
-        ? { message: 'Stopped because you signed out of DeepSeek.', code: 'ACCOUNT_SIGNED_OUT' }
+        ? { message: 'Stopped because you signed out of SuperNova.', code: 'ACCOUNT_SIGNED_OUT' }
         : undefined
     case 'interrupted':
-      return { message: 'The DSH process exited before this turn finished.', code: 'INTERRUPTED' }
+      return { message: 'The SNH process exited before this turn finished.', code: 'INTERRUPTED' }
     default:
       // Completed, blocked, max-tokens, forked, and plugin-merged endings have no failure row.
       return undefined

@@ -3,7 +3,7 @@ description: "在完整回答末尾显示支持位置选择、撤销和恢复的
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-creation-recommendations
+# @supernova-ai/snh-client-ui-creation-recommendations
 
 [English](README.md) | 中文
 
@@ -25,7 +25,7 @@ kind: "package-reference"
 <a id="use-this-package"></a>
 ## 使用本包
 
-Web 组合（[`dsh-web-app`](../../bundle/web-app/README.zh.md)）会挂载本包。本浏览器组件没有配置字段；它为 `create_personalized_page` 卡片填充共享的[操作卡片框架](../ui-action-cards/README.zh.md)。
+Web 组合（[`snh-web-app`](../../bundle/web-app/README.zh.md)）会挂载本包。本浏览器组件没有配置字段；它为 `create_personalized_page` 卡片填充共享的[操作卡片框架](../ui-action-cards/README.zh.md)。
 
 ### 操作结果与恢复
 

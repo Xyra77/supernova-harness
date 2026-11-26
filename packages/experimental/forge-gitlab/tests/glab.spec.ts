@@ -7,7 +7,7 @@ import { GlabOutputLimitError, GlabTimeoutError, GlabUnavailableError, glabRunne
 let root = ''
 
 beforeEach(async () => {
-  root = await mkdtemp(join(tmpdir(), 'dsh-forge-glab-'))
+  root = await mkdtemp(join(tmpdir(), 'snh-forge-glab-'))
 })
 
 afterEach(async () => {

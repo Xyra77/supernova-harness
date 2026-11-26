@@ -1,17 +1,17 @@
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry, { agentEvents, type Agent } from '@deepseek-ai/dsh-agent'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry, { agentEvents, type Agent } from '@supernova-ai/snh-agent'
 import UserQuestionService, {
   TIMED_WAIT_PARAMETER,
   UserQuestionError,
   type AskUserQuestionAnswer,
   type AskUserQuestionRequest,
-} from '@deepseek-ai/dsh-user-questions'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { HarnessError } from '@deepseek-ai/dsh-error'
-import { createToolResultMessage, createUserMessage, type ToolCallId, type ToolSchema, type UserMessage } from '@deepseek-ai/dsh-llm'
-import { Session, type SessionId, SESSION_FORMAT_VERSION, TOOL_OUTCOME_UNKNOWN } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+} from '@supernova-ai/snh-user-questions'
+import { brandString } from '@supernova-ai/snh-brand'
+import { HarnessError } from '@supernova-ai/snh-error'
+import { createToolResultMessage, createUserMessage, type ToolCallId, type ToolSchema, type UserMessage } from '@supernova-ai/snh-llm'
+import { Session, type SessionId, SESSION_FORMAT_VERSION, TOOL_OUTCOME_UNKNOWN } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 
 interface QuestionAnswerer {
   ask(request: AskUserQuestionRequest): Promise<AskUserQuestionAnswer>

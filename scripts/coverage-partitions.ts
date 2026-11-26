@@ -13,20 +13,20 @@ import { coverageExemptHeavySuites } from './coverage-exempt.ts'
 import { pnpmInvocation } from './pnpm-invocation.ts'
 
 /** Environment variable selecting the number of instrumented coverage processes. */
-export const COVERAGE_PARTITIONS_ENV = 'DSH_COVERAGE_PARTITIONS'
+export const COVERAGE_PARTITIONS_ENV = 'SNH_COVERAGE_PARTITIONS'
 
 /** Internal marker that suppresses reports and thresholds inside a partition process. */
-export const COVERAGE_PARTITION_MODE_ENV = 'DSH_COVERAGE_PARTITION_MODE'
+export const COVERAGE_PARTITION_MODE_ENV = 'SNH_COVERAGE_PARTITION_MODE'
 
 /** Environment variable carrying a lane's per-test, hook, and `expect.poll` budget in milliseconds. */
-export const COVERAGE_TEST_TIMEOUT_ENV = 'DSH_COVERAGE_TEST_TIMEOUT_MS'
+export const COVERAGE_TEST_TIMEOUT_ENV = 'SNH_COVERAGE_TEST_TIMEOUT_MS'
 
 /**
  * Environment variable selecting one file shard of the instrumented inventory,
  * as `<index>/<count>`. A shard run writes {@link COVERAGE_SHARD_DIRECTORY}
  * and leaves merging and thresholds to {@link mergeCoverageShards}.
  */
-export const COVERAGE_SHARD_ENV = 'DSH_COVERAGE_SHARD'
+export const COVERAGE_SHARD_ENV = 'SNH_COVERAGE_SHARD'
 
 /** Root-relative directory where a shard run writes its manifest, blobs, and durations. */
 export const COVERAGE_SHARD_DIRECTORY = 'coverage/shard'
@@ -39,7 +39,7 @@ export interface CoverageShard {
 
 /**
  * Parse an optional coverage file shard.
- * @param raw - the `DSH_COVERAGE_SHARD` value.
+ * @param raw - the `SNH_COVERAGE_SHARD` value.
  * @returns the shard, or undefined when unset or empty.
  * @throws when the value is not `<index>/<count>` with 1 <= index <= count.
  */
@@ -169,7 +169,7 @@ export function parseCoveragePartitionCount(raw: string | undefined): number | u
 }
 
 /**
- * Parse the lane test budget carried by `DSH_COVERAGE_TEST_TIMEOUT_MS`.
+ * Parse the lane test budget carried by `SNH_COVERAGE_TEST_TIMEOUT_MS`.
  * @param raw - the configured millisecond budget, or undefined to keep Vitest's defaults.
  * @returns the budget in milliseconds, or undefined when unset.
  * @throws when the value is set and is not a positive integer.

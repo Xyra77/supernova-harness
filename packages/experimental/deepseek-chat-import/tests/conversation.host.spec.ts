@@ -1,10 +1,10 @@
 import { createHash } from 'node:crypto'
 import { describe, expect, it } from 'vitest'
-import { AttachmentId } from '@deepseek-ai/dsh-attachment'
-import type { FileAttachmentRef, ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import { Session, SESSION_FORMAT_VERSION, SessionId } from '@deepseek-ai/dsh-session'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import { AttachmentId } from '@supernova-ai/snh-attachment'
+import type { FileAttachmentRef, ImageAttachmentRef } from '@supernova-ai/snh-attachment'
+import { Session, SESSION_FORMAT_VERSION, SessionId } from '@supernova-ai/snh-session'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import type { SessionEvent } from '@supernova-ai/snh-session'
 import {
   convertConversation, ExportConversationError, IMPORTED_MODEL_SOURCE, messageTime, selectBranch,
 } from '../src/conversation.ts'
@@ -265,7 +265,7 @@ describe('convertConversation', () => {
     })
     expect(resultText(results[0]?.data.message.content)).toContain('- [Route A](https://a.example/route) — Take bus 1')
     expect(results[1]?.data.meta).toEqual({ url: 'https://a.example/route', statusCode: 200, truncated: false })
-    expect(resultText(results[1]?.data.message.content)).toContain('Route A\n\nThe page content is not included in the DeepSeek chat export.')
+    expect(resultText(results[1]?.data.message.content)).toContain('Route A\n\nThe page content is not included in the SuperNova chat export.')
     expect(results[2]?.data).not.toHaveProperty('meta')
     expect(results[2]?.data.message.content).toEqual([{ type: 'text', text: 'Error: the page could not be opened.' }])
     expect(converted.events.map(event => event.time - BASE).filter((time, index, all) => time !== all[index - 1]))

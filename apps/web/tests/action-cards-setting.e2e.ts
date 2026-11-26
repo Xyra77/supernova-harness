@@ -5,8 +5,8 @@ import { join } from 'node:path'
 import { chromium } from 'playwright'
 import yaml from 'js-yaml'
 import { expect, it, onTestFinished } from 'vitest'
-import { credentialRef } from '@deepseek-ai/dsh-credentials'
-import { startMockLlmServer, type MockLlmServer } from '@deepseek-ai/dsh-llm-mock-server'
+import { credentialRef } from '@supernova-ai/snh-credentials'
+import { startMockLlmServer, type MockLlmServer } from '@supernova-ai/snh-llm-mock-server'
 import { launchWebScaffold, webSnapshotMode } from './scaffold.ts'
 import { connectFreshWorkspace, newEnglishPage, openSettings } from './support.ts'
 
@@ -52,12 +52,12 @@ function catalogCardSkills(body: unknown): readonly string[] {
  * @returns the scaffold, the page and a sender that resolves when the turn settles.
  */
 async function openClient(server: MockLlmServer) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-card-switch-browser-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-card-switch-browser-'))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
-  const key = credentialRef('DSH_CARD_SWITCH_BROWSER_KEY')
+  const key = credentialRef('SNH_CARD_SWITCH_BROWSER_KEY')
   const overlay = join(root, 'cards.yml')
   await writeFile(overlay, JSON.stringify([
-    { id: 'llm-deepseek', config: { baseURL: server.baseURL, apiKeyEnv: key } },
+    { id: 'llm-supernova', config: { baseURL: server.baseURL, apiKeyEnv: key } },
     { id: 'agent-default-model', config: { provider: 'deepseek-official', model: 'deepseek-v4-flash' } },
   ]))
   const scaffold = await launchWebScaffold({ deepSeekMissingCredential: true, extraOverlayPath: overlay, actionCards: true })

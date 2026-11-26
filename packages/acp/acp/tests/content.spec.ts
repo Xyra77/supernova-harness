@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { Context } from '@deepseek-ai/cordis'
-import { AttachmentError } from '@deepseek-ai/dsh-attachment'
-import type { AttachmentId } from '@deepseek-ai/dsh-attachment/types'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ImageAttachmentRef, SaveImageAttachment } from '@deepseek-ai/dsh-attachment'
-import type { ModelSelection } from '@deepseek-ai/dsh-agent'
+import type { Context } from '@supernova-ai/cordis'
+import { AttachmentError } from '@supernova-ai/snh-attachment'
+import type { AttachmentId } from '@supernova-ai/snh-attachment/types'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ImageAttachmentRef, SaveImageAttachment } from '@supernova-ai/snh-attachment'
+import type { ModelSelection } from '@supernova-ai/snh-agent'
 import {
   AcpContentError,
   admitAcpPrompt,

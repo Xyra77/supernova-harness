@@ -2,7 +2,7 @@
  * Connection plugin browser-half apply: ctx.connection handle mounting,
  * explicit carrier selection, and single-consumer connection-loop ownership.
  */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   apply,
@@ -18,12 +18,12 @@ import { syncedConnectionConfig as synced } from './synced-config.client.ts'
 
 type Win = {
   location?: { hostname: string; origin?: string }
-  __DSH_TRANSPORT__?: ClientTransportHooks
+  __SNH_TRANSPORT__?: ClientTransportHooks
 }
 
 afterEach(() => {
   delete (globalThis as Win).location
-  delete (globalThis as Win).__DSH_TRANSPORT__
+  delete (globalThis as Win).__SNH_TRANSPORT__
   vi.unstubAllGlobals()
   vi.useRealTimers()
 })
@@ -482,7 +482,7 @@ describe('connection client apply', () => {
       call: vi.fn(async (_channel: string, endpoint: string, payload: unknown) => ({ ok: true as const, value: { endpoint, payload } })),
       open: vi.fn((_channel: string, endpoint: string) => (async function *(): AsyncGenerator { yield endpoint })()),
     }
-    ;(globalThis as Win).__DSH_TRANSPORT__ = { rpc }
+    ;(globalThis as Win).__SNH_TRANSPORT__ = { rpc }
     const handle = await mount()
     expect(handle.rpc).toBe(rpc)
     await expect(handle.rpc.call('/api', 'session/list', { args: [] })).resolves.toEqual({
@@ -499,7 +499,7 @@ describe('connection client apply', () => {
         if (uplink !== undefined) yield* uplink
       })(),
     )
-    ;(globalThis as Win).__DSH_TRANSPORT__ = {
+    ;(globalThis as Win).__SNH_TRANSPORT__ = {
       fetch: vi.fn<RpcFetch>(),
       openStream,
       ownsHost: true,

@@ -1,7 +1,7 @@
 /** Original log coordinates submitted for target-owned Chat reveal. */
 
-import type { SessionEventLike } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
+import type { SessionEventLike } from '@supernova-ai/snh-api-session-controller/client'
+import type { StreamChunk } from '@supernova-ai/snh-llm'
 import type { InspectorChatTarget } from '../objects.ts'
 
 /** Original owning event and, for an Assistant child row, its selected stream chunk. */

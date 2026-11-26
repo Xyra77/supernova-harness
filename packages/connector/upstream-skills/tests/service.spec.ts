@@ -5,9 +5,9 @@
 import { mkdir, mkdtemp, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import type { ProfileContext } from '@deepseek-ai/dsh-app-boot'
-import SkillRegistry from '@deepseek-ai/dsh-skill'
+import { Context } from '@supernova-ai/cordis'
+import type { ProfileContext } from '@supernova-ai/snh-app-boot'
+import SkillRegistry from '@supernova-ai/snh-skill'
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import UpstreamSkills, { type Config, type UpstreamSkillsHandle, type UpstreamSkillSet, type UpstreamSkillsState } from '../src/index.ts'
 import { KEPT, archivePath, pin, repository, serve, startHost, type ArchiveHost } from './harness.ts'
@@ -51,7 +51,7 @@ let entry: string
 
 beforeAll(async () => {
   host = await startHost()
-  fixtures = await mkdtemp(join(tmpdir(), 'dsh-upstream-skills-entry-'))
+  fixtures = await mkdtemp(join(tmpdir(), 'snh-upstream-skills-entry-'))
   entry = join(fixtures, 'SKILL.md')
   await writeFile(entry, ENTRY)
 })
@@ -73,8 +73,8 @@ beforeEach(async () => {
   service = await load()
   host.routes = {}
   host.requests.length = 0
-  home = await mkdtemp(join(tmpdir(), 'dsh-upstream-skills-home-'))
-  vi.stubEnv('DSH_HOME', home)
+  home = await mkdtemp(join(tmpdir(), 'snh-upstream-skills-home-'))
+  vi.stubEnv('SNH_HOME', home)
   release = () => {}
 })
 
@@ -378,7 +378,7 @@ describe('register', () => {
 })
 
 describe('register in a profile', () => {
-  /** The Harness home of the profile, which differs from `$DSH_HOME` here. */
+  /** The Harness home of the profile, which differs from `$SNH_HOME` here. */
   const harness = () => join(home, 'harness')
   /** The directory of the `web` profile for the plugin. */
   const pins = () => join(harness(), 'cache', 'vendor', 'web')

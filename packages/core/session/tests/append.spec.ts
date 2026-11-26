@@ -1,8 +1,8 @@
 import { describe, expect, it, onTestFinished } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import SessionStore, { Session, type SessionId, SessionSeq, type SessionEventInput } from '@deepseek-ai/dsh-session'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { Context } from '@supernova-ai/cordis'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import SessionStore, { Session, type SessionId, SessionSeq, type SessionEventInput } from '@supernova-ai/snh-session'
+import { brandString } from '@supernova-ai/snh-brand'
 
 function message(text: string) {
   return createUserMessage({ content: [{ type: 'text', text }], source: { kind: 'user' } })

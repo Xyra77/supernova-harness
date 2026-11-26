@@ -1,9 +1,9 @@
 /** Persona sections share ordinary registration precedence and plugin disposal. */
 import assert from 'node:assert/strict'
-import type { Context } from '@deepseek-ai/cordis'
-import * as Persona from '@deepseek-ai/dsh-persona'
-import type {} from '@deepseek-ai/dsh-system-prompt'
-import type {} from '@deepseek-ai/dsh-tools'
+import type { Context } from '@supernova-ai/cordis'
+import * as Persona from '@supernova-ai/snh-persona'
+import type {} from '@supernova-ai/snh-system-prompt'
+import type {} from '@supernova-ai/snh-tools'
 
 export const name = 'persona-section-overrides'
 export const inject = ['systemPrompt']

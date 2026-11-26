@@ -10,18 +10,18 @@
  * VM-realm schemas and canonical values are rebuilt as host objects, while rendered content and
  * presentation metadata are shape-checked before entering the registry. Common JSON-Schema spellings are normalized when they
  * have one meaning; invalid vocabulary fails during registration with a teaching error.
- * @module @deepseek-ai/dsh-cordis-host-runner/guard
+ * @module @supernova-ai/snh-cordis-host-runner/guard
  */
 
-import { Context } from '@deepseek-ai/cordis'
-import type { Plugin } from '@deepseek-ai/cordis'
-import { scopeOf } from '@deepseek-ai/dsh-scope'
-import { assertSupportedJsonSchema, defineTool } from '@deepseek-ai/dsh-tools'
-import { toolErrorMessage } from '@deepseek-ai/dsh-tools/pipeline'
-import type { ToolDefinition, ToolExecution } from '@deepseek-ai/dsh-tools'
-import { HarnessError } from '@deepseek-ai/dsh-error'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import { Context } from '@supernova-ai/cordis'
+import type { Plugin } from '@supernova-ai/cordis'
+import { scopeOf } from '@supernova-ai/snh-scope'
+import { assertSupportedJsonSchema, defineTool } from '@supernova-ai/snh-tools'
+import { toolErrorMessage } from '@supernova-ai/snh-tools/pipeline'
+import type { ToolDefinition, ToolExecution } from '@supernova-ai/snh-tools'
+import { HarnessError } from '@supernova-ai/snh-error'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
 
 const DYNAMIC_TOOL = Symbol('cordis-host-runner.dynamic-tool')
 const SCHEMA_TYPES = new Set<unknown>(['string', 'number', 'integer', 'boolean', 'null', 'object', 'array', 'json'])
@@ -813,7 +813,7 @@ function sandboxContext(ctx: Context, reportFailure: (error: Error) => void): Co
   }
   const get = (name: string): unknown => readService(name, false)
   // The browser half builds the same façade over its own Context
-  // (`@deepseek-ai/dsh-cordis-client-runner`, whose CTX_VERBS names this one its
+  // (`@supernova-ai/snh-cordis-client-runner`, whose CTX_VERBS names this one its
   // twin), and the sameness is the point: a package author meets ONE contract on
   // both halves. Folding them together is not available — the two halves compile
   // in separate programs where `Context` merges different service keys — so the

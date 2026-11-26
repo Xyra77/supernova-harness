@@ -1,6 +1,6 @@
 /** Host Loader entry declaring the Models credential-onboarding choice; onboarding belongs to the Client. */
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
 import type { ModelsConfig } from './types.ts'
 
 /** Credential-onboarding choice synced to the browser. */

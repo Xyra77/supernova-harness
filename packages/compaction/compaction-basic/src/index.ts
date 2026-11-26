@@ -1,21 +1,21 @@
 /**
  * Basic replay-aware compaction backend.
  *
- * @module @deepseek-ai/dsh-compaction-basic
+ * @module @supernova-ai/snh-compaction-basic
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { CompactionEngine, ManualCompactionError } from '@deepseek-ai/dsh-compaction'
-import type { CompactionResult, CompactionTrigger } from '@deepseek-ai/dsh-compaction'
-import type { EpochHeader, Session, SessionSeq } from '@deepseek-ai/dsh-session'
-import type { ProjectionHandle } from '@deepseek-ai/dsh-session-projection'
-import { CONTEXT_WINDOW_EXCEEDED_CODE, LlmError } from '@deepseek-ai/dsh-llm'
-import { assertNever } from '@deepseek-ai/dsh-util-values'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
-import type { CommandId } from '@deepseek-ai/dsh-commands/types'
+import { Context, Service } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { CompactionEngine, ManualCompactionError } from '@supernova-ai/snh-compaction'
+import type { CompactionResult, CompactionTrigger } from '@supernova-ai/snh-compaction'
+import type { EpochHeader, Session, SessionSeq } from '@supernova-ai/snh-session'
+import type { ProjectionHandle } from '@supernova-ai/snh-session-projection'
+import { CONTEXT_WINDOW_EXCEEDED_CODE, LlmError } from '@supernova-ai/snh-llm'
+import { assertNever } from '@supernova-ai/snh-util-values'
+import type { Agent, PreStepDecision } from '@supernova-ai/snh-agent'
+import type { CommandId } from '@supernova-ai/snh-commands/types'
 // Type-only: makes the optional sibling service available to `ctx.get()`.
-import type {} from '@deepseek-ai/dsh-compaction-tool-result-pruner'
+import type {} from '@supernova-ai/snh-compaction-tool-result-pruner'
 import { answeredRouteProjectionDefinition } from './answered-route.ts'
 import type { AnsweredRoute } from './answered-route.ts'
 import {

@@ -5,10 +5,10 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { setImmediate } from 'node:timers/promises'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import { SESSION_FORMAT_VERSION, SessionId, SessionSeq, SessionLogOffset } from '@deepseek-ai/dsh-session'
-import type { SessionEvent, SessionHeader } from '@deepseek-ai/dsh-session'
-import { SessionAlreadyOwnedError } from '@deepseek-ai/dsh-session-persistence'
-import type { SessionPersistenceCreateOptions } from '@deepseek-ai/dsh-session-persistence'
+import { SESSION_FORMAT_VERSION, SessionId, SessionSeq, SessionLogOffset } from '@supernova-ai/snh-session'
+import type { SessionEvent, SessionHeader } from '@supernova-ai/snh-session'
+import { SessionAlreadyOwnedError } from '@supernova-ai/snh-session-persistence'
+import type { SessionPersistenceCreateOptions } from '@supernova-ai/snh-session-persistence'
 import { SqliteStore } from '../src/sqlite.ts'
 import type { SqliteStoreOptions } from '../src/sqlite.ts'
 import { sqliteLogs, storedEvents, tailSegment } from './fixtures/store.ts'
@@ -32,7 +32,7 @@ const forkOptions = (source: SessionId, prefix: readonly SessionEvent[]): Sessio
 })
 
 async function fixture(overrides: Partial<SqliteStoreOptions> = {}) {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-normal-fork-concurrency-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-normal-fork-concurrency-'))
   const path = join(root, 'sessions.sqlite')
   const stores: SqliteStore[] = []
   const store = (ownOverrides: Partial<SqliteStoreOptions> = {}) => {

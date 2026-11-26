@@ -9,20 +9,20 @@
  * listed Workspaces, the occupancy-gated add entry, and the creation hop
  * before `onPick`.
  */
-import { syncedConfig } from '@deepseek-ai/dsh-client-test-runtime'
+import { syncedConfig } from '@supernova-ai/snh-client-test-runtime'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, screen } from '@testing-library/react'
 import { useRef, useState } from 'react'
-import type { Context } from '@deepseek-ai/cordis'
-import type { WorkspaceId, WorkspaceView } from '@deepseek-ai/dsh-api-workspace-controller/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { Modal } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { PropsRenderFactories, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import { SlotTestRuntime, usePinnedBrowserLanguages } from '@deepseek-ai/dsh-client-test-runtime'
-import { apply as applyMenus, inject as injectMenus } from '@deepseek-ai/dsh-client-ui-context-menu/client'
-import { apply, inject } from '@deepseek-ai/dsh-client-ui-workspace/client'
+import type { Context } from '@supernova-ai/cordis'
+import type { WorkspaceId, WorkspaceView } from '@supernova-ai/snh-api-workspace-controller/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import { Modal } from '@supernova-ai/snh-client-ui-primitives'
+import type { PropsRenderFactories, PropsRuntime } from '@supernova-ai/snh-client-ui-slots'
+import { SlotTestRuntime, usePinnedBrowserLanguages } from '@supernova-ai/snh-client-test-runtime'
+import { apply as applyMenus, inject as injectMenus } from '@supernova-ai/snh-client-ui-context-menu/client'
+import { apply, inject } from '@supernova-ai/snh-client-ui-workspace/client'
 
 // The service reads its initial locale from the browser; these specs assert
 // the shipped Chinese copy, so they state the browser they assume.

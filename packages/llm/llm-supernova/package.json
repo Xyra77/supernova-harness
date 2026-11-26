@@ -1,0 +1,93 @@
+{
+  "name": "@supernova-ai/snh-llm-supernova",
+  "description": "SuperNova Messages adapter",
+  "version": "0.2.3-alpha.2",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "directory": "packages/llm/llm-supernova"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./src/*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/types/**/*.d.ts",
+    "lib/types/**/*.d.ts.map",
+    "lib/**/*.js.map",
+    "src"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-anonymous-user-id": "workspace:*",
+    "@supernova-ai/snh-atomic-write": "workspace:*",
+    "@supernova-ai/snh-attachment": "workspace:*",
+    "@supernova-ai/snh-supernova-llm-api-extensions": "workspace:*",
+    "@supernova-ai/snh-fs": "workspace:*",
+    "@supernova-ai/snh-home-paths": "workspace:*",
+    "@supernova-ai/snh-launch-environment": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-timeout": "workspace:*",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~"
+  },
+  "dependencies": {
+    "@supernova-ai/cosmokit": "workspace:~",
+    "@supernova-ai/snh-brand": "workspace:*",
+    "@supernova-ai/snh-util-values": "workspace:*",
+    "@supernova-ai/schemastery": "workspace:~",
+    "eventsource-parser": "^3.1.0",
+    "semver": "^7.8.5"
+  },
+  "devDependencies": {
+    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-deepseek-account": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-agent": "workspace:*",
+    "@supernova-ai/snh-anonymous-user-id": "workspace:*",
+    "@supernova-ai/snh-atomic-write": "workspace:*",
+    "@supernova-ai/snh-attachment": "workspace:*",
+    "@supernova-ai/snh-attachment-local": "workspace:*",
+    "@supernova-ai/snh-authorization": "workspace:*",
+    "@supernova-ai/snh-credentials": "workspace:*",
+    "@supernova-ai/snh-supernova-llm-api-extensions": "workspace:*",
+    "@supernova-ai/snh-fs": "workspace:*",
+    "@supernova-ai/snh-home-paths": "workspace:*",
+    "@supernova-ai/snh-launch-environment": "workspace:*",
+    "@supernova-ai/snh-llm": "workspace:*",
+    "@supernova-ai/snh-plugin-package-inventory-supernova": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-session-log-supernova": "workspace:*",
+    "@supernova-ai/snh-timeout": "workspace:*",
+    "@supernova-ai/snh-http-proxy": "workspace:*",
+    "@supernova-ai/cordis-plugin-loader": "workspace:~",
+    "@supernova-ai/cordis-plugin-include": "workspace:~",
+    "@supernova-ai/snh-agent-loop": "workspace:*",
+    "@supernova-ai/snh-session-projection": "workspace:*",
+    "@supernova-ai/snh-system-prompt": "workspace:*",
+    "@supernova-ai/snh-tool-executor-native": "workspace:*",
+    "@supernova-ai/snh-tool-testkit": "workspace:*",
+    "@supernova-ai/snh-tools": "workspace:*",
+    "@supernova-ai/snh-credentials-local": "workspace:*",
+    "@supernova-ai/snh-settings": "workspace:*",
+    "@supernova-ai/snh-deepseek-account": "workspace:*",
+    "@types/semver": "^7.8.0",
+    "@supernova-ai/snh-supernova-auth": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "@supernova-ai/cordis-plugin-loader": {
+      "optional": true
+    }
+  }
+}

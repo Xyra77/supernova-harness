@@ -8,7 +8,7 @@ import { removeFixtureSafely } from './test-fixture-cleanup.ts'
 import { DEPENDENT_TYPERT_SOURCE, writeCompiledDependency, writeTypertWorkspace } from './typert-workspace.fixture.ts'
 
 function temporaryRoot(): string {
-  const root = mkdtempSync(join(tmpdir(), 'dsh-source-remote-'))
+  const root = mkdtempSync(join(tmpdir(), 'snh-source-remote-'))
   onTestFinished(() => { removeFixtureSafely(root) })
   return root
 }

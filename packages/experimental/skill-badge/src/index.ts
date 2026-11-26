@@ -1,29 +1,29 @@
 /**
- * Bundled `dsh-badge` skill provider.
+ * Bundled `snh-badge` skill provider.
  *
- * @module @deepseek-ai/dsh-skill-badge
+ * @module @supernova-ai/snh-skill-badge
  */
 
 import { readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
-import type { Context } from '@deepseek-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
 import {
   BUNDLED_SKILL_RANK,
   type SkillCandidate,
   type SkillDefinition,
   type SkillProvider,
-} from '@deepseek-ai/dsh-skill'
+} from '@supernova-ai/snh-skill'
 
-const PROVIDER_NAME = 'dsh-badge'
-const SKILL_BODY_URL = new URL('../assets/dsh-badge.md', import.meta.url)
+const PROVIDER_NAME = 'snh-badge'
+const SKILL_BODY_URL = new URL('../assets/snh-badge.md', import.meta.url)
 const RESOURCE_BASE = {
   kind: 'directory',
   path: fileURLToPath(new URL('../assets/', import.meta.url)),
 } as const
 const INVOCATION = { modelInvocable: true, userInvocable: true } as const
-const DESCRIPTION = 'Add the official “powered by dsh” badge to documents, pull requests, merge requests, and other content produced with DeepSeek Harness. Use whenever creating a pull request or merge request. Also use when the user asks for a dsh badge, powered-by-dsh attribution, or a reusable dsh badge asset or snippet.'
+const DESCRIPTION = 'Add the official “powered by snh” badge to documents, pull requests, merge requests, and other content produced with SuperNova Harness. Use whenever creating a pull request or merge request. Also use when the user asks for a snh badge, powered-by-snh attribution, or a reusable snh badge asset or snippet.'
 const CANDIDATE: SkillCandidate = {
-  name: 'dsh-badge',
+  name: 'snh-badge',
   description: DESCRIPTION,
   invocation: INVOCATION,
   provider: PROVIDER_NAME,
@@ -54,7 +54,7 @@ export const name = 'skill-badge'
 /** Service required by the bundled provider. */
 export const inject = ['skills']
 
-/** Register the bundled `dsh-badge` provider on `ctx.skills`. */
+/** Register the bundled `snh-badge` provider on `ctx.skills`. */
 export function apply(ctx: Context): void {
   ctx.skills.registerProvider(() => provider)
 }

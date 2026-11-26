@@ -19,12 +19,12 @@ const built = ['lib/index.js', 'lib/process.js'].every(file => existsSync(join(p
 
 describe.skipIf(!built)('built lib real load path (plain node)', () => {
   it.each(['process', 'persistent-process'])('loads a copied %s bundle before rejecting a missing control channel', async (entry) => {
-    const directory = await mkdtemp(join(tmpdir(), 'dsh-standalone-worker-'))
+    const directory = await mkdtemp(join(tmpdir(), 'snh-standalone-worker-'))
     onTestFinished(async () => { await rm(directory, { recursive: true, force: true }) })
     const path = join(directory, 'worker.mjs')
     await copyFile(join(pkgDir, `lib/${entry}.js`), path)
     const result = await execa(process.execPath, ['--experimental-vm-modules', path, '100000'], {
-      cwd: directory, env: { DSH_SUBPROCESS_CONTROL: '' }, stdin: 'ignore',
+      cwd: directory, env: { SNH_SUBPROCESS_CONTROL: '' }, stdin: 'ignore',
       timeout: 55_000, killSignal: 'SIGKILL', reject: false,
     })
     expect(result.timedOut).toBe(false)
@@ -36,15 +36,15 @@ describe.skipIf(!built)('built lib real load path (plain node)', () => {
   it.each(['per-call', 'vm-script'] as const)('runs TypeScript and bindings through published exports in %s mode', async (executionMode) => {
     const program = 'const doubled: number = await tools.double({ n: 21 }); inspect("halfway", doubled); const structured = await tools.structured({}); inspect(structured); let failure; try { await tools.fail({}) } catch (error) { failure = { typed: error instanceof ToolCallError, name: error.name, toolName: error.toolName, message: error.message } }; const env = Object.keys((await import("node:process")).env); ' + (executionMode === 'per-call' ? 'return { doubled, structured, failure, env };' : '({ doubled, structured, failure, env })')
     const script = `
-      const { Context } = await import('@deepseek-ai/cordis')
-      const { NodePtcRuntime } = await import('@deepseek-ai/dsh-ptc-runtime-node')
-      const { PtcInspectableValue } = await import('@deepseek-ai/dsh-ptc-runtime')
+      const { Context } = await import('@supernova-ai/cordis')
+      const { NodePtcRuntime } = await import('@supernova-ai/snh-ptc-runtime-node')
+      const { PtcInspectableValue } = await import('@supernova-ai/snh-ptc-runtime')
       const ctx = new Context()
       for (const name of ['session-projection', 'fs-local', 'subprocess-local', 'sandbox-local']) {
-        const plugin = await import('@deepseek-ai/dsh-' + name)
+        const plugin = await import('@supernova-ai/snh-' + name)
         await ctx.plugin(plugin.default, {})
       }
-      const { default: SandboxPolicy } = await import('@deepseek-ai/dsh-sandbox-policy')
+      const { default: SandboxPolicy } = await import('@supernova-ai/snh-sandbox-policy')
       await ctx.plugin(SandboxPolicy, { mode: 'read-only' })
       await ctx.plugin(NodePtcRuntime, ${JSON.stringify({ executionMode })})
       const result = await ctx.ptcRuntime.run(ctx.ptcRuntime.resolve({

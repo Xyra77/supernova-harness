@@ -7,24 +7,24 @@
  * `session/projections` admitted per Session through the Gateway.
  */
 
-import { Context } from '@deepseek-ai/cordis'
-import type { AttachmentId } from '@deepseek-ai/dsh-attachment/types'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import TypertGatewayService from '@deepseek-ai/dsh-api-gateway'
-import type { RemoteAccessBinding, RemoteAccessRole } from '@deepseek-ai/dsh-api-remote-access'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import { remoteMethods, type PeerId, type PeerScope, type Principal, type RemoteInvocation } from '@deepseek-ai/dsh-typert-protocol'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
+import { Context } from '@supernova-ai/cordis'
+import type { AttachmentId } from '@supernova-ai/snh-attachment/types'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import TypertGatewayService from '@supernova-ai/snh-api-gateway'
+import type { RemoteAccessBinding, RemoteAccessRole } from '@supernova-ai/snh-api-remote-access'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import type { SessionId } from '@supernova-ai/snh-session'
+import { remoteMethods, type PeerId, type PeerScope, type Principal, type RemoteInvocation } from '@supernova-ai/snh-typert-protocol'
+import TypertRegistry from '@supernova-ai/snh-typert-registry'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type SessionController from '../src/index.ts'
 import { ApiSessionList } from '../src/list.ts'
 import type { SessionControlFrame, SessionRequestId, SessionSearchValue } from '../src/types.ts'
 import { createSessionTestController } from './test-remote.ts'
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@supernova-ai/snh-typert-protocol' {
   interface PrincipalMap {
     /** Test-only non-owner caller shared by the access specs. */
     'test-guest': { readonly kind: 'test-guest'; readonly guest: string }

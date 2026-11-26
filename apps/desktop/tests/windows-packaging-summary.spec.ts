@@ -13,7 +13,7 @@ it('separates workflow identity, requested source, and resolved build version', 
     GITHUB_WORKFLOW_REF: 'repo/.github/workflows/windows-package.yml@refs/heads/master',
     GITHUB_WORKFLOW_SHA: 'workflow-sha', PACKAGE_INPUT_VERSION_MODE: 'default',
     PACKAGE_VERSION: '0.2.2-rc.1.20261110.1.1', PACKAGE_SIGNING: 'signed',
-    DSH_PACKAGING_PRESET: 'test', DSH_DESKTOP_UPDATE_CHANNEL: 'nightly',
+    SNH_PACKAGING_PRESET: 'test', SNH_DESKTOP_UPDATE_CHANNEL: 'nightly',
   })
   expect(summary).toContain('| 源码 ref | <code>feature/windows</code> |')
   expect(summary).toContain('| 检出源码 SHA | <code>source-sha</code> |')
@@ -34,8 +34,8 @@ it('retains unresolved and machine-default labels after an earlier failure', () 
 it('escapes input markup and excludes unrelated environment and private configuration', () => {
   const summary = windowsPackagingSummary({
     PACKAGE_SOURCE_REF: '<script>|\n[link](url)`',
-    DSH_DESKTOP_WINDOWS_TOKEN_PIN: 'private-pin-sentinel',
-    DSH_PACKAGING_CONFIG_DIR: 'private-directory-sentinel',
+    SNH_DESKTOP_WINDOWS_TOKEN_PIN: 'private-pin-sentinel',
+    SNH_PACKAGING_CONFIG_DIR: 'private-directory-sentinel',
   })
   expect(summary).toContain('&#60;script&#62;&#124;&#10;&#91;link&#93;&#40;url&#41;&#96;')
   expect(summary).not.toContain('<script>')

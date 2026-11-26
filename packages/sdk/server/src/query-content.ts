@@ -1,7 +1,7 @@
 /** SDK content-block validation and extraction for native command routing. */
 
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { SdkEncodedImageBlock, SdkPromptContentBlock } from '@deepseek-ai/dsh-sdk-protocol'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import type { SdkEncodedImageBlock, SdkPromptContentBlock } from '@supernova-ai/snh-sdk-protocol'
 
 /**
  * Validate fields used by input routing before creating a Session.

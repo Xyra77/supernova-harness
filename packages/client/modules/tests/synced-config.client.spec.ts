@@ -3,10 +3,10 @@ import { mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import type { Entry } from '@deepseek-ai/cordis-plugin-loader'
-import z from '@deepseek-ai/schemastery'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import type { Entry } from '@supernova-ai/cordis-plugin-loader'
+import z from '@supernova-ai/schemastery'
 import { afterEach, expect, it, vi } from 'vitest'
 import { ClientModuleRegistry } from '../src/index.ts'
 import type { WebBootGraph } from '../src/client/manifest.ts'
@@ -56,11 +56,11 @@ it('reads intersection members, tolerates non-object values, and rejects lossy J
 
 /** A resolvable built browser package under a temporary node_modules. */
 function writePackage(name: string): void {
-  dir ??= realpathSync(mkdtempSync(join(tmpdir(), 'dsh-synced-config-')))
+  dir ??= realpathSync(mkdtempSync(join(tmpdir(), 'snh-synced-config-')))
   const root = join(dir, 'node_modules', ...name.split('/'))
   mkdirSync(join(root, 'lib'), { recursive: true })
   writeFileSync(join(root, 'package.json'), JSON.stringify({
-    name, exports: { './client': './lib/client.js', './package.json': './package.json' }, dsh: { client: { platform: 'web' } },
+    name, exports: { './client': './lib/client.js', './package.json': './package.json' }, snh: { client: { platform: 'web' } },
   }))
   writeFileSync(join(root, 'lib', 'client.js'), 'module.exports = {}\n')
 }
@@ -154,7 +154,7 @@ it('publishes values for an entry created after startup that has not activated y
 const bootConfigOf = (ctx: Context, id: string) => (principal: { kind: string }): unknown => {
   const table: { kind: string; name?: string; value?: unknown }[] = []
   ctx.emit('webserver/index-inject', table as never, { principal } as never)
-  const graph = table.find(row => row.name === '__DSH_BOOT__')!.value as { entries: { id: string; config?: unknown }[] }
+  const graph = table.find(row => row.name === '__SNH_BOOT__')!.value as { entries: { id: string; config?: unknown }[] }
   return graph.entries.find(row => row.id === id)!.config
 }
 

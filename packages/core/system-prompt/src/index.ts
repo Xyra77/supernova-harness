@@ -1,23 +1,23 @@
 /**
  * Registry for ordered system sections, dynamic context, tool schemas, and prompt variables.
  *
- * @module @deepseek-ai/dsh-system-prompt
+ * @module @supernova-ai/snh-system-prompt
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { AnonymousEntries, NamedEntries, ScopedLayers, scopeTarget } from '@deepseek-ai/dsh-scope'
-import type { ScopeKey, ScopeLayer, Scoped } from '@deepseek-ai/dsh-scope'
-import { createMessage } from '@deepseek-ai/dsh-llm'
-import type { ContextSnapshotSection, SystemMessage, ToolSchema } from '@deepseek-ai/dsh-llm'
-import type { Session, SurfaceIntent } from '@deepseek-ai/dsh-session'
-import type { ProjectionHandle } from '@deepseek-ai/dsh-session-projection'
+import { Context, Service } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { AnonymousEntries, NamedEntries, ScopedLayers, scopeTarget } from '@supernova-ai/snh-scope'
+import type { ScopeKey, ScopeLayer, Scoped } from '@supernova-ai/snh-scope'
+import { createMessage } from '@supernova-ai/snh-llm'
+import type { ContextSnapshotSection, SystemMessage, ToolSchema } from '@supernova-ai/snh-llm'
+import type { Session, SurfaceIntent } from '@supernova-ai/snh-session'
+import type { ProjectionHandle } from '@supernova-ai/snh-session-projection'
 import { assembleSystemAdmission, assertDistinctSections } from './admission.ts'
 import { sectionAdmissionsDefinition } from './projection.ts'
 import type { RenderedSection } from './admission.ts'
 import type { SectionAdmissions } from './projection.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     systemPrompt: SystemPrompt
   }
@@ -25,7 +25,7 @@ declare module '@deepseek-ai/cordis' {
   interface Events {
     /**
      * Presentation waterfall over assembled sections, contexts, and variables.
-     * Scope-filtered dispatch (`@deepseek-ai/dsh-scope`): scoped listeners
+     * Scope-filtered dispatch (`@supernova-ai/snh-scope`): scoped listeners
      * receive only that scope's assemblies. Returned section text determines updates;
      * omitting a previously admitted section leaves its instructions unchanged.
      * Empty text withdraws its instructions; registration disposal retires it.
@@ -314,7 +314,7 @@ function compareToolNames(a: ToolSchema, b: ToolSchema): number {
 
 /** Plugin config: the deployment-authored fragment of the system prompt (see {@link Config.personaPrefix} for its contract). */
 export interface Config {
-  /** Include the fixed DeepSeek Harness identity before the deployment persona (default true). */
+  /** Include the fixed SuperNova Harness identity before the deployment persona (default true). */
   includeHarnessIdentity?: boolean
   /** Include optional runtime-context snapshots in model history (default true); required context remains. */
   includeRuntimeContext?: boolean
@@ -514,7 +514,7 @@ export class SystemPrompt extends Service {
       this.section({
         name: 'harness:identity',
         order: this.getSectionOrder('HARNESS_IDENTITY'),
-        text: 'You are an AI agent powered by DeepSeek Harness.',
+        text: 'You are an AI agent powered by SuperNova Harness.',
       })
     }
     this.section({

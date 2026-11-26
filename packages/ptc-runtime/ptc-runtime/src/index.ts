@@ -1,13 +1,13 @@
 /**
  * Service Definition for the PTC execution capability seam that runs one model-written program against host async bindings.
  * Runtimes know nothing about tools or sessions; consumers own those concerns.
- * @module @deepseek-ai/dsh-ptc-runtime
+ * @module @supernova-ai/snh-ptc-runtime
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import { HarnessError } from '@deepseek-ai/dsh-error'
+import { Context, Service } from '@supernova-ai/cordis'
+import { HarnessError } from '@supernova-ai/snh-error'
 import type { PtcProgramFormat, PtcRunRequest, PtcRunResult, PtcRunSpec } from './types.ts'
-import type { SandboxMode } from '@deepseek-ai/dsh-sandbox'
+import type { SandboxMode } from '@supernova-ai/snh-sandbox'
 
 export { PtcImage } from './image.ts'
 export { PtcInspectableValue } from './inspectable-value.ts'
@@ -41,7 +41,7 @@ export const RESERVED_BINDING_WORDS: ReadonlySet<string> = new Set([
   'private', 'protected', 'public', 'arguments', 'eval',
 ])
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     ptcRuntime: PtcRuntime
   }
@@ -89,7 +89,7 @@ export abstract class PtcRuntime extends Service {
    * lowercase identifier. Informational, not gating — a consumer that
    * generates language-specific presentation (typed SDK stubs, usage
    * instructions) switches on it and fails loud on a language it cannot
-   * present. The shipped Node backend and `dsh-tool-executor-ptc` support
+   * present. The shipped Node backend and `snh-tool-executor-ptc` support
    * `'typescript'`. Other languages require their own consumers.
    */
   abstract readonly language: string

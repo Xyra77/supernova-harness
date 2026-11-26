@@ -1,25 +1,25 @@
 // @vitest-environment jsdom
 /** Generated Remote methods and settings registrations leave with the plugin fiber. */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { createElement, Fragment, useState } from 'react'
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { createSlotRenderer, StaticRemoteAccess } from '@deepseek-ai/dsh-client-test-runtime'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { resolveSlotLabel, type PropsRenderSlots, type StandardSourceBinding } from '@deepseek-ai/dsh-client-ui-slots'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
-import { apply as gatewayApply, inject as gatewayInject } from '@deepseek-ai/dsh-api-gateway/client'
-import { apply as resourcesApply, inject as resourcesInject } from '@deepseek-ai/dsh-client-resources/client'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import { createSlotRenderer, StaticRemoteAccess } from '@supernova-ai/snh-client-test-runtime'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import { SlotRegistry } from '@supernova-ai/snh-client-ui-renderer/client'
+import { resolveSlotLabel, type PropsRenderSlots, type StandardSourceBinding } from '@supernova-ai/snh-client-ui-slots'
+import TypertRegistry from '@supernova-ai/snh-typert-registry'
+import { apply as gatewayApply, inject as gatewayInject } from '@supernova-ai/snh-api-gateway/client'
+import { apply as resourcesApply, inject as resourcesInject } from '@supernova-ai/snh-client-resources/client'
 import type { PairingRequestId } from '../src/types.ts'
 import type { PairingInjected } from '../src/client/PairingRequests.tsx'
-import type { ConnectionHandle } from '@deepseek-ai/dsh-client-connection/client'
-import type { RemoteConnectionContentProps, RemoteConnectionExtensionProps } from '@deepseek-ai/dsh-client-remote-connection/client'
+import type { ConnectionHandle } from '@supernova-ai/snh-client-connection/client'
+import type { RemoteConnectionContentProps, RemoteConnectionExtensionProps } from '@supernova-ai/snh-client-remote-connection/client'
 import { en, zh } from '../src/client/locales.ts'
 import { apply, inject } from '../src/client/index.ts'
 
-vi.mock('@deepseek-ai/dsh-client-remote-connection/remote', async () => import('./remote-fixture.ts'))
+vi.mock('@supernova-ai/snh-client-remote-connection/remote', async () => import('./remote-fixture.ts'))
 
 afterEach(cleanup)
 
@@ -133,7 +133,7 @@ async function bench(call: ConnectionHandle['rpc']['call'], beforeMount?: (ctx: 
 
 describe('remote connection settings registration', () => {
   it('keeps the Remote mounted without registering settings or polling in Desktop', async () => {
-    vi.stubGlobal('dshDesktop', { protocolVersion: 1 })
+    vi.stubGlobal('snhDesktop', { protocolVersion: 1 })
     onTestFinished(() => { vi.unstubAllGlobals() })
     const call = vi.fn<ConnectionHandle['rpc']['call']>()
     const { ctx, slots } = await bench(call)
@@ -756,7 +756,7 @@ it('aborts a pending pairing read and decision when the shared plugin unloads', 
   const { ctx, slots, fiber } = await bench(call)
   const pin = new AbortController()
   onTestFinished(() => { pin.abort() })
-  ctx.resources.pin('dsh-resource://device-pairing/requests', pin.signal)
+  ctx.resources.pin('snh-resource://device-pairing/requests', pin.signal)
   const face = approvalFace(slots)
   const decision = face.decide('request-one' as PairingRequestId, 'deny')
   await vi.waitFor(() => { expect(signals).toHaveLength(2) })

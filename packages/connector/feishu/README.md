@@ -3,7 +3,7 @@ description: "Add the Feishu plugin to a profile: the official lark-cli with its
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-feishu
+# @supernova-ai/snh-feishu
 
 English | [中文](README.zh.md)
 
@@ -30,8 +30,8 @@ The Feishu plugin lets conversations use Feishu through the official `lark-cli`.
 Install the plugin from the Web sidebar's **Plugins** page or with the CLI:
 
 ```sh
-dsh plugin --profile web add @deepseek-ai/dsh-feishu
-dsh plugin --profile web remove @deepseek-ai/dsh-feishu
+snh plugin --profile web add @supernova-ai/snh-feishu
+snh plugin --profile web remove @supernova-ai/snh-feishu
 ```
 
 pnpm blocks the `@larksuite/cli` install script, which downloads and verifies the official native binary; approve it through the Plugins page's **Allow these scripts and retry** or the other paths that [Plugin Manager](../../boot/plugin-manager/README.md) documents. Until the executable exists, the `feishu` row fails to load with an error that names the missing path.
@@ -55,7 +55,7 @@ The Plugins page drives these operations through the connector account registry,
 | `sign-out` | After the user confirms, runs `auth logout --json`, which also signs out the user's own terminal, then checks again |
 | Cancel | Cancels the operation during app setup or sign-in and waits for its command to exit; other steps are ignored |
 
-A check runs `auth status --verify --json`. The account reads `connected` only when the CLI reports an available user that its server verified, `signed-out` when the user is missing, not configured, or needs a refresh, `unconfigured` when no app exists, and `unverified` otherwise, for example when verification cannot reach the server. Every state except `unconfigured` carries the configured `appId`. Each link that `config init` prints and each device-authorization link that `auth login` reports is offered only when it is an HTTPS address on `feishu.cn` or `larksuite.com`. A sign-in that leaves requested permissions ungranted (`auth login` exits with code 3 and lists them as missing) still succeeds; a command that later needs a missing permission reports it. Results report succeeded, cancelled, or failed. Failures show the command and observed exit code on the page and in the Host log; native messages, paths, and authorization data are omitted. A successful Feishu webpage does not confirm that local credentials were saved. The process running DSH needs access to the CLI configuration and system credential storage; `DSH_HOME` does not relocate either.
+A check runs `auth status --verify --json`. The account reads `connected` only when the CLI reports an available user that its server verified, `signed-out` when the user is missing, not configured, or needs a refresh, `unconfigured` when no app exists, and `unverified` otherwise, for example when verification cannot reach the server. Every state except `unconfigured` carries the configured `appId`. Each link that `config init` prints and each device-authorization link that `auth login` reports is offered only when it is an HTTPS address on `feishu.cn` or `larksuite.com`. A sign-in that leaves requested permissions ungranted (`auth login` exits with code 3 and lists them as missing) still succeeds; a command that later needs a missing permission reports it. Results report succeeded, cancelled, or failed. Failures show the command and observed exit code on the page and in the Host log; native messages, paths, and authorization data are omitted. A successful Feishu webpage does not confirm that local credentials were saved. The process running SNH needs access to the CLI configuration and system credential storage; `SNH_HOME` does not relocate either.
 
 ### Configure
 
@@ -65,7 +65,7 @@ A check runs `auth status --verify --json`. The account reads `connected` only w
 
 An account check or sign-out gets the `commandTimeoutMs` of the [`cli-account` row](../cli-account/README.md#use-this-package), 30 seconds by default. App setup and sign-in wait up to 10 minutes for the user in the browser, and each command keeps at most 1 MiB of stdout; the CLI account Service fixes both limits.
 
-The generated [config catalog](../../../docs/config-catalog.md#deepseek-aidsh-feishu) is the exhaustive source of supported fields.
+The generated [config catalog](../../../docs/config-catalog.md#supernova-aisnh-feishu) is the exhaustive source of supported fields.
 
 -----
 
@@ -77,7 +77,7 @@ The generated [config catalog](../../../docs/config-catalog.md#deepseek-aidsh-fe
 
 [`cordis.patch.yml`](cordis.patch.yml) inserts this package as the `feishu` row after the profile's other layers, and the Plugins page keys the account section by this package name. [`src/index.ts`](src/index.ts) is a function plugin. It checks that `binDir/lark-cli` (`lark-cli.exe` on Windows) is executable, registers that path and the account with `ctx.cliAccounts`, and registers the skill provider. [`src/cli.ts`](src/cli.ts) locates `lark-cli` and parses the JSON output of its account commands. The [CLI account Service](../cli-account/README.md) gives the model that path in runtime context, runs each command by the same path, runs one account operation at a time, and reports a failed command by its exit code. [`src/account.ts`](src/account.ts) carries out each operation with the Feishu commands and reads setup and sign-in links from their output lines. [`src/presentation.ts`](src/presentation.ts) maps each view to the section the registry serves, in the text of [`src/locales.ts`](src/locales.ts). Disposal cancels the active operation, aborts running commands, and settles after their processes exit.
 
-[`skills/feishu/SKILL.md`](skills/feishu/SKILL.md) is the only skill this package carries: the DSH guidance, an index of the 28 guides that `lark-cli` 1.0.97 embeds, and how to open them. [`src/skills.ts`](src/skills.ts) reads the entry once when the plugin loads and lists it as the `feishu` provider's one skill with an opaque resource base, so the catalog lists the entry and a load returns the file without running the CLI. The guides stay in the binary, and the agent reads them with `lark-cli skills read`.
+[`skills/feishu/SKILL.md`](skills/feishu/SKILL.md) is the only skill this package carries: the SNH guidance, an index of the 28 guides that `lark-cli` 1.0.97 embeds, and how to open them. [`src/skills.ts`](src/skills.ts) reads the entry once when the plugin loads and lists it as the `feishu` provider's one skill with an opaque resource base, so the catalog lists the entry and a load returns the file without running the CLI. The guides stay in the binary, and the agent reads them with `lark-cli skills read`.
 
 </details>
 
@@ -121,7 +121,7 @@ The entry is fixed. Loading or unloading the plugin changes the catalog, which i
 
 #### What the model sees
 
-A `skill` tool result for `feishu` contains about 6,700 characters: the DSH guidance, an index that gives each of the 28 guides embedded in `lark-cli` 1.0.97 one line with its routing rules, and how to open a guide. The DSH guidance tells the agent to run `lark-cli` by the absolute path from the current runtime context, to ask the user to connect Feishu on the plugin page before running the CLI's setup and sign-in flow itself, and to set the narrowest `sandbox_permissions` for the commands that save sign-in state. The opening instructions tell the agent that the guides are not skills and that it reads a guide, and the files a guide references, with `lark-cli skills read`. Its resource description reads `Embedded lark-cli guides; open them with the skills read command given in the loaded skill.`
+A `skill` tool result for `feishu` contains about 6,700 characters: the SNH guidance, an index that gives each of the 28 guides embedded in `lark-cli` 1.0.97 one line with its routing rules, and how to open a guide. The SNH guidance tells the agent to run `lark-cli` by the absolute path from the current runtime context, to ask the user to connect Feishu on the plugin page before running the CLI's setup and sign-in flow itself, and to set the narrowest `sandbox_permissions` for the commands that save sign-in state. The opening instructions tell the agent that the guides are not skills and that it reads a guide, and the files a guide references, with `lark-cli skills read`. Its resource description reads `Embedded lark-cli guides; open them with the skills read command given in the loaded skill.`
 
 #### Token effect
 
@@ -163,7 +163,7 @@ The system prompt does not change; loading or unloading the row, or a changed pa
 
 - Only macOS and Windows x64 are supported; other platforms are unverified.
 - Commands must run on this Host. When a composition runs them elsewhere, such as over SSH, the plugin still loads, and each command that runs `lark-cli` fails because the path does not exist there.
-- The plugin uses the CLI's default configuration. Signing in or out from DSH affects the user's own terminal, and there is no DSH-private account or account picker. The plugin offers no unbind operation; turning it off keeps the configuration and sign-in.
+- The plugin uses the CLI's default configuration. Signing in or out from SNH affects the user's own terminal, and there is no SNH-private account or account picker. The plugin offers no unbind operation; turning it off keeps the configuration and sign-in.
 - Sign-in reads the device-authorization link and the completion from `lark-cli auth login --json` events; a CLI version that changes those events fails the connection with a retryable result.
 - The entry's guide index follows `lark-cli` 1.0.97; pinning another `@larksuite/cli` version means checking the index against that version's `lark-cli skills list`.
 - Under a file sandbox, a token refresh during an ordinary command can be denied and then needs single-command approval.

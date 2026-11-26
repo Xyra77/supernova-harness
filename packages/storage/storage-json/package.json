@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-storage-json",
-  "description": "JSON file KV storage backend for the DeepSeek Harness storage hub",
+  "name": "@supernova-ai/snh-storage-json",
+  "description": "JSON file KV storage backend for the SuperNova Harness storage hub",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -32,14 +32,14 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@deepseek-ai/dsh-storage": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/snh-storage": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "workspace:~"
+    "@supernova-ai/schemastery": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/dsh-storage": "workspace:*",
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/snh-storage": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

@@ -1,22 +1,22 @@
 import { mountWorkingDirectoryFixture } from '../../subagent/tests/working-directory-fixture.ts'
 import { join } from 'node:path'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { LocalBashExecutor } from '@deepseek-ai/dsh-bash-local'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import * as ToolBash from '@deepseek-ai/dsh-tool-bash'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek-api-key'
-import SubagentRuntime from '@deepseek-ai/dsh-subagent'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import { LocalBashExecutor } from '@supernova-ai/snh-bash-local'
+import * as BashEnvPlugin from '@supernova-ai/snh-shell-env'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import * as ToolBash from '@supernova-ai/snh-tool-bash'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
+import SubagentRuntime from '@supernova-ai/snh-subagent'
 import * as Spawn from '../src/index.ts'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
-import * as ToolSubagent from '@deepseek-ai/dsh-tool-subagent'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
+import * as ToolSubagent from '@supernova-ai/snh-tool-subagent'
 
 /**
- * Shared harness for the spawn-backend e2e: the full real stack (DeepSeek
+ * Shared harness for the spawn-backend e2e: the full real stack (SuperNova
  * adapter + real bash tool + the subagent tool bound to the spawn backend), so
  * a real parent agent can delegate to a real in-process child that does real
  * work (writes a file). Lives outside the *.e2e.ts pattern so importing it never
@@ -33,8 +33,8 @@ export async function spawnHarness(workdir: string): Promise<Context> {
     systemPrompt: { personaPrefix: 'You are a coding agent. Report only when the requested work is done.' },
   })
   await ctx.plugin(AgentLoop, { agents: [] })
-  await ctx.plugin(DeepSeekAuth)
-  await ctx.plugin(LlmDeepSeek)
+  await ctx.plugin(SuperNovaAuth)
+  await ctx.plugin(LlmSuperNova)
   await ctx.plugin(LocalSubprocessRuntime)
   await ctx.plugin(BashEnvPlugin)
   await ctx.plugin(LocalBashExecutor, { cwd: workdir, timeoutMs: 30_000 })

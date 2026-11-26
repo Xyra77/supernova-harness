@@ -14,7 +14,7 @@ Before [browser plugin configuration sync](../../implemented/architecture/2026-1
 
 | Category | Use | Packages |
 |---|---|---|
-| A. Page globals carry Host configuration | `webserver/index-inject` writes `window.__DSH_*__`, read once when the browser loads | `shortcuts`, `ui-sidebar-documentpreview`, `ui-account-notifications`, `ui-settings-models` (onboarding), `ui-settings-account` (contact details), `connection` (recovery parameters) |
+| A. Page globals carry Host configuration | `webserver/index-inject` writes `window.__SNH_*__`, read once when the browser loads | `shortcuts`, `ui-sidebar-documentpreview`, `ui-account-notifications`, `ui-settings-models` (onboarding), `ui-settings-account` (contact details), `connection` (recovery parameters) |
 | B. Runtime values read through `configForms` | The browser subscribes to accepted values of its own or another entry through the settings mirror | `ui-chat`, `ui-conversation`, `locale`, `ui-theme`, `ui-settings-account`, `ui-settings-general`, `ui-agent-preset`, experimental `timeline`, `client-ui-cot-translation`, `client-ui-forge`, `cua` |
 | C. `Config` declared only on the Client face | The browser exports a schema, but the entry never receives configuration | Done in the architecture PR: `ui-context-menu` `resolutionTimeoutMs` and `ui-conversation` `maxConcurrentFileUploads` are top-level volatile fields of their Host schemas, and the Client schemas are removed |
 | D. First-paint pre-injection | The page HTML pre-injects values to avoid a first-paint flash | `ui-theme` palette and font sizes |

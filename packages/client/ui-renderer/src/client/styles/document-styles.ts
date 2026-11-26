@@ -1,6 +1,6 @@
 /** Ordered module styles owned by one renderer presentation destination. */
-import type { ClientModuleMeta } from '@deepseek-ai/dsh-package-manifest'
-import type { ClientModuleLoader, ClientModuleRecord } from '@deepseek-ai/dsh-client-modules/client'
+import type { ClientModuleMeta } from '@supernova-ai/snh-package-manifest'
+import type { ClientModuleLoader, ClientModuleRecord } from '@supernova-ai/snh-client-modules/client'
 
 interface StyleRecord {
   readonly element: HTMLStyleElement

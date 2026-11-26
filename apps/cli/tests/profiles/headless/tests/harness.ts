@@ -1,25 +1,25 @@
-import { Context } from '@deepseek-ai/cordis'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { LocalBashExecutor } from '@deepseek-ai/dsh-bash-local'
-import * as BashEnvPlugin from '@deepseek-ai/dsh-shell-env'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import * as ToolBash from '@deepseek-ai/dsh-tool-bash'
-import * as ToolTodo from '@deepseek-ai/dsh-tool-todo'
-import * as LlmDeepSeek from '@deepseek-ai/dsh-llm-deepseek-api-key'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
-import ToolResultPruner from '@deepseek-ai/dsh-compaction-tool-result-pruner'
-import * as JsonlSessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import * as SessionCheckpointPolicy from '@deepseek-ai/dsh-session-checkpoint-policy'
-import { BasicCompactionEngine } from '@deepseek-ai/dsh-compaction-basic'
-import type { BasicCompactionConfig } from '@deepseek-ai/dsh-compaction-basic'
+import { Context } from '@supernova-ai/cordis'
+import type { SessionEvent } from '@supernova-ai/snh-session'
+import type { Agent } from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import { LocalBashExecutor } from '@supernova-ai/snh-bash-local'
+import * as BashEnvPlugin from '@supernova-ai/snh-shell-env'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import * as ToolBash from '@supernova-ai/snh-tool-bash'
+import * as ToolTodo from '@supernova-ai/snh-tool-todo'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
+import TokenMeter from '@supernova-ai/snh-token-meter'
+import ToolResultPruner from '@supernova-ai/snh-compaction-tool-result-pruner'
+import * as JsonlSessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import * as SessionCheckpointPolicy from '@supernova-ai/snh-session-checkpoint-policy'
+import { BasicCompactionEngine } from '@supernova-ai/snh-compaction-basic'
+import type { BasicCompactionConfig } from '@supernova-ai/snh-compaction-basic'
 
 /**
  * Shared harness for the headless-agent e2e suites: the full plugin stack
- * with the real DeepSeek adapter and the real bash + todo_write tools. Lives
+ * with the real SuperNova adapter and the real bash + todo_write tools. Lives
  * outside the *.e2e.ts pattern so importing it never re-registers another
  * file's tests.
  */
@@ -71,8 +71,8 @@ export async function codingHarness(workdir: string, options: CodingHarnessOptio
     systemPrompt: { personaPrefix: options.personaPrefix ?? '' },
   })
   await ctx.plugin(AgentLoop, { agents: [] })
-  await ctx.plugin(DeepSeekAuth)
-  await ctx.plugin(LlmDeepSeek, {
+  await ctx.plugin(SuperNovaAuth)
+  await ctx.plugin(LlmSuperNova, {
     ...options.modelContextWindow === undefined && options.modelMaxTokens === undefined ? {} : {
       models: [{
         id: 'deepseek-v4-flash',

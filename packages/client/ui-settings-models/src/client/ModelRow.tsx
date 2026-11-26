@@ -4,8 +4,8 @@ import type { DragEvent, ReactNode } from 'react'
 import {
   IconChevronDownOutlineRegular, IconChevronRightOutlineRegular, IconDragHandleOutlineRegular,
   IconTrashOutlineRegular, Tooltip, useRowDragPreview,
-} from '@deepseek-ai/dsh-client-ui-primitives'
-import type { DeepSeekModelDraft } from './DeepSeekModelsEditor.tsx'
+} from '@supernova-ai/snh-client-ui-primitives'
+import type { SuperNovaModelDraft } from './SuperNovaModelsEditor.tsx'
 import type { ModelsKey } from './locales.ts'
 import { ModelInputTypes } from './ModelInputTypes.tsx'
 import { ModelReasoningEfforts } from './ModelReasoningEfforts.tsx'
@@ -22,7 +22,7 @@ interface CapacityInput {
 
 /** Adapter-owned data and actions for one model row. */
 interface ModelRowProps {
-  model: DeepSeekModelDraft
+  model: SuperNovaModelDraft
   rowKey: number
   position: number
   order: ModelRowOrder
@@ -40,7 +40,7 @@ interface ModelRowProps {
   maxTokens: CapacityInput
   onFieldChange: (field: 'id' | 'name', value: string | undefined) => void
   onIdBlur?: (value: string) => void
-  onChange: (model: DeepSeekModelDraft) => void
+  onChange: (model: SuperNovaModelDraft) => void
   onToggle: () => void
   onRemove: () => void
 }
@@ -113,7 +113,7 @@ export function ModelRow(props: ModelRowProps): ReactNode {
             draggable={!disabled}
             onDragStart={(event) => {
               event.dataTransfer.effectAllowed = 'move'
-              event.dataTransfer.setData('application/x-dsh-model-order', String(position))
+              event.dataTransfer.setData('application/x-snh-model-order', String(position))
               props.order.onStart()
               preview.start(event, event.currentTarget.closest('[data-row-key]') as HTMLElement)
             }}

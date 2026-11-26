@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session'
-import { prepareSessionSnapshotFixtureForComparison } from '@deepseek-ai/dsh-llm-replay'
+import { SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session'
+import { prepareSessionSnapshotFixtureForComparison } from '@supernova-ai/snh-llm-replay'
 import {
   type NormalizeContext,
   extractSnapshotSpillPaths,
@@ -406,13 +406,13 @@ describe('normalizeSessionLog', () => {
       data: {
         content: [{
           type: 'text',
-          text: 'Full formatted result stored at: /tmp/dsh-acp-snapshot-spill/session-c22bc3f1d2af/8a7b6c5d4e3f-bash.txt. Use read with offset/limit, or grep this path to search within it.',
+          text: 'Full formatted result stored at: /tmp/snh-acp-snapshot-spill/session-c22bc3f1d2af/8a7b6c5d4e3f-bash.txt. Use read with offset/limit, or grep this path to search within it.',
         }],
       },
     })
     const out = normalizeSessionLog(`${header({ cwd: ctx.cwd })}\n${ev}\n`, ctx)
     expect(out).toContain('{{spillLocator:bash.txt}}')
-    expect(out).not.toContain('/tmp/dsh-acp-snapshot-spill')
+    expect(out).not.toContain('/tmp/snh-acp-snapshot-spill')
   })
 
   it('scrubs scenario-owned snapshot spill paths', () => {
@@ -421,13 +421,13 @@ describe('normalizeSessionLog', () => {
       data: {
         content: [{
           type: 'text',
-          text: 'Full formatted result stored at: /tmp/dsh-acp-snap-012345678/session-c22bc3f1d2af/8a7b6c5d4e3f-bash.txt. Use read with offset/limit, or grep this path to search within it.',
+          text: 'Full formatted result stored at: /tmp/snh-acp-snap-012345678/session-c22bc3f1d2af/8a7b6c5d4e3f-bash.txt. Use read with offset/limit, or grep this path to search within it.',
         }],
       },
     })
     const out = normalizeSessionLog(`${header({ cwd: ctx.cwd })}\n${ev}\n`, ctx)
     expect(out).toContain('{{spillLocator:bash.txt}}')
-    expect(out).not.toContain('/tmp/dsh-acp-snap-012345678')
+    expect(out).not.toContain('/tmp/snh-acp-snap-012345678')
   })
 
   it('scrubs scenario-owned snapshot spill paths with Windows drive and separators', () => {
@@ -436,13 +436,13 @@ describe('normalizeSessionLog', () => {
       data: {
         content: [{
           type: 'text',
-          text: String.raw`Full formatted result stored at: C:\t\dsh-acp-snap-012345678\session-c22bc3f1d2af\8a7b6c5d4e3f-bash.txt. Use read with offset/limit, or grep this path to search within it.`,
+          text: String.raw`Full formatted result stored at: C:\t\snh-acp-snap-012345678\session-c22bc3f1d2af\8a7b6c5d4e3f-bash.txt. Use read with offset/limit, or grep this path to search within it.`,
         }],
       },
     })
     const out = normalizeSessionLog(`${header({ cwd: ctx.cwd })}\n${ev}\n`, ctx)
     expect(out).toContain('{{spillLocator:bash.txt}}')
-    expect(out).not.toContain('C:\\t\\dsh-acp-snap-012345678')
+    expect(out).not.toContain('C:\\t\\snh-acp-snap-012345678')
   })
 
   it('shares cwd-rooted path handling with stdout normalization', () => {
@@ -807,7 +807,7 @@ describe('normalizeSessionSnapshot', () => {
       { type: 'session', version, id, createdAt: 1, isSeeded: false, delegationDepth: 0 },
       { type: 'turn/start', seq: 0, time: 1, data: { turn: 1 } },
       {
-        type: 'session-log-deepseek/delivery-accepted', seq: 1, time: 2,
+        type: 'session-log-supernova/delivery-accepted', seq: 1, time: 2,
         data: { sessionId: id, throughSeq: 0, sessionFormatVersion: deliveryVersion },
       },
     ].map(record => JSON.stringify(record)).join('\n') + '\n'
@@ -849,7 +849,7 @@ describe('normalizeSessionSnapshot', () => {
     const target = prepareSessionSnapshotFixtureForComparison(source)
     const marker = JSON.parse(target.trimEnd().split('\n').at(-1)!) as unknown
     expect(marker).toEqual({
-      type: 'session-log-deepseek/delivery-accepted', seq: 1, time: 2,
+      type: 'session-log-supernova/delivery-accepted', seq: 1, time: 2,
       data: { sessionId: 'recorded-session', throughSeq: 0, sessionFormatVersion: 99 },
     })
     const [historical, migrated] = normalizeSessionSnapshots([source, target], ctx, { nativeWriterOutput: true })
@@ -871,7 +871,7 @@ describe('normalizeSessionSnapshot', () => {
 
   it('preserves delivery and captured-source generations without a validated source generation', () => {
     const event = (version: number): string => JSON.stringify({
-      type: 'session-log-deepseek/delivery-accepted',
+      type: 'session-log-supernova/delivery-accepted',
       data: { sessionId: 's', throughSeq: 4, sessionFormatVersion: version },
     })
     expect(normalizeSessionFormatMetadata(event(0))).toBe(event(0))
@@ -886,7 +886,7 @@ describe('normalizeSessionSnapshot', () => {
         createdAt: 0,
       }),
       JSON.stringify({
-        type: 'session-log-deepseek/delivery-accepted',
+        type: 'session-log-supernova/delivery-accepted',
         data: { sessionFormatVersion: 1, throughSeq: 21, otherVersion: 8 },
       }),
       JSON.stringify({
@@ -1109,7 +1109,7 @@ describe('extractSnapshotSpillPaths', () => {
     ['/tmp', String.fromCharCode(92)],
     ['C:/t', String.fromCharCode(92)],
   ])('recognizes %s locators with %s separators in nested JSON omissions without scrubbing byte counts', (root, separator) => {
-    const locator = `${root}/dsh-acp-snap-123456789/session-123456abcdef/abcdef123456-session-reference-1.txt`.replaceAll('/', separator)
+    const locator = `${root}/snh-acp-snap-123456789/session-123456abcdef/abcdef123456-session-reference-1.txt`.replaceAll('/', separator)
     const notice = { sessionId: 'source', omittedBytes: 42, fullSnapshot: { status: 'saved', locator, bytes: 1234 } }
     const log = JSON.stringify({ type: 'user/message', data: { content: [{ type: 'text', text: JSON.stringify([notice]) }] } })
     const encodedLocator = JSON.stringify(JSON.stringify(locator).slice(1, -1)).slice(1, -1)
@@ -1136,13 +1136,13 @@ describe('extractSnapshotSpillPaths', () => {
 
   it('maps each spill filename to its full matched path, last match wins per name', () => {
     const log = [
-      'Full formatted result stored at: /tmp/dsh-acp-snapshot-spill/session-c22bc3f1d2af/8a7b6c5d4e3f-bash.txt. Use read with offset/limit, or grep this path to search within it.',
-      'stale copy at /tmp/dsh-acp-snap-012345678/session-aaaaaaaaaaaa/bbbbbbbbbbbb-grep.txt then',
-      'fresh copy at /tmp/dsh-acp-snap-012345678/session-cccccccccccc/dddddddddddd-grep.txt then',
+      'Full formatted result stored at: /tmp/snh-acp-snapshot-spill/session-c22bc3f1d2af/8a7b6c5d4e3f-bash.txt. Use read with offset/limit, or grep this path to search within it.',
+      'stale copy at /tmp/snh-acp-snap-012345678/session-aaaaaaaaaaaa/bbbbbbbbbbbb-grep.txt then',
+      'fresh copy at /tmp/snh-acp-snap-012345678/session-cccccccccccc/dddddddddddd-grep.txt then',
     ].join('\n')
     expect(extractSnapshotSpillPaths(log)).toEqual(new Map([
-      ['bash.txt', '/tmp/dsh-acp-snapshot-spill/session-c22bc3f1d2af/8a7b6c5d4e3f-bash.txt'],
-      ['grep.txt', '/tmp/dsh-acp-snap-012345678/session-cccccccccccc/dddddddddddd-grep.txt'],
+      ['bash.txt', '/tmp/snh-acp-snapshot-spill/session-c22bc3f1d2af/8a7b6c5d4e3f-bash.txt'],
+      ['grep.txt', '/tmp/snh-acp-snap-012345678/session-cccccccccccc/dddddddddddd-grep.txt'],
     ]))
   })
 
@@ -1164,7 +1164,7 @@ function systemMessageEvent(text: string, seq = 2): string {
         id: '11111111-1111-4111-8111-111111111111',
         role: 'system',
         content: text.length === 0 ? [] : [{ type: 'text', text }],
-        source: { kind: 'plugin', plugin: '@deepseek-ai/dsh-system-prompt' },
+        source: { kind: 'plugin', plugin: '@supernova-ai/snh-system-prompt' },
       },
     },
   })
@@ -1273,7 +1273,7 @@ describe('scrubSessionSnapshot', () => {
 
     expect(scrubSessionSnapshot(`${header}\n${system}\n${request}\n${event}\n`)).toBe([
       header,
-      '{"type":"system/message","data":{"turn":1,"step":1,"message":{"id":"11111111-1111-4111-8111-111111111111","role":"system","content":[{"type":"text","text":"{{system}}"}],"source":{"kind":"plugin","plugin":"@deepseek-ai/dsh-system-prompt"}}}}',
+      '{"type":"system/message","data":{"turn":1,"step":1,"message":{"id":"11111111-1111-4111-8111-111111111111","role":"system","content":[{"type":"text","text":"{{system}}"}],"source":{"kind":"plugin","plugin":"@supernova-ai/snh-system-prompt"}}}}',
       '{"type":"request/header","data":{"header":{"tools":"{{tools}}"},"reason":"initial"}}',
       '{"type":"turn/start","data":{"turn":1,"seq":41,"time":42}}',
       '',

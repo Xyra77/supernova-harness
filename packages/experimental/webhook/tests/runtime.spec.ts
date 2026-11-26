@@ -1,7 +1,7 @@
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { readFileSync } from 'node:fs'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 import WebhookRuntime, {
   type WebhookDeliveryId,
   type WebhookRuleId,
@@ -200,7 +200,7 @@ describe('WebhookRuntime', () => {
     ].map(path => readFileSync(new URL(path, import.meta.url), 'utf8')).join('\n')
     const forbidden: ReadonlyArray<readonly [string, RegExp]> = [
       ['execution records', /\bWebhook(?:Execution|Status)\b/],
-      ['delivery storage domains', /@deepseek-ai\/dsh-storage|\bstorageDomain\b|\bDomainSpec\b/],
+      ['delivery storage domains', /@supernova-ai\/snh-storage|\bstorageDomain\b|\bDomainSpec\b/],
       ['retry timers', /\bset(?:Timeout|Interval)\s*\(/],
       ['delivery-id dedupe maps', /new Map<\s*WebhookDeliveryId/],
       ['Agent idle waits', /\.whenIdle\s*\(/],

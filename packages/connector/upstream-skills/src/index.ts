@@ -1,30 +1,30 @@
 /**
  * Upstream skills of CLI app plugins: the Host Service `ctx.upstreamSkills` downloads the files that a plugin's entry
  * skill indexes from one directory of the vendor's GitHub repository at a pinned commit, verifies them, publishes them
- * in the DSH cache, and lists the entry skill over them once they are there. In a profile, each plugin's files have
+ * in the SNH cache, and lists the entry skill over them once they are there. In a profile, each plugin's files have
  * a directory of their own, from which a registration deletes the other pins once its own pin is in place.
- * @module @deepseek-ai/dsh-upstream-skills
+ * @module @supernova-ai/snh-upstream-skills
  */
 
 import { randomUUID } from 'node:crypto'
 import { readFileSync, statSync } from 'node:fs'
 import { mkdir, readdir, rename, rm } from 'node:fs/promises'
 import { basename, dirname, join, resolve } from 'node:path'
-import { Service, type Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import { Service, type Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
 // Also declares `Context.profileContext`, the launcher-provided profile that owns a plugin's downloads.
-import type { ProfileContext } from '@deepseek-ai/dsh-app-boot'
-import { dshCachePath } from '@deepseek-ai/dsh-home-paths'
-import { BUNDLED_SKILL_RANK, isSkillName } from '@deepseek-ai/dsh-skill'
-import type { SkillCandidate, SkillDefinition, SkillProvider, SkillProviderControl } from '@deepseek-ai/dsh-skill'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
+import type { ProfileContext } from '@supernova-ai/snh-app-boot'
+import { snhCachePath } from '@supernova-ai/snh-home-paths'
+import { BUNDLED_SKILL_RANK, isSkillName } from '@supernova-ai/snh-skill'
+import type { SkillCandidate, SkillDefinition, SkillProvider, SkillProviderControl } from '@supernova-ai/snh-skill'
+import { MAX_TIMER_DELAY_MS } from '@supernova-ai/snh-timeout'
 import { parse as parseYaml } from 'yaml'
 import { downloadSkillSet, writeFiles } from './archive.ts'
 import type { UpstreamSkillsHandle, UpstreamSkillsRegistration, UpstreamSkillsState } from './types.ts'
 
 export type * from './types.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** The upstream skills CLI app plugins register. */
     upstreamSkills: UpstreamSkills
@@ -101,7 +101,7 @@ class UpstreamSkillProvider implements SkillProvider {
   /**
    * The profile's own directory for this plugin, from which {@link prune} deletes the other pins; the processes of
    * the profile share it. Undefined for a configured `skillsDir` and without a profile, where pins share
-   * `$DSH_HOME/cache/<name>` and all stay.
+   * `$SNH_HOME/cache/<name>` and all stay.
    */
   private readonly pins: string | undefined
   /** Whether this registration has started deleting the other pins, which it does once. */
@@ -126,10 +126,10 @@ class UpstreamSkillProvider implements SkillProvider {
       const remedy = `set it to a directory holding the files of ${options.set.directory} at their repository paths`
       if (!this.installed()) throw new Error(`${options.name}: skillsDir ${skillsDir} is not a directory; ${remedy}`)
     } else if (profile === undefined) {
-      this.directory = dshCachePath(options.name, pin)
+      this.directory = snhCachePath(options.name, pin)
     } else {
       // Only this profile's processes read these pins; one that still runs another plugin version loses its pin.
-      this.pins = dshCachePath({ dshHome: profile.home }, options.name, profile.name)
+      this.pins = snhCachePath({ snhHome: profile.home }, options.name, profile.name)
       this.directory = join(this.pins, pin)
     }
     const entry = readEntry(options)

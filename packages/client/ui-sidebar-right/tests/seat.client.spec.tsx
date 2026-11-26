@@ -1,27 +1,27 @@
 // @vitest-environment jsdom
-import { syncedConfig } from '@deepseek-ai/dsh-client-test-runtime'
-import { apply as applyMenus, inject as injectMenus } from '@deepseek-ai/dsh-client-ui-context-menu/client'
+import { syncedConfig } from '@supernova-ai/snh-client-test-runtime'
+import { apply as applyMenus, inject as injectMenus } from '@supernova-ai/snh-client-ui-context-menu/client'
 /** Sidebar presentation and tab subscriptions through the production slot renderer. */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, fireEvent, waitFor } from '@testing-library/react'
 import { useEffect, useState, useSyncExternalStore } from 'react'
-import { SlotTestRuntime, type SlotView } from '@deepseek-ai/dsh-client-test-runtime'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import type { ShortcutCatalogEntry, ShortcutCommandId } from '@deepseek-ai/dsh-client-shortcuts/client'
-import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type { MainPanelId } from '@deepseek-ai/dsh-client-ui-layout/client'
-import type { PaneId, SplitId, TabId } from '@deepseek-ai/dsh-client-ui-dockkit'
-import { dockPaneIds, getPane } from '@deepseek-ai/dsh-client-ui-dockkit'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import { SlotTestRuntime, type SlotView } from '@supernova-ai/snh-client-test-runtime'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import type { ShortcutCatalogEntry, ShortcutCommandId } from '@supernova-ai/snh-client-shortcuts/client'
+import type { PropsRuntime } from '@supernova-ai/snh-client-ui-slots'
+import type { MainPanelId } from '@supernova-ai/snh-client-ui-layout/client'
+import type { PaneId, SplitId, TabId } from '@supernova-ai/snh-client-ui-dockkit'
+import { dockPaneIds, getPane } from '@supernova-ai/snh-client-ui-dockkit'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import { apply, inject } from '../src/client/index.ts'
 import { intentsFor } from '../src/client/shell/SidebarRight.tsx'
 import { registerSidebarShortcuts } from '../src/client/shortcuts.ts'
-import { ShortcutRegistry } from '@deepseek-ai/dsh-client-shortcuts/src/client/registry.ts'
+import { ShortcutRegistry } from '@supernova-ai/snh-client-shortcuts/src/client/registry.ts'
 import type { SidebarRightTabInfo, SidebarRightTabMenuOwnerProps } from '../src/client/contract/slots.ts'
 import type { createSidebarRightStore } from '../src/client/stores.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-sidebar-right/client' {
+declare module '@supernova-ai/snh-client-ui-sidebar-right/client' {
   interface SidebarRightTabParamsMap {
     'transient-view': { text: string }
   }
@@ -33,7 +33,7 @@ declare module '../src/client/contract/params.ts' {
   }
 }
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@supernova-ai/snh-client-ui-slots' {
   interface SlotMap {
     /** A Conversation-column stand-in rendered before the seat, opening a resource as soon as a seat is mounted. */
     'sidebar-right.test.opener': { kind: 'single'; scope: 'session'; owner: { armed: boolean } }
@@ -109,7 +109,7 @@ async function mountSeat(viewportWidth = 1440, canShow = true, entryCount = 0, o
     const seat = useSyncExternalStore(listener => mounted.subscribe(listener), () => mounted.getSnapshot())
     useEffect(() => {
       if (seat === undefined) return
-      const address = `dsh-resource://file/session/s-test/arrival-${opened.length + 1}.txt`
+      const address = `snh-resource://file/session/s-test/arrival-${opened.length + 1}.txt`
       runtime.ctx.sidebarRight.openResource(address)
       opened.push(address)
     }, [seat])
@@ -146,7 +146,7 @@ async function mountSeat(viewportWidth = 1440, canShow = true, entryCount = 0, o
   }
   await act(async () => {
     runtime.ctx.sidebarRightTabs.register({
-      id: 'test/text', kind: 'text', priority: 'builtin', patterns: ['dsh-resource://file/**'],
+      id: 'test/text', kind: 'text', priority: 'builtin', patterns: ['snh-resource://file/**'],
       title: address => address.slice(address.lastIndexOf('/') + 1),
       keepMounted,
       guide: Array.from({ length: entryCount }, (_, order) => ({ id: String(order), order, title: () => 'Test', description: () => 'Test page' })),
@@ -163,7 +163,7 @@ async function mountSeat(viewportWidth = 1440, canShow = true, entryCount = 0, o
   const controller = runtime.ctx.sidebarRight
   const layout = () => instance.getSnapshot().bySession[SESSION]!.layout
   const open = (name = 'a.txt', options?: Parameters<typeof controller.openResource>[1]) => {
-    act(() => { controller.openResource(`dsh-resource://file/session/s-test/${name}`, options) })
+    act(() => { controller.openResource(`snh-resource://file/session/s-test/${name}`, options) })
     return controller.active()!
   }
   const selectSession = (id: SessionId): void => {
@@ -681,11 +681,11 @@ describe('RightbarSeat presentation', () => {
     expect(h.view.container.querySelectorAll('[data-dockkit-pane]')).toHaveLength(2)
     for (const width of [518, 620]) {
       h.view.update({ width, viewportWidth: 1440, canShow: true })
-      expect(panel.style.getPropertyValue('--dsh-sidebar-right-panel-width')).toBe(`${width}px`)
-      expect(panel.style.getPropertyValue('--dsh-sidebar-width')).toBe('')
+      expect(panel.style.getPropertyValue('--snh-sidebar-right-panel-width')).toBe(`${width}px`)
+      expect(panel.style.getPropertyValue('--snh-sidebar-width')).toBe('')
     }
     act(() => { h.actions.setExpanded(SESSION, false) })
-    expect(panel.style.getPropertyValue('--dsh-sidebar-right-panel-width')).toBe('620px')
+    expect(panel.style.getPropertyValue('--snh-sidebar-right-panel-width')).toBe('620px')
   })
 
   it('fills the viewport without replacing the content tree or releasing the wide track', async () => {
@@ -693,16 +693,16 @@ describe('RightbarSeat presentation', () => {
     const tab = h.open()
     const panel = element(h.view.container, '[data-sidebar-right-panel]')
     const body = element(h.view.container, '[data-tab-body]')
-    expect(panel.style.getPropertyValue('--dsh-sidebar-right-panel-width')).toBe('420px')
+    expect(panel.style.getPropertyValue('--snh-sidebar-right-panel-width')).toBe('420px')
     fireEvent.click(element(h.view.container, '[data-sidebar-right-mode]'))
     expect(h.layout().mode).toBe('fullscreen')
-    expect(panel.style.getPropertyValue('--dsh-sidebar-right-panel-width')).toBe('calc(100vw + 1px)')
+    expect(panel.style.getPropertyValue('--snh-sidebar-right-panel-width')).toBe('calc(100vw + 1px)')
     expect(panel.dataset['sidebarRightPanel']).toBe('fullscreen')
     expect(element(h.view.container, '[data-tab-body]')).toBe(body)
     expect(h.frame.openRightbar).toHaveBeenLastCalledWith(true, true)
     expect(h.bodies.get(tab.id)?.sidebar).toEqual({ expanded: true, fullscreen: true })
     fireEvent.click(element(h.view.container, '[data-sidebar-right-mode]'))
-    expect(panel.style.getPropertyValue('--dsh-sidebar-right-panel-width')).toBe('420px')
+    expect(panel.style.getPropertyValue('--snh-sidebar-right-panel-width')).toBe('420px')
     expect(element(h.view.container, '[data-tab-body]')).toBe(body)
     expect(h.frame.openRightbar).toHaveBeenLastCalledWith(true, false)
     fireEvent.click(element(h.view.container, '[data-sidebar-right-toggle]'))
@@ -851,7 +851,7 @@ describe('RightbarSeat fullscreen entry', () => {
     else if (change === 'session') {
       await h.runtime.sessions.add({ id: OTHER })
       act(() => { h.selectSession(OTHER) })
-      act(() => { h.controller.openResource('dsh-resource://file/session/s-other/b.txt') })
+      act(() => { h.controller.openResource('snh-resource://file/session/s-other/b.txt') })
     } else await h.runtime.dispose()
     const openCalls = [...h.frame.openRightbar.mock.calls]
     const closeCalls = h.frame.closeRightbar.mock.calls.length
@@ -944,12 +944,12 @@ describe('slot-owned useTabInfo', () => {
     expect(h.instance.getSnapshot()).toBe(stored)
     expect(info.tab.signal.aborted).toBe(false)
     act(() => { h.selectSession(OTHER) })
-    act(() => { h.controller.openResource('dsh-resource://file/session/s-other/other.txt', { params: { line: 9 } }) })
+    act(() => { h.controller.openResource('snh-resource://file/session/s-other/other.txt', { params: { line: 9 } }) })
     const otherTab = h.controller.active()!
     expect(otherTab.id).toBe(own.id)
     const otherInfo = h.bodies.get(otherTab.id)!
     expect(otherInfo.tab.signal).not.toBe(info.tab.signal)
-    act(() => { info.tab.actions.openResource('dsh-resource://file/session/s-test/b.txt') })
+    act(() => { info.tab.actions.openResource('snh-resource://file/session/s-test/b.txt') })
     expect(Object.values(h.layout().tabs).map(tab => tab.title)).toContain('b.txt')
     expect(h.controller.active()?.contentId).toBe(otherTab.contentId)
     expect(h.bodies.get(otherTab.id)?.tab.navigation.params).toEqual({ line: 9 })
@@ -1200,7 +1200,7 @@ describe('the reveal glow', () => {
     expect(marked()).toEqual([])
     // A request whose Session is hidden in the same commit is dropped, not deferred.
     act(() => {
-      h.controller.openResource('dsh-resource://file/session/s-test/b.txt')
+      h.controller.openResource('snh-resource://file/session/s-test/b.txt')
       h.runtime.panelInfo.set({ activePanelId: 'other-panel' as MainPanelId })
     })
     expect(marked()).toEqual([])

@@ -121,7 +121,7 @@ def check_toggle_mouse(helper, owner, state_file, executable):
         wait_owned(lambda s: s["active"] and s["keyWindow"])
         call("getState", {**window, "maxElements": 300, "maxDepth": 20})
         key = hashlib.sha256(Path(helper.process.args[0]).read_bytes()).hexdigest()
-        socket = Path(f"/tmp/dsh-cua-{os.getuid()}/{key}.sock")
+        socket = Path(f"/tmp/snh-cua-{os.getuid()}/{key}.sock")
         for index, (button, down, moved, up) in enumerate([("left", 1, 6, 2), ("right", 3, 7, 4), ("middle", 25, 27, 26)]):
             assert cursor(*inside) == inside
             params = {**window, "mouseButton": button, "useSystemInput": True}
@@ -196,7 +196,7 @@ def check_system_drag(helper, owner, window, point, state_file):
     assert (move["point"][0] - down["point"][0], down["point"][1] - move["point"][1]) == (80, 20), events
     assert up["point"] == move["point"] and not up["pressedButtons"] & 1, events
     key = hashlib.sha256(Path(helper.process.args[0]).read_bytes()).hexdigest()
-    connection = Connection(Path(f"/tmp/dsh-cua-{os.getuid()}/{key}.sock"), key)
+    connection = Connection(Path(f"/tmp/snh-cua-{os.getuid()}/{key}.sock"), key)
     try:
         app = connection.call("getApp", {"selector": str(state["pid"])})
         target = {**params, "appHandle": app["appHandle"], "durationMs": 5000, "steps": 2}
@@ -254,7 +254,7 @@ def check_clicks(helper, window, point, state_file):
         count += len(types)
     # Production cancellation travels directly over the socket; the diagnostic stdio proxy exchanges whole requests.
     key = hashlib.sha256(Path(helper.process.args[0]).read_bytes()).hexdigest()
-    socket_path = Path(f"/tmp/dsh-cua-{os.getuid()}/{key}.sock")
+    socket_path = Path(f"/tmp/snh-cua-{os.getuid()}/{key}.sock")
     for ending in ["cancel", "timeout", "disconnect"]:
         connection = Connection(socket_path, key, maxClickHoldMs=7000, timeoutMs=2000 if ending == "timeout" else 30000)
         try:
@@ -424,7 +424,7 @@ def check_system_input(helper, owner, state_file, executable):
     state = wait_for_state(state_file, lambda value: any(event["type"] == 2 for event in value["events"][count:]))
     assert not next(event for event in state["events"][count:] if event["type"] == 2)["shift"], state
     key = hashlib.sha256(Path(helper.process.args[0]).read_bytes()).hexdigest()
-    connection = Connection(Path(f"/tmp/dsh-cua-{os.getuid()}/{key}.sock"), key)
+    connection = Connection(Path(f"/tmp/snh-cua-{os.getuid()}/{key}.sock"), key)
     try:
         selected = connection.call("getApp", {"selector": str(state["pid"])})
         target = {**window, "appHandle": selected["appHandle"]}
@@ -464,17 +464,17 @@ def main():
     transcript = []
     helper = None
     pid = None
-    with tempfile.TemporaryDirectory(prefix="dsh-cua-capabilities-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="snh-cua-capabilities-") as temporary:
         root = Path(temporary)
         application = root / "Capabilities Fixture.app"
         executable = application / "Contents/MacOS/CapabilitiesFixture"
         executable.parent.mkdir(parents=True)
         state_file = root / "state.json"
         info = {"CFBundleName": "Capabilities Fixture", "CFBundleDisplayName": "Capabilities Fixture",
-                "CFBundleIdentifier": "test.dsh.cua." + uuid.uuid4().hex,
+                "CFBundleIdentifier": "test.snh.cua." + uuid.uuid4().hex,
                 "CFBundleExecutable": "CapabilitiesFixture", "CFBundlePackageType": "APPL",
-                "DSHFixtureStatePath": str(state_file), "DSHFixtureBackground": args.click_only or args.keyboard_only or args.drag_only or args.toggle_only or args.mixed_only or args.system_input_only,
-                "DSHFixtureKeyboard": args.keyboard_only or args.mixed_only}
+                "SNHFixtureStatePath": str(state_file), "SNHFixtureBackground": args.click_only or args.keyboard_only or args.drag_only or args.toggle_only or args.mixed_only or args.system_input_only,
+                "SNHFixtureKeyboard": args.keyboard_only or args.mixed_only}
         (application / "Contents/Info.plist").write_bytes(plistlib.dumps(info))
         subprocess.run(["swiftc", str(ROOT / "tests/CapabilitiesFixture.swift"), "-o", str(executable)], check=True)
         try:

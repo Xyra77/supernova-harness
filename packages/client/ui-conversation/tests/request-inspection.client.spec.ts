@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { SessionSeq } from '@deepseek-ai/dsh-session/types'
-import type { SessionEvent } from '@deepseek-ai/dsh-session/types'
+import { SessionSeq } from '@supernova-ai/snh-session/types'
+import type { SessionEvent } from '@supernova-ai/snh-session/types'
 import type { SystemPromptNode } from '../src/client/contract/request-inspection.ts'
 import { inspectRequestPrompt } from '../src/client/contract/request-inspection.ts'
 

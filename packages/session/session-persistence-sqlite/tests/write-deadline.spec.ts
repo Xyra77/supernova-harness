@@ -3,9 +3,9 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { SESSION_FORMAT_VERSION, SessionId, SessionSeq, SessionStore } from '@deepseek-ai/dsh-session'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
+import { Context } from '@supernova-ai/cordis'
+import { SESSION_FORMAT_VERSION, SessionId, SessionSeq, SessionStore } from '@supernova-ai/snh-session'
+import type { SessionEvent } from '@supernova-ai/snh-session'
 import { sqliteLogs } from './fixtures/store.ts'
 import * as persistence from '../src/index.ts'
 import { SqliteStore, SqliteSessionHandle } from '../src/sqlite.ts'
@@ -15,7 +15,7 @@ const event = (seq: number): SessionEvent => seq % 2 === 0
   : { type: 'turn/end', seq: SessionSeq(seq), time: 0, data: { turn: (seq + 1) / 2, reason: { kind: 'completed' } } }
 
 it.each([false, true])('schedules a threshold batch during drain settlement, failure=%s', async (fail) => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-session-drain-settlement-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-session-drain-settlement-'))
   const reported = Promise.withResolvers<unknown>()
   const logs = sqliteLogs(join(root, 'sessions.sqlite'), root, {
     report: (_id, error) => { reported.resolve(error) },
@@ -57,7 +57,7 @@ it.each([false, true])('schedules a threshold batch during drain settlement, fai
 })
 
 it('starts a follow-up write once its own batching deadline elapsed during the preceding commit', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-sqlite-deadline-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-sqlite-deadline-'))
   const logs = sqliteLogs(join(root, 'sessions.sqlite'), root)
   const writer = await logs.create({ version: SESSION_FORMAT_VERSION, id: SessionId('deadline'), createdAt: 0, isSeeded: false })
   await writer.flush()
@@ -94,7 +94,7 @@ it('starts a follow-up write once its own batching deadline elapsed during the p
 })
 
 it('retains the published settlement event under an immediate-close interleaving', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-session-close-settlement-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-session-close-settlement-'))
   const ctx = new Context()
   onTestFinished(async () => { try { await ctx.fiber.dispose() } finally { await rm(root, { recursive: true, force: true }) } })
   await ctx.plugin(SessionStore)

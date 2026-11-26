@@ -1,14 +1,14 @@
-/** Creator mode adds its DSH customization intent to the actual model prompt. */
+/** Creator mode adds its SNH customization intent to the actual model prompt. */
 import { readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright'
 import { expect, it } from 'vitest'
-import type {} from '@deepseek-ai/dsh-token-meter'
+import type {} from '@supernova-ai/snh-token-meter'
 import { fixtureUserPrompts, launchWebScaffold } from './scaffold.ts'
 import { connectFreshWorkspace, newEnglishPage } from './support.ts'
 
 const FIXTURE = fileURLToPath(new URL('../../../snapshots/web/creator-persona/session.v4.jsonl', import.meta.url))
-const CUSTOMIZATION_INTENT = 'You help the user customize DeepSeek Harness itself.'
+const CUSTOMIZATION_INTENT = 'You help the user customize SuperNova Harness itself.'
 
 it('sends the Creator customization intent without taking actions for an ordinary request', async () => {
   const scaffold = await launchWebScaffold({
@@ -36,7 +36,7 @@ it('sends the Creator customization intent without taking actions for an ordinar
       if (system === undefined) throw new Error('Creator request has no system prompt')
       // Each section is its own text block; adapters join them with blank lines.
       const prompt = system.content.flatMap(block => block.type === 'text' ? [block.text] : []).join('\n\n')
-      expect(prompt).toMatch(/^You are a coding agent powered by the .+ model\. You help the user customize DeepSeek Harness itself\.$/mu)
+      expect(prompt).toMatch(/^You are a coding agent powered by the .+ model\. You help the user customize SuperNova Harness itself\.$/mu)
       expect(prompt.split(CUSTOMIZATION_INTENT)).toHaveLength(2)
       const sharedPrompt = prompt.replace(` ${CUSTOMIZATION_INTENT}`, '')
       console.info('Creator persona context increment', {
@@ -48,7 +48,7 @@ it('sends the Creator customization intent without taking actions for an ordinar
       const catalog = agent.session.snapshotEvents().flatMap(event =>
         event.type === 'user/message' && event.data.source.kind === 'skill-catalog'
           ? event.data.source.entries.map(entry => entry.name) : [])
-      expect(catalog).toContain('dsh-doc')
+      expect(catalog).toContain('snh-doc')
       expect(catalog).not.toContain('official-plugins')
       expect(catalog).not.toContain('personalized-pages')
       expect(agent.session.snapshotEvents().filter(event => event.type === 'tool/call')).toEqual([])

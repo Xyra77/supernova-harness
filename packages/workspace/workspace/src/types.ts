@@ -2,12 +2,12 @@
  * Public type vocabulary of the workspace entity: the `WorkspaceId` brand and
  * the `Workspace` consumer interface. Types only — the `WorkspaceId` factory
  * lives in `index.ts` (this file carries no runtime code).
- * @module @deepseek-ai/dsh-workspace/src/types
+ * @module @supernova-ai/snh-workspace/src/types
  */
 
-import type { Branded } from '@deepseek-ai/dsh-brand'
-import type { SessionHeader, SessionId } from '@deepseek-ai/dsh-session/types'
-import type { TypertResource } from '@deepseek-ai/dsh-typert-protocol'
+import type { Branded } from '@supernova-ai/snh-brand'
+import type { SessionHeader, SessionId } from '@supernova-ai/snh-session/types'
+import type { TypertResource } from '@supernova-ai/snh-typert-protocol'
 
 /**
  * Identifies one workspace record. A generated uuid, never the path: path
@@ -15,7 +15,7 @@ import type { TypertResource } from '@deepseek-ai/dsh-typert-protocol'
  */
 export type WorkspaceId = Branded<'WorkspaceId'>
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@supernova-ai/snh-typert-protocol' {
   interface TypertResourceMap {
     /** One Workspace; the Workspace Controller registers its default `workspaceId` wire field. */
     workspace: TypertResource<WorkspaceId>

@@ -14,9 +14,9 @@ Status: implemented
 
 ### 位置归主体所有，面板提出申请
 
-[`ui-conversation`](../../../../packages/client/ui-conversation/README.zh.md#end-reserve) 拥有正文的宽度轴、滚动容器和宽度手柄，因此这段位置也归它所有。样式表在 Conversation 主体上设置 `--dsh-chat-end-reserve` 来提出申请；主体据此推出滚动容器的末端内边距 `--dsh-chat-end-inset`，以及起始留白能让出的最大预留 `--dsh-chat-end-reserve-max`。面板的样式表通过一条 `:has()` 规则把预留设为 348px，该规则在停靠探针带有标记时匹配，因此申请不需要 Slot 属性，也不会让 Chat 视图重新渲染。
+[`ui-conversation`](../../../../packages/client/ui-conversation/README.zh.md#end-reserve) 拥有正文的宽度轴、滚动容器和宽度手柄，因此这段位置也归它所有。样式表在 Conversation 主体上设置 `--snh-chat-end-reserve` 来提出申请；主体据此推出滚动容器的末端内边距 `--snh-chat-end-inset`，以及起始留白能让出的最大预留 `--snh-chat-end-reserve-max`。面板的样式表通过一条 `:has()` 规则把预留设为 348px，该规则在停靠探针带有标记时匹配，因此申请不需要 Slot 属性，也不会让 Chat 视图重新渲染。
 
-主体从滚动容器的宽度推出这些长度；它测量该宽度并发布为 `--dsh-conversation-viewport-width`。有三个盒子读取内边距：滚动容器用它作内边距，主体中的宽度手柄用它定位，[`ui-chat`](../../../../packages/client/ui-chat/README.zh.md#scroll-ownership) 的侧边层用它越过内边距延伸回去，让面板位于滚动容器的末端边缘。用百分比写出的长度在这三处会按不同的盒子解析，而滚动容器自身的内容盒又随内边距变化。测量得到的像素宽度让三处取得同一个值，并且不随内边距改变。
+主体从滚动容器的宽度推出这些长度；它测量该宽度并发布为 `--snh-conversation-viewport-width`。有三个盒子读取内边距：滚动容器用它作内边距，主体中的宽度手柄用它定位，[`ui-chat`](../../../../packages/client/ui-chat/README.zh.md#scroll-ownership) 的侧边层用它越过内边距延伸回去，让面板位于滚动容器的末端边缘。用百分比写出的长度在这三处会按不同的盒子解析，而滚动容器自身的内容盒又随内边距变化。测量得到的像素宽度让三处取得同一个值，并且不随内边距改变。
 
 ### 一个探针，结果不受让出的位置影响
 
@@ -28,7 +28,7 @@ Status: implemented
 
 ### 面板和正文做同一个动作
 
-用户的一次按下让面板显示或隐藏时，面板播放进入或退出动画，正文在同样的 160ms 内按同一条曲线移动：动画期间，面板的样式表在 Conversation 主体上设置 `--dsh-chat-end-reserve-transition`，滚动容器的内边距和侧边层的外边距都从它取得过渡。面板通过比较两次渲染来区分按下和空间变化：显示与否变了，而停靠空间没变。空间变化时面板立即显示或隐藏，这涵盖了挂载、切换到另一个会话、缩放窗口和拖动正文宽度。
+用户的一次按下让面板显示或隐藏时，面板播放进入或退出动画，正文在同样的 160ms 内按同一条曲线移动：动画期间，面板的样式表在 Conversation 主体上设置 `--snh-chat-end-reserve-transition`，滚动容器的内边距和侧边层的外边距都从它取得过渡。面板通过比较两次渲染来区分按下和空间变化：显示与否变了，而停靠空间没变。空间变化时面板立即显示或隐藏，这涵盖了挂载、切换到另一个会话、缩放窗口和拖动正文宽度。
 
 ## Alternatives considered
 

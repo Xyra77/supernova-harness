@@ -1,0 +1,10 @@
+version: 1
+scenario: supernova-deferred-tools
+profile: headless
+composition: supernova-deferred-tools
+recording: authored
+header:
+  class: supernova-deferred-tools
+  pin: true
+  systemPromptSource: supernova-all-deferred-tools
+  changes: 4

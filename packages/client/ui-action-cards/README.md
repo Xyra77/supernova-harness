@@ -3,7 +3,7 @@ description: "Browser half of optional action cards: the card frame below comple
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-action-cards
+# @supernova-ai/snh-client-ui-action-cards
 
 English | [中文](README.zh.md)
 
@@ -25,7 +25,7 @@ Users see an optional action card below a completed answer: its title, a brief t
 <a id="use-this-package"></a>
 ## Use this package
 
-The Web composition ([`dsh-web-app`](../../bundle/web-app/README.md)) mounts this package beside its [Host service](../../interaction/action-cards/README.md). This browser contribution has no configuration fields. It adds the Personalized recommendations switch to Settings → General, which writes the Host service's `enabled` field.
+The Web composition ([`snh-web-app`](../../bundle/web-app/README.md)) mounts this package beside its [Host service](../../interaction/action-cards/README.md). This browser contribution has no configuration fields. It adds the Personalized recommendations switch to Settings → General, which writes the Host service's `enabled` field.
 
 ### Register a card body
 

@@ -2,10 +2,10 @@
  * Per-server runtime status, list views, and the MCP manager's Cordis event.
  * Types only — no runtime code.
  *
- * @module @deepseek-ai/dsh-mcp-manager/types
+ * @module @supernova-ai/snh-mcp-manager/types
  */
 
-import type { McpCloseResult, McpConnectionStatus, McpOAuthAttemptView } from '@deepseek-ai/dsh-mcp-client/types'
+import type { McpCloseResult, McpConnectionStatus, McpOAuthAttemptView } from '@supernova-ai/snh-mcp-client/types'
 
 /**
  * Status of one managed server. Extends the mcp-client connection status with
@@ -32,7 +32,7 @@ export interface McpManagedServerView {
   status: McpManagedServerStatus
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Events {
     /**
      * A managed server's connection status or authorization view changed;

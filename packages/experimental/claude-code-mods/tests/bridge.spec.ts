@@ -1,4 +1,4 @@
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { createServer } from 'node:http'
 import type { AddressInfo } from 'node:net'
@@ -6,27 +6,27 @@ import { tmpdir } from 'node:os'
 import { pathToFileURL } from 'node:url'
 import { join, resolve } from 'node:path'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
-import { Context, type Fiber } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import CommandRuntime from '@deepseek-ai/dsh-commands'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import WorkingDirectory from '@deepseek-ai/dsh-working-directory'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { createAssistantMessage, createUserMessage, type ToolCallId as ToolCallIdOf } from '@deepseek-ai/dsh-llm'
-import type { LlmResolvedModelInfo } from '@deepseek-ai/dsh-llm'
-import TokenMeter from '@deepseek-ai/dsh-token-meter'
-import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment/types'
-import { scopeOf } from '@deepseek-ai/dsh-scope'
-import type { SessionId, SessionEvent } from '@deepseek-ai/dsh-session'
-import Storage from '@deepseek-ai/dsh-storage'
-import * as StorageDomain from '@deepseek-ai/dsh-storage-domain'
-import * as StorageJson from '@deepseek-ai/dsh-storage-json'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tool-testkit'
-import UserQuestionService from '@deepseek-ai/dsh-user-questions'
+import { Context, type Fiber } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import type { Agent } from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import CommandRuntime from '@supernova-ai/snh-commands'
+import LocalFileSystem from '@supernova-ai/snh-fs-local'
+import WorkingDirectory from '@supernova-ai/snh-working-directory'
+import { brandString } from '@supernova-ai/snh-brand'
+import { createAssistantMessage, createUserMessage, type ToolCallId as ToolCallIdOf } from '@supernova-ai/snh-llm'
+import type { LlmResolvedModelInfo } from '@supernova-ai/snh-llm'
+import TokenMeter from '@supernova-ai/snh-token-meter'
+import type { ImageAttachmentRef } from '@supernova-ai/snh-attachment/types'
+import { scopeOf } from '@supernova-ai/snh-scope'
+import type { SessionId, SessionEvent } from '@supernova-ai/snh-session'
+import Storage from '@supernova-ai/snh-storage'
+import * as StorageDomain from '@supernova-ai/snh-storage-domain'
+import * as StorageJson from '@supernova-ai/snh-storage-json'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import { defineContentToolFixture } from '@supernova-ai/snh-tool-testkit'
+import UserQuestionService from '@supernova-ai/snh-user-questions'
 import ClaudeCodeMods, { defineMod, MODS_API_VERSION, type Config, type ModPlugin, type ModRegister } from '../src/index.ts'
 import { MockAdapter, textResponse, toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 
@@ -46,7 +46,7 @@ afterEach(async () => {
   for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true })
 })
 
-function scratch(prefix = 'dsh-cc-mods-'): string {
+function scratch(prefix = 'snh-cc-mods-'): string {
   const dir = mkdtempSync(join(tmpdir(), prefix))
   dirs.push(dir)
   return dir
@@ -109,7 +109,7 @@ async function harness(
   await mountAgentLoopTestDependencies(ctx, { tools: options.tools ?? {} })
   await ctx.plugin(AgentLoop, { agents: [] })
   await ctx.plugin(CommandRuntime)
-  const workspace = scratch('dsh-cc-mods-ws-')
+  const workspace = scratch('snh-cc-mods-ws-')
   await options.services?.(ctx, workspace)
   if (ctx.get('fs') === undefined) await ctx.plugin(LocalFileSystem, { cwd: workspace })
   await ctx.plugin(WorkingDirectory, { defaultDirectory: workspace })

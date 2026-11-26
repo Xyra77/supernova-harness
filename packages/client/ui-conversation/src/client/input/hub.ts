@@ -4,18 +4,18 @@
  * catalog subscription. Saved drafts enter the model before the first lookup
  * returns; Session-scope disposal releases the shell and its resources.
  */
-import type {} from '@deepseek-ai/dsh-client-product-analytics/client'
-import type { PlanProjection } from '@deepseek-ai/dsh-plan-mode/types'
-import type { GoalProjection } from '@deepseek-ai/dsh-goal/types'
-import type { Context } from '@deepseek-ai/cordis'
+import type {} from '@supernova-ai/snh-client-product-analytics/client'
+import type { PlanProjection } from '@supernova-ai/snh-plan-mode/types'
+import type { GoalProjection } from '@supernova-ai/snh-goal/types'
+import type { Context } from '@supernova-ai/cordis'
 import type {
   ISessions, SessionBinding, SessionFace, SessionReference, SessionSnapshot,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionId, SessionSeq } from '@deepseek-ai/dsh-session/types'
-import type { TranslateNS } from '@deepseek-ai/dsh-client-locale/client'
-import type { InboxState } from '@deepseek-ai/dsh-agent/types'
-import type { ModelSelectionProjection } from '@deepseek-ai/dsh-agent/types'
-import type { ObservableSnapshot } from '@deepseek-ai/dsh-client-store'
+} from '@supernova-ai/snh-api-session-controller/client'
+import type { SessionId, SessionSeq } from '@supernova-ai/snh-session/types'
+import type { TranslateNS } from '@supernova-ai/snh-client-locale/client'
+import type { InboxState } from '@supernova-ai/snh-agent/types'
+import type { ModelSelectionProjection } from '@supernova-ai/snh-agent/types'
+import type { ObservableSnapshot } from '@supernova-ai/snh-client-store'
 import type {
   DraftAttachmentId, DraftAttachmentSerializationResult, DraftInitializationOptions, DraftInitializationResult, InputState,
   InputTriggerController, SessionInputResolver, SessionInput, SubmitOutcome,
@@ -54,7 +54,7 @@ interface ConversationAttachmentFace {
   releaseDraftAttachment(id: DraftAttachmentId): void
 }
 
-declare module '@deepseek-ai/dsh-api-session-controller/client' {
+declare module '@supernova-ai/snh-api-session-controller/client' {
   interface SessionReferenceSourceMap {
     /** A Session whose composer draft holds attachments, kept without its event connection. */
     draft: unknown
@@ -67,7 +67,7 @@ function draftNeedsHold(input: InputState, session: SessionSnapshot): boolean {
 }
 
 /** Per-Session marker that a page unload discarded the draft's browser-owned attachments. */
-const UNLOAD_MARK_PREFIX = 'dsh.composer-draft-attachments-unloaded'
+const UNLOAD_MARK_PREFIX = 'snh.composer-draft-attachments-unloaded'
 
 /** Record that an unloading page held draft attachments for these Sessions. */
 function writeUnloadMarks(sessionIds: readonly SessionId[]): void {

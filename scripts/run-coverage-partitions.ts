@@ -1,4 +1,4 @@
-/** CLI entry for partitioned Vitest coverage, optionally limited to one `DSH_COVERAGE_SHARD` file shard. */
+/** CLI entry for partitioned Vitest coverage, optionally limited to one `SNH_COVERAGE_SHARD` file shard. */
 import { resolve } from 'node:path'
 import {
   COVERAGE_PARTITIONS_ENV,

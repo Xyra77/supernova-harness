@@ -1,7 +1,7 @@
 /** Browser-safe request and receipt types for staged file uploads. */
 
-import type { FileAttachmentRef, ImageAttachmentRef } from '@deepseek-ai/dsh-attachment/types'
-import type { Branded } from '@deepseek-ai/dsh-brand'
+import type { FileAttachmentRef, ImageAttachmentRef } from '@supernova-ai/snh-attachment/types'
+import type { Branded } from '@supernova-ai/snh-brand'
 
 /** Canonical encoded upload accepted by the Remote fallback. */
 export interface EncodedFileUploadRequest {

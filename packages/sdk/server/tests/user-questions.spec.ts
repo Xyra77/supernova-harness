@@ -1,16 +1,16 @@
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import { mountAgentLoopTestDependencies } from '@deepseek-ai/dsh-agent-loop-testkit'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import UserQuestions from '@deepseek-ai/dsh-user-questions'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import type { JsonRpcTransportPeer } from '@deepseek-ai/dsh-sdk-protocol'
+import { Context } from '@supernova-ai/cordis'
+import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import UserQuestions from '@supernova-ai/snh-user-questions'
+import type { SessionId } from '@supernova-ai/snh-session'
+import type { JsonRpcTransportPeer } from '@supernova-ai/snh-sdk-protocol'
 import { MockAdapter, textResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import { expect, it, onTestFinished, vi } from 'vitest'
 import { HarnessSdkJsonRpcServer } from '../src/server.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const questions = [{ id: 'format', question: 'Which format?', options: [{ label: 'CSV' }, { label: 'JSON' }] }]
 const answer = { answers: [{ id: 'format', selected: ['CSV'], custom: 'include a header' }] }

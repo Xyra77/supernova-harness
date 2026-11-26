@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-client-ui-session-panel",
+  "name": "@supernova-ai/snh-client-ui-session-panel",
   "description": "Floating Session panel opened from the Session header, composed of sections that plugins register",
   "version": "0.2.3-alpha.2",
   "type": "module",
@@ -32,28 +32,28 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~",
-    "@deepseek-ai/dsh-api-remotes": "workspace:*",
-    "@deepseek-ai/dsh-api-session-controller": "workspace:*",
-    "@deepseek-ai/dsh-api-workspace-controller": "workspace:*",
-    "@deepseek-ai/dsh-client-connection": "workspace:*",
-    "@deepseek-ai/dsh-client-locale": "workspace:*",
-    "@deepseek-ai/dsh-client-store": "workspace:*",
-    "@deepseek-ai/dsh-client-test-runtime": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-chat": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-context-menu": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-conversation": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-primitives": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-renderer": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-session": "workspace:*",
-    "@deepseek-ai/dsh-client-ui-slots": "workspace:*",
-    "@deepseek-ai/dsh-session": "workspace:*",
-    "@deepseek-ai/dsh-util-workspace-path": "workspace:*",
-    "@deepseek-ai/dsh-working-directory": "workspace:*",
-    "@deepseek-ai/dsh-workspace": "workspace:*",
+    "@supernova-ai/cordis": "workspace:~",
+    "@supernova-ai/snh-api-remotes": "workspace:*",
+    "@supernova-ai/snh-api-session-controller": "workspace:*",
+    "@supernova-ai/snh-api-workspace-controller": "workspace:*",
+    "@supernova-ai/snh-client-connection": "workspace:*",
+    "@supernova-ai/snh-client-locale": "workspace:*",
+    "@supernova-ai/snh-client-store": "workspace:*",
+    "@supernova-ai/snh-client-test-runtime": "workspace:*",
+    "@supernova-ai/snh-client-ui-chat": "workspace:*",
+    "@supernova-ai/snh-client-ui-context-menu": "workspace:*",
+    "@supernova-ai/snh-client-ui-conversation": "workspace:*",
+    "@supernova-ai/snh-client-ui-primitives": "workspace:*",
+    "@supernova-ai/snh-client-ui-renderer": "workspace:*",
+    "@supernova-ai/snh-client-ui-session": "workspace:*",
+    "@supernova-ai/snh-client-ui-slots": "workspace:*",
+    "@supernova-ai/snh-session": "workspace:*",
+    "@supernova-ai/snh-util-workspace-path": "workspace:*",
+    "@supernova-ai/snh-working-directory": "workspace:*",
+    "@supernova-ai/snh-workspace": "workspace:*",
     "@testing-library/react": "^16.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -67,16 +67,16 @@
     "lib/**/*.js.map",
     "src"
   ],
-  "dsh": {
+  "snh": {
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-api-remotes",
-        "@deepseek-ai/dsh-client-connection",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-chat",
-        "@deepseek-ai/dsh-client-ui-context-menu",
-        "@deepseek-ai/dsh-client-ui-conversation",
-        "@deepseek-ai/dsh-client-ui-primitives"
+        "@supernova-ai/snh-api-remotes",
+        "@supernova-ai/snh-client-connection",
+        "@supernova-ai/snh-client-locale",
+        "@supernova-ai/snh-client-ui-chat",
+        "@supernova-ai/snh-client-ui-context-menu",
+        "@supernova-ai/snh-client-ui-conversation",
+        "@supernova-ai/snh-client-ui-primitives"
       ],
       "platform": "web"
     }

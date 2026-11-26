@@ -1,17 +1,17 @@
 /** Controlled connection streams exercise the platform-independent native protocol client. */
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import { PassThrough, Writable } from 'node:stream'
-import { HarnessError } from '@deepseek-ai/dsh-error'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import { Context } from '@deepseek-ai/cordis'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import { NativeToolExecutor } from '@deepseek-ai/dsh-tool-executor-native'
-import Tools, { defineTool } from '@deepseek-ai/dsh-tools'
+import { HarnessError } from '@supernova-ai/snh-error'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import { Context } from '@supernova-ai/cordis'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import { NativeToolExecutor } from '@supernova-ai/snh-tool-executor-native'
+import Tools, { defineTool } from '@supernova-ai/snh-tools'
 import type { NativeChannel } from '../src/native-client.ts'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { z } from 'zod'
 import { NativeClient, NativeError } from '../src/native-client.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const shared = vi.hoisted(() => ({ create: vi.fn() }))
 

@@ -1,13 +1,13 @@
 /** Remote connection settings registration; invitation credentials stay in this plugin's memory. */
-import type { Context } from '@deepseek-ai/cordis'
-import remoteConnectionRemote from '@deepseek-ai/dsh-client-remote-connection/remote'
-import type {} from '@deepseek-ai/dsh-api-remotes/client'
-import type {} from '@deepseek-ai/dsh-api-remote-access/client'
-import type {} from '@deepseek-ai/dsh-client-locale/client'
-import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
-import { writeClipboard } from '@deepseek-ai/dsh-client-ui-primitives'
+import type { Context } from '@supernova-ai/cordis'
+import remoteConnectionRemote from '@supernova-ai/snh-client-remote-connection/remote'
+import type {} from '@supernova-ai/snh-api-remotes/client'
+import type {} from '@supernova-ai/snh-api-remote-access/client'
+import type {} from '@supernova-ai/snh-client-locale/client'
+import type {} from '@supernova-ai/snh-client-ui-settings/client'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
+import type {} from '@supernova-ai/snh-client-ui-layout/client'
+import { writeClipboard } from '@supernova-ai/snh-client-ui-primitives'
 import { RemoteConnectionController } from './remote-connection-controller.ts'
 import { LoginLinkController } from './login-link-controller.ts'
 import { LoginLinkToast } from './LoginLinkToast.tsx'
@@ -21,7 +21,7 @@ import { en, zh, ja, es, fr, de, ru, pt, type RemoteConnectionLocaleKey } from '
 export type { RemoteConnectionContentProps, RemoteConnectionExtensionProps } from './slots.ts'
 export type { RemoteConnectionState } from './remote-connection-controller.ts'
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@supernova-ai/snh-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** Remote connection settings copy. */
     remoteConnection: RemoteConnectionLocaleKey
@@ -38,7 +38,7 @@ export const inject = ['slots', 'locale', 'remote', 'remoteAccess', 'resources']
  */
 export async function apply(ctx: Context): Promise<void> {
   await ctx.remote.$mount(remoteConnectionRemote)
-  if ('dshDesktop' in globalThis) return
+  if ('snhDesktop' in globalThis) return
   ctx.effect(() => ctx.locale.register('remoteConnection', { en, zh, ja, es, fr, de, ru, pt }), 'remote-connection: dictionaries')
   const t = ctx.locale.bind('remoteConnection')
   ctx.inject(['remote.remoteConnection'], (scope) => {

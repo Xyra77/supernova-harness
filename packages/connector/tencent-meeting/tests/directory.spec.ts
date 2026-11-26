@@ -37,7 +37,7 @@ it('names a platform the package ships no executable for', () => {
 
 it('accepts a configured directory and names its missing executable with the remedy', async () => {
   const binDir = await createBinDir()
-  const empty = await mkdtemp(join(tmpdir(), 'dsh-tencent-meeting-empty-'))
+  const empty = await mkdtemp(join(tmpdir(), 'snh-tencent-meeting-empty-'))
   onTestFinished(async () => {
     await rm(binDir, { recursive: true, force: true })
     await rm(empty, { recursive: true, force: true })

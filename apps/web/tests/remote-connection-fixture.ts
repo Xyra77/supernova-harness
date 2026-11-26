@@ -31,7 +31,7 @@ async function stop(child: ChildProcess, closed: Promise<void>): Promise<void> {
 }
 
 /**
- * Launch the built `dsh web` profile; browsers map qr-login.test to its loopback listener.
+ * Launch the built `snh web` profile; browsers map qr-login.test to its loopback listener.
  * The fixture certificate is self-signed and deliberately accepted only by test browser contexts.
  * @param secure - whether the actual listener uses TLS; false exercises HTTP login and cookies.
  * @param ticketLifetimeMs - invitation lifetime for expiry scenarios; omitted keeps the shipped default.
@@ -40,7 +40,7 @@ async function stop(child: ChildProcess, closed: Promise<void>): Promise<void> {
 export async function launchRemoteConnectionFixture(secure: boolean, ticketLifetimeMs?: number): Promise<RemoteConnectionFixture> {
   const bin = join(REPO_ROOT, 'apps/cli/lib/bin.js')
   if (!existsSync(bin)) throw new Error('Build the CLI and Web artifacts before running the remote-connection browser test.')
-  const root = await mkdtemp(join(tmpdir(), 'dsh-web-qr-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-web-qr-'))
   let child: ChildProcess | undefined
   let closed: Promise<void> | undefined
   try {
@@ -64,7 +64,7 @@ export async function launchRemoteConnectionFixture(secure: boolean, ticketLifet
         '  config:',
         `    ticketLifetimeMs: ${ticketLifetimeMs}`,
       ],
-      '- id: llm-deepseek',
+      '- id: llm-supernova',
       '  disabled: true',
       '- id: llm-pi-ai',
       '  disabled: true',
@@ -77,9 +77,9 @@ export async function launchRemoteConnectionFixture(secure: boolean, ticketLifet
     const tls = secure ? await materializeTlsFixture(root) : undefined
     const env: NodeJS.ProcessEnv = {
       ...process.env,
-      DSH_HOME: join(root, 'home'),
-      DSH_AGENTS_HOME: join(root, 'agents'),
-      DSH_TELEMETRY_DISABLED: '1',
+      SNH_HOME: join(root, 'home'),
+      SNH_AGENTS_HOME: join(root, 'agents'),
+      SNH_TELEMETRY_DISABLED: '1',
     }
     delete env.NODE_OPTIONS
     delete env.DEEPSEEK_API_KEY
@@ -106,7 +106,7 @@ export async function launchRemoteConnectionFixture(secure: boolean, ticketLifet
       processHandle.stderr.setEncoding('utf8')
       processHandle.stdout.on('data', (chunk: string) => {
         output += chunk
-        const published = /dsh web: (https?:\/\/qr-login\.test:\d+\/[^\s]*)/.exec(output)?.[1]
+        const published = /snh web: (https?:\/\/qr-login\.test:\d+\/[^\s]*)/.exec(output)?.[1]
         if (published !== undefined) settle(published)
       })
       processHandle.stderr.on('data', (chunk: string) => { output += chunk })

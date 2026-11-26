@@ -3,7 +3,7 @@
 import type {
   BranchUpdateRequest, ChangeRequestRef, ChangeRequestSnapshot, ForgeActionFailure, ForgeFailure, ForgeRerunRequest,
   ForgeReviewerCandidate, ForgeReviewersRequest,
-} from '@deepseek-ai/dsh-experimental-forge'
+} from '@supernova-ai/snh-experimental-forge'
 import { z } from 'zod'
 import type { GitLabApi } from './api.ts'
 import { avatarUrlOf, checkedProject, mergeRequestPath } from './urls.ts'

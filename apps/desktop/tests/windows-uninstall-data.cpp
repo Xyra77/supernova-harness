@@ -137,7 +137,7 @@ int wmain(int argc, wchar_t** argv) {
     assert(DeleteFileW(report.c_str()));
     assert(RemoveDirectoryW(installation.c_str()));
 
-    for (auto home : {L"C:/HarnessHome", L"~/.dsh", L"~\\.dsh", L" \t "}) {
+    for (auto home : {L"C:/HarnessHome", L"~/.snh", L"~\\.snh", L" \t "}) {
         assert(CreateDirectoryW(installation.c_str(), nullptr));
         void* alternate = UninstallBegin(report.c_str());
         assert(alternate);
@@ -157,7 +157,7 @@ int wmain(int argc, wchar_t** argv) {
     ZeroMemory(contents, sizeof(contents));
     assert(ReadFile(reportFile, contents, sizeof(contents) - 1, &length, nullptr));
     CloseHandle(reportFile);
-    assert(strstr(contents, "Validate DSH_HOME"));
+    assert(strstr(contents, "Validate SNH_HOME"));
     assert(strstr(contents, "relative/home"));
     assert(DeleteFileW(report.c_str()));
     assert(RemoveDirectoryW(installation.c_str()));

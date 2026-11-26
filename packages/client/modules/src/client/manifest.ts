@@ -23,23 +23,23 @@
  * registered its factory before a consumer materializes.
  *
  * This file is the browser-safe contract face (zero node imports): the
- * `__DSH_BOOT__` wire types, the boot-manifest parser, and the boundaries around
+ * `__SNH_BOOT__` wire types, the boot-manifest parser, and the boundaries around
  * {@link ClientModuleSystem}. The package root is the host-side service that
  * composes the wire.
  */
 
-import type { SyncedConfigValues } from '@deepseek-ai/dsh-client-config/types'
-import type {} from '@deepseek-ai/cordis'
+import type { SyncedConfigValues } from '@supernova-ai/snh-client-config/types'
+import type {} from '@supernova-ai/cordis'
 import type {
-  DshClientManifest, ClientModuleMetaFactory,
-  DshClientModuleManifest,
-} from '@deepseek-ai/dsh-package-manifest'
-import type { ScriptRealm } from '@deepseek-ai/dsh-client-script-realm/client'
-export type { ClientBundleRequire } from '@deepseek-ai/dsh-package-manifest'
+  SnhClientManifest, ClientModuleMetaFactory,
+  SnhClientModuleManifest,
+} from '@supernova-ai/snh-package-manifest'
+import type { ScriptRealm } from '@supernova-ai/snh-client-script-realm/client'
+export type { ClientBundleRequire } from '@supernova-ai/snh-package-manifest'
 import type { ClientEntries } from './entries.ts'
 import type { ClientModuleSystem } from './system.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** The client module system the web shell builds at boot (provided by the `./client` wrapper plugin). */
     modules: ClientModuleLoader
@@ -97,7 +97,7 @@ export interface WebBootRelease {
   commit?: string
 }
 
-/** The composed client entry graph the host injects as `window.__DSH_BOOT__`. */
+/** The composed client entry graph the host injects as `window.__SNH_BOOT__`. */
 export interface WebBootGraph {
   /** Consistency anchor over the current entry and batch descriptors. */
   rev: string
@@ -154,7 +154,7 @@ export interface BootManifest {
 }
 
 /**
- * Validate an optional string-array field read from a `dsh.client` declaration
+ * Validate an optional string-array field read from a `snh.client` declaration
  * or from the boot wire.
  * @param subject - diagnostic prefix naming the package or the wire row.
  * @param field - field name as it appears in the diagnostic.
@@ -171,27 +171,27 @@ export function optionalStringArray(subject: string, field: string, value: unkno
 }
 
 /**
- * Narrow an unknown parsed JSON value to the `dsh.client` declaration. Shared
+ * Narrow an unknown parsed JSON value to the `snh.client` declaration. Shared
  * by the node half's Loader scan and the roster generator, so both read a
  * package's browser declaration through one validator.
  * @param pkgName - package name used as the diagnostic prefix.
- * @param value - the raw `dsh.client` field of the package manifest.
+ * @param value - the raw `snh.client` field of the package manifest.
  * @returns the validated declaration, or undefined when the field is absent.
  * @throws {Error} when the field is present but any member is malformed.
  */
-export function parseDshClient(pkgName: string, value: unknown): DshClientManifest | undefined {
+export function parseSnhClient(pkgName: string, value: unknown): SnhClientManifest | undefined {
   if (value === undefined) return undefined
   if (typeof value !== 'object' || value === null) {
-    throw new Error(`client-modules: ${pkgName} has a non-object dsh.client declaration`)
+    throw new Error(`client-modules: ${pkgName} has a non-object snh.client declaration`)
   }
   const decl = value as Record<string, unknown>
   if (typeof decl.platform !== 'string') {
-    throw new Error(`client-modules: ${pkgName} dsh.client.platform must be a string`)
+    throw new Error(`client-modules: ${pkgName} snh.client.platform must be a string`)
   }
-  const inject = optionalStringArray(pkgName, 'dsh.client.inject', decl.inject)
-  const external = optionalStringArray(pkgName, 'dsh.client.external', decl.external)
+  const inject = optionalStringArray(pkgName, 'snh.client.inject', decl.inject)
+  const external = optionalStringArray(pkgName, 'snh.client.external', decl.external)
   if (decl.immediately !== undefined && typeof decl.immediately !== 'boolean') {
-    throw new Error(`client-modules: ${pkgName} dsh.client.immediately must be a boolean`)
+    throw new Error(`client-modules: ${pkgName} snh.client.immediately must be a boolean`)
   }
   return {
     platform: decl.platform,
@@ -229,15 +229,15 @@ export function stripClientSuffix(spec: string): string {
 }
 
 /**
- * Parse `window.__DSH_BOOT__` into the two consumer views. Wire boundary:
+ * Parse `window.__SNH_BOOT__` into the two consumer views. Wire boundary:
  * a missing or malformed graph throws (the shell shows the loud failure —
  * a page without a valid manifest cannot boot anything).
- * @param wire - the raw `window.__DSH_BOOT__` value.
+ * @param wire - the raw `window.__SNH_BOOT__` value.
  * @returns the manifest with optional plugin-view fields normalized.
  */
 export function parseBootManifest(wire: unknown): BootManifest {
   if (typeof wire !== 'object' || wire === null) {
-    throw new Error('client-modules: window.__DSH_BOOT__ is missing or not an object')
+    throw new Error('client-modules: window.__SNH_BOOT__ is missing or not an object')
   }
   const graph = wire as Record<string, unknown>
   if (typeof graph.rev !== 'string') {
@@ -359,14 +359,14 @@ export function readRelease(wire: unknown): WebBootRelease | undefined {
 }
 
 /** Registration face of one shared browser artifact manifest. */
-export type ClientBundleRegistration = DshClientModuleManifest
+export type ClientBundleRegistration = SnhClientModuleManifest
 
 /** Inputs passed by the web entry when it creates the client module system. */
 export interface ClientModuleCreateOptions {
   /** Raw Host-injected boot graph; the modules bundle owns validation and projection. */
   boot: unknown
   /** Initially delivered manifests; registration does not evaluate their JavaScript or metadata. */
-  staticModules: readonly DshClientModuleManifest[]
+  staticModules: readonly SnhClientModuleManifest[]
   /** Execution hook for the module system’s Main Realm; defaults to the page script transport. */
   loadBundle?: (url: string) => Promise<void>
   /** Package-asset reference hook behind {@link ClientBundleRequire.asset}. Defaults to returning the reference. */
@@ -394,9 +394,9 @@ export interface ClientModuleLoaderTarget {
 }
 
 /** Window API of the web boot protocol: the host-injected graph and registration facade. */
-export interface DshWindow {
+export interface SnhWindow {
   /** Host-composed entry graph, injected before the shell bundle runs; wire-boundary raw until {@link parseBootManifest}. */
-  __DSH_BOOT__?: unknown
+  __SNH_BOOT__?: unknown
   /** HTML-installed facade: a pending registration queue, then the live module-system target. */
   __ModuleLoader__?: ClientModuleLoaderTarget
 }
@@ -499,7 +499,7 @@ export interface ClientModuleSystemOptions {
   /** Boot graph validated by {@link parseBootManifest}, owned by the resulting module system. */
   manifest: BootManifest
   /** Initially delivered manifests; registration does not evaluate their JavaScript or metadata. */
-  staticModules: readonly DshClientModuleManifest[]
+  staticModules: readonly SnhClientModuleManifest[]
   /** Stable HTML-installed registration facade to switch from queue to live mode. */
   registrationTarget: ClientModuleLoaderTarget
   /** Already-materialized modules bundle consumed while creating the system. */

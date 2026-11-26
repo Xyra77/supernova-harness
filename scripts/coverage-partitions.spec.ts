@@ -53,7 +53,7 @@ async function writeBlob(command: CoverageCommand): Promise<void> {
 }
 
 async function temporaryRoot(): Promise<string> {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-coverage-partitions-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-coverage-partitions-'))
   roots.push(root)
   return root
 }
@@ -783,7 +783,7 @@ describe('coverage partition coordinator', () => {
 
 describe('coverage file shards', () => {
   // An absolute checkout root on any platform, distinct from every temporary root.
-  const otherCheckout = join(tmpdir(), 'dsh-coverage-other-checkout')
+  const otherCheckout = join(tmpdir(), 'snh-coverage-other-checkout')
 
   it.each([
     [undefined, undefined],
@@ -795,7 +795,7 @@ describe('coverage file shards', () => {
   })
 
   it.each(['3/2', '0/2', '1/0', 'a/b', '1'])('rejects %j', (raw) => {
-    expect(() => parseCoverageShard(raw)).toThrow(/DSH_COVERAGE_SHARD must be <index>\/<count>/)
+    expect(() => parseCoverageShard(raw)).toThrow(/SNH_COVERAGE_SHARD must be <index>\/<count>/)
   })
 
   const sizes = new Map([['a.spec.ts', 90], ['b.spec.ts', 60], ['c.spec.ts', 50], ['d.spec.ts', 30], ['e.spec.ts', 20], ['f.spec.ts', 20]])

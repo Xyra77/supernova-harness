@@ -3,14 +3,14 @@ import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import { provideWorkingDirectoryFixture } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { TerminalController } from '@deepseek-ai/dsh-api-terminal-controller'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import TerminalSessionService from '@deepseek-ai/dsh-terminal'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import { provideWorkingDirectoryFixture } from '@supernova-ai/snh-agent-loop-testkit'
+import { TerminalController } from '@supernova-ai/snh-api-terminal-controller'
+import SandboxPolicyService from '@supernova-ai/snh-sandbox-policy'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import TerminalSessionService from '@supernova-ai/snh-terminal'
 import { PanelTerminalBackend } from '../src/backend.ts'
 import { Config } from '../src/config.ts'
 import { agentFor } from './agent.ts'
@@ -19,7 +19,7 @@ const config = Config({ startupSilenceMs: 200, promptSilenceMs: 150, probeInterv
 
 describe.skipIf(process.platform === 'win32')('sidebar terminals in a real shell', () => {
   it('keeps shell state across sends, reports a quiet command as inferred_idle and closes the terminal', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'dsh-terminal-panel-'))
+    const root = await mkdtemp(join(tmpdir(), 'snh-terminal-panel-'))
     const ctx = new Context()
     try {
       provideWorkingDirectoryFixture(ctx, root)

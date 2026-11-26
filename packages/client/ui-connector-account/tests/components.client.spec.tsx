@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 /** The slot entries render each registrant's display from the Host with the shared copy, and buttons call the Host callbacks. */
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { PluginsSubject } from '@deepseek-ai/dsh-client-ui-plugin-manager/client'
-import type { LocalizedText } from '@deepseek-ai/dsh-package-manifest'
-import { RemoteError, type RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+import { makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import type { PluginsSubject } from '@supernova-ai/snh-client-ui-plugin-manager/client'
+import type { LocalizedText } from '@supernova-ai/snh-package-manifest'
+import { RemoteError, type RemoteResult } from '@supernova-ai/snh-typert-protocol'
 import { afterEach, expect, it, onTestFinished, vi } from 'vitest'
 import {
   ConnectorAccountActivationEntry, ConnectorAccountBadgeEntry, ConnectorAccountSectionEntry, ConnectorAccountToastEntry,
@@ -83,7 +83,7 @@ it('disables the buttons while a call is pending or the Host stream is down', as
   expect(disabled()).toEqual([true])
 })
 
-it('asks before a button that changes the account outside DSH and starts it only after the user accepts', async () => {
+it('asks before a button that changes the account outside SNH and starts it only after the user accepts', async () => {
   const props = sectionOf({
     phase: 'connected', status: '已连接', notes: [],
     buttons: [{ label: '退出登录', command: { kind: 'start', operation: 'sign-out' }, confirm: { title: '退出演示？', body: '终端也会退出。', label: '确认退出' } }],

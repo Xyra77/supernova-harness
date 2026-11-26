@@ -2,8 +2,8 @@
 
 import { homedir } from 'node:os'
 import { addAbortSignal, type Readable } from 'node:stream'
-import type { SubprocessRuntime } from '@deepseek-ai/dsh-subprocess'
-import { deadline, timeoutOf } from '@deepseek-ai/dsh-timeout'
+import type { SubprocessRuntime } from '@supernova-ai/snh-subprocess'
+import { deadline, timeoutOf } from '@supernova-ai/snh-timeout'
 
 const STDERR_TAIL_BYTES = 4096
 const MAX_OUTPUT_BYTES = 1_048_576

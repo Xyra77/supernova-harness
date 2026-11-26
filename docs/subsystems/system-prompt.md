@@ -8,7 +8,7 @@ Source: [`packages/core/system-prompt/src/index.ts`](../../packages/core/system-
 
 ## Assembly context
 
-`AssembleContext` identifies the scope and optional Session receiving one assembly. With a Session, the assembly’s `systemUpdates()` compares the captured sections with that Session’s committed state when called; without one, it returns no writes. The context is merge-extensible: `dsh-agent` adds optional `agent` and `modelSelection` fields. `assembleContextFor(agent, signal)` supplies the agent, Session, scope, and signal; the loop adds the model selection retained across retries, with omitted reasoning effort using adapter defaults.
+`AssembleContext` identifies the scope and optional Session receiving one assembly. With a Session, the assembly’s `systemUpdates()` compares the captured sections with that Session’s committed state when called; without one, it returns no writes. The context is merge-extensible: `snh-agent` adds optional `agent` and `modelSelection` fields. `assembleContextFor(agent, signal)` supplies the agent, Session, scope, and signal; the loop adds the model selection retained across retries, with omitted reasoning effort using adapter defaults.
 
 ```ts type-equiv
 /** Merge-extensible context for one prompt assembly. */
@@ -229,12 +229,12 @@ Source: [`packages/core/system-prompt/src/index.ts`](../../packages/core/system-
 
 #### `system-prompt/assemble` — waterfall
 
-Presentation waterfall over assembled sections, contexts, and variables. Scope-filtered dispatch (`@deepseek-ai/dsh-scope`): scoped listeners receive only that scope's assemblies. Returned section text determines updates; omitting a previously admitted section leaves its instructions unchanged. Empty text withdraws its instructions; registration disposal retires it. Tool declarations remain provider-owned. A supplied signal controls only this explicit assembly request and must not be retained to control later turns. A registered complete section is restored after this waterfall, so listeners cannot add to or replace that scope's system prompt.
+Presentation waterfall over assembled sections, contexts, and variables. Scope-filtered dispatch (`@supernova-ai/snh-scope`): scoped listeners receive only that scope's assemblies. Returned section text determines updates; omitting a previously admitted section leaves its instructions unchanged. Empty text withdraws its instructions; registration disposal retires it. Tool declarations remain provider-owned. A supplied signal controls only this explicit assembly request and must not be retained to control later turns. A registered complete section is restored after this waterfall, so listeners cannot add to or replace that scope's system prompt.
 
 ```ts cordis-catalog
 /**
  * Presentation waterfall over assembled sections, contexts, and variables.
- * Scope-filtered dispatch (`@deepseek-ai/dsh-scope`): scoped listeners
+ * Scope-filtered dispatch (`@supernova-ai/snh-scope`): scoped listeners
  * receive only that scope's assemblies. Returned section text determines updates;
  * omitting a previously admitted section leaves its instructions unchanged.
  * Empty text withdraws its instructions; registration disposal retires it.

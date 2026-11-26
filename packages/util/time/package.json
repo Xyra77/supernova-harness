@@ -1,5 +1,5 @@
 {
-  "name": "@deepseek-ai/dsh-util-time",
+  "name": "@supernova-ai/snh-util-time",
   "description": "Strict instant and IANA zone parsing, millisecond spans, and bounded Cron/RRULE recurrence arithmetic",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
@@ -35,9 +35,9 @@
     "rrule": "2.8.1"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

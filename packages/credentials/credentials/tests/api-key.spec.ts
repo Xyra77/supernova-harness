@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { normalizeApiKey } from '@deepseek-ai/dsh-credentials'
+import { normalizeApiKey } from '@supernova-ai/snh-credentials'
 
 describe('normalizeApiKey', () => {
   it('accepts a printable-ASCII key unchanged', () => {

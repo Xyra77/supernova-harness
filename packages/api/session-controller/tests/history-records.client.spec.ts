@@ -1,8 +1,8 @@
 /** V2 history records become one event-shaped Client value per wire record. */
 
 import { describe, expect, it } from 'vitest'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm/types'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm/types'
 import type { SessionHistoryRecord } from '../src/types.ts'
 import {
   historyEntries,

@@ -4,19 +4,19 @@
  * removed checkout.
  */
 
-import { Context, Service, type Volatile } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type {} from '@deepseek-ai/dsh-fs'
-import type { SandboxExecutionPolicy } from '@deepseek-ai/dsh-sandbox'
-import type {} from '@deepseek-ai/dsh-sandbox-policy'
-import type {} from '@deepseek-ai/dsh-settings'
-import { appendPluginRecord } from '@deepseek-ai/dsh-session'
-import type { Session, SessionId } from '@deepseek-ai/dsh-session'
-import type { ProjectionHandle } from '@deepseek-ai/dsh-session-projection'
-import type {} from '@deepseek-ai/dsh-working-directory'
-import { HarnessError } from '@deepseek-ai/dsh-error'
-import { MAX_TIMER_DELAY_MS } from '@deepseek-ai/dsh-timeout'
+import { Context, Service, type Volatile } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type {} from '@supernova-ai/snh-fs'
+import type { SandboxExecutionPolicy } from '@supernova-ai/snh-sandbox'
+import type {} from '@supernova-ai/snh-sandbox-policy'
+import type {} from '@supernova-ai/snh-settings'
+import { appendPluginRecord } from '@supernova-ai/snh-session'
+import type { Session, SessionId } from '@supernova-ai/snh-session'
+import type { ProjectionHandle } from '@supernova-ai/snh-session-projection'
+import type {} from '@supernova-ai/snh-working-directory'
+import { HarnessError } from '@supernova-ai/snh-error'
+import { MAX_TIMER_DELAY_MS } from '@supernova-ai/snh-timeout'
 import { within, WorktreeReclamation } from './archive.ts'
 import { WorktreeError } from './error.ts'
 import { PREPARE_DIRECTORY } from './directory.ts'
@@ -80,7 +80,7 @@ const REMOTE_REFS = 'refs/remotes/'
 /** Runs one confined Git command; output with an exit code outside `allowedExitCodes` throws. */
 type GitRun = (directory: string, args: string[], allowedExitCodes?: number[], env?: NodeJS.ProcessEnv) => ReturnType<typeof runCommand>
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     worktrees: WorktreeService
   }
@@ -104,7 +104,7 @@ export class WorktreeService extends Service {
   static Config = z.object({
     retainOnArchive: z.boolean().default(false).volatile(),
     directory: z.string().default('.agents/worktrees'),
-    namePrefix: z.string().default('dsh-'),
+    namePrefix: z.string().default('snh-'),
     gitCommand: z.string().default('git'),
     nodeCommand: z.string().default('node'),
     timeoutMs: z.number().default(300_000),

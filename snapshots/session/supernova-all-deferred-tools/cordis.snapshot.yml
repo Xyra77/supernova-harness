@@ -1,0 +1,18 @@
+- id: llm-supernova
+  disabled: true
+
+- insert:
+    - id: llm-replay
+      name: '@supernova-ai/snh-llm-replay'
+      config:
+        providers:
+          - id: deepseek-official
+            name: SuperNova
+            models:
+              - id: deepseek-v4-flash
+                toolUpdate: addition-only
+                defaultMaxTokens: 256000
+                reasoningEfforts: [off, low, high, max]
+                defaultReasoningEffort: high
+    - id: messages-all-deferred-tools-snapshot
+      name: '../../../packages/llm/llm-supernova/tests/fixtures/all-deferred-tools.ts'

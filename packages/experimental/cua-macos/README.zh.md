@@ -3,7 +3,7 @@ description: "通过按应用和窗口限定的对象，观察和操作原生 ma
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-cua-macos
+# @supernova-ai/snh-cua-macos
 
 [English](README.md) | 中文
 
@@ -22,7 +22,7 @@ kind: "package-reference"
 
 helper 为授权提示和已授权应用列表提供 64 像素 PNG 图标。读取图标不会启动应用或检查窗口，图标不决定可复用授权。
 
-helper 通过 LaunchServices 作为独立应用运行，正式版为 `DSH Computer Use.app`，源码开发版为 `DSH Computer Use Dev.app`。辅助功能和屏幕录制权限属于此应用。授权引导使用启动时记录的责任应用 bundle URL、标识、文件名和系统图标；系统归属信息不可用时使用独立 helper 自身的 bundle。拖动和 Finder 选择通过应用发现模块读取磁盘上当前的 bundle 标识及可执行文件。页面和引导框统一显示应用的 `.app` 文件名。其他构建更新 `current.json` 后，已有连接仍指向正在运行的应用版本。 helper 嵌套在其他 `.app` 中时，会从经过校验的独立副本启动，存放与校验规则见[原生构建与服务](native/README.zh.md#build-and-service)。
+helper 通过 LaunchServices 作为独立应用运行，正式版为 `SNH Computer Use.app`，源码开发版为 `SNH Computer Use Dev.app`。辅助功能和屏幕录制权限属于此应用。授权引导使用启动时记录的责任应用 bundle URL、标识、文件名和系统图标；系统归属信息不可用时使用独立 helper 自身的 bundle。拖动和 Finder 选择通过应用发现模块读取磁盘上当前的 bundle 标识及可执行文件。页面和引导框统一显示应用的 `.app` 文件名。其他构建更新 `current.json` 后，已有连接仍指向正在运行的应用版本。 helper 嵌套在其他 `.app` 中时，会从经过校验的独立副本启动，存放与校验规则见[原生构建与服务](native/README.zh.md#build-and-service)。
 
 权限请求打开对应隐私设置页和原生悬浮引导框。引导框首次选择面积最大的设置窗口，随后按窗口 ID 跟随。它使用普通窗口层级，紧邻所选窗口上方排列，使认证弹窗保持在其上方。定位读取窗口边界，不申请辅助功能权限。引导框等到识别出设置窗口后才显示；打开设置失败时独立显示手动导航说明。材质的透明度遮罩为面板和阴影提供圆角。最新请求替换共享引导，连接清理只关闭自身创建的引导。应用不可用时仍尝试打开设置，并在页面报告失败原因。权限已授予时只打开设置；显式进入设置会关闭原有引导。系统拒绝打开设置时报告 `SETTINGS_UNAVAILABLE`；应用目标缺失或被替换时报告 `APPLICATION_UNAVAILABLE`。系统设置决定是否接收拖入的应用，以及是否要求重新启动。
 
@@ -38,12 +38,12 @@ provider 按当前界面语言生成引导和恢复文案，不支持的语言�
 从仓库运行 Web 时，在插件页开启 [Computer Use](../cua-bundle/README.zh.md)。首次启用会在 macOS 14 及以上准备本机组件。现有 Web profile 保持选中时，后续构建继续检查更新。未开启的 profile 不准备原生组件。也可以显式加载源码覆盖层：
 
 ```sh
-pnpm dsh headless --patch packages/experimental/cua-macos/examples/macos.cordis.yml --dump-config
+pnpm snh headless --patch packages/experimental/cua-macos/examples/macos.cordis.yml --dump-config
 ```
 
-配置输出命令不发起模型请求。执行真实任务时，将 `--dump-config` 替换为任务提示，并配置该 profile 的模型凭据。配置挂载 computer-use 注册表和本 provider；使用前需移除已有的竞争 provider。helper 需要辅助功能权限来读取 AX 和输入，需要屏幕录制权限来截图；通过 Computer Use 权限页打开系统设置并添加 helper。源码构建的应用包名为 `DSH Computer Use Dev.app`，Info.plist 声明名称 `DSH Computer Use Dev`；授权时选择开发版条目。`getCapabilities` 返回提供方声明的平台能力，以及实际查询的权限和锁屏状态。桌面会话锁定或不可用时，界面观察与输入会在分派前拒绝，需由用户解锁 macOS 后继续。`listApps` 和 `cua.getState` 列出运行中的应用。`findApps(query)` 按名称、bundle ID 或绝对路径搜索 macOS 标准应用目录。`getApp` 按唯一名称、bundle ID、路径或运行中的 PID 选择应用，取得应用许可后，在需要时后台启动尚未运行的应用。授权前从磁盘读取应用的 Bundle ID 和可执行路径，在启动前后重新读取并核对；没有 Bundle ID 的应用使用规范化的可执行路径复用授权。找到指定的安装包后，`getApp` 用可执行文件路径查找已有进程，进程显示名可以是其他语言。需要启动时，macOS 打开指定的安装副本，也可以复用授权期间启动的进程。helper 等待应用完成启动后返回运行状态。启动后验证失败会使待启动句柄失效，但进程可能仍在运行；应先查看运行中的应用，再取得新句柄。返回对象时不读取 AX，也不激活应用。启动被取消时，应用可能已经运行。模型指引要求先在后台观察和输入，不在初始化或每次动作前激活应用。窗口隐藏或最小化时，先尝试 `app.show()` 或 `window.show()`，再重新观察。它请求取消隐藏和恢复最小化，不主动激活、抬起窗口或切换桌面空间；应用级恢复选择焦点窗口、主窗口或唯一 AX 窗口。结果通过 `windowId` 指明选中的窗口，未选中时为 null；`foregroundChanged` 比较操作前后的前台应用和最上层窗口，无法取得完整观察时为 null，返回后仍可能发生焦点变化。恢复失败或窗口仍不可用时，说明需要前台的步骤，再调用 `app.activate()` 或窗口声明的 `AXRaise` 动作并重新观察。必须使用前台时，以完成任务为先。应用收到输入后仍可能改变焦点，后台投递不保证用户操作始终不受干扰。
+配置输出命令不发起模型请求。执行真实任务时，将 `--dump-config` 替换为任务提示，并配置该 profile 的模型凭据。配置挂载 computer-use 注册表和本 provider；使用前需移除已有的竞争 provider。helper 需要辅助功能权限来读取 AX 和输入，需要屏幕录制权限来截图；通过 Computer Use 权限页打开系统设置并添加 helper。源码构建的应用包名为 `SNH Computer Use Dev.app`，Info.plist 声明名称 `SNH Computer Use Dev`；授权时选择开发版条目。`getCapabilities` 返回提供方声明的平台能力，以及实际查询的权限和锁屏状态。桌面会话锁定或不可用时，界面观察与输入会在分派前拒绝，需由用户解锁 macOS 后继续。`listApps` 和 `cua.getState` 列出运行中的应用。`findApps(query)` 按名称、bundle ID 或绝对路径搜索 macOS 标准应用目录。`getApp` 按唯一名称、bundle ID、路径或运行中的 PID 选择应用，取得应用许可后，在需要时后台启动尚未运行的应用。授权前从磁盘读取应用的 Bundle ID 和可执行路径，在启动前后重新读取并核对；没有 Bundle ID 的应用使用规范化的可执行路径复用授权。找到指定的安装包后，`getApp` 用可执行文件路径查找已有进程，进程显示名可以是其他语言。需要启动时，macOS 打开指定的安装副本，也可以复用授权期间启动的进程。helper 等待应用完成启动后返回运行状态。启动后验证失败会使待启动句柄失效，但进程可能仍在运行；应先查看运行中的应用，再取得新句柄。返回对象时不读取 AX，也不激活应用。启动被取消时，应用可能已经运行。模型指引要求先在后台观察和输入，不在初始化或每次动作前激活应用。窗口隐藏或最小化时，先尝试 `app.show()` 或 `window.show()`，再重新观察。它请求取消隐藏和恢复最小化，不主动激活、抬起窗口或切换桌面空间；应用级恢复选择焦点窗口、主窗口或唯一 AX 窗口。结果通过 `windowId` 指明选中的窗口，未选中时为 null；`foregroundChanged` 比较操作前后的前台应用和最上层窗口，无法取得完整观察时为 null，返回后仍可能发生焦点变化。恢复失败或窗口仍不可用时，说明需要前台的步骤，再调用 `app.activate()` 或窗口声明的 `AXRaise` 动作并重新观察。必须使用前台时，以完成任务为先。应用收到输入后仍可能改变焦点，后台投递不保证用户操作始终不受干扰。
 
-源码构建默认使用 `sourceSigning: ad-hoc` 临时签名，不创建证书或钥匙串。二进制变化后可能需要重新授权。需要减少开发重建和跨 worktree 的授权次数时，在 DSH home 的 `cordis.patch.yml` 中选择已有证书及其钥匙串绝对路径；`cua-macos` 是加载 `@deepseek-ai/dsh-cua-macos` 的节点 ID：
+源码构建默认使用 `sourceSigning: ad-hoc` 临时签名，不创建证书或钥匙串。二进制变化后可能需要重新授权。需要减少开发重建和跨 worktree 的授权次数时，在 SNH home 的 `cordis.patch.yml` 中选择已有证书及其钥匙串绝对路径；`cua-macos` 是加载 `@supernova-ai/snh-cua-macos` 的节点 ID：
 
 ```yaml
 - id: cua-macos
@@ -53,7 +53,7 @@ pnpm dsh headless --patch packages/experimental/cua-macos/examples/macos.cordis.
       keychain: "/Users/<user>/.cua-macos-keys/dev/signing.keychain-db"
 ```
 
-`identity` 是已有证书名称或 SHA-1 指纹，`keychain` 是必填的绝对路径。开发者负责生成和解锁钥匙串；构建只使用所选证书。合并配置时保留该节点已有的其他字段。仓库的[开发者签名 skill](../../../.agents/skills/dsh-cua-macos-signing/SKILL.md)指导 Agent 在 `~/.cua-macos-keys/` 中生成、复用和移除身份，并只将选择身份的配置写入 DSH home。
+`identity` 是已有证书名称或 SHA-1 指纹，`keychain` 是必填的绝对路径。开发者负责生成和解锁钥匙串；构建只使用所选证书。合并配置时保留该节点已有的其他字段。仓库的[开发者签名 skill](../../../.agents/skills/snh-cua-macos-signing/SKILL.md)指导 Agent 在 `~/.cua-macos-keys/` 中生成、复用和移除身份，并只将选择身份的配置写入 SNH home。
 
 | 字段 | 默认值 | 含义 |
 | --- | --- | --- |
@@ -84,7 +84,7 @@ pnpm dsh headless --patch packages/experimental/cua-macos/examples/macos.cordis.
 
 外部输入监听器只订阅鼠标按下和滚动事件。对于关注的窗口，helper 在内存中分别保留其他 Agent 和外部输入最近一次活动的时间。发给模型并写入 Session 日志的活动提醒只包含窗口 ID、来源和距今时间。监听器不记录按键、输入文本、鼠标坐标或滚动距离。
 
-[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-cua-macos)列出全部字段。原生工具调用使用 `{method, params}`，模型可以看到每个方法的完整参数定义。`getApp` 返回每个面向应用的操作所需的 `appHandle`，`app.getWindow(windowId)` 返回负责截图和指针输入的对象。
+[配置目录](../../../docs/config-catalog.zh.md#supernova-aisnh-cua-macos)列出全部字段。原生工具调用使用 `{method, params}`，模型可以看到每个方法的完整参数定义。`getApp` 返回每个面向应用的操作所需的 `appHandle`，`app.getWindow(windowId)` 返回负责截图和指针输入的对象。
 
 `pressKey(key, modifiers?)` 按下并松开一个键。使用快捷键时单独传入修饰键，例如 `pressKey('a', ['command'])`。单独调用 `pressKey('shift')` 时，按下事件带有 Shift 标志，释放事件清除该标志。`+` 和 `plus` 都会发送 Shift 和等号。`pressKey`、`click` 和 `drag` 都接受修饰键 `command`、`shift`、`option`/`alt`、`control`/`ctrl` 和 `fn`。只有 `pressKey` 的修饰键参数还接受 `command` 的别名 `cmd`。按键名由平台定义；数字键盘名称（`KP_0` 到 `KP_9`、`KP_Enter` 和数字键盘运算键）保留独立的物理键码。`typeText` 发送字面文本，包括其中的换行和制表符。短按使用 App 对象上的 `pressKey`。
 
@@ -92,7 +92,7 @@ pnpm dsh headless --patch packages/experimental/cua-macos/examples/macos.cordis.
 
 Agent 销毁和插件卸载会取消并等待完整工具调用，包括图像接入检查和附件存储。已经开始的图像写入必须结束后，销毁才会返回；已取消的调用不会返回成功截图。
 
-CUA 工具在读取 AX、窗口标题、截图、激活和输入前检查应用授权。首次选择应用时询问用户，可选择本会话允许、拒绝；profile 提供持久存储时还可保存长期授权。会话许可按对话和应用身份持久化，重启 DSH 或关闭 Computer Use 后仍可复用，其他对话需要单独授权。应用身份使用区分大小写的 Bundle ID，因此不同路径下的版本和副本共用许可与撤销决定，不受签名状态影响。运行中应用具有有效 Bundle ID 时，即使操作系统无法提供可执行路径，也可以授权。路径可取得时仍核对所选目标，进程实例和窗口归属检查始终保留。缺少 Bundle ID 时，授权必须取得规范化可执行路径。在同一路径下重启或更新会沿用许可，移动或复制到另一个路径则需要重新决定。这项规则不验证发布者身份，其他程序声明相同标识，或替换路径授权所对应的可执行文件时，也会继承许可。拒绝后，同一会话不会反复询问。撤销与长期许可的保存共用队列，在队列内读取并移除许可，然后使相关 Agent 连接失效并等待原生清理完成，不自动重放输入。同一 Agent 连接中的其他应用也需要重新选择，其他应用的会话许可和长期许可仍可复用。设计理由见[应用授权决策](../../../.agents/notes/implemented/architecture/2026-09-26-cua-application-consent.zh.md)。这些检查的范围是 CUA 调用。persistent PTC 与已授权的 shell 仍按各自执行权限运行。
+CUA 工具在读取 AX、窗口标题、截图、激活和输入前检查应用授权。首次选择应用时询问用户，可选择本会话允许、拒绝；profile 提供持久存储时还可保存长期授权。会话许可按对话和应用身份持久化，重启 SNH 或关闭 Computer Use 后仍可复用，其他对话需要单独授权。应用身份使用区分大小写的 Bundle ID，因此不同路径下的版本和副本共用许可与撤销决定，不受签名状态影响。运行中应用具有有效 Bundle ID 时，即使操作系统无法提供可执行路径，也可以授权。路径可取得时仍核对所选目标，进程实例和窗口归属检查始终保留。缺少 Bundle ID 时，授权必须取得规范化可执行路径。在同一路径下重启或更新会沿用许可，移动或复制到另一个路径则需要重新决定。这项规则不验证发布者身份，其他程序声明相同标识，或替换路径授权所对应的可执行文件时，也会继承许可。拒绝后，同一会话不会反复询问。撤销与长期许可的保存共用队列，在队列内读取并移除许可，然后使相关 Agent 连接失效并等待原生清理完成，不自动重放输入。同一 Agent 连接中的其他应用也需要重新选择，其他应用的会话许可和长期许可仍可复用。设计理由见[应用授权决策](../../../.agents/notes/implemented/architecture/2026-09-26-cua-application-consent.zh.md)。这些检查的范围是 CUA 调用。persistent PTC 与已授权的 shell 仍按各自执行权限运行。
 
 原始 `getState` 操作返回经过校验的状态字段，以及按本次披露选项生成的完整文本。原生 helper 还返回供原生检查使用的结构化元素诊断数组，其中 `elementId` 是不透明字符串；工具投影会从模型文本和结构化工具值中移除这份重复数组。
 
@@ -111,7 +111,7 @@ AX 观察默认只展示菜单栏入口。使用 `app.getAccessibilityTree({ inc
 使用 persistent PTC 时，在 macOS 配置后追加 `--patch packages/experimental/cua-macos/examples/persistent-ptc.cordis.yml`。该 provider 为存活的 Agent 保留变量，并遵守当前选择的文件沙箱策略。调用方导入适配模块，并提供当前执行中已授权的 `tools.cua` 绑定。persistent PTC 会在 CUA 指引中收到安装目录内 bridge 的文件 URL，项目无须安装本包。下面的例子用于能从自身安装目录解析本包、且已提供 `tools` 的外部宿主。对其他 Agent，`cua_run_code` 已经提供全局对象，并通过[共享 CUA 包](../cua/README.zh.md)保留变量：
 
 ```javascript
-import { connectCua } from '@deepseek-ai/dsh-cua/bridge'
+import { connectCua } from '@supernova-ai/snh-cua/bridge'
 const cua = connectCua(() => tools.cua)
 const app = await cua.getApp("com.apple.TextEdit")
 const windows = await app.getWindows()
@@ -126,7 +126,7 @@ inspect(await window.getScreenshot())
 
 `getWindow` 不发送原生请求；截图和指针输入会拒绝已关闭或属于其他应用的窗口。元素操作前须显式读取 `getAccessibilityTree()`。截图不要求 AX 读取成功。所有坐标输入（包括相对坐标）都要求先成功读取覆盖该窗口的 AX 或取得截图；绝对像素坐标要求已交付的截图。仅当窗口和 sheet 发现过程未遇到不可读元素时，已确认归属但没有 AX 界面的窗口才返回空快照。在单个 API 实例内，门面按应用句柄保存一份当前辅助功能快照，该句柄的所有应用对象和窗口对象共享它，包括重复选择。读取任一窗口都会替换该快照；元素操作使用最新快照 ID，因此应使用最新树中的元素 ID，不应假定旧 ID 仍指向同一控件。局部 AX 节点失效时会成功返回带明确不可用分支标记的部分快照；原始状态包含 `hasUnreadableElements: true`。这些分支没有元素 ID，内容未知，应通过截图查看。致命观察错误不发布快照。处理错误前请参阅[原生观察与错误语义](native/README.zh.md#observation-and-input)；不要自动重复此前的输入。窗口对象负责截图和指针输入。键盘方法保留在 `app` 上，因为输入跟随应用的当前焦点。
 
-普通 `mouseMove(target)` 默认通过辅助功能悬停。如果目标或其祖先没有同时声明 `AXShowAlternateUI` 和 `AXShowDefaultUI`，则返回 `HOVER_UNAVAILABLE`，不会弹窗。只有任务确实需要移动用户的鼠标时，主任务才调用 `win.mouseMove(target, { useSystemInput: true })`。用户允许后，Host 重新检查窗口和目标位置，再执行本次移动。每次移动系统指针都要显式传 `useSystemInput: true`。省略参数或传 `false` 时使用辅助功能悬停。拒绝时不派发输入。会话记住此次选择，直到关闭会话或重启 DSH。
+普通 `mouseMove(target)` 默认通过辅助功能悬停。如果目标或其祖先没有同时声明 `AXShowAlternateUI` 和 `AXShowDefaultUI`，则返回 `HOVER_UNAVAILABLE`，不会弹窗。只有任务确实需要移动用户的鼠标时，主任务才调用 `win.mouseMove(target, { useSystemInput: true })`。用户允许后，Host 重新检查窗口和目标位置，再执行本次移动。每次移动系统指针都要显式传 `useSystemInput: true`。省略参数或传 `false` 时使用辅助功能悬停。拒绝时不派发输入。会话记住此次选择，直到关闭会话或重启 SNH。
 
 `win.toggleMouse(button, direction)` 默认向窗口发送当前鼠标位置的事件。按下时必须命中选定的前台窗口。需要系统按钮状态时，在 `down` 上传入 `{ useSystemInput: true }`，沿用拖动审批。`up` 始终使用保存的输入方式和窗口，即使焦点改变或窗口关闭也如此。原进程退出后，系统按钮清理仍在当前鼠标位置释放；定向释放会检查保存的进程身份，跳过已退出或复用的 PID。
 
@@ -252,13 +252,13 @@ Available at app or window level depending on the platform.
 - pressKey(key: string, modifiers?: Modifier[], options?: { useSystemInput?: boolean }) -> ActionResult — press and release one complete keystroke. For example pressKey('Tab', ['shift']) or pressKey('+'). Key names are platform-defined strings. Pass key and modifiers separately; do not pack them into a chord string. System input requires the selected foreground application and sends modifiers and the main key through the system keyboard queue, then releases them in reverse order.
 - sendKeyEvent(key: string, direction: 'down' | 'up', options?: { useSystemInput?: boolean }) -> ActionResult — send one key-down or key-up event; key accepts a single key name, including a modifier. For example W down, D down, D up, W up. A repeated 'down' for an ordinary held key sends one repeat without adding another hold. System down requires the selected foreground app; use the same useSystemInput value for explicit key up.
 
-Explicit downs from sendKeyEvent and toggleMouse remain held across programs and turns until an explicit up releases them through the same target. After a successful run_code or cua_run_code, a system reminder lists any remaining keys and mouse buttons, their targets and input modes. No reminder is added when none remain. Program failure, a received cancellation, connection closure, and disposal release owned inputs together in reverse dispatch order. After a DSH stop, the next CUA operation waits for any pending cleanup. A client pause between completed MCP calls is not observable by the server, so held input can remain pressed. pressKey, typeText, click, and complete drag release their own inputs within the operation.
+Explicit downs from sendKeyEvent and toggleMouse remain held across programs and turns until an explicit up releases them through the same target. After a successful run_code or cua_run_code, a system reminder lists any remaining keys and mouse buttons, their targets and input modes. No reminder is added when none remain. Program failure, a received cancellation, connection closure, and disposal release owned inputs together in reverse dispatch order. After a SNH stop, the next CUA operation waits for any pending cleanup. A client pause between completed MCP calls is not observable by the server, so held input can remain pressed. pressKey, typeText, click, and complete drag release their own inputs within the operation.
 
 click, drag, and pressKey are convenience operations; sendKeyEvent, mouseMove, and toggleMouse are primitive operations. For complex action combinations, decompose convenience operations into sequences of primitive operations supported by the current platform.
 
 Recent activity notices identify when another agent or external input was last detected on a window you observed. You may continue using the window. Recheck its state if your next action depends on what you saw.
 
-Pass useSystemInput: true only when the task requires system keyboard or mouse input. Omitting the option or passing false uses the provider default. When approval is enabled, the first explicit system input requests permission; otherwise it executes immediately. Prefer a supported non-system action when it meets the task. The approval question interrupts the user; approval or refusal lasts until this session closes or DSH restarts. Approval does not change later calls: pass true on each system operation. If the user dismisses the request, ask again only if they request it. Wait for an outstanding request to finish. Subagents cannot request system input.
+Pass useSystemInput: true only when the task requires system keyboard or mouse input. Omitting the option or passing false uses the provider default. When approval is enabled, the first explicit system input requests permission; otherwise it executes immediately. Prefer a supported non-system action when it meets the task. The approval question interrupts the user; approval or refusal lasts until this session closes or SNH restarts. Approval does not change later calls: pass true on each system operation. If the user dismisses the request, ask again only if they request it. Wait for an outstanding request to finish. Subagents cannot request system input.
 ```
 
 #### Token 影响
@@ -289,7 +289,7 @@ Pass useSystemInput: true only when the task requires system keyboard or mouse i
 - 系统鼠标拖动的每一步都必须命中所选窗口。同一应用中拦截鼠标的弹窗也会中断手势。检查窗口和投递事件的耗时会计入实际拖动时间。默认路径只在鼠标事件上记录修饰键，读取系统键盘状态的应用可能无法识别；`useSystemInput: true` 会发送系统键盘按下和松开事件。
 - 后台输入依赖私有 SkyLight 符号，macOS 升级可能使其不可用，需在目标系统版本验证。
 - 实测 Blender Unicode 输入曾出现分派成功但界面未显示文本，后台 AppKit 的 Command+A 曾未选中全文。输入后必须检查应用状态；工具返回成功只表示已分派。
-- 源码构建默认使用 `ad-hoc`，二进制变化后可能需要重新授权。[开发者固定身份](../../../.agents/skills/dsh-cua-macos-signing/SKILL.md)保存在 DSH home 之外；删除 DSH home 只删除选择它的配置，不删除证书和私钥。正式分发应以固定 Developer ID 签名并完成公证；构建命令支持 `--identity` 指定签名身份，安装版保留分发时的签名。[权限页面](../cua/README.zh.md)提供 helper 授权入口和目标应用许可撤销。
+- 源码构建默认使用 `ad-hoc`，二进制变化后可能需要重新授权。[开发者固定身份](../../../.agents/skills/snh-cua-macos-signing/SKILL.md)保存在 SNH home 之外；删除 SNH home 只删除选择它的配置，不删除证书和私钥。正式分发应以固定 Developer ID 签名并完成公证；构建命令支持 `--identity` 指定签名身份，安装版保留分发时的签名。[权限页面](../cua/README.zh.md)提供 helper 授权入口和目标应用许可撤销。
 - 发布打包不自动验证 GUI 启动、helper 身份或退出清理。发布维护者可在发布前，在已登录桌面的 Mac 上执行[分发 smoke](native/README.zh.md#build-and-service)；打包成功不能证明这些运行行为已通过验收。
 - 已保存许可的条目显示一个已批准副本的名称、路径和图标，不枚举共享身份的所有安装副本。删除该副本后图标可能不可用，撤销仍作用于同一身份的所有副本。
 - macOS 无法提供运行中应用的 Bundle ID 时，helper 仅在其报告的 bundle 可执行路径与实际进程路径相同时读取该 bundle，仍无标识则使用路径。只有 Bundle ID 和实际可执行路径均不可用时才拒绝生成授权身份；进程实例验证仍可能独立失败。

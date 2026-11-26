@@ -9,9 +9,9 @@
     "./client": "./client.js"
   },
   "dependencies": {
-    "@deepseek-ai/schemastery": "*"
+    "@supernova-ai/schemastery": "*"
   },
-  "dsh": {
+  "snh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     },

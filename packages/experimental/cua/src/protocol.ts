@@ -1,7 +1,7 @@
 /** JSON validation shared by model tool admission and the native object facade. */
 import { Buffer } from 'node:buffer'
 import { z } from 'zod'
-import type { ObjectJsonSchema } from '@deepseek-ai/dsh-tools'
+import type { ObjectJsonSchema } from '@supernova-ai/snh-tools'
 import type { CuaAppHandle, CuaSnapshotId } from './types.ts'
 
 const windowId = z.string().min(1)

@@ -1,17 +1,17 @@
 /**
  * Same-session goal-round driver over public agent, session, and goal services.
- * @module @deepseek-ai/dsh-goal-round-driver
+ * @module @supernova-ai/snh-goal-round-driver
  */
 
 import { isDeepStrictEqual } from 'node:util'
-import { FiberState } from '@deepseek-ai/cordis'
-import type { Context } from '@deepseek-ai/cordis'
-import type { Agent, PreStepDecision } from '@deepseek-ai/dsh-agent'
-import type { GoalMessageSource, GoalRef, GoalView } from '@deepseek-ai/dsh-goal'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { ContentBlock, MessageId, MessageSource } from '@deepseek-ai/dsh-llm'
-import type { Session, SessionEvent, UserMessage } from '@deepseek-ai/dsh-session'
-import type {} from '@deepseek-ai/dsh-subagent'
+import { FiberState } from '@supernova-ai/cordis'
+import type { Context } from '@supernova-ai/cordis'
+import type { Agent, PreStepDecision } from '@supernova-ai/snh-agent'
+import type { GoalMessageSource, GoalRef, GoalView } from '@supernova-ai/snh-goal'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import type { ContentBlock, MessageId, MessageSource } from '@supernova-ai/snh-llm'
+import type { Session, SessionEvent, UserMessage } from '@supernova-ai/snh-session'
+import type {} from '@supernova-ai/snh-subagent'
 import { renderGoalRoundPrompt } from './prompt.ts'
 
 export { renderGoalRoundPrompt } from './prompt.ts'

@@ -2,17 +2,17 @@
  * Model-facing foreground Ralph loop over the workflow and subagent seams. A
  * fixed script starts one fresh structured-output child per round, carrying
  * only the immutable objective and the previous bounded handoff between them.
- * @module @deepseek-ai/dsh-tool-ralph
+ * @module @supernova-ai/snh-tool-ralph
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
-import type { SubagentProvider } from '@deepseek-ai/dsh-subagent'
-import { defineTool, ToolArgsError, ToolContextUnavailableError } from '@deepseek-ai/dsh-tools'
-import type { ToolCallView, ToolResultView } from '@deepseek-ai/dsh-tools'
-import type { WorkflowResult, WorkflowRun } from '@deepseek-ai/dsh-workflow'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
+import type { SubagentProvider } from '@supernova-ai/snh-subagent'
+import { defineTool, ToolArgsError, ToolContextUnavailableError } from '@supernova-ai/snh-tools'
+import type { ToolCallView, ToolResultView } from '@supernova-ai/snh-tools'
+import type { WorkflowResult, WorkflowRun } from '@supernova-ai/snh-workflow'
 import { RalphError } from './error.ts'
 
 export const name = 'tool-ralph'

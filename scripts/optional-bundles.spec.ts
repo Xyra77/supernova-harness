@@ -5,20 +5,20 @@ import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { describe, expect, it, onTestFinished } from 'vitest'
-import type { EntryOptions } from '@deepseek-ai/cordis-plugin-loader'
+import type { EntryOptions } from '@supernova-ai/cordis-plugin-loader'
 import { loadOverlayPatches } from '../packages/boot/app-boot/src/index.ts'
 import { readPluginMeta } from '../packages/boot/app-boot/src/package-meta.ts'
 import { bundlePatchPaths, composeEntries, initProfile, readProfileManifest } from '../packages/boot/app-boot/src/profile.ts'
 import { OPTIONAL_BUNDLES, PROFILE_TEMPLATES } from '../packages/util/official-bundles/src/bundles.ts'
 import { HIDDEN_BUNDLES } from '../packages/util/official-bundles/src/plugin-manager.ts'
-import type { DshBundleManifest } from '../packages/util/package-manifest/src/types.ts'
+import type { SnhBundleManifest } from '../packages/util/package-manifest/src/types.ts'
 import { createPluginProfile } from '../apps/desktop/src/project-manager.ts'
 
 const root = resolve(import.meta.dirname, '..')
 
 interface Manifest {
   name: string
-  dsh?: { bundle?: DshBundleManifest }
+  snh?: { bundle?: SnhBundleManifest }
 }
 
 const bundles = new Map(globSync('packages/*/*/package.json', { cwd: root }).map((path) => {
@@ -28,19 +28,19 @@ const bundles = new Map(globSync('packages/*/*/package.json', { cwd: root }).map
 
 function bundle(name: string): { dir: string; patches: ReturnType<typeof loadOverlayPatches> } {
   const entry = bundles.get(name)
-  if (entry?.manifest.dsh?.bundle === undefined) throw new Error(`${name} is not a workspace bundle`)
-  return { dir: entry.dir, patches: bundlePatchPaths(entry.dir, entry.manifest.dsh.bundle).flatMap(path => loadOverlayPatches('test', path)) }
+  if (entry?.manifest.snh?.bundle === undefined) throw new Error(`${name} is not a workspace bundle`)
+  return { dir: entry.dir, patches: bundlePatchPaths(entry.dir, entry.manifest.snh.bundle).flatMap(path => loadOverlayPatches('test', path)) }
 }
 
 /** Optional bundles that compose a profile of their own; the plugin page hides them, the Host inventory still reports them. */
-const STANDALONE_PROFILE_BUNDLES: readonly string[] = ['@deepseek-ai/dsh-cua-mcp']
+const STANDALONE_PROFILE_BUNDLES: readonly string[] = ['@supernova-ai/snh-cua-mcp']
 
 const lightweight = [
-  '@deepseek-ai/dsh-experimental-session-search',
-  '@deepseek-ai/dsh-experimental-ralph-bundle',
-  '@deepseek-ai/dsh-experimental-terminal-bundle',
-  '@deepseek-ai/dsh-experimental-badge-skill-bundle',
-  '@deepseek-ai/dsh-experimental-session-titles-bundle',
+  '@supernova-ai/snh-experimental-session-search',
+  '@supernova-ai/snh-experimental-ralph-bundle',
+  '@supernova-ai/snh-experimental-terminal-bundle',
+  '@supernova-ai/snh-experimental-badge-skill-bundle',
+  '@supernova-ai/snh-experimental-session-titles-bundle',
 ]
 
 function presetRows(entries: EntryOptions[], id: string): EntryOptions[] {
@@ -54,17 +54,17 @@ function flattenRows(entries: EntryOptions[]): EntryOptions[] {
 }
 
 function profileLayers(surface: 'web' | 'desktop'): ReturnType<typeof loadOverlayPatches>[] {
-  const directory = mkdtempSync(join(tmpdir(), 'dsh-bundle-compatibility-'))
+  const directory = mkdtempSync(join(tmpdir(), 'snh-bundle-compatibility-'))
   onTestFinished(() => { rmSync(directory, { recursive: true, force: true }) })
   if (surface === 'desktop') createPluginProfile(directory)
   else initProfile(directory, PROFILE_TEMPLATES.web!.bundles)
-  const names = readProfileManifest('test', directory).dsh?.profile?.bundles
+  const names = readProfileManifest('test', directory).snh?.profile?.bundles
   if (names === undefined) throw new Error(`${surface} profile has no bundle list`)
   return names.map(name => bundle(name).patches)
 }
 
 describe.each(['web', 'desktop'] as const)('%s optional bundle overrides', (surface) => {
-  const selectedNames = ['@deepseek-ai/dsh-experimental-badge-skill-bundle', '@deepseek-ai/dsh-experimental-ralph-bundle']
+  const selectedNames = ['@supernova-ai/snh-experimental-badge-skill-bundle', '@supernova-ai/snh-experimental-ralph-bundle']
 
   it('keeps established selectors for later configuration and disabled overrides', () => {
     const shipped = profileLayers(surface)
@@ -75,9 +75,9 @@ describe.each(['web', 'desktop'] as const)('%s optional bundle overrides', (surf
       { id: 'tool-ralph', config, disabled: true },
     ]], warning => warnings.push(warning))
     expect(warnings).toEqual([])
-    expect(entries.find(row => row.id === 'skill-badge')).toMatchObject({ name: '@deepseek-ai/dsh-skill-badge', disabled: true })
+    expect(entries.find(row => row.id === 'skill-badge')).toMatchObject({ name: '@supernova-ai/snh-skill-badge', disabled: true })
     expect(flattenRows(entries).find(row => row.id === 'tool-ralph'))
-      .toMatchObject({ name: '@deepseek-ai/dsh-tool-ralph', config, disabled: true })
+      .toMatchObject({ name: '@supernova-ai/snh-tool-ralph', config, disabled: true })
     expect(entries.find(row => row.id === 'optional-ralph')?.isolate).toEqual({ workflowEngine: true })
   })
 
@@ -97,20 +97,20 @@ describe.each(['web', 'desktop'] as const)('%s optional bundle overrides', (surf
 
 describe('optional bundles', () => {
   it('admits Computer Use on macOS and native Windows Hosts', () => {
-    expect(bundles.get('@deepseek-ai/dsh-cua-bundle')?.manifest.dsh?.bundle?.platforms).toEqual(['darwin', 'win32'])
+    expect(bundles.get('@supernova-ai/snh-cua-bundle')?.manifest.snh?.bundle?.platforms).toEqual(['darwin', 'win32'])
   })
-  const shipped = ['@deepseek-ai/dsh-base', '@deepseek-ai/dsh-web-app'].map(name => bundle(name).patches)
+  const shipped = ['@supernova-ai/snh-base', '@supernova-ai/snh-web-app'].map(name => bundle(name).patches)
 
   it('ships at least one bundle switched off', () => {
     expect(OPTIONAL_BUNDLES.length).toBeGreaterThan(0)
   })
 
   it('keeps the Inspector out of the default plugin list', () => {
-    expect(OPTIONAL_BUNDLES).not.toContain('@deepseek-ai/dsh-experimental-inspector')
+    expect(OPTIONAL_BUNDLES).not.toContain('@supernova-ai/snh-experimental-inspector')
   })
 
   it.each(['web', 'desktop'] as const)('requires explicit selection of Timeline on %s', (surface) => {
-    const name = '@deepseek-ai/dsh-timeline'
+    const name = '@supernova-ai/snh-timeline'
     const layers = profileLayers(surface)
     expect(OPTIONAL_BUNDLES).toContain(name)
     expect(flattenRows(composeEntries(layers)).some(row => row.name === name)).toBe(false)
@@ -162,40 +162,40 @@ describe('optional bundles', () => {
   })
 
   it('retains the standalone worktree bundle for explicit profiles', () => {
-    const name = '@deepseek-ai/dsh-experimental-tool-worktree'
+    const name = '@supernova-ai/snh-experimental-tool-worktree'
     expect(OPTIONAL_BUNDLES).toContain(name)
     for (const template of Object.values(PROFILE_TEMPLATES)) expect(template.bundles).not.toContain(name)
     const rows = composeEntries([...shipped, bundle(name).patches])
-    for (const moduleName of [name, '@deepseek-ai/dsh-experimental-worktree']) {
+    for (const moduleName of [name, '@supernova-ai/snh-experimental-worktree']) {
       expect(composeEntries(shipped).some(row => row.name === moduleName)).toBe(false)
       expect(rows.filter(row => row.name === moduleName && row.disabled !== true)).toHaveLength(1)
     }
   })
 
   it('offers the forge panel and model worktree tool together over one worktree service', () => {
-    const name = '@deepseek-ai/dsh-experimental-forge-bundle'
+    const name = '@supernova-ai/snh-experimental-forge-bundle'
     expect(OPTIONAL_BUNDLES).toContain(name)
     for (const template of Object.values(PROFILE_TEMPLATES)) expect(template.bundles).not.toContain(name)
     const rows = flattenRows(composeEntries([...shipped, bundle(name).patches]))
     for (const moduleName of [
-      '@deepseek-ai/dsh-experimental-forge',
-      '@deepseek-ai/dsh-experimental-forge-github',
-      '@deepseek-ai/dsh-forge-gitlab',
-      '@deepseek-ai/dsh-experimental-forge-session',
-      '@deepseek-ai/dsh-experimental-client-ui-forge',
-      '@deepseek-ai/dsh-experimental-tool-worktree',
+      '@supernova-ai/snh-experimental-forge',
+      '@supernova-ai/snh-experimental-forge-github',
+      '@supernova-ai/snh-forge-gitlab',
+      '@supernova-ai/snh-experimental-forge-session',
+      '@supernova-ai/snh-experimental-client-ui-forge',
+      '@supernova-ai/snh-experimental-tool-worktree',
     ]) {
       expect(flattenRows(composeEntries(shipped)).some(row => row.name === moduleName)).toBe(false)
       expect(rows.filter(row => row.name === moduleName && row.disabled !== true)).toHaveLength(1)
     }
     expect(composeEntries([...shipped, bundle(name).patches]).some(row => row.name === 'cordis:group' && row.id === 'optional-forge-panel')).toBe(false)
-    expect(rows.filter(row => row.name === '@deepseek-ai/dsh-experimental-worktree')).toHaveLength(1)
+    expect(rows.filter(row => row.name === '@supernova-ai/snh-experimental-worktree')).toHaveLength(1)
   })
 
   it('keeps the existing tool and panel row overrides addressable in the unified bundle', () => {
     const config = { directory: '.agents/custom-worktrees' }
     const warnings: string[] = []
-    const composed = composeEntries([...shipped, bundle('@deepseek-ai/dsh-experimental-forge-bundle').patches, [
+    const composed = composeEntries([...shipped, bundle('@supernova-ai/snh-experimental-forge-bundle').patches, [
       { id: 'worktree', config },
       { id: 'tool-worktree', disabled: true },
       { id: 'forge-panel', disabled: true },
@@ -234,21 +234,21 @@ describe('optional bundles', () => {
     const composed = composeEntries([...shipped, ...lightweight.map(name => bundle(name).patches)])
     const names = flattenRows(composed).map(row => row.name)
     for (const name of [
-      '@deepseek-ai/dsh-tool-session-query',
-      '@deepseek-ai/dsh-tool-ralph', '@deepseek-ai/dsh-tool-terminal',
+      '@supernova-ai/snh-tool-session-query',
+      '@supernova-ai/snh-tool-ralph', '@supernova-ai/snh-tool-terminal',
     ]) expect(names).toContain(name)
     expect(composed.find(row => row.id === 'optional-ralph')?.isolate).toEqual({ workflowEngine: true })
     expect(composed.find(row => row.id === 'optional-persistent-terminals')?.isolate).toEqual({ terminals: true })
     const search = composed.find(row => row.id === 'optional-session-search')
     expect(search?.isolate).toEqual({ sessionQuery: true })
     expect(search?.config).toEqual([
-      { id: 'optional-session-query-sqlite', name: '@deepseek-ai/dsh-session-query-sqlite', config: { path: ':memory:', openAt: 'first-search' } },
-      { id: 'optional-tool-session-query', name: '@deepseek-ai/dsh-tool-session-query' },
+      { id: 'optional-session-query-sqlite', name: '@supernova-ai/snh-session-query-sqlite', config: { path: ':memory:', openAt: 'first-search' } },
+      { id: 'optional-tool-session-query', name: '@supernova-ai/snh-tool-session-query' },
     ])
     expect(composed.find(row => row.id === 'session-query-sqlite')?.config).toEqual({ path: ':memory:', openAt: 'never' })
     expect(composed.find(row => row.id === 'session-title-llm')?.disabled).toBe(true)
     expect(composed.find(row => row.id === 'optional-session-title-all-prompts')?.name)
-      .toBe('@deepseek-ai/dsh-session-title-all-prompts-llm')
+      .toBe('@supernova-ai/snh-session-title-all-prompts-llm')
   })
 
   it('delivers the Schedule service and task page without a Host clock row', () => {
@@ -256,8 +256,8 @@ describe('optional bundles', () => {
     // The delivered composition carries the Host Schedule service and its task
     // page enabled; the clock stays preset-level, so no Host row declares it.
     for (const row of [
-      { id: 'schedule', name: '@deepseek-ai/dsh-schedule' },
-      { id: 'ui-schedule', name: '@deepseek-ai/dsh-client-ui-schedule' },
+      { id: 'schedule', name: '@supernova-ai/snh-schedule' },
+      { id: 'ui-schedule', name: '@supernova-ai/snh-client-ui-schedule' },
     ]) {
       expect(composed.filter(entry => entry.id === row.id && entry.name === row.name && entry.disabled !== true))
         .toHaveLength(1)
@@ -285,8 +285,8 @@ describe('optional bundles', () => {
     for (const id of ['preset-standard', 'preset-cordis', 'preset-ptc']) {
       const plugins = presetPlugins(id)
       for (const plugin of [
-        { id: 'time-context', name: '@deepseek-ai/dsh-time-context' },
-        { id: 'tool-schedule', name: '@deepseek-ai/dsh-tool-schedule' },
+        { id: 'time-context', name: '@supernova-ai/snh-time-context' },
+        { id: 'tool-schedule', name: '@supernova-ai/snh-tool-schedule' },
       ]) {
         const matches = plugins.filter(row => row.id === plugin.id && row.name === plugin.name)
         expect(matches).toHaveLength(1)
@@ -299,8 +299,8 @@ describe('optional bundles', () => {
       }
     }
     // `minimal` declares neither, so it composes no clock reading and no reminder tool.
-    expect(presetPlugins('preset-minimal').some(row => row.name === '@deepseek-ai/dsh-time-context'
-      || row.name === '@deepseek-ai/dsh-tool-schedule')).toBe(false)
+    expect(presetPlugins('preset-minimal').some(row => row.name === '@supernova-ai/snh-time-context'
+      || row.name === '@supernova-ai/snh-tool-schedule')).toBe(false)
   })
 
   it.each(OPTIONAL_BUNDLES)('%s resolves a title, description, and icon in both shipped languages', (name) => {

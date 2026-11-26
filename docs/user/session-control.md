@@ -8,7 +8,7 @@ English | [中文](session-control.zh.md)
 
 ## Summary
 
-Enable `session_send_message` in a Web profile when an Agent needs to send instructions or findings to another ordinary Session. The recipient can belong to a different Workspace or directory. You need a profile that includes the `@deepseek-ai/dsh-web-app` bundle, such as `web`, and the target Session's id. The tool is unavailable in the `headless`, `sdk`, `sdk-minimal`, and `acp` profiles.
+Enable `session_send_message` in a Web profile when an Agent needs to send instructions or findings to another ordinary Session. The recipient can belong to a different Workspace or directory. You need a profile that includes the `@supernova-ai/snh-web-app` bundle, such as `web`, and the target Session's id. The tool is unavailable in the `headless`, `sdk`, `sdk-minimal`, and `acp` profiles.
 
 ## Table of Contents
 
@@ -25,7 +25,7 @@ Enable `session_send_message` in a Web profile when an Agent needs to send instr
 
 The tool is disabled by default. Enabling it allows any Agent that sees it, including a subagent, to address any ordinary Session that the Web Session controller can open, including Sessions outside its current Workspace or cwd.
 
-Append this patch to `$DSH_HOME/profiles/<profile>/cordis.patch.yml` of a Web profile, preserving existing entries. If `DSH_HOME` is unset, use `~/.dsh`:
+Append this patch to `$SNH_HOME/profiles/<profile>/cordis.patch.yml` of a Web profile, preserving existing entries. If `SNH_HOME` is unset, use `~/.snh`:
 
 ```yaml
 - id: tool-session-control
@@ -37,7 +37,7 @@ Restart the profile after changing its patch. The patch targets the `tool-sessio
 From a source checkout, the same patch is available in [session-control.overlay.yml](../../apps/cli/config/examples/session-control.overlay.yml). Inspect its effect without starting the Web server:
 
 ```sh
-pnpm dsh --profile web --patch apps/cli/config/examples/session-control.overlay.yml --dump-config
+pnpm snh --profile web --patch apps/cli/config/examples/session-control.overlay.yml --dump-config
 ```
 
 The composed `tool-session-control` row has `disabled: false`. Keep the overlay when launching that profile, or keep the patch in the profile file above. The [profile reference](../../apps/cli/README.md#profiles) explains patch precedence and configuration inspection.

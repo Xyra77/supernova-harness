@@ -1,17 +1,17 @@
 /** Host-wide durable reminders and shared human/model management. */
 import { randomUUID } from 'node:crypto'
 import { isDeepStrictEqual } from 'node:util'
-import z from '@deepseek-ai/schemastery'
-import { Context, Service } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import { RemoteError, TypertRemoteService, Remote } from '@deepseek-ai/dsh-typert-protocol'
-import type { Domain } from '@deepseek-ai/dsh-storage-domain'
-import { delegationDepthOf } from '@deepseek-ai/dsh-subagent'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { SessionActivity } from '@deepseek-ai/dsh-workspace'
-import type {} from '@deepseek-ai/dsh-api-session-controller'
+import z from '@supernova-ai/schemastery'
+import { Context, Service } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import { RemoteError, TypertRemoteService, Remote } from '@supernova-ai/snh-typert-protocol'
+import type { Domain } from '@supernova-ai/snh-storage-domain'
+import { delegationDepthOf } from '@supernova-ai/snh-subagent'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type { SessionActivity } from '@supernova-ai/snh-workspace'
+import type {} from '@supernova-ai/snh-api-session-controller'
 import { ScheduleRuntime, type ScheduleRuntimeLimits } from './runtime.ts'
 import { scheduleDomain, scheduleTaskSchema, type ScheduleTask } from './storage.ts'
 import { deliveryHistoryPage } from './delivery-history.ts'
@@ -61,7 +61,7 @@ export {
 } from './domain.ts'
 
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Events {
     /**
      * Restore a reminder's Session through its embedding's owning controller.

@@ -59,16 +59,16 @@ describe('configLedgerSource', () => {
     let title = 'Shell'
     b.register('plugins.item', { id: 'bash', label: () => title })
     b.register('plugins.item', { id: 'loop', label: 'Agent loop' })
-    b.register('plugins.bundle.config', { key: 'dsh-x' })
-    b.register('plugins.row.config', { key: rowConfigKey('dsh-x', 'row') })
-    b.register('settings.section', { id: 'timeline', label: () => title }, '@scope/dsh-timeline')
+    b.register('plugins.bundle.config', { key: 'snh-x' })
+    b.register('plugins.row.config', { key: rowConfigKey('snh-x', 'row') })
+    b.register('settings.section', { id: 'timeline', label: () => title }, '@scope/snh-timeline')
     b.register('settings.section', { id: 'loose', label: 'Loose' })
 
     expect(source.getSnapshot()).toEqual({
       items: [{ id: 'bash', label: 'Shell' }, { id: 'loop', label: 'Agent loop' }],
-      bundles: new Set(['dsh-x']),
-      rows: new Set(['dsh-x#row']),
-      sections: [{ id: 'timeline', label: 'Shell', module: '@scope/dsh-timeline' }, { id: 'loose', label: 'Loose' }],
+      bundles: new Set(['snh-x']),
+      rows: new Set(['snh-x#row']),
+      sections: [{ id: 'timeline', label: 'Shell', module: '@scope/snh-timeline' }, { id: 'loose', label: 'Loose' }],
     })
     // A label thunk is re-read when the locale moves, not before.
     title = '终端'

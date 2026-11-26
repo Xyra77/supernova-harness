@@ -1,6 +1,6 @@
 {
-  "name": "@deepseek-ai/dsh-official-bundles",
-  "description": "Installation-owned lists of official dsh bundles (shipped profile templates, optional, on-demand, and retired bundles) and the plugin manager's protected and presented packages",
+  "name": "@supernova-ai/snh-official-bundles",
+  "description": "Installation-owned lists of official snh bundles (shipped profile templates, optional, on-demand, and retired bundles) and the plugin manager's protected and presented packages",
   "version": "0.2.3-alpha.2",
   "publishConfig": {
     "access": "public"
@@ -30,12 +30,12 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@deepseek-ai/dsh-package-manifest": "workspace:*"
+    "@supernova-ai/snh-package-manifest": "workspace:*"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   },
   "devDependencies": {
-    "@deepseek-ai/cordis": "workspace:~"
+    "@supernova-ai/cordis": "workspace:~"
   }
 }

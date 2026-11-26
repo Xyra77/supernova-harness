@@ -1,12 +1,12 @@
 /**
  * Canonical Office tool results and their model-facing content.
- * @module @deepseek-ai/dsh-tool-office/content
+ * @module @supernova-ai/snh-tool-office/content
  */
 
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { AttachmentId, ImageAttachmentRef, ImageMediaType } from '@deepseek-ai/dsh-attachment/types'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { OfficeConversionFormat, OfficeRecalculationFormat } from '@deepseek-ai/dsh-office-kit'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import type { AttachmentId, ImageAttachmentRef, ImageMediaType } from '@supernova-ai/snh-attachment/types'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { OfficeConversionFormat, OfficeRecalculationFormat } from '@supernova-ai/snh-office-kit'
 
 /**
  * One rendered image and the document location it shows. The attachment fields are those of the stored reference;

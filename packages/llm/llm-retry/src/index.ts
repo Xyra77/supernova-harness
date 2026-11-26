@@ -2,17 +2,17 @@
  * Provider-routed model-request retry policy on the agent loop's request
  * recovery extension point. Each scheduled retry is durable before its cancellable wait.
  *
- * @module @deepseek-ai/dsh-llm-retry
+ * @module @supernova-ai/snh-llm-retry
  */
 
 import { randomUUID } from 'node:crypto'
-import type { Context, Events } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
+import type { Context, Events } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
 import { z as zod } from 'zod'
-import type { Agent, RequestErrorAction } from '@deepseek-ai/dsh-agent'
-import type { LlmFailure, ResolvedRetryPolicy } from '@deepseek-ai/dsh-llm'
-import type {} from '@deepseek-ai/dsh-session-projection'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import type { Agent, RequestErrorAction } from '@supernova-ai/snh-agent'
+import type { LlmFailure, ResolvedRetryPolicy } from '@supernova-ai/snh-llm'
+import type {} from '@supernova-ai/snh-session-projection'
+import { brandString } from '@supernova-ai/snh-brand'
 import type { RetryId } from './brand.ts'
 import type { LlmRetryEventData } from './types.ts'
 

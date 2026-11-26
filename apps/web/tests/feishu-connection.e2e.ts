@@ -74,7 +74,7 @@ describe.skipIf(process.platform === 'win32')('web e2e: Feishu plugin connection
   let tripwire: ReturnType<typeof watchConsole>
 
   beforeAll(async () => {
-    binDir = await mkdtemp(join(tmpdir(), 'dsh-feishu-e2e-'))
+    binDir = await mkdtemp(join(tmpdir(), 'snh-feishu-e2e-'))
     await writeFile(join(binDir, 'lark-cli'), LARK_CLI)
     await chmod(join(binDir, 'lark-cli'), 0o755)
     const overlay = join(binDir, 'feishu.overlay.yml')
@@ -108,7 +108,7 @@ describe.skipIf(process.platform === 'win32')('web e2e: Feishu plugin connection
     await page.getByRole('navigation', { name: '全局面板' }).getByRole('button', { name: '插件', exact: true }).click()
     const panel = page.locator('[data-plugin-panel]')
     await panel.getByRole('button', { name: '查看 飞书插件', exact: true }).click({ timeout: 20_000 })
-    const section = panel.locator('[data-connector-account-key="@deepseek-ai/dsh-feishu"]')
+    const section = panel.locator('[data-connector-account-key="@supernova-ai/snh-feishu"]')
     await expect.poll(() => section.getAttribute('data-connector-account'), { timeout: 20_000 }).toBe('disconnected')
     expect(await panel.locator('[data-plugin-detail]').getByText('未连接', { exact: true }).count()).toBe(2)
 

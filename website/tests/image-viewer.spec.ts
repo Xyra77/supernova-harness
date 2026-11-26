@@ -94,7 +94,7 @@ function render(complete = true) {
   const container = document.createElement('p')
   const image = document.createElement('img')
   image.src = 'https://docs.example/provider.png'
-  image.alt = 'DeepSeek API settings'
+  image.alt = 'SuperNova API settings'
   container.append(image)
   required(document.querySelector('main')).append(container)
   return { image, container, state: imageState(image, complete) }
@@ -106,16 +106,16 @@ function install(): ImageViewer {
 }
 
 function entry(): HTMLElement {
-  return getByRole(document.body, 'button', { name: 'View image fullscreen: DeepSeek API settings' })
+  return getByRole(document.body, 'button', { name: 'View image fullscreen: SuperNova API settings' })
 }
 
 function open(): HTMLDialogElement {
   entry().click()
-  return getByRole(document.body, 'dialog', { name: 'DeepSeek API settings' }) as HTMLDialogElement
+  return getByRole(document.body, 'dialog', { name: 'SuperNova API settings' }) as HTMLDialogElement
 }
 
 function enlarged(dialog: HTMLElement): HTMLImageElement {
-  return required(dialog.querySelector('.dsh-media-paper')?.shadowRoot?.querySelector('img'))
+  return required(dialog.querySelector('.snh-media-paper')?.shadowRoot?.querySelector('img'))
 }
 
 describe('documentation image viewer', () => {
@@ -132,7 +132,7 @@ describe('documentation image viewer', () => {
     state.width = 0
     image.dispatchEvent(new Event('error'))
     expect(queryAllByRole(document.body, 'button')).toHaveLength(0)
-    expect(image.classList.contains('dsh-image-zoomable')).toBe(false)
+    expect(image.classList.contains('snh-image-zoomable')).toBe(false)
     image.click()
     trigger.click()
     expect(queryByRole(document.body, 'dialog')).toBeNull()
@@ -166,8 +166,8 @@ describe('documentation image viewer', () => {
   })
 
   it.each([
-    { locale: 'en-US', title: 'DeepSeek API settings', name: 'View image fullscreen: DeepSeek API settings', trigger: 'image' },
-    { locale: 'zh-CN', title: 'DeepSeek API 配置', name: '全屏查看图片：DeepSeek API 配置', trigger: 'button' },
+    { locale: 'en-US', title: 'SuperNova API settings', name: 'View image fullscreen: SuperNova API settings', trigger: 'image' },
+    { locale: 'zh-CN', title: 'SuperNova API 配置', name: '全屏查看图片：SuperNova API 配置', trigger: 'button' },
   ])('opens the loaded image with accessible controls in $locale', async ({ locale, title, name, trigger }) => {
     const { image, state } = render()
     language = locale
@@ -208,7 +208,7 @@ describe('documentation image viewer', () => {
     expect(current.zoom).toHaveBeenCalledWith(1, { animate: false })
     expect(current.pan).toHaveBeenCalledWith(0, 0, { animate: false })
     current.getScale.mockReturnValue(1)
-    required(dialog.querySelector('.dsh-media-paper')).dispatchEvent(new Event('panzoomchange'))
+    required(dialog.querySelector('.snh-media-paper')).dispatchEvent(new Event('panzoomchange'))
     expect(original.textContent).toBe('100%')
     expect(original.getAttribute('aria-label')).toBe('Original size (100%), currently 100%')
     const controls = ['Zoom out', 'Original size (100%), currently 100%', 'Zoom in', 'Fit view', 'Viewer help', 'Close']
@@ -317,8 +317,8 @@ describe('documentation image viewer', () => {
     expect(required(controllers[0]).zoomIn).not.toHaveBeenCalled()
     if (action === 'refresh') expect(document.activeElement).toBe(trigger)
     else {
-      expect(image.classList.contains('dsh-image-zoomable')).toBe(false)
-      expect(container.classList.contains('dsh-image-container')).toBe(false)
+      expect(image.classList.contains('snh-image-zoomable')).toBe(false)
+      expect(container.classList.contains('snh-image-container')).toBe(false)
       image.click()
       trigger.click()
       expect(queryByRole(document.body, 'dialog')).toBeNull()

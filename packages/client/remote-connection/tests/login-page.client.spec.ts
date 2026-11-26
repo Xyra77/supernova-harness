@@ -86,7 +86,7 @@ it.each(['en-US', 'zh-CN'])('shows the anonymous Token form without Client boot 
   expect(fixture.input.required).toBe(true)
   expect(fixture.input.getAttribute('aria-describedby')).toBe('token-hint token-error')
   expect(fixture.submit.textContent).toBe(t.tokenSubmit)
-  expect(document.documentElement.innerHTML).not.toContain('__DSH_BOOT__')
+  expect(document.documentElement.innerHTML).not.toContain('__SNH_BOOT__')
   expect(document.documentElement.innerHTML).not.toContain('authPages')
   expect((document.getElementById('qr-notice') as HTMLElement).hidden).toBe(true)
   expect(document.getElementById('status')?.textContent).toBe('')
@@ -97,7 +97,7 @@ it.each(['en-US', 'zh-CN'])('shows the anonymous Token form without Client boot 
 it.each([
   'http://192.168.1.8:3080/',
   'http://[2001:db8::1]:3080/',
-  'https://host.example:9443/tools/dsh/',
+  'https://host.example:9443/tools/snh/',
   'https://host.example:9443/tools/$&/$$/',
 ])('shows %s without page credentials, query values, or fragments in the placeholder', (applicationUrl) => {
   const fixture = authenticationPage()
@@ -403,11 +403,11 @@ it.each(['en-US', 'zh-CN'])('keeps device pairing available without the Token pr
   const t = language.startsWith('zh') ? loginLocales.zh : loginLocales.en
   expect(document.getElementById('description')?.textContent).toBe(t.authenticationDescription)
   expect(document.getElementById('token-form')).toBeNull()
-  expect(document.querySelectorAll('dsh-device-pairing')).toHaveLength(1)
+  expect(document.querySelectorAll('snh-device-pairing')).toHaveLength(1)
   const script = document.querySelector<HTMLScriptElement>('script[src]')!
   expect(script.getAttribute('src')).toBe('./pairing/client.js')
   expect(script.defer).toBe(true)
-  expect(document.documentElement.innerHTML).not.toContain('__DSH_BOOT__')
+  expect(document.documentElement.innerHTML).not.toContain('__SNH_BOOT__')
   expect(document.documentElement.innerHTML).not.toContain('authPages')
   expect(fixture.exchange).not.toHaveBeenCalled()
 })
@@ -415,11 +415,11 @@ it.each(['en-US', 'zh-CN'])('keeps device pairing available without the Token pr
 it('renders the Token form and pairing as separate sign-in actions in the same document', () => {
   const fixture = authenticationPage({ tokenLoginEnabled: true, pairingEnabled: true })
   enterAuthenticationPage(loginLocales)
-  expect(fixture.form.querySelector('dsh-device-pairing')).toBeNull()
-  expect(fixture.form.nextElementSibling?.tagName).toBe('DSH-DEVICE-PAIRING')
+  expect(fixture.form.querySelector('snh-device-pairing')).toBeNull()
+  expect(fixture.form.nextElementSibling?.tagName).toBe('SNH-DEVICE-PAIRING')
   expect(document.querySelectorAll('script[src]')).toHaveLength(1)
   expect(renderAuthenticationPage({ tokenLoginEnabled: true, pairingEnabled: true }))
-    .toContain(`<dsh-device-pairing><noscript><p>${loginLocales.en.pairingScriptRequired}</p></noscript></dsh-device-pairing>`)
+    .toContain(`<snh-device-pairing><noscript><p>${loginLocales.en.pairingScriptRequired}</p></noscript></snh-device-pairing>`)
 })
 
 
@@ -433,7 +433,7 @@ it.each([
   const methods = document.querySelector('.methods')!
   expect(methods.children).toHaveLength(count)
   expect(document.getElementById('token-form')?.parentElement).toBe(tokenLoginEnabled ? methods : undefined)
-  expect(document.querySelector('dsh-device-pairing')?.parentElement).toBe(pairingEnabled ? methods : undefined)
+  expect(document.querySelector('snh-device-pairing')?.parentElement).toBe(pairingEnabled ? methods : undefined)
   expect(document.getElementById('title')?.parentElement).toBe(methods.parentElement)
   expect(document.getElementById('description')?.parentElement).toBe(methods.parentElement)
   expect(document.getElementById('qr-notice')?.parentElement).toBe(methods.parentElement)

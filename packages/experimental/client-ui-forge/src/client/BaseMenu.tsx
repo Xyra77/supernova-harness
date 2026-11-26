@@ -5,9 +5,9 @@ import clsx from 'clsx'
 import {
   IconBranchOutlineRegular, IconCheckOutlineRegular, IconChevronDownOutlineRegular,
   IconWarningTriangleOutlineRegular, Menu, MenuItemButton, Tooltip,
-} from '@deepseek-ai/dsh-client-ui-primitives'
-import type { PropsLocale } from '@deepseek-ai/dsh-client-ui-slots'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+} from '@supernova-ai/snh-client-ui-primitives'
+import type { PropsLocale } from '@supernova-ai/snh-client-ui-slots'
+import type { RemoteResult } from '@supernova-ai/snh-typert-protocol'
 import type { ForgeBaseBranch, ForgeBaseBranches } from '../types.ts'
 import { branchSearchStatus, useBranchSearch } from './branch-search.tsx'
 import type { NS } from './locales.ts'

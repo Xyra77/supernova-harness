@@ -1,16 +1,16 @@
 /** First-write lease failures and cancellation through published Session events. @module */
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { mkdtemp, rm, stat } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import { SessionId, SessionStore } from '@deepseek-ai/dsh-session'
+import { SessionId, SessionStore } from '@supernova-ai/snh-session'
 import * as plugin from '../src/index.ts'
 import { SessionWriteLease } from '../src/lease.ts'
 import { sessionDir } from '../../session-persistence-jsonl/src/format.ts'
 
 async function fixture() {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-session-write-recovery-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-session-write-recovery-'))
   const ctx = new Context()
   onTestFinished(async () => {
     try { await ctx.fiber.dispose() }

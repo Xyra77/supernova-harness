@@ -2,7 +2,7 @@
 import { fileURLToPath } from 'node:url'
 import { chromium, type Locator } from 'playwright'
 import { expect, it } from 'vitest'
-import type { ScheduleTiming } from '@deepseek-ai/dsh-schedule/client'
+import type { ScheduleTiming } from '@supernova-ai/snh-schedule/client'
 import { captureStableAria, compareOrRefreshGolden, launchWebScaffold, watchConsole, webSnapshotMode } from './scaffold.ts'
 import { revealNavigationDrawer, writeComposerDraft } from './support.ts'
 
@@ -17,7 +17,7 @@ it.each([
   try {
     browser = await chromium.launch()
     const page = await browser.newPage({ viewport: { width: 1440, height: 960 }, locale: copy.locale })
-    await page.addInitScript((locale) => { localStorage.setItem('dsh.locale', locale) }, copy.locale)
+    await page.addInitScript((locale) => { localStorage.setItem('snh.locale', locale) }, copy.locale)
     const tripwire = watchConsole(page)
     await page.goto(scaffold.authenticatedUrl, { waitUntil: 'load' })
     const input = page.locator('[data-composer-input][contenteditable="true"]').first()
@@ -60,7 +60,7 @@ it.each([
   try {
     browser = await chromium.launch()
     const page = await browser.newPage({ viewport: { width: 1440, height: 960 }, locale: copy.locale })
-    await page.addInitScript((locale) => { localStorage.setItem('dsh.locale', locale) }, copy.locale)
+    await page.addInitScript((locale) => { localStorage.setItem('snh.locale', locale) }, copy.locale)
     const tripwire = watchConsole(page)
     await page.goto(scaffold.authenticatedUrl, { waitUntil: 'load' })
     const input = page.locator('[data-composer-input][contenteditable="true"]').first()
@@ -112,7 +112,7 @@ it.each([
     for (const { width, columns } of [{ width: 390, columns: 1 }, { width: 680, columns: 2 }, { width: 1440, columns: 2 }]) {
       const phone = width < 600
       const page = await browser.newPage({ viewport: { width, height: 900 }, isMobile: phone, hasTouch: phone, locale: copy.locale })
-      await page.addInitScript((locale) => { localStorage.setItem('dsh.locale', locale) }, copy.locale)
+      await page.addInitScript((locale) => { localStorage.setItem('snh.locale', locale) }, copy.locale)
       const tripwire = watchConsole(page)
       await page.goto(scaffold.authenticatedUrl, { waitUntil: 'load' })
       await revealNavigationDrawer(page, copy.locale)
@@ -160,7 +160,7 @@ it('opens stored timing fields immediately without selecting another repeat opti
     }
     browser = await chromium.launch()
     const page = await browser.newPage({ viewport: { width: 1440, height: 960 }, locale: 'zh-CN', timezoneId: 'Asia/Shanghai' })
-    await page.addInitScript(() => { localStorage.setItem('dsh.locale', 'zh') })
+    await page.addInitScript(() => { localStorage.setItem('snh.locale', 'zh') })
     const tripwire = watchConsole(page)
     await page.goto(scaffold.authenticatedUrl, { waitUntil: 'load' })
     await page.getByRole('button', { name: '自动化任务', exact: true }).click()
@@ -197,7 +197,7 @@ it.each(['2026-03-07T16:00:00.000Z', '2026-03-08T16:00:00.000Z'])(
       browser = await chromium.launch()
       const page = await browser.newPage({ viewport: { width: 1440, height: 960 }, locale: 'zh-CN', timezoneId: 'America/New_York' })
       await page.addInitScript((now) => {
-        localStorage.setItem('dsh.locale', 'zh')
+        localStorage.setItem('snh.locale', 'zh')
         Date.now = () => Date.parse(now)
       }, now)
       const tripwire = watchConsole(page)
@@ -245,7 +245,7 @@ it('creates from a paused empty state, selects the task, and saves an inline edi
   try {
     browser = await chromium.launch()
     const page = await browser.newPage({ viewport: { width: 1440, height: 960 }, locale: 'zh-CN', timezoneId: 'Asia/Shanghai' })
-    await page.addInitScript(() => { localStorage.setItem('dsh.locale', 'zh') })
+    await page.addInitScript(() => { localStorage.setItem('snh.locale', 'zh') })
     const tripwire = watchConsole(page)
     await page.goto(scaffold.authenticatedUrl, { waitUntil: 'load' })
     await page.getByRole('button', { name: '自动化任务', exact: true }).click()
@@ -390,7 +390,7 @@ it('creates and edits Custom Cron through the built UI while retaining its expli
   try {
     browser = await chromium.launch()
     const page = await browser.newPage({ viewport: { width: 1440, height: 960 }, locale: 'zh-CN', timezoneId: 'Asia/Shanghai' })
-    await page.addInitScript(() => { localStorage.setItem('dsh.locale', 'zh') })
+    await page.addInitScript(() => { localStorage.setItem('snh.locale', 'zh') })
     const tripwire = watchConsole(page)
     await page.goto(scaffold.authenticatedUrl, { waitUntil: 'load' })
     await page.getByRole('button', { name: '自动化任务', exact: true }).click()

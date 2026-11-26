@@ -1,25 +1,25 @@
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { describe, expect, it, vi } from 'vitest'
-import type { AttachmentId, ImageAttachmentRef } from '@deepseek-ai/dsh-attachment/types'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { LlmAttemptId } from '@deepseek-ai/dsh-llm/types'
-import type { StreamChunk } from '@deepseek-ai/dsh-llm'
+import type { AttachmentId, ImageAttachmentRef } from '@supernova-ai/snh-attachment/types'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { LlmAttemptId } from '@supernova-ai/snh-llm/types'
+import type { StreamChunk } from '@supernova-ai/snh-llm'
 import type {
   AssistantLiveChunkEvent, SessionEventLike, SessionEventLikeEntry,
   SessionLiveEventEntry, SessionTransientEventEntry,
-} from '@deepseek-ai/dsh-api-session-controller/client'
-import { SessionSeq } from '@deepseek-ai/dsh-session/types'
-import type { SessionEvent, SessionId } from '@deepseek-ai/dsh-session/types'
-import { ConversationNodeAssembler } from '@deepseek-ai/dsh-client-ui-conversation/client'
+} from '@supernova-ai/snh-api-session-controller/client'
+import { SessionSeq } from '@supernova-ai/snh-session/types'
+import type { SessionEvent, SessionId } from '@supernova-ai/snh-session/types'
+import { ConversationNodeAssembler } from '@supernova-ai/snh-client-ui-conversation/client'
 import type {
   ConversationContextReader, ConversationLocation, ConversationMatch,
   ConversationNodeContext, ConversationNodeDefinition, ConversationStartMatch,
   ConversationViewDefinition,
-} from '@deepseek-ai/dsh-client-ui-conversation/client'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { resolveSlotLabel } from '@deepseek-ai/dsh-client-ui-slots'
-import type { StoredEntry } from '@deepseek-ai/dsh-client-ui-slots'
+} from '@supernova-ai/snh-client-ui-conversation/client'
+import { SlotRegistry } from '@supernova-ai/snh-client-ui-renderer/client'
+import { makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import { resolveSlotLabel } from '@supernova-ai/snh-client-ui-slots'
+import type { StoredEntry } from '@supernova-ai/snh-client-ui-slots'
 import { de, en, es, fr, ja, NS, pt, ru, zh } from '../src/client/locales.ts'
 import type {
   StatsCall, StatsContribution, StatsSnapshot, StatsStepMetrics, StatsStepState, StatsViewNode,

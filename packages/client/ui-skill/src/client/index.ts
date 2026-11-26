@@ -6,7 +6,7 @@
  * text and the prompt ships the same literal (plain-text-reference decision;
  * see .agents/notes/archived/architecture/2026-07-25-web-input-machine-and-slash-pipeline.md);
  * determinism
- * lives host-side — the pre-step boundary (`dsh-tool-skill`) recognizes a
+ * lives host-side — the pre-step boundary (`snh-tool-skill`) recognizes a
  * leading `/name` naming a user-invocable skill and injects the rendered
  * body for every entry point, including `disable-model-invocation` skills the
  * model-side catalog never lists (issue #1470). The RPC rides the plugin's
@@ -33,35 +33,35 @@
  * accent row derived only from each logged call/result slice.
  */
 // Type-only: the carrier types, the forwarded Host-event face and the ctx.remote merge.
-import type {} from '@deepseek-ai/dsh-client-ui-sidebar-right/client'
-import type { Context as ClientContext } from '@deepseek-ai/cordis'
-import type { SkillEntry } from '@deepseek-ai/dsh-api-remotes/client'
-import type {} from '@deepseek-ai/dsh-api-session-controller/client'
+import type {} from '@supernova-ai/snh-client-ui-sidebar-right/client'
+import type { Context as ClientContext } from '@supernova-ai/cordis'
+import type { SkillEntry } from '@supernova-ai/snh-api-remotes/client'
+import type {} from '@supernova-ai/snh-api-session-controller/client'
 // Type-only: the forwarded `plugin-manager/changed` declaration.
-import type {} from '@deepseek-ai/dsh-plugin-manager/types'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import type { InputTriggerServiceContract, InputTriggerSource } from '@deepseek-ai/dsh-client-ui-input-trigger/client'
-import { fileAddressFor } from '@deepseek-ai/dsh-util-workspace-path'
-import { TextSearchIndex } from '@deepseek-ai/dsh-util-text-search'
+import type {} from '@supernova-ai/snh-plugin-manager/types'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import type { InputTriggerServiceContract, InputTriggerSource } from '@supernova-ai/snh-client-ui-input-trigger/client'
+import { fileAddressFor } from '@supernova-ai/snh-util-workspace-path'
+import { TextSearchIndex } from '@supernova-ai/snh-util-text-search'
 // Type-only: pulls the locale plugin's Context merge (ctx.locale).
-import type {} from '@deepseek-ai/dsh-client-locale/client'
+import type {} from '@supernova-ai/snh-client-locale/client'
 // Type-only: pulls the SlotRegistry service merge (ctx.slots).
-import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
-import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
+import type {} from '@supernova-ai/snh-client-ui-renderer/client'
+import type {} from '@supernova-ai/snh-client-ui-conversation/client'
 import { SkillRow } from './SkillRow.tsx'
 import { SkillReference, type SkillReferenceInjected } from './SkillReference.tsx'
 import { skillReferenceRule } from './user-text-rules.ts'
 export type {} from './user-text-rules.ts'
 import { en, ja, es, fr, de, ru, pt, NS, zh, type SkillKey } from './locales.ts'
 
-declare module '@deepseek-ai/dsh-api-session-controller/client' {
+declare module '@supernova-ai/snh-api-session-controller/client' {
   interface SessionReferenceSourceMap {
     /** A skill-catalog fetch waiting for initial history and its RPC result. */
     skillCatalog: unknown
   }
 }
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@supernova-ai/snh-client-ui-slots' {
   interface LocaleNamespaceMap {
     /** The dedicated skill tool row's copy. */
     skill: SkillKey
@@ -224,7 +224,7 @@ export function apply(ctx: ClientContext): void {
       // Plain-text-reference decision (web-input-machine note): the pick
       // lands plain text and the prompt ships the same
       // literal. Determinism lives host-side — the host's
-      // pre-step boundary (dsh-tool-skill) recognizes the leading /name and
+      // pre-step boundary (snh-tool-skill) recognizes the leading /name and
       // injects the rendered body for every entry point. A name shared with a
       // host command still resolves to the command: adjudication claims the
       // line client-side before it ever becomes a prompt.

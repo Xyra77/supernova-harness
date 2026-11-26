@@ -26,7 +26,7 @@ pi-ai 依赖从 1.1.0 升级到 1.3.0。以下聊天模型 ID 不再包含在目
 |---|---|
 | `anthropic/claude-sonnet-4-5` | 200000 / — |
 | `anthropic/claude-sonnet-4-5-20250929` | 200000 / — |
-| `openrouter/deepseek/deepseek-v4-flash` | 1048575 / 943717 |
+| `openrouter/supernova/deepseek-v4-flash` | 1048575 / 943717 |
 | `openrouter/inclusionai/ling-3.0-flash-vl` | 131072 / — |
 | `openrouter/meta-llama/llama-4-scout` | 131072 / — |
 | `openrouter/minimax/minimax-m2` | — / 131072 |
@@ -42,7 +42,7 @@ pi-ai 依赖从 1.1.0 升级到 1.3.0。以下聊天模型 ID 不再包含在目
 | `openrouter/~z-ai/glm-latest` | — / 131072 |
 | `radius/claude-sonnet-4-5` | 200000 / — |
 | `vercel-ai-gateway/alibaba/qwen3-coder` | — / 32768 |
-| `vercel-ai-gateway/deepseek/deepseek-v4.1-flash-fast` | — / 32768 |
+| `vercel-ai-gateway/supernova/deepseek-v4.1-flash-fast` | — / 32768 |
 
 `vercel-ai-gateway` 的 `alibaba/qwen-3-235b` 模型现在被声明为非推理模型。协议与推理强度变更见[单独的指南](../pi-ai-protocol-replay/guide.zh.md)。
 

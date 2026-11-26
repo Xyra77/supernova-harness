@@ -1,17 +1,17 @@
 import { describe, expect, it, onTestFinished } from 'vitest'
-import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@deepseek-ai/dsh-agent-loop-testkit'
-import { Context } from '@deepseek-ai/cordis'
+import { mountAgentLoopTestDependencies, mountAgentLoopTestHarness } from '@supernova-ai/snh-agent-loop-testkit'
+import { Context } from '@supernova-ai/cordis'
 import SessionStore, {
   Session,
   SessionId,
-} from '@deepseek-ai/dsh-session'
-import type { SandboxMode } from '@deepseek-ai/dsh-sandbox'
-import type { ApprovalPolicy } from '@deepseek-ai/dsh-user-approval'
+} from '@supernova-ai/snh-session'
+import type { SandboxMode } from '@supernova-ai/snh-sandbox'
+import type { ApprovalPolicy } from '@supernova-ai/snh-user-approval'
 import PermissionPresetService, {
   AUTO_PRESET, CUSTOM_PRESET,
-} from '@deepseek-ai/dsh-permission-presets'
+} from '@supernova-ai/snh-permission-presets'
 import { liveConfig } from '../../../settings/settings/tests/live-config.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const configurations = new WeakMap<Context, Awaited<ReturnType<typeof liveConfig>>>()
 

@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Authentification des requêtes SuperNova",
+    "description": "Choisit la clé API ou la connexion au compte pour chaque requête envoyée à SuperNova et fournit les en-têtes de la requête."
+  }
+}

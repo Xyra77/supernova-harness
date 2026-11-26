@@ -1,9 +1,9 @@
 /** First-party Host inspect providers registered by the Cordis tool package. */
 
-import type { Context } from '@deepseek-ai/cordis'
-import { getDshRuntimeVersion } from '@deepseek-ai/dsh-app-boot'
-import { InspectError, type HostCordisInspectProviderRegistration } from '@deepseek-ai/dsh-cordis-host-runner'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import type { Context } from '@supernova-ai/cordis'
+import { getSnhRuntimeVersion } from '@supernova-ai/snh-app-boot'
+import { InspectError, type HostCordisInspectProviderRegistration } from '@supernova-ai/snh-cordis-host-runner'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
 import { EVENT_API, queryEventApi, queryServiceApi } from './api-catalog.ts'
 import { queryLiveConfig } from './config.ts'
 
@@ -31,7 +31,7 @@ const CONFIG_OUTPUT = {
   description: 'One directory page of live entries with patch ids, Config status, total, and nextOffset, or one entry\'s projected JSON Schema with shared definitions, omission acceptance, and projection limitations.',
 } as const
 const RUNTIME_OUTPUT = {
-  description: 'Object whose version field is the exact running DSH version.',
+  description: 'Object whose version field is the exact running SNH version.',
 } as const
 const HOST_EVENTS = EVENT_API.filter(event => !event.name.startsWith('cordis/'))
 
@@ -68,9 +68,9 @@ export function hostInspectProviders(ctx: Context): HostCordisInspectProviderReg
     ),
     registration(
       'Runtime',
-      'Running DSH version, the version that plugin engines.dsh ranges and DSH peer dependencies are checked against.',
+      'Running SNH version, the version that plugin engines.snh ranges and SNH peer dependencies are checked against.',
       'getVersion',
-      () => ({ version: getDshRuntimeVersion() }),
+      () => ({ version: getSnhRuntimeVersion() }),
       undefined,
       RUNTIME_OUTPUT,
     ),

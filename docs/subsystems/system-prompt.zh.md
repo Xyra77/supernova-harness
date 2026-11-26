@@ -8,7 +8,7 @@
 
 ## 组装上下文
 
-`AssembleContext` 标识一次组装的作用域及可选接收 Session。传入 Session 时，组装结果的 `systemUpdates()` 在调用时将捕获的段与该 Session 的已提交状态比较；未传入时，它不返回写入。该上下文可合并扩展：`dsh-agent` 添加可选字段 `agent` 和 `modelSelection`。`assembleContextFor(agent, signal)` 提供 agent、Session、作用域与信号；循环添加重试期间保留的模型选择，省略推理强度时使用适配器默认值。
+`AssembleContext` 标识一次组装的作用域及可选接收 Session。传入 Session 时，组装结果的 `systemUpdates()` 在调用时将捕获的段与该 Session 的已提交状态比较；未传入时，它不返回写入。该上下文可合并扩展：`snh-agent` 添加可选字段 `agent` 和 `modelSelection`。`assembleContextFor(agent, signal)` 提供 agent、Session、作用域与信号；循环添加重试期间保留的模型选择，省略推理强度时使用适配器默认值。
 
 ```ts type-equiv
 /** Merge-extensible context for one prompt assembly. */
@@ -229,12 +229,12 @@ Source: [`packages/core/system-prompt/src/index.ts`](../../packages/core/system-
 
 #### `system-prompt/assemble` — waterfall
 
-Presentation waterfall over assembled sections, contexts, and variables. Scope-filtered dispatch (`@deepseek-ai/dsh-scope`): scoped listeners receive only that scope's assemblies. Returned section text determines updates; omitting a previously admitted section leaves its instructions unchanged. Empty text withdraws its instructions; registration disposal retires it. Tool declarations remain provider-owned. A supplied signal controls only this explicit assembly request and must not be retained to control later turns. A registered complete section is restored after this waterfall, so listeners cannot add to or replace that scope's system prompt.
+Presentation waterfall over assembled sections, contexts, and variables. Scope-filtered dispatch (`@supernova-ai/snh-scope`): scoped listeners receive only that scope's assemblies. Returned section text determines updates; omitting a previously admitted section leaves its instructions unchanged. Empty text withdraws its instructions; registration disposal retires it. Tool declarations remain provider-owned. A supplied signal controls only this explicit assembly request and must not be retained to control later turns. A registered complete section is restored after this waterfall, so listeners cannot add to or replace that scope's system prompt.
 
 ```ts cordis-catalog
 /**
  * Presentation waterfall over assembled sections, contexts, and variables.
- * Scope-filtered dispatch (`@deepseek-ai/dsh-scope`): scoped listeners
+ * Scope-filtered dispatch (`@supernova-ai/snh-scope`): scoped listeners
  * receive only that scope's assemblies. Returned section text determines updates;
  * omitting a previously admitted section leaves its instructions unchanged.
  * Empty text withdraws its instructions; registration disposal retires it.

@@ -4,14 +4,14 @@
  * payloads that plugins and hosts observe. Internal control interfaces, such
  * as the manager host, belong with their implementation.
  *
- * @module @deepseek-ai/dsh-subagent/types
+ * @module @supernova-ai/snh-subagent/types
  */
 
-import type { Agent, AgentOptions } from '@deepseek-ai/dsh-agent'
-import type { Branded } from '@deepseek-ai/dsh-brand'
-import type { ContentBlock, MessageId } from '@deepseek-ai/dsh-llm'
-import type { SessionEvent, SessionId } from '@deepseek-ai/dsh-session'
-import type { ObjectJsonSchema } from '@deepseek-ai/dsh-tools'
+import type { Agent, AgentOptions } from '@supernova-ai/snh-agent'
+import type { Branded } from '@supernova-ai/snh-brand'
+import type { ContentBlock, MessageId } from '@supernova-ai/snh-llm'
+import type { SessionEvent, SessionId } from '@supernova-ai/snh-session'
+import type { ObjectJsonSchema } from '@supernova-ai/snh-tools'
 
 /** Current concurrency capacity of one subagent tree; observing it reserves no slots. */
 export interface SubagentCapacity {
@@ -179,7 +179,7 @@ export interface SubagentStartRequest {
    * Optional host-Agent provider, model, reasoning-effort, and output-token
    * overrides. Requires {@link SubagentCapabilities.agentOptions}; in-process
    * providers merge them over the parent Agent's options when they create the
-   * child, while the DSH SDK provider merges them over its instance defaults
+   * child, while the SNH SDK provider merges them over its instance defaults
    * before initializing the separate child runtime.
    */
   readonly agentOptions?: AgentOptions

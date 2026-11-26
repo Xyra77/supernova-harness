@@ -9,7 +9,7 @@ English | [中文](guide.zh.md)
 
 ## Change
 
-`SessionQueryEngine.inspectSession(sessionId, read, signal?)` from `@deepseek-ai/dsh-session-query` is removed. It prepared an unpublished `Session` for a cold Session and passed it to a synchronous getter, so projection handles and owner services could read it. That object was not in the Session store, had no Agent, and could not be appended to. The only in-repository caller, worktree archive cleanup, now reads projection wire values through `observeSession`.
+`SessionQueryEngine.inspectSession(sessionId, read, signal?)` from `@supernova-ai/snh-session-query` is removed. It prepared an unpublished `Session` for a cold Session and passed it to a synchronous getter, so projection handles and owner services could read it. That object was not in the Session store, had no Agent, and could not be appended to. The only in-repository caller, worktree archive cleanup, now reads projection wire values through `observeSession`.
 
 A third-party plugin is affected when it calls `ctx.sessionQuery.inspectSession`; it fails to compile, and an untyped call rejects at run time.
 

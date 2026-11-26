@@ -1,13 +1,13 @@
 /** Provider-wide SQLite transaction failures across cached handles and durability barriers. @module */
 import { LiveWriteBuffer } from '../src/buffer.ts'
 import { DatabaseSync } from 'node:sqlite'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { expect, it, onTestFinished, vi } from 'vitest'
-import { SESSION_FORMAT_VERSION, SessionId, SessionSeq, SessionStore } from '@deepseek-ai/dsh-session'
-import type { SessionHeader } from '@deepseek-ai/dsh-session'
+import { SESSION_FORMAT_VERSION, SessionId, SessionSeq, SessionStore } from '@supernova-ai/snh-session'
+import type { SessionHeader } from '@supernova-ai/snh-session'
 import * as persistence from '../src/index.ts'
 import { SqliteSessionHandle } from '../src/sqlite.ts'
 import { sqliteLogs } from './fixtures/store.ts'
@@ -15,7 +15,7 @@ import { SessionWriteLease } from '../src/lease.ts'
 import { sessionDir } from '../src/paths.ts'
 
 it.each(['commit', 'rollback'] as const)('isolates every SQLite handle after an unknown %s result and still releases them', async (operation) => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-segment-unknown-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-segment-unknown-'))
   const ctx = new Context()
   onTestFinished(async () => { try { await ctx.fiber.dispose() } finally { await rm(root, { recursive: true, force: true }) } })
   await ctx.plugin(SessionStore)
@@ -72,7 +72,7 @@ it.each(['commit', 'rollback'] as const)('isolates every SQLite handle after an 
 })
 
 it('rejects a created writer whose first lease completes after another Session makes the store unusable', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-segment-lease-unknown-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-segment-lease-unknown-'))
   const entered = Promise.withResolvers<undefined>(), release = Promise.withResolvers<undefined>()
   const logs = sqliteLogs(join(root, 'sessions.sqlite'), root, { acquireCreationLease: async (header) => {
     if (header.id === SessionId('waiting')) { entered.resolve(undefined); await release.promise }
@@ -105,7 +105,7 @@ it('rejects a created writer whose first lease completes after another Session m
 })
 
 it('refuses a queued second Session before its transaction begins and rejects flush after all writers close', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-segment-queued-unknown-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-segment-queued-unknown-'))
   const path = join(root, 'sessions.sqlite'), logs = sqliteLogs(path, root)
   onTestFinished(async () => { try { await logs.close() } finally { await rm(root, { recursive: true, force: true }) } })
   const header = (id: string): SessionHeader => ({ version: SESSION_FORMAT_VERSION, id: SessionId(id), createdAt: 0, isSeeded: false })

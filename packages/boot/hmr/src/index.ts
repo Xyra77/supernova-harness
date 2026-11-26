@@ -2,26 +2,26 @@
 import assert from 'node:assert/strict'
 import { AsyncLocalStorage } from 'node:async_hooks'
 import { watchConfig as watchExactConfig } from './watch-config.ts'
-import { Context, FiberState, Inject, Service, type Fiber, type Plugin } from '@deepseek-ai/cordis'
-import type { Entry, ModuleLoader, ModuleJob, ResolveResult } from '@deepseek-ai/cordis-plugin-loader'
-import type { Include } from '@deepseek-ai/cordis-plugin-include'
+import { Context, FiberState, Inject, Service, type Fiber, type Plugin } from '@supernova-ai/cordis'
+import type { Entry, ModuleLoader, ModuleJob, ResolveResult } from '@supernova-ai/cordis-plugin-loader'
+import type { Include } from '@supernova-ai/cordis-plugin-include'
 import { FSWatcher, watch, type ChokidarOptions } from 'chokidar'
 import { basename, dirname, join, relative, resolve, sep } from 'node:path'
 import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync } from 'node:fs'
 import {
   readProfileManifest, readProfilePatches, recomposeProfile, PROFILE_PATCH_FILENAME, type RuntimeResolution,
-} from '@deepseek-ai/dsh-app-boot'
-import type {} from '@deepseek-ai/dsh-cmdline'
+} from '@supernova-ai/snh-app-boot'
+import type {} from '@supernova-ai/snh-cmdline'
 import { handleError } from './error.ts'
 import { PackageManifests } from './package-manifest.ts'
 import { ModuleFiles } from './module-files.ts'
-import type {} from '@deepseek-ai/cordis-plugin-timer'
+import type {} from '@supernova-ai/cordis-plugin-timer'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { createRequire } from 'node:module'
 import picomatch from 'picomatch'
-import z from '@deepseek-ai/schemastery'
+import z from '@supernova-ai/schemastery'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     /** Serialized plugin-code and configuration reloads. */
     hmr: Hmr
@@ -393,7 +393,7 @@ class Hmr extends Service {
       let lastInputs: string | undefined
       let lastBundles = JSON.stringify(profile.startedBundles)
       const refresh = async (manifestOnly: boolean): Promise<void> => {
-        const bundles = JSON.stringify(readProfileManifest('dsh', profile.dir).dsh?.profile?.bundles ?? [])
+        const bundles = JSON.stringify(readProfileManifest('snh', profile.dir).snh?.profile?.bundles ?? [])
         if (manifestOnly && bundles === lastBundles) return
         const inputs = JSON.stringify([bundles, ...patchFiles.map((filename) => {
           try { return readFileSync(filename, 'utf8') }
@@ -895,7 +895,7 @@ class Hmr extends Service {
   /**
    * Evict the loaded modules below the directories of mappings a recomposition dropped and expire their package
    * configuration, so a disabled or removed package that is installed or enabled again is imported afresh. Modules of
-   * DSH's own static graph, and those below a directory that is still mapped, stay loaded.
+   * SNH's own static graph, and those below a directory that is still mapped, stay loaded.
    * @param dropped Real directories, with a trailing separator, of the dropped mappings.
    * @param kept Real directories, with a trailing separator, of the mappings that stay.
    */
@@ -946,7 +946,7 @@ class Hmr extends Service {
     let comparedAt = 0
     let pending: PendingModule[] = []
     try {
-      const patches = readProfilePatches('dsh', profile)
+      const patches = readProfilePatches('snh', profile)
       comparedAt = this.files.now()
       // A failed comparison keeps every record, so the next recomposition compares the same modules again.
       comparison = await this.contained('comparing loaded modules with disk', () => {
@@ -978,7 +978,7 @@ class Hmr extends Service {
           return job !== undefined && namespaceOf(job) === undefined
         }))
       }, undefined)
-      const result = await recomposeProfile(this.ownerContext[Context.root], patches, 'dsh', { requiredIds, running })
+      const result = await recomposeProfile(this.ownerContext[Context.root], patches, 'snh', { requiredIds, running })
       const restartReason = compared === undefined || unavailable ? 'module-comparison' : result.restartReason
       return { warnings: result.warnings, pending, ...restartReason === undefined ? {} : { restartReason } }
     } finally {

@@ -1,17 +1,17 @@
-/** DeepSeek account service; browser approval never bypasses local cancellation. */
+/** SuperNova account service; browser approval never bypasses local cancellation. */
 import { randomBytes, randomUUID, createHash, timingSafeEqual } from 'node:crypto'
 import type { ServerResponse } from 'node:http'
-import type {} from '@deepseek-ai/dsh-host-webserver'
+import type {} from '@supernova-ai/snh-host-webserver'
 import { arch, platform, release } from 'node:os'
 import { promises as streamPromises } from 'node:stream'
-import { Context, Service } from '@deepseek-ai/cordis'
-import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
-import Schema from '@deepseek-ai/schemastery'
+import { Context, Service } from '@supernova-ai/cordis'
+import { Remote, TypertRemoteService } from '@supernova-ai/snh-typert-protocol'
+import Schema from '@supernova-ai/schemastery'
 import { z } from 'zod'
 import { mergePlatformCookies, platformClientHeaders, platformWireLocale } from './client-metadata.ts'
 import { type AccountNotification, type AccountNotificationBatch, type AccountNotificationEvent, type AccountNotificationId, type AccountClientMetadata, type AccountDetails, type AccountRequestCredential, type AccountUserId, type AccountView, type AccountUpdate, type PlatformSession, type SignInAttemptId, type SignInAttemptView } from './types.ts'
-import { credentialKey } from '@deepseek-ai/dsh-credentials'
-import type { AuthorizationSession } from '@deepseek-ai/dsh-authorization'
+import { credentialKey } from '@supernova-ai/snh-credentials'
+import type { AuthorizationSession } from '@supernova-ai/snh-authorization'
 import { profile, readAccountDetail } from './details.ts'
 import { readNotificationContent, readNotifications, sendNotificationEvent } from './notifications.ts'
 import { revokeAccount, type LogoutRetryPolicy } from './logout.ts'
@@ -19,8 +19,8 @@ import { ACCOUNT_TOKEN_HEADER, AccountUnauthorizedError, PlatformAuthError, plat
 
 export type * from './types.ts'
 
-declare module '@deepseek-ai/cordis' {
-  interface Context { deepseekAccount: DeepSeekAccount }
+declare module '@supernova-ai/cordis' {
+  interface Context { supernovaAccount: SuperNovaAccount }
   interface Events {
     /** Local grant removal has completed. After the listeners return, the `revoked` signal of that grant's request credentials aborts.
      * @mode emit
@@ -102,7 +102,7 @@ interface Attempt {
 }
 
 /** Account login, credentials, and client-safe Remote operations. */
-export class DeepSeekAccount extends TypertRemoteService {
+export class SuperNovaAccount extends TypertRemoteService {
   static inject = ['credentials', 'authorization']
   static Config = Config
   private readonly origin: string
@@ -135,7 +135,7 @@ export class DeepSeekAccount extends TypertRemoteService {
 
   /** @param ctx - Host with authorization and credentials services. @param config - deployment options. */
   constructor(ctx: Context, config: Config = {}) {
-    super(ctx, 'deepseekAccount', { namespace: 'account' })
+    super(ctx, 'supernovaAccount', { namespace: 'account' })
     const resolved = Config(config)
     this.embeddedPageDist = resolved.embeddedPageDist
     this.origin = platformOrigin(resolved.platformOrigin, resolved.allowLoopbackHttp, 'platformOrigin')
@@ -161,7 +161,7 @@ export class DeepSeekAccount extends TypertRemoteService {
       maxRetries: resolved.logoutMaxRetries, delayMs: resolved.logoutRetryDelayMs, requestTimeoutMs: this.requestTimeout,
     }
     ctx.authorization.registerFlow({
-      key: KEY, label: 'DeepSeek', methods: [{ id: 'browser', label: 'DeepSeek' }],
+      key: KEY, label: 'SuperNova', methods: [{ id: 'browser', label: 'SuperNova' }],
       run: (session) => {
         const attempt = this.attempt
         if (attempt === undefined) return Promise.reject(new PlatformAuthError('protocol'))
@@ -463,7 +463,7 @@ export class DeepSeekAccount extends TypertRemoteService {
     if (!result.success) throw new PlatformAuthError('storage')
     // Development grants cannot authenticate production model or file requests.
     const issuer = new URL(result.data.issuer)
-    if (result.data.token.startsWith('dsh_mock_')) return undefined
+    if (result.data.token.startsWith('snh_mock_')) return undefined
     if (this.inferenceOrigin === 'https://api.deepseek.com') {
       if (['localhost', '127.0.0.1', '[::1]'].includes(issuer.hostname)) return undefined
     } else if (issuer.origin !== this.origin) return undefined
@@ -490,7 +490,7 @@ export class DeepSeekAccount extends TypertRemoteService {
       headers: { [ACCOUNT_TOKEN_HEADER]: token },
       revoked,
       reject: async () => {
-        try { await ctx.get('deepseekAccount')?.rejectToken(token) }
+        try { await ctx.get('supernovaAccount')?.rejectToken(token) }
         catch (_credentialRemovalFailed) { /* The destination's rejection is the failure to report; the next rejection retries. */ }
       },
     }
@@ -779,7 +779,7 @@ export class DeepSeekAccount extends TypertRemoteService {
         login_source: attempt.loginSource,
       }, signal, attempt.clientHeaders), { reportInput: true })
       if (!init.success) this.rejectPayload('auth_init', init.error)
-      const authorizeUrl = browserUrl(init.data.authorize_url, this.origin, '/dsh/authorize', this.rewriteBrowserOrigin)
+      const authorizeUrl = browserUrl(init.data.authorize_url, this.origin, '/snh/authorize', this.rewriteBrowserOrigin)
       authorizeId = init.data.authorize_id
       signal.throwIfAborted()
       const now = Date.now()
@@ -801,7 +801,7 @@ export class DeepSeekAccount extends TypertRemoteService {
         device_id: identity.id, device_model: `${platform()}-${arch()}`, os_version: deviceOsVersion(),
       }, signal, attempt.clientHeaders), { reportInput: true })
       if (!result.success) this.rejectPayload('auth_exchange', result.error)
-      const completionUrl = new URL(browserUrl(result.data.authorized_url, this.origin, '/dsh/authorized', this.rewriteBrowserOrigin))
+      const completionUrl = new URL(browserUrl(result.data.authorized_url, this.origin, '/snh/authorized', this.rewriteBrowserOrigin))
       completionUrl.searchParams.set('login_source', attempt.loginSource)
       attempt.completionUrl = completionUrl.href
       if (Date.now() >= expiresAt) deadline.abort()
@@ -868,7 +868,7 @@ export class DeepSeekAccount extends TypertRemoteService {
     }
   }
 }
-export default DeepSeekAccount
+export default SuperNovaAccount
 
 /** OS identification shared by login and credential-free identity reads. */
 function deviceOsVersion(): string {

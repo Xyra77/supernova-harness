@@ -8,15 +8,15 @@
  * Package-private; the hub alone constructs it and wires the scoped event
  * listeners onto it.
  */
-import type { Context } from '@deepseek-ai/cordis'
-import type { InboxState } from '@deepseek-ai/dsh-agent/types'
-import type { SessionEventLikeEntry, SessionEventSource, SessionSnapshot } from '@deepseek-ai/dsh-api-session-controller/client'
-import type { SessionSeq } from '@deepseek-ai/dsh-session/types'
+import type { Context } from '@supernova-ai/cordis'
+import type { InboxState } from '@supernova-ai/snh-agent/types'
+import type { SessionEventLikeEntry, SessionEventSource, SessionSnapshot } from '@supernova-ai/snh-api-session-controller/client'
+import type { SessionSeq } from '@supernova-ai/snh-session/types'
 import {
   createSnapshotStore, type ObservableSnapshot, type SnapshotStore,
-} from '@deepseek-ai/dsh-client-store'
+} from '@supernova-ai/snh-client-store'
 import type { LexicalEditor } from 'lexical'
-import type { QuoteSummary } from '@deepseek-ai/dsh-client-ui-primitives'
+import type { QuoteSummary } from '@supernova-ai/snh-client-ui-primitives'
 import type {
   CommandClaim, ConsumeTokenRequest, DraftAttachmentId, DraftInitializationOptions, DraftInitializationResult,
   InputActions, InputEffect, InputNotice, InputState, InputTriggerController, PickOutcome,

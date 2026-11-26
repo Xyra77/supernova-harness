@@ -2,17 +2,17 @@
 
 [English](index.md) | 中文
 
-请先按照[根目录 README](../../../README.zh.md#run) 中的说明启动 Web UI；命令会打印其访问地址。本指南从服务器已经运行的状态开始。`dsh` 进程会把启动时所在的目录作为默认文件系统位置；全新的 Web UI 则不会选中任何工作区，你需要添加一个工作区。
+请先按照[根目录 README](../../../README.zh.md#run) 中的说明启动 Web UI；命令会打印其访问地址。本指南从服务器已经运行的状态开始。`snh` 进程会把启动时所在的目录作为默认文件系统位置；全新的 Web UI 则不会选中任何工作区，你需要添加一个工作区。
 
 ## 配置模型
 
-打开**设置 → 模型**，输入 [DeepSeek API 密钥](https://platform.deepseek.com/)并保存。模型路由会立即可用，不需要重启服务器。
+打开**设置 → 模型**，输入 [SuperNova API 密钥](https://platform.deepseek.com/)并保存。模型路由会立即可用，不需要重启服务器。
 
 [模型配置指南](./providers.zh.md)介绍其他提供方和自定义 OpenAI 兼容端点。
 
 ## 选择工作区
 
-点击**选择工作区**，添加启动 `dsh` 时所在的项目目录，然后选中它。选中工作区前，会话输入框不可用。
+点击**选择工作区**，添加启动 `snh` 时所在的项目目录，然后选中它。选中工作区前，会话输入框不可用。
 
 ## 运行任务
 
@@ -28,6 +28,6 @@ Agent（智能体）可以读取和编辑工作区文件、运行命令、委派
 - [在 Session 之间发送消息](../session-control.zh.md)
 - [使用 Python SDK](./python-sdk.zh.md)
 - [在反向代理之后发布 Web UI](./public-deployments.zh.md)
-- [卸载 DSH 桌面端](./desktop-uninstall-cleanup.zh.md)
+- [卸载 SNH 桌面端](./desktop-uninstall-cleanup.zh.md)
 - [使用其他 CLI 模式](../../../apps/cli/README.zh.md)
 - [开发插件](../develop/basic/index.zh.md)

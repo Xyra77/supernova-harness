@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { DeepSeekModelDraft } from '../src/client/DeepSeekModelsEditor.tsx'
-import { validateDeepSeekModels } from '../src/client/DeepSeekModelsEditor.tsx'
+import type { SuperNovaModelDraft } from '../src/client/SuperNovaModelsEditor.tsx'
+import { validateSuperNovaModels } from '../src/client/SuperNovaModelsEditor.tsx'
 import { ModelListEditor } from '../src/client/ModelListEditor.tsx'
 import { ModelReasoningEfforts, validateReasoningEfforts } from '../src/client/ModelReasoningEfforts.tsx'
 import type { ModelsOperations } from '../src/client/operations.ts'
@@ -18,8 +18,8 @@ const DEFAULTS = { off: null, low: 'low', medium: 'medium', high: 'high' }
 const LEVELS = ['off', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max']
 
 /** Render the controlled group over local state, reporting every write. */
-function renderGroup(initial: DeepSeekModelDraft, options: { disabled?: boolean; levels?: readonly string[]; levelsOnly?: boolean } = {}) {
-  const writes: DeepSeekModelDraft[] = []
+function renderGroup(initial: SuperNovaModelDraft, options: { disabled?: boolean; levels?: readonly string[]; levelsOnly?: boolean } = {}) {
+  const writes: SuperNovaModelDraft[] = []
   function Harness() {
     const [model, setModel] = useState(initial)
     return (
@@ -272,8 +272,8 @@ describe('reasoning-level validation', () => {
     expect(validateReasoningEfforts(undefined)).toBeUndefined()
   })
 
-  it('stays out of the shared model checker that DeepSeek and catalog rows use', () => {
-    expect(validateDeepSeekModels([{ id: 'chat', reasoningEfforts: { off: null } }])).toBeUndefined()
+  it('stays out of the shared model checker that SuperNova and catalog rows use', () => {
+    expect(validateSuperNovaModels([{ id: 'chat', reasoningEfforts: { off: null } }])).toBeUndefined()
   })
 })
 
@@ -286,8 +286,8 @@ describe('reasoning levels in the model list', () => {
   }
 
   /** Render the list over local state, reporting every write. */
-  function renderList(initial: DeepSeekModelDraft[]) {
-    const writes: DeepSeekModelDraft[][] = []
+  function renderList(initial: SuperNovaModelDraft[]) {
+    const writes: SuperNovaModelDraft[][] = []
     function Harness() {
       const [models, setModels] = useState(initial)
       return (
@@ -326,7 +326,7 @@ describe('reasoning levels in the model list', () => {
   })
 
   it('edits a catalog route row', () => {
-    const writes: DeepSeekModelDraft[][] = []
+    const writes: SuperNovaModelDraft[][] = []
     render(<ModelListEditor
       models={[{ id: 'gpt-5' }]} onChange={(next) => { writes.push(next) }} catalogProvider="openai" reasoningLevels={LEVELS}
       probe={{ settingsNs: 'llm-pi-ai', provider: 'openai' }}

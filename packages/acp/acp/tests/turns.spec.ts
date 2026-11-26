@@ -1,13 +1,13 @@
 import { AcpSession } from '../src/session.ts'
 import { mountWorkingDirectoryFixture } from '../../../subagent/subagent/tests/working-directory-fixture.ts'
-import { createUserMessage, type StreamChunk } from '@deepseek-ai/dsh-llm'
-import type { ContextFormed } from '@deepseek-ai/dsh-llm'
+import { createUserMessage, type StreamChunk } from '@supernova-ai/snh-llm'
+import type { ContextFormed } from '@supernova-ai/snh-llm'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import { PROTOCOL_VERSION } from '@agentclientprotocol/sdk'
-import type { SessionId } from '@deepseek-ai/dsh-session'
+import type { SessionId } from '@supernova-ai/snh-session'
 import { setImmediate } from 'node:timers/promises'
-import SubagentRuntime, { NO_START_CAPABILITIES } from '@deepseek-ai/dsh-subagent'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import SubagentRuntime, { NO_START_CAPABILITIES } from '@supernova-ai/snh-subagent'
+import { defineContentToolFixture } from '@supernova-ai/snh-tool-testkit'
 import { toolCallResponse } from '../../../core/agent-loop/tests/mock-adapter.ts'
 import {
   errorResponse,
@@ -16,9 +16,9 @@ import {
   textResponse,
   type BridgeHarness,
 } from './harness.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
-declare module '@deepseek-ai/dsh-llm' {
+declare module '@supernova-ai/snh-llm' {
   interface MessageSourceMap {
     'test': { kind: 'test' } & ContextFormed
   }

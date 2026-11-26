@@ -1,9 +1,9 @@
 /** Committed system sections and pending compaction recovery folded from the Session log. */
 
 import { z } from 'zod'
-import type { SystemMessage, TextBlock } from '@deepseek-ai/dsh-llm'
-import type { SessionEvent } from '@deepseek-ai/dsh-session'
-import type { ProjectionDefinition } from '@deepseek-ai/dsh-session-projection'
+import type { SystemMessage, TextBlock } from '@supernova-ai/snh-llm'
+import type { SessionEvent } from '@supernova-ai/snh-session'
+import type { ProjectionDefinition } from '@supernova-ai/snh-session-projection'
 
 /** Effective instructions contributed by one source. */
 export interface CommittedSection {

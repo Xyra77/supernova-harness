@@ -4,10 +4,10 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, write
 import { rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { basename, dirname, isAbsolute, join, resolve } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import WebServer from '@deepseek-ai/dsh-host-webserver'
-import * as Connection from '@deepseek-ai/dsh-client-connection'
-import * as DesktopAuthentication from '@deepseek-ai/dsh-host-authentication-desktop'
+import { Context } from '@supernova-ai/cordis'
+import WebServer from '@supernova-ai/snh-host-webserver'
+import * as Connection from '@supernova-ai/snh-client-connection'
+import * as DesktopAuthentication from '@supernova-ai/snh-host-authentication-desktop'
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import { assertOfficeSkillsLoadable, smokeDesktopRuntime } from '../scripts/smoke-runtime.ts'
 import { runtimeFixture } from './runtime-fixture.ts'
@@ -40,11 +40,11 @@ const loadedSkills = [
 ]
 
 it('uses the private readiness Cookie for every packaged runtime HTTP probe', async () => {
-  const root = mkdtempSync(join(tmpdir(), 'dsh-smoke-auth-'))
+  const root = mkdtempSync(join(tmpdir(), 'snh-smoke-auth-'))
   const ctx = new Context()
   onTestFinished(async () => {
     await ctx.fiber.dispose()
-    if (!isAbsolute(root) || dirname(root) !== resolve(tmpdir()) || !basename(root).startsWith('dsh-smoke-auth-')) {
+    if (!isAbsolute(root) || dirname(root) !== resolve(tmpdir()) || !basename(root).startsWith('snh-smoke-auth-')) {
       throw new Error(`refusing unexpected fixture cleanup path: ${root}`)
     }
     await rm(root, { recursive: true, force: true })
@@ -58,7 +58,7 @@ it('uses the private readiness Cookie for every packaged runtime HTTP probe', as
     python: '3.12.0', pythonPackages: {},
   }))
   const secret = Buffer.alloc(32, 7).toString('base64url')
-  const cookie = `dsh-desktop-session=${secret}`
+  const cookie = `snh-desktop-session=${secret}`
   await ctx.plugin(WebServer, { host: '127.0.0.1', port: 0 }).await()
   await ctx.plugin(Connection).await()
   await ctx.plugin(DesktopAuthentication, { readSecret: () => secret }).await()
@@ -96,7 +96,7 @@ it('uses the private readiness Cookie for every packaged runtime HTTP probe', as
       if (args.includes('add')) cpSync(join(home, 'desktop-installed-smoke-plugin'), installed, { recursive: true })
       else {
         if (!args.includes('remove') || !isAbsolute(home) || dirname(home) !== resolve(tmpdir())
-          || !basename(home).startsWith('dsh-desktop-smoke-')) throw new Error('unexpected package-manager fixture operation')
+          || !basename(home).startsWith('snh-desktop-smoke-')) throw new Error('unexpected package-manager fixture operation')
         expect(readFileSync(join(installed, 'index.js'), 'utf8')).toContain('installed plugin ready')
         rmSync(installed, { recursive: true })
       }

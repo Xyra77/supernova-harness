@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path'
 
 const require = createRequire(import.meta.url)
 const templates = join(dirname(require.resolve('app-builder-lib/package.json')), 'templates/nsis')
-const patched = Symbol.for('@deepseek-ai/dsh-desktop/directory-installer')
+const patched = Symbol.for('@supernova-ai/snh-desktop/directory-installer')
 
 function replaceOnce(source, before, after) {
   if (source.split(before).length !== 2) throw new Error(`Desktop NSIS template changed: ${before}`)
@@ -22,7 +22,7 @@ export function directoryInstallSection(source) {
   result = replaceOnce(result, '!include installer.nsh', `!include installer.nsh
 !macroundef extractUsing7za
 !macro extractUsing7za FILE
-  !insertmacro dshExtractPayload "\${FILE}"
+  !insertmacro snhExtractPayload "\${FILE}"
 !macroend
 !macroundef uninstallOldVersion
 !macro uninstallOldVersion ROOT_KEY
@@ -36,8 +36,8 @@ export function directoryInstallSection(source) {
   \${EndIf}
 !macroend`)
   result = replaceOnce(result, '!insertmacro setLinkVars', `!insertmacro setLinkVars
-!insertmacro dshStageApplication`)
-  result = replaceOnce(result, '!insertmacro installApplicationFiles', 'Call dshPromoteDirectories\nIfErrors 0 +3\n  SetErrorLevel 2\n  Quit')
+!insertmacro snhStageApplication`)
+  result = replaceOnce(result, '!insertmacro installApplicationFiles', 'Call snhPromoteDirectories\nIfErrors 0 +3\n  SetErrorLevel 2\n  Quit')
   result = replaceOnce(result, '!ifdef UNINSTALLER_ICON\n  File /oname=uninstallerIcon.ico "${UNINSTALLER_ICON}"\n!endif\n', '')
   // The staging macro uses the upstream installer macro, including its signed uninstaller.
   return result
@@ -49,7 +49,7 @@ export function directoryInstallSection(source) {
  * @returns {string} Helper with cleanup before installer exits.
  */
 export function directoryInstallerExits(source) {
-  return source.replaceAll(/^(\s*)Quit\s*$/gm, '$1!ifndef BUILD_UNINSTALLER\n$1Call dshCleanupDirectories\n$1!endif\n$1Quit')
+  return source.replaceAll(/^(\s*)Quit\s*$/gm, '$1!ifndef BUILD_UNINSTALLER\n$1Call snhCleanupDirectories\n$1!endif\n$1Quit')
 }
 
 /**
@@ -92,7 +92,7 @@ export function installWindowsDirectoryInstaller() {
     const uninstaller = join(directory, 'uninstaller.nsh')
     await writeFile(uninstaller, directoryUninstaller(await readFile(join(templates, 'uninstaller.nsh'), 'utf8')))
     adapted = replaceOnce(adapted, '!include "uninstaller.nsh"', `!include "${uninstaller}"`)
-    return `!define DSH_UPDATER_CACHE_NAME "${this.packager.appInfo.updaterCacheDirName}"\n!define DSH_SEVENZIP_PATH "${tool}"\n!define DSH_SEVENZIP_LICENSE_DIR "${dirname(dirname(sourceTool))}"\n${await compute.call(this, adapted, ...args)}`
+    return `!define SNH_UPDATER_CACHE_NAME "${this.packager.appInfo.updaterCacheDirName}"\n!define SNH_SEVENZIP_PATH "${tool}"\n!define SNH_SEVENZIP_LICENSE_DIR "${dirname(dirname(sourceTool))}"\n${await compute.call(this, adapted, ...args)}`
   }
 }
 
@@ -105,9 +105,9 @@ export function directoryUninstaller(source) {
   let normalized = source.replaceAll('\r\n', '\n')
   normalized = normalized.replaceAll('"$INSTDIR$R0', '"\\\\?\\$INSTDIR$R0')
     .replaceAll('"$PLUGINSDIR\\old-install', '"\\\\?\\$PLUGINSDIR\\old-install')
-  normalized = replaceOnce(normalized, 'Function un.onInit\n', 'Var dshUninstallDirectory\nFunction un.onInit\n  StrCpy $dshUninstallDirectory $INSTDIR\n')
+  normalized = replaceOnce(normalized, 'Function un.onInit\n', 'Var snhUninstallDirectory\nFunction un.onInit\n  StrCpy $snhUninstallDirectory $INSTDIR\n')
   normalized = replaceOnce(normalized, '  !insertmacro initMultiUser', `  !insertmacro initMultiUser
-  StrCpy $INSTDIR $dshUninstallDirectory
+  StrCpy $INSTDIR $snhUninstallDirectory
   \${If} \${isUpdated}
     ReadRegStr $R0 SHELL_CONTEXT "\${INSTALL_REGISTRY_KEY}" InstallLocation
     GetFullPathName $R0 "$R0\\."
@@ -122,10 +122,10 @@ export function directoryUninstaller(source) {
   if (payloadStart < 0 || payloadEnd < 0) throw new Error('NSIS uninstaller payload template changed')
   normalized = normalized.slice(0, payloadStart) + '  ${If} ${isUpdated}\n'
     + normalized.slice(payloadStart, payloadEnd) + '  ${EndIf}\n'
-    + '  ${If} $UnDirectoryOnly == 1\n    Goto dshUninstallFinished\n  ${EndIf}\n'
+    + '  ${If} $UnDirectoryOnly == 1\n    Goto snhUninstallFinished\n  ${EndIf}\n'
     + normalized.slice(payloadEnd)
   normalized = replaceOnce(normalized, '  !ifdef ONE_CLICK\n    !insertmacro quitSuccess',
-    'dshUninstallFinished:\n  Call un.FinishCleanup\n  !ifdef ONE_CLICK\n    !insertmacro quitSuccess')
+    'snhUninstallFinished:\n  Call un.FinishCleanup\n  !ifdef ONE_CLICK\n    !insertmacro quitSuccess')
   const start = normalized.indexOf('  Var /GLOBAL isDeleteAppData\n')
   const end = normalized.indexOf('  DeleteRegKey SHELL_CONTEXT "${UNINSTALL_REGISTRY_KEY}"', start)
   if (start < 0 || end < 0) throw new Error('NSIS uninstaller data removal template changed')

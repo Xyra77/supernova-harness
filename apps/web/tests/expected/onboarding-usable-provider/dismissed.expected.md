@@ -12,9 +12,9 @@
   - paragraph: 填入各提供商的 API 密钥即可使用其模型。
   - list:
     - listitem:
-      - text: DeepSeek API
+      - text: SuperNova API
       - img "API 密钥缺失"
-      - button "编辑 DeepSeek API (deepseek-official)": 编辑
+      - button "编辑 SuperNova API (deepseek-official)": 编辑
   - tablist "添加方式":
     - tab "第三方模型提供商" [selected]
     - tab "自定义模型 API"
@@ -30,7 +30,7 @@
       - option "cerebras"
       - option "cloudflare-ai-gateway"
       - option "cloudflare-workers-ai"
-      - option "deepseek"
+      - option "supernova"
       - option "fireworks"
       - option "github-copilot"
       - option "google"

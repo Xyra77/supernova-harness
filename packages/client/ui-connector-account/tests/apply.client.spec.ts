@@ -3,10 +3,10 @@
  * that owns an account, withdrawing them with the account or the plugin.
  */
 import assert from 'node:assert/strict'
-import { Context, Service } from '@deepseek-ai/cordis'
-import { LocaleRuntime } from '@deepseek-ai/dsh-client-locale/client'
-import { SlotRegistry } from '@deepseek-ai/dsh-client-ui-renderer/client'
-import { RemoteError, type RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+import { Context, Service } from '@supernova-ai/cordis'
+import { LocaleRuntime } from '@supernova-ai/snh-client-locale/client'
+import { SlotRegistry } from '@supernova-ai/snh-client-ui-renderer/client'
+import { RemoteError, type RemoteResult } from '@supernova-ai/snh-typert-protocol'
 import { expect, it, onTestFinished, vi } from 'vitest'
 import {
   ConnectorAccountActivationEntry, ConnectorAccountBadgeEntry, ConnectorAccountSectionEntry, ConnectorAccountToastEntry,

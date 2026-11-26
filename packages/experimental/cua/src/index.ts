@@ -2,15 +2,15 @@
 import { join } from 'node:path'
 import { Buffer } from 'node:buffer'
 import { tmpdir } from 'node:os'
-import { withFileLock } from '@deepseek-ai/dsh-atomic-write'
-import type { Context } from '@deepseek-ai/cordis'
-import Schema from '@deepseek-ai/schemastery'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { ComputerUseProviderName } from '@deepseek-ai/dsh-computer-use/types'
-import { admitEncodedImages } from '@deepseek-ai/dsh-attachment'
-import type { ImageAttachmentRef, ImageRequestTarget } from '@deepseek-ai/dsh-attachment'
-import type { ContentBlock } from '@deepseek-ai/dsh-llm'
-import type { JsonValue } from '@deepseek-ai/dsh-util-values'
+import { withFileLock } from '@supernova-ai/snh-atomic-write'
+import type { Context } from '@supernova-ai/cordis'
+import Schema from '@supernova-ai/schemastery'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type { ComputerUseProviderName } from '@supernova-ai/snh-computer-use/types'
+import { admitEncodedImages } from '@supernova-ai/snh-attachment'
+import type { ImageAttachmentRef, ImageRequestTarget } from '@supernova-ai/snh-attachment'
+import type { ContentBlock } from '@supernova-ai/snh-llm'
+import type { JsonValue } from '@supernova-ai/snh-util-values'
 import { z } from 'zod'
 import { NativeClient, NativeError, type NativeClientConfig, type NativeChannelFactory } from './native-client.ts'
 import { SystemInputControl } from './system-input.ts'
@@ -25,12 +25,12 @@ import { CuaConfigFields, type CuaScreenshotTargetConfig, type CuaStandaloneRunC
 import { fixedScreenshotTarget, installCuaTools } from './tool-registration.ts'
 import { CuaCoordinates } from './coordinates.ts'
 import { observeNativeWindows } from './native-observation.ts'
-import { ToolArgsError, ToolContextUnavailableError, type ToolDefinition, type ToolExecution } from '@deepseek-ai/dsh-tools'
-import type {} from '@deepseek-ai/dsh-subprocess'
-import type {} from '@deepseek-ai/dsh-computer-use'
-import type {} from '@deepseek-ai/dsh-ptc-runtime'
-import type {} from '@deepseek-ai/cordis-plugin-loader'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { ToolArgsError, ToolContextUnavailableError, type ToolDefinition, type ToolExecution } from '@supernova-ai/snh-tools'
+import type {} from '@supernova-ai/snh-subprocess'
+import type {} from '@supernova-ai/snh-computer-use'
+import type {} from '@supernova-ai/snh-ptc-runtime'
+import type {} from '@supernova-ai/cordis-plugin-loader'
+import { brandString } from '@supernova-ai/snh-brand'
 
 export { CuaAccess } from './access.ts'
 export type { CuaStartupCapabilities } from './types.ts'
@@ -100,7 +100,7 @@ export const CuaConfig = Schema.object(CuaConfigFields) satisfies Schema<Record<
 
 
 function executionAgent(execution: Readonly<ToolExecution>): Agent {
-  if (!execution.agent) throw new ToolContextUnavailableError('dsh-cua requires an agent-owned execution')
+  if (!execution.agent) throw new ToolContextUnavailableError('snh-cua requires an agent-owned execution')
   return execution.agent
 }
 
@@ -255,7 +255,7 @@ export function installCua(ctx: Context, config: CuaConfig, backend: CuaBackend)
   }>()
   const closedOwners = new WeakSet<Agent>()
   function ownerFor(agent: Agent) {
-    if (closedOwners.has(agent) || ctx.agents.get(agent.id) !== agent) throw new ToolContextUnavailableError('dsh-cua agent has been disposed')
+    if (closedOwners.has(agent) || ctx.agents.get(agent.id) !== agent) throw new ToolContextUnavailableError('snh-cua agent has been disposed')
     const existing = ownerCleanups.get(agent)
     if (existing) return existing
     const controller = new AbortController()
@@ -274,14 +274,14 @@ export function installCua(ctx: Context, config: CuaConfig, backend: CuaBackend)
         }
       })
     }
-    const release = agent.ctx.effect(() => close, 'dsh-cua.agent')
+    const release = agent.ctx.effect(() => close, 'snh-cua.agent')
     const owner = { close, release, signal: controller.signal, coordinates: new CuaCoordinates() }
     ownerCleanups.set(agent, owner)
     return owner
   }
   ctx.effect(function* () {
     if (heldInputs) yield* heldInputs.install()
-    yield ctx.computerUse.register(brandString<ComputerUseProviderName>('dsh-cua'))
+    yield ctx.computerUse.register(brandString<ComputerUseProviderName>('snh-cua'))
     yield async () => {
       lifetime.abort()
       const permissions = Promise.allSettled([access.dispose()])
@@ -292,7 +292,7 @@ export function installCua(ctx: Context, config: CuaConfig, backend: CuaBackend)
       const errors: unknown[] = []
       for (const result of [...await permissions, ...results, ...releases]) if (result.status === 'rejected') errors.push(result.reason)
       try { await backend.disposeNative?.() } catch (error) { errors.push(error) }
-      if (errors.length > 0) ctx.logger.error(new AggregateError(errors, 'dsh-cua helper cleanup failed'))
+      if (errors.length > 0) ctx.logger.error(new AggregateError(errors, 'snh-cua helper cleanup failed'))
     }
     const callNative = async (request: CuaOperation, execution: Readonly<CuaExecution>, useSystemInput?: boolean) => {
       const { method, params: parsedParams } = request
@@ -358,7 +358,7 @@ export function installCua(ctx: Context, config: CuaConfig, backend: CuaBackend)
           pixelWidth: image.width, pixelHeight: image.height, coordinateSpace: 'screenshot-pixels', attachment }
       }
       const result = method === 'paste'
-        ? await withFileLock(join(tmpdir(), 'dsh-cua-system-clipboard'), requestNative, { waitMs: config.timeoutMs, signal })
+        ? await withFileLock(join(tmpdir(), 'snh-cua-system-clipboard'), requestNative, { waitMs: config.timeoutMs, signal })
         : await requestNative()
       if (method === 'getApp') {
         const prepared = AppResult.parse(result)
@@ -465,7 +465,7 @@ export function installCua(ctx: Context, config: CuaConfig, backend: CuaBackend)
       },
     }
     yield installCuaTools(ctx, config, tool, guidance, programGuidance, agent => heldInputs?.release(agent) ?? Promise.resolve())
-  }, 'dsh-cua.runtime')
+  }, 'snh-cua.runtime')
 }
 
 /** Host marker for the optional Client contribution; platform providers install native execution separately. */

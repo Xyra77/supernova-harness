@@ -1,19 +1,19 @@
 /** Mounted-only polling for the owner's pending pairing requests. */
-import type { Context } from '@deepseek-ai/cordis'
-import type { ResourceProvider } from '@deepseek-ai/dsh-client-resources/client'
-import { RemoteError, remoteErrorOf } from '@deepseek-ai/dsh-typert-protocol'
-import type { RemoteResult } from '@deepseek-ai/dsh-typert-protocol'
+import type { Context } from '@supernova-ai/cordis'
+import type { ResourceProvider } from '@supernova-ai/snh-client-resources/client'
+import { RemoteError, remoteErrorOf } from '@supernova-ai/snh-typert-protocol'
+import type { RemoteResult } from '@supernova-ai/snh-typert-protocol'
 import type { PairingRequestId, PairingRequestsValue } from '../types.ts'
-import type {} from '@deepseek-ai/dsh-client-remote-connection/remote'
+import type {} from '@supernova-ai/snh-client-remote-connection/remote'
 
-declare module '@deepseek-ai/dsh-client-ui-slots' {
+declare module '@supernova-ai/snh-client-ui-slots' {
   interface ResourceProtocolMap {
     /** Pairing requests whose displayed codes require owner approval. */
     'device-pairing': PairingRequestsValue
   }
 }
 
-declare module '@deepseek-ai/dsh-typert-protocol' {
+declare module '@supernova-ai/snh-typert-protocol' {
   interface RemoteErrorDetailsMap {
     /** The approval-list read failed before a response was received. */
     'pairing/read-failed': {}

@@ -8,7 +8,7 @@
  * long file (scripts/web-snapshot-projects.ts) weighs the file's size divided by its slice count. Every
  * shard computes the same assignment from the same checkout, so the shards partition the spec set exactly.
  *
- * `DSH_WEB_SNAPSHOT_SHARD_SHARES` lists one positive capacity share per shard, comma-separated; unset
+ * `SNH_WEB_SNAPSHOT_SHARD_SHARES` lists one positive capacity share per shard, comma-separated; unset
  * gives every shard the same share.
  */
 import { statSync } from 'node:fs'
@@ -18,7 +18,7 @@ import type { TestSpecification } from 'vitest/node'
 import { WEB_SNAPSHOT_SLICE_COUNTS } from './web-snapshot-projects.ts'
 
 /** Environment variable listing the capacity share of each web snapshot shard. */
-export const WEB_SNAPSHOT_SHARD_SHARES_ENV = 'DSH_WEB_SNAPSHOT_SHARD_SHARES'
+export const WEB_SNAPSHOT_SHARD_SHARES_ENV = 'SNH_WEB_SNAPSHOT_SHARD_SHARES'
 
 /** One spec to place, identified by its project name and root-relative path. */
 export interface WeightedFile {

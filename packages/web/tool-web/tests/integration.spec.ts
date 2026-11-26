@@ -1,32 +1,32 @@
 /**
- * Integration: the real fetch backend (`dsh-web-fetch-http`) + a real search provider
- * (`dsh-web-deepseek-api`) + the real seam (`dsh-web`) + the model tool (`dsh-tool-web`) + the
- * tool-call timeout policy (`dsh-tool-call-timeout-policy`), exercised through `executeToolFixture()` —
+ * Integration: the real fetch backend (`snh-web-fetch-http`) + a real search provider
+ * (`snh-web-supernova-api`) + the real seam (`snh-web`) + the model tool (`snh-tool-web`) + the
+ * tool-call timeout policy (`snh-tool-call-timeout-policy`), exercised through `executeToolFixture()` —
  * nothing bypasses the tool registry. Fetch verifies world effects against loopback HTTP; search uses the real
- * DeepSeek Search API provider with only its network boundary stubbed.
+ * SuperNova Search API provider with only its network boundary stubbed.
  */
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { executeToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { executeToolFixture } from '@supernova-ai/snh-tool-testkit'
 
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
 import { AddressInfo } from 'node:net'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { DSH_LAUNCH_ENVIRONMENT_KEY, createLaunchEnvironmentSnapshot } from '@deepseek-ai/dsh-launch-environment'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import DeepSeekAuth from '@deepseek-ai/dsh-deepseek-auth'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm/types'
-import { createScope } from '@deepseek-ai/dsh-scope'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { type ToolExecutionResult } from '@deepseek-ai/dsh-tools'
-import WebRuntime from '@deepseek-ai/dsh-web'
-import * as WebFetchLocal from '@deepseek-ai/dsh-web-fetch-http'
-import * as WebDeepSeekApi from '@deepseek-ai/dsh-web-deepseek-api'
-import * as ToolWeb from '@deepseek-ai/dsh-tool-web'
-import * as TimeoutPolicy from '@deepseek-ai/dsh-tool-call-timeout-policy'
+import { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { SNH_LAUNCH_ENVIRONMENT_KEY, createLaunchEnvironmentSnapshot } from '@supernova-ai/snh-launch-environment'
+import { brandString } from '@supernova-ai/snh-brand'
+import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
+import type { ToolCallId } from '@supernova-ai/snh-llm/types'
+import { createScope } from '@supernova-ai/snh-scope'
+import type { SessionId } from '@supernova-ai/snh-session'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime, { type ToolExecutionResult } from '@supernova-ai/snh-tools'
+import WebRuntime from '@supernova-ai/snh-web'
+import * as WebFetchLocal from '@supernova-ai/snh-web-fetch-http'
+import * as WebSuperNovaApi from '@supernova-ai/snh-web-supernova-api'
+import * as ToolWeb from '@supernova-ai/snh-tool-web'
+import * as TimeoutPolicy from '@supernova-ai/snh-tool-call-timeout-policy'
 
 const testToolSignal = new AbortController().signal
 const SEARCH_API_BASE = 'https://api.deepseek.test/v1/tools'
@@ -53,13 +53,13 @@ beforeEach(async () => {
   await ctx.plugin(ToolRuntime)
   await ctx.plugin(NativeToolExecutor)
   await ctx.plugin(WebRuntime, {
-    searchProvider: WebDeepSeekApi.DEEPSEEK_SEARCH_API_PROVIDER_ID,
+    searchProvider: WebSuperNovaApi.DEEPSEEK_SEARCH_API_PROVIDER_ID,
     fetchProvider: WebFetchLocal.LOCAL_FETCH_PROVIDER_ID,
   })
   await ctx.plugin(WebFetchLocal, {})
-  ctx.provide(DSH_LAUNCH_ENVIRONMENT_KEY, createLaunchEnvironmentSnapshot([{ source: 'process', values: { DEEPSEEK_API_KEY: 'search-key' } }]))
-  await ctx.plugin(DeepSeekAuth)
-  await ctx.plugin(WebDeepSeekApi, { searchBaseURL: SEARCH_API_BASE, sendOriginalQuestion: false })
+  ctx.provide(SNH_LAUNCH_ENVIRONMENT_KEY, createLaunchEnvironmentSnapshot([{ source: 'process', values: { DEEPSEEK_API_KEY: 'search-key' } }]))
+  await ctx.plugin(SuperNovaAuth)
+  await ctx.plugin(WebSuperNovaApi, { searchBaseURL: SEARCH_API_BASE, sendOriginalQuestion: false })
   // The shipped deployment shape: the tool-call budget is declared by tool-web
   // config (default 30s, attached as ToolDefinition.timeoutMs) and enforced by
   // the zero-config timeout-policy plugin, set above the provider backstop so the
@@ -117,7 +117,7 @@ describe('web_fetch integration over the real backend', () => {
   })
 })
 
-describe('web_search integration over the real DeepSeek Search API provider', () => {
+describe('web_search integration over the real SuperNova Search API provider', () => {
   it('runs web_search end-to-end and formats the provider result', async () => {
     const fetchMock = vi.fn(async (_endpoint: string, _init: { headers: HeadersInit; body: string }) => new Response(
       JSON.stringify({ results: [{ url: 'https://result.test', title: 'Result', snippet: 'a snippet', date: null }] }),
@@ -185,7 +185,7 @@ describe('tool-call timeout returns TOOL_TIMEOUT (deadline wins over a slow fetc
   it('returns a structured TOOL_TIMEOUT (not the provider WEB_FETCH_TIMEOUT) when the tool-call budget wins', async () => {
     const out = await call('web_fetch', { url: slowBase }, tctx)
     expect(out.isError).toBe(true)
-    // The outer tool-call deadline won: TOOL_TIMEOUT, owned by dsh-tool-call-timeout-policy,
+    // The outer tool-call deadline won: TOOL_TIMEOUT, owned by snh-tool-call-timeout-policy,
     // NOT the provider's own WEB_FETCH_TIMEOUT (its 30s backstop never fired).
     expect(out.error?.info?.code).toBe('TOOL_TIMEOUT')
     const text = out.content.map(b => (b.type === 'text' ? b.text : '')).join('')

@@ -2,7 +2,7 @@
 
 [English](working-directory.md) | 中文
 
-Session 的当前目录由 [`dsh-working-directory`](../../packages/session/working-directory/README.zh.md) 拥有。不可变 header 标识原始项目；`workspace-root/change` 记录后续目录相关操作所用目录的每次移动。生成的[持久化目录](../persistence-catalog.zh.md) 拥有事件声明。
+Session 的当前目录由 [`snh-working-directory`](../../packages/session/working-directory/README.zh.md) 拥有。不可变 header 标识原始项目；`workspace-root/change` 记录后续目录相关操作所用目录的每次移动。生成的[持久化目录](../persistence-catalog.zh.md) 拥有事件声明。
 
 ## 目录选择
 

@@ -7,12 +7,12 @@
  */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { bindSnapshotSelector, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { PlanProjection } from '@deepseek-ai/dsh-plan-mode/client'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import { bindSnapshotSelector, makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import type { PlanProjection } from '@supernova-ai/snh-plan-mode/client'
 import { PlanChip, type PlanChipProps } from '../src/client/PlanModeControl.tsx'
 import css from '../src/client/PlanModeControl.module.css'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
+import { zh as commonZh } from '@supernova-ai/snh-client-locale/src/locales/zh.ts'
 import { zh } from '../src/client/locales.ts'
 
 afterEach(cleanup)

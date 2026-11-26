@@ -10,12 +10,12 @@
  */
 import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from 'vitest'
 import { act, cleanup, fireEvent, within } from '@testing-library/react'
-import { Context } from '@deepseek-ai/cordis'
-import { createSidebarRightController } from '@deepseek-ai/dsh-client-ui-sidebar-right/src/client/service.ts'
-import { SidebarRightTabRegistry } from '@deepseek-ai/dsh-client-ui-sidebar-right/src/client/tab-registry.ts'
-import { createSidebarRightStore } from '@deepseek-ai/dsh-client-ui-sidebar-right/src/client/stores.ts'
-import { sessionFileAddress } from '@deepseek-ai/dsh-util-workspace-path'
-import { RemoteError } from '@deepseek-ai/dsh-client-test-runtime'
+import { Context } from '@supernova-ai/cordis'
+import { createSidebarRightController } from '@supernova-ai/snh-client-ui-sidebar-right/src/client/service.ts'
+import { SidebarRightTabRegistry } from '@supernova-ai/snh-client-ui-sidebar-right/src/client/tab-registry.ts'
+import { createSidebarRightStore } from '@supernova-ai/snh-client-ui-sidebar-right/src/client/stores.ts'
+import { sessionFileAddress } from '@supernova-ai/snh-util-workspace-path'
+import { RemoteError } from '@supernova-ai/snh-client-test-runtime'
 import { DEFAULT_NAVIGATOR_WIDTH } from '../src/client/store.ts'
 import type { DirLevel, FilesTreeState } from '../src/client/store.ts'
 import { locateFile, navigatorGeometry, relativeFileOf } from '../src/client/store.ts'
@@ -171,7 +171,7 @@ describe('FileNavigator beside a preview', () => {
     const h = mountNavigator(A)
     await revealSrc(h)
     const registry = new SidebarRightTabRegistry(new Context())
-    registry.register({ id: 'text', kind: 'text', patterns: ['dsh-resource://file/**'], title: address => address })
+    registry.register({ id: 'text', kind: 'text', patterns: ['snh-resource://file/**'], title: address => address })
     const sidebar = createSidebarRightController(registry, () => {}, {
       autoFullscreen: () => false,
       openWithFocus: (_session, open) => { open() },

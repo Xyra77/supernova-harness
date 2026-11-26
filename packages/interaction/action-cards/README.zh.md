@@ -3,7 +3,7 @@ description: "可选操作卡片的共享 Host 服务：从回答里的 action-c
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-action-cards
+# @supernova-ai/snh-action-cards
 
 [English](README.md) | 中文
 
@@ -25,13 +25,13 @@ kind: "package-reference"
 <a id="use-this-package"></a>
 ## 使用本包
 
-Web 组合（[`dsh-web-app`](../../bundle/web-app/README.zh.md)）在每个 Web 和桌面端 profile 中挂载本服务及其[浏览器端](../../client/ui-action-cards/README.zh.md)，以及[个性化页面](../../extensions/creation-recommendations/README.zh.md)和[插件推荐](../../extensions/plugin-recommendations/README.zh.md)两个种类。本服务有一个配置字段：
+Web 组合（[`snh-web-app`](../../bundle/web-app/README.zh.md)）在每个 Web 和桌面端 profile 中挂载本服务及其[浏览器端](../../client/ui-action-cards/README.zh.md)，以及[个性化页面](../../extensions/creation-recommendations/README.zh.md)和[插件推荐](../../extensions/plugin-recommendations/README.zh.md)两个种类。本服务有一个配置字段：
 
 | 字段 | 默认值 | 含义 |
 |---|---|---|
 | `enabled` | `true` | 在之后的 Skill 目录中列出各卡片种类通过 `skillProvider` 注册的 Skill，对所有种类生效，不只是两个推荐种类。“设置 → 通用设置 → 个性化推荐”无需重启即可修改。关闭后，这些 Skill 既不列出也不能加载；模型仍写出的代码块（例如本会话早先已加载过 Skill）照常成为卡片，已经显示的卡片也仍可操作。 |
 
-生成的[配置目录](../../../docs/config-catalog.zh.md#deepseek-aidsh-action-cards)是可接受字段的完整来源。
+生成的[配置目录](../../../docs/config-catalog.zh.md#supernova-aisnh-action-cards)是可接受字段的完整来源。
 
 ### 注册卡片种类
 

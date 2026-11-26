@@ -1,11 +1,11 @@
 /** Browser-session authentication for the Host Connection carrier. */
 
 import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto'
-import type { PeerId } from '@deepseek-ai/dsh-typert-protocol'
-import { CONNECT_PATH } from '@deepseek-ai/dsh-client-connection'
+import type { PeerId } from '@supernova-ai/snh-typert-protocol'
+import { CONNECT_PATH } from '@supernova-ai/snh-client-connection'
 import type { ConnectionInteractions } from './types.ts'
-import { credentialKey } from '@deepseek-ai/dsh-credentials'
-import type { CredentialProvider, CredentialRecord } from '@deepseek-ai/dsh-credentials'
+import { credentialKey } from '@supernova-ai/snh-credentials'
+import type { CredentialProvider, CredentialRecord } from '@supernova-ai/snh-credentials'
 import type {
   ConnectionIndexRequest,
   ConnectionIndexResponse,
@@ -16,7 +16,7 @@ const AUTH_RECORD_KEY = credentialKey('client-connection', 'browser-session')
 const DAY_MILLISECONDS = 24 * 60 * 60 * 1000
 const SECRET_BYTES = 32
 const TOKEN_QUERY = 'token'
-const COOKIE_PREFIX = 'dsh-auth-'
+const COOKIE_PREFIX = 'snh-auth-'
 /** Exactly the names `cookieName` generates: the prefix and an unpadded base64url SHA-256 digest. */
 const GENERATED_COOKIE_NAME = new RegExp(`^${COOKIE_PREFIX}[A-Za-z0-9_-]{43}$`, 'u')
 /**
@@ -320,7 +320,7 @@ export class BrowserAuth {
    */
   authorizeIndex(req: ConnectionIndexRequest, res: ConnectionIndexResponse, secure = false): boolean {
     /* v8 ignore next -- node:http always supplies url on server requests. */
-    const url = new URL(req.url ?? '/', 'http://dsh.invalid')
+    const url = new URL(req.url ?? '/', 'http://snh.invalid')
     const tokens = url.searchParams.getAll(TOKEN_QUERY)
     if (tokens.length > 0) {
       const authority = requestAudience(req.headers, secure)
@@ -378,7 +378,7 @@ export class BrowserAuth {
     secure: boolean,
     publish: (interactions: ConnectionInteractions) => PeerId,
   ): void {
-    const url = new URL(req.url ?? '/', 'http://dsh.invalid')
+    const url = new URL(req.url ?? '/', 'http://snh.invalid')
     const declarations = url.searchParams.getAll('interactions')
     const interactions = declarations[0] ?? 'none'
     if (declarations.length > 1 || (interactions !== 'answer' && interactions !== 'none')) {
@@ -450,6 +450,6 @@ export class BrowserAuth {
     })
     res.end(req.method === 'HEAD'
       ? undefined
-      : 'dsh web authentication required; reopen the URL printed by dsh web.\n')
+      : 'snh web authentication required; reopen the URL printed by snh web.\n')
   }
 }

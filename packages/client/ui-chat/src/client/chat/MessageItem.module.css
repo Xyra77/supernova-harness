@@ -17,12 +17,12 @@
      resolves to the original 525px on the default column and widens with a
      dragged or adaptive column. The 748px fallback covers mounts outside the
      conversation column, where the axis variable is absent. */
-  max-width: min(calc(var(--dsh-chat-content-width, 748px) * 0.702), 82%);
+  max-width: min(calc(var(--snh-chat-content-width, 748px) * 0.702), 82%);
 }
 .referenceSummary {
   color: var(--dsw-alias-label-tertiary);
-  font-size: var(--dsh-content-font-size-secondary, 13px);
-  line-height: calc(18px + var(--dsh-content-font-delta-secondary, 0px));
+  font-size: var(--snh-content-font-size-secondary, 13px);
+  line-height: calc(18px + var(--snh-content-font-delta-secondary, 0px));
 }
 .contextRow {
   padding: 2px 0;
@@ -61,16 +61,16 @@
    delta. */
 .inheritedHistoryIcon {
   flex: none;
-  width: calc(14px + var(--dsh-content-font-delta, 0px));
-  height: calc(14px + var(--dsh-content-font-delta, 0px));
+  width: calc(14px + var(--snh-content-font-delta, 0px));
+  height: calc(14px + var(--snh-content-font-delta, 0px));
 }
 
 .inheritedHistoryLabel {
   flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
-  font-size: var(--dsh-content-font-size-secondary, 13px);
-  line-height: calc(24px + var(--dsh-content-font-delta, 0px));
+  font-size: var(--snh-content-font-size-secondary, 13px);
+  line-height: calc(24px + var(--snh-content-font-delta, 0px));
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -85,7 +85,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  height: calc(24px + var(--dsh-content-font-delta, 0px));
+  height: calc(24px + var(--snh-content-font-delta, 0px));
   min-width: 0;
   padding: 0;
   border: none;
@@ -115,8 +115,8 @@
   flex: none;
   display: inline-grid;
   place-items: center;
-  width: calc(16px + var(--dsh-content-font-delta, 0px));
-  height: calc(16px + var(--dsh-content-font-delta, 0px));
+  width: calc(16px + var(--snh-content-font-delta, 0px));
+  height: calc(16px + var(--snh-content-font-delta, 0px));
   margin-right: 6px;
   color: inherit;
 }
@@ -124,8 +124,8 @@
 /* Same glyph-scaling rule as DisclosureRow's leading: the CSS edge overrides
    the svg attributes so the 14px glyphs follow the font-size delta. */
 .compactionLeading svg {
-  width: calc(14px + var(--dsh-content-font-delta, 0px));
-  height: calc(14px + var(--dsh-content-font-delta, 0px));
+  width: calc(14px + var(--snh-content-font-delta, 0px));
+  height: calc(14px + var(--snh-content-font-delta, 0px));
 }
 
 .compactionContextIcon,
@@ -162,8 +162,8 @@
 
 .compactionTitle {
   flex: none;
-  font-size: var(--dsh-content-font-size-secondary, 13px);
-  line-height: calc(24px + var(--dsh-content-font-delta, 0px));
+  font-size: var(--snh-content-font-size-secondary, 13px);
+  line-height: calc(24px + var(--snh-content-font-delta, 0px));
   color: inherit;
 }
 
@@ -181,16 +181,16 @@
   min-width: 0;
   overflow: hidden;
   color: inherit;
-  font-size: var(--dsh-content-font-size-secondary, 13px);
-  line-height: calc(24px + var(--dsh-content-font-delta, 0px));
+  font-size: var(--snh-content-font-size-secondary, 13px);
+  line-height: calc(24px + var(--snh-content-font-delta, 0px));
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .retryRow {
   color: var(--dsw-alias-label-tertiary);
-  font-size: var(--dsh-content-font-size-secondary, 13px);
-  line-height: calc(20px + var(--dsh-content-font-delta-secondary, 0px));
+  font-size: var(--snh-content-font-size-secondary, 13px);
+  line-height: calc(20px + var(--snh-content-font-delta-secondary, 0px));
 }
 
 .retrySummary {
@@ -255,8 +255,8 @@
   margin-top: 3px;
   padding-left: 14px;
   overflow-wrap: anywhere;
-  font-size: var(--dsh-content-font-size-secondary, 13px);
-  line-height: calc(18px + var(--dsh-content-font-delta-secondary, 0px));
+  font-size: var(--snh-content-font-size-secondary, 13px);
+  line-height: calc(18px + var(--snh-content-font-delta-secondary, 0px));
 }
 
 .retryDetailLabel {
@@ -269,8 +269,8 @@
   gap: 8px;
   align-items: start;
   padding: 2px 0;
-  font-size: var(--dsh-content-font-size-secondary, 13px);
-  line-height: calc(20px + var(--dsh-content-font-delta-secondary, 0px));
+  font-size: var(--snh-content-font-size-secondary, 13px);
+  line-height: calc(20px + var(--snh-content-font-delta-secondary, 0px));
 }
 
 .turnErrorDot {

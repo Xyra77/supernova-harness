@@ -1,7 +1,7 @@
 /** Workspace-relative name and path discovery through packaged ripgrep. */
-import { readRipgrepLines, spawnRipgrep, type RipgrepLinesResult } from '@deepseek-ai/dsh-util-ripgrep'
-import type { SubprocessRuntime } from '@deepseek-ai/dsh-subprocess'
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
+import { readRipgrepLines, spawnRipgrep, type RipgrepLinesResult } from '@supernova-ai/snh-util-ripgrep'
+import type { SubprocessRuntime } from '@supernova-ai/snh-subprocess'
+import { RemoteError } from '@supernova-ai/snh-typert-protocol'
 import type { WorkspaceFileSearchMatch, WorkspaceFileSearchResult } from './types.ts'
 
 /** Deployment budgets on one search's results, listed files and process. */

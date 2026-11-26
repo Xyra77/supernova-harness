@@ -1,6 +1,6 @@
 /**
  * Browser-safe Workspace path and display helpers.
- * @module @deepseek-ai/dsh-util-workspace-path
+ * @module @supernova-ai/snh-util-workspace-path
  */
 import { sessionFileAddress } from './file-address.ts'
 
@@ -88,7 +88,7 @@ export * from './file-address.ts'
  * @param sessionId - the Session the path is read in.
  * @param cwd - the directory that Session works in, when known.
  * @param path - absolute path or path relative to `cwd`, in either separator spelling.
- * @returns the `dsh-resource://file/session/…` address.
+ * @returns the `snh-resource://file/session/…` address.
  */
 export function fileAddressFor(sessionId: string, cwd: string | undefined, path: string): string {
   return sessionFileAddress(sessionId, resolveWorkspacePath(cwd, path))
@@ -109,12 +109,12 @@ export function relativizeToCwd(text: string, cwd: string | undefined): string {
 
 /**
  * Address a decoded absolute file path through the authenticated file route.
- * @param base - HTTP(S) application base, including its deployment prefix, or `dsh-app://app/`.
+ * @param base - HTTP(S) application base, including its deployment prefix, or `snh-app://app/`.
  * @param path - Native file path; URL escapes in authored Markdown must already be decoded.
  * @returns File URL, or undefined for unsupported transports and non-absolute paths.
  */
 export function fileMediaUrl(base: string, path: string): string | undefined {
-  if ((!/^https?:/u.test(base) && !base.startsWith('dsh-app://app/')) || !isAbsoluteWorkspacePath(path)
+  if ((!/^https?:/u.test(base) && !base.startsWith('snh-app://app/')) || !isAbsoluteWorkspacePath(path)
     || /^[/\\]{2}/u.test(path) || /[\u0000-\u001f\u007f]/u.test(path)) return undefined
   return new URL(`api/file?path=${encodeURIComponent(path)}`, base).href
 }

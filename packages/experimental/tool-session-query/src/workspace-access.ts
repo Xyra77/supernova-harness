@@ -1,22 +1,22 @@
 /**
  * Caller identity, workspace authorization, and visible lineage projection.
  *
- * @module @deepseek-ai/dsh-tool-session-query/workspace-access
+ * @module @supernova-ai/snh-tool-session-query/workspace-access
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { HarnessError } from '@deepseek-ai/dsh-llm'
+import type { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import { HarnessError } from '@supernova-ai/snh-llm'
 import {
   type SessionHeader,
   type SessionId as SessionIdValue,
-} from '@deepseek-ai/dsh-session'
-import type { TurnBoundaryProjection } from '@deepseek-ai/dsh-agent'
+} from '@supernova-ai/snh-session'
+import type { TurnBoundaryProjection } from '@supernova-ai/snh-agent'
 import type {
   SessionLineageNode,
   SessionRecord,
-} from '@deepseek-ai/dsh-session-query'
-import type { ToolRunContext } from '@deepseek-ai/dsh-tools'
+} from '@supernova-ai/snh-session-query'
+import type { ToolRunContext } from '@supernova-ai/snh-tools'
 import { serviceBoundary } from './service-boundary.ts'
 
 interface Caller {

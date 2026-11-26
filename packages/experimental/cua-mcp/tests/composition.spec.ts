@@ -5,30 +5,30 @@ import { join } from 'node:path'
 import { createInterface } from 'node:readline'
 import { PassThrough } from 'node:stream'
 import { pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import AgentLoop from '@deepseek-ai/dsh-agent-loop'
-import AgentPreset from '@deepseek-ai/dsh-agent-preset'
-import AgentPresets from '@deepseek-ai/dsh-agent-preset-registry'
-import LocalAttachmentStore from '@deepseek-ai/dsh-attachment-local'
-import ComputerUseRegistry from '@deepseek-ai/dsh-computer-use'
-import { CuaConfig, installCua } from '@deepseek-ai/dsh-cua'
-import type { NativeChannelFactory } from '@deepseek-ai/dsh-cua/native-client'
-import FileSystem from '@deepseek-ai/dsh-fs-local'
-import LlmRuntime from '@deepseek-ai/dsh-llm'
-import NodeRuntime from '@deepseek-ai/dsh-ptc-runtime-node'
-import Sandbox from '@deepseek-ai/dsh-sandbox-local'
-import SandboxPolicy from '@deepseek-ai/dsh-sandbox-policy'
-import SessionStore from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import Subprocess from '@deepseek-ai/dsh-subprocess-local'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
-import ToolRuntime from '@deepseek-ai/dsh-tools'
-import UserQuestions from '@deepseek-ai/dsh-user-questions'
-import WorkingDirectory from '@deepseek-ai/dsh-working-directory'
+import { Context } from '@supernova-ai/cordis'
+import Include from '@supernova-ai/cordis-plugin-include'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import AgentLoop from '@supernova-ai/snh-agent-loop'
+import AgentPreset from '@supernova-ai/snh-agent-preset'
+import AgentPresets from '@supernova-ai/snh-agent-preset-registry'
+import LocalAttachmentStore from '@supernova-ai/snh-attachment-local'
+import ComputerUseRegistry from '@supernova-ai/snh-computer-use'
+import { CuaConfig, installCua } from '@supernova-ai/snh-cua'
+import type { NativeChannelFactory } from '@supernova-ai/snh-cua/native-client'
+import FileSystem from '@supernova-ai/snh-fs-local'
+import LlmRuntime from '@supernova-ai/snh-llm'
+import NodeRuntime from '@supernova-ai/snh-ptc-runtime-node'
+import Sandbox from '@supernova-ai/snh-sandbox-local'
+import SandboxPolicy from '@supernova-ai/snh-sandbox-policy'
+import SessionStore from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import Subprocess from '@supernova-ai/snh-subprocess-local'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
+import ToolRuntime from '@supernova-ai/snh-tools'
+import UserQuestions from '@supernova-ai/snh-user-questions'
+import WorkingDirectory from '@supernova-ai/snh-working-directory'
 import { Client, InMemoryTransport, type CallToolResult } from '@modelcontextprotocol/client'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { createNativeFixture } from '../../../../snapshots/session/cua-run-code/native-channel.mjs'
@@ -93,7 +93,7 @@ function lastJson(result: CallToolResult): unknown {
 }
 
 async function setup(options: SetupOptions = {}) {
-  const directory = await mkdtemp(join(tmpdir(), 'dsh-cua-mcp-'))
+  const directory = await mkdtemp(join(tmpdir(), 'snh-cua-mcp-'))
   const ctx = new Context()
   onTestFinished(async () => {
     try { await ctx.fiber.dispose() } finally { await rm(directory, { recursive: true, force: true }) }
@@ -120,14 +120,14 @@ async function setup(options: SetupOptions = {}) {
       },
     },
   }
-  // The Host plane owns the native executor, as dsh-base does; the empty preset adds no model-facing rows.
+  // The Host plane owns the native executor, as snh-base does; the empty preset adds no model-facing rows.
   const entries = Object.keys(modules).filter(name => options.provider !== false || name !== 'cua').map(name => ({
     id: name, name: `cordis:${name}`,
     ...name === 'agentPresets' ? { config: { default: 'cua-mcp' } } : {},
     ...name === 'preset' ? { config: { id: 'cua-mcp', plugins: [] } } : {},
     ...name === 'sandboxPolicy' ? { config: { mode: 'danger-full-access', workspaceRoot: directory } } : {},
     ...name === 'sharedRuntime' ? { config: { executionMode: 'per-call' } } : {},
-    ...name === 'attachments' ? { config: { dshHome: directory } } : {},
+    ...name === 'attachments' ? { config: { snhHome: directory } } : {},
     ...name === 'cua' ? { config: {
       screenshotTarget: { longEdge: 1, maxBytes: 100_000 },
       allowedApps: options.granted === false ? [] : [{ id: 'a'.repeat(64), name: 'Fixture', executablePath: '/fixture/app' }],
@@ -383,14 +383,14 @@ describe('Computer Use MCP composition', () => {
     expect(lastJson(b)).toEqual(['a', 'b'])
     const failed = await run('throw new Error("boom")')
     expect(failed.isError).toBe(true)
-    // The client marks the error; the text is DSH's failure message without its `Error: ` prefix.
+    // The client marks the error; the text is SNH's failure message without its `Error: ` prefix.
     expect(texts(failed)[0]).toMatch(/^code run failed \(exception\): .*boom/s)
     const controller = new AbortController()
     const hanging = run('await new Promise(resolve => setTimeout(resolve, 60_000))', {}, controller.signal)
     setTimeout(() => { controller.abort() }, 100)
     await expect(hanging).rejects.toThrow()
     expect(lastJson(await run('inspect(1 + 1)'))).toBe(2)
-    // Argument validation belongs to the DSH executor: a program without the required description is refused there.
+    // Argument validation belongs to the SNH executor: a program without the required description is refused there.
     const invalid = await client.callTool({ name: 'cua_run_code', arguments: { code: '1' } })
     expect(invalid.isError).toBe(true)
     expect(texts(invalid)).toEqual(['invalid arguments: missing required property "description"'])
@@ -587,7 +587,7 @@ describe('Computer Use MCP composition', () => {
     const unsupported = await setup({ consent: 'elicit', granted: false })
     const refused = await unsupported.run('var app = await cua.getApp("test.fixture"); app.appHandle')
     expect(refused.isError).toBe(true)
-    expect(texts(refused).join('\n')).toContain('DSH_CUA_CONSENT=allow')
+    expect(texts(refused).join('\n')).toContain('SNH_CUA_CONSENT=allow')
   })
 
   it('lists no program tool on a Host without a CUA provider and releases the connection Agent on disposal', async () => {

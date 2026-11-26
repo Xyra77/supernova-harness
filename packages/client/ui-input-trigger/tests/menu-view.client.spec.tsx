@@ -9,13 +9,13 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import { zh as commonZh } from '@deepseek-ai/dsh-client-locale/src/locales/zh.ts'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import { makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import { zh as commonZh } from '@supernova-ai/snh-client-locale/src/locales/zh.ts'
 import { zh } from '../src/client/locales.ts'
 import type {
   InputTriggerCrumb, MenuState, TriggerHit,
-} from '@deepseek-ai/dsh-client-ui-input-trigger/client'
+} from '@supernova-ai/snh-client-ui-input-trigger/client'
 import { MenuView } from '../src/client/MenuView.tsx'
 
 const hit: TriggerHit = {

@@ -2,7 +2,7 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { PLATFORM_IPC, type PlatformLocale } from './platform-ipc.ts'
 
-const originArgument = '--dsh-platform-origin='
+const originArgument = '--snh-platform-origin='
 const allowedOrigin = process.argv.find(argument => argument.startsWith(originArgument))?.slice(originArgument.length)
 if (process.isMainFrame && location.origin === allowedOrigin) {
   let token: string | undefined
@@ -27,7 +27,7 @@ if (process.isMainFrame && location.origin === allowedOrigin) {
     token = value.token
     locale = value.locale
   }
-  contextBridge.exposeInMainWorld('dsh', {
+  contextBridge.exposeInMainWorld('snh', {
     protocolVersion: 1,
     displayMode: 'embedded',
     getLocale: (): PlatformLocale => {

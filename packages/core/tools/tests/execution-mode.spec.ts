@@ -1,15 +1,15 @@
 /** Covers fail-closed per-call classification and model-schema isolation. */
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import { ToolExecutionPipeline } from '@deepseek-ai/dsh-tools/pipeline'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import { ToolExecutionPipeline } from '@supernova-ai/snh-tools/pipeline'
 
-import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
+import * as NativeToolExecutor from '@supernova-ai/snh-tool-executor-native'
 import { describe, expect, expectTypeOf, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { ToolCallId } from '@deepseek-ai/dsh-llm'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import ToolRuntime, { type ToolDefinition, type ToolExecutionInput, type ToolExecutionMode } from '@deepseek-ai/dsh-tools'
-import { defineContentToolFixture } from '@deepseek-ai/dsh-tool-testkit'
+import { Context } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { ToolCallId } from '@supernova-ai/snh-llm'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import ToolRuntime, { type ToolDefinition, type ToolExecutionInput, type ToolExecutionMode } from '@supernova-ai/snh-tools'
+import { defineContentToolFixture } from '@supernova-ai/snh-tool-testkit'
 
 const testToolSignal = new AbortController().signal
 

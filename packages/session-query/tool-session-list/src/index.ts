@@ -1,10 +1,10 @@
 /**
  * Opt-in read-only Workspace and Session metadata tools for the mounted runtime.
- * @module @deepseek-ai/dsh-tool-session-list
+ * @module @supernova-ai/snh-tool-session-list
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import { defineTool } from '@deepseek-ai/dsh-tools'
+import type { Context } from '@supernova-ai/cordis'
+import { defineTool } from '@supernova-ai/snh-tools'
 import { DEFAULT_PAGE_LIMIT, listSessions, listWorkspaces, MAX_PAGE_LIMIT } from './list.ts'
 
 /** Cordis plugin identity. */

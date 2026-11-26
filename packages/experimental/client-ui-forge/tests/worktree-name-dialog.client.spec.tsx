@@ -2,7 +2,7 @@
 /** Naming dialog of a worktree branch: the starting text, the rules checked while typing, the Host's refusals, and the retry mode. */
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
+import { makeTranslate } from '@supernova-ai/snh-client-test-runtime'
 import { en } from '../src/client/locales.ts'
 import { WorktreeNameDialog, type WorktreeNameDialogProps } from '../src/client/WorktreeNameDialog.tsx'
 
@@ -16,7 +16,7 @@ const t = makeTranslate(en)
 function mount(props: Partial<WorktreeNameDialogProps> = {}) {
   const submit = vi.fn<WorktreeNameDialogProps['submit']>(async () => 'accepted')
   const close = vi.fn()
-  render(<WorktreeNameDialog mode="name" initial="dsh-" prefix="dsh-" from="refs/heads/main" named={false} submit={submit} close={close}
+  render(<WorktreeNameDialog mode="name" initial="snh-" prefix="snh-" from="refs/heads/main" named={false} submit={submit} close={close}
     t={t} {...props} />)
   const dialog = (): HTMLElement => screen.getByRole('dialog')
   const field = (): HTMLInputElement => within(dialog()).getByRole('textbox', { name: en['nameDialog.field'] })
@@ -70,7 +70,7 @@ describe('WorktreeNameDialog rules', () => {
   })
 
   it('takes the keyboard with the caret after the starting text', () => {
-    const d = mount({ initial: 'dsh-fix', named: true })
+    const d = mount({ initial: 'snh-fix', named: true })
     expect(document.activeElement).toBe(d.field())
     expect(d.field().selectionStart).toBe(7)
   })
@@ -79,12 +79,12 @@ describe('WorktreeNameDialog rules', () => {
 describe('WorktreeNameDialog requests', () => {
   it('requests the name with Enter, ignores Enter while composing, and closes once the request is accepted', async () => {
     const d = mount()
-    d.type('dsh-fix')
+    d.type('snh-fix')
     fireEvent.keyDown(d.field(), { key: 'Enter', isComposing: true })
     expect(d.submit).not.toHaveBeenCalled()
     fireEvent.keyDown(d.field(), { key: 'a' })
     await act(async () => { fireEvent.keyDown(d.field(), { key: 'Enter' }) })
-    expect(d.submit).toHaveBeenCalledWith('dsh-fix')
+    expect(d.submit).toHaveBeenCalledWith('snh-fix')
     expect(d.close).toHaveBeenCalledOnce()
   })
 
@@ -92,20 +92,20 @@ describe('WorktreeNameDialog requests', () => {
     let answer: (result: 'branch-exists' | 'invalid-name' | 'failed') => void = () => {}
     const d = mount()
     d.submit.mockImplementation(() => new Promise((resolve) => { answer = resolve }))
-    d.type('dsh-taken')
+    d.type('snh-taken')
     fireEvent.click(d.confirm())
     expect(d.confirm().hasAttribute('disabled')).toBe(true)
     await act(async () => { answer('branch-exists') })
-    expect(d.message()).toBe('A branch named dsh-taken already exists')
+    expect(d.message()).toBe('A branch named snh-taken already exists')
     expect(d.confirm().hasAttribute('disabled')).toBe(true)
 
-    d.type('dsh-odd')
+    d.type('snh-odd')
     expect(d.confirm().hasAttribute('disabled')).toBe(false)
     fireEvent.click(d.confirm())
     await act(async () => { answer('invalid-name') })
     expect(d.message()).toBe(en['branchName.invalid'])
 
-    d.type('dsh-other')
+    d.type('snh-other')
     fireEvent.click(d.confirm())
     await act(async () => { answer('failed') })
     expect(d.message()).toBe('The first message creates this branch from main; the worktree directory takes its name')
@@ -113,7 +113,7 @@ describe('WorktreeNameDialog requests', () => {
   })
 
   it('returns a named request to generated names, ignoring a refusal that names no branch', async () => {
-    const d = mount({ initial: 'dsh-fix', named: true })
+    const d = mount({ initial: 'snh-fix', named: true })
     d.submit.mockResolvedValueOnce('branch-exists')
     await act(async () => { fireEvent.click(within(d.dialog()).getByRole('button', { name: en['nameDialog.auto'] })) })
     expect(d.submit).toHaveBeenCalledWith(null)
@@ -123,12 +123,12 @@ describe('WorktreeNameDialog requests', () => {
   })
 
   it('renames for another attempt in retry mode, without the return to generated names', async () => {
-    const d = mount({ mode: 'retry', initial: 'dsh-fix', named: true })
+    const d = mount({ mode: 'retry', initial: 'snh-fix', named: true })
     expect(screen.getByRole('dialog', { name: en['nameDialog.retryTitle'] })).toBeTruthy()
     expect(within(d.dialog()).queryByRole('button', { name: en['nameDialog.auto'] })).toBeNull()
-    d.type('dsh-fix-2')
+    d.type('snh-fix-2')
     await act(async () => { fireEvent.click(d.confirm()) })
-    expect(d.submit).toHaveBeenCalledWith('dsh-fix-2')
+    expect(d.submit).toHaveBeenCalledWith('snh-fix-2')
   })
 
   it('closes without a request from Cancel and the close button', () => {

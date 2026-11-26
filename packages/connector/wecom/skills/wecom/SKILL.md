@@ -5,7 +5,7 @@ description: 企业微信插件：通过 wecom-cli 使用企业微信的通讯�
 
 # 企业微信插件
 
-## DSH 指引
+## SNH 指引
 
 - 在面向用户的回复中，把这项集成称为“企业微信插件”。`wecom-cli` 由企业微信插件安装，按当前 runtime context 给出的绝对路径运行，不要直接按名称运行。不要执行 `npm install -g @wecom/cli`，也不要用其他方式另装或升级 `wecom-cli`。
 - `wecom-cli` 的授权保存在这台电脑的默认配置目录，与用户自己终端里的 `wecom-cli` 共用。

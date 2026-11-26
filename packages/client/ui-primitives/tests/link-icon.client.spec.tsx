@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { cleanup, render } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
-import { LinkIconMedium, LinkIconRegular, classifyLinkPath, type LinkIconKind } from '@deepseek-ai/dsh-client-ui-primitives'
+import { LinkIconMedium, LinkIconRegular, classifyLinkPath, type LinkIconKind } from '@supernova-ai/snh-client-ui-primitives'
 
 afterEach(cleanup)
 

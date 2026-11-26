@@ -15,14 +15,14 @@ Approval outcomes, audit events, policy defaults, and synchronous business metho
 
 ## Migration
 
-1. In custom `cordis.yml` files, mount `@deepseek-ai/dsh-session-projection` before `@deepseek-ai/dsh-user-approval`. Avoid adding a duplicate registry to a shipped profile.
+1. In custom `cordis.yml` files, mount `@supernova-ai/snh-session-projection` before `@supernova-ai/snh-user-approval`. Avoid adding a duplicate registry to a shipped profile.
 2. In direct host compositions, use `ctx.plugin(ApprovalService)` and await activation before using `ctx.approval`. Do not construct the service with `new ApprovalService(...)`: that does not run `Service.init`.
 
    ```ts
-   import { Context } from '@deepseek-ai/cordis'
-   import SessionStore from '@deepseek-ai/dsh-session'
-   import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-   import ApprovalService from '@deepseek-ai/dsh-user-approval'
+   import { Context } from '@supernova-ai/cordis'
+   import SessionStore from '@supernova-ai/snh-session'
+   import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+   import ApprovalService from '@supernova-ai/snh-user-approval'
 
    const ctx = new Context()
    await ctx.plugin(SessionStore)

@@ -2,14 +2,14 @@ import { mountWorkingDirectoryFixture } from './working-directory-fixture.ts'
 /** External activation admission and resource ownership across parent lifetimes. */
 
 import { describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import type { SessionId } from '@deepseek-ai/dsh-session'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import { Context } from '@supernova-ai/cordis'
+import type { Agent } from '@supernova-ai/snh-agent'
+import type { SessionId } from '@supernova-ai/snh-session'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import SubagentRuntime from '../src/index.ts'
 import type { SubagentStartRequest, SubagentRun, SubagentResult } from '../src/types.ts'
 import { externalTestParent } from './external-activation-helpers.ts'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 const complete: SubagentResult = { output: [], stopReason: 'completed' }
 

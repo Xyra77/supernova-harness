@@ -1,8 +1,8 @@
 /** Fire-and-forget webhook rule registry and Workspace-backed Session runtime. */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import { errorChain } from '@deepseek-ai/dsh-llm'
-import { deepFreeze, snapshotJsonValue } from '@deepseek-ai/dsh-util-values'
+import { Context, Service } from '@supernova-ai/cordis'
+import { errorChain } from '@supernova-ai/snh-llm'
+import { deepFreeze, snapshotJsonValue } from '@supernova-ai/snh-util-values'
 import type { WebhookRuleId } from './brand.ts'
 import { createWebhookSession } from './session.ts'
 import type { VerifiedWebhookDelivery, WebhookRule, WebhookSessionRequest } from './types.ts'
@@ -10,7 +10,7 @@ import type { VerifiedWebhookDelivery, WebhookRule, WebhookSessionRequest } from
 export * from './brand.ts'
 export type * from './types.ts'
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     webhookRuntime: WebhookRuntime
   }

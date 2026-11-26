@@ -1,10 +1,10 @@
-import type { Context } from '@deepseek-ai/cordis'
-import type {} from '@deepseek-ai/dsh-agent'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { CompactionId } from '@deepseek-ai/dsh-compaction/types'
-import { compactCheckpointSource } from '@deepseek-ai/dsh-compaction'
-import { createUserMessage } from '@deepseek-ai/dsh-llm'
-import type {} from '@deepseek-ai/dsh-tools'
+import type { Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-agent'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { CompactionId } from '@supernova-ai/snh-compaction/types'
+import { compactCheckpointSource } from '@supernova-ai/snh-compaction'
+import { createUserMessage } from '@supernova-ai/snh-llm'
+import type {} from '@supernova-ai/snh-tools'
 
 export const name = 'workspace-context-compaction'
 

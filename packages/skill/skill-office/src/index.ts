@@ -3,9 +3,9 @@
 import { readFile } from 'node:fs/promises'
 import { isAbsolute, join, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import { BUNDLED_SKILL_RANK, type SkillCandidate } from '@deepseek-ai/dsh-skill'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import { BUNDLED_SKILL_RANK, type SkillCandidate } from '@supernova-ai/snh-skill'
 import { parse as parseYaml } from 'yaml'
 
 const SKILL_NAMES = ['office'] as const
@@ -108,7 +108,7 @@ export function apply(ctx: Context, config: ResolvedConfig): void {
     return { kind: 'failed', error, persistent }
   }
   ctx.skills.registerProvider(control => ({
-    name: 'dsh-office',
+    name: 'snh-office',
     async list(options) {
       const reads = await Promise.all(SKILL_NAMES.map(async skillName => ({ skillName, read: await readSkill(skillName, options.signal) })))
       const candidates: SkillCandidate[] = []
@@ -118,7 +118,7 @@ export function apply(ctx: Context, config: ResolvedConfig): void {
         candidates.push({
           name: skillName, description: read.description,
           invocation: { modelInvocable: true, userInvocable: true },
-          provider: 'dsh-office', source: 'bundled', rank: BUNDLED_SKILL_RANK,
+          provider: 'snh-office', source: 'bundled', rank: BUNDLED_SKILL_RANK,
           resourceBase: { kind: 'directory', path: directory.split(sep).join('/') }, locator: join(directory, 'SKILL.md'),
         })
       }

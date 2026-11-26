@@ -1,26 +1,26 @@
 import { access, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry from '@deepseek-ai/dsh-agent'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { unsupportedInbox, unsupportedModel } from '@deepseek-ai/dsh-agent-loop-testkit'
-import LocalFileSystem from '@deepseek-ai/dsh-fs-local'
-import type { ConfinedArgv, SandboxMode } from '@deepseek-ai/dsh-sandbox'
-import SandboxPolicyService from '@deepseek-ai/dsh-sandbox-policy'
-import SessionStore, { appendPluginRecord, type SessionId, SessionLogOffset } from '@deepseek-ai/dsh-session'
-import type { Session } from '@deepseek-ai/dsh-session'
-import * as SessionPersistence from '@deepseek-ai/dsh-session-persistence-jsonl'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SessionProjectionCache from '@deepseek-ai/dsh-session-projection-cache'
-import SessionQueryEngine from '@deepseek-ai/dsh-session-query'
-import type { SessionEventSearchPage, SessionSearchHit, SessionSearchPage } from '@deepseek-ai/dsh-session-query'
-import Storage from '@deepseek-ai/dsh-storage'
-import { DomainFacility } from '@deepseek-ai/dsh-storage-domain'
-import LocalSubprocessRuntime from '@deepseek-ai/dsh-subprocess-local'
-import SystemPrompt from '@deepseek-ai/dsh-system-prompt'
-import WorkingDirectoryService from '@deepseek-ai/dsh-working-directory'
-import WorkspaceRegistry from '@deepseek-ai/dsh-workspace'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry from '@supernova-ai/snh-agent'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { unsupportedInbox, unsupportedModel } from '@supernova-ai/snh-agent-loop-testkit'
+import LocalFileSystem from '@supernova-ai/snh-fs-local'
+import type { ConfinedArgv, SandboxMode } from '@supernova-ai/snh-sandbox'
+import SandboxPolicyService from '@supernova-ai/snh-sandbox-policy'
+import SessionStore, { appendPluginRecord, type SessionId, SessionLogOffset } from '@supernova-ai/snh-session'
+import type { Session } from '@supernova-ai/snh-session'
+import * as SessionPersistence from '@supernova-ai/snh-session-persistence-jsonl'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SessionProjectionCache from '@supernova-ai/snh-session-projection-cache'
+import SessionQueryEngine from '@supernova-ai/snh-session-query'
+import type { SessionEventSearchPage, SessionSearchHit, SessionSearchPage } from '@supernova-ai/snh-session-query'
+import Storage from '@supernova-ai/snh-storage'
+import { DomainFacility } from '@supernova-ai/snh-storage-domain'
+import LocalSubprocessRuntime from '@supernova-ai/snh-subprocess-local'
+import SystemPrompt from '@supernova-ai/snh-system-prompt'
+import WorkingDirectoryService from '@supernova-ai/snh-working-directory'
+import WorkspaceRegistry from '@supernova-ai/snh-workspace'
 import { MemoryMediaPool, MemoryStorageBackend } from '../../../storage/storage-domain/tests/helpers/memory-backend.ts'
 import type {} from '../src/archive.ts'
 import WorktreeService, { CREATED_RECORD, worktreeProjection } from '../src/index.ts'
@@ -30,7 +30,7 @@ import * as removal from '../src/removal.ts'
 import { git, repository, UnusedSandbox } from './harness.ts'
 import { mkdtemp, realpath, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import { brandString } from '@supernova-ai/snh-brand'
 
 /** Archive tests only use the query service's listing and observation APIs. */
 class ArchiveQueries extends SessionQueryEngine {
@@ -74,7 +74,7 @@ async function fixture(options: {
   /** Point the deployment's default directory inside the checkout the fixture creates. */
   defaultInWorktree?: boolean
 } = {}) {
-  const temporary = await realpath(await mkdtemp(join(tmpdir(), 'dsh-worktree-archive-')))
+  const temporary = await realpath(await mkdtemp(join(tmpdir(), 'snh-worktree-archive-')))
   cleanups.push(() => rm(temporary, { recursive: true, force: true }))
   const root = await repository(temporary)
   const ctx = new Context()

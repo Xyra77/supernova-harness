@@ -5,12 +5,12 @@
  * operation, so a changed credential reaches the next operation without any
  * plugin restart, and configuration surfaces describe a reference without
  * ever seeing its full value.
- * @module @deepseek-ai/dsh-credentials
+ * @module @supernova-ai/snh-credentials
  */
 
-import { Context, Service } from '@deepseek-ai/cordis'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { launchEnvironmentOf } from '@deepseek-ai/dsh-launch-environment'
+import { Context, Service } from '@supernova-ai/cordis'
+import { brandString } from '@supernova-ai/snh-brand'
+import { launchEnvironmentOf } from '@supernova-ai/snh-launch-environment'
 import type { CredentialInfo, CredentialKey, CredentialRecord, CredentialRef } from './types.ts'
 
 export type {
@@ -147,7 +147,7 @@ export interface CredentialRecordEntry {
   kind: CredentialRecord['kind']
 }
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context {
     credentials: CredentialProvider
   }

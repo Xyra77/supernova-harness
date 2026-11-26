@@ -3,7 +3,7 @@ description: "Add the Tencent Meeting plugin to a profile: the official tmeet wi
 kind: "package-bundle"
 ---
 
-# @deepseek-ai/dsh-tencent-meeting
+# @supernova-ai/snh-tencent-meeting
 
 English | [中文](README.zh.md)
 
@@ -30,8 +30,8 @@ The Tencent Meeting plugin lets conversations use Tencent Meeting through the of
 Install the plugin from the Web sidebar's **Plugins** page or with the CLI:
 
 ```sh
-dsh plugin --profile web add @deepseek-ai/dsh-tencent-meeting
-dsh plugin --profile web remove @deepseek-ai/dsh-tencent-meeting
+snh plugin --profile web add @supernova-ai/snh-tencent-meeting
+snh plugin --profile web remove @supernova-ai/snh-tencent-meeting
 ```
 
 `@tencentcloud/tmeet` declares an install script, so the first installation stops with `@tencentcloud/tmeet` among the pending build scripts. On the Plugins page, select **Allow these scripts and retry**; with the CLI, set `allowBuilds` for it to `true` in the profile's `pnpm-workspace.yaml` and run the command again. The script makes the packaged executable executable and runs `tmeet auth logout`, which signs out tmeet on this computer, including the user's own terminal. The approval stays in the profile, so each later installation of a new `@tencentcloud/tmeet` version runs the script and signs out again; sign in again on the plugin page afterwards. When the package has no executable for the computer's platform, or the executable is missing, the plugin fails to load with an error that names the platform or path.
@@ -40,7 +40,7 @@ dsh plugin --profile web remove @deepseek-ai/dsh-tencent-meeting
 
 After the plugin loads, one `tencent-meeting` skill joins the skill catalog. The agent loads it with the `skill` tool, opens the `tmeet-skill` guide and its references with the file tools, and runs `tmeet` by that path through the ordinary Shell tools under the current sandbox and approval policy. When a command reports a missing or expired sign-in, the agent asks the user to connect Tencent Meeting on the plugin page; it runs `tmeet auth login --no-browser` only when the user asks to finish it in the conversation, and requests `sandbox_permissions` with a `justification` on the first attempt because the command writes outside the workspace.
 
-The guide comes from `skills/tmeet-skill/` of `TencentCloud/tencentmeeting-cli` at tag `v1.0.18` (commit `e631b35`), without `scripts/agent_init.py`. The row downloads that commit's archive when it loads and keeps the verified files in `$DSH_HOME/cache/tencent-meeting/`; until they are in place, the catalog has no `tencent-meeting` skill and the plugin page reports the download. A failed download is retried by the page's check.
+The guide comes from `skills/tmeet-skill/` of `TencentCloud/tencentmeeting-cli` at tag `v1.0.18` (commit `e631b35`), without `scripts/agent_init.py`. The row downloads that commit's archive when it loads and keeps the verified files in `$SNH_HOME/cache/tencent-meeting/`; until they are in place, the catalog has no `tencent-meeting` skill and the plugin page reports the download. A failed download is retried by the page's check.
 
 Turning the plugin off in Plugin Manager withdraws the skill, the path from runtime context, and the account section. The CLI sign-in and the downloaded guide stay in place.
 
@@ -56,7 +56,7 @@ The Plugins page drives these operations through the connector account registry,
 | `sign-out` | After the user confirms, runs `auth logout`, which also signs out the user's own terminal, then checks again |
 | Cancel | Cancels a sign-in while it waits for authorization and waits for its command to exit; other steps are ignored |
 
-A check runs `auth status`, which in tmeet 1.0.18 prints plain text and exits with code 0 whether or not a user is signed in. The account reads `signed-out` for `Not logged in.`, for `Session has expired.`, or when `Logged in` comes with an expired refresh token; `connected`, with the user name, when `Logged in` comes with a `UserName:` line, which the CLI prints only after its user-info request to the server succeeds; and `unverified` for any other `Logged in`, for example when that request cannot reach the server. A nonzero exit or other output fails the check and keeps the previous account. The link that `auth login` prints on its `authorize url:` stdout line is offered only when it is an HTTPS address on `meeting.tencent.com`. Results report succeeded, cancelled, or failed. Failures show the command and the observed exit code on the page and in the Host log; the CLI's output, which can carry the one-time authorization code, is omitted. The process running DSH needs access to the CLI configuration in `~/.tmeet`, the encrypted credentials in `~/Library/Application Support/tmeet`, and the macOS Keychain item that holds their key; `DSH_HOME` does not relocate them.
+A check runs `auth status`, which in tmeet 1.0.18 prints plain text and exits with code 0 whether or not a user is signed in. The account reads `signed-out` for `Not logged in.`, for `Session has expired.`, or when `Logged in` comes with an expired refresh token; `connected`, with the user name, when `Logged in` comes with a `UserName:` line, which the CLI prints only after its user-info request to the server succeeds; and `unverified` for any other `Logged in`, for example when that request cannot reach the server. A nonzero exit or other output fails the check and keeps the previous account. The link that `auth login` prints on its `authorize url:` stdout line is offered only when it is an HTTPS address on `meeting.tencent.com`. Results report succeeded, cancelled, or failed. Failures show the command and the observed exit code on the page and in the Host log; the CLI's output, which can carry the one-time authorization code, is omitted. The process running SNH needs access to the CLI configuration in `~/.tmeet`, the encrypted credentials in `~/Library/Application Support/tmeet`, and the macOS Keychain item that holds their key; `SNH_HOME` does not relocate them.
 
 ### Configure
 
@@ -67,7 +67,7 @@ A check runs `auth status`, which in tmeet 1.0.18 prints plain text and exits wi
 
 An account check or sign-out gets the `commandTimeoutMs` of the [`cli-account` row](../cli-account/README.md#use-this-package), 30 seconds by default. Sign-in waits up to 10 minutes for the user, and each command keeps at most 1 MiB of stdout; the CLI account Service fixes both limits. tmeet itself stops waiting for authorization after 5 minutes. The guide is downloaded from the `skillsUrls` of the [`upstream-skills` row](../upstream-skills/README.md#use-this-package), each within its `skillsTimeoutMs`.
 
-The generated [config catalog](../../../docs/config-catalog.md#deepseek-aidsh-tencent-meeting) is the exhaustive source of supported fields.
+The generated [config catalog](../../../docs/config-catalog.md#supernova-aisnh-tencent-meeting) is the exhaustive source of supported fields.
 
 -----
 
@@ -79,7 +79,7 @@ The generated [config catalog](../../../docs/config-catalog.md#deepseek-aidsh-te
 
 [`cordis.patch.yml`](cordis.patch.yml) inserts this package as the `tencent-meeting` row after the profile's other layers, and the Plugins page keys the account section by this package name. [`src/index.ts`](src/index.ts) is a function plugin. It resolves the `tmeet` executable, registers the `tencent-meeting` skill with `ctx.upstreamSkills` under the pin in [`src/skills.ts`](src/skills.ts), and registers that path and the account with `ctx.cliAccounts`. The account view carries the download state, and each check restarts a failed download without waiting for it. `@tencentcloud/tmeet` ships one executable per platform under `dist/`, each named for its platform, and its `bin` is a Node launcher. [`src/directory.ts`](src/directory.ts) therefore picks the executable for `process.platform` and `process.arch` with the same names the launcher uses, and both the runtime context and the plugin's own commands use that path. The [CLI account Service](../cli-account/README.md) gives the model that path in runtime context, runs each command by the same path, runs one operation at a time, and reports a failed command by its exit code. [`src/account.ts`](src/account.ts) carries out each operation with the tmeet commands, reads the authorization link from the output lines of `auth login`, and parses the `auth status` text. [`src/presentation.ts`](src/presentation.ts) maps each view to the section the registry serves, in the text of [`src/locales.ts`](src/locales.ts). Disposal cancels the active operation, aborts running commands, and settles after their processes exit.
 
-[`skills/tencent-meeting/SKILL.md`](skills/tencent-meeting/SKILL.md) is the only skill this package carries: the DSH guidance, an index of the guide, and how to open it. Upstream publishes the guide only in its repository and not in the npm package, so the [upstream skills Service](../upstream-skills/README.md) downloads it; it is a set of files under the skill's base directory, not a separate skill. The pin excludes `scripts/agent_init.py`, which records the calling agent and model in the CLI configuration for upstream telemetry. Where the DSH guidance and the guide disagree, the entry tells the agent to follow the DSH guidance: it uses the plugin's `tmeet` instead of installing one, skips `agent_init.py`, and sends sign-in to the plugin page. References are ordinary files in the guide's directory.
+[`skills/tencent-meeting/SKILL.md`](skills/tencent-meeting/SKILL.md) is the only skill this package carries: the SNH guidance, an index of the guide, and how to open it. Upstream publishes the guide only in its repository and not in the npm package, so the [upstream skills Service](../upstream-skills/README.md) downloads it; it is a set of files under the skill's base directory, not a separate skill. The pin excludes `scripts/agent_init.py`, which records the calling agent and model in the CLI configuration for upstream telemetry. Where the SNH guidance and the guide disagree, the entry tells the agent to follow the SNH guidance: it uses the plugin's `tmeet` instead of installing one, skips `agent_init.py`, and sends sign-in to the plugin page. References are ordinary files in the guide's directory.
 
 </details>
 
@@ -117,7 +117,7 @@ The catalog is fixed for one plugin version. Loading or unloading the plugin cha
 
 #### What the model sees
 
-A `skill` tool result for `tencent-meeting` contains about 1,200 characters: the DSH guidance, a one-sentence index of the `tmeet-skill` guide, and how to open it. The DSH guidance tells the agent to run the plugin's `tmeet` by the absolute path from the current runtime context, to skip the guide's installation check and its `agent_init.py` step, to ask the user to connect on the plugin page before running `tmeet auth login --no-browser` itself, and to request `sandbox_permissions` for that command from its first attempt; it takes precedence over the guide where they disagree. Its resource base is the downloaded directory, `skillsDir` or `$DSH_HOME/cache/tencent-meeting/skills-<digest>`, so the agent opens `skills/tmeet-skill/SKILL.md` with the file tools rather than the `skill` tool and resolves the guide's relative paths against the guide's own directory.
+A `skill` tool result for `tencent-meeting` contains about 1,200 characters: the SNH guidance, a one-sentence index of the `tmeet-skill` guide, and how to open it. The SNH guidance tells the agent to run the plugin's `tmeet` by the absolute path from the current runtime context, to skip the guide's installation check and its `agent_init.py` step, to ask the user to connect on the plugin page before running `tmeet auth login --no-browser` itself, and to request `sandbox_permissions` for that command from its first attempt; it takes precedence over the guide where they disagree. Its resource base is the downloaded directory, `skillsDir` or `$SNH_HOME/cache/tencent-meeting/skills-<digest>`, so the agent opens `skills/tmeet-skill/SKILL.md` with the file tools rather than the `skill` tool and resolves the guide's relative paths against the guide's own directory.
 
 #### Token effect
 
@@ -160,11 +160,11 @@ The system prompt does not change; loading or unloading the row, or a changed pa
 - Only macOS and Windows x64 are supported; Linux is unverified. `@tencentcloud/tmeet` ships no Windows arm64 executable.
 - Installing a new `@tencentcloud/tmeet` version signs out tmeet on this computer, because its approved install script runs `tmeet auth logout`.
 - Commands must run on this Host. When a composition runs them elsewhere, such as over SSH, the plugin still loads, and each command that runs `tmeet` fails because the path does not exist there.
-- The plugin uses the CLI's default configuration. Signing in or out from DSH affects the user's own terminal, and there is no DSH-private account or account picker.
+- The plugin uses the CLI's default configuration. Signing in or out from SNH affects the user's own terminal, and there is no SNH-private account or account picker.
 - The account state comes from the plain-text output of tmeet 1.0.18's `auth status`, and the sign-in link from its `authorize url:` line; a CLI version that changes that text fails the check or the sign-in with a retryable result. An account for which the server returns no user name reads as unconfirmed.
-- The guide follows upstream tag `v1.0.18`; updating it means a new pin from `scripts/upstream-skills-digest.ts`, after which the entry's index and DSH guidance must be checked against the new guide.
+- The guide follows upstream tag `v1.0.18`; updating it means a new pin from `scripts/upstream-skills-digest.ts`, after which the entry's index and SNH guidance must be checked against the new guide.
 - The first load after a new pin needs access to GitHub or a configured mirror; until a download succeeds, the agent has no `tencent-meeting` skill.
-- The downloaded guide stays in `$DSH_HOME/cache/tencent-meeting/` after the plugin is removed or pins another commit.
+- The downloaded guide stays in `$SNH_HOME/cache/tencent-meeting/` after the plugin is removed or pins another commit.
 
 <a id="dev-note"></a>
 ### Dev Note

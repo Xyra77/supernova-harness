@@ -3,7 +3,7 @@ description: "Show completed-answer creation cards with location choice, Undo an
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-client-ui-creation-recommendations
+# @supernova-ai/snh-client-ui-creation-recommendations
 
 English | [中文](README.zh.md)
 
@@ -25,7 +25,7 @@ Users see one creation proposal below the completed answer. Short plans appear i
 <a id="use-this-package"></a>
 ## Use this package
 
-The Web composition ([`dsh-web-app`](../../bundle/web-app/README.md)) mounts this package. This browser contribution has no configuration fields; it fills the shared [action card frame](../ui-action-cards/README.md) for `create_personalized_page` cards.
+The Web composition ([`snh-web-app`](../../bundle/web-app/README.md)) mounts this package. This browser contribution has no configuration fields; it fills the shared [action card frame](../ui-action-cards/README.md) for `create_personalized_page` cards.
 
 ### Outcomes and recovery
 

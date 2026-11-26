@@ -6,15 +6,15 @@
  * entry, installation-carried bundles, and unaddressable rows stay protected by their own rules.
  */
 export const PROTECTED_PLUGINS: ReadonlySet<string> = new Set([
-  '@deepseek-ai/dsh-plugin-manager', '@deepseek-ai/cordis-plugin-loader',
-  '@deepseek-ai/cordis-plugin-include', '@deepseek-ai/dsh-api-gateway',
-  '@deepseek-ai/dsh-host-webserver', '@deepseek-ai/dsh-client-modules',
-  '@deepseek-ai/dsh-client-ui-plugin-manager',
-  '@deepseek-ai/dsh-host-plugin-inventory', '@deepseek-ai/dsh-typert-registry',
-  '@deepseek-ai/dsh-api-remotes', '@deepseek-ai/dsh-api-remote-access',
-  '@deepseek-ai/cordis-plugin-timer', '@deepseek-ai/dsh-client-connection',
-  '@deepseek-ai/dsh-host-frontend-static', '@deepseek-ai/dsh-tools',
-  '@deepseek-ai/dsh-hmr',
+  '@supernova-ai/snh-plugin-manager', '@supernova-ai/cordis-plugin-loader',
+  '@supernova-ai/cordis-plugin-include', '@supernova-ai/snh-api-gateway',
+  '@supernova-ai/snh-host-webserver', '@supernova-ai/snh-client-modules',
+  '@supernova-ai/snh-client-ui-plugin-manager',
+  '@supernova-ai/snh-host-plugin-inventory', '@supernova-ai/snh-typert-registry',
+  '@supernova-ai/snh-api-remotes', '@supernova-ai/snh-api-remote-access',
+  '@supernova-ai/cordis-plugin-timer', '@supernova-ai/snh-client-connection',
+  '@supernova-ai/snh-host-frontend-static', '@supernova-ai/snh-tools',
+  '@supernova-ai/snh-hmr',
 ])
 
 /**
@@ -23,14 +23,14 @@ export const PROTECTED_PLUGINS: ReadonlySet<string> = new Set([
  * Their Host availability and activation stay intact.
  */
 export const HIDDEN_BUNDLES: ReadonlySet<string> = new Set([
-  '@deepseek-ai/dsh-base',
-  '@deepseek-ai/dsh-web-app',
-  '@deepseek-ai/dsh-headless',
-  '@deepseek-ai/dsh-sdk-app',
-  '@deepseek-ai/dsh-acp-app',
-  '@deepseek-ai/dsh-sdk-minimal',
-  '@deepseek-ai/dsh-experimental-tool-worktree',
-  '@deepseek-ai/dsh-cua-mcp',
+  '@supernova-ai/snh-base',
+  '@supernova-ai/snh-web-app',
+  '@supernova-ai/snh-headless',
+  '@supernova-ai/snh-sdk-app',
+  '@supernova-ai/snh-acp-app',
+  '@supernova-ai/snh-sdk-minimal',
+  '@supernova-ai/snh-experimental-tool-worktree',
+  '@supernova-ai/snh-cua-mcp',
 ])
 
 /**
@@ -38,9 +38,9 @@ export const HIDDEN_BUNDLES: ReadonlySet<string> = new Set([
  * this list, decides whether a bundle appears on the main list.
  */
 export const EXTENSION_BUNDLES: readonly string[] = [
-  '@deepseek-ai/dsh-experimental-voice-input-bundle',
-  '@deepseek-ai/dsh-experimental-plugin-market-bundle',
-  '@deepseek-ai/dsh-experimental-auto-review',
+  '@supernova-ai/snh-experimental-voice-input-bundle',
+  '@supernova-ai/snh-experimental-plugin-market-bundle',
+  '@supernova-ai/snh-experimental-auto-review',
 ]
 
 /**
@@ -48,37 +48,37 @@ export const EXTENSION_BUNDLES: readonly string[] = [
  * which includes every eligible bundle, ranks them last in this order.
  */
 export const MORE_BUNDLES: readonly string[] = [
-  '@deepseek-ai/dsh-experimental-inspector-profile',
-  '@deepseek-ai/dsh-cua-bundle',
-  '@deepseek-ai/dsh-timeline',
-  '@deepseek-ai/dsh-experimental-terminal-bundle',
-  '@deepseek-ai/dsh-experimental-cot-translation-bundle',
-  '@deepseek-ai/dsh-experimental-session-search',
-  '@deepseek-ai/dsh-experimental-session-titles-bundle',
-  '@deepseek-ai/dsh-experimental-badge-skill-bundle',
-  '@deepseek-ai/dsh-experimental-ralph-bundle',
-  '@deepseek-ai/dsh-deepseek-chat-import',
-  '@deepseek-ai/dsh-subagent-codex',
-  '@deepseek-ai/dsh-subagent-claude-code',
+  '@supernova-ai/snh-experimental-inspector-profile',
+  '@supernova-ai/snh-cua-bundle',
+  '@supernova-ai/snh-timeline',
+  '@supernova-ai/snh-experimental-terminal-bundle',
+  '@supernova-ai/snh-experimental-cot-translation-bundle',
+  '@supernova-ai/snh-experimental-session-search',
+  '@supernova-ai/snh-experimental-session-titles-bundle',
+  '@supernova-ai/snh-experimental-badge-skill-bundle',
+  '@supernova-ai/snh-experimental-ralph-bundle',
+  '@supernova-ai/snh-deepseek-chat-import',
+  '@supernova-ai/snh-subagent-codex',
+  '@supernova-ai/snh-subagent-claude-code',
 ]
 
 /** Official bundles the plugin manager marks with the Experimental badge. */
 export const EXPERIMENTAL_BUNDLES: ReadonlySet<string> = new Set([
-  '@deepseek-ai/dsh-cua-bundle',
-  '@deepseek-ai/dsh-cua-mcp',
-  '@deepseek-ai/dsh-timeline',
-  '@deepseek-ai/dsh-experimental-terminal-bundle',
-  '@deepseek-ai/dsh-experimental-voice-input-bundle',
-  '@deepseek-ai/dsh-experimental-auto-review',
-  '@deepseek-ai/dsh-experimental-inspector-profile',
-  '@deepseek-ai/dsh-experimental-forge-bundle',
-  '@deepseek-ai/dsh-experimental-tool-worktree',
-  '@deepseek-ai/dsh-experimental-cot-translation-bundle',
-  '@deepseek-ai/dsh-experimental-session-search',
-  '@deepseek-ai/dsh-experimental-session-titles-bundle',
-  '@deepseek-ai/dsh-experimental-badge-skill-bundle',
-  '@deepseek-ai/dsh-experimental-ralph-bundle',
-  '@deepseek-ai/dsh-experimental-plugin-market-bundle',
-  '@deepseek-ai/dsh-experimental-liveshare',
-  '@deepseek-ai/dsh-deepseek-chat-import',
+  '@supernova-ai/snh-cua-bundle',
+  '@supernova-ai/snh-cua-mcp',
+  '@supernova-ai/snh-timeline',
+  '@supernova-ai/snh-experimental-terminal-bundle',
+  '@supernova-ai/snh-experimental-voice-input-bundle',
+  '@supernova-ai/snh-experimental-auto-review',
+  '@supernova-ai/snh-experimental-inspector-profile',
+  '@supernova-ai/snh-experimental-forge-bundle',
+  '@supernova-ai/snh-experimental-tool-worktree',
+  '@supernova-ai/snh-experimental-cot-translation-bundle',
+  '@supernova-ai/snh-experimental-session-search',
+  '@supernova-ai/snh-experimental-session-titles-bundle',
+  '@supernova-ai/snh-experimental-badge-skill-bundle',
+  '@supernova-ai/snh-experimental-ralph-bundle',
+  '@supernova-ai/snh-experimental-plugin-market-bundle',
+  '@supernova-ai/snh-experimental-liveshare',
+  '@supernova-ai/snh-deepseek-chat-import',
 ])

@@ -3,13 +3,13 @@ import {
   RemoteStream,
   RemoteStreamCarrierError,
   type RemoteStreamOptions,
-} from '@deepseek-ai/dsh-api-gateway/client'
-import { RemoteError } from '@deepseek-ai/dsh-typert-protocol'
-import { streamHandle } from '@deepseek-ai/dsh-remote-mock'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import type { LlmAttemptId } from '@deepseek-ai/dsh-llm'
-import { SESSION_FORMAT_VERSION } from '@deepseek-ai/dsh-session/types'
-import type { RemoteResult, RemoteStreamHandle } from '@deepseek-ai/dsh-typert-protocol'
+} from '@supernova-ai/snh-api-gateway/client'
+import { RemoteError } from '@supernova-ai/snh-typert-protocol'
+import { streamHandle } from '@supernova-ai/snh-remote-mock'
+import { brandString } from '@supernova-ai/snh-brand'
+import type { LlmAttemptId } from '@supernova-ai/snh-llm'
+import { SESSION_FORMAT_VERSION } from '@supernova-ai/snh-session/types'
+import type { RemoteResult, RemoteStreamHandle } from '@supernova-ai/snh-typert-protocol'
 import {
   createSessionControlStream,
   SessionEventStream,

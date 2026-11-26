@@ -5,23 +5,23 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { basename, dirname, isAbsolute, join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { Context } from '@deepseek-ai/cordis'
-import Loader from '@deepseek-ai/cordis-plugin-loader'
-import Include from '@deepseek-ai/cordis-plugin-include'
-import * as Connection from '@deepseek-ai/dsh-client-connection'
-import LocalCredentials from '@deepseek-ai/dsh-credentials-local'
-import WebServer from '@deepseek-ai/dsh-host-webserver'
-import TypertRegistry from '@deepseek-ai/dsh-typert-registry'
-import TypertGateway from '@deepseek-ai/dsh-api-gateway'
-import RemoteAccess from '@deepseek-ai/dsh-api-remote-access'
-import type { PeerScope } from '@deepseek-ai/dsh-typert-protocol'
+import { Context } from '@supernova-ai/cordis'
+import Loader from '@supernova-ai/cordis-plugin-loader'
+import Include from '@supernova-ai/cordis-plugin-include'
+import * as Connection from '@supernova-ai/snh-client-connection'
+import LocalCredentials from '@supernova-ai/snh-credentials-local'
+import WebServer from '@supernova-ai/snh-host-webserver'
+import TypertRegistry from '@supernova-ai/snh-typert-registry'
+import TypertGateway from '@supernova-ai/snh-api-gateway'
+import RemoteAccess from '@supernova-ai/snh-api-remote-access'
+import type { PeerScope } from '@supernova-ai/snh-typert-protocol'
 import { expect, it, onTestFinished, vi } from 'vitest'
 import WebSocket from 'ws'
 import { parseRemoteStreamServerMessage, type RemoteStreamServerMessage } from '../src/stream-protocol.ts'
 import OperatorConnectFixture from './operator-connect-fixture.ts'
 
 it('uses the provider-owned Peer for HTTP and streams, then closes only its scope on unload', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-provider-transport-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-provider-transport-'))
   const ctx = new Context()
   const clients: { socket: WebSocket; closed: Promise<void>; errors: Error[] }[] = []
   onTestFinished(async () => {
@@ -30,7 +30,7 @@ it('uses the provider-owned Peer for HTTP and streams, then closes only its scop
       await closed
     }))
     await ctx.fiber.dispose()
-    if (!isAbsolute(root) || dirname(root) !== resolve(tmpdir()) || !basename(root).startsWith('dsh-provider-transport-')) {
+    if (!isAbsolute(root) || dirname(root) !== resolve(tmpdir()) || !basename(root).startsWith('snh-provider-transport-')) {
       throw new Error(`refusing unexpected fixture cleanup path: ${root}`)
     }
     await rm(root, { recursive: true, force: true })

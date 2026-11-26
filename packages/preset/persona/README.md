@@ -3,13 +3,13 @@ description: "The composable persona row presets mount to give one agent its own
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-persona
+# @supernova-ai/snh-persona
 
 English | [中文](README.zh.md)
 
 ## Summary
 
-`dsh-persona` supplies a persona prefix and suffix through ordinary system sections. Mount it in a preset to customize that preset’s sessions, or globally to override deployment defaults. It can also make the prefix the complete system prompt, suppressing every other section, and turn off optional runtime context for its scope.
+`snh-persona` supplies a persona prefix and suffix through ordinary system sections. Mount it in a preset to customize that preset’s sessions, or globally to override deployment defaults. It can also make the prefix the complete system prompt, suppressing every other section, and turn off optional runtime context for its scope.
 
 ## Table of Contents
 
@@ -30,7 +30,7 @@ Mount this row inside a preset composition to give that preset’s sessions thei
 ### Configuration
 
 ```yaml
-- name: '@deepseek-ai/dsh-persona'
+- name: '@supernova-ai/snh-persona'
   config:
     prefix: You are a terse systems engineer who answers in short commands.
 ```
@@ -42,7 +42,7 @@ Mount this row inside a preset composition to give that preset’s sessions thei
 | `complete` | `false` | Use only the rendered prefix as the system prompt; ignore the suffix |
 | `includeRuntimeContext` | `true` | Include optional runtime context for this agent scope; false suppresses optional contributions without disabling their owning services; required contributions remain |
 
-The generated [configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-persona) is the exhaustive source for every accepted field and its JSDoc.
+The generated [configuration catalog](../../../docs/config-catalog.md#supernova-aisnh-persona) is the exhaustive source for every accepted field and its JSDoc.
 
 ### Persona behavior
 
@@ -85,7 +85,7 @@ Read these pages when the package-level contract is not enough; they move from t
 
 - [agent-presets package](../agent-preset-registry/README.md) — the preset composition this row mounts into.
 - [System prompt subsystem](../../../docs/subsystems/system-prompt.md) — sections, assembly, and the persona values this row configures.
-- [Generated configuration catalog](../../../docs/config-catalog.md#deepseek-aidsh-persona) — every accepted config field and its source declaration.
+- [Generated configuration catalog](../../../docs/config-catalog.md#supernova-aisnh-persona) — every accepted config field and its source declaration.
 
 -----
 

@@ -19,13 +19,13 @@ import { fileURLToPath } from 'node:url'
 import type { Browser, Locator, Page } from 'playwright'
 import { chromium } from 'playwright'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { initialShortcutConfig } from '@deepseek-ai/dsh-client-shortcuts/protocol'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { type ToolCallId, createAssistantMessage, createToolResultMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { Session } from '@deepseek-ai/dsh-session'
+import { initialShortcutConfig } from '@supernova-ai/snh-client-shortcuts/protocol'
+import { brandString } from '@supernova-ai/snh-brand'
+import { type ToolCallId, createAssistantMessage, createToolResultMessage, createUserMessage } from '@supernova-ai/snh-llm'
+import type { Session } from '@supernova-ai/snh-session'
 import {
   INTERACTIVE_SELECTOR, RECALL_MARK, isDraggableAt, type RegionRect,
-} from '@deepseek-ai/dsh-client-web/src/window-drag/regions.ts'
+} from '@supernova-ai/snh-client-web/src/window-drag/regions.ts'
 import { launchWebScaffold, watchConsole, type WebScaffold } from './scaffold.ts'
 import {
   collectWindowSurface, connectFreshWorkspace, expandOwningTurnProcess, newEnglishPage, saveFailureShot,
@@ -194,7 +194,7 @@ describe('web e2e: macOS window drag coverage', () => {
     const page = await newEnglishPage(browser)
     await page.addInitScript(({ value, snapshot }) => {
       // The Desktop platform marker requires the preload's keyboard and preference capabilities.
-      Object.assign(window, { dshDesktop: { protocolVersion: 1,
+      Object.assign(window, { snhDesktop: { protocolVersion: 1,
         keyboard: { subscribe: () => () => {}, closeWindow: async () => {} },
         shortcuts: { get: async () => ({ ...snapshot, status: 'ready' }),
           subscribe: () => () => {}, recording: async () => {},
@@ -204,7 +204,7 @@ describe('web e2e: macOS window drag coverage', () => {
         document.documentElement.setAttribute('data-platform', value)
         if (value === 'win32') {
           document.documentElement.setAttribute('data-windows-titlebar', '')
-          document.documentElement.style.setProperty('--dsh-windows-titlebar-height', '40px')
+          document.documentElement.style.setProperty('--snh-windows-titlebar-height', '40px')
         }
       }
       if (document.documentElement === null) document.addEventListener('DOMContentLoaded', mark, { once: true })
@@ -602,7 +602,7 @@ describe('web e2e: macOS window drag coverage', () => {
     ['darwin', false], ['darwin', true], ['win32', false], ['win32', true],
   ] as const)('%s scopes compact spacing with tabs=%s to the collapsed macOS header at every width', async (platform, hasTabs) => {
     const host = hasTabs ? await launchWebScaffold({
-      profile: { packages: [], bundles: ['@deepseek-ai/dsh-experimental-plugin-market-bundle'] },
+      profile: { packages: [], bundles: ['@supernova-ai/snh-experimental-plugin-market-bundle'] },
     }) : scaffold
     try {
       const { page, tripwire } = await desktopPage(platform, host)

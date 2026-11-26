@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "SuperNova リクエスト認証",
+    "description": "SuperNova へのリクエストごとに API キーまたはアカウントログインを選び、リクエストヘッダーを提供します。"
+  }
+}

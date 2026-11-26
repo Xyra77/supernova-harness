@@ -1,17 +1,17 @@
 /** Raw Session journal transport and message-aligned pagination coverage. */
 
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
-import AgentRegistry, { type Agent, type AssistantStreamFrame } from '@deepseek-ai/dsh-agent'
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
-import SessionStore from '@deepseek-ai/dsh-session'
-import { brandString } from '@deepseek-ai/dsh-brand'
-import { type LlmAttemptId, type ToolCallId, createMessage, createToolResultMessage, createUserMessage } from '@deepseek-ai/dsh-llm'
-import type { MessageSource } from '@deepseek-ai/dsh-llm'
-import type { Session, SessionEvent, SessionId } from '@deepseek-ai/dsh-session'
+import { Context } from '@supernova-ai/cordis'
+import AgentRegistry, { type Agent, type AssistantStreamFrame } from '@supernova-ai/snh-agent'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
+import SessionStore from '@supernova-ai/snh-session'
+import { brandString } from '@supernova-ai/snh-brand'
+import { type LlmAttemptId, type ToolCallId, createMessage, createToolResultMessage, createUserMessage } from '@supernova-ai/snh-llm'
+import type { MessageSource } from '@supernova-ai/snh-llm'
+import type { Session, SessionEvent, SessionId } from '@supernova-ai/snh-session'
 import { HistoryController } from '../src/history/controller.ts'
 import { WebController } from '../src/web/controller.ts'
-import type { SessionFollowFrame, SessionPage, SessionWireEvent } from '@deepseek-ai/dsh-api-session-controller/types'
+import type { SessionFollowFrame, SessionPage, SessionWireEvent } from '@supernova-ai/snh-api-session-controller/types'
 import { createSessionTestRemote, installSessionReadTestServices } from './test-remote.ts'
 
 type CheckpointSource = Extract<MessageSource, { readonly kind: 'compact-checkpoint' }>

@@ -24,7 +24,7 @@ This partially supersedes the per-run override policy in stored credential prece
 
 ## Consequences
 
-- Headless ignores saved API keys, provider records and grants. A provider requiring stored sign-in or the DeepSeek account route fails until the user restores stored authentication; restoring it also restores saved-first precedence.
+- Headless ignores saved API keys, provider records and grants. A provider requiring stored sign-in or the SuperNova account route fails until the user restores stored authentication; restoring it also restores saved-first precedence.
 - Environment and external provider credential chains remain available. Sessions, settings and tools stay composed; omission of the store does not deny filesystem reads by tools.
 - Web, SDK and ACP retain the credential store. Their authentication, login and refresh implementations are unchanged.
 - Profile-level process tests cover all three environment layers, named and native pi-ai authentication, missing keys, ignored malformed storage, restoration and preservation of the document. Existing headless transcripts and real-model workspace tests cover the remaining composition.

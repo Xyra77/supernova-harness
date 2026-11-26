@@ -6,14 +6,14 @@
  * saved grants, and sign-out; once a grant exists, the server's
  * `mcp__tencent-docs__*` tools are listed in the system prompt and each agent
  * loads the ones it needs.
- * @module @deepseek-ai/dsh-tencent-docs
+ * @module @supernova-ai/snh-tencent-docs
  */
 
-import type { Context } from '@deepseek-ai/cordis'
-import z from '@deepseek-ai/schemastery'
-import type {} from '@deepseek-ai/dsh-mcp-account'
-import type {} from '@deepseek-ai/dsh-mcp-manager'
-import type {} from '@deepseek-ai/dsh-system-prompt'
+import type { Context } from '@supernova-ai/cordis'
+import z from '@supernova-ai/schemastery'
+import type {} from '@supernova-ai/snh-mcp-account'
+import type {} from '@supernova-ai/snh-mcp-manager'
+import type {} from '@supernova-ai/snh-system-prompt'
 import { COPY } from './locales.ts'
 
 export const name = 'tencent-docs'
@@ -34,7 +34,7 @@ export interface Config {
   toolLoading: 'eager' | 'on-demand'
 }
 
-/* jscpd:ignore-start -- deliberate twin of dsh-notion and dsh-linear: the same MCP server and guidance registrations. */
+/* jscpd:ignore-start -- deliberate twin of snh-notion and snh-linear: the same MCP server and guidance registrations. */
 /** Runtime configuration schema for the Tencent Docs plugin. */
 export const Config: z<Partial<Config>, Config> = z.object({
   url: z.string().default('https://docs.qq.com/openapi/mcp'),
@@ -62,7 +62,7 @@ export function apply(ctx: Context, config: Config): void {
     text: GUIDANCE,
   })
   ctx.inject(['mcpAccounts'], (scope) => {
-    scope.effect(() => scope.mcpAccounts.register({ server: SERVER_NAME, packageName: '@deepseek-ai/dsh-tencent-docs', copy: COPY }), 'tencent-docs: Plugins page account')
+    scope.effect(() => scope.mcpAccounts.register({ server: SERVER_NAME, packageName: '@supernova-ai/snh-tencent-docs', copy: COPY }), 'tencent-docs: Plugins page account')
   })
 }
 /* jscpd:ignore-end */

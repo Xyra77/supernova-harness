@@ -1,14 +1,14 @@
 /** The packaged `tencent-meeting` entry skill and the upstream guide it indexes. */
 
 import { fileURLToPath } from 'node:url'
-import type { UpstreamSkillSet } from '@deepseek-ai/dsh-upstream-skills'
+import type { UpstreamSkillSet } from '@supernova-ai/snh-upstream-skills'
 
 /** The packaged entry, which opens the guide by its repository path `skills/tmeet-skill/SKILL.md`. */
 export const ENTRY = fileURLToPath(new URL('../skills/tencent-meeting/SKILL.md', import.meta.url))
 
 /**
  * The official tmeet guide at the release the plugin installs, without `scripts/agent_init.py`, which the entry tells the
- * agent to skip because DSH runs `tmeet` by its absolute path.
+ * agent to skip because SNH runs `tmeet` by its absolute path.
  */
 export const TMEET_SKILLS: UpstreamSkillSet = {
   repository: 'TencentCloud/tencentmeeting-cli',

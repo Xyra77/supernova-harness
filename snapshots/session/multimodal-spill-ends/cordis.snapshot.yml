@@ -2,29 +2,29 @@
 # the adapter and re-pins the recorded vision model. The replay catalog declares image input,
 # so the strict read_image gate accepts the route and the tool result carries
 # the durable image block.
-- id: llm-deepseek
-  name: '@deepseek-ai/dsh-llm-deepseek-api-key'
+- id: llm-supernova
+  name: '@supernova-ai/snh-llm-supernova-api-key'
   disabled: true
 
 - id: agent-default-model
-  name: '@deepseek-ai/dsh-agent-default-model'
+  name: '@supernova-ai/snh-agent-default-model'
   config:
     provider: deepseek-official
     model: deepseek-v4-flash-vision-exp
 
 - id: session-persistence-jsonl
-  name: '@deepseek-ai/dsh-session-persistence-jsonl'
+  name: '@supernova-ai/snh-session-persistence-jsonl'
   config:
-    root: !!js dshHomePath('sessions')
+    root: !!js snhHomePath('sessions')
     compression: none
 
 - id: agent-instructions
-  name: '@deepseek-ai/dsh-agent-instructions'
+  name: '@supernova-ai/snh-agent-instructions'
   config:
     maxBytes: 65536
 
 - id: system-prompt
-  name: '@deepseek-ai/dsh-system-prompt'
+  name: '@supernova-ai/snh-system-prompt'
   config:
     personaPrefix: |
       You are a coding assistant powered by the {{model}} model. Your bash tool runs under a file sandbox — a `[sandbox: file access denied …]` result is policy, not a command bug.
@@ -33,11 +33,11 @@
 
 - insert:
     - id: llm-replay
-      name: '@deepseek-ai/dsh-llm-replay'
+      name: '@supernova-ai/snh-llm-replay'
       config:
         providers:
           - id: deepseek-official
-            name: DeepSeek
+            name: SuperNova
             models:
               - id: deepseek-v4-flash
                 inputModalities: [text]
@@ -48,10 +48,10 @@
                 imageRequestTokens: 169
 
 - id: attachment-local
-  name: '@deepseek-ai/dsh-attachment-local'
+  name: '@supernova-ai/snh-attachment-local'
 
 - id: spill-policy
-  name: '@deepseek-ai/dsh-spill-policy'
+  name: '@supernova-ai/snh-spill-policy'
   config:
     maxInlineTokens: 1000
 
@@ -59,13 +59,13 @@
     - name: './fixture.mjs'
 
 - id: spill-local
-  name: '@deepseek-ai/dsh-spill-local'
+  name: '@supernova-ai/snh-spill-local'
   config:
-    root: !!js process.env.DSH_SNAPSHOT_SPILL_ROOT ?? './.spill'
+    root: !!js process.env.SNH_SNAPSHOT_SPILL_ROOT ?? './.spill'
 
 - insert:
     - id: snapshot-spill-locators
       name: ../../../scripts/snapshot-spill-locators.ts
       config:
-        root: !!js process.env.DSH_SNAPSHOT_SPILL_ROOT
-        locatorRoot: !!js process.env.DSH_SNAPSHOT_SPILL_LOCATOR_ROOT
+        root: !!js process.env.SNH_SNAPSHOT_SPILL_ROOT
+        locatorRoot: !!js process.env.SNH_SNAPSHOT_SPILL_LOCATOR_ROOT

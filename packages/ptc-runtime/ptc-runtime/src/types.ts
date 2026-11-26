@@ -3,11 +3,11 @@
  * {@link ../index.ts | PtcRuntime} and what it gets back. Pure types — no
  * runtime code lives here.
  *
- * @module @deepseek-ai/dsh-ptc-runtime/src/types
+ * @module @supernova-ai/snh-ptc-runtime/src/types
  */
 
-import type { ImageAttachmentRef } from '@deepseek-ai/dsh-attachment'
-import type { SandboxEnforcement, SandboxExecutionPolicy, SandboxMode } from '@deepseek-ai/dsh-sandbox'
+import type { ImageAttachmentRef } from '@supernova-ai/snh-attachment'
+import type { SandboxEnforcement, SandboxExecutionPolicy, SandboxMode } from '@supernova-ai/snh-sandbox'
 
 /** Raw text fragments and inspected images in emission order; concatenate adjacent text without separators. */
 export type PtcOutput = { type: 'text'; text: string } | { type: 'image'; attachment: ImageAttachmentRef }

@@ -1,10 +1,10 @@
-import SessionProjectionRegistry from '@deepseek-ai/dsh-session-projection'
+import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import { describe, expect, it } from 'vitest'
-import { Context } from '@deepseek-ai/cordis'
+import { Context } from '@supernova-ai/cordis'
 import SystemPrompt, {
   AssembleContext, PromptAssembly, renderContextSections, renderContextSnapshot, renderPrompt,
-} from '@deepseek-ai/dsh-system-prompt'
-import type { PromptContextOrderName, PromptPresentation, PromptSectionOrderName } from '@deepseek-ai/dsh-system-prompt'
+} from '@supernova-ai/snh-system-prompt'
+import type { PromptContextOrderName, PromptPresentation, PromptSectionOrderName } from '@supernova-ai/snh-system-prompt'
 
 /**
  * Every assembly carries the plugin's own built-ins — `harness:identity`
@@ -13,7 +13,7 @@ import type { PromptContextOrderName, PromptPresentation, PromptSectionOrderName
  * their own sections; the built-ins' behavior is pinned by its own describe.
  */
 const BUILT_IN = ['harness:identity', 'deployment:persona-prefix', 'deployment:persona-suffix']
-const IDENTITY = 'You are an AI agent powered by DeepSeek Harness.'
+const IDENTITY = 'You are an AI agent powered by SuperNova Harness.'
 const SECTION_ORDER_NAMES = [
   'HARNESS_IDENTITY', 'DEPLOYMENT_PERSONA_PREFIX',
   'PLAN_POLICY', 'TEAM_POLICY', 'PTC_ONLY', 'FILE_REFERENCE', 'TOOL_BASH',
@@ -171,7 +171,7 @@ describe('SystemPrompt', () => {
     try {
       await ctx.plugin(SessionProjectionRegistry)
       await ctx.plugin(SystemPrompt, { personaPrefix: 'Model {{model}}.', personaSuffix: 'In {{cwd}} on {{platform}}.' })
-      let environment = { model: 'model-a', cwd: '/alice/project', platform: 'darwin', source: '/alice/dsh', url: 'http://127.0.0.1:3080' }
+      let environment = { model: 'model-a', cwd: '/alice/project', platform: 'darwin', source: '/alice/snh', url: 'http://127.0.0.1:3080' }
       for (const key of ['model', 'cwd', 'platform'] as const) {
         ctx.systemPrompt.variable(key, () => environment[key])
       }
@@ -187,11 +187,11 @@ describe('SystemPrompt', () => {
         name: 'web', order: ctx.systemPrompt.getSectionOrder('WEB_SURFACE'), text: () => environment.url,
       })
       const first = renderPrompt(await ctx.systemPrompt.assemble())
-      environment = { model: 'model-a', cwd: 'C:/bob/project', platform: 'win32', source: 'C:/bob/dsh', url: 'http://127.0.0.1:4080' }
+      environment = { model: 'model-a', cwd: 'C:/bob/project', platform: 'win32', source: 'C:/bob/snh', url: 'http://127.0.0.1:4080' }
       const second = renderPrompt(await ctx.systemPrompt.assemble())
       const prefix = [IDENTITY, 'Model model-a.', ...reusable].join('\n\n') + '\n\n'
-      expect(first).toBe(prefix + '/alice/dsh\n\nhttp://127.0.0.1:3080\n\nIn /alice/project on darwin.')
-      expect(second).toBe(prefix + 'C:/bob/dsh\n\nhttp://127.0.0.1:4080\n\nIn C:/bob/project on win32.')
+      expect(first).toBe(prefix + '/alice/snh\n\nhttp://127.0.0.1:3080\n\nIn /alice/project on darwin.')
+      expect(second).toBe(prefix + 'C:/bob/snh\n\nhttp://127.0.0.1:4080\n\nIn C:/bob/project on win32.')
       environment.model = 'model-b'
       expect(renderPrompt(await ctx.systemPrompt.assemble()))
         .toBe(second.replace('Model model-a.', 'Model model-b.'))
@@ -231,7 +231,7 @@ describe('SystemPrompt', () => {
     it('registers the harness identity and the configured deployment persona', async () => {
       const ctx = new Context()
       await ctx.plugin(SessionProjectionRegistry)
-      await ctx.plugin(SystemPrompt, { personaPrefix: 'You are DeepSeek Harness.' })
+      await ctx.plugin(SystemPrompt, { personaPrefix: 'You are SuperNova Harness.' })
 
       const assembly = await ctx.systemPrompt.assemble()
       expect(assembly.sections.map(s => s.name)).toEqual([
@@ -239,7 +239,7 @@ describe('SystemPrompt', () => {
         'deployment:persona-prefix',
         'deployment:persona-suffix',
       ])
-      expect(renderPrompt(assembly)).toBe(`${IDENTITY}\n\nYou are DeepSeek Harness.`)
+      expect(renderPrompt(assembly)).toBe(`${IDENTITY}\n\nYou are SuperNova Harness.`)
     })
 
     it('renders no persona section for a persona-less deployment (empty default)', async () => {
@@ -294,7 +294,7 @@ describe('SystemPrompt', () => {
   it('assembles sections in order with context-resolved text and collected tools', async () => {
     const ctx = new Context()
     await ctx.plugin(SessionProjectionRegistry)
-    await ctx.plugin(SystemPrompt, { personaPrefix: 'You are DeepSeek Harness.' })
+    await ctx.plugin(SystemPrompt, { personaPrefix: 'You are SuperNova Harness.' })
 
     ctx.systemPrompt.section({ name: 'cwd', order: 20, text: () => 'cwd: /tmp' })
     ctx.systemPrompt.section({ name: 'rules', order: 10, text: 'Be precise.' })
@@ -304,14 +304,14 @@ describe('SystemPrompt', () => {
 
     const assembly = await ctx.systemPrompt.assemble()
     expect(assembly.sections.map(s => s.name)).toEqual(['harness:identity', 'deployment:persona-prefix', 'rules', 'cwd', 'deployment:persona-suffix'])
-    expect(assembly.sections.map(s => s.text)).toEqual([IDENTITY, 'You are DeepSeek Harness.', 'Be precise.', 'cwd: /tmp', ''])
+    expect(assembly.sections.map(s => s.text)).toEqual([IDENTITY, 'You are SuperNova Harness.', 'Be precise.', 'cwd: /tmp', ''])
     expect(assembly.contexts).toEqual([
       { name: 'earlier', text: 'context 1' },
       { name: 'later', text: 'context 2' },
     ])
     expect(assembly.tools).toEqual([{ name: 'echo', description: 'echo back', parameters: {} }])
     expect(assembly.variables).toEqual({})
-    expect(renderPrompt(assembly)).toBe(`${IDENTITY}\n\nYou are DeepSeek Harness.\n\nBe precise.\n\ncwd: /tmp`)
+    expect(renderPrompt(assembly)).toBe(`${IDENTITY}\n\nYou are SuperNova Harness.\n\nBe precise.\n\ncwd: /tmp`)
     expect(renderContextSnapshot(assembly)).toBe('Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\ncontext 1\n\ncontext 2')
   })
 
@@ -869,6 +869,6 @@ describe('SystemPrompt', () => {
   })
 })
 
-function admittedMessages(assembly: import('@deepseek-ai/dsh-system-prompt').PromptAssembly) {
+function admittedMessages(assembly: import('@supernova-ai/snh-system-prompt').PromptAssembly) {
   return assembly.systemUpdates(false).map(update => update.message)
 }

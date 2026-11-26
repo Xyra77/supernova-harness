@@ -4,7 +4,7 @@
 
 ## 概要
 
-通过 `ctx.systemPrompt.section()` 注册具名指令，已接受的 agent（智能体）步骤会首次引入指令、发送变化后的文本，并在其拥有者卸载后撤回指令。本教程假定你已有一个挂载在 `dsh` 配置中的 Cordis 插件，且配置提供 `systemPrompt`；创建插件的步骤见[包检查清单](adding-a-package.zh.md)。
+通过 `ctx.systemPrompt.section()` 注册具名指令，已接受的 agent（智能体）步骤会首次引入指令、发送变化后的文本，并在其拥有者卸载后撤回指令。本教程假定你已有一个挂载在 `snh` 配置中的 Cordis 插件，且配置提供 `systemPrompt`；创建插件的步骤见[包检查清单](adding-a-package.zh.md)。
 
 ## 目录
 
@@ -23,8 +23,8 @@
 声明服务依赖，并通过插件的 `ctx` 注册。Cordis 管理返回的清理函数，在插件卸载时清理注册。
 
 ```ts
-import type { Context } from '@deepseek-ai/cordis'
-import '@deepseek-ai/dsh-system-prompt'
+import type { Context } from '@supernova-ai/cordis'
+import '@supernova-ai/snh-system-prompt'
 
 export const name = 'example-response-style'
 export const inject = ['systemPrompt']
@@ -49,8 +49,8 @@ export function apply(ctx: Context) {
 对于会变化的指令，保留一次注册，让同步 `text` 回调读取当前状态。在插件的 `apply(ctx)` 中调用此辅助函数，再从你负责的状态变化处理器调用返回的 `update()`。
 
 ```ts
-import type { Context } from '@deepseek-ai/cordis'
-import '@deepseek-ai/dsh-system-prompt'
+import type { Context } from '@supernova-ai/cordis'
+import '@supernova-ai/snh-system-prompt'
 
 export function registerInstructions(ctx: Context, initialText: string) {
   let currentText = initialText

@@ -43,7 +43,7 @@ describe('branchNameProblem', () => {
     expect(branchNameProblem(name)).toBe(problem)
   })
 
-  it.each(['fix-login', 'dsh-0a1b2c3d-9f3e', 'fix/login', 'a./b', 'a/@/b', 'é', 'HEAD'])('accepts %j', (name) => {
+  it.each(['fix-login', 'snh-0a1b2c3d-9f3e', 'fix/login', 'a./b', 'a/@/b', 'é', 'HEAD'])('accepts %j', (name) => {
     expect(branchNameProblem(name)).toBeNull()
   })
 

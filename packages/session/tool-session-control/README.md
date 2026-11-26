@@ -3,7 +3,7 @@ description: "Enable session_send_message in a Web profile so an Agent can messa
 kind: "package-reference"
 ---
 
-# @deepseek-ai/dsh-tool-session-control
+# @supernova-ai/snh-tool-session-control
 
 English | [中文](README.zh.md)
 
@@ -25,7 +25,7 @@ Let an Agent in a Web profile send a message to another ordinary Session, includ
 <a id="use-this-package"></a>
 ## Use this package
 
-Enable the disabled `tool-session-control` row of the `@deepseek-ai/dsh-web-app` bundle with a profile patch; the [user guide](../../../docs/user/session-control.md) shows the patch and how to inspect the composed row.
+Enable the disabled `tool-session-control` row of the `@supernova-ai/snh-web-app` bundle with a profile patch; the [user guide](../../../docs/user/session-control.md) shows the patch and how to inspect the composed row.
 
 ### When to choose it
 
@@ -38,7 +38,7 @@ Enable it when Agents in a Web profile must hand instructions or findings to ind
   disabled: false
 ```
 
-The package declares no `Config` fields. It injects `ctx.tools`, `ctx.sessionController` from [`@deepseek-ai/dsh-api-session-controller`](../../api/session-controller/README.md), and `ctx.workspaceRegistry` from [`@deepseek-ai/dsh-workspace`](../../workspace/workspace/README.md); the dsh-web-app bundle mounts both Host services, and a composition without them registers no tool.
+The package declares no `Config` fields. It injects `ctx.tools`, `ctx.sessionController` from [`@supernova-ai/snh-api-session-controller`](../../api/session-controller/README.md), and `ctx.workspaceRegistry` from [`@supernova-ai/snh-workspace`](../../workspace/workspace/README.md); the snh-web-app bundle mounts both Host services, and a composition without them registers no tool.
 
 ### Delivery and failures
 
@@ -63,7 +63,7 @@ Call `session_send_message({ session_id: "target-id", message: "Please review th
 <details>
 <summary>Implementation internals — click to expand</summary>
 
-The tool takes the sender from the runtime's calling Agent, so the model cannot choose a sender identity. It checks the Workspace registry's archive list, waits for the Session controller's activation while racing the caller's signal, then rechecks cancellation and the archive list. It builds the message with the `agent-message` source that `@deepseek-ai/dsh-subagent` declares, records the caller's `senderSessionId`, prefixes the text with `Session <caller session id> sent a message: `, and calls `steer()` on the target. The prefix differs from the `Agent <name> sent a message: ` prefix of `send_message`, whose names resolve only inside one subagent tree. Inbox failures propagate unchanged. The [tool pipeline](../../core/tools/README.md) applies its ordinary cancellation behavior. The Host presenter shows the target id and message text; the [Web tool card](../../client/ui-tool/README.md) derives the accepted state and message ID from the recorded result.
+The tool takes the sender from the runtime's calling Agent, so the model cannot choose a sender identity. It checks the Workspace registry's archive list, waits for the Session controller's activation while racing the caller's signal, then rechecks cancellation and the archive list. It builds the message with the `agent-message` source that `@supernova-ai/snh-subagent` declares, records the caller's `senderSessionId`, prefixes the text with `Session <caller session id> sent a message: `, and calls `steer()` on the target. The prefix differs from the `Agent <name> sent a message: ` prefix of `send_message`, whose names resolve only inside one subagent tree. Inbox failures propagate unchanged. The [tool pipeline](../../core/tools/README.md) applies its ordinary cancellation behavior. The Host presenter shows the target id and message text; the [Web tool card](../../client/ui-tool/README.md) derives the accepted state and message ID from the recorded result.
 
 ### Source map
 
@@ -92,7 +92,7 @@ The tool takes the sender from the runtime's calling Agent, so the model cannot 
 
 #### What the model sees
 
-The [tool catalog](../../../docs/tool-catalog.md#deepseek-aidsh-tool-session-control) defines the exact schema. The description instructs the model: "Use this tool only when the user explicitly asks you to send a message to another session." The schema exposes neither sender identity nor permission overrides. A successful call returns one JSON text block, `{"message_id":"..."}`, that confirms inbox insertion, not completion or a reply. Target cancellation or disposal can leave the message unprocessed. A rejected call returns `Error: <message>`; a subagent target reads `session "<id>" is not available to session_send_message`.
+The [tool catalog](../../../docs/tool-catalog.md#supernova-aisnh-tool-session-control) defines the exact schema. The description instructs the model: "Use this tool only when the user explicitly asks you to send a message to another session." The schema exposes neither sender identity nor permission overrides. A successful call returns one JSON text block, `{"message_id":"..."}`, that confirms inbox insertion, not completion or a reply. Target cancellation or disposal can leave the message unprocessed. A rejected call returns `Error: <message>`; a subagent target reads `session "<id>" is not available to session_send_message`.
 
 #### Token effect
 
@@ -120,7 +120,7 @@ Append-only in the recipient; the message joins at its next input boundary witho
 
 <a id="known-limitations-and-deferred-work"></a>
 
-- **Web compositions only** — only the dsh-web-app bundle declares the row; the `headless`, `sdk`, `sdk-minimal`, and `acp` profiles mount no Session controller and offer no `session_send_message`.
+- **Web compositions only** — only the snh-web-app bundle declares the row; the `headless`, `sdk`, `sdk-minimal`, and `acp` profiles mount no Session controller and offer no `session_send_message`.
 - **Subagent targets are unavailable** — a subagent can send to an ordinary Session, but that Session cannot reply to it with this tool. The separate `send_message` tool can address only members of the caller's own subagent tree.
 - **Automatic reply loops** — automatic replies can repeatedly wake two Sessions and consume tokens. The explicit-user-request instruction relies on the model; the runtime applies no message-rate or hop limit.
 - **Text only, no reply wait** — messages carry text only; the tool attaches no files and does not wait for the recipient's turn or answer.

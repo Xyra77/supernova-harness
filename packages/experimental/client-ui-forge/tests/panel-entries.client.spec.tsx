@@ -6,14 +6,14 @@
  */
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { RemoteHostFacts } from '@deepseek-ai/dsh-api-remotes/client'
-import type { MergeRequest } from '@deepseek-ai/dsh-experimental-forge/types'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { bindSnapshotSelector, contextMenuHook, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { ContextMenuTarget } from '@deepseek-ai/dsh-client-ui-context-menu/client'
-import type { PanelFoldProps } from '@deepseek-ai/dsh-client-ui-session-panel/client'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
-import { brandString } from '@deepseek-ai/dsh-brand'
+import type { RemoteHostFacts } from '@supernova-ai/snh-api-remotes/client'
+import type { MergeRequest } from '@supernova-ai/snh-experimental-forge/types'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import { bindSnapshotSelector, contextMenuHook, makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import type { ContextMenuTarget } from '@supernova-ai/snh-client-ui-context-menu/client'
+import type { PanelFoldProps } from '@supernova-ai/snh-client-ui-session-panel/client'
+import type { SessionId } from '@supernova-ai/snh-session/types'
+import { brandString } from '@supernova-ai/snh-brand'
 import {
   ChangeRequestsActions, ChangeRequestsSection, type ChangeRequestsActionsProps, type ChangeRequestsSectionProps,
 } from '../src/client/ChangeRequestsSection.tsx'
@@ -481,9 +481,9 @@ describe('CheckoutRow', () => {
     Object.defineProperty(name, 'scrollWidth', { value: 240, configurable: true })
     Object.defineProperty(name, 'clientWidth', { value: 120, configurable: true })
     fireEvent.pointerEnter(element)
-    expect([name.hasAttribute('data-marquee'), name.style.getPropertyValue('--dsh-marquee-range')]).toEqual([true, '120px'])
+    expect([name.hasAttribute('data-marquee'), name.style.getPropertyValue('--snh-marquee-range')]).toEqual([true, '120px'])
     fireEvent.pointerLeave(element)
-    expect([name.hasAttribute('data-marquee'), name.style.getPropertyValue('--dsh-marquee-range')]).toEqual([false, ''])
+    expect([name.hasAttribute('data-marquee'), name.style.getPropertyValue('--snh-marquee-range')]).toEqual([false, ''])
   })
 
   it('names a detached HEAD with its commit and a linked worktree', () => {
@@ -495,14 +495,14 @@ describe('CheckoutRow', () => {
   })
 
   it('names the worktree this Session created with its base', () => {
-    const b = row(ready({ directory: '/work/repo-dsh', worktree: worktree({ created: created({ path: '/work/repo-dsh' }) }) },
-      { root: '/work/repo-dsh', branch: 'other', linked: true }))
+    const b = row(ready({ directory: '/work/repo-snh', worktree: worktree({ created: created({ path: '/work/repo-snh' }) }) },
+      { root: '/work/repo-snh', branch: 'other', linked: true }))
     expect(b.element()?.textContent).toBe(`otherWorktree · from main${en['checkout.worktreeActions']}`)
   })
 
   it('names the base commit of a created worktree without a base branch, and a checkout without a commit', () => {
-    const b = row(ready({ directory: '/work/repo-dsh', worktree: worktree({ created: created({ path: '/work/repo-dsh', from: null }) }) },
-      { root: '/work/repo-dsh', branch: null, linked: true }))
+    const b = row(ready({ directory: '/work/repo-snh', worktree: worktree({ created: created({ path: '/work/repo-snh', from: null }) }) },
+      { root: '/work/repo-snh', branch: null, linked: true }))
     expect(b.element()?.textContent).toBe(`${en['checkout.detached']} · 0a1b2c3Worktree · from ccccccc${en['checkout.worktreeActions']}`)
     cleanup()
     expect(row(ready({}, { branch: null, commit: null })).element()?.textContent)
@@ -515,7 +515,7 @@ describe('CheckoutRow', () => {
     expect(element.hasAttribute('data-missing')).toBe(true)
     // A removed worktree has no directory to act on, so the row has no menu part.
     expect(rowParts(element)).toBe('body(icon content) trailing')
-    expect(within(element).getByText('dsh/0a1b2c3d')).toBeTruthy()
+    expect(within(element).getByText('snh/0a1b2c3d')).toBeTruthy()
     expect(within(element).getByText(en['missing.title'])).toBeTruthy()
     expect(b.renderFactorySlot).not.toHaveBeenCalledWith('contextMenu.button', expect.anything())
     fireEvent.click(within(element).getByRole('button', { name: en['checkout.restore'] }))

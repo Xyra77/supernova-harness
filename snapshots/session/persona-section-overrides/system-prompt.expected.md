@@ -1,4 +1,4 @@
-You are an AI agent powered by DeepSeek Harness.
+You are an AI agent powered by SuperNova Harness.
 
 Persona instructions: read task.txt.
 
@@ -42,7 +42,7 @@ Complete persona instructions: read task.txt again.
 
 From this point onward, the following system-prompt sections replace all earlier system-prompt sections.
 
-You are an AI agent powered by DeepSeek Harness.
+You are an AI agent powered by SuperNova Harness.
 
 Persona instructions: read task.txt.
 

@@ -6,7 +6,7 @@ import { mergeReportDirectories, renderMergedReport } from '../benchmarks/suppor
 
 /** A private directory removed when the current test finishes. */
 async function temporaryRoot(): Promise<string> {
-  const root = await mkdtemp(join(tmpdir(), 'dsh-benchmark-report-'))
+  const root = await mkdtemp(join(tmpdir(), 'snh-benchmark-report-'))
   onTestFinished(() => rm(root, { recursive: true, force: true }))
   return root
 }

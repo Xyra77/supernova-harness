@@ -2,11 +2,11 @@ import { mkdtemp, mkdir, readFile, readdir, rm, symlink } from 'node:fs/promises
 import { homedir } from 'node:os'
 import { createServer, type Socket } from 'node:net'
 import { delimiter, join } from 'node:path'
-import { Context } from '@deepseek-ai/cordis'
-import Sandbox from '@deepseek-ai/dsh-sandbox-local'
-import { SandboxUnavailableError } from '@deepseek-ai/dsh-sandbox'
+import { Context } from '@supernova-ai/cordis'
+import Sandbox from '@supernova-ai/snh-sandbox-local'
+import { SandboxUnavailableError } from '@supernova-ai/snh-sandbox'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
-import type { PtcBindingFunction, PtcBindingNamespace, PtcRunRequest } from '@deepseek-ai/dsh-ptc-runtime'
+import type { PtcBindingFunction, PtcBindingNamespace, PtcRunRequest } from '@supernova-ai/snh-ptc-runtime'
 import type { Config } from '../src/index.ts'
 import { mountRuntime } from './setup.ts'
 
@@ -36,7 +36,7 @@ describe.each(modes)('Node program process in $executionMode with scoped REPL $r
   const retained = mode.executionMode !== 'per-call'
 
   async function setup(config: Config = {}, policy: 'read-only' | 'workspace-write' | 'danger-full-access' = 'danger-full-access') {
-    const root = await mkdtemp(join(homedir(), '.dsh-node-runtime-test-'))
+    const root = await mkdtemp(join(homedir(), '.snh-node-runtime-test-'))
     const cwd = join(root, 'workspace')
     await mkdir(cwd)
     const ctx = new Context()
@@ -93,23 +93,23 @@ describe.each(modes)('Node program process in $executionMode with scoped REPL $r
     onTestFinished(() => { vi.unstubAllEnvs() })
     vi.stubEnv('TEMP', temp)
     vi.stubEnv('TMP', tmp)
-    vi.stubEnv('DSH_TEST_RUNTIME_SECRET', 'must-not-inherit')
+    vi.stubEnv('SNH_TEST_RUNTIME_SECRET', 'must-not-inherit')
     const childCode = 'const fs=require("node:fs"); const path=require("node:path"); const temp=require("node:os").tmpdir(); const file=path.join(temp,"native-temp.txt"); fs.writeFileSync(file,"native-temp"); fs.writeFileSync("native-observation.json",JSON.stringify({file,temp,env:Object.keys(process.env)}));'
     const result = await run({
       program: `const {spawnSync}=await import("node:child_process"); const child=spawnSync(process.execPath,["-e",${JSON.stringify(childCode)}],{stdio:"inherit"}); if(child.status!==0) throw new Error(child.error?.message ?? "native child failed"); const native=JSON.parse((await import("node:fs")).readFileSync("native-observation.json","utf8")); const observed=await tools.inspect({path:native.file}); ${completion('{env:Object.keys(process.env),native,observed}')};`,
       bindings: bindings({ inspect: async (args) => {
         const path = (args as { path: string }).path
-        expect(path.startsWith(`${temp}\\dsh-`)).toBe(true)
+        expect(path.startsWith(`${temp}\\snh-`)).toBe(true)
         return await readFile(path, 'utf8')
       } }),
     })
     expect(result.error).toBeUndefined()
     const value = result.value as { env: string[]; native: { env: string[]; temp: string }; observed: string }
     expect(value.env).toEqual([])
-    expect(value.native.env).not.toContain('DSH_TEST_RUNTIME_SECRET')
-    expect(value.native.temp.startsWith(`${temp}\\dsh-`)).toBe(true)
+    expect(value.native.env).not.toContain('SNH_TEST_RUNTIME_SECRET')
+    expect(value.native.temp.startsWith(`${temp}\\snh-`)).toBe(true)
     expect(value.observed).toBe('native-temp')
-    expect((await readdir(join(tmp, 'dsh-acl-locks'))).some(name => name.endsWith('.lock'))).toBe(true)
+    expect((await readdir(join(tmp, 'snh-acl-locks'))).some(name => name.endsWith('.lock'))).toBe(true)
   })
 
   it('returns binding values and preserves typed binding rejection', async () => {
@@ -125,10 +125,10 @@ describe.each(modes)('Node program process in $executionMode with scoped REPL $r
   it('executes TypeScript binding names and own error members without cross-language exclusions', async () => {
     const { run } = await setup()
     const result = await run({
-      program: `const value = await $tools.echo({}); let caught; try { await __dsh_main__.fail({}) } catch (error) { caught = [value, error instanceof lambda, error.name, error.__proto__, error.message]; } ${completion('caught')}`,
+      program: `const value = await $tools.echo({}); let caught; try { await __snh_main__.fail({}) } catch (error) { caught = [value, error instanceof lambda, error.name, error.__proto__, error.message]; } ${completion('caught')}`,
       bindings: [
         { global: '$tools', functions: { echo: async () => 'ok' } },
-        { global: '__dsh_main__', functions: { fail: async () => { throw new Error('denied') } }, errorClass: { name: 'lambda', memberNameProperty: '__proto__' } },
+        { global: '__snh_main__', functions: { fail: async () => { throw new Error('denied') } }, errorClass: { name: 'lambda', memberNameProperty: '__proto__' } },
       ],
     })
     expect(result.error).toBeUndefined()

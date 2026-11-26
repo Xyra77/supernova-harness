@@ -5,10 +5,10 @@
  */
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
-import { bindSnapshotSelector, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
-import type { ChangeRequestIssue, ChangeRequestLabel, ChangeRequestSummary } from '@deepseek-ai/dsh-experimental-forge/types'
+import { createSnapshotStore } from '@supernova-ai/snh-client-store'
+import { bindSnapshotSelector, makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import type { PropsRuntime } from '@supernova-ai/snh-client-ui-slots'
+import type { ChangeRequestIssue, ChangeRequestLabel, ChangeRequestSummary } from '@supernova-ai/snh-experimental-forge/types'
 import { en } from '../src/client/locales.ts'
 import { fittingLabels, ReviewLabels } from '../src/client/review-page/ReviewLabels.tsx'
 import { ReviewList, type ReviewListProps } from '../src/client/review-page/ReviewList.tsx'
@@ -294,7 +294,7 @@ describe('ReviewList compact view', () => {
     Object.defineProperty(title, 'clientWidth', { value: 100, configurable: true })
     fireEvent.pointerEnter(item)
     expect(title.dataset.marquee).toBe('')
-    expect(title.style.getPropertyValue('--dsh-marquee-range')).toBe('200px')
+    expect(title.style.getPropertyValue('--snh-marquee-range')).toBe('200px')
     fireEvent.pointerLeave(item)
     expect(title.dataset.marquee).toBeUndefined()
   })

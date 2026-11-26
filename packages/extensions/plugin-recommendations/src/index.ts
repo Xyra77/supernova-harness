@@ -1,13 +1,13 @@
 /** Explicit-need official plugin recommendations: an `enable_official_plugin` card offers one plugin, and only a human click enables it. */
 import { z } from 'zod'
-import { Service, type Context } from '@deepseek-ai/cordis'
-import { Remote, TypertRemoteService } from '@deepseek-ai/dsh-typert-protocol'
-import type { Agent } from '@deepseek-ai/dsh-agent'
-import { isPluginStopping } from '@deepseek-ai/dsh-action-cards'
-import type { ActionCardDecision, ActionCardId, ActionCardProposalOf, ActionCardResult } from '@deepseek-ai/dsh-action-cards'
-import type {} from '@deepseek-ai/dsh-plugin-manager'
-import type { ChangeResult } from '@deepseek-ai/dsh-plugin-manager/types'
-import type {} from '@deepseek-ai/dsh-skill'
+import { Service, type Context } from '@supernova-ai/cordis'
+import { Remote, TypertRemoteService } from '@supernova-ai/snh-typert-protocol'
+import type { Agent } from '@supernova-ai/snh-agent'
+import { isPluginStopping } from '@supernova-ai/snh-action-cards'
+import type { ActionCardDecision, ActionCardId, ActionCardProposalOf, ActionCardResult } from '@supernova-ai/snh-action-cards'
+import type {} from '@supernova-ai/snh-plugin-manager'
+import type { ChangeResult } from '@supernova-ai/snh-plugin-manager/types'
+import type {} from '@supernova-ai/snh-skill'
 import { eligible, registerOfficialPluginsSkill } from './skill.ts'
 import type { PluginData, PluginDetails, PluginPhase, RecommendationDetails } from './types.ts'
 export type * from './types.ts'
@@ -17,7 +17,7 @@ export const name = 'plugin-recommendations'
 /** Services the plugin uses; `actionCards` owns card state and user actions. */
 export const inject = ['pluginManager', 'agents', 'skills', 'actionCards']
 
-declare module '@deepseek-ai/cordis' {
+declare module '@supernova-ai/cordis' {
   interface Context { pluginRecommendations: PluginRecommendations }
 }
 
@@ -61,7 +61,7 @@ export class PluginRecommendations extends TypertRemoteService {
       action: ACTION, details: detailsSchema,
       verbs: { enable: { global: true } },
       openPhases: ['failed', 'unconfirmed'],
-      statusGuidance: 'Plugin cards: enabled means the plugin is on now, or after a DSH restart when application is restart-required; '
+      statusGuidance: 'Plugin cards: enabled means the plugin is on now, or after a SNH restart when application is restart-required; '
         + 'already-enabled means it was on before; failed, or unconfirmed when a reload cut enabling off, can be retried from the card; '
         + 'dismissed means the user declined it, so do not offer it again in this conversation; enabling authorizes nothing beyond that plugin.',
       // Every action, including Not now, first learns whether an interrupted enable has since landed.

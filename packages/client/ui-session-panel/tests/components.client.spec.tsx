@@ -2,10 +2,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, createEvent, fireEvent, render, screen } from '@testing-library/react'
 import { useRef, type ReactNode } from 'react'
-import { useModalLayer } from '@deepseek-ai/dsh-client-ui-primitives'
-import { bindSnapshotSelector, contextMenuHook, makeTranslate } from '@deepseek-ai/dsh-client-test-runtime'
-import type { FactoryComponentPropsOf } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import { useModalLayer } from '@supernova-ai/snh-client-ui-primitives'
+import { bindSnapshotSelector, contextMenuHook, makeTranslate } from '@supernova-ai/snh-client-test-runtime'
+import type { FactoryComponentPropsOf } from '@supernova-ai/snh-client-ui-slots'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import { EnvironmentSection } from '../src/client/EnvironmentSection.tsx'
 import { PanelDetails } from '../src/client/PanelDetails.tsx'
 import { PanelFold } from '../src/client/PanelFold.tsx'
@@ -67,7 +67,7 @@ describe('SessionPanelToggle', () => {
     render(<SessionPanelToggle {...props} />)
     const button = screen.getByRole('button', { name: '会话面板 需要处理' })
     expect(button.getAttribute('aria-expanded')).toBe('true')
-    expect(button.getAttribute('aria-controls')).toBe(`dsh-session-panel-${SID}`)
+    expect(button.getAttribute('aria-controls')).toBe(`snh-session-panel-${SID}`)
     expect(renderSlot).toHaveBeenCalledWith('conversation.session.panel.indicator', { panelShown: true })
   })
 
@@ -228,10 +228,10 @@ describe('SessionPanel', () => {
     render(<SessionPanel {...props} />)
     const panel = screen.getByRole('complementary', { name: '会话面板' })
     expect(panel.getAttribute('data-session-panel')).toBe('docked')
-    expect(panel.id).toBe(`dsh-session-panel-${SID}`)
+    expect(panel.id).toBe(`snh-session-panel-${SID}`)
     const regions = screen.getAllByRole('region')
     expect(regions.map(region => region.getAttribute('aria-labelledby'))).toEqual([
-      `dsh-session-panel-${SID}-environment`, `dsh-session-panel-${SID}-change-requests`,
+      `snh-session-panel-${SID}-environment`, `snh-session-panel-${SID}-change-requests`,
     ])
     expect(screen.getByRole('heading', { name: '变更请求' })).toBeTruthy()
     expect(screen.getByText('environment body')).toBeTruthy()
@@ -242,7 +242,7 @@ describe('SessionPanel', () => {
   it('closes the overlay on Escape from inside and returns focus to the toggle', () => {
     const { props, owners, closeOverlay } = panelProps(false, { pinned: true, overlay: SID })
     const toggle = document.createElement('button')
-    toggle.id = `dsh-session-panel-toggle-${SID}`
+    toggle.id = `snh-session-panel-toggle-${SID}`
     document.body.append(toggle)
     try {
       render(<SessionPanel {...props} />)
@@ -279,7 +279,7 @@ describe('SessionPanel', () => {
   it('closes the overlay on an outside pointerdown but not on the panel, the toggle, or an open menu', () => {
     const { props, closeOverlay } = panelProps(false, { pinned: true, overlay: SID })
     const toggle = document.createElement('button')
-    toggle.id = `dsh-session-panel-toggle-${SID}`
+    toggle.id = `snh-session-panel-toggle-${SID}`
     const menu = document.createElement('div')
     menu.setAttribute('role', 'menu')
     const item = document.createElement('button')
@@ -341,7 +341,7 @@ describe('SessionPanel', () => {
 
   it('hands focus to the toggle when the panel hides with the keyboard inside it', () => {
     const toggle = document.createElement('button')
-    toggle.id = `dsh-session-panel-toggle-${SID}`
+    toggle.id = `snh-session-panel-toggle-${SID}`
     const outside = document.createElement('button')
     document.body.append(toggle, outside)
     try {
@@ -416,7 +416,7 @@ describe('SessionPanel', () => {
     it('keeps a panel a press hid until its exit ends, with the presentation it had, and hands focus to the toggle at once', () => {
       allowMotion()
       const toggle = document.createElement('button')
-      toggle.id = `dsh-session-panel-toggle-${SID}`
+      toggle.id = `snh-session-panel-toggle-${SID}`
       document.body.append(toggle)
       try {
         const docked = panelProps(true, DOCKED)
@@ -553,7 +553,7 @@ describe('SessionPanel', () => {
       // With both shown the drag starts.
       sectionOf('change-requests').style.display = ''
       fireEvent.dragStart(headOf('jobs'), { dataTransfer })
-      expect(dataTransfer.setData).toHaveBeenCalledWith('application/x-dsh-session-panel-section', 'jobs')
+      expect(dataTransfer.setData).toHaveBeenCalledWith('application/x-snh-session-panel-section', 'jobs')
     })
 
     it('marks the dragged section and the edge it would land at, and moves it on the drop', () => {
@@ -564,7 +564,7 @@ describe('SessionPanel', () => {
       place('jobs', 180)
       const dataTransfer = transfer()
       fireEvent.dragStart(headOf('jobs'), { dataTransfer })
-      expect(dataTransfer.setData).toHaveBeenCalledWith('application/x-dsh-session-panel-section', 'jobs')
+      expect(dataTransfer.setData).toHaveBeenCalledWith('application/x-snh-session-panel-section', 'jobs')
       expect(dataTransfer.effectAllowed).toBe('move')
       // The drag image is a copy of the title row.
       expect(dataTransfer.setDragImage).toHaveBeenCalledTimes(1)

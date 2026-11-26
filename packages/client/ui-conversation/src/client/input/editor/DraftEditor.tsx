@@ -3,9 +3,9 @@ import { useId } from 'react'
 import type { CSSProperties, KeyboardEventHandler, ReactNode, RefObject } from 'react'
 import type { LexicalEditor } from 'lexical'
 import clsx from 'clsx'
-import { HoverCardGroup } from '@deepseek-ai/dsh-client-ui-primitives'
-import type { PropsRenderSlots } from '@deepseek-ai/dsh-client-ui-slots'
-import type { SessionId } from '@deepseek-ai/dsh-session/types'
+import { HoverCardGroup } from '@supernova-ai/snh-client-ui-primitives'
+import type { PropsRenderSlots } from '@supernova-ai/snh-client-ui-slots'
+import type { SessionId } from '@supernova-ai/snh-session/types'
 import type { InputState } from '../../contract/input.ts'
 import { ComposerContentEditable } from './ComposerContentEditable.tsx'
 import { DecoratorPortals } from './DecoratorPortals.tsx'
@@ -56,7 +56,7 @@ export function DraftEditor({
           aria-expanded={workspaceTrigger ? workspacePickerOpen : undefined}
           tabIndex={workspaceTrigger ? 0 : undefined}
           onKeyDown={workspaceTrigger ? onWorkspaceKeyDown : undefined}
-          style={hint === null ? undefined : { '--dsh-composer-hint': JSON.stringify(hint) } as CSSProperties}
+          style={hint === null ? undefined : { '--snh-composer-hint': JSON.stringify(hint) } as CSSProperties}
         />
         {showPlaceholder && (
           <div id={placeholderId} aria-hidden className={css.placeholder} data-composer-placeholder>
