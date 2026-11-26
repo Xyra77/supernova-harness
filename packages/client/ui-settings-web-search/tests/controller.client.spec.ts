@@ -596,7 +596,7 @@ describe('WebSearchCardController billing', () => {
     const b = bench()
     try {
       serve(b)
-      await vi.waitFor(() => { expect(b.state().search.kind).toBe('supernova') })
+      await vi.waitFor(() => { expect(b.state().search.kind).toBe('deepseek') })
       expect(b.state()).toMatchObject({ searchBilling: { value: 'auto', overridden: false }, fetchBilling: undefined })
       b.face.selectProvider('fetchProvider', 'supernova-fetch-api')
       b.face.selectProvider('searchProvider', 'deepseek-official')
@@ -609,7 +609,7 @@ describe('WebSearchCardController billing', () => {
     try {
       serve(b, { value: API_SELECTION, base: API_SELECTION })
       b.api.publish({ value: { count: 10, searchBilling: 'account', fetchBilling: 'session' as never }, user: { searchBilling: 'account' } })
-      await vi.waitFor(() => { expect(b.state().fetch.kind).toBe('supernova') })
+      await vi.waitFor(() => { expect(b.state().fetch.kind).toBe('deepseek') })
       expect(b.state()).toMatchObject({
         searchBilling: { value: 'account', overridden: true }, fetchBilling: { value: 'auto' },
       })
@@ -620,7 +620,7 @@ describe('WebSearchCardController billing', () => {
     const b = bench({ accept: true })
     try {
       serve(b, { value: API_SELECTION, base: API_SELECTION })
-      await vi.waitFor(() => { expect(b.state().fetch.kind).toBe('supernova') })
+      await vi.waitFor(() => { expect(b.state().fetch.kind).toBe('deepseek') })
       b.face.selectBilling('search', 'api-key')
       expect(b.state()).toMatchObject({ dirty: true, searchBilling: { value: 'api-key', overridden: true } })
       b.face.save()
@@ -655,7 +655,7 @@ describe('WebSearchCardController advanced override', () => {
     const b = bench()
     try {
       serve(b, { value: API_SELECTION, base: API_SELECTION })
-      await vi.waitFor(() => { expect(b.state().fetch.kind).toBe('supernova') })
+      await vi.waitFor(() => { expect(b.state().fetch.kind).toBe('deepseek') })
       expect(b.state()).toMatchObject({ searchBilling: { advancedOverride: [] }, fetchBilling: { advancedOverride: [] } })
       b.api.publish({ value: { count: 10, searchApiKeyEnv: 'OWN_KEY', searchBaseURL: 'https://own.test/v1/tools', fetchBaseURL: '' } })
       expect(b.state().searchBilling?.advancedOverride).toEqual(['searchBaseURL', 'searchApiKeyEnv'])
@@ -671,7 +671,7 @@ describe('WebSearchCardController advanced override', () => {
     try {
       const composed = { count: 10, searchBaseURL: 'https://own.test/v1/tools', fetchApiKeyEnv: 'OWN_KEY' }
       serve(b, { value: API_SELECTION, base: API_SELECTION }, composed)
-      await vi.waitFor(() => { expect(b.state().fetch.kind).toBe('supernova') })
+      await vi.waitFor(() => { expect(b.state().fetch.kind).toBe('deepseek') })
       b.face.selectBilling('fetch', 'api-key')
       b.face.edit('count', '20')
       b.face.save()
@@ -915,7 +915,7 @@ describe('WebSearchCardController provider selection', () => {
       b.credentials.listProviders.mockResolvedValue({ ok: true, value: WITH_PLUGINS })
       serve(b)
       await vi.waitFor(() => { expect(b.state().search.options).toHaveLength(3) })
-      expect(b.state()).toMatchObject({ search: { selected: 'supernova-search-api', kind: 'supernova' }, fetch: { selected: 'http', kind: 'local' } })
+      expect(b.state()).toMatchObject({ search: { selected: 'supernova-search-api', kind: 'deepseek' }, fetch: { selected: 'http', kind: 'local' } })
       b.face.selectProvider('searchProvider', 'exa')
       expect(b.state()).toMatchObject({ dirty: true, search: { selected: 'exa', kind: 'plugin' }, fetch: { selected: 'http' } })
       expect(b.web.mutate).not.toHaveBeenCalled()
@@ -944,7 +944,7 @@ describe('WebSearchCardController provider selection', () => {
   it('writes explicit selections when the deployment composes the APIs', async () => {
     const b = bench({ accept: true })
     serve(b, { value: API_SELECTION, base: API_SELECTION })
-    expect(b.state()).toMatchObject({ search: { kind: 'supernova' }, fetch: { kind: 'supernova' } })
+    expect(b.state()).toMatchObject({ search: { kind: 'deepseek' }, fetch: { kind: 'deepseek' } })
     b.face.selectProvider('fetchProvider', 'http')
     b.face.save()
     await vi.waitFor(() => { expect(b.state().dirty).toBe(false) })

@@ -90,7 +90,7 @@ function safeResize(height: number, width: number, paddedHeight: number, paddedW
   /* v8 ignore next 3 -- the published solver's assertion; the closed-form
      solve stays within the budget for every positive geometry. */
   if (solved.numTokens > MAX_IMAGE_TOKENS) {
-    throw new Error(`supernova image tokens: no grid fits the token budget for ${width}x${height}`)
+    throw new Error(`deepseek image tokens: no grid fits the token budget for ${width}x${height}`)
   }
   return solved
 }
@@ -153,5 +153,5 @@ export function deepSeekImageTokens(width: number, height: number): number {
   }
   /* v8 ignore next 2 -- the published solver's non-convergence guard; every
      pass is a projection, so a second identical pass is a fixpoint. */
-  throw new Error(`supernova image tokens: resize did not converge for ${width}x${height}`)
+  throw new Error(`deepseek image tokens: resize did not converge for ${width}x${height}`)
 }

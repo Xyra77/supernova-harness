@@ -6,7 +6,7 @@
 # adapter fields around `retryPolicy`, while the app patch re-pins the recorded
 # flash model and restates its base fields.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   config:
     thinking: enabled
     reasoningEffort: max

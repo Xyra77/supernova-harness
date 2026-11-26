@@ -1,7 +1,7 @@
 # Keyless parent-model overlay for the SNH SDK diagnostic snapshot.
 
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - insert:

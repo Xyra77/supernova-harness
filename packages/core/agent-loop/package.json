@@ -48,7 +48,7 @@
     "zod": "4.6.6"
   },
   "devDependencies": {
-    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-deepseek-api-key": "workspace:*",
     "@supernova-ai/cordis": "workspace:~",
     "@supernova-ai/snh-llm-pi-ai": "workspace:*",
     "@supernova-ai/snh-agent": "workspace:*",

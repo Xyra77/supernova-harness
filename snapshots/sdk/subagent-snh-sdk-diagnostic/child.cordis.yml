@@ -1,7 +1,7 @@
 # SDK-profile patch for the deterministic diagnostic child runtime.
 
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - id: agent-instructions

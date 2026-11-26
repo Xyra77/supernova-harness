@@ -66,7 +66,7 @@ Each profile may set a `retryPolicy`; omission uses normal mode with five retrie
         api: openai-completions
         baseURL: https://gateway.acme.example/v1
         compat:
-          thinkingFormat: supernova
+          thinkingFormat: deepseek
         models:
           - id: acme-think
             name: Acme Think

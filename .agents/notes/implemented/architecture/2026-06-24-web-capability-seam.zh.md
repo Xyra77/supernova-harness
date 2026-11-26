@@ -55,7 +55,7 @@ Web 访问是一个一等能力 seam，遵循[能力 seam Agent Note](2026-06-13
 
 ```mermaid
 flowchart LR
-  supernova["@supernova-ai/snh-web-search-supernova"] -->|registerSearchProvider| web["@supernova-ai/snh-web / ctx.web"]
+  deepseek["@supernova-ai/snh-web-search-supernova"] -->|registerSearchProvider| web["@supernova-ai/snh-web / ctx.web"]
   supernovaApi["@supernova-ai/snh-web-supernova-api"] -->|registerSearchProvider / registerFetchProvider| web
   fetchLocal["@supernova-ai/snh-web-fetch-http"] -->|registerFetchProvider| web
   toolWeb["@supernova-ai/snh-tool-web"] -->|search/fetch| web

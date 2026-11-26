@@ -1,6 +1,6 @@
 # Minimal live counterpart for the glob-sampling snapshot composition.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   config:
     models:
       - id: deepseek-v4-pro

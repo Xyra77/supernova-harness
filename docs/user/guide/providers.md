@@ -12,7 +12,7 @@ Open **Settings → Models**. The SuperNova API card exposes one API-key field; 
 
 Keys are write-only. The page receives a redacted descriptor after saving, never the literal secret. The key is stored in `$SNH_HOME/.credentials.yaml`, while settings retain only its credential reference.
 
-With a key saved and the default endpoint, SuperNova's models follow the list the SuperNova API publishes. The list loads when the models are first needed, refreshes in the background about every ten minutes while they are in use, and falls back to the built-in models when it cannot load. Editing **Models** under **Customized settings** keeps your own list instead and stops following the published one; **Restore defaults** follows it again and reloads it. While the published list is in use, the card shows the built-in models, so a newly published model appears only in the model picker. The [API-key provider reference](../../../packages/llm/llm-supernova-api-key/README.md) owns the listing, fallback, and gating rules.
+With a key saved and the default endpoint, SuperNova's models follow the list the SuperNova API publishes. The list loads when the models are first needed, refreshes in the background about every ten minutes while they are in use, and falls back to the built-in models when it cannot load. Editing **Models** under **Customized settings** keeps your own list instead and stops following the published one; **Restore defaults** follows it again and reloads it. While the published list is in use, the card shows the built-in models, so a newly published model appears only in the model picker. The [API-key provider reference](../../../packages/llm/llm-deepseek-api-key/README.md) owns the listing, fallback, and gating rules.
 
 ## Add a third-party provider
 
@@ -158,13 +158,13 @@ The page writes `reasoningEfforts` in `$SNH_HOME/profiles/<profile>/cordis.patch
 
 Each key is a level the menu offers, and its value is the spelling sent on the wire as `reasoning_effort`, so `max: xhigh` renames a level for a gateway with its own vocabulary. Only `off` may stay empty, because for most endpoints not thinking is the parameter's absence. The route's `reasoning` is the level used while a session has picked none; choosing an effort in the picker saves it, with the model, as the default for new sessions.
 
-An `off` left empty sends nothing, which only stops a model that thinks on request; an `off` given a value sends that value as `reasoning_effort` instead. A model that thinks unless told not to — SuperNova V4 behind an OpenAI-compatible gateway, for example — needs `compat.thinkingFormat: supernova`, which makes `off` send `thinking: {type: disabled}` and every other level send `thinking: {type: enabled}` beside the effort:
+An `off` left empty sends nothing, which only stops a model that thinks on request; an `off` given a value sends that value as `reasoning_effort` instead. A model that thinks unless told not to — SuperNova V4 behind an OpenAI-compatible gateway, for example — needs `compat.thinkingFormat: deepseek`, which makes `off` send `thinking: {type: disabled}` and every other level send `thinking: {type: enabled}` beside the effort:
 
 ```yaml
         models:
           - id: deepseek-v4-pro
             compat:
-              thinkingFormat: supernova
+              thinkingFormat: deepseek
             reasoningEfforts:
               off:
               high: high
@@ -207,7 +207,7 @@ A route's `compat` is the default for its models, and a model's own wins field b
           - id: my-model
           - id: my-reasoner
             compat:
-              thinkingFormat: supernova
+              thinkingFormat: deepseek
 ```
 
 What neither sets keeps the installed catalog's value for that model, and what the catalog does not describe falls to pi-ai's detection. Give every switch you name a value: a key left empty (`supportsDeveloperRole:`) is refused rather than ignored, because an empty value would erase what the catalog knows while saying nothing in its place. A name no protocol accepts is refused too, and the message lists the ones that are available.
@@ -225,7 +225,7 @@ Every switch, its accepted values, and the protocols that take it are listed und
 - **The gateway refuses every request although the key and URL are right** — Its request shape differs from OpenAI's. Start with `compat.supportsDeveloperRole: false` and `compat.maxTokensField: max_tokens` on the route.
 - **Only reasoning models fail** — pi-ai sends their system prompt as the `developer` role, which the gateway rejects. Set `compat.supportsDeveloperRole: false`.
 - **The Effort menu does not appear for a model you entered by hand** — It declares no levels. Turn on **Reasoning levels** in the model's **Model options**, or add `reasoningEfforts` to the model in `cordis.patch.yml`.
-- **`off` does not stop a SuperNova model from thinking** — An empty `off` sends no reasoning field at all, and an endpoint that thinks by default keeps thinking. Set `compat.thinkingFormat: supernova` on the model or the route.
+- **`off` does not stop a SuperNova model from thinking** — An empty `off` sends no reasoning field at all, and an endpoint that thinks by default keeps thinking. Set `compat.thinkingFormat: deepseek` on the model or the route.
 - **A compat switch is refused as having no value** — A key written with nothing after the colon. Give it a value, or remove the key to keep the installed catalog's.
 - **An image is refused before sending** — The model declares no image modality. Give a custom provider's model `input: [text, image]`; on SuperNova's own route, select an image-capable entry from the configured catalog (`deepseek-flash` by default) and confirm that your gateway serves that model with image input.
 - **The provider rejects a request carrying an image** — The model declares images its endpoint does not actually serve. Remove `image` from whichever list granted it — the model's `input`, or the route's `defaultInput` — then start a new session: the attached image stays in the session log, so the same request repeats until the session moves off it.

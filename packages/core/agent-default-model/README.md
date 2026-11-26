@@ -34,7 +34,7 @@ The composition requires a provider and model. Consumers read the live reference
 ```yaml
 - name: '@supernova-ai/snh-agent-default-model'
   config:
-    provider: supernova
+    provider: deepseek
     model: deepseek-chat
 ```
 

@@ -51,7 +51,7 @@
     "semver": "^7.8.5"
   },
   "devDependencies": {
-    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-deepseek-api-key": "workspace:*",
     "@supernova-ai/snh-llm-deepseek-account": "workspace:*",
     "@supernova-ai/cordis": "workspace:~",
     "@supernova-ai/snh-agent": "workspace:*",

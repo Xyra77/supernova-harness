@@ -32,7 +32,7 @@ async function observe(run: () => Promise<unknown>): Promise<string[]> {
   return seen
 }
 import { SuperNovaSearchProvider } from '../src/provider.ts'
-describe('supernova search egress', () => {
+describe('deepseek search egress', () => {
   it('goes through the proxy', async () => {
     const p = new SuperNovaSearchProvider(() => ({ apiKey: 'probe', baseURL: 'http://dsk-probe.invalid', model: 'm', apiVersion: '2023-06-01', maxTokens: 16, maxUses: 1 }))
     expect(await observe(() => p.search({ query: 'probe' }))).toEqual(['REQ http://dsk-probe.invalid/messages'])

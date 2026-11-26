@@ -9,13 +9,13 @@ English | [中文](guide.zh.md)
 
 ## Change
 
-`@supernova-ai/snh-supernova-auth` provides `ctx.supernovaAuth`, which releases the API key or the account sign-in for one SuperNova request. `@supernova-ai/snh-llm-supernova-api-key`, `@supernova-ai/snh-llm-deepseek-account`, `@supernova-ai/snh-web-supernova-api`, and `@supernova-ai/snh-web-search-supernova` declare it as a peer dependency and start only in a composition that mounts it. The `base` and `sdk-minimal` bundles mount it.
+`@supernova-ai/snh-supernova-auth` provides `ctx.supernovaAuth`, which releases the API key or the account sign-in for one SuperNova request. `@supernova-ai/snh-llm-deepseek-api-key`, `@supernova-ai/snh-llm-deepseek-account`, `@supernova-ai/snh-web-supernova-api`, and `@supernova-ai/snh-web-search-supernova` declare it as a peer dependency and start only in a composition that mounts it. The `base` and `sdk-minimal` bundles mount it.
 
 `@supernova-ai/snh-llm-supernova` no longer exports `resolveSuperNovaApiKey`, `deepSeekApiKeyConfigured`, `resolveSuperNovaAccountToken`, or `rejectSuperNovaAccountToken`. `SuperNovaAdapterOptions.resolveAuth(connection, endpoint)` returns `SuperNovaRequestAuth | undefined`, `SuperNovaRequestAuth` gains an optional `revoked` signal, and the new `missingCredential` option names the missing-credential failure. `createModelListingCache` takes `credential(url)` returning request headers, and its `load` is optional.
 
 `@supernova-ai/snh-llm` no longer exports `normalizeApiKey` and `assertUsableApiKey`. `@supernova-ai/snh-credentials` exports `normalizeApiKey(raw)`, `resolveCredentialRef(ctx, ref)`, and `credentialRefConfigured(ctx, ref)`.
 
-`@supernova-ai/snh-llm-supernova-api-key` no longer exports `plainOptions` and `resolveAdapterOptions`; `@supernova-ai/snh-llm-deepseek-account` no longer exports `plainAccountOptions` and `resolveAccountOptions`. The account route plugin cancels its running Agents after sign-out and registers a running-task report.
+`@supernova-ai/snh-llm-deepseek-api-key` no longer exports `plainOptions` and `resolveAdapterOptions`; `@supernova-ai/snh-llm-deepseek-account` no longer exports `plainAccountOptions` and `resolveAccountOptions`. The account route plugin cancels its running Agents after sign-out and registers a running-task report.
 
 `@supernova-ai/snh-deepseek-account` adds Host-only `resolveRequestCredential(url)` and `registerRunningTaskReport(report)` and makes `resolveToken(url)` and `rejectToken(token)` private; `hasRunningAccountTasks()` answers from registered reports and no longer reads `ctx.agents`. A sign-out aborts released credentials' `revoked` signal, ending in-flight account requests: model requests outside a turn fail with `ACCOUNT_SIGN_IN_REQUIRED`, Search and Fetch with `WEB_PROVIDER_ERROR`. The package drops its `snh-agent` and `snh-llm` peer dependencies and moves from `packages/credentials/` to `packages/account/` under its unchanged name.
 

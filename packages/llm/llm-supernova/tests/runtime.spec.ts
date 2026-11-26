@@ -23,7 +23,7 @@ import { getOrCreateAnonymousUserId, type AnonymousUserId } from '@supernova-ai/
 import type { SessionId } from '@supernova-ai/snh-session'
 import SuperNovaLlmApiExtensionRegistry from '@supernova-ai/snh-supernova-llm-api-extensions'
 import type { PreparedSuperNovaLlmApiExtensions } from '@supernova-ai/snh-supernova-llm-api-extensions'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
 import { SuperNovaAdapter, resolveAdapterOptions } from '@supernova-ai/snh-llm-supernova'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import type { ContextFormed } from '@supernova-ai/snh-llm'
@@ -1775,7 +1775,7 @@ describe('plugin registration and config', () => {
     ]) expect(LlmSuperNova).not.toHaveProperty(helper)
   })
 
-  it('registers the supernova provider and unregisters on dispose (HMR safety)', async () => {
+  it('registers the deepseek provider and unregisters on dispose (HMR safety)', async () => {
     const server = await mockServer([])
     const ctx = new Context()
     await ctx.plugin(LlmRuntime)
@@ -1787,7 +1787,7 @@ describe('plugin registration and config', () => {
     expect(ctx.llm.listConfigurableProviders()).toEqual([{
       provider: 'deepseek-official',
       displayName: 'SuperNova API',
-      settingsNs: 'llm-supernova-api-key',
+      settingsNs: 'llm-deepseek-api-key',
       settingsPath: [],
     }])
     await fiber.dispose()
@@ -1815,7 +1815,7 @@ describe('plugin registration and config', () => {
     })
   })
 
-  it('owns the supernova provider and advertises the default models', async () => {
+  it('owns the deepseek provider and advertises the default models', async () => {
     vi.stubEnv('DEEPSEEK_API_KEY', 'catalog-fixture-key')
     const ctx = new Context()
     await ctx.plugin(LlmRuntime)

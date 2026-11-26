@@ -289,14 +289,14 @@ describe('request stability across the loop', () => {
   })
 
   it('rematerializes the selected adapter maxTokens default after a provider switch', async () => {
-    const supernova = new MockAdapter([textResponse('supernova')], undefined, 256_000)
+    const deepseek = new MockAdapter([textResponse('deepseek')], undefined, 256_000)
     const other = new MockAdapter([textResponse('other')], undefined, 8_192)
     const ctx = await harnessRoutes([
-      ['supernova', supernova],
+      ['deepseek', deepseek],
       ['other', other],
     ])
     const agent = await ctx.agentLoop.create(brandString<SessionId>('adapter-max-tokens-switch'), {
-      provider: 'supernova',
+      provider: 'deepseek',
       model: 'supernova-model',
     })
     send(agent, 'first')
@@ -305,7 +305,7 @@ describe('request stability across the loop', () => {
     send(agent, 'second')
     await waitForIdle(ctx, agent)
 
-    expect(supernova.requests[0]?.maxTokens).toBe(256_000)
+    expect(deepseek.requests[0]?.maxTokens).toBe(256_000)
     expect(other.requests[0]?.maxTokens).toBe(8_192)
     const headers = agent.session.snapshotEvents().filter(event => event.type === 'request/header')
     expect(headers.map(event => event.data.header.config.maxTokens)).toEqual([256_000, 8_192])
@@ -316,14 +316,14 @@ describe('request stability across the loop', () => {
   })
 
   it('preserves an explicit agent maxTokens cap across a provider switch', async () => {
-    const supernova = new MockAdapter([textResponse('supernova')], undefined, 256_000)
+    const deepseek = new MockAdapter([textResponse('deepseek')], undefined, 256_000)
     const other = new MockAdapter([textResponse('other')], undefined, 8_192)
     const ctx = await harnessRoutes([
-      ['supernova', supernova],
+      ['deepseek', deepseek],
       ['other', other],
     ])
     const agent = await ctx.agentLoop.create(brandString<SessionId>('explicit-max-tokens-switch'), {
-      provider: 'supernova',
+      provider: 'deepseek',
       model: 'supernova-model',
       maxTokens: 4_096,
     })
@@ -333,7 +333,7 @@ describe('request stability across the loop', () => {
     send(agent, 'second')
     await waitForIdle(ctx, agent)
 
-    expect(supernova.requests[0]?.maxTokens).toBe(4_096)
+    expect(deepseek.requests[0]?.maxTokens).toBe(4_096)
     expect(other.requests[0]?.maxTokens).toBe(4_096)
     const headers = agent.session.snapshotEvents().filter(event => event.type === 'request/header')
     expect(headers.map(event => event.data.header.config.maxTokens)).toEqual([4_096, 4_096])

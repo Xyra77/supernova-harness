@@ -36,7 +36,7 @@ kind: "package-reference"
   config:
     agents:
       - id: 'main'
-        provider: supernova
+        provider: deepseek
         model: deepseek-chat
         reasoningEffort: high
         cwd: /workspace
@@ -63,7 +63,7 @@ kind: "package-reference"
 ```text
 const handle = await ctx.agents.create({
   sessionId,
-  agentOptions: { provider: 'supernova', model: 'deepseek-chat' },
+  agentOptions: { provider: 'deepseek', model: 'deepseek-chat' },
   setup: (agentCtx, agent) => { /* scoped registrations plus explicit unpublished Agent */ },
 })
 ```

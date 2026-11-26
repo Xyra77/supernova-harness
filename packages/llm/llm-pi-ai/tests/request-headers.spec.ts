@@ -19,7 +19,7 @@ async function harness(baseURL: string, otherURL?: string, headers?: Record<stri
   const ctx = new Context()
   onTestFinished(() => ctx.fiber.dispose())
   await ctx.plugin(LlmRuntime)
-  await ctx.plugin(PiAi, { providers: { supernova: {
+  await ctx.plugin(PiAi, { providers: { deepseek: {
     apiKeyEnv: 'PI_HEADERS_KEY', baseURL,
     headers: { 'X-Company': 'static', 'X-Request-Session': 'static-session', ...headers },
   }, ...otherURL === undefined ? {} : { gateway: {
@@ -67,8 +67,8 @@ it('composes request-local headers, enforces attribution, and removes disposed l
   await assemble(ctx, { model: 'deepseek-flash', messages: [], sessionId: brandString<SessionId>('one') })
   await assemble(ctx, { model: 'deepseek-flash', messages: [] })
   expect(seen).toEqual([
-    { provider: 'supernova', model: 'deepseek-flash', baseURL: server.url, sessionId: 'one' },
-    { provider: 'supernova', model: 'deepseek-flash', baseURL: server.url },
+    { provider: 'deepseek', model: 'deepseek-flash', baseURL: server.url, sessionId: 'one' },
+    { provider: 'deepseek', model: 'deepseek-flash', baseURL: server.url },
   ])
   expect(server.headers[0]).toMatchObject({
     'x-request-session': 'one', 'x-company': 'static', 'x-second-listener': 'yes', 'user-agent': userAgent(),
@@ -91,14 +91,14 @@ it('uses the prepared endpoint and isolates overlapping requests', async () => {
     headers.set('x-request-session', String(request.sessionId))
     return next()
   })
-  const prepared = await ctx.llm.prepareCall({ provider: 'supernova', model: 'deepseek-flash' })
+  const prepared = await ctx.llm.prepareCall({ provider: 'deepseek', model: 'deepseek-flash' })
   const iterator = prepared.stream({ ...prepared.config, messages: [], sessionId: brandString<SessionId>('first') })[Symbol.asyncIterator]()
   onTestFinished(async () => { await iterator.return?.() })
   await iterator.next()
   await assemble(ctx, { provider: 'gateway', model: 'm', messages: [], sessionId: brandString<SessionId>('second') })
   while (!(await iterator.next()).done) { /* Drain the first response after the second call settles. */ }
   expect(seen.map(({ provider, baseURL, sessionId }) => ({ provider, baseURL, sessionId }))).toEqual([
-    { provider: 'supernova', baseURL: first.url, sessionId: 'first' },
+    { provider: 'deepseek', baseURL: first.url, sessionId: 'first' },
     { provider: 'gateway', baseURL: second.url, sessionId: 'second' },
   ])
   expect(first.headers[0]?.['x-request-session']).toBe('first')
@@ -123,7 +123,7 @@ it.each([
   const result = await assemble(ctx, { model: 'deepseek-flash', messages: [] })
   expect(result.finish).toMatchObject({ kind: 'error', failure: {
     code: 'REQUEST_HEADERS',
-    message: `pi-ai request header preparation failed for provider "supernova": ${detail}`,
+    message: `pi-ai request header preparation failed for provider "deepseek": ${detail}`,
   } })
   expect(JSON.stringify(result.finish)).not.toContain('private-')
   expect(server.requests).toHaveLength(0)

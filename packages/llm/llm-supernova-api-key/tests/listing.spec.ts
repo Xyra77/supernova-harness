@@ -59,7 +59,7 @@ it('follows the official listing while the catalog is the built-in one', async (
     context: { contextWindow: 1_048_576 }, systemPromptUpdate: 'in-history', toolUpdate: 'addition-only', inputModalities: ['text', 'image'],
   })
   expect(requests.map(request => request.headers.get('x-api-key'))).toEqual(['fixture-api-key'])
-  expect(diagnostics).toHaveBeenCalledExactlyOnceWith('[llm-supernova-api-key]', expect.stringContaining('loaded 3 model(s), skipped 0 row(s)') as string)
+  expect(diagnostics).toHaveBeenCalledExactlyOnceWith('[llm-deepseek-api-key]', expect.stringContaining('loaded 3 model(s), skipped 0 row(s)') as string)
 })
 
 it('advertises listed badges only while it follows the listing', async () => {
@@ -103,7 +103,7 @@ it('falls back to the built-in catalog when the listing fails', async () => {
   await ctx.plugin(SuperNovaAuth)
   await ctx.plugin(ApiKey, {})
   expect(await ids(ctx)).toEqual(BUILT_IN)
-  expect(warn).toHaveBeenCalledExactlyOnceWith('[llm-supernova-api-key]', expect.stringContaining('using the bundled catalog') as string)
+  expect(warn).toHaveBeenCalledExactlyOnceWith('[llm-deepseek-api-key]', expect.stringContaining('using the bundled catalog') as string)
 })
 
 it('refuses listed models this build cannot serve before any inference request', async () => {
@@ -118,7 +118,7 @@ it('refuses listed models this build cannot serve before any inference request',
   await expect(ctx.llm.prepareCall({ provider: 'deepseek-official', model: 'deepseek-v5' })).rejects.toMatchObject({ code: 'MODEL_UNSUPPORTED' })
   await expect(ctx.llm.prepareCall({ provider: 'deepseek-official', model: 'deepseek-v5-next' })).rejects.toMatchObject({ code: 'CLIENT_UPGRADE_REQUIRED' })
   await expect(ctx.llm.prepareCall({ provider: 'deepseek-official', model: 'unlisted-pass-through' })).resolves.toBeDefined()
-  expect(warn).toHaveBeenCalledExactlyOnceWith('[llm-supernova-api-key]', 'model "deepseek-v4-pro" declares no api_capabilities.anthropic_messages')
+  expect(warn).toHaveBeenCalledExactlyOnceWith('[llm-deepseek-api-key]', 'model "deepseek-v4-pro" declares no api_capabilities.anthropic_messages')
   expect(requests).toHaveLength(1)
 })
 

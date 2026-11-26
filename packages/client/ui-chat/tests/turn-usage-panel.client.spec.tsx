@@ -21,7 +21,7 @@ describe('TurnUsagePanel', () => {
       outputTokens: 5_800,
       reasoningTokens: 42,
       totalTokens: 15_800,
-      routes: [{ provider: 'supernova', model: 'deepseek-chat' }],
+      routes: [{ provider: 'deepseek', model: 'deepseek-chat' }],
     }
     const view = render(<TurnUsagePanel usage={usage} t={t} />)
 

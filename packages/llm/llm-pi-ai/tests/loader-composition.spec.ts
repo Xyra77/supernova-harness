@@ -98,11 +98,11 @@ describe('llm-pi-ai real dormant composition', () => {
       return next()
     })
     await writeFile(settingsPath, [
-      '- id: llm-pi-ai', '  config:', '    providers:', '      supernova:',
+      '- id: llm-pi-ai', '  config:', '    providers:', '      deepseek:',
       '        apiKeyEnv: PI_COMPOSITION_KEY', `        baseURL: ${server.url}`, '',
     ].join('\n'))
     await vi.waitFor(() => {
-      expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['supernova'])
+      expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['deepseek'])
     }, { timeout: 5000 })
     const result = await assemble(ctx, { model: 'deepseek-flash', messages: [], sessionId: brandString<SessionId>('loader-session') })
     expect(result.finish).toEqual({ kind: 'stop' })
@@ -129,16 +129,16 @@ describe('llm-pi-ai real dormant composition', () => {
       '- id: llm-pi-ai',
       '  config:',
       '    providers:',
-      '      supernova:',
+      '      deepseek:',
       '        apiKeyEnv: PI_COMPOSITION_KEY',
       `        baseURL: ${server.url}`,
       '',
     ].join('\n'))
     await vi.waitFor(() => {
-      expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['supernova'])
+      expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['deepseek'])
     }, { timeout: 5000 })
 
-    const result = await assemble(ctx, { provider: 'supernova', model: 'deepseek-flash', messages: [] })
+    const result = await assemble(ctx, { provider: 'deepseek', model: 'deepseek-flash', messages: [] })
     expect(result.message.content).toEqual([{ type: 'text', text: 'hello' }])
     expect(server.headers[0]?.authorization).toBe('Bearer key-from-store')
   })
@@ -202,17 +202,17 @@ describe('llm-pi-ai real dormant composition', () => {
       '- id: llm-pi-ai',
       '  config:',
       '    providers:',
-      '      supernova:',
+      '      deepseek:',
       '        apiKeyEnv: PI_COMPOSITION_KEY',
       `        baseURL: ${server.url}`,
       '',
     ].join('\n'))
     await vi.waitFor(() => {
-      expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['supernova'])
+      expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['deepseek'])
     }, { timeout: 5000 })
 
     const truncated = await assemble(ctx, {
-      provider: 'supernova',
+      provider: 'deepseek',
       model: 'deepseek-flash',
       messages: [],
     })
@@ -220,14 +220,14 @@ describe('llm-pi-ai real dormant composition', () => {
     expect(truncated.message.content).toEqual([{ type: 'text', text: 'partial' }])
     expect(truncated.message.source).toEqual({
       kind: 'model',
-      provider: 'supernova',
+      provider: 'deepseek',
       model: 'deepseek-flash',
       replayState: {
         response: {
           kind: 'pi-ai',
           version: 2,
           api: 'openai-completions',
-          provider: 'supernova',
+          provider: 'deepseek',
           model: 'deepseek-flash',
           stopReason: 'length',
         },
@@ -236,7 +236,7 @@ describe('llm-pi-ai real dormant composition', () => {
     })
 
     const continued = await assemble(ctx, {
-      provider: 'supernova',
+      provider: 'deepseek',
       model: 'deepseek-flash',
       messages: [
         truncated.message,
@@ -263,13 +263,13 @@ describe('llm-pi-ai real dormant composition', () => {
       '- id: llm-pi-ai',
       '  config:',
       '    providers:',
-      '      supernova:',
+      '      deepseek:',
       '        apiKeyEnv: PI_COMPOSITION_KEY',
       `        baseURL: ${server.url}`,
       '',
     ].join('\n'))
     await vi.waitFor(() => {
-      expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['supernova'])
+      expect(ctx.llm.listProviders().map(provider => provider.id)).toEqual(['deepseek'])
     }, { timeout: 5000 })
 
     // A pre-envelope session log entry: max-token assembly dropped the tool
@@ -280,13 +280,13 @@ describe('llm-pi-ai real dormant composition', () => {
       source: {
         kind: 'model',
         ...{
-          provider: 'supernova',
+          provider: 'deepseek',
           model: 'deepseek-flash',
           replayState: {
             kind: 'pi-ai',
             version: 1,
             api: 'openai-completions',
-            provider: 'supernova',
+            provider: 'deepseek',
             model: 'deepseek-flash',
             stopReason: 'length',
             blocks: [{ type: 'text' }, { type: 'tool-call' }],
@@ -295,7 +295,7 @@ describe('llm-pi-ai real dormant composition', () => {
       },
     })
     const continued = await assemble(ctx, {
-      provider: 'supernova',
+      provider: 'deepseek',
       model: 'deepseek-flash',
       messages: [
         poisoned,

@@ -50,7 +50,7 @@ export function plainOptions(config: Config): Options {
  */
 export function resolveAdapterOptions(config: Options, environment?: LaunchEnvironmentSnapshot): ResolvedSuperNovaOptions {
   const { modelsTimeoutMs: _timeout, modelsMaxAgeMs: _maxAge, apiKeyEnv, ...messages } = config
-  const timing = resolveListingTiming(config, 'llm-supernova-api-key')
+  const timing = resolveListingTiming(config, 'llm-deepseek-api-key')
   const connection = resolveProtocolOptions(messages, environment)
   const listed = new URL(connection.baseURL).origin === OFFICIAL_ORIGIN && isBuiltInCatalog(connection.models)
   return {

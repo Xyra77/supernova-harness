@@ -34,7 +34,7 @@ kind: "package-reference"
 ```yaml
 - name: '@supernova-ai/snh-agent-default-model'
   config:
-    provider: supernova
+    provider: deepseek
     model: deepseek-chat
 ```
 

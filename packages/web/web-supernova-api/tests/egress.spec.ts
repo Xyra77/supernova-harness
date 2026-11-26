@@ -34,7 +34,7 @@ async function observe(run: () => Promise<unknown>): Promise<string[]> {
   return seen
 }
 import { SuperNovaSearchApiProvider } from '../src/search.ts'
-describe('supernova search api egress', () => {
+describe('deepseek search api egress', () => {
   it('goes through the proxy', async () => {
     const p = new SuperNovaSearchApiProvider(() => ({ auth: { sources: [keyCandidate('http://dsk-probe.invalid/api/v1/tools/search', 'probe', 'PROBE_KEY')] }, count: 10, requestsPerSecond: 5, guidance: customGuidance('search') }))
     expect(await observe(() => p.search({ query: 'probe' }))).toEqual(['REQ http://dsk-probe.invalid/api/v1/tools/search'])

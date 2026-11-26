@@ -2,7 +2,7 @@
 # the explicit replay script. The SDK waits for each accepted title before sending
 # the next human message.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - id: agent-default-model

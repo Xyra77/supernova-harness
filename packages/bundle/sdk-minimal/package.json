@@ -46,7 +46,7 @@
     "@supernova-ai/snh-supernova-llm-api-extensions": "workspace:*",
     "@supernova-ai/snh-jobs-local": "workspace:*",
     "@supernova-ai/snh-llm": "workspace:*",
-    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-deepseek-api-key": "workspace:*",
     "@supernova-ai/snh-llm-retry": "workspace:*",
     "@supernova-ai/snh-mcp-resources": "workspace:*",
     "@supernova-ai/snh-plugin-package-inventory-supernova": "workspace:*",

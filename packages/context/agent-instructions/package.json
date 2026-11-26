@@ -57,7 +57,7 @@
     "@supernova-ai/snh-home-paths": "workspace:*",
     "@supernova-ai/snh-llm": "workspace:*",
     "@supernova-ai/snh-llm-supernova": "workspace:*",
-    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-deepseek-api-key": "workspace:*",
     "@supernova-ai/snh-session": "workspace:*",
     "@supernova-ai/snh-session-projection": "workspace:*",
     "@supernova-ai/snh-system-prompt": "workspace:*",

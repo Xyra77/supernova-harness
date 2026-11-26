@@ -2,7 +2,7 @@
 # SuperNova adapter with replay while preserving the app's one-task admission
 # config and the recorded flash route.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - id: agent-default-model

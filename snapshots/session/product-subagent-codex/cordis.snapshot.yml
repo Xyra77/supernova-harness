@@ -1,7 +1,7 @@
 # Keyless twin of product-subagent-codex.cordis.yml: keep both named product
 # providers and tools while replacing only the external model adapter.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - insert:

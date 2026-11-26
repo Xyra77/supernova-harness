@@ -1,7 +1,7 @@
 # Keyless generic ACP v1 control-surface patch over `snh --profile acp`.
 
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - id: acp

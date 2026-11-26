@@ -50,7 +50,7 @@
     "@supernova-ai/schemastery": "workspace:~"
   },
   "devDependencies": {
-    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-deepseek-api-key": "workspace:*",
     "@supernova-ai/cordis": "workspace:~",
     "@supernova-ai/snh-agent": "workspace:*",
     "@supernova-ai/snh-agent-loop": "workspace:*",

@@ -23,7 +23,7 @@ function usage(overrides: UsageOverrides = {}): TokenUsage {
 function message(
   seq: number,
   tokenUsage?: TokenUsage,
-  provider = 'supernova',
+  provider = 'deepseek',
   model = 'deepseek-chat',
   step = 1,
   streamTokenUsage = tokenUsage,
@@ -77,7 +77,7 @@ describe('deriveTurnTokenUsage', () => {
       cacheReadTokens: 50,
       cacheWriteTokens: 0,
       reasoningTokens: 8,
-      routes: [{ provider: 'supernova', model: 'deepseek-chat' }],
+      routes: [{ provider: 'deepseek', model: 'deepseek-chat' }],
     })
   })
 
@@ -101,7 +101,7 @@ describe('deriveTurnTokenUsage', () => {
       message(
         4,
         usage({ inputTokens: 30, outputTokens: 5, totalTokens: 45, cacheReadTokens: 10 }),
-        'supernova',
+        'deepseek',
         'deepseek-chat',
         1,
         usage(),
@@ -112,7 +112,7 @@ describe('deriveTurnTokenUsage', () => {
 
   it('keeps the latest streaming sample when the final message omits usage', () => {
     const result = deriveTurnTokenUsage(completeAttempt(
-      message(4, undefined, 'supernova', 'deepseek-chat', 1, usage()),
+      message(4, undefined, 'deepseek', 'deepseek-chat', 1, usage()),
     ))
     expect(result).toMatchObject({ uncachedInputTokens: 100, outputTokens: 20, totalTokens: 170 })
   })
@@ -221,7 +221,7 @@ describe('deriveTurnTokenUsage', () => {
       totalTokens: 340,
       cacheReadTokens: 100,
       routes: [
-        { provider: 'supernova', model: 'deepseek-chat' },
+        { provider: 'deepseek', model: 'deepseek-chat' },
         { provider: 'openai', model: 'gpt-5' },
       ],
     })
@@ -241,7 +241,7 @@ describe('deriveTurnTokenUsage', () => {
         step: 2,
         message: {
           id: 'message-6', role: 'assistant', content: [],
-          source: { kind: 'model', provider: 'supernova', model: 'deepseek-chat' },
+          source: { kind: 'model', provider: 'deepseek', model: 'deepseek-chat' },
         },
         usage: attempt,
       }),

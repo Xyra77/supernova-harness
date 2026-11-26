@@ -22,9 +22,9 @@ Status: implemented
 
 `LlmRuntime` 按提供方注册和解析适配器。`registerAdapter(providers, adapter)` 在修改注册表前检查整个提供方列表，遇到重复项时返回 `DUPLICATE_ADAPTER`，并以一个 effect 为单位整体 dispose（资源释放）。模型 ID 不作为注册键；仍由选中的适配器负责验证或转发。后续的 [LLM 目录与 ACP 模型选择 Agent Note](../../archived/architecture/2026-07-15-llm-model-catalog-and-acp-selection.md) 增加了建议性的 `listProviders()` / `listModels()` 发现接口，但不会把目录成员关系变成请求校验规则。
 
-在一个 Cordis 上下文中，一个提供方只能有一个适配器所有者。`snh-llm-supernova` 注册 `supernova`；`snh-llm-pi-ai` 也可以注册 `supernova`，但同时加载两个所有者属于配置错误，不采用顺序规则或回退行为。若部署选择手写的 SuperNova 实现，需从 pi-ai 配置中排除 `supernova`；若部署选择 pi-ai 的 SuperNova 实现，则不挂载 `snh-llm-supernova`。
+在一个 Cordis 上下文中，一个提供方只能有一个适配器所有者。`snh-llm-supernova` 注册 `deepseek`；`snh-llm-pi-ai` 也可以注册 `deepseek`，但同时加载两个所有者属于配置错误，不采用顺序规则或回退行为。若部署选择手写的 SuperNova 实现，需从 pi-ai 配置中排除 `deepseek`；若部署选择 pi-ai 的 SuperNova 实现，则不挂载 `snh-llm-supernova`。
 
-`snh-llm-supernova` 移除模型注册列表，接受通过 `supernova` 提供方路由的任意模型字符串。其请求序列化、`/chat/completions` 端点、thinking 选项、SSE（Server-Sent Events）解析和错误行为保持不变；`options.model` 仍会原样发送。
+`snh-llm-supernova` 移除模型注册列表，接受通过 `deepseek` 提供方路由的任意模型字符串。其请求序列化、`/chat/completions` 端点、thinking 选项、SSE（Server-Sent Events）解析和错误行为保持不变；`options.model` 仍会原样发送。
 
 ### 显式 pi-ai 提供方配置
 
@@ -54,7 +54,7 @@ pi-ai 回放状态用其成功 `AssistantMessage` 的带版本最小投影填充
 
 压缩配置在 `summarizationModel` 之外增加 `summarizationProvider`。两个值均为空时继承，均非空时选择显式目标；只配置其中一个会导致加载失败。继承优先使用最近一次记录的请求目标，没有时回退到 agent 创建选项。`compaction/summary` 使用现有模型调用 envelope 记录两个字段。
 
-JSON-RPC 运行时显式接收提供方与模型。仅当 `supernova` 提供方没有注册所有者时，其便利回退才会挂载 `snh-llm-supernova`；其他缺失的提供方会直接失败，不会猜测适配器。
+JSON-RPC 运行时显式接收提供方与模型。仅当 `deepseek` 提供方没有注册所有者时，其便利回退才会挂载 `snh-llm-supernova`；其他缺失的提供方会直接失败，不会猜测适配器。
 
 当前的 seed/load 验证会拒绝省略必需提供方／模型字段的请求头和助手消息。冻结的 v0-to-v1 迁移边要求迁移前已具备同一套可重建路由身份；它绝不会猜测缺失的提供方或模型，畸形结构会在发布前被拒绝。
 

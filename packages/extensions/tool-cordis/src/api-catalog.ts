@@ -1076,181 +1076,6 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
     ],
   },
   {
-    key: 'supernovaAccount',
-    summary: 'Account login, credentials, and client-safe Remote operations.',
-    description: 'Account login, credentials, and client-safe Remote operations.',
-    methods: [
-      {
-        signature: '@Remote async getState(): Promise<AccountView>',
-        description: 'Read stored-account presence and the latest login attempt.',
-        parameters: [],
-        returns: 'a snapshot without credentials or PKCE secrets.',
-      },
-      {
-        signature: '@Remote async getProfile(client: AccountClientMetadata): Promise<AccountDetails[\'profile\'] | null>',
-        description: 'Query Platform profile independently of wallet balances. A ready result whose stable profile ID first becomes available or changes notifies identity-enabled watch consumers, so they re-read getPlatformSession; repeated IDs stay silent.',
-        parameters: [{ name: 'client', description: 'identity of the requesting UI for this call.' }],
-        returns: 'profile outcome, or null if signed out or the grant changed during the query.',
-      },
-      {
-        signature: '@Remote getBalance(client: AccountClientMetadata): Promise<AccountDetails[\'balance\'] | null>',
-        description: 'Query Platform recharge and bonus wallet balances independently of profile data.',
-        parameters: [{ name: 'client', description: 'identity of the requesting UI for this call.' }],
-        returns: 'balance outcome, or null if signed out or the grant changed during the query.',
-      },
-      {
-        signature: '@Remote async getNotifications(client: AccountClientMetadata): Promise<AccountNotificationBatch | null>',
-        description: 'Query unconsumed account notifications in server order without reading profile data.',
-        parameters: [{ name: 'client', description: 'identity of the requesting UI for this call; its language selects the server-authored message.' }],
-        returns: 'notifications with their next query delay, or null if signed out or the grant changed during the query.',
-      },
-      {
-        signature: '@Remote async getNotificationContent(id: AccountNotificationId, client: AccountClientMetadata): Promise<AccountNotification | null>',
-        description: 'Query localized content of a notification, including one already consumed.',
-        parameters: [{ name: 'id', description: 'notification whose content is requested.' }, { name: 'client', description: 'identity of the requesting UI; its language selects the localized content.' }],
-        returns: 'content without changing consumption, or null if signed out or the grant changed.',
-      },
-      {
-        signature: '@Remote async reportNotificationEvent(id: AccountNotificationId, event: AccountNotificationEvent, client: AccountClientMetadata): Promise<boolean>',
-        description: 'Report a notification interaction; the backend decides consumption.',
-        parameters: [{ name: 'id', description: 'notification the user interacted with.' }, { name: 'event', description: 'displayed frame, non-dismiss action click, or explicit dismissal.' }, { name: 'client', description: 'identity of the requesting UI for this call.' }],
-        returns: 'true once the server accepts the event; false if signed out or credentials changed during the call.',
-      },
-      {
-        signature: 'async getDeviceIdentity(): Promise<{ deviceId?: string; userId?: AccountUserId; osVersion: string }>',
-        description: 'Read existing login identity without creating a device or returning credentials.',
-        parameters: [],
-        returns: 'optional device/account identifiers and the provider\'s OS version string.',
-      },
-      {
-        signature: 'async getPlatformSession(): Promise<PlatformSession | null>',
-        description: 'Read credentials for the configured embedded-page origin, bound to their account environment, and pair them with the account ID from the last successful profile read; no profile request is made.',
-        parameters: [],
-        returns: 'a Host-only snapshot, or null while signed out or when the credential changed during the read.',
-      },
-      {
-        signature: 'async resolveRequestCredential(url: string): Promise<AccountRequestCredential | undefined>',
-        description: 'Release the account credential for one request to `url` as the request carries it, together with its invalidation, which runs on the account service mounted when it is called, and the signal this service aborts when it signs out of that credential. Host-only.',
-        parameters: [{ name: 'url', description: 'actual request destination or API base URL.' }],
-        returns: 'the request credential, or undefined for other origins or a signed-out account.',
-      },
-      {
-        signature: '@Remote async startSignIn(client: AccountClientMetadata, callbackOrigin: string, loginSource: \'web\' | \'desktop\'): Promise<AccountView>',
-        description: 'Join an active attempt or start browser authorization.',
-        parameters: [{ name: 'client', description: 'identity of the requesting UI; a new attempt captures it, and joining retains the original attempt\'s identity.' }, { name: 'callbackOrigin', description: 'browser-accessible loopback HTTP origin, including any SSH local port.' }, { name: 'loginSource', description: 'initiating UI, used to return from a failed exchange.' }],
-        returns: 'the initial snapshot without waiting for browser approval.',
-      },
-      {
-        signature: '@Remote async cancelSignIn(attemptId: SignInAttemptId): Promise<AccountView>',
-        description: 'Cancel only the named attempt; committing attempts settle before returning.',
-        parameters: [{ name: 'attemptId', description: 'attempt identity from this Host.' }],
-        returns: 'state after cancellation or an already-started commit.',
-      },
-      {
-        signature: '@Remote signOut(client: AccountClientMetadata): Promise<AccountView>',
-        description: 'Remove the local grant while retaining API keys; the provider revokes it in the background.',
-        parameters: [{ name: 'client', description: 'identity of the requesting UI, captured for the background revocation retries.' }],
-        returns: 'the signed-out state after local removal; remote failures never restore the grant.',
-      },
-      {
-        signature: 'registerRunningTaskReport(report: () => boolean): () => void',
-        description: 'Register a report of running work that signing out would interrupt. The plugin billing the account to a model route registers one from within `ctx.effect()`; without any report nothing is known to be running.',
-        parameters: [{ name: 'report', description: 'answers whether such work is running now.' }],
-        returns: 'the disposer removing the report.',
-      },
-      {
-        signature: '@Remote hasRunningAccountTasks(): boolean',
-        description: 'Inspect running work before sign-out.',
-        parameters: [],
-        returns: 'whether a registered report says a running task uses the account; false without reports.',
-      },
-      {
-        signature: '@Remote({ mode: \'stream\' }) async *watchExpiry(signal: AbortSignal): AsyncIterable<\'session-expired\'>',
-        description: 'Subscribe to live credential expiry without replay.',
-        parameters: [{ name: 'signal', description: 'subscription lifetime; provider disposal also ends it.' }],
-        returns: 'expiry notifications emitted during the subscription.',
-      },
-      {
-        signature: 'watch(signal: AbortSignal, includeIdentityChanges: boolean = false): AsyncIterable<AccountUpdate>',
-        description: 'Subscribe to ordered updates including a complete initial snapshot.',
-        parameters: [{ name: 'signal', description: 'subscription lifetime; ending it never cancels login.' }, { name: 'includeIdentityChanges', description: 'also notify when cached Platform identity changes; defaults to false.' }],
-        returns: 'complete state with snapshot or credentials-changed event type; credential changes take priority when updates coalesce.',
-      },
-      {
-        signature: '@Remote({ name: \'watch\', mode: \'stream\' }) watchState(signal: AbortSignal): AsyncIterable<AccountUpdate>',
-        description: 'Stream account state without the Host-only identity subscription option.',
-        parameters: [{ name: 'signal', description: 'subscription lifetime.' }],
-        returns: 'initial state, login progress, and credential-change updates.',
-      },
-    ],
-  },
-  {
-    key: 'supernovaAuth',
-    summary: '`ctx.supernovaAuth`: the two SuperNova credential kinds behind one request-authorization operation.',
-    description: '`ctx.supernovaAuth`: the two SuperNova credential kinds behind one request-authorization operation.',
-    methods: [
-      {
-        signature: 'connect(kind: SuperNovaAuthKind, route: string, connection: () => SuperNovaAuthConnection): () => void',
-        description: 'Connect the deployment a model route plugin\'s settings name for one kind. Call it from within `ctx.effect()`.',
-        parameters: [{ name: 'kind', description: 'the kind the plugin\'s route bills.' }, { name: 'route', description: 'provider route the plugin registers; {@link routeKind} answers `kind` for it while connected.' }, { name: 'connection', description: 'reads the plugin\'s current settings; a throw marks the kind unresolved for that operation.' }],
-        returns: 'the disposer removing the connection.',
-        throws: ['{SuperNovaAuthError} code `DUPLICATE_CONNECTION` when the kind is already connected.'],
-      },
-      {
-        signature: 'routeKind(route: string | undefined): SuperNovaAuthKind | undefined',
-        description: 'The kind that bills a conversation on one model route.',
-        parameters: [{ name: 'route', description: 'provider route of a model request; undefined names none.' }],
-        returns: 'the kind connected under that route, or undefined for a route no plugin connected.',
-      },
-      {
-        signature: 'candidates(request: SuperNovaAuthRequest): (SuperNovaAuthCandidate | SuperNovaAuthUnresolved)[]',
-        description: 'The kinds one request can authenticate with, in the order its billing tries them, each bound to its destination. Nothing is read from a credential store.',
-        parameters: [{ name: 'request', description: 'the request.' }],
-        returns: 'candidates and unresolved kinds, first preferred; empty when the destination accepts no kind the billing allows or no allowed kind serves an absolute destination.',
-      },
-      {
-        signature: 'async authorize(request: SuperNovaAuthRequest, signal?: AbortSignal): Promise<SuperNovaAuthorization | undefined>',
-        description: 'Release the credential of the first candidate that has one. A later candidate is not read once an earlier one has a credential, fails to read, or does not resolve.',
-        parameters: [{ name: 'request', description: 'the request.' }, { name: 'signal', description: 'cancellation for the lookups.' }],
-        returns: 'the authorization, or undefined when no candidate has a credential.',
-        throws: ['{SuperNovaAuthError} code `UNRESOLVED_CONNECTION` at an unresolved kind, `INVALID_CREDENTIAL` for an unusable API key; store failures propagate.'],
-      },
-    ],
-  },
-  {
-    key: 'supernovaChatImport',
-    summary: 'Serves the owner-only export upload route and the limits the browser checks first.',
-    description: 'Serves the owner-only export upload route and the limits the browser checks first.',
-    methods: [
-      {
-        signature: '@Remote limits(signal: AbortSignal): SupernovaChatImportLimits',
-        description: 'Report the limits the browser checks before uploading. Only the owner may import, so every other principal is refused.',
-        parameters: [{ name: 'signal', description: 'Client cancellation or Remote withdrawal.' }],
-        returns: 'the largest accepted archive size.',
-        throws: ['{RemoteError} `supernovaChatImport/owner-only` for a caller that is not the owner.'],
-      },
-    ],
-  },
-  {
-    key: 'supernovaLlmApiExtensions',
-    summary: 'Registry of independently owned top-level fields for official SuperNova requests.',
-    description: 'Registry of independently owned top-level fields for official SuperNova requests.',
-    methods: [
-      {
-        signature: 'register<K extends keyof SuperNovaLlmApiExtensionMap>( field: K, provider: SuperNovaLlmApiExtensionProvider<SuperNovaLlmApiExtensionMap[K]>, ): () => Promise<void>',
-        description: 'Register the sole provider of one top-level request field. Registration is effect-scoped.',
-        parameters: [{ name: 'field', description: 'declaration-merged field owned by the provider.' }, { name: 'provider', description: 'request-time field preparation and optional acceptance behavior.' }],
-        returns: 'disposer that releases the field.',
-      },
-      {
-        signature: 'async prepare(request: SuperNovaLlmApiExtensionRequest): Promise<PreparedSuperNovaLlmApiExtensions>',
-        description: 'Prepare every currently registered field from one immutable base request. A provider whose preparation throws, or whose value cannot be cloned, is omitted from this request; the first such failure per field is logged. Only cancellation rejects. Field values are cloned and frozen; providers retain no mutable alias to the outgoing request.',
-        parameters: [{ name: 'request', description: 'exact serialized request facts before extension fields.' }],
-        returns: 'detached fields and their idempotent joint acceptance transaction.',
-      },
-    ],
-  },
-  {
     key: 'directoryPicker',
     summary: 'Abstract directory-picking service.',
     description: 'Abstract directory-picking service. Subclass, implement `capability()`, and load the subclass as a plugin — it registers as `ctx.directoryPicker` (one implementation per context; loading a second throws, cordis\' standard duplicate-service behavior). The capability object must be stable for the service lifetime: consumers may capture it across calls.',
@@ -4543,6 +4368,181 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
     ],
   },
   {
+    key: 'supernovaAccount',
+    summary: 'Account login, credentials, and client-safe Remote operations.',
+    description: 'Account login, credentials, and client-safe Remote operations.',
+    methods: [
+      {
+        signature: '@Remote async getState(): Promise<AccountView>',
+        description: 'Read stored-account presence and the latest login attempt.',
+        parameters: [],
+        returns: 'a snapshot without credentials or PKCE secrets.',
+      },
+      {
+        signature: '@Remote async getProfile(client: AccountClientMetadata): Promise<AccountDetails[\'profile\'] | null>',
+        description: 'Query Platform profile independently of wallet balances. A ready result whose stable profile ID first becomes available or changes notifies identity-enabled watch consumers, so they re-read getPlatformSession; repeated IDs stay silent.',
+        parameters: [{ name: 'client', description: 'identity of the requesting UI for this call.' }],
+        returns: 'profile outcome, or null if signed out or the grant changed during the query.',
+      },
+      {
+        signature: '@Remote getBalance(client: AccountClientMetadata): Promise<AccountDetails[\'balance\'] | null>',
+        description: 'Query Platform recharge and bonus wallet balances independently of profile data.',
+        parameters: [{ name: 'client', description: 'identity of the requesting UI for this call.' }],
+        returns: 'balance outcome, or null if signed out or the grant changed during the query.',
+      },
+      {
+        signature: '@Remote async getNotifications(client: AccountClientMetadata): Promise<AccountNotificationBatch | null>',
+        description: 'Query unconsumed account notifications in server order without reading profile data.',
+        parameters: [{ name: 'client', description: 'identity of the requesting UI for this call; its language selects the server-authored message.' }],
+        returns: 'notifications with their next query delay, or null if signed out or the grant changed during the query.',
+      },
+      {
+        signature: '@Remote async getNotificationContent(id: AccountNotificationId, client: AccountClientMetadata): Promise<AccountNotification | null>',
+        description: 'Query localized content of a notification, including one already consumed.',
+        parameters: [{ name: 'id', description: 'notification whose content is requested.' }, { name: 'client', description: 'identity of the requesting UI; its language selects the localized content.' }],
+        returns: 'content without changing consumption, or null if signed out or the grant changed.',
+      },
+      {
+        signature: '@Remote async reportNotificationEvent(id: AccountNotificationId, event: AccountNotificationEvent, client: AccountClientMetadata): Promise<boolean>',
+        description: 'Report a notification interaction; the backend decides consumption.',
+        parameters: [{ name: 'id', description: 'notification the user interacted with.' }, { name: 'event', description: 'displayed frame, non-dismiss action click, or explicit dismissal.' }, { name: 'client', description: 'identity of the requesting UI for this call.' }],
+        returns: 'true once the server accepts the event; false if signed out or credentials changed during the call.',
+      },
+      {
+        signature: 'async getDeviceIdentity(): Promise<{ deviceId?: string; userId?: AccountUserId; osVersion: string }>',
+        description: 'Read existing login identity without creating a device or returning credentials.',
+        parameters: [],
+        returns: 'optional device/account identifiers and the provider\'s OS version string.',
+      },
+      {
+        signature: 'async getPlatformSession(): Promise<PlatformSession | null>',
+        description: 'Read credentials for the configured embedded-page origin, bound to their account environment, and pair them with the account ID from the last successful profile read; no profile request is made.',
+        parameters: [],
+        returns: 'a Host-only snapshot, or null while signed out or when the credential changed during the read.',
+      },
+      {
+        signature: 'async resolveRequestCredential(url: string): Promise<AccountRequestCredential | undefined>',
+        description: 'Release the account credential for one request to `url` as the request carries it, together with its invalidation, which runs on the account service mounted when it is called, and the signal this service aborts when it signs out of that credential. Host-only.',
+        parameters: [{ name: 'url', description: 'actual request destination or API base URL.' }],
+        returns: 'the request credential, or undefined for other origins or a signed-out account.',
+      },
+      {
+        signature: '@Remote async startSignIn(client: AccountClientMetadata, callbackOrigin: string, loginSource: \'web\' | \'desktop\'): Promise<AccountView>',
+        description: 'Join an active attempt or start browser authorization.',
+        parameters: [{ name: 'client', description: 'identity of the requesting UI; a new attempt captures it, and joining retains the original attempt\'s identity.' }, { name: 'callbackOrigin', description: 'browser-accessible loopback HTTP origin, including any SSH local port.' }, { name: 'loginSource', description: 'initiating UI, used to return from a failed exchange.' }],
+        returns: 'the initial snapshot without waiting for browser approval.',
+      },
+      {
+        signature: '@Remote async cancelSignIn(attemptId: SignInAttemptId): Promise<AccountView>',
+        description: 'Cancel only the named attempt; committing attempts settle before returning.',
+        parameters: [{ name: 'attemptId', description: 'attempt identity from this Host.' }],
+        returns: 'state after cancellation or an already-started commit.',
+      },
+      {
+        signature: '@Remote signOut(client: AccountClientMetadata): Promise<AccountView>',
+        description: 'Remove the local grant while retaining API keys; the provider revokes it in the background.',
+        parameters: [{ name: 'client', description: 'identity of the requesting UI, captured for the background revocation retries.' }],
+        returns: 'the signed-out state after local removal; remote failures never restore the grant.',
+      },
+      {
+        signature: 'registerRunningTaskReport(report: () => boolean): () => void',
+        description: 'Register a report of running work that signing out would interrupt. The plugin billing the account to a model route registers one from within `ctx.effect()`; without any report nothing is known to be running.',
+        parameters: [{ name: 'report', description: 'answers whether such work is running now.' }],
+        returns: 'the disposer removing the report.',
+      },
+      {
+        signature: '@Remote hasRunningAccountTasks(): boolean',
+        description: 'Inspect running work before sign-out.',
+        parameters: [],
+        returns: 'whether a registered report says a running task uses the account; false without reports.',
+      },
+      {
+        signature: '@Remote({ mode: \'stream\' }) async *watchExpiry(signal: AbortSignal): AsyncIterable<\'session-expired\'>',
+        description: 'Subscribe to live credential expiry without replay.',
+        parameters: [{ name: 'signal', description: 'subscription lifetime; provider disposal also ends it.' }],
+        returns: 'expiry notifications emitted during the subscription.',
+      },
+      {
+        signature: 'watch(signal: AbortSignal, includeIdentityChanges: boolean = false): AsyncIterable<AccountUpdate>',
+        description: 'Subscribe to ordered updates including a complete initial snapshot.',
+        parameters: [{ name: 'signal', description: 'subscription lifetime; ending it never cancels login.' }, { name: 'includeIdentityChanges', description: 'also notify when cached Platform identity changes; defaults to false.' }],
+        returns: 'complete state with snapshot or credentials-changed event type; credential changes take priority when updates coalesce.',
+      },
+      {
+        signature: '@Remote({ name: \'watch\', mode: \'stream\' }) watchState(signal: AbortSignal): AsyncIterable<AccountUpdate>',
+        description: 'Stream account state without the Host-only identity subscription option.',
+        parameters: [{ name: 'signal', description: 'subscription lifetime.' }],
+        returns: 'initial state, login progress, and credential-change updates.',
+      },
+    ],
+  },
+  {
+    key: 'supernovaAuth',
+    summary: '`ctx.supernovaAuth`: the two SuperNova credential kinds behind one request-authorization operation.',
+    description: '`ctx.supernovaAuth`: the two SuperNova credential kinds behind one request-authorization operation.',
+    methods: [
+      {
+        signature: 'connect(kind: SuperNovaAuthKind, route: string, connection: () => SuperNovaAuthConnection): () => void',
+        description: 'Connect the deployment a model route plugin\'s settings name for one kind. Call it from within `ctx.effect()`.',
+        parameters: [{ name: 'kind', description: 'the kind the plugin\'s route bills.' }, { name: 'route', description: 'provider route the plugin registers; {@link routeKind} answers `kind` for it while connected.' }, { name: 'connection', description: 'reads the plugin\'s current settings; a throw marks the kind unresolved for that operation.' }],
+        returns: 'the disposer removing the connection.',
+        throws: ['{SuperNovaAuthError} code `DUPLICATE_CONNECTION` when the kind is already connected.'],
+      },
+      {
+        signature: 'routeKind(route: string | undefined): SuperNovaAuthKind | undefined',
+        description: 'The kind that bills a conversation on one model route.',
+        parameters: [{ name: 'route', description: 'provider route of a model request; undefined names none.' }],
+        returns: 'the kind connected under that route, or undefined for a route no plugin connected.',
+      },
+      {
+        signature: 'candidates(request: SuperNovaAuthRequest): (SuperNovaAuthCandidate | SuperNovaAuthUnresolved)[]',
+        description: 'The kinds one request can authenticate with, in the order its billing tries them, each bound to its destination. Nothing is read from a credential store.',
+        parameters: [{ name: 'request', description: 'the request.' }],
+        returns: 'candidates and unresolved kinds, first preferred; empty when the destination accepts no kind the billing allows or no allowed kind serves an absolute destination.',
+      },
+      {
+        signature: 'async authorize(request: SuperNovaAuthRequest, signal?: AbortSignal): Promise<SuperNovaAuthorization | undefined>',
+        description: 'Release the credential of the first candidate that has one. A later candidate is not read once an earlier one has a credential, fails to read, or does not resolve.',
+        parameters: [{ name: 'request', description: 'the request.' }, { name: 'signal', description: 'cancellation for the lookups.' }],
+        returns: 'the authorization, or undefined when no candidate has a credential.',
+        throws: ['{SuperNovaAuthError} code `UNRESOLVED_CONNECTION` at an unresolved kind, `INVALID_CREDENTIAL` for an unusable API key; store failures propagate.'],
+      },
+    ],
+  },
+  {
+    key: 'supernovaChatImport',
+    summary: 'Serves the owner-only export upload route and the limits the browser checks first.',
+    description: 'Serves the owner-only export upload route and the limits the browser checks first.',
+    methods: [
+      {
+        signature: '@Remote limits(signal: AbortSignal): SupernovaChatImportLimits',
+        description: 'Report the limits the browser checks before uploading. Only the owner may import, so every other principal is refused.',
+        parameters: [{ name: 'signal', description: 'Client cancellation or Remote withdrawal.' }],
+        returns: 'the largest accepted archive size.',
+        throws: ['{RemoteError} `supernovaChatImport/owner-only` for a caller that is not the owner.'],
+      },
+    ],
+  },
+  {
+    key: 'supernovaLlmApiExtensions',
+    summary: 'Registry of independently owned top-level fields for official SuperNova requests.',
+    description: 'Registry of independently owned top-level fields for official SuperNova requests.',
+    methods: [
+      {
+        signature: 'register<K extends keyof SuperNovaLlmApiExtensionMap>( field: K, provider: SuperNovaLlmApiExtensionProvider<SuperNovaLlmApiExtensionMap[K]>, ): () => Promise<void>',
+        description: 'Register the sole provider of one top-level request field. Registration is effect-scoped.',
+        parameters: [{ name: 'field', description: 'declaration-merged field owned by the provider.' }, { name: 'provider', description: 'request-time field preparation and optional acceptance behavior.' }],
+        returns: 'disposer that releases the field.',
+      },
+      {
+        signature: 'async prepare(request: SuperNovaLlmApiExtensionRequest): Promise<PreparedSuperNovaLlmApiExtensions>',
+        description: 'Prepare every currently registered field from one immutable base request. A provider whose preparation throws, or whose value cannot be cloned, is omitted from this request; the first such failure per field is logged. Only cancellation rejects. Field values are cloned and frozen; providers retain no mutable alias to the outgoing request.',
+        parameters: [{ name: 'request', description: 'exact serialized request facts before extension fields.' }],
+        returns: 'detached fields and their idempotent joint acceptance transaction.',
+      },
+    ],
+  },
+  {
     key: 'systemPrompt',
     summary: 'Registry service for the prompt inputs assembled before each model step.',
     description: 'Registry service for the prompt inputs assembled before each model step.',
@@ -7315,58 +7315,6 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export interface DailyScheduleRecord {\n    readonly id: ScheduleId;\n    readonly kind: \'daily\';\n    readonly title: string;\n    readonly prompt: string;\n    readonly time: string;\n    readonly timeZone: string;\n    readonly scheduledAt: string;\n}',
   },
   {
-    name: 'SuperNovaApiKeyHeader',
-    declaration: 'export type SuperNovaApiKeyHeader = \'authorization\' | \'x-api-key\';',
-  },
-  {
-    name: 'SuperNovaAuthBilling',
-    declaration: 'export type SuperNovaAuthBilling = \'auto\' | SuperNovaAuthKind;',
-  },
-  {
-    name: 'SuperNovaAuthCandidate',
-    declaration: 'export interface SuperNovaAuthCandidate {\n    readonly kind: SuperNovaAuthKind;\n    readonly endpoint: string;\n    readonly reference?: CredentialRef;\n    configured(): Promise<boolean>;\n    resolve(signal?: AbortSignal): Promise<SuperNovaAuthorization | undefined>;\n}',
-  },
-  {
-    name: 'SuperNovaAuthConnection',
-    declaration: 'export interface SuperNovaAuthConnection {\n    readonly baseURL: string;\n    readonly reference?: CredentialRef;\n    readonly owner?: string;\n}',
-  },
-  {
-    name: 'SuperNovaAuthDestination',
-    declaration: 'export type SuperNovaAuthDestination = {\n    readonly path: string;\n} | {\n    readonly url: string;\n};',
-  },
-  {
-    name: 'SuperNovaAuthKind',
-    declaration: 'export type SuperNovaAuthKind = \'api-key\' | \'account\';',
-  },
-  {
-    name: 'SuperNovaAuthorization',
-    declaration: 'export interface SuperNovaAuthorization {\n    readonly kind: SuperNovaAuthKind;\n    readonly endpoint: string;\n    readonly headers: Readonly<Record<string, string>>;\n    readonly reference?: CredentialRef;\n    reject?(): Promise<void>;\n    readonly revoked?: AbortSignal;\n}',
-  },
-  {
-    name: 'SuperNovaAuthRequest',
-    declaration: 'export interface SuperNovaAuthRequest {\n    readonly consumer: string;\n    readonly accepts: readonly SuperNovaAuthKind[];\n    readonly billing?: SuperNovaAuthBilling;\n    readonly route?: string | undefined;\n    readonly destination: SuperNovaAuthDestination;\n    readonly connections?: Readonly<Partial<Record<SuperNovaAuthKind, SuperNovaAuthConnection>>>;\n    readonly apiKeyHeaders?: readonly SuperNovaApiKeyHeader[];\n}',
-  },
-  {
-    name: 'SuperNovaAuthUnresolved',
-    declaration: 'export interface SuperNovaAuthUnresolved {\n    readonly kind: SuperNovaAuthKind;\n    readonly unresolved: \'connection\' | \'deployment\';\n    readonly error: unknown;\n}',
-  },
-  {
-    name: 'SuperNovaLlmApiExtensionMap',
-    declaration: 'export interface SuperNovaLlmApiExtensionMap {\n}',
-  },
-  {
-    name: 'SuperNovaLlmApiExtensionProvider',
-    declaration: 'export interface SuperNovaLlmApiExtensionProvider<T extends SuperNovaLlmApiJson> {\n    prepare(request: SuperNovaLlmApiExtensionRequest): PreparedSuperNovaLlmApiExtension<T> | undefined | Promise<PreparedSuperNovaLlmApiExtension<T> | undefined>;\n}',
-  },
-  {
-    name: 'SuperNovaLlmApiExtensionRequest',
-    declaration: 'export interface SuperNovaLlmApiExtensionRequest {\n    readonly body: Readonly<Record<string, SuperNovaLlmApiJson>>;\n    readonly sessionId?: string;\n    readonly purpose?: string;\n    readonly signal: AbortSignal;\n}',
-  },
-  {
-    name: 'SuperNovaLlmApiJson',
-    declaration: 'export type SuperNovaLlmApiJson = null | boolean | number | string | SuperNovaLlmApiJson[] | {\n    [key: string]: SuperNovaLlmApiJson;\n};',
-  },
-  {
     name: 'DeliveryRetentionBounds',
     declaration: 'export interface DeliveryRetentionBounds {\n    readonly days: number;\n    readonly records: number;\n}',
   },
@@ -7453,14 +7401,6 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'DomainTableSpec',
     declaration: 'export interface DomainTableSpec<K extends string = string, V = unknown> {\n    readonly valueSchema: ZodType<V>;\n    readonly __key?: K;\n}',
-  },
-  {
-    name: 'SnhEnvironment',
-    declaration: 'export type SnhEnvironment = Readonly<Record<SnhEnvironmentKey, string>>;',
-  },
-  {
-    name: 'SnhEnvironmentKey',
-    declaration: 'export type SnhEnvironmentKey = `${typeof SNH_ENV_PREFIX}${string}`;',
   },
   {
     name: 'DynamicCordisPackage',
@@ -9123,20 +9063,20 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export interface PreparedAdapterCall {\n    readonly model: LlmResolvedModelInfo;\n    stream(options: GenerateOptions): AsyncIterable<StreamChunk>;\n}',
   },
   {
-    name: 'PreparedSuperNovaLlmApiExtension',
-    declaration: 'export interface PreparedSuperNovaLlmApiExtension<T extends SuperNovaLlmApiJson> {\n    readonly value: T;\n    accept?(): void | Promise<void>;\n}',
-  },
-  {
-    name: 'PreparedSuperNovaLlmApiExtensions',
-    declaration: 'export interface PreparedSuperNovaLlmApiExtensions {\n    readonly fields: Readonly<Partial<SuperNovaLlmApiExtensionMap>>;\n    accept(): Promise<void>;\n}',
-  },
-  {
     name: 'PreparedLlmCall',
     declaration: 'export interface PreparedLlmCall {\n    readonly config: LlmCallConfig;\n    readonly retryPolicy: ResolvedRetryPolicy;\n    readonly context?: LlmModelContext;\n    readonly inputModalities?: readonly ModelModality[];\n    readonly systemPromptUpdate?: SystemPromptUpdate;\n    readonly toolUpdate?: ToolUpdate;\n    readonly adapterDefaults: LlmCallConfigAdapterDefaults;\n    stream(options: GenerateOptions): AsyncIterable<StreamChunk>;\n}',
   },
   {
     name: 'PreparedReferencedMessage',
     declaration: 'export interface PreparedReferencedMessage {\n    content: ContentBlock[];\n    additionalContext?: UserMessage;\n}',
+  },
+  {
+    name: 'PreparedSuperNovaLlmApiExtension',
+    declaration: 'export interface PreparedSuperNovaLlmApiExtension<T extends SuperNovaLlmApiJson> {\n    readonly value: T;\n    accept?(): void | Promise<void>;\n}',
+  },
+  {
+    name: 'PreparedSuperNovaLlmApiExtensions',
+    declaration: 'export interface PreparedSuperNovaLlmApiExtensions {\n    readonly fields: Readonly<Partial<SuperNovaLlmApiExtensionMap>>;\n    accept(): Promise<void>;\n}',
   },
   {
     name: 'PrepareSessionOptions',
@@ -10639,6 +10579,14 @@ export const TYPE_API: readonly TypeApiEntry[] = [
     declaration: 'export interface SkillViewOptions extends SkillLookupOptions {\n    readonly scope?: ScopeKey | undefined;\n}',
   },
   {
+    name: 'SnhEnvironment',
+    declaration: 'export type SnhEnvironment = Readonly<Record<SnhEnvironmentKey, string>>;',
+  },
+  {
+    name: 'SnhEnvironmentKey',
+    declaration: 'export type SnhEnvironmentKey = `${typeof SNH_ENV_PREFIX}${string}`;',
+  },
+  {
     name: 'SpeechCatalog',
     declaration: 'export interface SpeechCatalog extends SpeechSnapshot {\n    readonly maxAudioBytes: number;\n    readonly maxDurationSeconds: number;\n}',
   },
@@ -10925,6 +10873,58 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'SubprocessTerminalSpawnSpec',
     declaration: 'export interface SubprocessTerminalSpawnSpec {\n    argv: readonly string[];\n    cwd: string;\n    env?: Record<string, string> | undefined;\n    rows: number;\n    cols: number;\n    terminalType: string;\n    shellActivity?: boolean | undefined;\n    graceMs: number;\n    signal?: AbortSignal | undefined;\n}',
+  },
+  {
+    name: 'SuperNovaApiKeyHeader',
+    declaration: 'export type SuperNovaApiKeyHeader = \'authorization\' | \'x-api-key\';',
+  },
+  {
+    name: 'SuperNovaAuthBilling',
+    declaration: 'export type SuperNovaAuthBilling = \'auto\' | SuperNovaAuthKind;',
+  },
+  {
+    name: 'SuperNovaAuthCandidate',
+    declaration: 'export interface SuperNovaAuthCandidate {\n    readonly kind: SuperNovaAuthKind;\n    readonly endpoint: string;\n    readonly reference?: CredentialRef;\n    configured(): Promise<boolean>;\n    resolve(signal?: AbortSignal): Promise<SuperNovaAuthorization | undefined>;\n}',
+  },
+  {
+    name: 'SuperNovaAuthConnection',
+    declaration: 'export interface SuperNovaAuthConnection {\n    readonly baseURL: string;\n    readonly reference?: CredentialRef;\n    readonly owner?: string;\n}',
+  },
+  {
+    name: 'SuperNovaAuthDestination',
+    declaration: 'export type SuperNovaAuthDestination = {\n    readonly path: string;\n} | {\n    readonly url: string;\n};',
+  },
+  {
+    name: 'SuperNovaAuthKind',
+    declaration: 'export type SuperNovaAuthKind = \'api-key\' | \'account\';',
+  },
+  {
+    name: 'SuperNovaAuthorization',
+    declaration: 'export interface SuperNovaAuthorization {\n    readonly kind: SuperNovaAuthKind;\n    readonly endpoint: string;\n    readonly headers: Readonly<Record<string, string>>;\n    readonly reference?: CredentialRef;\n    reject?(): Promise<void>;\n    readonly revoked?: AbortSignal;\n}',
+  },
+  {
+    name: 'SuperNovaAuthRequest',
+    declaration: 'export interface SuperNovaAuthRequest {\n    readonly consumer: string;\n    readonly accepts: readonly SuperNovaAuthKind[];\n    readonly billing?: SuperNovaAuthBilling;\n    readonly route?: string | undefined;\n    readonly destination: SuperNovaAuthDestination;\n    readonly connections?: Readonly<Partial<Record<SuperNovaAuthKind, SuperNovaAuthConnection>>>;\n    readonly apiKeyHeaders?: readonly SuperNovaApiKeyHeader[];\n}',
+  },
+  {
+    name: 'SuperNovaAuthUnresolved',
+    declaration: 'export interface SuperNovaAuthUnresolved {\n    readonly kind: SuperNovaAuthKind;\n    readonly unresolved: \'connection\' | \'deployment\';\n    readonly error: unknown;\n}',
+  },
+  {
+    name: 'SuperNovaLlmApiExtensionMap',
+    declaration: 'export interface SuperNovaLlmApiExtensionMap {\n}',
+  },
+  {
+    name: 'SuperNovaLlmApiExtensionProvider',
+    declaration: 'export interface SuperNovaLlmApiExtensionProvider<T extends SuperNovaLlmApiJson> {\n    prepare(request: SuperNovaLlmApiExtensionRequest): PreparedSuperNovaLlmApiExtension<T> | undefined | Promise<PreparedSuperNovaLlmApiExtension<T> | undefined>;\n}',
+  },
+  {
+    name: 'SuperNovaLlmApiExtensionRequest',
+    declaration: 'export interface SuperNovaLlmApiExtensionRequest {\n    readonly body: Readonly<Record<string, SuperNovaLlmApiJson>>;\n    readonly sessionId?: string;\n    readonly purpose?: string;\n    readonly signal: AbortSignal;\n}',
+  },
+  {
+    name: 'SuperNovaLlmApiJson',
+    declaration: 'export type SuperNovaLlmApiJson = null | boolean | number | string | SuperNovaLlmApiJson[] | {\n    [key: string]: SuperNovaLlmApiJson;\n};',
   },
   {
     name: 'SurfaceEvent',

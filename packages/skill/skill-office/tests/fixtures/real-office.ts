@@ -13,7 +13,7 @@ export function officeModelPatches() {
       { id: 'llm-supernova', disabled: true },
       { id: 'llm-pi-ai', config: { providers: { 'office-test': {
         api: 'openai-completions', apiKeyEnv: 'DEEPSEEK_API_KEY', baseURL: process.env.DEEPSEEK_BASE_URL,
-        compat: { thinkingFormat: 'supernova' },
+        compat: { thinkingFormat: 'deepseek' },
         models: [{ id: model, contextWindow: 128000, maxTokens: 8192, input: ['text', 'image'] }],
       } } } },
     ] : [{ id: 'llm-supernova', config: { thinking: 'enabled', reasoningEffort: 'high', maxTokens: 8192,

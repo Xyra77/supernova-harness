@@ -21,7 +21,7 @@
       "path": "../../llm/llm"
     },
     {
-      "path": "../../llm/llm-supernova-api-key"
+      "path": "../../llm/llm-deepseek-api-key"
     },
     {
       "path": "../../core/agent"

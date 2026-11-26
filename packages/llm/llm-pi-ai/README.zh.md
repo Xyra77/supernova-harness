@@ -66,7 +66,7 @@ kind: "package-reference"
         api: openai-completions
         baseURL: https://gateway.acme.example/v1
         compat:
-          thinkingFormat: supernova
+          thinkingFormat: deepseek
         models:
           - id: acme-think
             name: Acme Think

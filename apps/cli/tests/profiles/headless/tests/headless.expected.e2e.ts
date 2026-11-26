@@ -976,7 +976,7 @@ describe('headless stream-json snapshots', () => {
         {
           "maxTokens": 1024,
           "model": "deepseek-flash",
-          "provider": "supernova",
+          "provider": "deepseek",
           "reasoningEffort": "low",
         }
       `)

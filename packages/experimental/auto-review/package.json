@@ -59,7 +59,7 @@
     "@supernova-ai/snh-fs-sandbox": "workspace:*",
     "@supernova-ai/snh-llm": "workspace:*",
     "@supernova-ai/snh-llm-supernova": "workspace:*",
-    "@supernova-ai/snh-llm-supernova-api-key": "workspace:*",
+    "@supernova-ai/snh-llm-deepseek-api-key": "workspace:*",
     "@supernova-ai/snh-permission-presets": "workspace:*",
     "@supernova-ai/snh-ptc-runtime-node": "workspace:*",
     "@supernova-ai/snh-sandbox": "workspace:*",

@@ -558,7 +558,7 @@
     # key coming from the credential store below. Thinking defaults are a deployment
     # choice.
     - id: llm-supernova
-      name: '@supernova-ai/snh-llm-supernova-api-key'
+      name: '@supernova-ai/snh-llm-deepseek-api-key'
 
     - id: llm-deepseek-account
       name: '@supernova-ai/snh-llm-deepseek-account'

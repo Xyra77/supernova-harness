@@ -11,7 +11,7 @@ import { en } from '../src/client/locales.ts'
 afterEach(() => { cleanup(); vi.restoreAllMocks() })
 
 function Editor(props: {
-  family: 'supernova' | 'pi-ai'
+  family: 'deepseek' | 'pi-ai'
   initial: SuperNovaModelDraft[]
   changed: (models: SuperNovaModelDraft[]) => void
   disabled?: boolean
@@ -23,7 +23,7 @@ function Editor(props: {
     onChange: (next: SuperNovaModelDraft[]): void => { props.changed(next); setModels(next) },
     onReset: (): void => { setModels(props.initial) },
   }
-  return props.family === 'supernova'
+  return props.family === 'deepseek'
     ? <SuperNovaModelsEditor {...shared} defaultContextWindow={undefined} defaultMaxTokens={undefined} />
     : <ModelListEditor
       {...shared} probe={{ settingsNs: 'llm-pi-ai' }} onBusyChange={() => {}}
@@ -61,7 +61,7 @@ function leave(target: HTMLElement, relatedTarget: Node | null = null) {
   fireEvent(target, event)
 }
 
-describe.each(['supernova', 'pi-ai'] as const)('%s model ordering', (family) => {
+describe.each(['deepseek', 'pi-ai'] as const)('%s model ordering', (family) => {
   it('keeps name editing expanded after blur and restores disclosure focus on collapse', () => {
     render(<Editor family={family} initial={[{ id: 'first', name: 'First' }]} changed={vi.fn()} />)
     const name = screen.getByLabelText<HTMLInputElement>(`${en.modelName} 1`)
@@ -269,7 +269,7 @@ it('does not accept another provider editor\'s dragged model', () => {
   const firstChanged = vi.fn()
   const secondChanged = vi.fn()
   const first = render(<Editor family="pi-ai" initial={[{ id: 'a' }, { id: 'b' }]} changed={firstChanged} />)
-  const second = render(<Editor family="supernova" initial={[{ id: 'c' }, { id: 'd' }]} changed={secondChanged} />)
+  const second = render(<Editor family="deepseek" initial={[{ id: 'c' }, { id: 'd' }]} changed={secondChanged} />)
   const source = within(first.container).getByRole<HTMLButtonElement>('button', { name: `${en.reorderModel} 1` })
   const destination = within(second.container).getByRole<HTMLButtonElement>('button', { name: `${en.reorderModel} 2` })
   const dataTransfer = transfer()

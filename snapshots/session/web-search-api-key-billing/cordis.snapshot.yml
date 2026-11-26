@@ -1,7 +1,7 @@
 # Keyless replay counterpart: the account stand-in and Search endpoint remain real; only the model adapter is
 # replaced by replay.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - id: llm-deepseek-account

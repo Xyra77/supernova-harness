@@ -1401,7 +1401,7 @@ describe('installLlmReplay (through the real LlmRuntime)', () => {
       file,
       providers: [
         {
-          id: 'supernova',
+          id: 'deepseek',
           name: 'SuperNova',
           retryPolicy: {
             mode: 'normal',
@@ -1427,15 +1427,15 @@ describe('installLlmReplay (through the real LlmRuntime)', () => {
     })
 
     expect(ctx.llm.listProviders()).toEqual([
-      { id: 'supernova', name: 'SuperNova' },
+      { id: 'deepseek', name: 'SuperNova' },
       { id: 'empty', name: 'empty' },
     ])
-    await expect(ctx.llm.listModels('supernova')).resolves.toEqual([
-      { provider: 'supernova', id: 'flash', name: 'flash', inputModalities: ['text', 'image'] },
-      { provider: 'supernova', id: 'pro', name: 'Pro', description: 'Larger model', badge: { text: { en: 'New', zh: '新' }, tone: 'info' } },
+    await expect(ctx.llm.listModels('deepseek')).resolves.toEqual([
+      { provider: 'deepseek', id: 'flash', name: 'flash', inputModalities: ['text', 'image'] },
+      { provider: 'deepseek', id: 'pro', name: 'Pro', description: 'Larger model', badge: { text: { en: 'New', zh: '新' }, tone: 'info' } },
     ])
     await expect(ctx.llm.listModels('empty')).resolves.toEqual([])
-    await expect(ctx.llm.resolveModelInfo('supernova', 'flash')).resolves.toMatchObject({
+    await expect(ctx.llm.resolveModelInfo('deepseek', 'flash')).resolves.toMatchObject({
       context: { contextWindow: 128_000 },
       inputModalities: ['text', 'image'],
       defaultMaxTokens: 64_000,
@@ -1446,18 +1446,18 @@ describe('installLlmReplay (through the real LlmRuntime)', () => {
       systemPromptUpdate: 'in-history',
       toolUpdate: 'addition-only',
     })
-    await expect(ctx.llm.resolveModelInfo('supernova', 'pro')).resolves.not.toHaveProperty('systemPromptUpdate')
-    await expect(ctx.llm.resolveModelInfo('supernova', 'pro')).resolves.not.toHaveProperty('toolUpdate')
-    await expect(ctx.llm.resolveModelInfo('supernova', 'pro')).resolves.not.toHaveProperty('inputModalities')
-    await expect(ctx.llm.resolveModelInfo('supernova', 'pro')).resolves.not.toHaveProperty('context')
+    await expect(ctx.llm.resolveModelInfo('deepseek', 'pro')).resolves.not.toHaveProperty('systemPromptUpdate')
+    await expect(ctx.llm.resolveModelInfo('deepseek', 'pro')).resolves.not.toHaveProperty('toolUpdate')
+    await expect(ctx.llm.resolveModelInfo('deepseek', 'pro')).resolves.not.toHaveProperty('inputModalities')
+    await expect(ctx.llm.resolveModelInfo('deepseek', 'pro')).resolves.not.toHaveProperty('context')
     // Efforts without a configured default preserve the provider's own default.
-    await expect(ctx.llm.resolveModelInfo('supernova', 'pro')).resolves.toMatchObject({
+    await expect(ctx.llm.resolveModelInfo('deepseek', 'pro')).resolves.toMatchObject({
       reasoning: { efforts: [{ id: 'high', name: 'high' }] },
     })
-    await expect(ctx.llm.resolveModelInfo('supernova', 'pro')).resolves.not.toHaveProperty('defaultMaxTokens')
-    await expect(ctx.llm.resolveModelInfo('supernova', 'unlisted')).resolves.not.toHaveProperty('context')
+    await expect(ctx.llm.resolveModelInfo('deepseek', 'pro')).resolves.not.toHaveProperty('defaultMaxTokens')
+    await expect(ctx.llm.resolveModelInfo('deepseek', 'unlisted')).resolves.not.toHaveProperty('context')
     await expect(ctx.llm.resolveModelInfo('empty', 'unlisted')).resolves.not.toHaveProperty('context')
-    expect(ctx.llm.providerRetryPolicy('supernova')).toMatchObject({
+    expect(ctx.llm.providerRetryPolicy('deepseek')).toMatchObject({
       mode: 'normal',
       maxRetries: 2,
       initialDelayMs: 1,
@@ -1472,7 +1472,7 @@ describe('installLlmReplay (through the real LlmRuntime)', () => {
       jitterRatio: 0.1,
     })
     const prepared = await ctx.llm.prepareCall({
-      provider: 'supernova', model: 'flash',
+      provider: 'deepseek', model: 'flash',
     }, undefined, (controls, model) => ({ ...controls, reasoningEffort: model.reasoning!.efforts[0]!.id }))
     expect(prepared.config.reasoningEffort).toBe('off')
     expect(await drain(prepared.stream({ ...prepared.config, messages: [] }))).toEqual(TEXT_CHUNKS)
@@ -1489,9 +1489,9 @@ describe('installLlmReplay (through the real LlmRuntime)', () => {
     expect(() => {
       installLlmReplay(ctx, {
         file,
-        providers: [{ id: 'supernova', retryPolicy: { mode: 'normal', maxRetries: -1 } }],
+        providers: [{ id: 'deepseek', retryPolicy: { mode: 'normal', maxRetries: -1 } }],
       })
-    }).toThrow(/llm-replay: provider "supernova" retryPolicy\.maxRetries/)
+    }).toThrow(/llm-replay: provider "deepseek" retryPolicy\.maxRetries/)
   })
 
   it('serves the Nth call the Nth derived entry (positional)', async () => {
@@ -2144,14 +2144,14 @@ describe('apply (the plugin entry)', () => {
     installLlmReplay(ctx, {
       file,
       providers: [{
-        id: 'supernova',
+        id: 'deepseek',
         models: [
           { id: 'vision', inputModalities: ['text', 'image'], imageRequestTokens: 384 },
           { id: 'plain' },
         ],
       }],
     })
-    const pricing = ctx.llm.imageRequestPricing('supernova', 'vision')
+    const pricing = ctx.llm.imageRequestPricing('deepseek', 'vision')
     expect(pricing).toBeDefined()
     const ref = {
       attachmentId: 'sha256:aaaaaaaa',
@@ -2167,7 +2167,7 @@ describe('apply (the plugin entry)', () => {
     expect(priced?.map(price => price.visualTokens)).toEqual([384, 0])
     expect(priced?.[0]?.text).toContain('640x480px')
     expect(priced?.[1]?.text).toContain('image omitted to fit request image limits')
-    expect(ctx.llm.imageRequestPricing('supernova', 'plain')).toBeUndefined()
+    expect(ctx.llm.imageRequestPricing('deepseek', 'plain')).toBeUndefined()
   })
 
   it('rejects imageRequestTokens on a model without the image modality during load', () => {

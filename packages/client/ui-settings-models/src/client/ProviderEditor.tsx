@@ -46,7 +46,7 @@ import { RetryPolicyEditor, retryPolicyDefaults, retryPolicyFailure } from './Re
 import styles from './ModelsSection.module.css'
 
 /** Per-adapter-family curated field sets (unknown namespaces get the hint alone). */
-type EditorLayout = 'supernova' | 'pi-ai' | 'unknown'
+type EditorLayout = 'deepseek' | 'pi-ai' | 'unknown'
 
 
 
@@ -160,7 +160,7 @@ export function pathOps(
 
 /** The editor layout the owning namespace selects. */
 function layoutOf(ns: string): EditorLayout {
-  if (ns === 'llm-supernova') return 'supernova'
+  if (ns === 'llm-supernova') return 'deepseek'
   if (ns === 'llm-pi-ai') return 'pi-ai'
   return 'unknown'
 }
@@ -406,7 +406,7 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
    * narrowed so the per-family branches below are total: an unknown namespace
    * renders the hint instead and never reaches this body.
    */
-  const curatedFields = (family: 'supernova' | 'pi-ai'): ReactNode => {
+  const curatedFields = (family: 'deepseek' | 'pi-ai'): ReactNode => {
     // What a hand-declared route names for itself and nothing else can supply.
     // A whole-section `llm-supernova` profile is a composition fact with no
     // per-route identity for its schema to carry, hence the family test.
@@ -419,7 +419,7 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
     const defaultInput = schema.getPath(fallback, ['defaultInput'])
     const baseURL = stringAt(fallback, 'baseURL') ?? props.defaultBaseURL
     const endpointEnv = props.baseURLEnv ?? []
-    const endpointHint = family === 'supernova' ? t('deepSeekEndpointHint')
+    const endpointHint = family === 'deepseek' ? t('deepSeekEndpointHint')
       : baseURL === undefined && endpointEnv.length > 0 ? t('baseUrlEnvironment').replace('{env}', () => endpointEnv.join(', ')) : undefined
     // A named reference is the only credential the adapter reads for this
     // route. Without one, a catalog route authenticates the way the directory
@@ -555,7 +555,7 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
                 className={styles['input']}
                 type="text"
                 value={stringAt(draft, 'baseURL') ?? ''}
-                placeholder={family === 'supernova'
+                placeholder={family === 'deepseek'
                   ? t('deepSeekBaseUrl')
                   : baseURL === undefined ? t(endpointEnv.length > 0 ? 'baseUrlConfigured' : 'baseUrlDefault')
                     : t('baseUrlPlaceholder').replace('{url}', () => baseURL)}
@@ -614,7 +614,7 @@ export function ProviderEditor(props: ProviderEditorProps): ReactNode {
             {/* Both families edit the same rows through the same contract; only
                 the extras differ — SuperNova's inherited capacities, pi-ai's
                 endpoint interrogation. */}
-            {family === 'supernova'
+            {family === 'deepseek'
               ? (
                 <SuperNovaModelsEditor
                   {...catalogProps}

@@ -5,12 +5,12 @@
 /:
   en: 059ab5482d52d8b8
   zh: 006b65489bc4ec70
-/supernova-api-key-model-visibility:
+/deepseek-api-key-model-visibility:
   en: 7b14dc7133967bfd
   zh: 4f338ae1e8151feb
-/supernova-api-key-model-visibility/change:
+/deepseek-api-key-model-visibility/change:
   en: ab0b141fbb3167ab
   zh: 918f4202223abe44
-/supernova-api-key-model-visibility/migration:
+/deepseek-api-key-model-visibility/migration:
   en: 2fda36f7e543f1d0
   zh: e8522f256de5adaa

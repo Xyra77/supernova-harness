@@ -909,13 +909,13 @@ describe('ModelsSection', () => {
     expect(onClose).toHaveBeenCalledWith(true)
   })
 
-  it('applies customized supernova fields as path ops', async () => {
+  it('applies customized deepseek fields as path ops', async () => {
     const { mutate } = await mountSuperNovaCard({
       mutate: vi.fn(() => Promise.resolve(remoteOk(wireNamespaces()[0]))),
     })
     fireEvent.click(screen.getByText(en.customized))
     const baseURL = screen.getByLabelText<HTMLInputElement>(en.baseUrl)
-    // The supernova placeholder is pinned to the public endpoint, not the
+    // The deepseek placeholder is pinned to the public endpoint, not the
     // effective value (which may reflect a launch-environment override).
     expect(baseURL.placeholder).toBe('https://api.deepseek.com/anthropic (Default to use DEEPSEEK_BASE_URL)')
     fireEvent.change(baseURL, { target: { value: 'https://next2' } })
@@ -1377,7 +1377,7 @@ describe('ModelsSection', () => {
     ])
   })
 
-  it('pins the supernova placeholder and clears typed input back to inherited', async () => {
+  it('pins the deepseek placeholder and clears typed input back to inherited', async () => {
     const { face } = scriptedFace()
     const bare: SettingsNamespaceView = {
       ns: 'llm-supernova',
@@ -2235,7 +2235,7 @@ it.each([
   ['openai', `sk-proj-${'•'.repeat(8)}wxyz`],
   ['anthropic', `sk-ant-a${'•'.repeat(8)}wxyz`],
   ['google', `AIzaS${'•'.repeat(8)}wxyz`],
-  ['supernova', `sk-abcde${'•'.repeat(8)}wxyz`],
+  ['deepseek', `sk-abcde${'•'.repeat(8)}wxyz`],
   ['acme-gateway', `vendor_abcde${'•'.repeat(8)}wxyz`],
 ] as const)('protects the saved %s key and reveals only its replacement', (provider, masked) => {
   renderPiAiEditor(provider, piAiNamespaceWith(provider, { apiKeyEnv: 'TEAM_API_KEY' }), {
@@ -2604,7 +2604,7 @@ it('shows endpoint configuration variables without presenting them as credential
 })
 
 it.each([true, false, undefined])('shows the confirmed fallback state without assuming a connection works: %s', (configured) => {
-  renderPiAiEditor('supernova', wireNamespaces().find(view => view.ns === 'llm-pi-ai')!, {
+  renderPiAiEditor('deepseek', wireNamespaces().find(view => view.ns === 'llm-pi-ai')!, {
     nativeAuth: { env: ['DEEPSEEK_API_KEY'], oauth: false },
     ...configured === undefined ? {} : { credentialChecks: { DEEPSEEK_API_KEY: { configured, writable: true } } },
   })

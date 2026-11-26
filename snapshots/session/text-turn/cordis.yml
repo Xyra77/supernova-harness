@@ -3,7 +3,7 @@
 # deterministic test composition and raw persistence needed for recording.
 
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   config:
     thinking: enabled
     reasoningEffort: max

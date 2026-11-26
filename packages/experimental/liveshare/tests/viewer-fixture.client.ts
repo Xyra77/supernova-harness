@@ -1148,8 +1148,8 @@ function buildAlphaLog(presented = false): SessionEvent[] {
   toolTurn(
     70,
     'web_search',
-    '{"queries":["supernova harness architecture"]}',
-    'Search results for supernova harness architecture.',
+    '{"queries":["deepseek harness architecture"]}',
+    'Search results for deepseek harness architecture.',
     WEB_SEARCH_META,
   )
   toolTurn(
@@ -3530,7 +3530,7 @@ function createFixtureWorld(options: FixtureOptions): FixtureWorld {
       // Capacity parallel of the host token-meter's request/context record:
       // log-only, appended inside the open turn, and deduplicated against the
       // route already recorded (the fixture never varies contextWindow).
-      const selection = modelSelections.get(id) ?? { provider: 'supernova', model: 'deepseek-v4-flash' }
+      const selection = modelSelections.get(id) ?? { provider: 'deepseek', model: 'deepseek-v4-flash' }
       const previousHeader = logOf(id).findLast(event => event.type === 'request/header')
       const previousSelection = previousHeader?.type === 'request/header'
         ? {

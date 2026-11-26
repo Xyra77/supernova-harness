@@ -12,7 +12,7 @@
 
 密钥是只写的。保存后，页面只会收到脱敏描述符，永远不会收到明文密钥。密钥存储在 `$SNH_HOME/.credentials.yaml` 中，settings 只保留它的凭据引用。
 
-保存了密钥且使用默认端点时，SuperNova 的模型跟随 SuperNova API 发布的列表。第一次需要模型时加载列表，使用期间约每十分钟在后台刷新一次，无法加载时退回内置模型。在**自定义设置**里编辑**模型目录**会改用你自己的列表，不再跟随发布的列表；点**恢复默认模型**会重新跟随并重新加载。使用发布的列表时，卡片上显示的是内置模型，因此新发布的模型只出现在模型选择器中。列表、兜底和门控规则见 [API key 提供方参考](../../../packages/llm/llm-supernova-api-key/README.zh.md)。
+保存了密钥且使用默认端点时，SuperNova 的模型跟随 SuperNova API 发布的列表。第一次需要模型时加载列表，使用期间约每十分钟在后台刷新一次，无法加载时退回内置模型。在**自定义设置**里编辑**模型目录**会改用你自己的列表，不再跟随发布的列表；点**恢复默认模型**会重新跟随并重新加载。使用发布的列表时，卡片上显示的是内置模型，因此新发布的模型只出现在模型选择器中。列表、兜底和门控规则见 [API key 提供方参考](../../../packages/llm/llm-deepseek-api-key/README.zh.md)。
 
 ## 添加第三方提供商
 
@@ -158,13 +158,13 @@ SuperNova 将省略的 `inputModalities` 视为纯文本，并拒绝空列表。
 
 每个键都是菜单提供的一个等级，其值是在协议上以 `reasoning_effort` 发送的写法，因此 `max: xhigh` 可以为自有一套词汇的网关重命名某个等级。只有 `off` 可以留空，因为对多数端点来说，不思考就是不传该参数。路由的 `reasoning` 是会话尚未选择等级时采用的等级；在选择器中选定某个等级后，它会与模型一起保存为新会话的默认值。
 
-留空的 `off` 什么都不发送，这只能让「按请求才思考」的模型停下来；给 `off` 一个值，则会把该值作为 `reasoning_effort` 发送。对于「不明确关闭就会思考」的模型——例如 OpenAI 兼容网关后面的 SuperNova V4——需要 `compat.thinkingFormat: supernova`：它让 `off` 发送 `thinking: {type: disabled}`，其他每个等级则在 effort 之外再发送 `thinking: {type: enabled}`：
+留空的 `off` 什么都不发送，这只能让「按请求才思考」的模型停下来；给 `off` 一个值，则会把该值作为 `reasoning_effort` 发送。对于「不明确关闭就会思考」的模型——例如 OpenAI 兼容网关后面的 SuperNova V4——需要 `compat.thinkingFormat: deepseek`：它让 `off` 发送 `thinking: {type: disabled}`，其他每个等级则在 effort 之外再发送 `thinking: {type: enabled}`：
 
 ```yaml
         models:
           - id: deepseek-v4-pro
             compat:
-              thinkingFormat: supernova
+              thinkingFormat: deepseek
             reasoningEfforts:
               off:
               high: high
@@ -207,7 +207,7 @@ SuperNova 将省略的 `inputModalities` 视为纯文本，并拒绝空列表。
           - id: my-model
           - id: my-reasoner
             compat:
-              thinkingFormat: supernova
+              thinkingFormat: deepseek
 ```
 
 两者都未设置的字段，沿用已安装 catalog 为该模型记录的值；catalog 也未描述的，落到 pi-ai 的检测。凡是写下的开关都要给值：冒号后留空的键（`supportsDeveloperRole:`）会被拒绝而不是被忽略，因为空值会抹掉 catalog 已知的信息，却又没有给出任何替代。任何协议都不接受的名字同样会被拒绝，报错会列出可用的那些。
@@ -225,7 +225,7 @@ SuperNova 将省略的 `inputModalities` 视为纯文本，并拒绝空列表。
 - **密钥与地址都正确，网关却拒绝每一个请求**：它的请求形状与 OpenAI 不同。先在路由上设 `compat.supportsDeveloperRole: false` 与 `compat.maxTokensField: max_tokens`。
 - **只有推理模型失败**：pi-ai 把它们的系统提示词以 `developer` 角色发出，而网关拒绝该角色。设 `compat.supportsDeveloperRole: false`。
 - **手动录入的模型没有推理等级菜单**：该模型没有声明任何等级。在该模型的**模型选项**中打开**推理等级**，或在 `cordis.patch.yml` 中给该模型加上 `reasoningEfforts`。
-- **`off` 无法让 SuperNova 模型停止思考**：留空的 `off` 不发送任何推理字段，默认思考的端点就继续思考。请在模型或路由上设置 `compat.thinkingFormat: supernova`。
+- **`off` 无法让 SuperNova 模型停止思考**：留空的 `off` 不发送任何推理字段，默认思考的端点就继续思考。请在模型或路由上设置 `compat.thinkingFormat: deepseek`。
 - **某个 compat 开关因没有值而被拒绝**：冒号后什么都没写。给它一个值，或删掉该键以沿用已安装 catalog 的值。
 - **图片在发送前被拒绝**：该模型未声明图片模态。请给自定义提供商的模型加上 `input: [text, image]`；在 SuperNova 自身的路由上，请从配置的目录中选择支持图片的条目（默认为 `deepseek-flash`），并确认网关提供该模型且支持图片输入。
 - **提供商拒绝了带图片的请求**：该模型声明了其端点实际并不提供的图片能力。请从授予它图片能力的那个列表中移除 `image`——可能是模型的 `input`，也可能是路由的 `defaultInput`——然后开启新会话：附加的图片会留在会话日志里，因此在会话离开它之前，同一个请求会不断重复。

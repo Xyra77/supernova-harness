@@ -384,7 +384,7 @@ it.each([
   undefined,
   { modelName: 'openai/gpt-5.4-mini' },
   { modelName: 'openai/gpt-5.4-mini', apiKey: ' ' },
-  { modelName: 'supernova/deepseek-chat', apiKey: 'fixture' },
+  { modelName: 'deepseek/deepseek-chat', apiKey: 'fixture' },
   { modelName: 'openai/gpt-5.4-mini', apiKey: 'fixture', baseURL: 'https://fixture' },
 ])('rejects unsupported native model configuration before browser acquisition: %j', async (model) => {
   await expect(ctx.plugin(Provider, { mode: 'launch', model } as Provider.Config)).rejects.toThrow()

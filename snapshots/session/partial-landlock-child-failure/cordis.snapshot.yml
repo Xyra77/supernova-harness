@@ -1,7 +1,7 @@
 # Keyless runner-classification composition: replay authored model turns and
 # replace the shipping provider with a deterministic process-launch stand-in.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - id: sandbox

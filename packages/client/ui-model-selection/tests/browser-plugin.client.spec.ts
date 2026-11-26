@@ -556,11 +556,11 @@ describe('ui-model-selection dual entry', () => {
     const face = b.seat().inject!(sid('child'))
     expect(face.available).toBe(false)
     face.load()
-    await expect(face.select({ provider: 'supernova', model: 'deepseek-v4-pro' })).resolves.toBeUndefined()
+    await expect(face.select({ provider: 'deepseek', model: 'deepseek-v4-pro' })).resolves.toBeUndefined()
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).load())
       .rejects.toThrow(/unavailable for addressed subagent/)
     await expect(b.ctx.modelDirectories.directoryFor(sid('child')).select({
-      provider: 'supernova',
+      provider: 'deepseek',
       model: 'deepseek-v4-pro',
     })).rejects.toThrow(/unavailable for addressed subagent/)
     b.ctx.emit('connection/reset')

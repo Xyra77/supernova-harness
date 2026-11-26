@@ -345,13 +345,13 @@ Every package below exports a Cordis plugin that a bundle patch can name in a Lo
 
 | Package | Config | Description |
 |---|---|---|
-| `@supernova-ai/snh-supernova-llm-api-extensions` | no | Additive request-field registry for the official SuperNova LLM API adapter |
 | `@supernova-ai/snh-llm` | no | Provider-neutral LLM service interface for the SuperNova Harness |
 | `@supernova-ai/snh-llm-deepseek-account` | yes | SuperNova account provider authentication and discovery |
-| `@supernova-ai/snh-llm-supernova-api-key` | yes | SuperNova api-key provider authentication and discovery |
 | `@supernova-ai/snh-llm-pi-ai` | yes | pi-ai-backed SuperNova adapter for the SuperNova Harness LLM seam (design-verification twin of snh-llm-supernova) |
 | `@supernova-ai/snh-llm-retry` | yes | Provider-routed LLM request retry policy for the SuperNova Harness |
+| `@supernova-ai/snh-llm-deepseek-api-key` | yes | SuperNova api-key provider authentication and discovery |
 | `@supernova-ai/snh-plugin-package-inventory-supernova` | yes | Active Loader-backed plugin package inventory for official SuperNova LLM API requests |
+| `@supernova-ai/snh-supernova-llm-api-extensions` | no | Additive request-field registry for the official SuperNova LLM API adapter |
 | `@supernova-ai/snh-token-meter` | yes | Replay-aware token measurement service (ctx.tokenMeter) for the SuperNova Harness |
 
 ## lsp
@@ -501,8 +501,8 @@ Every package below exports a Cordis plugin that a bundle patch can name in a Lo
 | `@supernova-ai/snh-subagent-acp` | yes | Out-of-process ACP subagent backend: drives a child agent in a spawned subprocess over the Agent Client Protocol |
 | `@supernova-ai/snh-subagent-claude-code` | yes | One-shot Claude Code subagent provider over the official Agent SDK |
 | `@supernova-ai/snh-subagent-codex` | yes | One-shot Codex subagent provider over the official app-server protocol |
-| `@supernova-ai/snh-subagent-snh-sdk` | yes | Out-of-process SDK subagent backend: drives a child SuperNova Harness runtime subprocess over stdio JSON-RPC through the TypeScript SDK client |
 | `@supernova-ai/snh-subagent-fork-in-process` | yes | In-process fork subagent backend: runs a child agent seeded with a prefix of the parent's log |
+| `@supernova-ai/snh-subagent-snh-sdk` | yes | Out-of-process SDK subagent backend: drives a child SuperNova Harness runtime subprocess over stdio JSON-RPC through the TypeScript SDK client |
 | `@supernova-ai/snh-subagent-spawn-in-process` | yes | In-process spawn subagent backend: runs a fresh child agent on ctx.agents |
 | `@supernova-ai/snh-tool-subagent` | yes | Model-facing subagent delegation tool over the ctx.subagents seam |
 | `@supernova-ai/snh-tool-subagent-control` | yes | Shared messaging, interruption, and child discovery tools for subagents |
@@ -557,9 +557,9 @@ Every package below exports a Cordis plugin that a bundle patch can name in a Lo
 |---|---|---|
 | `@supernova-ai/snh-tool-web` | yes | Model-facing web tools (web_search, web_fetch) over the SuperNova Harness web capability seam (ctx.web) |
 | `@supernova-ai/snh-web` | yes | Abstract web access capability seam (ctx.web) for the SuperNova Harness — search/fetch provider registry, registration-order-independent selection, request/result vocabulary, and the WebError taxonomy |
-| `@supernova-ai/snh-web-supernova-api` | yes | SuperNova Search and Fetch API providers for the SuperNova Harness web capability seam (ctx.web) |
 | `@supernova-ai/snh-web-fetch-http` | yes | Anonymous HTTP(S) fetch provider for the SuperNova Harness web capability seam (ctx.web) |
 | `@supernova-ai/snh-web-search-supernova` | yes | SuperNova-backed search provider (native web_search via the Anthropic-compatible API) for the SuperNova Harness web capability seam (ctx.web) |
+| `@supernova-ai/snh-web-supernova-api` | yes | SuperNova Search and Fetch API providers for the SuperNova Harness web capability seam (ctx.web) |
 
 ## workflow
 

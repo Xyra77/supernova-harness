@@ -19,7 +19,7 @@ afterEach(cleanup)
 
 const t = makeTranslate(zh, commonZh)
 
-const SEARCH_ARGS = '{"queries":["supernova harness"]}'
+const SEARCH_ARGS = '{"queries":["deepseek harness"]}'
 const FETCH_ARGS = '{"url":"https://example.com/page"}'
 
 interface SearchMeta {
@@ -124,7 +124,7 @@ describe('webCardModel', () => {
 
   it('accepts open-root extensions while validating declared web arguments', () => {
     expect(webCardModel(settledSearch({
-      call: { name: 'web_search', argsRaw: '{"queries":["supernova"],"extension":1}' },
+      call: { name: 'web_search', argsRaw: '{"queries":["deepseek"],"extension":1}' },
     }))).not.toBeNull()
     expect(webCardModel(settledSearch({
       call: { name: 'web_search', argsRaw: '{"queries":[7]}' },

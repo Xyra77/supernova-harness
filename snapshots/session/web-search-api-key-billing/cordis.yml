@@ -2,7 +2,7 @@
 # SuperNova API key, with Search billed only to the API key. The account route stays unmounted so
 # the account token goes to the default account origin.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - id: llm-deepseek-account

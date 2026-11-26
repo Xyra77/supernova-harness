@@ -2275,24 +2275,6 @@ export interface Config extends Omit<ProtocolConfig, 'models'>, ModelListingConf
 ```
 <!-- END GENERATED config-catalog:@supernova-ai/snh-llm-deepseek-account -->
 
-<!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-llm-supernova-api-key -->
-<a id="supernova-aisnh-llm-supernova-api-key"></a>
-
-## `@supernova-ai/snh-llm-supernova-api-key`
-
-- `inject`: `llm` · `supernovaAuth`
-- `refs`: [`ModelListingConfig`](../packages/llm/llm-supernova/src/index.ts) · [`ProtocolConfig`](../packages/llm/llm-supernova/src/index.ts) · `Volatile` (`@supernova-ai/cordis`)
-- `source`: [`packages/llm/llm-supernova-api-key/src/config.ts:18`](../packages/llm/llm-supernova-api-key/src/config.ts)
-
-```ts config-catalog
-/** Messages configuration with a per-request API-key reference. */
-export interface Config extends ProtocolConfig, ModelListingConfig {
-  /** Credential reference resolved per request; defaults to DEEPSEEK_API_KEY. */
-  apiKeyEnv: Volatile<string>
-}
-```
-<!-- END GENERATED config-catalog:@supernova-ai/snh-llm-supernova-api-key -->
-
 <!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-llm-pi-ai -->
 <a id="supernova-aisnh-llm-pi-ai"></a>
 
@@ -2681,6 +2663,24 @@ export interface ReplayModelConfig {
 export type Config = Readonly<Record<string, never>>
 ```
 <!-- END GENERATED config-catalog:@supernova-ai/snh-llm-retry -->
+
+<!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-llm-deepseek-api-key -->
+<a id="supernova-aisnh-llm-deepseek-api-key"></a>
+
+## `@supernova-ai/snh-llm-deepseek-api-key`
+
+- `inject`: `llm` · `supernovaAuth`
+- `refs`: [`ModelListingConfig`](../packages/llm/llm-supernova/src/index.ts) · [`ProtocolConfig`](../packages/llm/llm-supernova/src/index.ts) · `Volatile` (`@supernova-ai/cordis`)
+- `source`: [`packages/llm/llm-deepseek-api-key/src/config.ts:18`](../packages/llm/llm-deepseek-api-key/src/config.ts)
+
+```ts config-catalog
+/** Messages configuration with a per-request API-key reference. */
+export interface Config extends ProtocolConfig, ModelListingConfig {
+  /** Credential reference resolved per request; defaults to DEEPSEEK_API_KEY. */
+  apiKeyEnv: Volatile<string>
+}
+```
+<!-- END GENERATED config-catalog:@supernova-ai/snh-llm-deepseek-api-key -->
 
 <!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-lsp-stdio -->
 <a id="supernova-aisnh-lsp-stdio"></a>
@@ -3485,6 +3485,26 @@ export interface RuntimeProcessEvents {
 ```
 <!-- END GENERATED config-catalog:@supernova-ai/snh-sdk-jsonrpc-server -->
 
+<!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-session-log-export -->
+<a id="supernova-aisnh-session-log-export"></a>
+
+## `@supernova-ai/snh-session-log-export`
+
+- `inject`: `commands` · `connection`
+- `source`: [`packages/session-query/session-log-export/src/index.ts:48`](../packages/session-query/session-log-export/src/index.ts)
+
+```ts config-catalog
+/** Session-log archive policy. */
+export interface Config {
+  /** DEFLATE level for each ZIP entry. @default 6 */
+  readonly compressionLevel?: SessionLogCompressionLevel
+}
+
+/** Valid fflate DEFLATE levels accepted by session-log export. */
+export type SessionLogCompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+```
+<!-- END GENERATED config-catalog:@supernova-ai/snh-session-log-export -->
+
 <!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-session-log-supernova -->
 <a id="supernova-aisnh-session-log-supernova"></a>
 
@@ -3508,26 +3528,6 @@ export interface Config {
 }
 ```
 <!-- END GENERATED config-catalog:@supernova-ai/snh-session-log-supernova -->
-
-<!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-session-log-export -->
-<a id="supernova-aisnh-session-log-export"></a>
-
-## `@supernova-ai/snh-session-log-export`
-
-- `inject`: `commands` · `connection`
-- `source`: [`packages/session-query/session-log-export/src/index.ts:48`](../packages/session-query/session-log-export/src/index.ts)
-
-```ts config-catalog
-/** Session-log archive policy. */
-export interface Config {
-  /** DEFLATE level for each ZIP entry. @default 6 */
-  readonly compressionLevel?: SessionLogCompressionLevel
-}
-
-/** Valid fflate DEFLATE levels accepted by session-log export. */
-export type SessionLogCompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-```
-<!-- END GENERATED config-catalog:@supernova-ai/snh-session-log-export -->
 
 <!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-session-persistence-jsonl -->
 <a id="supernova-aisnh-session-persistence-jsonl"></a>
@@ -4207,6 +4207,23 @@ export type CodexPermissionMode =
 ```
 <!-- END GENERATED config-catalog:@supernova-ai/snh-subagent-codex -->
 
+<!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-subagent-fork-in-process -->
+<a id="supernova-aisnh-subagent-fork-in-process"></a>
+
+## `@supernova-ai/snh-subagent-fork-in-process`
+
+- `inject`: `subagents`
+- `source`: [`packages/subagent/subagent-fork-in-process/src/index.ts:29`](../packages/subagent/subagent-fork-in-process/src/index.ts)
+
+```ts config-catalog
+/** Config: the registry name to register the provider under. */
+export interface Config {
+  /** Provider name on `ctx.subagents` (default `fork`). */
+  providerName: string
+}
+```
+<!-- END GENERATED config-catalog:@supernova-ai/snh-subagent-fork-in-process -->
+
 <!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-subagent-snh-sdk -->
 <a id="supernova-aisnh-subagent-snh-sdk"></a>
 
@@ -4254,23 +4271,6 @@ export interface Config {
 }
 ```
 <!-- END GENERATED config-catalog:@supernova-ai/snh-subagent-snh-sdk -->
-
-<!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-subagent-fork-in-process -->
-<a id="supernova-aisnh-subagent-fork-in-process"></a>
-
-## `@supernova-ai/snh-subagent-fork-in-process`
-
-- `inject`: `subagents`
-- `source`: [`packages/subagent/subagent-fork-in-process/src/index.ts:29`](../packages/subagent/subagent-fork-in-process/src/index.ts)
-
-```ts config-catalog
-/** Config: the registry name to register the provider under. */
-export interface Config {
-  /** Provider name on `ctx.subagents` (default `fork`). */
-  providerName: string
-}
-```
-<!-- END GENERATED config-catalog:@supernova-ai/snh-subagent-fork-in-process -->
 
 <!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-subagent-spawn-in-process -->
 <a id="supernova-aisnh-subagent-spawn-in-process"></a>
@@ -5366,59 +5366,6 @@ export interface Config {
 ```
 <!-- END GENERATED config-catalog:@supernova-ai/snh-web-app -->
 
-<!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-web-supernova-api -->
-<a id="supernova-aisnh-web-supernova-api"></a>
-
-## `@supernova-ai/snh-web-supernova-api`
-
-- `inject`: `web` · `supernovaAuth`
-- `refs`: `Volatile` (`@supernova-ai/cordis`)
-- `source`: [`packages/web/web-supernova-api/src/index.ts:55`](../packages/web/web-supernova-api/src/index.ts)
-
-```ts config-catalog
-/**
- * Settings read by the next search or fetch without re-registering either provider. A non-empty `*BaseURL` or
- * `*ApiKeyEnv` gives that capability its own endpoint and key; with neither, its `*Billing` chooses its SuperNova
- * credential. Stored fields of earlier settings (`baseURL`, `apiKeyEnv`, `apiKey`) are not schema fields: they load
- * without error and have no effect.
- */
-export interface Config {
-  /** Search API results per search, from 1 through 50; a smaller request bound wins. Defaults to 10. */
-  count: Volatile<number>
-  /**
-   * Most Search requests this plugin instance sends in any one-second window; later searches wait,
-   * and the wait counts against the caller's timeout. Other processes and clients on the same account
-   * share the account limit without coordination. Defaults to 5.
-   */
-  searchRequestsPerSecond: Volatile<number>
-  /** Send the triggering user question, bounded to 128 characters, as `ori_question`. Defaults to true. */
-  sendOriginalQuestion: Volatile<boolean>
-  /**
-   * Credential Search sends without {@link searchBaseURL} and {@link searchApiKeyEnv}. `auto` uses the conversation's
-   * SuperNova account or API key while it chats on a SuperNova model route, and otherwise the API key, then the signed-in
-   * account; `account` uses only the signed-in account; `api-key` uses only the API key. Defaults to `auto`.
-   */
-  searchBilling: Volatile<'auto' | 'account' | 'api-key'>
-  /** Credential Fetch sends without {@link fetchBaseURL} and {@link fetchApiKeyEnv}, chosen as {@link searchBilling} is. */
-  fetchBilling: Volatile<'auto' | 'account' | 'api-key'>
-  /**
-   * Own Search API base including its path prefix; `/search` is appended. With only {@link searchApiKeyEnv} set, the
-   * official base applies.
-   */
-  searchBaseURL: Volatile<string | undefined>
-  /** Own Search API credential reference. With only {@link searchBaseURL} set, `DEEPSEEK_API_KEY` applies. */
-  searchApiKeyEnv: Volatile<string | undefined>
-  /**
-   * Own Fetch API base including its path prefix; `/fetch` is appended. With only {@link fetchApiKeyEnv} set, the
-   * official base applies.
-   */
-  fetchBaseURL: Volatile<string | undefined>
-  /** Own Fetch API credential reference. With only {@link fetchBaseURL} set, `DEEPSEEK_API_KEY` applies. */
-  fetchApiKeyEnv: Volatile<string | undefined>
-}
-```
-<!-- END GENERATED config-catalog:@supernova-ai/snh-web-supernova-api -->
-
 <!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-web-fetch-http -->
 <a id="supernova-aisnh-web-fetch-http"></a>
 
@@ -5473,6 +5420,59 @@ export interface Config {
 }
 ```
 <!-- END GENERATED config-catalog:@supernova-ai/snh-web-search-supernova -->
+
+<!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-web-supernova-api -->
+<a id="supernova-aisnh-web-supernova-api"></a>
+
+## `@supernova-ai/snh-web-supernova-api`
+
+- `inject`: `web` · `supernovaAuth`
+- `refs`: `Volatile` (`@supernova-ai/cordis`)
+- `source`: [`packages/web/web-supernova-api/src/index.ts:55`](../packages/web/web-supernova-api/src/index.ts)
+
+```ts config-catalog
+/**
+ * Settings read by the next search or fetch without re-registering either provider. A non-empty `*BaseURL` or
+ * `*ApiKeyEnv` gives that capability its own endpoint and key; with neither, its `*Billing` chooses its SuperNova
+ * credential. Stored fields of earlier settings (`baseURL`, `apiKeyEnv`, `apiKey`) are not schema fields: they load
+ * without error and have no effect.
+ */
+export interface Config {
+  /** Search API results per search, from 1 through 50; a smaller request bound wins. Defaults to 10. */
+  count: Volatile<number>
+  /**
+   * Most Search requests this plugin instance sends in any one-second window; later searches wait,
+   * and the wait counts against the caller's timeout. Other processes and clients on the same account
+   * share the account limit without coordination. Defaults to 5.
+   */
+  searchRequestsPerSecond: Volatile<number>
+  /** Send the triggering user question, bounded to 128 characters, as `ori_question`. Defaults to true. */
+  sendOriginalQuestion: Volatile<boolean>
+  /**
+   * Credential Search sends without {@link searchBaseURL} and {@link searchApiKeyEnv}. `auto` uses the conversation's
+   * SuperNova account or API key while it chats on a SuperNova model route, and otherwise the API key, then the signed-in
+   * account; `account` uses only the signed-in account; `api-key` uses only the API key. Defaults to `auto`.
+   */
+  searchBilling: Volatile<'auto' | 'account' | 'api-key'>
+  /** Credential Fetch sends without {@link fetchBaseURL} and {@link fetchApiKeyEnv}, chosen as {@link searchBilling} is. */
+  fetchBilling: Volatile<'auto' | 'account' | 'api-key'>
+  /**
+   * Own Search API base including its path prefix; `/search` is appended. With only {@link searchApiKeyEnv} set, the
+   * official base applies.
+   */
+  searchBaseURL: Volatile<string | undefined>
+  /** Own Search API credential reference. With only {@link searchBaseURL} set, `DEEPSEEK_API_KEY` applies. */
+  searchApiKeyEnv: Volatile<string | undefined>
+  /**
+   * Own Fetch API base including its path prefix; `/fetch` is appended. With only {@link fetchApiKeyEnv} set, the
+   * official base applies.
+   */
+  fetchBaseURL: Volatile<string | undefined>
+  /** Own Fetch API credential reference. With only {@link fetchBaseURL} set, `DEEPSEEK_API_KEY` applies. */
+  fetchApiKeyEnv: Volatile<string | undefined>
+}
+```
+<!-- END GENERATED config-catalog:@supernova-ai/snh-web-supernova-api -->
 
 <!-- BEGIN GENERATED config-catalog:@supernova-ai/snh-webhook-github -->
 <a id="supernova-aisnh-webhook-github"></a>
@@ -5671,8 +5671,6 @@ export interface Config {
 | `@supernova-ai/snh-cordis-client-runner` | — | [`packages/extensions/cordis-client-runner/src/index.ts`](../packages/extensions/cordis-client-runner/src/index.ts) |
 | `@supernova-ai/snh-creation-recommendations` | `tools` · `pluginManager` · `agents` · `subagents` · `profileContext` · `skills` · `actionCards` | [`packages/extensions/creation-recommendations/src/index.ts`](../packages/extensions/creation-recommendations/src/index.ts) |
 | `@supernova-ai/snh-cua` | — | [`packages/experimental/cua/src/index.ts`](../packages/experimental/cua/src/index.ts) |
-| `@supernova-ai/snh-supernova-auth` | — | [`packages/account/supernova-auth/src/index.ts`](../packages/account/supernova-auth/src/index.ts) |
-| `@supernova-ai/snh-supernova-llm-api-extensions` | — | [`packages/llm/supernova-llm-api-extensions/src/index.ts`](../packages/llm/supernova-llm-api-extensions/src/index.ts) |
 | `@supernova-ai/snh-deliverable-file-references` | `systemPrompt` | [`packages/deliverables/deliverable-file-references/src/index.ts`](../packages/deliverables/deliverable-file-references/src/index.ts) |
 | `@supernova-ai/snh-experimental-auto-review` | `approval` · `llm` · `permissionPresets` · `sessions` · `tools` · `workingDirectory` | [`packages/experimental/auto-review/src/index.ts`](../packages/experimental/auto-review/src/index.ts) |
 | `@supernova-ai/snh-experimental-client-ui-claude-code-mods` | — | [`packages/experimental/client-ui-claude-code-mods/src/index.ts`](../packages/experimental/client-ui-claude-code-mods/src/index.ts) |
@@ -5706,6 +5704,8 @@ export interface Config {
 | `@supernova-ai/snh-storage` | — | [`packages/storage/storage/src/index.ts`](../packages/storage/storage/src/index.ts) |
 | `@supernova-ai/snh-subprocess-local` | — | [`packages/subprocess/subprocess-local/src/index.ts`](../packages/subprocess/subprocess-local/src/index.ts) |
 | `@supernova-ai/snh-subprocess-ssh` | `ssh` | [`packages/ssh/subprocess-ssh/src/index.ts`](../packages/ssh/subprocess-ssh/src/index.ts) |
+| `@supernova-ai/snh-supernova-auth` | — | [`packages/account/supernova-auth/src/index.ts`](../packages/account/supernova-auth/src/index.ts) |
+| `@supernova-ai/snh-supernova-llm-api-extensions` | — | [`packages/llm/supernova-llm-api-extensions/src/index.ts`](../packages/llm/supernova-llm-api-extensions/src/index.ts) |
 | `@supernova-ai/snh-terminal` | — | [`packages/terminal/terminal/src/index.ts`](../packages/terminal/terminal/src/index.ts) |
 | `@supernova-ai/snh-tool-call-timeout-policy` | `tools` | [`packages/guard/timeout-policy/src/index.ts`](../packages/guard/timeout-policy/src/index.ts) |
 | `@supernova-ai/snh-tool-cordis` | `tools` · `cordisInspect` | [`packages/extensions/tool-cordis/src/index.ts`](../packages/extensions/tool-cordis/src/index.ts) |
@@ -5788,8 +5788,8 @@ export interface Config {
 | `@supernova-ai/snh-http-proxy` | — | [`packages/util/http-proxy/src/index.ts`](../packages/util/http-proxy/src/index.ts) |
 | `@supernova-ai/snh-launch-environment` | — | [`packages/util/launch-environment/src/index.ts`](../packages/util/launch-environment/src/index.ts) |
 | `@supernova-ai/snh-lazy-require` | — | [`packages/util/lazy-require/src/index.ts`](../packages/util/lazy-require/src/index.ts) |
-| `@supernova-ai/snh-llm-supernova` | — | [`packages/llm/llm-supernova/src/index.ts`](../packages/llm/llm-supernova/src/index.ts) |
 | `@supernova-ai/snh-llm-mock-server` | — | [`packages/test-support/llm-mock-server/src/index.ts`](../packages/test-support/llm-mock-server/src/index.ts) |
+| `@supernova-ai/snh-llm-supernova` | — | [`packages/llm/llm-supernova/src/index.ts`](../packages/llm/llm-supernova/src/index.ts) |
 | `@supernova-ai/snh-loader-smoke` | — | [`packages/test-support/loader-smoke/src/index.ts`](../packages/test-support/loader-smoke/src/index.ts) |
 | `@supernova-ai/snh-native-command` | — | [`packages/util/native-command/src/index.ts`](../packages/util/native-command/src/index.ts) |
 | `@supernova-ai/snh-official-bundles` | — | [`packages/util/official-bundles/src/index.ts`](../packages/util/official-bundles/src/index.ts) |

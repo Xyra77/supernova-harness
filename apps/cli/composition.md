@@ -206,7 +206,7 @@ flowchart LR
   cfg --> plugin_snh_base_agent_loop
   plugin_snh_base_fs_sandbox["fs-sandbox<br/>@supernova-ai/snh-fs-sandbox"]
   cfg --> plugin_snh_base_fs_sandbox
-  plugin_snh_base_llm_supernova["llm-supernova<br/>@supernova-ai/snh-llm-supernova-api-key"]
+  plugin_snh_base_llm_supernova["llm-supernova<br/>@supernova-ai/snh-llm-deepseek-api-key"]
   cfg --> plugin_snh_base_llm_supernova
   plugin_snh_base_llm_deepseek_account["llm-deepseek-account<br/>@supernova-ai/snh-llm-deepseek-account"]
   cfg --> plugin_snh_base_llm_deepseek_account
@@ -313,7 +313,7 @@ flowchart LR
 | `system-prompt` | `@supernova-ai/snh-system-prompt` |
 | `agent-loop` | `@supernova-ai/snh-agent-loop` |
 | `fs-sandbox` | `@supernova-ai/snh-fs-sandbox` |
-| `llm-supernova` | `@supernova-ai/snh-llm-supernova-api-key` |
+| `llm-supernova` | `@supernova-ai/snh-llm-deepseek-api-key` |
 | `llm-deepseek-account` | `@supernova-ai/snh-llm-deepseek-account` |
 
 Source config: [`packages/bundle/base/cordis.patch.yml`](../../packages/bundle/base/cordis.patch.yml).

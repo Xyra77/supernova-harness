@@ -1,7 +1,7 @@
 # Keyless counterpart to depth-two.cordis.yml: apply the depth patch and replace
 # the live adapter with per-session replay.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - id: sandbox

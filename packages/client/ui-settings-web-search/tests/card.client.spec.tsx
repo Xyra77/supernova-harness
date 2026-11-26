@@ -51,7 +51,7 @@ function shipped(): WebSearchCardState {
     ...settled,
     selectionBlocked: false,
     providersFailed: false,
-    search: { selected: 'supernova-search-api', options: SEARCH_OPTIONS, kind: 'supernova', auto: false },
+    search: { selected: 'supernova-search-api', options: SEARCH_OPTIONS, kind: 'deepseek', auto: false },
     fetch: { selected: 'http', options: FETCH_OPTIONS, kind: 'local', auto: false },
     count: field('10'),
     searchBilling: { value: 'auto', overridden: false, advancedOverride: [] },
@@ -66,7 +66,7 @@ function shipped(): WebSearchCardState {
 function apis(): WebSearchCardState {
   const base = shipped()
   return {
-    ...base, fetch: { ...base.fetch, selected: 'supernova-fetch-api', kind: 'supernova' }, fetchBilling: { value: 'account', overridden: true, advancedOverride: [] },
+    ...base, fetch: { ...base.fetch, selected: 'supernova-fetch-api', kind: 'deepseek' }, fetchBilling: { value: 'account', overridden: true, advancedOverride: [] },
   }
 }
 

@@ -1,7 +1,7 @@
 # Keyless replay counterpart: the failed search remains real; only the
 # conversation model adapter is replaced by replay.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - id: plugin-package-inventory-supernova

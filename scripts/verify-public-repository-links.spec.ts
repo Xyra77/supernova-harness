@@ -3,8 +3,8 @@ import { findUnavailableRepositoryReferences } from './verify-public-repository-
 
 describe('repository link policy', () => {
   it('rejects encoded and case-varied references to the unavailable repository', () => {
-    const unavailableOwner = ['supernova', 'ai'].join('-')
-    const unavailableName = ['supernova', 'harness', 'sdk'].join('-')
+    const unavailableOwner = ['deepseek', 'ai'].join('-')
+    const unavailableName = ['deepseek', 'harness', 'sdk'].join('-')
     const unavailableRepository = `${unavailableOwner}/${unavailableName}`
     const encodedRepository = unavailableRepository.replaceAll('-', '%2D').replace('/', '%2F')
     const htmlEncodedRepository = unavailableRepository.replace('/', '&#x2f;')

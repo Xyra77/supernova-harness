@@ -451,14 +451,14 @@
       - listitem: review-child — Layout review | {{timestamp}} | persisted
       - listitem: review-grandchild — Narrow layout | {{timestamp}} | persisted
 - button "Inspect"
-- button "List models supernova" [expanded]
+- button "List models deepseek" [expanded]
 - text: Recorded result
 - list:
   - listitem:
-    - text: supernova/deepseek-chat
+    - text: deepseek/deepseek-chat
     - paragraph: SuperNova Chat
   - listitem:
-    - text: supernova/deepseek-reasoner
+    - text: deepseek/deepseek-reasoner
     - paragraph: SuperNova Reasoner
 - button "Inspect"
 - button "Create subagent 检查工具卡片布局，并列出三个最值得改进的地方。" [expanded]

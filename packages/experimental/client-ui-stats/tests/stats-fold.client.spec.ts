@@ -104,7 +104,7 @@ function assistantMessage(content: readonly ContentBlock[] = []): AssistantMessa
     role: 'assistant',
     id: brandString<MessageId>('assistant-1'),
     content,
-    source: { kind: 'model', provider: 'supernova', model: 'deepseek-chat' },
+    source: { kind: 'model', provider: 'deepseek', model: 'deepseek-chat' },
   }
 }
 
@@ -162,7 +162,7 @@ function retry(turn: number, step: number, time: number): SessionEventLike {
     turn,
     step,
     retryId: brandString<RetryId>('retry-1'),
-    provider: 'supernova',
+    provider: 'deepseek',
     mode: 'normal',
     policyKey: 'default',
     retry: 1,

@@ -141,4 +141,4 @@ The harness uses waterfalls for decisions that cooperating plugins may wrap or a
 
 Next: [Configuration](05-config.md) — plugin options from `cordis.yml`.
 
-[![](https://img.shields.io/badge/powered_by-snh-4D6BFE?style=flat-square&logo=supernova&logoColor=white)](https://github.com/deepseek-ai/deepseek-harness)
+[![](https://img.shields.io/badge/powered_by-snh-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/deepseek-ai/deepseek-harness)

@@ -23,8 +23,8 @@ it.each([
 })
 
 it.each([
-  [{ modelsTimeoutMs: 0 }, /^llm-supernova-api-key: modelsTimeoutMs must be a positive finite number/],
-  [{ modelsMaxAgeMs: 1.5 }, /^llm-supernova-api-key: modelsMaxAgeMs must be a non-negative safe integer/],
+  [{ modelsTimeoutMs: 0 }, /^llm-deepseek-api-key: modelsTimeoutMs must be a positive finite number/],
+  [{ modelsMaxAgeMs: 1.5 }, /^llm-deepseek-api-key: modelsMaxAgeMs must be a non-negative safe integer/],
 ])('rejects %j', (options, message) => {
   expect(() => resolveAdapterOptions({ models: [{ id: 'custom' }], ...options })).toThrow(message)
 })

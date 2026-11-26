@@ -2,7 +2,7 @@
 # `text-turn/cordis.snapshot.yml` applies only to the `default` composition, so
 # a sibling composition restates those swaps and adds its own rows.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - id: plugin-package-inventory-supernova

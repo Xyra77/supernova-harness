@@ -141,8 +141,8 @@ it('exposes the same image dimensions and byte budget used by SuperNova request 
   const model = { ...VISION_MODEL, imagePixelBudget: 10_000, imageTargetBytes: 50_000 }
   const source = ref('screenshot', 1000, 1000, 60_000)
   const provider = adapter({ models: [model] })
-  expect(provider.imageRequestTarget('supernova', 'vision', source)).toEqual({
+  expect(provider.imageRequestTarget('deepseek', 'vision', source)).toEqual({
     width: 100, height: 100, maxImageBytes: 32 * 1024 * 1024, imageTargetBytes: 50_000,
   })
-  expect(() => provider.imageRequestTarget('supernova', 'missing', source)).toThrow('no declared image projection')
+  expect(() => provider.imageRequestTarget('deepseek', 'missing', source)).toThrow('no declared image projection')
 })

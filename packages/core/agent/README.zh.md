@@ -36,7 +36,7 @@ kind: "package-reference"
 ```text
 const handle = await ctx.agents.create({
   sessionId,
-  agentOptions: { provider: 'supernova', model: 'deepseek-chat' },
+  agentOptions: { provider: 'deepseek', model: 'deepseek-chat' },
 })
 // later:
 await handle.dispose()   // stops the loop, unregisters, removes the session, unwinds the scope

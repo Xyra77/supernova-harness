@@ -279,9 +279,9 @@ describe('WebRuntime search readiness', () => {
   }
 
   it('answers from the selected provider and passes it the request route', async () => {
-    const { web } = await mountWeb({ searchProvider: 'supernova' })
+    const { web } = await mountWeb({ searchProvider: 'deepseek' })
     const asked: (string | undefined)[] = []
-    web.registerSearchProvider(readyProvider('supernova', available, false, asked))
+    web.registerSearchProvider(readyProvider('deepseek', available, false, asked))
     await expect(web.searchReady('deepseek-official')).resolves.toBe(false)
     expect(asked).toEqual(['deepseek-official'])
   })
@@ -290,7 +290,7 @@ describe('WebRuntime search readiness', () => {
     const { web } = await mountWeb({ searchProvider: 'exa' })
     const supernovaAsked: (string | undefined)[] = []
     web.registerSearchProvider(readyProvider('exa', available, true))
-    web.registerSearchProvider(readyProvider('supernova', available, false, supernovaAsked))
+    web.registerSearchProvider(readyProvider('deepseek', available, false, supernovaAsked))
     await expect(web.searchReady('deepseek-official')).resolves.toBe(true)
     expect(supernovaAsked).toEqual([])
   })
@@ -397,10 +397,10 @@ describe('WebRuntime fetch readiness', () => {
   }
 
   it('answers from the provider fetch() selects and passes it the request route', async () => {
-    const { web } = await mountWeb({ fetchProvider: 'supernova' })
+    const { web } = await mountWeb({ fetchProvider: 'deepseek' })
     const asked: (string | undefined)[] = []
     const httpAsked: (string | undefined)[] = []
-    web.registerFetchProvider(readyFetchProvider('supernova', available, false, asked))
+    web.registerFetchProvider(readyFetchProvider('deepseek', available, false, asked))
     web.registerFetchProvider(readyFetchProvider('http', available, true, httpAsked))
     await expect(web.fetchReady('deepseek-official')).resolves.toBe(false)
     expect(asked).toEqual(['deepseek-official'])

@@ -545,7 +545,7 @@ describe('subagent descriptors', () => {
       mode: 'continuable' as const,
       provider: 'spawn',
       label: 'complete child',
-      agentProvider: 'supernova',
+      agentProvider: 'deepseek',
       agentModel: 'chat',
       agentReasoningEffort: brandString<ReasoningEffortId>('high'),
       persona: 'reviewer',

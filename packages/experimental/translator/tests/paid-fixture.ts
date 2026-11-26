@@ -6,7 +6,7 @@ import SessionStore, { SESSION_FORMAT_VERSION, type SessionId, SessionSeq, type 
 import * as JsonlPersistence from '@supernova-ai/snh-session-persistence-jsonl'
 import SessionProjectionRegistry from '@supernova-ai/snh-session-projection'
 import SqliteSessionQuery from '@supernova-ai/snh-session-query-sqlite'
-import * as Official from '@supernova-ai/snh-llm-supernova-api-key'
+import * as Official from '@supernova-ai/snh-llm-deepseek-api-key'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import * as Account from '@supernova-ai/snh-llm-deepseek-account'
 import SuperNovaLlmApiExtensionRegistry from '@supernova-ai/snh-supernova-llm-api-extensions'
@@ -133,7 +133,7 @@ export async function paidFixture(cleanups: Array<() => Promise<void>>, options:
     { id: 'session', name: '@supernova-ai/snh-session' },
     { id: 'storage', name: '@supernova-ai/snh-session-persistence-jsonl', config: { root: storedRoot, compression: 'none' } },
     { id: 'supernova-auth', name: '@supernova-ai/snh-supernova-auth' },
-    { id: 'official-custom-id', name: options.officialName ?? '@supernova-ai/snh-llm-supernova-api-key', disabled: !withNativeOwners, config: {
+    { id: 'official-custom-id', name: options.officialName ?? '@supernova-ai/snh-llm-deepseek-api-key', disabled: !withNativeOwners, config: {
       baseURL, apiKeyEnv: 'PAID_TRANSLATION_FIXTURE_KEY', models: options.officialModels ?? [{ id: 'deepseek-flash', name: 'Flash version-independent name' }],
     } },
     { id: 'account-custom-id', name: '@supernova-ai/snh-llm-deepseek-account', disabled: !withNativeOwners, config: { baseURL } },
@@ -153,7 +153,7 @@ export async function paidFixture(cleanups: Array<() => Promise<void>>, options:
     ['@supernova-ai/snh-session-persistence-jsonl', JsonlPersistence], ['@supernova-ai/snh-session-query-sqlite', SqliteSessionQuery],
     ['@supernova-ai/snh-supernova-auth', SuperNovaAuth],
     ['@supernova-ai/snh-session-projection', SessionProjectionRegistry],
-    [options.officialName ?? '@supernova-ai/snh-llm-supernova-api-key', Official],
+    [options.officialName ?? '@supernova-ai/snh-llm-deepseek-api-key', Official],
     ['@supernova-ai/snh-llm-deepseek-account', Account], ['@supernova-ai/snh-experimental-translator', Translator],
     ['@supernova-ai/snh-supernova-llm-api-extensions', SuperNovaLlmApiExtensionRegistry],
     ['@supernova-ai/snh-session-log-supernova', SessionLogSuperNova],

@@ -1,6 +1,6 @@
 # Keyless activation-capacity overlay holds the first child until the parent finishes.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - id: agent-default-model

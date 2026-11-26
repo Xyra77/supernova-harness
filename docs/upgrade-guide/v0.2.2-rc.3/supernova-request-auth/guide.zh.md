@@ -9,13 +9,13 @@ description: "SuperNova 模型路由和 Web 提供方要求挂载新的 snh-supe
 
 ## 变更
 
-`@supernova-ai/snh-supernova-auth` 提供 `ctx.supernovaAuth`，为一次 SuperNova 请求释放 API 密钥或账号登录凭据。`@supernova-ai/snh-llm-supernova-api-key`、`@supernova-ai/snh-llm-deepseek-account`、`@supernova-ai/snh-web-supernova-api` 和 `@supernova-ai/snh-web-search-supernova` 把它声明为对等依赖（peer dependency），并且只在挂载了它的组合中启动。`base` 与 `sdk-minimal` 两个组合包挂载它。
+`@supernova-ai/snh-supernova-auth` 提供 `ctx.supernovaAuth`，为一次 SuperNova 请求释放 API 密钥或账号登录凭据。`@supernova-ai/snh-llm-deepseek-api-key`、`@supernova-ai/snh-llm-deepseek-account`、`@supernova-ai/snh-web-supernova-api` 和 `@supernova-ai/snh-web-search-supernova` 把它声明为对等依赖（peer dependency），并且只在挂载了它的组合中启动。`base` 与 `sdk-minimal` 两个组合包挂载它。
 
 `@supernova-ai/snh-llm-supernova` 不再导出 `resolveSuperNovaApiKey`、`deepSeekApiKeyConfigured`、`resolveSuperNovaAccountToken` 和 `rejectSuperNovaAccountToken`。`SuperNovaAdapterOptions.resolveAuth(connection, endpoint)` 返回 `SuperNovaRequestAuth | undefined`，`SuperNovaRequestAuth` 新增可选的 `revoked` 信号，新增的 `missingCredential` 选项命名凭据缺失的失败。`createModelListingCache` 的 `credential(url)` 返回请求头，其 `load` 变为可选。
 
 `@supernova-ai/snh-llm` 不再导出 `normalizeApiKey` 和 `assertUsableApiKey`。`@supernova-ai/snh-credentials` 导出 `normalizeApiKey(raw)`、`resolveCredentialRef(ctx, ref)` 和 `credentialRefConfigured(ctx, ref)`。
 
-`@supernova-ai/snh-llm-supernova-api-key` 不再导出 `plainOptions` 和 `resolveAdapterOptions`；`@supernova-ai/snh-llm-deepseek-account` 不再导出 `plainAccountOptions` 和 `resolveAccountOptions`。账号路由插件在退登后取消其运行中的 Agent，并注册运行中任务报告。
+`@supernova-ai/snh-llm-deepseek-api-key` 不再导出 `plainOptions` 和 `resolveAdapterOptions`；`@supernova-ai/snh-llm-deepseek-account` 不再导出 `plainAccountOptions` 和 `resolveAccountOptions`。账号路由插件在退登后取消其运行中的 Agent，并注册运行中任务报告。
 
 `@supernova-ai/snh-deepseek-account` 新增仅限 Host 的 `resolveRequestCredential(url)` 与 `registerRunningTaskReport(report)`，并将 `resolveToken(url)` 与 `rejectToken(token)` 改为私有；`hasRunningAccountTasks()` 根据注册的报告作答，不再读取 `ctx.agents`。退登会中止已释放凭据的 `revoked` 信号，从而结束在途的账号请求：回合之外的模型请求以 `ACCOUNT_SIGN_IN_REQUIRED` 失败，Search 与 Fetch 以 `WEB_PROVIDER_ERROR` 失败。该包移除 `snh-agent` 与 `snh-llm` 对等依赖，并以不变的名字从 `packages/credentials/` 移至 `packages/account/`。
 

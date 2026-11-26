@@ -11,7 +11,7 @@
 - id: llm-pi-ai
   config:
     providers:
-      supernova:
+      deepseek:
         apiKeyEnv: DEEPSEEK_API_KEY
         baseURL: !!js process.env.SNH_SNAPSHOT_BASE_URL
         reasoning: low
@@ -24,7 +24,7 @@
   config:
     agents:
       - id: main
-        provider: supernova
+        provider: deepseek
         model: deepseek-flash
         cwd: !!js process.cwd()
 

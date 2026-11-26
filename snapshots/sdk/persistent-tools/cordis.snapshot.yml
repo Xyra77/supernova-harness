@@ -1,7 +1,7 @@
 # Replay layer for the TypeScript SDK minimal customization patch.
 
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - insert:

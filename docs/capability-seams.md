@@ -16,7 +16,7 @@ flowchart LR
   pkg_plugin_recommendations["plugin-recommendations"]
   svc_pluginRecommendations["ctx.pluginRecommendations<br/>Explicit-need plugin recommendations"]
   pkg_client_ui_plugin_recommendations["client-ui-plugin-recommendations"]
-  pkg_supernova_chat_import["deepseek-chat-import"]
+  pkg_deepseek_chat_import["deepseek-chat-import"]
   svc_supernovaChatImport["ctx.supernovaChatImport<br/>SuperNova chat export import"]
   pkg_headless["headless"]
   svc_headlessStartup["ctx.headlessStartup<br/>Headless invocation options"]
@@ -164,7 +164,7 @@ flowchart LR
   svc_supernovaAccount["ctx.supernovaAccount<br/>SuperNova account"]
   pkg_llm_deepseek_account["llm-deepseek-account"]
   svc_supernovaAuth["ctx.supernovaAuth<br/>SuperNova request authentication"]
-  pkg_llm_deepseek_api_key["llm-supernova-api-key"]
+  pkg_llm_supernova_api_key["llm-deepseek-api-key"]
   pkg_web_supernova_api["web-supernova-api"]
   pkg_web_search_supernova["web-search-supernova"]
   pkg_authorization["authorization"]
@@ -391,9 +391,7 @@ flowchart LR
   pkg_cua --> svc_cuaAccess
   pkg_cua --> svc_cuaPrograms
   pkg_deepseek_account --> svc_supernovaAccount
-  pkg_supernova_auth --> svc_supernovaAuth
-  pkg_supernova_chat_import --> svc_supernovaChatImport
-  pkg_supernova_llm_api_extensions --> svc_supernovaLlmApiExtensions
+  pkg_deepseek_chat_import --> svc_supernovaChatImport
   pkg_experimental_api_speech_to_text --> svc_speechController
   pkg_experimental_browser_use_chrome_devtools_mcp --> svc_browserUse
   pkg_experimental_browser_use_playwright_mcp --> svc_browserUse
@@ -432,9 +430,9 @@ flowchart LR
   pkg_jobs --> svc_jobs
   pkg_jobs_local --> svc_jobs
   pkg_llm --> svc_llm
-  pkg_llm_supernova --> svc_llm
   pkg_llm_pi_ai --> svc_llm
   pkg_llm_replay --> svc_llm
+  pkg_llm_supernova --> svc_llm
   pkg_lsp --> svc_lsp
   pkg_lsp_stdio --> svc_lsp
   pkg_mcp_account --> svc_mcpAccounts
@@ -461,8 +459,8 @@ flowchart LR
   pkg_sandbox_windows_acl --> svc_skills
   pkg_schedule --> svc_schedule
   pkg_session --> svc_sessions
-  pkg_session_log_supernova --> svc_supernovaLlmApiExtensions
   pkg_session_log_supernova --> svc_sessionLogSuperNova
+  pkg_session_log_supernova --> svc_supernovaLlmApiExtensions
   pkg_session_persistence --> svc_sessionPersistence
   pkg_session_persistence_jsonl --> svc_sessionPersistence
   pkg_session_projection --> svc_sessionProjections
@@ -493,12 +491,14 @@ flowchart LR
   pkg_subagent_acp --> svc_subagents
   pkg_subagent_claude_code --> svc_subagents
   pkg_subagent_codex --> svc_subagents
-  pkg_subagent_snh_sdk --> svc_subagents
   pkg_subagent_fork_in_process --> svc_subagents
+  pkg_subagent_snh_sdk --> svc_subagents
   pkg_subagent_spawn_in_process --> svc_subagents
   pkg_subprocess --> svc_subprocess
   pkg_subprocess_local --> svc_subprocess
   pkg_subprocess_ssh --> svc_subprocess
+  pkg_supernova_auth --> svc_supernovaAuth
+  pkg_supernova_llm_api_extensions --> svc_supernovaLlmApiExtensions
   pkg_system_prompt --> svc_systemPrompt
   pkg_terminal --> svc_terminals
   pkg_terminal_bash --> svc_terminals
@@ -512,9 +512,9 @@ flowchart LR
   pkg_user_questions --> svc_userQuestions
   pkg_web --> svc_web
   pkg_web_app --> svc_webApp
-  pkg_web_supernova_api --> svc_web
   pkg_web_fetch_http --> svc_web
   pkg_web_search_supernova --> svc_web
+  pkg_web_supernova_api --> svc_web
   pkg_webhook --> svc_webhookRuntime
   pkg_workflow --> svc_workflowEngine
   pkg_workflow_ptc --> svc_workflowEngine
@@ -535,8 +535,8 @@ flowchart LR
   svc_approval --> pkg_tool_bash
   svc_approval --> pkg_tools
   svc_attachments --> pkg_api_session_controller
-  svc_attachments --> pkg_llm_supernova
   svc_attachments --> pkg_llm_pi_ai
+  svc_attachments --> pkg_llm_supernova
   svc_attachments --> pkg_tool_fs
   svc_authorization --> pkg_llm_pi_ai
   svc_browserUse --> pkg_experimental_browser_use_chrome_devtools_mcp
@@ -553,17 +553,10 @@ flowchart LR
   svc_connection_authentication --> pkg_client_connection
   svc_cordisInspect --> pkg_tool_cordis
   svc_credentials --> pkg_api_settings_controller
-  svc_credentials --> pkg_supernova_auth
   svc_credentials --> pkg_llm_pi_ai
+  svc_credentials --> pkg_supernova_auth
   svc_cuaAccess --> pkg_cua
   svc_cuaPrograms --> pkg_cua_mcp
-  svc_supernovaAccount --> pkg_supernova_auth
-  svc_supernovaAccount --> pkg_llm_deepseek_account
-  svc_supernovaAuth --> pkg_llm_deepseek_account
-  svc_supernovaAuth --> pkg_llm_deepseek_api_key
-  svc_supernovaAuth --> pkg_web_supernova_api
-  svc_supernovaAuth --> pkg_web_search_supernova
-  svc_supernovaLlmApiExtensions --> pkg_llm_supernova
   svc_directoryPicker --> pkg_api_workspace_controller
   svc_dynamicCordisRunner --> pkg_tool_cordis
   svc_fileReferences --> pkg_api_session_controller
@@ -655,6 +648,13 @@ flowchart LR
   svc_subprocess --> pkg_subagent_claude_code
   svc_subprocess --> pkg_subagent_codex
   svc_subprocess --> pkg_terminal_bash
+  svc_supernovaAccount --> pkg_llm_deepseek_account
+  svc_supernovaAccount --> pkg_supernova_auth
+  svc_supernovaAuth --> pkg_llm_deepseek_account
+  svc_supernovaAuth --> pkg_llm_supernova_api_key
+  svc_supernovaAuth --> pkg_web_search_supernova
+  svc_supernovaAuth --> pkg_web_supernova_api
+  svc_supernovaLlmApiExtensions --> pkg_llm_supernova
   svc_systemPrompt --> pkg_agent_loop
   svc_systemPrompt --> pkg_tool_fs
   svc_systemPrompt --> pkg_tool_terminal
@@ -763,7 +763,7 @@ flowchart LR
 | `ctx.subagentModelSelection` | `core` | [`tool-subagent`](../packages/subagent/tool-subagent) | - | [`tool-subagent`](../packages/subagent/tool-subagent) | - | Owns the default-off settings namespace that Agent-scoped delegation tools sample when composing a new top-level Session. |
 | `ctx.credentials` | `seam` | [`credentials`](../packages/credentials/credentials) | [`credentials-local`](../packages/credentials/credentials-local) | [`api-settings-controller`](../packages/api/settings-controller), [`supernova-auth`](../packages/account/supernova-auth), [`llm-pi-ai`](../packages/llm/llm-pi-ai) | - | Configuration carries references to secrets; providers own the values. Consumers resolve per operation, so a rotated credential reaches the very next request; the settings controller exposes value-free views and write-only storage. |
 | `ctx.supernovaAccount` | `service` | [`deepseek-account`](../packages/account/deepseek-account) | - | [`supernova-auth`](../packages/account/supernova-auth), [`llm-deepseek-account`](../packages/llm/llm-deepseek-account) | - | The Host owns browser authorization and local credentials and releases per-request credentials to SuperNova request authentication; the account model route registers its running-task report, and UI consumers receive state without tokens. |
-| `ctx.supernovaAuth` | `service` | [`supernova-auth`](../packages/account/supernova-auth) | - | [`llm-deepseek-account`](../packages/llm/llm-deepseek-account), [`llm-supernova-api-key`](../packages/llm/llm-supernova-api-key), [`web-supernova-api`](../packages/web/web-supernova-api), [`web-search-supernova`](../packages/web/web-search-supernova) | - | Every SuperNova API consumer names the credential kinds its API accepts; the service orders the API key and the account sign-in by billing, binds each to its deployment, and releases request headers. |
+| `ctx.supernovaAuth` | `service` | [`supernova-auth`](../packages/account/supernova-auth) | - | [`llm-deepseek-account`](../packages/llm/llm-deepseek-account), [`llm-deepseek-api-key`](../packages/llm/llm-deepseek-api-key), [`web-supernova-api`](../packages/web/web-supernova-api), [`web-search-supernova`](../packages/web/web-search-supernova) | - | Every SuperNova API consumer names the credential kinds its API accepts; the service orders the API key and the account sign-in by billing, binds each to its deployment, and releases request headers. |
 | `ctx.authorization` | `seam` | [`authorization`](../packages/credentials/authorization) | - | [`llm-pi-ai`](../packages/llm/llm-pi-ai) | - | Flows are registered by the plugin that knows how to obtain one credential and keyed by the record they write; the seam owns the conversation and the one-attempt-per-key lifecycle, never the protocol. |
 | `ctx.productAnalytics` | `service` | [`client-product-analytics`](../packages/client/product-analytics) | - | - | - | Accepts selected Desktop events, enriches available login identity, and observes live compaction under the live Host collection policy. |
 | `ctx.otel` | `service` | [`otel`](../packages/telemetry/otel) | - | [`host-product-telemetry-otel`](../packages/host/product-telemetry-otel), [`session-telemetry-otel`](../packages/session/session-telemetry-otel) | - | Product analytics and Session feedback adapters create independent reporting channels through one injected service. |

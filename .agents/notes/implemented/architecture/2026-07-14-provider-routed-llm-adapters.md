@@ -22,9 +22,9 @@ The adapter configuration also assumes one SuperNova API key and endpoint. A gen
 
 `LlmRuntime` registers and resolves adapters by provider. `registerAdapter(providers, adapter)` checks the entire provider list before mutating the registry, rejects a duplicate with `DUPLICATE_ADAPTER`, and disposes the whole registration as one effect. Model ids are not registration keys; the selected adapter still validates or forwards them. The later [LLM catalog and ACP selection Agent Note](../../archived/architecture/2026-07-15-llm-model-catalog-and-acp-selection.md) added advisory `listProviders()` / `listModels()` discovery without turning model membership into request validation.
 
-A provider has exactly one adapter owner in a Cordis context. `snh-llm-supernova` registers `supernova`; `snh-llm-pi-ai` may also register `supernova`, but loading both owners is a configuration error rather than an ordering rule or fallback. A deployment that wants the hand-rolled SuperNova implementation excludes `supernova` from the pi-ai profiles. A deployment that wants pi-ai's SuperNova implementation does not mount `snh-llm-supernova`.
+A provider has exactly one adapter owner in a Cordis context. `snh-llm-supernova` registers `deepseek`; `snh-llm-pi-ai` may also register `deepseek`, but loading both owners is a configuration error rather than an ordering rule or fallback. A deployment that wants the hand-rolled SuperNova implementation excludes `deepseek` from the pi-ai profiles. A deployment that wants pi-ai's SuperNova implementation does not mount `snh-llm-supernova`.
 
-`snh-llm-supernova` removes its model registration list and accepts any model string routed through provider `supernova`. Its request serialization, `/chat/completions` endpoint, thinking options, SSE parsing, and error behavior remain unchanged; `options.model` is still sent verbatim.
+`snh-llm-supernova` removes its model registration list and accepts any model string routed through provider `deepseek`. Its request serialization, `/chat/completions` endpoint, thinking options, SSE parsing, and error behavior remain unchanged; `options.model` is still sent verbatim.
 
 ### Explicit pi-ai provider profiles
 
@@ -54,7 +54,7 @@ Every model-selection path carries provider and model together: declarative agen
 
 Compaction configuration gains `summarizationProvider` beside `summarizationModel`. Both are empty to inherit, or both are non-empty to select an explicit target; a half-configured pair fails load. Inheritance uses the last logged request target when one exists and falls back to the agent's creation options. `compaction/summary` records both fields with the existing model-call envelope.
 
-The JSON-RPC runtime receives provider and model explicitly. Its convenience fallback mounts `snh-llm-supernova` only for provider `supernova` when that provider has no registered owner; other missing providers fail without guessing an adapter.
+The JSON-RPC runtime receives provider and model explicitly. Its convenience fallback mounts `snh-llm-supernova` only for provider `deepseek` when that provider has no registered owner; other missing providers fail without guessing an adapter.
 
 Current seed/load validation rejects request headers and assistant messages that omit required provider/model fields. The frozen v0-to-v1 edge requires the same reconstructable routing identity before migration; it never guesses a missing provider or model, and malformed shapes refuse before publication.
 

@@ -1,6 +1,6 @@
 # Keyless replay keeps the LSP composition intact and replaces only the model adapter.
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - insert:

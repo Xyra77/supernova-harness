@@ -4,7 +4,7 @@ import type { SessionId } from '@supernova-ai/snh-session'
 
 import AgentLoop from '@supernova-ai/snh-agent-loop'
 import { mountAgentLoopTestDependencies } from '@supernova-ai/snh-agent-loop-testkit'
-import * as LlmSuperNova from '@supernova-ai/snh-llm-supernova-api-key'
+import * as LlmSuperNova from '@supernova-ai/snh-llm-deepseek-api-key'
 import SubagentRuntime from '@supernova-ai/snh-subagent'
 import * as Spawn from '@supernova-ai/snh-subagent-spawn-in-process'
 import PtcWorkflowEngine from '../src/index.ts'

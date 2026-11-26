@@ -42,7 +42,7 @@ kind: "package-reference"
 ```yaml
 - name: '@supernova-ai/snh-llm'
 - name: '@supernova-ai/snh-supernova-auth'
-- name: '@supernova-ai/snh-llm-supernova-api-key'
+- name: '@supernova-ai/snh-llm-deepseek-api-key'
   config:
     apiKeyEnv: DEEPSEEK_API_KEY
 ```

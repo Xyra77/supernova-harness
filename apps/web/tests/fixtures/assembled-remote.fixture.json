@@ -4728,7 +4728,7 @@
                   "type": "tool-call",
                   "id": "fx-call-70",
                   "name": "web_search",
-                  "arguments": "{\"queries\":[\"supernova harness architecture\"]}"
+                  "arguments": "{\"queries\":[\"deepseek harness architecture\"]}"
                 }
               ],
               "source": {
@@ -4764,7 +4764,7 @@
                     "type": "tool-call",
                     "id": "fx-call-70",
                     "name": "web_search",
-                    "arguments": "{\"queries\":[\"supernova harness architecture\"]}"
+                    "arguments": "{\"queries\":[\"deepseek harness architecture\"]}"
                   }
                 }
               },
@@ -4806,7 +4806,7 @@
             "step": 0,
             "callId": "fx-call-70",
             "name": "web_search",
-            "arguments": "{\"queries\":[\"supernova harness architecture\"]}"
+            "arguments": "{\"queries\":[\"deepseek harness architecture\"]}"
           }
         }
       },
@@ -4831,7 +4831,7 @@
               "content": [
                 {
                   "type": "text",
-                  "text": "Search results for supernova harness architecture."
+                  "text": "Search results for deepseek harness architecture."
                 }
               ],
               "isError": false

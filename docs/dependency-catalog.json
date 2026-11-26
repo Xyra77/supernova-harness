@@ -373,2946 +373,6 @@
       ]
     },
     {
-      "name": "@supernova-ai/cordis",
-      "version": "4.0.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/cordis",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/cordis-plugin-group",
-      "version": "1.0.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/cordis-plugin-group",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/cordis-plugin-hmr",
-      "version": "1.0.17",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/cordis-plugin-hmr",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/cordis-plugin-include",
-      "version": "1.0.7",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/cordis-plugin-include",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/cordis-plugin-loader",
-      "version": "1.0.3",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/cordis-plugin-loader",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/cordis-plugin-timer",
-      "version": "1.1.4",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/cordis-plugin-timer",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/cosmokit",
-      "version": "1.8.3",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/cosmokit",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-acp",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-acp",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-acp-app",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-acp-app",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-agent",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-agent",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-agent-default-model",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-agent-default-model",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-agent-instructions",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-agent-instructions",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-agent-loop",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-agent-loop",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-agent-preset-registry",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-agent-preset-registry",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-agent-tool-presentation",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-agent-tool-presentation",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-anonymous-user-id",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-anonymous-user-id",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-api-gateway",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-api-gateway",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-api-remotes",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-api-remotes",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-api-session-controller",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-api-session-controller",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-api-settings-controller",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-api-settings-controller",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-api-workspace-controller",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-api-workspace-controller",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-api-workspace-files",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-api-workspace-files",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-app-boot",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-app-boot",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-atomic-write",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-atomic-write",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-attachment",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-attachment",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-attachment-local",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-attachment-local",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-authorization",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-authorization",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-base",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-base",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-bash-local",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-bash-local",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-bash-sandbox",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-bash-sandbox",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-brand",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-brand",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-chunked-list",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-chunked-list",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-connection",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-connection",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-file-upload",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-file-upload",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-hmr",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-hmr",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-locale",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-locale",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-modules",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-modules",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-resources",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-resources",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-agent-preset",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-agent-preset",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-approval",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-approval",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-attachment",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-attachment",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-brand-official",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-brand-official",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-chat",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-chat",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-commands",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-commands",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-conversation",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-conversation",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-cordis",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-cordis",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-deliverables",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-deliverables",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-directory-picker-browse",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-directory-picker-browse",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-directory-picker-native",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-directory-picker-native",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-goal",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-goal",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-input-trigger",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-input-trigger",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-jobs",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-jobs",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-layout",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-layout",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-message-feedback",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-message-feedback",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-model-selection",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-model-selection",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-open-in-app",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-open-in-app",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-permission-presets",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-permission-presets",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-plan",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-plan",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-reference",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-reference",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-renderer",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-renderer",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-schedule",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-schedule",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-session",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-session",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-settings",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-settings",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-settings-general",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-settings-general",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-settings-models",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-settings-models",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-settings-plugin-inventory",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-settings-plugin-inventory",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-settings-plugins",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-settings-plugins",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-sidebar",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-sidebar",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-sidebar-documentpreview",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-sidebar-documentpreview",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-sidebar-files",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-sidebar-files",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-sidebar-right",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-sidebar-right",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-skill",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-skill",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-subagent",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-subagent",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-theme",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-theme",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-tool",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-tool",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-trajectory",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-trajectory",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-user-questions",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-user-questions",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-workflow-run",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-workflow-run",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-client-ui-workspace",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-client-ui-workspace",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-cmdline",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-cmdline",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-code-runtime",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-code-runtime",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-code-runtime-worker-thread",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-code-runtime-worker-thread",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-command-compact",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-command-compact",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-command-feedback",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-command-feedback",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-command-goal",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-command-goal",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-commands",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-commands",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-compaction",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-compaction",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-compaction-basic",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-compaction-basic",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-compaction-tool-result-pruner",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-compaction-tool-result-pruner",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-cordis-client-runner",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-cordis-client-runner",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-cordis-host-runner",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-cordis-host-runner",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-credentials",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-credentials",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-credentials-local",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-credentials-local",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-supernova-llm-api-extensions",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-supernova-llm-api-extensions",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-deque",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-deque",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-file-reference",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-file-reference",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-file-reference-local",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-file-reference-local",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-fs",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-fs",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-fs-local",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-fs-local",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-fs-observation-policy",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-fs-observation-policy",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-fs-sandbox",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-fs-sandbox",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-goal",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-goal",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-goal-round-driver",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-goal-round-driver",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-headless",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-headless",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-home-paths",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-home-paths",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-hook-protocol",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-hook-protocol",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-hooks-claude-code",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-hooks-claude-code",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-hooks-codex",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-hooks-codex",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-host-directory-picker",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-host-directory-picker",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-host-directory-picker-auto",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-host-directory-picker-auto",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-host-directory-picker-browse",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-host-directory-picker-browse",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-host-directory-picker-native",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-host-directory-picker-native",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-host-frontend-static",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-host-frontend-static",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-host-open-in-app",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-host-open-in-app",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-host-plugin-inventory",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-host-plugin-inventory",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-host-webserver",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-host-webserver",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-http-proxy",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-http-proxy",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-invariants",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-invariants",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-jobs",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-jobs",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-jobs-local",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-jobs-local",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-launch-environment",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-launch-environment",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-llm",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-llm",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-llm-supernova",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-llm-supernova",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-llm-pi-ai",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-llm-pi-ai",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-llm-retry",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-llm-retry",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-mcp-client",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-mcp-client",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-message-feedback",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-message-feedback",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-native-command",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-native-command",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-output-retention",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-output-retention",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-package-manifest",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-package-manifest",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-permission-presets",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-permission-presets",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-persona",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-persona",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-plan-mode",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-plan-mode",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-plugin-package-inventory-supernova",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-plugin-package-inventory-supernova",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-pwsh-local",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-pwsh-local",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-pwsh-sandbox",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-pwsh-sandbox",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-repeat-tool-reminder",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-repeat-tool-reminder",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-sandbox",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-sandbox",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-sandbox-local",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-sandbox-local",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-sandbox-policy",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-sandbox-policy",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-sandbox-windows-acl",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-sandbox-windows-acl",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-schedule",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-schedule",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-scope",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-scope",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-sdk-app",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-sdk-app",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-sdk-jsonrpc-server",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-sdk-jsonrpc-server",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-sdk-minimal",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-sdk-minimal",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-sdk-protocol",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-sdk-protocol",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-checkpoint-policy",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-checkpoint-policy",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-format",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-format",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-format-catalog",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-format-catalog",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-format-v0-to-v1",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-format-v0-to-v1",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-format-v1-to-v2",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-format-v1-to-v2",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-format-v2-to-v3",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-format-v2-to-v3",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-log-supernova",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-log-supernova",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-log-export",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-log-export",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-persistence",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-persistence",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-persistence-jsonl",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-persistence-jsonl",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-projection",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-projection",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-projection-cache",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-projection-cache",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-query",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-query",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-query-sqlite",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-query-sqlite",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-reference",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-reference",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-stats",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-stats",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-telemetry",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-telemetry",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-telemetry-otel",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-telemetry-otel",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-title",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-title",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-title-first-prompt-llm",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-title-first-prompt-llm",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-title-llm",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-title-llm",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-session-turn-outline",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-session-turn-outline",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-settings",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-settings",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-settings-file",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-settings-file",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-shell",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-shell",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-shell-env",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-shell-env",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-skill",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-skill",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-skill-badge",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-skill-badge",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-skill-filesystem",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-skill-filesystem",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-spill",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-spill",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-spill-local",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-spill-local",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-spill-policy",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-spill-policy",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-storage",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-storage",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-storage-domain",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-storage-domain",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-storage-json",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-storage-json",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-subagent",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-subagent",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-subagent-fork-in-process",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-subagent-fork-in-process",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-subagent-in-process-driver",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-subagent-in-process-driver",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-subagent-spawn-in-process",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-subagent-spawn-in-process",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-subprocess",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-subprocess",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-subprocess-local",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-subprocess-local",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-system-prompt",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-system-prompt",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-terminal",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-terminal",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-terminal-bash",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-terminal-bash",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-time-context",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-time-context",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-timeout",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-timeout",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tmux-context",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tmux-context",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-token-meter",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-token-meter",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-ask-user",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-ask-user",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-bash",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-bash",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-bash-persistent",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-bash-persistent",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-call-timeout-policy",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-call-timeout-policy",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-cordis",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-cordis",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-fs",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-fs",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-fs-search",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-fs-search",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-goal",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-goal",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-jobs",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-jobs",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-present",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-present",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-pwsh",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-pwsh",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-pwsh-persistent",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-pwsh-persistent",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-ralph",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-ralph",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-skill",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-skill",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-str-replace-editor",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-str-replace-editor",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-subagent",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-subagent",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-subagent-control",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-subagent-control",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-todo",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-todo",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-web",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-web",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tool-workflow",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tool-workflow",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-tools",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-tools",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-typert-loader",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-typert-loader",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-typert-protocol",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-typert-protocol",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-typert-registry",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-typert-registry",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-user-approval",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-user-approval",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-user-questions",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-user-questions",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-util-crypto",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-util-crypto",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-util-time",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-util-time",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-util-values",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-util-values",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-util-workspace-path",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-util-workspace-path",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-web",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-web",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-web-app",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-web-app",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-web-fetch-http",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-web-fetch-http",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-web-frontend",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-web-frontend",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-web-search-supernova",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-web-search-supernova",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-webhook",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-webhook",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-webhook-github",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-webhook-github",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-win32-process",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-win32-process",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-workflow",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-workflow",
-          "direct": false,
-          "optional": false,
-          "peer": true
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-workflow-worker-thread",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-workflow-worker-thread",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/snh-workspace",
-      "version": "0.1.5-rc.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/snh-workspace",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/node-addon-system",
-      "version": "0.1.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/node-addon-system",
-          "direct": false,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/node-addon-system-darwin-arm64",
-      "version": "0.1.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/node-addon-system-darwin-arm64",
-          "direct": false,
-          "optional": true,
-          "peer": false,
-          "os": [
-            "darwin"
-          ],
-          "cpu": [
-            "arm64"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/node-addon-system-darwin-x64",
-      "version": "0.1.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/node-addon-system-darwin-x64",
-          "direct": false,
-          "optional": true,
-          "peer": false,
-          "os": [
-            "darwin"
-          ],
-          "cpu": [
-            "x64"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/node-addon-system-linux-arm64",
-      "version": "0.1.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/node-addon-system-linux-arm64",
-          "direct": false,
-          "optional": true,
-          "peer": false,
-          "os": [
-            "linux"
-          ],
-          "cpu": [
-            "arm64"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/node-addon-system-linux-x64",
-      "version": "0.1.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/node-addon-system-linux-x64",
-          "direct": false,
-          "optional": true,
-          "peer": false,
-          "os": [
-            "linux"
-          ],
-          "cpu": [
-            "x64"
-          ]
-        }
-      ]
-    },
-    {
-      "name": "@supernova-ai/schemastery",
-      "version": "3.18.2",
-      "installations": [
-        {
-          "location": "node_modules/@supernova-ai/schemastery",
-          "direct": true,
-          "optional": false,
-          "peer": false
-        }
-      ]
-    },
-    {
       "name": "@earendil-works/pi-ai",
       "version": "0.85.1",
       "installations": [
@@ -4746,6 +1806,2946 @@
       "installations": [
         {
           "location": "node_modules/@standard-schema/spec",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/cordis",
+      "version": "4.0.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/cordis",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/cordis-plugin-group",
+      "version": "1.0.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/cordis-plugin-group",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/cordis-plugin-hmr",
+      "version": "1.0.17",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/cordis-plugin-hmr",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/cordis-plugin-include",
+      "version": "1.0.7",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/cordis-plugin-include",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/cordis-plugin-loader",
+      "version": "1.0.3",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/cordis-plugin-loader",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/cordis-plugin-timer",
+      "version": "1.1.4",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/cordis-plugin-timer",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/cosmokit",
+      "version": "1.8.3",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/cosmokit",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/node-addon-system",
+      "version": "0.1.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/node-addon-system",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/node-addon-system-darwin-arm64",
+      "version": "0.1.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/node-addon-system-darwin-arm64",
+          "direct": false,
+          "optional": true,
+          "peer": false,
+          "os": [
+            "darwin"
+          ],
+          "cpu": [
+            "arm64"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/node-addon-system-darwin-x64",
+      "version": "0.1.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/node-addon-system-darwin-x64",
+          "direct": false,
+          "optional": true,
+          "peer": false,
+          "os": [
+            "darwin"
+          ],
+          "cpu": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/node-addon-system-linux-arm64",
+      "version": "0.1.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/node-addon-system-linux-arm64",
+          "direct": false,
+          "optional": true,
+          "peer": false,
+          "os": [
+            "linux"
+          ],
+          "cpu": [
+            "arm64"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/node-addon-system-linux-x64",
+      "version": "0.1.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/node-addon-system-linux-x64",
+          "direct": false,
+          "optional": true,
+          "peer": false,
+          "os": [
+            "linux"
+          ],
+          "cpu": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/schemastery",
+      "version": "3.18.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/schemastery",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-acp",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-acp",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-acp-app",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-acp-app",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-agent",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-agent",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-agent-default-model",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-agent-default-model",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-agent-instructions",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-agent-instructions",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-agent-loop",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-agent-loop",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-agent-preset-registry",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-agent-preset-registry",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-agent-tool-presentation",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-agent-tool-presentation",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-anonymous-user-id",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-anonymous-user-id",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-api-gateway",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-api-gateway",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-api-remotes",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-api-remotes",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-api-session-controller",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-api-session-controller",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-api-settings-controller",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-api-settings-controller",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-api-workspace-controller",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-api-workspace-controller",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-api-workspace-files",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-api-workspace-files",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-app-boot",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-app-boot",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-atomic-write",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-atomic-write",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-attachment",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-attachment",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-attachment-local",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-attachment-local",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-authorization",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-authorization",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-base",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-base",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-bash-local",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-bash-local",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-bash-sandbox",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-bash-sandbox",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-brand",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-brand",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-chunked-list",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-chunked-list",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-connection",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-connection",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-file-upload",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-file-upload",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-hmr",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-hmr",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-locale",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-locale",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-modules",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-modules",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-resources",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-resources",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-agent-preset",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-agent-preset",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-approval",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-approval",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-attachment",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-attachment",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-brand-official",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-brand-official",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-chat",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-chat",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-commands",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-commands",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-conversation",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-conversation",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-cordis",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-cordis",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-deliverables",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-deliverables",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-directory-picker-browse",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-directory-picker-browse",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-directory-picker-native",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-directory-picker-native",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-goal",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-goal",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-input-trigger",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-input-trigger",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-jobs",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-jobs",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-layout",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-layout",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-message-feedback",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-message-feedback",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-model-selection",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-model-selection",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-open-in-app",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-open-in-app",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-permission-presets",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-permission-presets",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-plan",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-plan",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-reference",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-reference",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-renderer",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-renderer",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-schedule",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-schedule",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-session",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-session",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-settings",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-settings",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-settings-general",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-settings-general",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-settings-models",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-settings-models",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-settings-plugin-inventory",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-settings-plugin-inventory",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-settings-plugins",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-settings-plugins",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-sidebar",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-sidebar",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-sidebar-documentpreview",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-sidebar-documentpreview",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-sidebar-files",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-sidebar-files",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-sidebar-right",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-sidebar-right",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-skill",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-skill",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-subagent",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-subagent",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-theme",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-theme",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-tool",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-tool",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-trajectory",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-trajectory",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-user-questions",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-user-questions",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-workflow-run",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-workflow-run",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-client-ui-workspace",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-client-ui-workspace",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-cmdline",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-cmdline",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-code-runtime",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-code-runtime",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-code-runtime-worker-thread",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-code-runtime-worker-thread",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-command-compact",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-command-compact",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-command-feedback",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-command-feedback",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-command-goal",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-command-goal",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-commands",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-commands",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-compaction",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-compaction",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-compaction-basic",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-compaction-basic",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-compaction-tool-result-pruner",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-compaction-tool-result-pruner",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-cordis-client-runner",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-cordis-client-runner",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-cordis-host-runner",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-cordis-host-runner",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-credentials",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-credentials",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-credentials-local",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-credentials-local",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-deque",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-deque",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-file-reference",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-file-reference",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-file-reference-local",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-file-reference-local",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-fs",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-fs",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-fs-local",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-fs-local",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-fs-observation-policy",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-fs-observation-policy",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-fs-sandbox",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-fs-sandbox",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-goal",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-goal",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-goal-round-driver",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-goal-round-driver",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-headless",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-headless",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-home-paths",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-home-paths",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-hook-protocol",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-hook-protocol",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-hooks-claude-code",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-hooks-claude-code",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-hooks-codex",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-hooks-codex",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-host-directory-picker",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-host-directory-picker",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-host-directory-picker-auto",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-host-directory-picker-auto",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-host-directory-picker-browse",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-host-directory-picker-browse",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-host-directory-picker-native",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-host-directory-picker-native",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-host-frontend-static",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-host-frontend-static",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-host-open-in-app",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-host-open-in-app",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-host-plugin-inventory",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-host-plugin-inventory",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-host-webserver",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-host-webserver",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-http-proxy",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-http-proxy",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-invariants",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-invariants",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-jobs",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-jobs",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-jobs-local",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-jobs-local",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-launch-environment",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-launch-environment",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-llm",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-llm",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-llm-pi-ai",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-llm-pi-ai",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-llm-retry",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-llm-retry",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-llm-supernova",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-llm-supernova",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-mcp-client",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-mcp-client",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-message-feedback",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-message-feedback",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-native-command",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-native-command",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-output-retention",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-output-retention",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-package-manifest",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-package-manifest",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-permission-presets",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-permission-presets",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-persona",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-persona",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-plan-mode",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-plan-mode",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-plugin-package-inventory-supernova",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-plugin-package-inventory-supernova",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-pwsh-local",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-pwsh-local",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-pwsh-sandbox",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-pwsh-sandbox",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-repeat-tool-reminder",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-repeat-tool-reminder",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-sandbox",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-sandbox",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-sandbox-local",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-sandbox-local",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-sandbox-policy",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-sandbox-policy",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-sandbox-windows-acl",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-sandbox-windows-acl",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-schedule",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-schedule",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-scope",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-scope",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-sdk-app",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-sdk-app",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-sdk-jsonrpc-server",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-sdk-jsonrpc-server",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-sdk-minimal",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-sdk-minimal",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-sdk-protocol",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-sdk-protocol",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-checkpoint-policy",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-checkpoint-policy",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-format",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-format",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-format-catalog",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-format-catalog",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-format-v0-to-v1",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-format-v0-to-v1",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-format-v1-to-v2",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-format-v1-to-v2",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-format-v2-to-v3",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-format-v2-to-v3",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-log-export",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-log-export",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-log-supernova",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-log-supernova",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-persistence",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-persistence",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-persistence-jsonl",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-persistence-jsonl",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-projection",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-projection",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-projection-cache",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-projection-cache",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-query",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-query",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-query-sqlite",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-query-sqlite",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-reference",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-reference",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-stats",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-stats",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-telemetry",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-telemetry",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-telemetry-otel",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-telemetry-otel",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-title",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-title",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-title-first-prompt-llm",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-title-first-prompt-llm",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-title-llm",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-title-llm",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-session-turn-outline",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-session-turn-outline",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-settings",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-settings",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-settings-file",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-settings-file",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-shell",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-shell",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-shell-env",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-shell-env",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-skill",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-skill",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-skill-badge",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-skill-badge",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-skill-filesystem",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-skill-filesystem",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-spill",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-spill",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-spill-local",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-spill-local",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-spill-policy",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-spill-policy",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-storage",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-storage",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-storage-domain",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-storage-domain",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-storage-json",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-storage-json",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-subagent",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-subagent",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-subagent-fork-in-process",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-subagent-fork-in-process",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-subagent-in-process-driver",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-subagent-in-process-driver",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-subagent-spawn-in-process",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-subagent-spawn-in-process",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-subprocess",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-subprocess",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-subprocess-local",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-subprocess-local",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-supernova-llm-api-extensions",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-supernova-llm-api-extensions",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-system-prompt",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-system-prompt",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-terminal",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-terminal",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-terminal-bash",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-terminal-bash",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-time-context",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-time-context",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-timeout",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-timeout",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tmux-context",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tmux-context",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-token-meter",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-token-meter",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-ask-user",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-ask-user",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-bash",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-bash",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-bash-persistent",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-bash-persistent",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-call-timeout-policy",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-call-timeout-policy",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-cordis",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-cordis",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-fs",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-fs",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-fs-search",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-fs-search",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-goal",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-goal",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-jobs",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-jobs",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-present",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-present",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-pwsh",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-pwsh",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-pwsh-persistent",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-pwsh-persistent",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-ralph",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-ralph",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-skill",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-skill",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-str-replace-editor",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-str-replace-editor",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-subagent",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-subagent",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-subagent-control",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-subagent-control",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-todo",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-todo",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-web",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-web",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tool-workflow",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tool-workflow",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-tools",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-tools",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-typert-loader",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-typert-loader",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-typert-protocol",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-typert-protocol",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-typert-registry",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-typert-registry",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-user-approval",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-user-approval",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-user-questions",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-user-questions",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-util-crypto",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-util-crypto",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-util-time",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-util-time",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-util-values",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-util-values",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-util-workspace-path",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-util-workspace-path",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-web",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-web",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-web-app",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-web-app",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-web-fetch-http",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-web-fetch-http",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-web-frontend",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-web-frontend",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-web-search-supernova",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-web-search-supernova",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-webhook",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-webhook",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-webhook-github",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-webhook-github",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-win32-process",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-win32-process",
+          "direct": false,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-workflow",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-workflow",
+          "direct": false,
+          "optional": false,
+          "peer": true
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-workflow-worker-thread",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-workflow-worker-thread",
+          "direct": true,
+          "optional": false,
+          "peer": false
+        }
+      ]
+    },
+    {
+      "name": "@supernova-ai/snh-workspace",
+      "version": "0.1.5-rc.2",
+      "installations": [
+        {
+          "location": "node_modules/@supernova-ai/snh-workspace",
           "direct": false,
           "optional": false,
           "peer": false

@@ -3,7 +3,7 @@
 # scenario's committed session JSONL.
 
 - id: llm-supernova
-  name: '@supernova-ai/snh-llm-supernova-api-key'
+  name: '@supernova-ai/snh-llm-deepseek-api-key'
   disabled: true
 
 - id: plugin-package-inventory-supernova

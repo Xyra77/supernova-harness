@@ -144,9 +144,9 @@ export interface WebProviderOption {
 }
 
 /** What the Search section shows for its selected provider. */
-export type WebSearchKind = 'supernova' | 'legacy' | 'plugin' | 'none'
+export type WebSearchKind = 'deepseek' | 'legacy' | 'plugin' | 'none'
 /** What the Fetch section shows for its selected provider. */
-export type WebFetchKind = 'local' | 'supernova' | 'plugin' | 'none'
+export type WebFetchKind = 'local' | 'deepseek' | 'plugin' | 'none'
 
 /** The legacy key control. */
 export interface WebApiKeyState extends SettingsFieldState {
@@ -380,7 +380,7 @@ export class WebSearchCardController {
   private searchKind(): WebSearchKind {
     const id = this.selected('searchProvider')
     if (id === '' || !this.registered('search', id)) return 'none'
-    if (id === PROVIDER_IDS.apiSearch) return this.api.shell().available ? 'supernova' : 'none'
+    if (id === PROVIDER_IDS.apiSearch) return this.api.shell().available ? 'deepseek' : 'none'
     if (id === PROVIDER_IDS.legacySearch) return this.legacy.shell().available ? 'legacy' : 'none'
     return this.providers === undefined ? 'none' : 'plugin'
   }
@@ -389,7 +389,7 @@ export class WebSearchCardController {
     const id = this.selected('fetchProvider')
     if (id === '' || !this.registered('fetch', id)) return 'none'
     if (id === PROVIDER_IDS.localFetch) return 'local'
-    if (id === PROVIDER_IDS.apiFetch) return this.api.shell().available ? 'supernova' : 'none'
+    if (id === PROVIDER_IDS.apiFetch) return this.api.shell().available ? 'deepseek' : 'none'
     return this.providers === undefined ? 'none' : 'plugin'
   }
 
@@ -461,8 +461,8 @@ export class WebSearchCardController {
         auto: base?.fetchProvider === undefined,
       },
       count: this.api.field('count'),
-      searchBilling: this.searchKind() === 'supernova' ? this.billing('search') : undefined,
-      fetchBilling: this.fetchKind() === 'supernova' ? this.billing('fetch') : undefined,
+      searchBilling: this.searchKind() === 'deepseek' ? this.billing('search') : undefined,
+      fetchBilling: this.fetchKind() === 'deepseek' ? this.billing('fetch') : undefined,
       messagesBaseURL: this.legacy.field('baseURL'),
       maxUses: this.legacy.field('maxUses'),
       legacyKey: this.keyShown() ? { ...this.selection.field(API_KEY_FIELD), ...this.credential } : undefined,

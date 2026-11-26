@@ -13,7 +13,7 @@ import { boot } from '@supernova-ai/snh-app-boot'
 import { createLaunchEnvironmentSnapshot } from '@supernova-ai/snh-launch-environment'
 import LlmRuntime from '@supernova-ai/snh-llm'
 import * as Account from '@supernova-ai/snh-llm-deepseek-account'
-import * as Official from '@supernova-ai/snh-llm-supernova-api-key'
+import * as Official from '@supernova-ai/snh-llm-deepseek-api-key'
 import SuperNovaAuth from '@supernova-ai/snh-supernova-auth'
 import WebRuntime from '@supernova-ai/snh-web'
 import * as webApiPlugin from '@supernova-ai/snh-web-supernova-api'
@@ -29,7 +29,7 @@ afterEach(async () => {
 const MODULES = new Map<string, unknown>([
   ['@supernova-ai/snh-llm', LlmRuntime],
   ['@supernova-ai/snh-supernova-auth', SuperNovaAuth],
-  ['@supernova-ai/snh-llm-supernova-api-key', Official],
+  ['@supernova-ai/snh-llm-deepseek-api-key', Official],
   ['@supernova-ai/snh-llm-deepseek-account', Account],
   ['@supernova-ai/snh-web', WebRuntime],
   ['@supernova-ai/snh-web-supernova-api', webApiPlugin],
@@ -72,7 +72,7 @@ async function bootComposition(
   await writeFile(configPath, JSON.stringify([
     { id: 'llm', name: '@supernova-ai/snh-llm' },
     { id: 'supernova-auth', name: '@supernova-ai/snh-supernova-auth' },
-    { id: 'llm-supernova', name: '@supernova-ai/snh-llm-supernova-api-key' },
+    { id: 'llm-supernova', name: '@supernova-ai/snh-llm-deepseek-api-key' },
     { id: 'llm-deepseek-account', name: '@supernova-ai/snh-llm-deepseek-account' },
     { id: 'web', name: '@supernova-ai/snh-web', config: { searchProvider: 'supernova-search-api', fetchProvider: 'supernova-fetch-api' } },
     { id: 'web-supernova-api', name: '@supernova-ai/snh-web-supernova-api', config: web },
