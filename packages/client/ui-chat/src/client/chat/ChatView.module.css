@@ -289,31 +289,21 @@
   overflow: hidden;
 }
 
-.runningWhaleAnimated {
-  display: none;
-  position: absolute;
-  inset: 0;
+.runningNova {
+  display: block;
+  transform-origin: 50% 50%;
 }
 
-.runningWhaleStill {
-  display: initial;
-}
-
-@supports (mask-mode: alpha) and (mask-image: url('')) {
-  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
-    .runningWhaleAnimated {
-      display: block;
-      background: currentColor;
-      mask: url('../assets/running-whale@2x.png') center / 100% 100% no-repeat;
-      mask-mode: alpha;
-      /* Keep animated-mask repaints on an icon-sized composited layer. */
-      will-change: transform;
-    }
-
-    .runningWhaleStill {
-      display: none;
-    }
+@media (prefers-reduced-motion: no-preference) {
+  .runningNova {
+    animation: runningNovaSpin 2.4s linear infinite;
+    /* Keep the rotation on an icon-sized composited layer. */
+    will-change: transform;
   }
+}
+
+@keyframes runningNovaSpin {
+  to { transform: rotate(360deg); }
 }
 
 .openError {
