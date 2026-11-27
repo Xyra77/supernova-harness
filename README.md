@@ -6,7 +6,7 @@ SuperNova Harness (`snh`) is an open-source agent harness developed by [SuperNov
 
 It is built on an **everything-is-a-plugin** architecture and powered by [Cordis](https://github.com/cordiverse/cordis), whose design is described in [_A Programming Paradigm for Spatiotemporal Composability_](https://arxiv.org/abs/2608.25512).
 
-Documentation: [https://supernova-harness.github.io/supernova-harness/](https://supernova-harness.github.io/supernova-harness/)
+Documentation: [https://supernova-harness.github.io/supernova-harness/](https://deepseek-harness.github.io/deepseek-harness/)
 
 ## Developer preview
 
