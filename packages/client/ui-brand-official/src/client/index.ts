@@ -21,10 +21,19 @@ export function apply(ctx: ClientContext): void {
   ctx.slots.inject('conversation.hero.brand.mark', () => ctx.slots.register({
     name: 'conversation.hero.brand.mark',
   }, SupernovaHeroMark))
-  if (process.env.SNH_CLIENT_BUILD_PROFILE !== 'official') return
-  ctx.slots.inject('sidebar.brand.mark', () =>
-    ctx.slots.inject('sidebar.brand.name', function* () {
-      yield ctx.slots.register({ name: 'sidebar.brand.mark' }, SupernovaMark)
-      yield ctx.slots.register({ name: 'sidebar.brand.name' }, SupernovaName)
-    }))
+
+  // The product mark is part of the visual identity in every build profile.
+  // Local builds keep the shell's "Local Build" label; official builds suppress it.
+  if (process.env.SNH_CLIENT_BUILD_PROFILE === 'official') {
+    ctx.slots.inject('sidebar.brand.mark', () =>
+      ctx.slots.inject('sidebar.brand.name', function* () {
+        yield ctx.slots.register({ name: 'sidebar.brand.mark' }, SupernovaMark)
+        yield ctx.slots.register({ name: 'sidebar.brand.name' }, SupernovaName)
+      }))
+    return
+  }
+
+  ctx.slots.inject('sidebar.brand.mark', () => ctx.slots.register({
+    name: 'sidebar.brand.mark',
+  }, SupernovaMark))
 }

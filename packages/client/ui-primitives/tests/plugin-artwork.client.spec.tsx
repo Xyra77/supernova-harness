@@ -36,17 +36,17 @@ describe('plugin artwork', () => {
     expect(container.querySelector('foreignObject div')).not.toBeNull()
   })
 
-  it('pairs the search green with the loop upper-right blue-violet in its ring and handle', () => {
+  it('pairs the search gold with the loop upper-right coral in its ring and handle', () => {
     const { container } = render(<PluginArtworkSearch />)
     const ring = container.querySelector<HTMLElement>('foreignObject div')
-    expect(ring?.style.background).toBe('conic-gradient(from 90deg, rgb(65, 225, 172) 0deg, rgb(101, 142, 255) 62.0619deg, rgb(65, 225, 172) 360deg)')
-    expect(container.querySelector('path[stroke]')?.getAttribute('stroke')).toBe('#658EFF')
+    expect(ring?.style.background).toBe('conic-gradient(from 90deg, rgb(225, 180, 65) 0deg, rgb(255, 125, 101) 62.0619deg, rgb(225, 180, 65) 360deg)')
+    expect(container.querySelector('path[stroke]')?.getAttribute('stroke')).toBe('#ff7d65')
   })
 
-  it('uses light blue for both terminal strokes', () => {
+  it('uses light coral for both terminal strokes', () => {
     const { container } = render(<PluginArtworkTerminal />)
     const strokes = [...container.querySelectorAll('path')].map(path => path.getAttribute('stroke'))
-    expect(strokes).toEqual(['#679EFE', '#679EFE'])
+    expect(strokes).toEqual(['#fe8667', '#fe8667'])
     expect(container.querySelector('linearGradient')).toBeNull()
   })
 

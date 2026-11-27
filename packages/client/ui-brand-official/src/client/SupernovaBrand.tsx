@@ -9,7 +9,7 @@ export function SupernovaMark({ size }: SidebarBrandMarkOwnerProps) {
       src={supernovaMarkUrl}
       width={size}
       height={size}
-      alt="Supernova"
+      alt="APT Supernova"
       draggable={false}
       style={{ display: 'block', objectFit: 'contain' }}
     />

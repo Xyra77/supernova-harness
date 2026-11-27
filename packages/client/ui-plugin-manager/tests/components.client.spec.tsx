@@ -1590,7 +1590,7 @@ describe('PluginManagerPage', () => {
       renderTab({ packages: [] }, { items: [{ id: 'custom-tool', label: 'Custom' }] })
       const card = document.querySelector('[data-plugin-item="custom-tool"]') as HTMLElement
       const stops = [...card.querySelectorAll('stop')].map(stop => stop.getAttribute('stop-color'))
-      expect(stops).toEqual(['#54ECE7', '#658EFF'])
+      expect(stops).toEqual(['#ecac54', '#ff7d65'])
     })
 
     it('renders a bundle\'s own configuration on its page, and no configure control on a row without one', () => {

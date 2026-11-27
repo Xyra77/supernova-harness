@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, render } from '@testing-library/react'
 import { SlotRegistry } from '@supernova-ai/snh-client-ui-renderer/client'
 import { apply, inject } from '../src/client/index.ts'
-import { OfficialBrandMark, OfficialBrandName } from '../src/client/Brand.tsx'
+import { SupernovaMark, SupernovaName } from '../src/client/SupernovaBrand.tsx'
 import { apply as hostApply } from '../src/index.ts'
 
 afterEach(() => {
@@ -18,9 +18,8 @@ const HOLES = [
   'sidebar.brand.mark',
   'sidebar.brand.name',
   'conversation.hero.frame',
+  'conversation.hero.brand.mark',
 ] as const
-
-const HERO_HOLE = 'conversation.hero.brand.mark'
 
 async function bench(declare = true) {
   const ctx = new Context()
@@ -28,7 +27,7 @@ async function bench(declare = true) {
   const slots = ctx.get('slots') as SlotRegistry
   const declareHoles = () => slots.register({
     name: 'root',
-    children: Object.fromEntries([...HOLES, HERO_HOLE].map(name => [name, {
+    children: Object.fromEntries(HOLES.map(name => [name, {
       kind: name === 'conversation.hero.frame' ? 'hoc' : 'single',
       scope: 'root',
     }])),
@@ -46,13 +45,14 @@ describe('official browser-brand plugin', () => {
     expect(inject).toEqual(['slots'])
   })
 
-  it('keeps local sidebar branding and provides the same blank-home feedback', async () => {
+  it('uses the APT sidebar mark in local builds and keeps the local name fallback', async () => {
     vi.stubEnv('SNH_CLIENT_BUILD_PROFILE', 'local')
     const subject = await bench()
     await subject.ctx.plugin({ inject: [...inject], apply }).await()
-    expect(subject.slots.entries('sidebar.brand.mark')).toHaveLength(0)
+    expect(subject.slots.entries('sidebar.brand.mark')).toHaveLength(1)
     expect(subject.slots.entries('sidebar.brand.name')).toHaveLength(0)
     expect(subject.slots.entries('conversation.hero.frame')).toHaveLength(1)
+    expect(subject.slots.entries('conversation.hero.brand.mark')).toHaveLength(1)
   })
 
   it('fills declarations before or after apply and removes every occupant on teardown', async () => {
@@ -79,36 +79,39 @@ describe('official browser-brand plugin', () => {
     for (const hole of HOLES) expect(after.slots.entries(hole)).toHaveLength(1)
   })
 
-  it('leaves the conversation hero on its declaring fallback even in official builds', async () => {
+  it('registers the APT hero mark in official builds', async () => {
     vi.stubEnv('SNH_CLIENT_BUILD_PROFILE', 'official')
     const subject = await bench()
     await subject.ctx.plugin({ inject: [...inject], apply }).await()
-    expect(subject.slots.entries(HERO_HOLE)).toHaveLength(0)
+    expect(subject.slots.entries('conversation.hero.brand.mark')).toHaveLength(1)
   })
 
-  it('registers the whale as a self-contained frame layer without replacing the hero mark', async () => {
+  it('registers the Supernova effect as a self-contained frame layer', async () => {
     vi.stubEnv('SNH_CLIENT_BUILD_PROFILE', 'official')
     const subject = await bench()
     const fiber = subject.ctx.plugin({ inject: [...inject], apply })
     try {
       await fiber.await()
       const [entry] = subject.slots.entries('conversation.hero.frame')
-      expect(entry?.options.id).toBe('pixel-whale')
+      expect(entry?.options.id).toBe('supernova-home')
       expect(entry?.inject).toBeUndefined()
-      expect(subject.slots.entries(HERO_HOLE)).toHaveLength(0)
+      expect(subject.slots.entries('conversation.hero.brand.mark')).toHaveLength(1)
     } finally {
       await fiber.dispose()
     }
   })
 
-  it('renders the official name independently from both requested mark sizes', () => {
-    const name = render(<OfficialBrandName />)
-    expect(name.container.querySelector('svg')?.getAttribute('viewBox')).toBe('26 0 156 24')
+  it('renders the APT Supernova mark at the requested size and suppresses the official name', () => {
+    const name = render(<SupernovaName />)
+    expect(name.container.firstChild).toBeNull()
     name.unmount()
 
-    const mark = render(<OfficialBrandMark size={34} />)
-    expect(mark.container.querySelector('svg')?.getAttribute('width')).toBe('34')
-    mark.rerender(<OfficialBrandMark size={24} />)
-    expect(mark.container.querySelector('svg')?.getAttribute('width')).toBe('24')
+    const mark = render(<SupernovaMark size={34} />)
+    const image = mark.container.querySelector('img')
+    expect(image?.getAttribute('alt')).toBe('APT Supernova')
+    expect(image?.getAttribute('width')).toBe('34')
+    expect(image?.getAttribute('height')).toBe('34')
+    mark.rerender(<SupernovaMark size={24} />)
+    expect(mark.container.querySelector('img')?.getAttribute('width')).toBe('24')
   })
 })
