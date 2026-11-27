@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepseek-ai/deepseek-harness.git",
+    "url": "git+https://github.com/Xyra77/supernova-harness.git",
     "directory": "packages/document/office-kit"
   },
   "exports": {
