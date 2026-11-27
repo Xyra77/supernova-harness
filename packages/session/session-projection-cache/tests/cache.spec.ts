@@ -474,6 +474,34 @@ describe('SessionProjectionCache write policy', () => {
   })
 })
 
+describe('SessionProjectionCache permanent deletion', () => {
+  it('removes a deleted lifecycle checkpoint and blocks late writes without blocking a recreated id', async () => {
+    const { ctx, root, cache } = await harness()
+    const id = brandString<SessionId>('permanent-delete')
+    const session = ctx.sessions.create(id)
+    await cache.write(session)
+    const deletedHeader = structuredClone(session.header)
+    expect(await storedRecord(root, id)).toBeDefined()
+
+    await cache.deleteSession(deletedHeader)
+    expect(await storedRecord(root, id)).toBeUndefined()
+    expect(cache.cachedSnapshot(deletedHeader)).toBeUndefined()
+
+    // Model a detach/cold-read checkpoint that was already in flight when
+    // deletion started: the same lifecycle tombstone must keep it from
+    // recreating the removed record.
+    await cache.write(session)
+    expect(await storedRecord(root, id)).toBeUndefined()
+
+    // A genuinely new lifecycle under the same id is still allowed to write.
+    const recreatedHeader = { ...deletedHeader, createdAt: deletedHeader.createdAt + 1 }
+    const written = whenWritten(ctx, id)
+    cache.coldSnapshot(recreatedHeader, SessionLogOffset(0), [])
+    await written
+    expect(cache.cachedSnapshot(recreatedHeader)).toBeDefined()
+  })
+})
+
 describe('SessionProjectionCache listing read', () => {
   it('rejects a nonzero inherited cut for an unseeded header on the fold face', async () => {
     const { cache } = await harness()

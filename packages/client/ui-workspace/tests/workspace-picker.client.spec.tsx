@@ -253,7 +253,7 @@ describe('WorkspacePicker', () => {
     ])
     const search = screen.getByRole('searchbox', { name: '搜索工作区' })
     expect(screen.queryByRole('button', { name: '清除搜索' })).toBeNull()
-    fireEvent.change(search, { target: { value: 'ＤＳＨ' } })
+    fireEvent.change(search, { target: { value: 'ＳＮＨ' } })
     expect(screen.getAllByRole('menuitem').map(entry => entry.textContent))
       .toEqual(['SNH release', 'Team SNH', 'supernova-harness', 'Archive', '添加工作区…'])
     fireEvent.keyDown(search, { key: 'Enter' })

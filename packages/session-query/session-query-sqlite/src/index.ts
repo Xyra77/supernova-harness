@@ -325,6 +325,54 @@ export class SqliteSessionQueryEngine extends SessionQueryEngine {
     })
   }
 
+  /**
+   * Remove the Session from the disposable full-text index and the prepared
+   * observation cache. This is called after the authoritative persistence row
+   * is deleted; serializing it with searches also prevents an in-flight
+   * reconciliation from leaving the just-deleted text indexed.
+   * @param sessionId - permanently removed Session identity.
+   * @returns resolution after the matching index documents are gone.
+   */
+  override async forgetSession(sessionId: SessionId): Promise<void> {
+    await super.forgetSession(sessionId)
+    // `first-search` may leave an existing on-disk index unopened. Open it
+    // here as well so deleting a Session cannot leave its old FTS text on disk
+    // until a later search happens. `never` is the only mode with no index.
+    if (this.config.openAt === 'never' || this._closed) return
+    await this._serialized(undefined, async () => {
+      await this._ensureReady(undefined)
+      const db = this._requireDb()
+      const persisted = db.prepare('SELECT 1 AS present FROM persisted_sessions WHERE id = ?').get(sessionId) !== undefined
+      const live = db.prepare('SELECT 1 AS present FROM temp.live_sessions WHERE id = ?').get(sessionId) !== undefined
+      if (!persisted && !live) return
+
+      let began = false
+      try {
+        db.exec('BEGIN IMMEDIATE')
+        began = true
+        this._deleteSession('persisted', sessionId)
+        this._deleteSession('live', sessionId)
+        if (persisted) {
+          db.prepare('UPDATE search_state SET global_generation = ? WHERE singleton = 1')
+            .run(this._mainGeneration() + 1)
+        }
+        db.exec('COMMIT')
+      } catch (error: unknown) {
+        if (began) {
+          try { db.exec('ROLLBACK') } catch { /* preserve the original failure */ }
+        }
+        throw new SessionQueryError(
+          `failed to forget permanently deleted session "${sessionId}" from the search index: ${errorMessage(error)}`,
+          'SESSION_QUERY_INDEX_FAILED',
+          { cause: error },
+        )
+      }
+      this._globalGeneration += 1
+      this._localGeneration = Math.max(this._localGeneration, this._globalGeneration) + (live ? 1 : 0)
+      if (persisted) this._persistenceEpoch += 1
+    })
+  }
+
   /** Close the database after every accepted operation reaches quiescence. */
   close(): Promise<void> {
     this._closePromise ??= this._close()

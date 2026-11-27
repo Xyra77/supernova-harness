@@ -23,7 +23,7 @@ import pLimit, { type LimitFunction } from 'p-limit'
 import {
   SessionPersistence, SessionFormatUnsupportedError,
   SessionPersistenceCorruptionError,
-  SessionAlreadyExistsError, SessionPersistenceNotFoundError,
+  SessionAlreadyExistsError, SessionAlreadyOwnedError, SessionPersistenceNotFoundError,
   assertStoredId, materializeCreateHeader, sessionFormatVersionRefusal, validateStoredEvents,
   type SessionAccess, type SessionHandle,
   type SessionHandleReadResult,
@@ -33,7 +33,7 @@ import {
   type SessionPersistenceRevision as PersistenceRevision,
 } from '@supernova-ai/snh-session-persistence'
 import { JsonlBackendTracker, JsonlSessionHandle, type StorageHandleState } from './storage.ts'
-import { SessionWriteLease } from './lease.ts'
+import { LEASE_FILENAME, SessionWriteLease } from './lease.ts'
 import { brandString } from '@supernova-ai/snh-brand'
 import { SESSION_FORMAT_VERSION, SessionLogOffset } from '@supernova-ai/snh-session'
 import type { SessionEvent, SessionId, SessionHeader, SessionLogOffset as SessionLogOffsetType } from '@supernova-ai/snh-session'
@@ -478,6 +478,7 @@ export class JsonlSessionPersistence extends SessionPersistence {
    */
   async open(id: SessionId, access: SessionAccess, options?: SessionPersistenceOpenOptions): Promise<SessionHandle> {
     options?.signal?.throwIfAborted()
+    if (this.tracker.isDeleting(id)) throw new SessionPersistenceNotFoundError(id)
     await this.ensureRootEncoding()
     options?.signal?.throwIfAborted()
     if (access === 'read') await this.tracker.closeCompletion(id)
@@ -603,6 +604,86 @@ export class JsonlSessionPersistence extends SessionPersistence {
       options?.signal?.throwIfAborted()
       if (isENOENT(error)) return undefined
       throw error
+    }
+  }
+
+  /**
+   * Permanently remove a stored Session's JSONL generations while retaining
+   * the stable kernel lock file. A pending migration is cancelled and joined
+   * before the directory is cleared. The tracker guard prevents this process
+   * from admitting a new writer between the initial check and lock acquisition.
+   * @param id - stored Session identity.
+   * @returns resolution after the directory deletion is durable.
+   */
+  async delete(id: SessionId): Promise<void> {
+    this.tracker.beginDelete(id)
+    let lease: SessionWriteLease | undefined
+    try {
+      const preparation = this.migrationPreparations.get(id)
+      if (preparation !== undefined) {
+        preparation.controller.abort(new Error(`session "${id}" is being deleted`))
+        await preparation.promise.catch(() => undefined)
+      }
+      await this.tracker.closeCompletion(id)
+      if (this.tracker.hasWriter(id) || this.tracker.hasPending(id)) {
+        throw new SessionAlreadyOwnedError(id)
+      }
+      const selected = await this.findLog(id)
+      if (selected === undefined) throw new SessionPersistenceNotFoundError(id)
+      const directory = dirname(selected.sourcePath)
+      lease = await SessionWriteLease.acquire(directory, id)
+      const latest = await this.findLog(id)
+      if (latest === undefined) throw new SessionPersistenceNotFoundError(id)
+      if (dirname(latest.sourcePath) !== directory) {
+        throw new Error(`session "${id}" changed storage directories during deletion`)
+      }
+      await this.removeGenerations(id, directory)
+    } finally {
+      try { await lease?.release() }
+      finally { this.tracker.endDelete(id) }
+    }
+  }
+
+  /**
+   * Remove a retained legacy JSONL copy while the SQLite provider already
+   * holds the combined database/artifact Session lease. This is intentionally
+   * separate from {@link delete}: calling it without that lease would race a
+   * legacy import or a new SQLite write-open.
+   * @param id - stored Session identity.
+   * @returns resolution after the JSONL copy, when present, is removed durably.
+   */
+  async deleteWhileLeased(id: SessionId): Promise<void> {
+    this.tracker.beginDelete(id)
+    try {
+      const preparation = this.migrationPreparations.get(id)
+      if (preparation !== undefined) {
+        preparation.controller.abort(new Error(`session "${id}" is being deleted`))
+        await preparation.promise.catch(() => undefined)
+      }
+      await this.tracker.closeCompletion(id)
+      if (this.tracker.hasWriter(id) || this.tracker.hasPending(id)) {
+        throw new SessionAlreadyOwnedError(id)
+      }
+      const selected = await this.findLog(id)
+      if (selected === undefined) return
+      await this.removeGenerations(id, dirname(selected.sourcePath))
+    } finally {
+      this.tracker.endDelete(id)
+    }
+  }
+
+  /** Remove every artifact except the permanent lock inode and invalidate path-keyed read caches. */
+  private async removeGenerations(id: SessionId, directory: string): Promise<void> {
+    for (const entry of await readdir(directory, { withFileTypes: true })) {
+      if (entry.name === LEASE_FILENAME) continue
+      await rm(join(directory, entry.name), { recursive: true, force: true })
+    }
+    this.coldLogMemo.delete(id)
+    this.listedHeaders.clear()
+    if (process.platform === 'win32') await ensureDurableDirectoryWin32(directory)
+    else {
+      const handle = await open(directory, 'r')
+      try { await handle.sync() } finally { await handle.close() }
     }
   }
 

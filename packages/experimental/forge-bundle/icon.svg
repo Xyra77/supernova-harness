@@ -6,6 +6,6 @@
   <path d="M13 14.4V21.6M23 21.6V16.2C23 14.3 21.7 13 19.8 13H18" stroke="#FFFFFF" stroke-width="1.6" />
   <path d="M20 11L18 13L20 15" stroke="#FFFFFF" stroke-width="1.6" stroke-linejoin="round" />
   <defs>
-    <linearGradient id="forge-bundle-card" x1="18" y1="7" x2="18" y2="29" gradientUnits="userSpaceOnUse"><stop stop-color="#69B9FF" /><stop offset="1" stop-color="#324DE2" /></linearGradient>
+    <linearGradient id="forge-bundle-card" x1="18" y1="7" x2="18" y2="29" gradientUnits="userSpaceOnUse"><stop stop-color="#ff9869" /><stop offset="1" stop-color="#e27a32" /></linearGradient>
   </defs>
 </svg>

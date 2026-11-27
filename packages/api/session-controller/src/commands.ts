@@ -6,6 +6,7 @@ import { continuationProjectionDefinition, type ContinuationState } from './cont
 import { modelAvailable } from './catalog.ts'
 import { randomUUID } from 'node:crypto'
 import type { Context } from '@supernova-ai/cordis'
+import type {} from '@supernova-ai/snh-session-projection-cache'
 import { brandString } from '@supernova-ai/snh-brand'
 import type { Agent, ModelSelection as AgentModelSelection } from '@supernova-ai/snh-agent'
 import { AttachmentError } from '@supernova-ai/snh-attachment'
@@ -42,6 +43,8 @@ import type {
   SessionCancelValue,
   SessionCreateRequest,
   SessionCreateValue,
+  SessionDeleteRequest,
+  SessionDeleteValue,
   SessionForkRequest,
   SessionForkValue,
   SessionPromptRequest,
@@ -219,6 +222,74 @@ export class SessionCommandController {
       )
     }
   }
+
+  /**
+   * Permanently delete one ordinary Session. A live Agent is stopped through
+   * its retained disposer before storage and Workspace indexes are removed;
+   * a cold Session is deleted directly without resuming it.
+   * @param request - Session identity to delete.
+   * @returns acknowledgement after the Session is no longer stored or listable.
+   */
+  async delete(request: SessionDeleteRequest): Promise<SessionDeleteValue> {
+    const { sessionId } = request
+    // Optional service, like every other Session read in this controller: it is not in
+    // `static inject`, so it is looked up with `get` and its absence is a typed refusal.
+    const persistence = this.ctx.get('sessionPersistence')
+    if (persistence === undefined) {
+      throw new RemoteError('gateway/internal', 'deleting is unavailable: this deployment mounts no session persistence service', {})
+    }
+    const initial = await persistence.stat(sessionId)
+    if (initial === undefined) {
+      throw new RemoteError('session/not-found', `session "${sessionId}" not found`, { sessionId })
+    }
+    if (initial.header.origin === 'subagent') {
+      throw apiSessionSubagentOwnershipError(sessionId)
+    }
+    const wasAttached = this.ctx.sessions.get(sessionId) !== undefined
+    try {
+      await this.agents.withPermanentDeletion(sessionId, async () => {
+        const current = await persistence.stat(sessionId)
+        if (current === undefined) {
+          throw new RemoteError('session/not-found', `session "${sessionId}" not found`, { sessionId })
+        }
+        if (current.header.origin === 'subagent') {
+          throw apiSessionSubagentOwnershipError(sessionId)
+        }
+        try {
+          await persistence.delete(sessionId)
+        } catch (error: unknown) {
+          if (error instanceof Error && error.name === 'SessionAlreadyOwnedError') {
+            throw new RemoteError('session/agent-busy', `session "${sessionId}" is still owned by another writer`, {
+              reason: 'close the other Session writer before deleting this Session',
+            })
+          }
+          throw error
+        }
+        // Derived projections and search documents can contain titles or
+        // message text. Delete them only after the authoritative log is gone:
+        // this avoids disabling a still-valid cache if storage refuses the
+        // delete, and the cache's tombstone prevents late write-back. Search
+        // cleanup is serialized with reconciliation, so an already-admitted
+        // query cannot repopulate its documents after this purge completes.
+        await this.ctx.get('sessionProjectionCache')?.deleteSession(current.header)
+        await this.ctx.sessionQuery.forgetSession(sessionId)
+        await this.ctx.workspaceRegistry.removeSession(sessionId)
+        // A live Agent emits session/disposed as its handle unwinds. Cold
+        // deletion has no lifecycle event, so publish the same removal relay.
+        if (!wasAttached) this.ctx.emit('api-session/removed', sessionId)
+      })
+      return { deleted: true }
+    } catch (error: unknown) {
+      if (error instanceof RemoteError) throw error
+      throw new RemoteError(
+        'gateway/internal',
+        `failed to permanently delete session "${sessionId}": ${String(error)}`,
+        {},
+        { cause: error },
+      )
+    }
+  }
+
 
   /**
    * Create a new ordinary Session from an exact event prefix. An explicit

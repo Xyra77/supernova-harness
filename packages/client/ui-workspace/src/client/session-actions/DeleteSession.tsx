@@ -16,7 +16,7 @@ import browserCss from '../rows/WorkspaceBrowser.module.css'
 export function DeleteSessionRowButton({
   sessionId, displayTitle, useSessionAccess, requestSessionDelete, t,
 }: SessionRowActionProps<DeleteSessionInjected>) {
-  const allowed = useSessionAccess(sessionId, 'workspace/deleteSession')
+  const allowed = useSessionAccess(sessionId, 'session/delete')
   if (!allowed) return null
   return (
     <Tooltip label={t('actions.delete')} side="bottom" align="end" delayMs={500} portal>

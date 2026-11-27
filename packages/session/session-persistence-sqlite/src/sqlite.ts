@@ -135,6 +135,7 @@ export class SqliteStore {
     head: SegmentId
   }>()
   private readonly creating = new Set<SessionId>()
+  private readonly deleting = new Set<SessionId>()
   private readonly directorySyncs = new Set<string>()
   private readonly statements = new Map<string, StatementSync>()
   private ready: Promise<DatabaseSync> | undefined
@@ -473,7 +474,7 @@ export class SqliteStore {
 
     const meta = materializeHeader(header, options?.inheritedEventCount)
     const inheritedCount = options?.inheritedEventCount ?? 0
-    if (this.creating.has(meta.id) || this.pendingCreates.has(meta.id) || this.writers.has(meta.id)) {
+    if (this.deleting.has(meta.id) || this.creating.has(meta.id) || this.pendingCreates.has(meta.id) || this.writers.has(meta.id)) {
       throw new SessionAlreadyExistsError(meta.id)
     }
     this.creating.add(meta.id)
@@ -546,6 +547,7 @@ export class SqliteStore {
   async open(id: SessionId, access: SessionAccess, signal?: AbortSignal,
     ownership?: { release(): Promise<void> }): Promise<SqliteSessionHandle> {
     this.check(); signal?.throwIfAborted()
+    if (this.deleting.has(id)) throw new SessionPersistenceNotFoundError(id)
     if (access === 'read') await this.writers.get(id)?.closeCompletion
     this.check(); signal?.throwIfAborted()
     const pending = this.pendingCreates.get(id)
@@ -652,6 +654,7 @@ export class SqliteStore {
    */
   private async admit(header: SessionHeader, access: SessionAccess, inheritedCount = 0, created = false,
     ownership?: { release(): Promise<void> }): Promise<SqliteSessionHandle> {
+    if (this.deleting.has(header.id)) throw new SessionPersistenceNotFoundError(header.id)
     if (access === 'write' && this.writers.has(header.id)) throw new SessionAlreadyOwnedError(header.id)
     let lease = access === 'write' && !created
       ? ownership ?? await this.acquireWriteLease(header, false)
@@ -903,6 +906,76 @@ export class SqliteStore {
     const row = this.row(await this.database(), id)
     if (row === undefined) return undefined
     return this.snapshot(id, row, this.parseHeader(id, row.header))
+  }
+
+  /**
+   * Permanently delete one Trace while retaining any immutable Segments still
+   * reachable from another Trace (notably a fork descendant). The caller may
+   * transfer a combined database/artifact lease already held while removing a
+   * legacy JSONL copy; otherwise this method acquires the same lease itself.
+   * @param id - Trace identity to remove.
+   * @param header - selected stored header used to locate the artifact lease.
+   * @param ownership - optional lease transferred from the routing provider.
+   * @returns resolution after the delete transaction commits.
+   */
+  async delete(id: SessionId, header: SessionHeader,
+    ownership?: { release(): Promise<void> }): Promise<void> {
+    this.check()
+    if (this.deleting.has(id)) throw new SessionAlreadyOwnedError(id)
+    this.deleting.add(id)
+    let lease = ownership
+    try {
+      const writer = this.writers.get(id)
+      if (writer !== undefined) {
+        if (writer.closeCompletion !== undefined) await writer.closeCompletion
+        if (this.writers.has(id)) throw new SessionAlreadyOwnedError(id)
+      }
+      if (this.pendingCreates.has(id) || this.creating.has(id)) throw new SessionAlreadyOwnedError(id)
+      if (!await this.exists()) throw new SessionPersistenceNotFoundError(id)
+      const db = await this.database()
+      const before = this.row(db, id)
+      if (before === undefined) throw new SessionPersistenceNotFoundError(id)
+      lease ??= await this.acquireWriteLease(header, false)
+      this.check()
+      if (this.writers.has(id) || this.pendingCreates.has(id) || this.creating.has(id)) {
+        throw new SessionAlreadyOwnedError(id)
+      }
+      this.transaction(db, () => {
+        if (this.row(db, id) === undefined) throw new SessionPersistenceNotFoundError(id)
+        this.statement(db, 'DELETE FROM traces WHERE trace_uuid = ?').run(id)
+
+        // A segment is reclaimable only when no surviving Trace ends at it or
+        // names it in its ancestor closure. Descendants that still need this
+        // history therefore keep the shared prefix alive after the parent is
+        // deleted.
+        const orphaned = this.statement(db, `SELECT s.segment_uuid,
+          COUNT(a.ancestor_uuid) AS depth
+          FROM segments s LEFT JOIN segment_ancestors a ON a.segment_uuid = s.segment_uuid
+          WHERE NOT EXISTS (SELECT 1 FROM traces t WHERE t.tail_segment_uuid = s.segment_uuid)
+            AND NOT EXISTS (
+              SELECT 1 FROM traces t
+              JOIN segment_ancestors live ON live.segment_uuid = t.tail_segment_uuid
+              WHERE live.ancestor_uuid = s.segment_uuid
+            )
+          GROUP BY s.segment_uuid ORDER BY depth DESC`).all() as Array<{ segment_uuid: string; depth: number }>
+
+        db.exec('DROP TRIGGER frames_no_delete; DROP TRIGGER ancestors_no_delete;')
+        for (const segment of orphaned) {
+          this.statement(db, 'DELETE FROM segment_ancestors WHERE segment_uuid = ? OR ancestor_uuid = ?')
+            .run(segment.segment_uuid, segment.segment_uuid)
+          this.statement(db, 'DELETE FROM frames WHERE segment_uuid = ?').run(segment.segment_uuid)
+          this.statement(db, 'DELETE FROM segments WHERE segment_uuid = ?').run(segment.segment_uuid)
+        }
+        db.exec(`CREATE TRIGGER frames_no_delete BEFORE DELETE ON frames BEGIN SELECT RAISE(ABORT, 'frames are append-only'); END;
+          CREATE TRIGGER ancestors_no_delete BEFORE DELETE ON segment_ancestors
+            BEGIN SELECT RAISE(ABORT, 'segment ancestry is immutable'); END;`)
+      })
+      this.pendingCreates.delete(id)
+      this.chains.delete(id)
+    } finally {
+      try { await lease?.release() }
+      finally { this.deleting.delete(id) }
+    }
   }
 
   private snapshot(id: SessionId, row: Metadata, header: SessionHeader): SessionPersistenceSnapshot {

@@ -337,6 +337,32 @@ export class WorkspaceRegistry extends Service {
   }
 
   /**
+   * Remove a permanently deleted Session from every Workspace and the
+   * registry-global archive/pin sets. Session persistence is deleted by the
+   * Session Controller before this method is called.
+   * @param sessionId - permanently deleted Session identity.
+   * @returns resolution after registry metadata and Workspace membership are updated.
+   */
+  removeSession(sessionId: SessionId): Promise<void> {
+    return this.enqueueOperation(async () => {
+      const state = this.requireState()
+      // Drop the lookup caches first: WorkspaceEntity's membership mutation
+      // uses candidateMatches to prune records whose backing Session vanished.
+      this.headers.delete(sessionId)
+      this.sessionPaths.delete(sessionId)
+      this.missingSessionPaths.delete(sessionId)
+      this.invalidSessionPaths.delete(sessionId)
+      const archivedSessionIds = state.archivedSessionIds.filter(id => id !== sessionId)
+      const pinnedSessionIds = state.pinnedSessionIds.filter(id => id !== sessionId)
+      if (archivedSessionIds.length !== state.archivedSessionIds.length
+        || pinnedSessionIds.length !== state.pinnedSessionIds.length) {
+        await this.setState({ ...state, archivedSessionIds, pinnedSessionIds })
+      }
+      for (const entity of this.entities.values()) await entity.detachSession(sessionId)
+    })
+  }
+
+  /**
    * Move one workspace within the durable display order, DOM-insertBefore-like.
    * With an anchor it lands before that workspace; without one it appends.
    * @param id - Workspace to move.

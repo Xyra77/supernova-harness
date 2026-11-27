@@ -24,13 +24,14 @@ import type { ArchiveToastEntryProps } from '../src/client/contract/toast.ts'
 import { en as commonEn } from '@supernova-ai/snh-client-locale/src/locales/en.ts'
 import { zh as commonZh } from '@supernova-ai/snh-client-locale/src/locales/zh.ts'
 import type {
-  RowToast, RowToastState, SessionArchiveConfirmInjected, SessionArchiveConfirmRequest,
-  SessionRenameDialogInjected, SessionRenameTarget,
+  RowToast, RowToastState, DeleteSessionInjected, SessionDeleteDialogInjected, SessionDeleteRequest,
+  SessionArchiveConfirmInjected, SessionArchiveConfirmRequest, SessionRenameDialogInjected, SessionRenameTarget,
 } from '../src/client/contract/slots.ts'
 import {
   ArchiveSessionRowButton, SessionArchiveConfirmDialog,
 } from '../src/client/session-actions/ArchiveSession.tsx'
 import { PinSessionRowButton } from '../src/client/session-actions/PinSession.tsx'
+import { DeleteSessionRowButton, SessionDeleteDialog } from '../src/client/session-actions/DeleteSession.tsx'
 import { SessionRenameDialog } from '../src/client/session-actions/RenameSession.tsx'
 import { RowActionToast } from '../src/client/session-actions/RowActionToast.tsx'
 import { createWorkspaceViewStore } from '../src/client/stores.ts'
@@ -708,5 +709,71 @@ describe('RowActionToast', () => {
     } finally {
       vi.useRealTimers()
     }
+  })
+})
+
+
+describe('permanent delete action', () => {
+  it('offers the row action only while the session/delete capability is present', () => {
+    const requestSessionDelete = vi.fn<DeleteSessionInjected['requestSessionDelete']>()
+    const useSessionAccess = vi.fn((_id: SessionId, endpoint: string) => endpoint === 'session/delete')
+    const view = render(
+      <DeleteSessionRowButton {...actionRow} useSessionAccess={useSessionAccess} requestSessionDelete={requestSessionDelete} />,
+    )
+    fireEvent.click(screen.getByRole('button', { name: '删除会话' }))
+    expect(requestSessionDelete).toHaveBeenCalledWith(ROW.sessionId, ROW.displayTitle)
+    view.rerender(<DeleteSessionRowButton {...actionRow} useSessionAccess={() => false} requestSessionDelete={requestSessionDelete} />)
+    expect(view.container.innerHTML).toBe('')
+  })
+
+  /** The dialog over a test-owned request source; settling clears the request as apply does. */
+  function deleteDialog(deleteSession: SessionDeleteDialogInjected['deleteSession'], translate = t) {
+    const request = createSnapshotStore<SessionDeleteRequest | null>(null)
+    const settleSessionDelete = vi.fn(() => { request.set(null) })
+    render(
+      <SessionDeleteDialog
+        {...overlay}
+        t={translate}
+        useDeleteRequest={bindSnapshotSelector(request)}
+        settleSessionDelete={settleSessionDelete}
+        deleteSession={deleteSession}
+      />,
+    )
+    const ask = (sessionId: string, displayTitle: string): void => {
+      act(() => { request.set({ sessionId: sid(sessionId), displayTitle }) })
+    }
+    return { settleSessionDelete, ask }
+  }
+
+  it('confirms with the named Session and settles only after the Host accepts deletion', async () => {
+    const pending = Promise.withResolvers<undefined>()
+    const deleteSession = vi.fn(() => pending.promise)
+    const { settleSessionDelete, ask } = deleteDialog(deleteSession)
+    expect(screen.queryByRole('dialog')).toBeNull()
+
+    ask('one', 'Session title')
+    expect(screen.getByRole('dialog', { name: '永久删除此会话？' }).textContent).toContain('Session title')
+    fireEvent.click(screen.getByRole('button', { name: '永久删除' }))
+    expect(deleteSession).toHaveBeenCalledWith(sid('one'))
+    expect(screen.getByRole('status').textContent).toBe('正在永久删除会话…')
+    fireEvent.click(screen.getByRole('button', { name: '取消' }))
+    fireEvent.keyDown(document, { key: 'Escape' })
+    expect(settleSessionDelete).not.toHaveBeenCalled()
+
+    await act(async () => { pending.resolve(undefined) })
+    expect(settleSessionDelete).toHaveBeenCalledOnce()
+    expect(screen.queryByRole('dialog')).toBeNull()
+  })
+
+  it('keeps the dialog open on Host rejection and allows a later cancel', async () => {
+    const deleteSession = vi.fn<SessionDeleteDialogInjected['deleteSession']>()
+      .mockRejectedValueOnce(new Error('delete refused'))
+    const { settleSessionDelete, ask } = deleteDialog(deleteSession)
+    ask('one', 'Session title')
+    fireEvent.click(screen.getByRole('button', { name: '永久删除' }))
+    await waitFor(() => { expect(screen.getByRole('alert').textContent).toBe('delete refused') })
+    expect(settleSessionDelete).not.toHaveBeenCalled()
+    fireEvent.click(screen.getByRole('button', { name: '取消' }))
+    expect(settleSessionDelete).toHaveBeenCalledOnce()
   })
 })

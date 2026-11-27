@@ -45,7 +45,8 @@ import type {} from '@supernova-ai/snh-client-ui-session/client'
 // Type-only: pulls the useSessionStatus root standard-hook merge.
 import type {} from '@supernova-ai/snh-client-ui-session-status/client'
 import {
-  type ArchiveSessionInjected, type DirectoryFlowSlotName, type ForkSessionInjected, menuOpenStateFactory, type PinSessionInjected,
+  type ArchiveSessionInjected, type DeleteSessionInjected, type SessionDeleteDialogInjected, type SessionDeleteRequest,
+  type DirectoryFlowSlotName, type ForkSessionInjected, menuOpenStateFactory, type PinSessionInjected,
   type SessionArchiveConfirmInjected, type SessionArchiveConfirmRequest,
   type RenameSessionInjected, type RowToast, type RowToastInjected, type RowToastState, type SessionRenameDialogInjected,
   type WorkspaceActionRequest, type SessionIdInjected, type WorkspaceBrowserInjected, type WorkspacePickerInjected,
@@ -55,6 +56,7 @@ import { UiWorkspaceService } from './navigation.ts'
 import { createWorkspaceViewStore } from './stores.ts'
 import { WorkspaceBrowser } from './rows/WorkspaceBrowser.tsx'
 import { ArchiveSessionRowButton, SessionArchiveConfirmDialog } from './session-actions/ArchiveSession.tsx'
+import { DeleteSessionRowButton, SessionDeleteDialog } from './session-actions/DeleteSession.tsx'
 import { derive } from './session-actions/derived.ts'
 import { registerSessionMenus } from './session-actions/context-menus.tsx'
 import { PinSessionRowButton } from './session-actions/PinSession.tsx'
@@ -141,7 +143,7 @@ const NS = 'workspace'
  * and reloads with it.
  */
 export const inject = ['contextMenus',
-  'slots', 'sessions', 'workspaces', 'locale', 'remote', 'remote.directoryPicker', 'layout', 'shortcuts', 'remoteAccess',
+  'slots', 'sessions', 'workspaces', 'locale', 'remote', 'remote.session', 'remote.directoryPicker', 'layout', 'shortcuts', 'remoteAccess',
   'uiSession', 'uiSession.sessionStatus',
 ]
 
@@ -212,12 +214,28 @@ export function apply(ctx: Context, config: SyncedConfig<WorkspaceNavigationConf
   // its bound hook.
   const renameRequest = derive(shortcutControls.state, state => state.renameTarget)
   const archiveRequest = createSnapshotStore<SessionArchiveConfirmRequest | null>(null)
+  const deleteRequest = createSnapshotStore<SessionDeleteRequest | null>(null)
   const requestSessionRename = shortcutControls.rename
   const unarchiveSession = (sessionId: SessionId): void => {
     uiWorkspace.unarchiveSession(sessionId).catch((reason: unknown) => {
       console.warn('session unarchive rejected:', reason)
     })
   }
+  const requestSessionDelete: DeleteSessionInjected['requestSessionDelete'] = (sessionId, displayTitle) => {
+    if (ctx.remoteAccess.source('session', sessionId, 'session/delete').getSnapshot()) {
+      deleteRequest.set({ sessionId, displayTitle })
+    }
+  }
+  const deleteSession: SessionDeleteDialogInjected['deleteSession'] = async (sessionId) => {
+    const result = await ctx.remote.session.delete({ sessionId })
+    if (!result.ok) throw new Error(result.error.message)
+  }
+  const deleteInjected = (): DeleteSessionInjected => ({ requestSessionDelete })
+  const deleteDialogInjected = (): SessionDeleteDialogInjected => ({
+    hooks: { deleteRequest },
+    settleSessionDelete: () => { deleteRequest.set(null) },
+    deleteSession,
+  })
   const renameSession: SessionRenameDialogInjected['renameSession'] = async (sessionId, title) => {
     const result = await sessions.using(
       sessionId,
@@ -400,11 +418,12 @@ export function apply(ctx: Context, config: SyncedConfig<WorkspaceNavigationConf
     } },
   }, SessionMenu))
   registerSessionMenus(ctx, {
-    ...pinInjected(), ...archiveInjected(), ...renameInjected(), ...forkInjected(), ...sessionIdInjected(),
+    ...pinInjected(), ...archiveInjected(), ...renameInjected(), ...forkInjected(), ...sessionIdInjected(), ...deleteInjected(),
     markSession,
   })
   ctx.slots.inject('sidebar.workspaces.session.row.action', function* () {
     yield ctx.slots.register({ name: 'sidebar.workspaces.session.row.action', id: 'archive', order: 100, locale: NS, inject: archiveInjected }, ArchiveSessionRowButton)
+    yield ctx.slots.register({ name: 'sidebar.workspaces.session.row.action', id: 'delete', order: 150, locale: NS, inject: deleteInjected }, DeleteSessionRowButton)
     yield ctx.slots.register({ name: 'sidebar.workspaces.session.row.action', id: 'pin', order: 200, locale: NS, inject: pinInjected }, PinSessionRowButton)
   })
   // The surfaces the actions raise live in the frame-wide layer: they must
@@ -416,6 +435,9 @@ export function apply(ctx: Context, config: SyncedConfig<WorkspaceNavigationConf
     yield ctx.slots.register({
       name: 'shell.overlay', id: 'workspace.session-archive', locale: NS, inject: archiveConfirmInjected,
     }, SessionArchiveConfirmDialog)
+    yield ctx.slots.register({
+      name: 'shell.overlay', id: 'workspace.session-delete', locale: NS, inject: deleteDialogInjected,
+    }, SessionDeleteDialog)
     yield ctx.slots.register({
       name: 'shell.overlay', id: 'workspace.row-toast', inject: rowToastInjected,
       children: { 'workspace.toast': { kind: 'keyed', scope: 'root' } },

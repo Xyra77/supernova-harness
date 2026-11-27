@@ -26,7 +26,17 @@ const execute = promisify(execFile)
 export async function git(cwd: string, ...args: string[]): Promise<string> {
   const result = await execute('git', ['-c', 'core.hooksPath=/dev/null', ...args], {
     cwd,
-    env: { ...process.env, GIT_CONFIG_NOSYSTEM: '1', GIT_CONFIG_GLOBAL: '', GIT_CONFIG_PARAMETERS: '', GIT_CONFIG_COUNT: '0', GIT_DIR: undefined, GIT_WORK_TREE: undefined, GIT_INDEX_FILE: undefined },
+    env: {
+      ...process.env,
+      LC_ALL: 'C',
+      GIT_CONFIG_NOSYSTEM: '1',
+      GIT_CONFIG_GLOBAL: '',
+      GIT_CONFIG_PARAMETERS: '',
+      GIT_CONFIG_COUNT: '0',
+      GIT_DIR: undefined,
+      GIT_WORK_TREE: undefined,
+      GIT_INDEX_FILE: undefined,
+    },
   })
   return result.stdout.trim()
 }

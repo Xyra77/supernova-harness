@@ -23,7 +23,8 @@ async function fixture() {
     hasStoredJsonl: async () => true, list: async () => [],
     stat: async () => ({ header, revision: SessionPersistenceRevision('legacy'), eventCount: 0 }),
     prepare: async () => ({ header, inheritedEventCount: SessionLogOffset(0), events: [],
-      commit: async publish => publish({ header, inheritedEventCount: SessionLogOffset(0), events: [] }) }),
+      commit: async publish => publish({ header, inheritedEventCount: SessionLogOffset(0), events: [] }) }), delete: async () => {},
+    deleteWhileLeased: async () => {},
   }
   const selected = vi.fn(async () => false)
   const migration = new LegacySessionMigration(jsonl, sqlite, selected, async () => {})

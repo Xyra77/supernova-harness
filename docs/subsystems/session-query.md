@@ -397,6 +397,15 @@ getListMetadata(session: Session): SessionListMetadata
 observeSession( sessionId: SessionId, options: SessionObservationOptions = {}, ): Promise<SessionObservation>
 
 /**
+ * Forget derived in-memory observation state after a permanent deletion.
+ * Concrete query indexes may additionally remove their persisted search
+ * documents; the default implementation only drops the prepared-log cache.
+ * @param sessionId - permanently removed Session identity.
+ * @returns resolution after this engine's deletion cleanup.
+ */
+forgetSession(sessionId: SessionId): Promise<void>
+
+/**
  * Search the live-preferred logical corpus and group by session.
  * @param request - query text, metadata filters, page size, and cursor.
  * @param exec - optional cancellation control.

@@ -7,11 +7,11 @@ import type { MenuContribution, ContextMenuTargetMap } from '@supernova-ai/snh-c
 import type { SessionId } from '@supernova-ai/snh-session/types'
 import type {} from '@supernova-ai/snh-client-ui-session-status/client'
 import type {
-  ArchiveSessionInjected, ForkSessionInjected, PinSessionInjected, RenameSessionInjected, SessionIdInjected,
+  ArchiveSessionInjected, DeleteSessionInjected, ForkSessionInjected, PinSessionInjected, RenameSessionInjected, SessionIdInjected,
 } from '../contract/slots.ts'
 
 type Actions = Omit<PinSessionInjected & ArchiveSessionInjected, 'hooks'>
-  & ForkSessionInjected & RenameSessionInjected & SessionIdInjected
+  & ForkSessionInjected & RenameSessionInjected & SessionIdInjected & DeleteSessionInjected
   & { readonly markSession: (sessionId: SessionId, unread: boolean) => void }
 
 /**
@@ -73,6 +73,11 @@ export function registerSessionMenus(ctx: Context, actions: Actions): void {
     id: 'copy', label: t('menu.sessionId'), icon: { key: 'workspace.copy' }, separatorBefore: true,
     run: () => actions.copySessionId(target.sessionId),
   }])
+  register('delete', 650, ['session/delete'], target => allowed(target, 'session/delete') ? [{
+    id: 'delete', label: t('deleteSession.menu'), icon: { key: 'workspace.delete' },
+    separatorBefore: true, afterContent: true,
+    run: () => { actions.requestSessionDelete(target.sessionId, target.displayTitle) },
+  }] : [])
   register('archive', 600, ['workspace/archiveSession', 'workspace/unarchiveSession'], (target) => {
     const restoring = archived(target)
     if (!allowed(target, restoring ? 'workspace/unarchiveSession' : 'workspace/archiveSession')) return []

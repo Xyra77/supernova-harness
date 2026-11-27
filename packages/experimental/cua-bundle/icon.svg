@@ -21,15 +21,15 @@
   -->
   <g transform="translate(4.036 4.036) scale(1.2201)">
     <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" fill="url(#g)" stroke="url(#g)" stroke-width="2" stroke-linejoin="round" />
-    <path d="M14 4.1 12 6" stroke="#51CFDB" stroke-width="2" stroke-linecap="round" />
-    <path d="m5.1 8-2.9-.8" stroke="#51CFDB" stroke-width="2" stroke-linecap="round" />
-    <path d="m6 12-1.9 2" stroke="#51CFDB" stroke-width="2" stroke-linecap="round" />
-    <path d="M7.2 2.2 8 5.1" stroke="#51CFDB" stroke-width="2" stroke-linecap="round" />
+    <path d="M14 4.1 12 6" stroke="#db9a51" stroke-width="2" stroke-linecap="round" />
+    <path d="m5.1 8-2.9-.8" stroke="#db9a51" stroke-width="2" stroke-linecap="round" />
+    <path d="m6 12-1.9 2" stroke="#db9a51" stroke-width="2" stroke-linecap="round" />
+    <path d="M7.2 2.2 8 5.1" stroke="#db9a51" stroke-width="2" stroke-linecap="round" />
   </g>
   <defs>
     <linearGradient id="g" x1="9" y1="9" x2="21" y2="21" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#86B8F5" />
-      <stop offset="1" stop-color="#5269E1" />
+      <stop stop-color="#f5a386" />
+      <stop offset="1" stop-color="#e17452" />
     </linearGradient>
   </defs>
 </svg>

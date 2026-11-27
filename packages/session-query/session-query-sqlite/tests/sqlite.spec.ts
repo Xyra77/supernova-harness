@@ -171,6 +171,11 @@ class TestPersistence extends SessionPersistence {
     return Promise.resolve(new TestHandle(header.id, structuredClone(header), 'write'))
   }
 
+  async delete(id: SessionIdType): Promise<void> {
+    TestPersistence.entries.delete(id)
+    TestPersistence.revisions.delete(id)
+  }
+
   // Appends are durable on resolution here; nothing buffers, so the service-wide flush is a no-op.
   async flush(): Promise<void> {}
 
@@ -553,6 +558,60 @@ describe('SQLite session search', () => {
     })
     expect(result.items.map(item => item.header.id)).toEqual([brandString<SessionId>('a-live'), persisted.id])
     await persistence.dispose()
+  })
+
+  it('purges persisted search text and prepared observations after a permanent deletion', async () => {
+    const durable = header('permanent-delete-index')
+    TestPersistence.reset([{ meta: durable, events: messageEvents('private text to delete') }])
+    const ctx = await liveContext()
+    const persistenceFiber = await ctx.plugin(TestPersistence)
+    const persistence = ctx.sessionPersistence
+    const service = ctx.sessionQuery as SqliteSessionQueryEngine
+    await expect(service.searchSessions({ query: 'private text' }))
+      .resolves.toMatchObject({ items: [{ header: durable, persisted: true }] })
+
+    // The source is now absent; cleanup is serialized with search/reconcile and
+    // removes FTS documents immediately rather than waiting for the next query.
+    await persistence.delete(durable.id)
+    await service.forgetSession(durable.id)
+    const database = (service as unknown as { _requireDb(): DatabaseSync })._requireDb()
+    expect(database.prepare('SELECT COUNT(*) AS count FROM persisted_docs WHERE session_id = ?')
+      .get(durable.id)).toMatchObject({ count: 0 })
+    expect(database.prepare('SELECT COUNT(*) AS count FROM persisted_sessions WHERE id = ?')
+      .get(durable.id)).toMatchObject({ count: 0 })
+    await expect(service.searchSessions({ query: 'private text' })).resolves.toEqual({ items: [] })
+    await persistenceFiber.dispose()
+  })
+
+  it('opens a dormant first-search index to purge deleted Session documents immediately', async () => {
+    const path = await temporaryPath('lazy-delete.db')
+    const durable = header('lazy-permanent-delete-index')
+    TestPersistence.reset([{ meta: durable, events: messageEvents('dormant private search text') }])
+
+    const first = new Context()
+    await first.plugin(SessionStore)
+    await first.plugin(SessionProjectionRegistry)
+    const firstSearch = await first.plugin(SqliteSessionQueryEngine, { path, openAt: 'first-search' })
+    const firstPersistence = await first.plugin(TestPersistence)
+    await expect(first.sessionQuery.searchSessions({ query: 'dormant private' }))
+      .resolves.toMatchObject({ items: [{ header: durable }] })
+    await firstPersistence.dispose()
+    await firstSearch.dispose()
+
+    // The next process has the on-disk FTS database but hasn't searched yet.
+    // Its Session source is already gone, so delete cleanup must still open
+    // that dormant index and remove the retained text before acknowledging.
+    TestPersistence.reset()
+    const second = new Context()
+    await second.plugin(SessionStore)
+    await second.plugin(SessionProjectionRegistry)
+    const secondSearch = await second.plugin(SqliteSessionQueryEngine, { path, openAt: 'first-search' })
+    const service = second.sessionQuery as SqliteSessionQueryEngine
+    await service.forgetSession(durable.id)
+    const database = (service as unknown as { _requireDb(): DatabaseSync })._requireDb()
+    expect(database.prepare('SELECT COUNT(*) AS count FROM persisted_docs WHERE session_id = ?')
+      .get(durable.id)).toMatchObject({ count: 0 })
+    await secondSearch.dispose()
   })
 
   it('positions snippets from FTS5 matches across diacritics and punctuation', async () => {

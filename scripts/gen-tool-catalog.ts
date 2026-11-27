@@ -136,6 +136,7 @@ class CatalogSessionPersistence extends SessionPersistence {
   flush = unavailableCatalogPersistence
   stat = unavailableCatalogPersistence
   list = unavailableCatalogPersistence
+  delete = unavailableCatalogPersistence
 }
 
 /** Schema collection does not read Workspace records or open their durable domain. */

@@ -226,6 +226,19 @@ export abstract class SessionPersistence extends Service {
   abstract stat(id: SessionId, options?: SessionPersistenceStatOptions): Promise<SessionPersistenceSnapshot | undefined>
 
   /**
+   * Permanently remove one stored Session and its private physical history.
+   * A backend must refuse while a write owner still holds the Session. When
+   * immutable history is shared by fork descendants, it must retain every
+   * segment still reachable from another stored Session and reclaim only
+   * segments made unreachable by this deletion.
+   * @param id - the stored Session to remove.
+   * @returns resolution after the deletion is durable and the Session is no longer listable.
+   * @throws {SessionPersistenceNotFoundError} when the Session does not exist.
+   * @throws {SessionAlreadyOwnedError} while another writer owns the Session.
+   */
+  abstract delete(id: SessionId): Promise<void>
+
+  /**
    * List every stored session visible to this process, in no promised order.
    * @param options - optional cancellation.
    * @returns one snapshot per stored session.

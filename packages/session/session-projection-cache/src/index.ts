@@ -109,6 +109,8 @@ export class SessionProjectionCache extends Service {
 
   private table?: KvTable<SessionId, CheckpointRecord>
   private readonly dirty = new Map<Session, DirtyState>()
+  /** Lifecycle tombstones prevent late dispose/cold-read writes from recreating a deleted checkpoint. */
+  private readonly deletedLifecycles = new Map<SessionId, Set<string>>()
 
   constructor(ctx: Context, public config: Config) {
     super(ctx, 'sessionProjectionCache')
@@ -189,6 +191,34 @@ export class SessionProjectionCache extends Service {
     const record = this.requireTable().get(meta.id)
     if (record === undefined || !predecessorIdentityMatches(record.identity, expected)) return undefined
     return this.viewRecord(record, [PREDECESSOR_TITLE_KEY])
+  }
+
+  /**
+   * Permanently invalidate the disposable checkpoint for one stored Session
+   * lifecycle. A tombstone is installed synchronously before the queued table
+   * delete, so a late detach/cold-read write cannot resurrect the row. A
+   * later Session deliberately reusing the same id has a distinct lifecycle
+   * identity and remains writable.
+   * @param meta - the authoritative stored header being deleted.
+   * @returns resolution after a matching checkpoint row is durably removed.
+   */
+  async deleteSession(meta: SessionHeader): Promise<void> {
+    const identity = lifecycleIdentityOf(meta)
+    const key = lifecycleDeletionKey(identity)
+    let deleted = this.deletedLifecycles.get(meta.id)
+    if (deleted === undefined) {
+      deleted = new Set<string>()
+      this.deletedLifecycles.set(meta.id, deleted)
+    }
+    deleted.add(key)
+
+    const table = this.requireTable()
+    const record = table.get(meta.id)
+    // The table may hold an older compatible-format checkpoint for the same
+    // Session lifecycle. It is still private data and must also be removed.
+    if (record !== undefined && lifecycleIdentityMatches(record.identity, identity)) {
+      await table.delete(meta.id)
+    }
   }
 
   /**
@@ -388,6 +418,7 @@ export class SessionProjectionCache extends Service {
 
   /** Replace one session's stored record with its log identity and a detached snapshot of `rows`. */
   private async put(id: SessionId, identity: CheckpointIdentity, rows: ProjectionCheckpoint): Promise<void> {
+    if (this.deletedLifecycles.get(id)?.has(lifecycleDeletionKey(identity))) return
     const detached = snapshotJsonValue(rows)
     if (detached === undefined) {
       throw new TypeError('projection checkpoint is not losslessly JSON-serializable (a unit state violates the plain-JSON contract)')
@@ -422,6 +453,11 @@ function identityOf(
     throw new Error('unseeded projection-cache identity inherited event count must be 0')
   }
   return { ...lifecycleIdentityOf(header), inheritedEventCount: cut }
+}
+
+/** Stable key for the format-independent fields that identify one stored Session lifecycle. */
+function lifecycleDeletionKey(identity: Pick<CheckpointIdentity, 'createdAt' | 'cwd' | 'isSeeded'>): string {
+  return JSON.stringify([identity.createdAt, identity.cwd ?? null, identity.isSeeded ?? false])
 }
 
 /**

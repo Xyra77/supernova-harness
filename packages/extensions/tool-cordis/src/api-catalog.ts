@@ -3281,6 +3281,12 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         returns: 'the accepted title and durable event sequence.',
       },
       {
+        signature: '@Remote(\'delete\') delete(request: SessionDeleteRequest): Promise<SessionDeleteValue>',
+        description: 'Permanently remove an ordinary Session and its durable history.',
+        parameters: [{ name: 'request', description: 'Session identity to delete.' }],
+        returns: 'acknowledgement after storage, Workspace membership, and list state are updated.',
+      },
+      {
         signature: '@Remote(\'fork\') async fork(request: SessionForkRequest): Promise<SessionForkValue>',
         description: 'Fork one cold-readable exact event prefix into a new Session. An omitted boundary selects the latest completed-turn prefix; an open cut receives synthetic fork closers.',
         parameters: [{ name: 'request', description: 'source Session, optional exact inclusive event boundary, and migration preflight choice.' }],
@@ -3443,6 +3449,13 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         returns: 'the snapshot, or `undefined` when the session does not exist.',
       },
       {
+        signature: 'abstract delete(id: SessionId): Promise<void>',
+        description: 'Permanently remove one stored Session and its private physical history. A backend must refuse while a write owner still holds the Session. When immutable history is shared by fork descendants, it must retain every segment still reachable from another stored Session and reclaim only segments made unreachable by this deletion.',
+        parameters: [{ name: 'id', description: 'the stored Session to remove.' }],
+        returns: 'resolution after the deletion is durable and the Session is no longer listable.',
+        throws: ['{SessionPersistenceNotFoundError} when the Session does not exist.', '{SessionAlreadyOwnedError} while another writer owns the Session.'],
+      },
+      {
         signature: 'abstract list(options?: SessionPersistenceListOptions): Promise<readonly SessionPersistenceSnapshot[]>',
         description: 'List every stored session visible to this process, in no promised order.',
         parameters: [{ name: 'options', description: 'optional cancellation.' }],
@@ -3466,6 +3479,12 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         description: 'Read only a predecessor checkpoint\'s title as a zero-I/O listing hint.\n\nThe authoritative Session header supplies the lifecycle identity. A cache checkpoint can lag that log but cannot lead it because writes flush the log first, so a matching predecessor title is a genuine (possibly stale) fact from this Session. The registry still requires the current title projection\'s row version and schema. No other predecessor projection is exposed: format normalization can change their current meaning, and the cachedSnapshot / hydration paths continue to reject them.',
         parameters: [{ name: 'meta', description: 'authoritative listed Session header.' }],
         returns: 'a title-only block at the stored title row\'s watermark, or `undefined` when the record is current, newer, unrelated, missing, or incompatible with the title unit.',
+      },
+      {
+        signature: 'async deleteSession(meta: SessionHeader): Promise<void>',
+        description: 'Permanently invalidate the disposable checkpoint for one stored Session lifecycle. A tombstone is installed synchronously before the queued table delete, so a late detach/cold-read write cannot resurrect the row. A later Session deliberately reusing the same id has a distinct lifecycle identity and remains writable.',
+        parameters: [{ name: 'meta', description: 'the authoritative stored header being deleted.' }],
+        returns: 'resolution after a matching checkpoint row is durably removed.',
       },
       {
         signature: 'hydratePrepared( session: Session, events: readonly SessionEvent[], ): ProjectionSnapshot',
@@ -3576,6 +3595,12 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         description: 'Observe one exact live or prepared Session without a persistence listing preflight.',
         parameters: [{ name: 'sessionId', description: 'logical Session identity.' }, { name: 'options', description: 'cancellation and projection selection for this read.' }],
         returns: 'a caller-owned observation lease.',
+      },
+      {
+        signature: 'forgetSession(sessionId: SessionId): Promise<void>',
+        description: 'Forget derived in-memory observation state after a permanent deletion. Concrete query indexes may additionally remove their persisted search documents; the default implementation only drops the prepared-log cache.',
+        parameters: [{ name: 'sessionId', description: 'permanently removed Session identity.' }],
+        returns: 'resolution after this engine\'s deletion cleanup.',
       },
       {
         signature: 'abstract searchSessions( request: SessionSearchRequest, exec?: SessionSearchExecContext, ): Promise<SessionSearchPage<SessionSearchHit>>',
@@ -5442,6 +5467,12 @@ export const SERVICE_API: readonly ServiceApiEntry[] = [
         description: 'Delete one workspace registration while retaining its directory and every session log. The durable order is updated before the table deletion; a failed table write restores the prior order and keeps the entity published. Unknown ids are an idempotent no-op for domain callers.',
         parameters: [{ name: 'id', description: 'Workspace registration to remove.' }],
         returns: '`true` when a record was deleted, `false` when it was unknown.',
+      },
+      {
+        signature: 'removeSession(sessionId: SessionId): Promise<void>',
+        description: 'Remove a permanently deleted Session from every Workspace and the registry-global archive/pin sets. Session persistence is deleted by the Session Controller before this method is called.',
+        parameters: [{ name: 'sessionId', description: 'permanently deleted Session identity.' }],
+        returns: 'resolution after registry metadata and Workspace membership are updated.',
       },
       {
         signature: 'insertBefore(id: WorkspaceId, beforeId?: WorkspaceId): Promise<readonly WorkspaceId[]>',
@@ -9805,6 +9836,14 @@ export const TYPE_API: readonly TypeApiEntry[] = [
   {
     name: 'SessionCreateValue',
     declaration: 'export interface SessionCreateValue {\n    readonly sessionId: SessionId;\n    readonly agentPreset?: string;\n}',
+  },
+  {
+    name: 'SessionDeleteRequest',
+    declaration: 'export interface SessionDeleteRequest {\n    readonly sessionId: SessionId;\n}',
+  },
+  {
+    name: 'SessionDeleteValue',
+    declaration: 'export interface SessionDeleteValue {\n    readonly deleted: true;\n}',
   },
   {
     name: 'SessionEndInput',

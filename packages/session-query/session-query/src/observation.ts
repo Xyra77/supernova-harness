@@ -96,6 +96,16 @@ export class SessionObservationReader {
   ) {}
 
   /**
+   * Drop the unpinned lookup entry after permanent Session deletion. Existing
+   * observation leases remain valid for their callers, but no later read can
+   * reuse this prepared object (reads still perform an authoritative `stat`).
+   * @param sessionId - permanently removed Session identity.
+   */
+  forget(sessionId: SessionId): void {
+    this.cache.delete(sessionId)
+  }
+
+  /**
    * Observe one live-preferred Session and retain a cold preparation until disposal.
    * @param sessionId - logical Session identity.
    * @param options - cancellation and all-or-none projection computation for this read.

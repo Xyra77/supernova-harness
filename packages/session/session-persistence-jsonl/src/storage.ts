@@ -398,6 +398,7 @@ export class JsonlBackendTracker {
   /** `null` marks a claim whose handle is still being constructed. */
   private readonly writers = new Map<SessionId, JsonlSessionHandle | null>()
   private readonly pending = new Map<SessionId, PendingSession>()
+  private readonly deleting = new Set<SessionId>()
   private counter = 0
 
   /** @param name - backend label used in in-memory revision tokens and teardown errors. */
@@ -416,7 +417,7 @@ export class JsonlBackendTracker {
    *   write handle holds the id — for create, the duplicate is the fact.
    */
   registerCreated(header: SessionHeader, inheritedEventCount: SessionLogOffset): void {
-    if (this.writers.has(header.id)) throw new SessionAlreadyExistsError(header.id)
+    if (this.deleting.has(header.id) || this.writers.has(header.id)) throw new SessionAlreadyExistsError(header.id)
     this.writers.set(header.id, null)
     this.pending.set(header.id, {
       header,
@@ -431,7 +432,7 @@ export class JsonlBackendTracker {
    * @throws {SessionAlreadyOwnedError} when an active write handle exists.
    */
   claimWrite(id: SessionId): void {
-    if (this.writers.has(id)) throw new SessionAlreadyOwnedError(id)
+    if (this.deleting.has(id) || this.writers.has(id)) throw new SessionAlreadyOwnedError(id)
     this.writers.set(id, null)
   }
 
@@ -441,6 +442,27 @@ export class JsonlBackendTracker {
    */
   releaseClaim(id: SessionId): void {
     this.writers.delete(id)
+  }
+
+  /** Whether this id is currently in a backend-owned deletion critical section. */
+  isDeleting(id: SessionId): boolean {
+    return this.deleting.has(id)
+  }
+
+  /** Whether this process currently holds a write claim for the Session. */
+  hasWriter(id: SessionId): boolean {
+    return this.writers.has(id)
+  }
+
+  /** Claim the local id against concurrent creates/opens while a physical delete is running. */
+  beginDelete(id: SessionId): void {
+    if (this.deleting.has(id) || this.writers.has(id)) throw new SessionAlreadyOwnedError(id)
+    this.deleting.add(id)
+  }
+
+  /** Release the local deletion guard after success or failure. */
+  endDelete(id: SessionId): void {
+    this.deleting.delete(id)
   }
 
   /**

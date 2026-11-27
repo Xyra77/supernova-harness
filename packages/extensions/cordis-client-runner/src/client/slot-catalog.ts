@@ -1171,8 +1171,10 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     hookContext: '',
     slotInject: '',
     declaredBy: 'factory \'conversation.content\' (client-ui-conversation), so it exists while that definition is registered',
-    occupants: [],
-    replaceRisk: 'none',
+    occupants: [
+      'client-ui-brand-official SupernovaHeroMark',
+    ],
+    replaceRisk: 'shadows-shipped-ui',
     example: 'return {\n  inject: [\'slots\'],\n  apply(ctx) {\n    ctx.slots.inject(\'conversation.hero.brand.mark\', () => ctx.slots.register(\n      { name: \'conversation.hero.brand.mark\' },\n      () => React.createElement(\'div\', null, \'hello\'),\n    ))\n  },\n}',
     source: 'packages/client/ui-conversation/src/client/contract/slots.ts:296',
   },
@@ -1223,7 +1225,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     slotInject: '',
     declaredBy: 'factory \'conversation.content\' (client-ui-conversation), so it exists while that definition is registered',
     occupants: [
-      'client-ui-brand-official PixelWhale id \'pixel-whale\'',
+      'client-ui-brand-official PixelNova id \'supernova-home\'',
     ],
     replaceRisk: 'wraps-owner-content',
     example: 'return {\n  inject: [\'slots\'],\n  apply(ctx) {\n    ctx.slots.inject(\'conversation.hero.frame\', () => ctx.slots.register(\n      { name: \'conversation.hero.frame\', id: \'my-layer\', order: 100 },\n      ({ children }) => React.createElement(\'div\', null, children),\n    ))\n  },\n}',
@@ -4827,6 +4829,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
       'client-ui-subagent SessionDropZone id \'subagent.session-drop\'',
       'client-ui-workspace SessionRenameDialog id \'workspace.session-rename\'',
       'client-ui-workspace SessionArchiveConfirmDialog id \'workspace.session-archive\'',
+      'client-ui-workspace SessionDeleteDialog id \'workspace.session-delete\'',
       'client-ui-workspace RowActionToast id \'workspace.row-toast\'',
       'experimental-client-ui-forge ActionToast id \'forge-panel.toast\'',
       'cua PermissionToast id \'cua-permission-outcome\'',
@@ -4942,7 +4945,8 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     slotInject: '',
     declaredBy: 'an entry in \'sidebar\' (client-ui-sidebar), so it exists while that entry is mounted',
     occupants: [
-      'client-ui-brand-official OfficialBrandMark',
+      'client-ui-brand-official SupernovaMark',
+      'client-ui-brand-official SupernovaMark',
       'experimental-liveshare ViewerBrandMark',
     ],
     replaceRisk: 'shadows-shipped-ui',
@@ -4977,7 +4981,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     slotInject: '',
     declaredBy: 'an entry in \'sidebar\' (client-ui-sidebar), so it exists while that entry is mounted',
     occupants: [
-      'client-ui-brand-official OfficialBrandName',
+      'client-ui-brand-official SupernovaName',
       'experimental-liveshare ViewerBrandName',
     ],
     replaceRisk: 'shadows-shipped-ui',
@@ -6371,6 +6375,7 @@ export const CLIENT_SLOT_API: readonly ClientSlotEntry[] = [
     declaredBy: 'an entry in \'sidebar.workspaces\' (client-ui-workspace), so it exists while that entry is mounted',
     occupants: [
       'client-ui-workspace ArchiveSessionRowButton id \'archive\'',
+      'client-ui-workspace DeleteSessionRowButton id \'delete\'',
       'client-ui-workspace PinSessionRowButton id \'pin\'',
     ],
     replaceRisk: 'none',

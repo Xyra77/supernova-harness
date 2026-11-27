@@ -592,6 +592,15 @@ list(): Workspace[]
 delete(id: WorkspaceId): Promise<boolean>
 
 /**
+ * Remove a permanently deleted Session from every Workspace and the
+ * registry-global archive/pin sets. Session persistence is deleted by the
+ * Session Controller before this method is called.
+ * @param sessionId - permanently deleted Session identity.
+ * @returns resolution after registry metadata and Workspace membership are updated.
+ */
+removeSession(sessionId: SessionId): Promise<void>
+
+/**
  * Move one workspace within the durable display order, DOM-insertBefore-like.
  * With an anchor it lands before that workspace; without one it appends.
  * @param id - Workspace to move.

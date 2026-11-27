@@ -856,3 +856,123 @@ it('reports a database close failure after draining and releasing the writer', a
   try { await expect(logs.close()).rejects.toMatchObject({ message: 'SQLite disposal failed', errors: [failure] }) }
   finally { fault.mockRestore() }
 })
+
+it('keeps a Session reachable and restores its route when the delete transaction fails', async () => {
+  const { root, storage } = await fixture()
+  const writer = await storage.create(header())
+  await writer.append([event(0), event(1)])
+  await writer.close()
+  expect(await routeOf(root, header().id)).toBe('sqlite')
+  // oxlint-disable-next-line typescript/unbound-method -- Called with the intercepted database as receiver below.
+  const exec = DatabaseSync.prototype.exec
+  const spy = vi.spyOn(DatabaseSync.prototype, 'exec').mockImplementation(function (this: DatabaseSync, sql) {
+    if (sql.startsWith('DROP TRIGGER frames_no_delete')) throw new Error('delete refused')
+    exec.call(this, sql)
+  })
+  try { await expect(storage.delete(header().id)).rejects.toMatchObject({ message: 'delete refused' }) }
+  finally { spy.mockRestore() }
+  // The transaction rolled back: the Session is still listed and readable, and the append-only guards survive.
+  expect(await storage.stat(header().id)).toMatchObject({ eventCount: 2 })
+  expect((await storage.list()).map(row => row.header.id)).toEqual([header().id])
+  const reader = await storage.open(header().id, 'read')
+  try { expect((await reader.read()).events).toHaveLength(2) } finally { await reader.close() }
+  const db = new DatabaseSync(join(root, '.segments', 'sessions.sqlite'))
+  try {
+    expect(db.prepare("SELECT name FROM sqlite_master WHERE type = 'trigger' AND name IN ('frames_no_delete', 'ancestors_no_delete') ORDER BY name").all())
+      .toEqual([{ name: 'ancestors_no_delete' }, { name: 'frames_no_delete' }])
+  } finally { db.close() }
+  // The delete withdrew the routing record before it failed; the next committed write must publish it again.
+  const again = await storage.open(header().id, 'write')
+  await again.append([event(2)])
+  await again.close()
+  expect(await routeOf(root, header().id)).toBe('sqlite')
+})
+
+it('completes a delete that is retried after a failed transaction', async () => {
+  const { root, storage } = await fixture()
+  const writer = await storage.create(header())
+  await writer.append([event(0), event(1)])
+  await writer.close()
+  // oxlint-disable-next-line typescript/unbound-method -- Called with the intercepted database as receiver below.
+  const exec = DatabaseSync.prototype.exec
+  const spy = vi.spyOn(DatabaseSync.prototype, 'exec').mockImplementation(function (this: DatabaseSync, sql) {
+    if (sql.startsWith('DROP TRIGGER frames_no_delete')) throw new Error('delete refused')
+    exec.call(this, sql)
+  })
+  try { await expect(storage.delete(header().id)).rejects.toMatchObject({ message: 'delete refused' }) }
+  finally { spy.mockRestore() }
+  await storage.delete(header().id)
+  expect(await storage.stat(header().id)).toBeUndefined()
+  expect(await storage.list()).toEqual([])
+  expect(await routeOf(root, header().id)).toBe('jsonl')
+  const db = new DatabaseSync(join(root, '.segments', 'sessions.sqlite'))
+  try { expect(db.prepare('SELECT count(*) AS count FROM frames').get()).toMatchObject({ count: 0 }) } finally { db.close() }
+})
+
+/** Row counts of every table a delete touches. */
+function tableCounts(path: string): Record<string, unknown> {
+  const db = new DatabaseSync(path)
+  try {
+    return db.prepare(`SELECT (SELECT count(*) FROM traces) AS traces, (SELECT count(*) FROM segments) AS segments,
+      (SELECT count(*) FROM segment_ancestors) AS ancestors, (SELECT count(*) FROM frames) AS frames`).get() ?? {}
+  } finally { db.close() }
+}
+
+it('rolls back a partial segment reclaim when a later statement of the delete fails', async () => {
+  const { root, storage } = await fixture()
+  const path = join(root, '.segments', 'sessions.sqlite')
+  const parent = await storage.create(header('parent'))
+  await parent.append([event(0), event(1)])
+  await parent.close()
+  const child = await storage.create({ ...header('child'), isSeeded: true }, { inheritedEventCount: SessionLogOffset(1),
+    parentSource: { sessionId: SessionId('parent'), endSeq: SessionLogOffset(1),
+      events: [event(0), { type: 'session/end-seed', seq: SessionSeq(1), time: 0, data: { inherited: true } }] } })
+  await child.close()
+  const before = tableCounts(path)
+  expect(before).toMatchObject({ traces: 2 })
+  // The child's own Segment is reclaimed after its ancestry and frame rows, so this fails mid-reclaim.
+  const db = new DatabaseSync(path)
+  try { db.exec("CREATE TRIGGER fail_segment_delete BEFORE DELETE ON segments BEGIN SELECT RAISE(ABORT, 'segment delete refused'); END") }
+  finally { db.close() }
+  await expect(storage.delete(SessionId('child'))).rejects.toThrow('segment delete refused')
+  expect(tableCounts(path)).toEqual(before)
+  const guard = new DatabaseSync(path)
+  try { expect(() => { guard.exec('DELETE FROM frames') }).toThrow('frames are append-only') } finally { guard.close() }
+  expect((await storage.list()).map(row => row.header.id).sort()).toEqual([SessionId('child'), SessionId('parent')])
+  const reader = await storage.open(SessionId('child'), 'read')
+  try { expect((await reader.read()).events).toHaveLength(2) } finally { await reader.close() }
+  // Once the fault is gone, a retry reclaims only the child and leaves the parent readable.
+  const repair = new DatabaseSync(path)
+  try { repair.exec('DROP TRIGGER fail_segment_delete') } finally { repair.close() }
+  await storage.delete(SessionId('child'))
+  expect((await storage.list()).map(row => row.header.id)).toEqual([SessionId('parent')])
+  const survivor = await storage.open(SessionId('parent'), 'read')
+  try { expect((await survivor.read()).events).toHaveLength(2) } finally { await survivor.close() }
+})
+
+it('restores the append-only guards when recreating them fails during delete', async () => {
+  const { root, storage } = await fixture()
+  const path = join(root, '.segments', 'sessions.sqlite')
+  const writer = await storage.create(header())
+  await writer.append([event(0), event(1)])
+  await writer.close()
+  const before = tableCounts(path)
+  // oxlint-disable-next-line typescript/unbound-method -- Called with the intercepted database as receiver below.
+  const exec = DatabaseSync.prototype.exec
+  const spy = vi.spyOn(DatabaseSync.prototype, 'exec').mockImplementation(function (this: DatabaseSync, sql) {
+    if (sql.startsWith('CREATE TRIGGER frames_no_delete')) throw new Error('guard recreation refused')
+    exec.call(this, sql)
+  })
+  try { await expect(storage.delete(header().id)).rejects.toMatchObject({ message: 'guard recreation refused' }) }
+  finally { spy.mockRestore() }
+  // The dropped guards, the removed rows and the withdrawn Trace all belong to the rolled-back transaction.
+  expect(tableCounts(path)).toEqual(before)
+  const guard = new DatabaseSync(path)
+  try {
+    expect(() => { guard.exec('DELETE FROM frames') }).toThrow('frames are append-only')
+    // A root Session has no ancestry rows to fire the row trigger, so the second guard is checked by name.
+    expect(guard.prepare("SELECT name FROM sqlite_master WHERE type = 'trigger' AND name IN ('frames_no_delete', 'ancestors_no_delete') ORDER BY name").all())
+      .toEqual([{ name: 'ancestors_no_delete' }, { name: 'frames_no_delete' }])
+  } finally { guard.close() }
+  expect(await storage.stat(header().id)).toMatchObject({ eventCount: 2 })
+})

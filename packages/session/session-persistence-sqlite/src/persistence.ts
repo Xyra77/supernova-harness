@@ -7,7 +7,7 @@ import type { Config } from './index.ts'
 import pLimit, { type LimitFunction } from 'p-limit'
 import { z } from 'zod'
 import { HarnessError } from '@supernova-ai/snh-llm'
-import { SessionPersistence, SessionAlreadyExistsError, SessionPersistenceNotFoundError, materializeCreateHeader } from '@supernova-ai/snh-session-persistence'
+import { SessionPersistence, SessionAlreadyExistsError, SessionAlreadyOwnedError, SessionPersistenceNotFoundError, materializeCreateHeader } from '@supernova-ai/snh-session-persistence'
 import type { SessionAccess, SessionPersistenceCreateOptions, SessionPersistenceOpenOptions,
   SessionPersistenceStatOptions, SessionPersistenceListOptions, SessionPersistenceSnapshot } from '@supernova-ai/snh-session-persistence'
 import { SessionId } from '@supernova-ai/snh-session'
@@ -30,6 +30,7 @@ export class SqliteSessionPersistence extends SessionPersistence {
   private readonly jsonl: JsonlBackend
   private readonly listLimit: LimitFunction
   private readonly publishedRoutes = new Set<SessionId>()
+  private readonly deleting = new Set<SessionId>()
   constructor(ctx: Context, owner: Context, config: Config,
     jsonl: JsonlBackend) {
     super(ctx)
@@ -155,6 +156,7 @@ export class SqliteSessionPersistence extends SessionPersistence {
 
   async create(header: SessionHeader, options?: SessionPersistenceCreateOptions) {
     options?.signal?.throwIfAborted()
+    if (this.deleting.has(header.id)) throw new SessionAlreadyExistsError(header.id)
     const snapshot = materializeCreateHeader(header)
     await this.start()
     await this.sqlite.assertRoutingDatabase()
@@ -165,6 +167,7 @@ export class SqliteSessionPersistence extends SessionPersistence {
 
   async open(id: SessionId, access: SessionAccess, options?: SessionPersistenceOpenOptions) {
     options?.signal?.throwIfAborted()
+    if (this.deleting.has(id)) throw new SessionPersistenceNotFoundError(id)
     await this.start()
     return await this.selected(id) ? this.sqlite.open(id, access, options?.signal) : this.migration.open(id, access, options)
   }
@@ -200,6 +203,44 @@ export class SqliteSessionPersistence extends SessionPersistence {
     }
     options?.signal?.throwIfAborted()
     return [...entries.filter(entry => !known.has(entry.header.id)), ...segmented]
+  }
+
+  /**
+   * Permanently delete a Session from the selected backend. The combined
+   * SQLite/artifact lease excludes new writes and legacy migration while any
+   * retained JSONL copy, routing marker, and SQLite Trace are removed.
+   * @param id - stored Session identity.
+   * @returns resolution after no backend can list or reopen the Session.
+   */
+  async delete(id: SessionId): Promise<void> {
+    if (this.deleting.has(id)) throw new SessionAlreadyOwnedError(id)
+    this.deleting.add(id)
+    try {
+      await this.start()
+      const selected = await this.sqlite.stat(id)
+      if (selected === undefined) {
+        // No SQLite row means this is a legacy JSONL-only Session. Its own
+        // backend obtains and holds the artifact lease through removal.
+        await this.jsonl.delete(id)
+        return
+      }
+      const lease = await this.sqlite.acquireSessionLease(selected.header)
+      try {
+        // Legacy JSONL generations can remain after a successful import. Remove
+        // that fallback under the very same lease before withdrawing the route.
+        await this.jsonl.deleteWhileLeased(id)
+        // Forget the published route before withdrawing the record: if anything below fails, the committed
+        // row stays authoritative and the next write must publish the routing record again.
+        this.publishedRoutes.delete(id)
+        await rm(this.markerPath(id), { force: true })
+        await this.syncDirectory()
+        await this.sqlite.delete(id, selected.header, lease)
+      } finally {
+        await lease.release()
+      }
+    } finally {
+      this.deleting.delete(id)
+    }
   }
 
   async flush(): Promise<void> { await this.sqlite.flush() }

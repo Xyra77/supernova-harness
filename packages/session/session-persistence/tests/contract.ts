@@ -270,6 +270,39 @@ export function runPersistenceContract(name: string, make: () => Promise<Contrac
       }
     })
 
+    it('permanent deletion refuses an active writer and removes every durable listing/open path', async () => {
+      const backend = await make()
+      try {
+        const m = meta('permanent-delete', '/work')
+        const writer = await backend.persistence.create(m)
+        await writer.append(oneTurnLog())
+        await writer.flush()
+
+        await expect(backend.persistence.delete(m.id)).rejects.toBeInstanceOf(SessionAlreadyOwnedError)
+        expect(await backend.persistence.stat(m.id)).toMatchObject({ header: m })
+        await writer.close()
+
+        await backend.persistence.delete(m.id)
+        expect(await backend.persistence.stat(m.id)).toBeUndefined()
+        expect((await backend.persistence.list()).map(row => row.header.id)).not.toContain(m.id)
+        await expect(backend.persistence.open(m.id, 'read')).rejects.toBeInstanceOf(SessionPersistenceNotFoundError)
+        await expect(backend.persistence.open(m.id, 'write')).rejects.toBeInstanceOf(SessionPersistenceNotFoundError)
+
+        if (backend.reopen !== undefined) {
+          const reopened = await backend.reopen()
+          try {
+            expect(await reopened.persistence.stat(m.id)).toBeUndefined()
+            expect((await reopened.persistence.list()).map(row => row.header.id)).not.toContain(m.id)
+            await expect(reopened.persistence.open(m.id, 'read')).rejects.toBeInstanceOf(SessionPersistenceNotFoundError)
+          } finally {
+            await reopened.dispose()
+          }
+        }
+      } finally {
+        await backend.dispose()
+      }
+    })
+
     it('a read handle refuses append and flush with SessionReadOnlyError', async () => {
       const { persistence, dispose } = await make()
       try {

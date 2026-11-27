@@ -288,6 +288,17 @@ cachedSnapshot( meta: SessionHeader, keys?: ProjectionKeySelection, ): Projectio
 cachedPredecessorTitle(meta: SessionHeader): ProjectionSnapshot | undefined
 
 /**
+ * Permanently invalidate the disposable checkpoint for one stored Session
+ * lifecycle. A tombstone is installed synchronously before the queued table
+ * delete, so a late detach/cold-read write cannot resurrect the row. A
+ * later Session deliberately reusing the same id has a distinct lifecycle
+ * identity and remains writable.
+ * @param meta - the authoritative stored header being deleted.
+ * @returns resolution after a matching checkpoint row is durably removed.
+ */
+async deleteSession(meta: SessionHeader): Promise<void>
+
+/**
  * Hydrate projection cells for an already-prepared Session without another
  * persistence read. The cache seeds matching rows; the supplied exact log
  * advances every unit to the observation cut. No checkpoint is written

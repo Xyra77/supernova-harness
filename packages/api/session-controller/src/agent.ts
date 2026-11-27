@@ -4,7 +4,7 @@ import type {} from '@supernova-ai/snh-fs'
 import { randomUUID } from 'node:crypto'
 import { mkdir } from 'node:fs/promises'
 import type { Context } from '@supernova-ai/cordis'
-import type { Agent, AgentOptions, AgentSetup } from '@supernova-ai/snh-agent'
+import type { Agent, AgentHandle, AgentOptions, AgentSetup } from '@supernova-ai/snh-agent'
 import type {} from '@supernova-ai/snh-agent-default-model'
 import { installModelSelection } from '@supernova-ai/snh-agent'
 import type {} from '@supernova-ai/snh-agent-preset-registry'
@@ -118,6 +118,10 @@ export class ApiSessionAgentController {
   private readonly resumes = new Map<SessionId, Promise<Agent>>()
   private readonly claims = new Map<SessionId, Promise<void>>()
   private readonly imageAdmissionChains = new WeakMap<Agent, Promise<void>>()
+  /** Handles are capabilities: retaining them is required to stop and dispose a Session we created/resumed. */
+  private readonly handles = new Map<SessionId, AgentHandle>()
+  /** Blocks new activation while a permanent deletion owns the Session identity. */
+  private readonly deleting = new Set<SessionId>()
 
   /** @param ctx - Host context carrying Agent, model, persistence, and Typert services. */
   constructor(private readonly ctx: Context) {}
@@ -127,6 +131,7 @@ export class ApiSessionAgentController {
    */
   initialize(): void {
     const ctx = this.ctx
+    ctx.on('agent/disposed', ({ agent }) => { this.handles.delete(agent.id) })
     ctx.typert.lookups.configure('agent', async (sessionId: SessionId) => {
       const found = await this.resolveAgent(sessionId)
       if ('error' in found) throw found.error
@@ -166,6 +171,9 @@ export class ApiSessionAgentController {
     sessionId: SessionId,
     observation?: SessionObservation,
   ): Promise<ApiSessionAgentResult> {
+    if (this.deleting.has(sessionId)) {
+      return { error: new RemoteError('session/agent-busy', `session "${sessionId}" is being permanently deleted`, { reason: 'session deletion is in progress' }) }
+    }
     const live = this.liveAgent(sessionId)
     if (live !== undefined) return live
     const attached = this.ctx.sessions.get(sessionId)
@@ -311,11 +319,11 @@ export class ApiSessionAgentController {
     if (published !== undefined && hasApiSessionSubagentOwner(published)) {
       throw new ApiSessionSubagentOwnership(sessionId)
     }
-    return (await this.ctx.agents.resume({
+    return this.own(await this.ctx.agents.resume({
       resumeSessionId: sessionId,
       agentOptions: this.agentOptions(),
       setup: composition.setup,
-    })).agent
+    }))
   }
 
   private async inOrder<Value>(sessionId: SessionId, operation: () => Promise<Value>): Promise<Value> {
@@ -331,6 +339,9 @@ export class ApiSessionAgentController {
 
   /** @returns the reused Session, a new Session under `sessionId` when none is stored, or a new Session under a minted identity. */
   private async claim(sessionId: SessionId, request: ApiSessionCreateRequest): Promise<Agent> {
+    if (this.deleting.has(sessionId)) {
+      throw new RemoteError('session/agent-busy', `session "${sessionId}" is being permanently deleted`, { reason: 'session deletion is in progress' })
+    }
     const attached = this.ctx.sessions.get(sessionId)
     const live = this.ctx.agents.get(sessionId)
     if (attached !== undefined && hasApiSessionSubagentOwner(attached)) {
@@ -365,11 +376,11 @@ export class ApiSessionAgentController {
     if (!reusable) return this.createMinted(request.cwd, composition)
     this.assertPresetApplicable(sessionId, request.agentPreset)
     try {
-      return (await this.ctx.agents.resume({
+      return this.own(await this.ctx.agents.resume({
         resumeSessionId: sessionId,
         agentOptions: this.agentOptions(),
         setup: this.reuseSetup(composition),
-      })).agent
+      }))
     } catch (error: unknown) {
       if (error instanceof ApiSessionStartedSinceObserved) return this.createMinted(request.cwd, composition)
       if (!(error instanceof Error) || error.name !== 'SessionAlreadyOwnedError') throw error
@@ -440,7 +451,7 @@ export class ApiSessionAgentController {
     } catch (error: unknown) {
       throw new Error(`failed to ensure project directory "${cwd}": ${String(error)}`, { cause: error })
     }
-    return (await this.ctx.agents.create({
+    return this.own(await this.ctx.agents.create({
       sessionId,
       agentOptions: this.agentOptions(),
       meta: {
@@ -448,7 +459,58 @@ export class ApiSessionAgentController {
         ...(composition.agentPreset === undefined ? {} : { agentPreset: composition.agentPreset }),
       },
       setup: composition.setup,
-    })).agent
+    }))
+  }
+
+  /** Retain the disposer capability for an Agent this controller creates or resumes. */
+  private own(handle: AgentHandle): Agent {
+    this.handles.set(handle.agent.id, handle)
+    return handle.agent
+  }
+
+  /**
+   * Stop any admitted Session work, dispose the Agent owned by this controller,
+   * and hold the identity against new lookups until the caller has removed its
+   * persistent record. A live Agent without a retained disposer is refused;
+   * deleting it through a bare Agent reference would violate ownership.
+   * @param sessionId - ordinary Session identity being deleted.
+   * @param remove - persistence and registry removal performed after disposal.
+   * @returns resolution after disposal and the caller's deletion operation.
+   */
+  async withPermanentDeletion(sessionId: SessionId, remove: () => Promise<void>): Promise<void> {
+    if (this.deleting.has(sessionId)) {
+      throw new RemoteError('session/agent-busy', `session "${sessionId}" is already being deleted`, { reason: 'session deletion is already in progress' })
+    }
+    this.deleting.add(sessionId)
+    try {
+      // Creation is serialized by identity. Its result must settle before we
+      // inspect the Agent handle so a just-published Agent cannot escape.
+      await this.claims.get(sessionId)
+      const resume = this.resumes.get(sessionId)
+      if (resume !== undefined) await resume.catch(() => undefined)
+      const live = this.ctx.agents.get(sessionId)
+      const attached = this.ctx.sessions.get(sessionId)
+      const handle = this.handles.get(sessionId)
+      if ((live !== undefined || attached !== undefined) && handle === undefined) {
+        throw new RemoteError('session/agent-busy', `session "${sessionId}" is active but its disposer is not owned by the Session controller`, {
+          reason: 'the active Agent is owned by another lifecycle provider',
+        })
+      }
+      if (handle !== undefined) {
+        // Sidecar providers stop their work before the main Agent is disposed.
+        await this.ctx.parallel('workspace/session-stop', { sessionId })
+        await handle.dispose()
+        this.handles.delete(sessionId)
+      }
+      if (this.ctx.agents.get(sessionId) !== undefined || this.ctx.sessions.get(sessionId) !== undefined) {
+        throw new RemoteError('session/agent-busy', `session "${sessionId}" did not finish disposing`, {
+          reason: 'the active Agent did not release its Session',
+        })
+      }
+      await remove()
+    } finally {
+      this.deleting.delete(sessionId)
+    }
   }
 
   /** The canonical spelling of a project directory, which new headers record; see SessionHeader.cwd. */
